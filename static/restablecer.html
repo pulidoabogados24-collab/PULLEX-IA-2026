@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restablecer contraseña — PULLEX IA</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/static/favicon.png">
+<style>
+:root{
+  --azul:#0A1E3F; --azul2:#0E2A57; --linea:#1c3f74;
+  --oro:#FFC93C; --oro2:#FDB813; --oro-d:#c9971f;
+  --txt:#eaf0fb; --txt2:#a9bad6; --mal:#ff6b6b; --ok:#39d98a;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--azul);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  color:var(--txt);padding:22px}
+.card{width:100%;max-width:400px;background:var(--azul2);border:1px solid var(--linea);
+  border-radius:22px;padding:30px 26px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.brand{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px}
+.escudo{width:56px;height:56px;border-radius:16px;background:linear-gradient(160deg,var(--oro),var(--oro-d));
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:#20170a}
+.logo-t{font-size:20px;font-weight:800;letter-spacing:2px}
+.logo-t b{color:var(--oro)}
+h2{font-size:16px;margin:0 0 6px;text-align:center}
+p.d{color:var(--txt2);font-size:13px;text-align:center;margin:0 0 18px;line-height:1.5}
+label.lb{display:block;font-size:12px;color:var(--txt2);margin:12px 0 5px;font-weight:600}
+.inp{width:100%;padding:13px 14px;border-radius:12px;background:var(--azul);border:1px solid var(--linea);
+  color:var(--txt);font-size:15px;outline:none}
+.inp:focus{border-color:var(--oro)}
+.btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(180deg,var(--oro),var(--oro2));
+  color:#20170a;font-weight:800;font-size:15px;margin-top:16px;border:0;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:default}
+.msg{font-size:13px;margin-top:12px;min-height:16px;text-align:center}
+.msg.err{color:var(--mal)}
+.msg.ok{color:var(--ok)}
+a{color:var(--oro);text-decoration:none;font-size:13px}
+.volver{display:block;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <div class="escudo">P</div>
+    <div class="logo-t">PUL<b>LEX</b> IA</div>
+  </div>
+  <h2 id="titulo">Elige tu nueva contraseña</h2>
+  <p class="d" id="desc">Este enlace es de un solo uso y vence 1 hora después de solicitarlo.</p>
+
+  <div id="formulario">
+    <label class="lb">Nueva contraseña</label>
+    <input id="clave1" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+    <label class="lb">Confirma la contraseña</label>
+    <input id="clave2" class="inp" type="password" placeholder="Repítela" autocomplete="new-password">
+    <button id="btn" class="btn" onclick="enviar()">Guardar nueva contraseña</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <a class="volver" href="/">← Volver a PULLEX IA</a>
+</div>
+<script>
+const params = new URLSearchParams(location.search);
+const token = params.get('token') || '';
+const $ = id => document.getElementById(id);
+
+if (!token) {
+  $('titulo').textContent = 'Enlace incompleto';
+  $('desc').textContent = 'Este enlace no trae la información necesaria. Pide uno nuevo desde la app.';
+  $('formulario').style.display = 'none';
+}
+
+async function enviar(){
+  const c1 = $('clave1').value, c2 = $('clave2').value;
+  $('msg').className = 'msg';
+  if (c1.length < 8) { $('msg').className='msg err'; $('msg').textContent='Mínimo 8 caracteres.'; return; }
+  if (c1 !== c2) { $('msg').className='msg err'; $('msg').textContent='Las contraseñas no coinciden.'; return; }
+  $('btn').disabled = true; $('btn').textContent = 'Guardando…';
+  try{
+    const r = await fetch('/api/restablecer-clave', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({token, clave: c1})
+    });
+    const d = await r.json().catch(()=>({}));
+    if (!r.ok) {
+      $('msg').className='msg err'; $('msg').textContent = d.detail || 'No se pudo actualizar.';
+      $('btn').disabled = false; $('btn').textContent = 'Guardar nueva contraseña';
+      return;
+    }
+    $('titulo').textContent = 'Contraseña actualizada';
+    $('desc').textContent = 'Ya puedes iniciar sesión con tu nueva contraseña.';
+    $('formulario').style.display = 'none';
+  }catch(e){
+    $('msg').className='msg err'; $('msg').textContent = 'Error de conexión. Intenta de nuevo.';
+    $('btn').disabled = false; $('btn').textContent = 'Guardar nueva contraseña';
+  }
+}
+</script>
+</body>
+</html>

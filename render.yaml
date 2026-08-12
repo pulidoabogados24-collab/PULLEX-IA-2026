@@ -1,0 +1,29 @@
+# Configuración automática para desplegar PULLEX IA en Render.com (plan gratuito).
+# Render lee este archivo solo y arma todo. Tú únicamente pegas tu clave de API
+# y defines el correo/clave del administrador.
+services:
+  - type: web
+    name: pullex-ia
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ANTHROPIC_API_KEY        # ← la pegas tú en Render (es secreta)
+        sync: false
+      - key: PULLEX_ADMIN_EMAIL       # tu correo de administrador (para entrar a /admin)
+        value: admin@pullex.co
+      - key: PULLEX_ADMIN_CLAVE       # OBLIGATORIA: pégala tú en Render, una clave fuerte y
+        sync: false                   # aleatoria (gestor de contraseñas). Sin este valor la
+                                       # app no arranca (hallazgo S1, cerrado 26-jul-2026).
+      - key: PULLEX_MODELO            # modelo económico para estudiantes
+        value: claude-haiku-4-5
+      - key: PULLEX_SECRET            # Render genera un valor estable automáticamente
+        generateValue: true
+      - key: RESEND_API_KEY           # opcional: sin ella no se envían correos de
+        sync: false                   # verificación/recuperación, pero la app arranca igual.
+                                       # Consíguela gratis en resend.com.
+      - key: PULLEX_EMAIL_FROM        # remitente que verás en los correos enviados
+        value: "PULLEX IA <onboarding@resend.dev>"
+      - key: PULLEX_APP_URL           # cámbiala por tu URL real de Render tras el primer deploy
+        value: https://pullex-ia.onrender.com

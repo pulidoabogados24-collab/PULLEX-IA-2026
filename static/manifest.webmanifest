@@ -1,0 +1,17 @@
+{
+  "name": "PULLEX IA — Asistente Jurídico",
+  "short_name": "PULLEX IA",
+  "description": "Asistente jurídico colombiano con IA para estudiantes de Derecho.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1E3F",
+  "theme_color": "#0A1E3F",
+  "lang": "es-CO",
+  "icons": [
+    { "src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/static/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
