@@ -1,0 +1,375 @@
+"""PULLEX Academia — modelo individual del conocimiento jurídico del estudiante.
+
+Tres piezas, sin dependencias externas:
+
+* MAPA: el Mapa del Derecho (área → tema → concepto). Las descripciones son deliberadamente
+  generales y casi no citan números de artículo: el mapa orienta el estudio, no reemplaza la
+  fuente oficial. Donde se nombra una norma, el estudiante debe verificar su vigencia.
+* Emparejamiento: los conceptos que devuelve el modelo ("confundió la inmediatez") se
+  convierten en un nodo del mapa por palabras clave; si no encaja, queda como concepto libre
+  del área, para no perder el dato.
+* Repetición espaciada tipo Leitner: cada concepto está en una "caja" 0-5. Un error lo manda a
+  la caja 1 (repaso mañana); un acierto lo sube una caja y aleja el próximo repaso
+  (1, 3, 7, 15 y 30 días).
+
+Los indicadores son orientativos para el propio estudiante; no deben usarse para decisiones
+académicas oficiales sin intervención humana.
+"""
+import re
+import time
+import unicodedata
+
+DIA = 86400
+INTERVALOS = {0: 1, 1: 1, 2: 3, 3: 7, 4: 15, 5: 30}  # días hasta el próximo repaso según la caja
+CAJA_DOMINADO = 4
+UMBRAL_ACIERTO = 60  # puntaje total (0-100) desde el que un concepto no señalado cuenta como acierto
+
+
+def normalizar(texto: str) -> str:
+    t = unicodedata.normalize("NFD", str(texto or "").lower())
+    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9ñ]+", " ", t).strip()
+
+
+# (id, nombre, descripción, palabras clave globales, palabras clave válidas solo dentro del área)
+def _c(cid, nombre, desc, kw=(), kwa=()):
+    return {"id": cid, "nombre": nombre, "desc": desc, "kw": list(kw), "kwa": list(kwa)}
+
+
+MAPA = [
+    {"area": "Constitucional", "temas": [
+        {"tema": "Acción de tutela", "conceptos": [
+            _c("tutela-procedencia", "Requisitos de procedencia",
+               "Antes del fondo, el juez verifica legitimación, inmediatez y subsidiariedad. Analízalos por separado y con los hechos del caso.",
+               ["procedencia de la tutela", "requisitos de procedencia", "procedibilidad"], ["procedencia"]),
+            _c("tutela-legitimacion", "Legitimación en la tutela",
+               "Quién puede presentar la tutela (el titular, un apoderado, un agente oficioso) y contra quién procede (autoridades y, en ciertos casos, particulares).",
+               ["legitimacion por activa", "legitimacion por pasiva", "agencia oficiosa", "agente oficioso"], ["legitimacion"]),
+            _c("tutela-inmediatez", "Inmediatez",
+               "La tutela debe presentarse en un plazo razonable desde la vulneración; no hay un término fijo, se analiza caso a caso.",
+               ["inmediatez", "plazo razonable"]),
+            _c("tutela-subsidiariedad", "Subsidiariedad",
+               "Procede si no hay otro medio de defensa judicial idóneo y eficaz, o como mecanismo transitorio para evitar un perjuicio irremediable.",
+               ["subsidiariedad", "otro medio de defensa", "mecanismo transitorio", "residual"]),
+            _c("tutela-perjuicio", "Perjuicio irremediable",
+               "Daño inminente, grave, que exige medidas urgentes e impostergables; habilita la tutela transitoria aunque exista otro medio.",
+               ["perjuicio irremediable"]),
+            _c("tutela-carencia", "Carencia actual de objeto",
+               "Hecho superado (se satisfizo la pretensión) o daño consumado: el juez ya no puede dar la orden pedida.",
+               ["hecho superado", "carencia actual", "dano consumado"]),
+            _c("tutela-providencias", "Tutela contra providencias judiciales",
+               "Procede excepcionalmente: requisitos generales de procedencia y al menos un defecto específico (fáctico, sustantivo, procedimental, orgánico, desconocimiento del precedente, entre otros).",
+               ["contra providencia", "defecto factico", "defecto sustantivo", "defecto procedimental", "defecto organico"]),
+        ]},
+        {"tema": "Derechos fundamentales", "conceptos": [
+            _c("derecho-salud", "Derecho fundamental a la salud",
+               "Derecho fundamental autónomo, desarrollado por la Ley Estatutaria de Salud (Ley 1751 de 2015 — verificar vigencia). Peso de la orden del médico tratante.",
+               ["derecho a la salud", "salud", "medico tratante", "eps"]),
+            _c("derecho-peticion", "Derecho de petición",
+               "Derecho a presentar solicitudes respetuosas y a recibir respuesta de fondo, clara y oportuna dentro del término legal.",
+               ["derecho de peticion", "peticion"]),
+            _c("debido-proceso", "Debido proceso",
+               "Garantías en toda actuación judicial y administrativa: juez natural, defensa, contradicción, legalidad, doble instancia, entre otras.",
+               ["debido proceso", "derecho de defensa", "contradiccion"]),
+            _c("minimo-vital", "Mínimo vital",
+               "Condiciones materiales mínimas para una existencia digna; relevante en tutelas por salarios o pensiones.",
+               ["minimo vital"]),
+        ]},
+    ]},
+    {"area": "Penal", "temas": [
+        {"tema": "Teoría del delito", "conceptos": [
+            _c("conducta", "Conducta", "Acción u omisión humana, voluntaria, penalmente relevante. Incluye la posición de garante en la omisión impropia.",
+               ["conducta", "accion u omision", "posicion de garante", "omision impropia", "comision por omision"]),
+            _c("tipicidad", "Tipicidad", "Adecuación de la conducta a la descripción legal del tipo penal (elementos objetivos y subjetivos).",
+               ["tipicidad", "tipo penal", "atipic*", "conducta atipica"]),
+            _c("imputacion-objetiva", "Imputación objetiva", "Creación de un riesgo jurídicamente desaprobado que se realiza en el resultado; riesgo permitido, autopuesta en peligro.",
+               ["imputacion objetiva", "riesgo permitido", "riesgo desaprobado", "nexo causal", "causalidad"]),
+            _c("dolo", "Dolo", "Conocimiento de los hechos constitutivos de la infracción y voluntad de realizarlos (incluye el dolo eventual).",
+               ["dolo", "doloso", "dolosa", "dolo eventual"]),
+            _c("culpa", "Culpa", "Infracción al deber objetivo de cuidado con un resultado previsible; solo es punible cuando la ley lo prevé.",
+               ["culpa", "culposo", "deber objetivo de cuidado", "imprudencia"]),
+            _c("antijuridicidad", "Antijuridicidad", "Lesión o puesta en peligro efectiva, sin justa causa, del bien jurídico tutelado.",
+               ["antijuridicidad", "bien juridico"]),
+            _c("legitima-defensa", "Legítima defensa", "Causal de ausencia de responsabilidad: agresión actual o inminente e injusta, defensa necesaria y proporcionada.",
+               ["legitima defensa", "defensa propia", "agresion actual", "agresion injusta", "actualidad de la agresion", "proporcionalidad de la defensa"]),
+            _c("culpabilidad", "Culpabilidad", "Reproche personal: imputabilidad, conocimiento de la antijuridicidad y exigibilidad de otra conducta.",
+               ["culpabilidad", "inimputab*", "error de prohibicion", "exigibilidad"]),
+            _c("ira-intenso-dolor", "Ira o intenso dolor", "Disminuye la pena cuando se actúa en ese estado, provocado por un comportamiento ajeno grave e injustificado.",
+               ["ira", "intenso dolor", "estado de ira"]),
+        ]},
+        {"tema": "Proceso penal acusatorio", "conceptos": [
+            _c("captura-flagrancia", "Captura en flagrancia", "Aprehensión sin orden judicial en las hipótesis legales de flagrancia; se somete a control de legalidad.",
+               ["flagrancia", "captura", "control de legalidad"]),
+            _c("imputacion", "Formulación de imputación", "Acto de comunicación de la Fiscalía que vincula formalmente al indiciado al proceso.",
+               ["formulacion de imputacion"], ["imputacion"]),
+            _c("medida-aseguramiento", "Medida de aseguramiento", "Restricción cautelar de la libertad o de otros derechos: requisitos de inferencia razonable, necesidad y proporcionalidad.",
+               ["medida de aseguramiento", "detencion preventiva"]),
+            _c("preacuerdos", "Preacuerdos", "Negociación entre Fiscalía e imputado o acusado que termina anticipadamente el proceso, con límites legales.",
+               ["preacuerdo", "aceptacion de cargos", "allanamiento"]),
+            _c("principio-oportunidad", "Principio de oportunidad", "Facultad reglada de la Fiscalía de suspender, interrumpir o renunciar a la persecución penal, con control judicial.",
+               ["principio de oportunidad"]),
+        ]},
+    ]},
+    {"area": "Laboral", "temas": [
+        {"tema": "Contrato de trabajo", "conceptos": [
+            _c("elementos-contrato", "Elementos del contrato de trabajo", "Prestación personal del servicio, continuada subordinación y salario; reunidos, hay contrato aunque se le dé otro nombre.",
+               ["elementos del contrato", "elementos esenciales", "prestacion personal", "remuneracion", "salario"]),
+            _c("subordinacion", "Subordinación", "Facultad del empleador de dar órdenes e imponer reglamentos durante todo el contrato; el rasgo que distingue del contrato de prestación de servicios.",
+               ["subordinacion", "dependencia", "autonomia tecnica"]),
+            _c("primacia-realidad", "Primacía de la realidad", "Prevalecen los hechos sobre las formas: un contrato de prestación de servicios puede ser, en realidad, un contrato de trabajo (contrato realidad).",
+               ["primacia de la realidad", "contrato realidad", "prestacion de servicios", "presuncion del contrato", "presuncion de contrato"]),
+        ]},
+        {"tema": "Terminación y protección", "conceptos": [
+            _c("despido-sin-justa-causa", "Despido sin justa causa", "Terminación unilateral sin una causa legal; genera la indemnización tarifada según el tipo de contrato.",
+               ["despido", "justa causa", "indemnizacion por despido"]),
+            _c("indemnizacion-moratoria", "Indemnización moratoria", "Sanción por no pagar salarios y prestaciones al terminar el contrato; se analiza la buena o mala fe del empleador.",
+               ["moratoria", "sancion moratoria", "buena fe"]),
+            _c("estabilidad-reforzada", "Estabilidad laboral reforzada", "Protección frente al despido de personas en situación de debilidad (salud, embarazo, fuero); exige autorización o justa causa.",
+               ["estabilidad laboral reforzada", "estabilidad reforzada", "fuero", "embarazo", "debilidad manifiesta"]),
+        ]},
+        {"tema": "Prestaciones y reclamación", "conceptos": [
+            _c("prestaciones-sociales", "Prestaciones sociales", "Cesantías, intereses sobre cesantías y prima de servicios, entre otras; se liquidan con el salario base.",
+               ["prestaciones", "cesantias", "prima de servicios"]),
+            _c("prescripcion-laboral", "Prescripción laboral", "Regla general de tres años desde que la obligación se hizo exigible; el reclamo escrito la interrumpe por una sola vez (verificar).",
+               ["prescripcion laboral"], ["prescripcion"]),
+        ]},
+    ]},
+    {"area": "Civil", "temas": [
+        {"tema": "Extinción de acciones", "conceptos": [
+            _c("prescripcion-extintiva", "Prescripción extintiva", "Modo de extinguir acciones y derechos por no ejercerlos durante el tiempo legal; se interrumpe y se renuncia; debe alegarse.",
+               ["prescripcion extintiva", "prescripcion de la accion"], ["prescripcion"]),
+            _c("caducidad", "Caducidad", "Término perentorio para acudir a la jurisdicción; no se interrumpe como la prescripción y el juez la declara de oficio. Diferénciala bien de la prescripción.",
+               ["caducidad", "prescripcion y caducidad", "prescripcion vs caducidad"]),
+        ]},
+        {"tema": "Responsabilidad y contratos", "conceptos": [
+            _c("responsabilidad-contractual", "Responsabilidad contractual", "Incumplimiento de una obligación nacida del contrato: incumplimiento, daño, nexo causal; resolución o cumplimiento más perjuicios.",
+               ["responsabilidad contractual", "incumplimiento", "resolucion del contrato", "condicion resolutoria"]),
+            _c("responsabilidad-extracontractual", "Responsabilidad extracontractual", "Daño causado sin vínculo contractual previo: hecho, daño, nexo causal y culpa (o régimen objetivo en actividades peligrosas).",
+               ["extracontractual", "actividades peligrosas", "responsabilidad civil"]),
+            _c("nulidad-contrato", "Nulidad del contrato", "Absoluta (objeto o causa ilícita, incapacidad absoluta, falta de solemnidades) o relativa (vicios del consentimiento, incapacidad relativa).",
+               ["nulidad absoluta", "nulidad relativa", "vicios del consentimiento", "error fuerza dolo"]),
+        ]},
+        {"tema": "Bienes", "conceptos": [
+            _c("posesion", "Posesión", "Tenencia de una cosa con ánimo de señor y dueño; distinta de la mera tenencia.",
+               ["posesion", "animo de senor", "mera tenencia"]),
+            _c("prescripcion-adquisitiva", "Prescripción adquisitiva", "Modo de adquirir el dominio por la posesión durante el tiempo legal (ordinaria o extraordinaria).",
+               ["prescripcion adquisitiva", "usucapion", "pertenencia"]),
+        ]},
+    ]},
+    {"area": "Administrativo", "temas": [
+        {"tema": "Medios de control", "conceptos": [
+            _c("nulidad-simple", "Nulidad", "Control objetivo de legalidad de un acto administrativo general, en interés de la legalidad.",
+               ["nulidad simple", "medio de control de nulidad"]),
+            _c("nulidad-restablecimiento", "Nulidad y restablecimiento del derecho", "Para quien se cree lesionado en un derecho por un acto administrativo particular; tiene término de caducidad.",
+               ["restablecimiento del derecho"]),
+            _c("reparacion-directa", "Reparación directa", "Indemnización por daños antijurídicos causados por hechos, omisiones u operaciones de la administración.",
+               ["reparacion directa", "dano antijuridico", "falla del servicio"]),
+            _c("caducidad-medio-control", "Caducidad del medio de control", "Cada medio de control tiene un término distinto; su conteo y la suspensión por conciliación prejudicial son errores frecuentes.",
+               ["caducidad del medio", "conciliacion prejudicial"], ["caducidad"]),
+        ]},
+        {"tema": "Actuación administrativa", "conceptos": [
+            _c("recursos-administrativos", "Recursos en sede administrativa", "Reposición, apelación y queja; cuándo son obligatorios para acudir a la jurisdicción.",
+               ["recurso de reposicion", "recurso de apelacion", "recursos administrativos", "via gubernativa"]),
+            _c("silencio-administrativo", "Silencio administrativo", "Efecto de que la administración no responda a tiempo: negativo como regla, positivo solo cuando la ley lo dispone.",
+               ["silencio administrativo", "silencio negativo", "silencio positivo"]),
+        ]},
+    ]},
+    {"area": "Familia", "temas": [
+        {"tema": "Niños, niñas y adolescentes", "conceptos": [
+            _c("interes-superior", "Interés superior del menor", "Criterio que orienta toda decisión que afecte a niños, niñas y adolescentes; sus derechos prevalecen.",
+               ["interes superior", "prevalencia de los derechos"]),
+            _c("alimentos", "Alimentos", "Obligación de proveer lo necesario para la subsistencia de quien tiene derecho; se fija según necesidad del alimentario y capacidad del alimentante.",
+               ["alimentos", "cuota alimentaria"]),
+            _c("custodia", "Custodia y visitas", "Cuidado personal del hijo y régimen de visitas del otro progenitor; se decide por el interés superior.",
+               ["custodia", "cuidado personal", "visitas"]),
+        ]},
+        {"tema": "Pareja", "conceptos": [
+            _c("union-marital", "Unión marital de hecho", "Comunidad de vida permanente y singular; la sociedad patrimonial exige requisitos y tiempo adicionales.",
+               ["union marital", "sociedad patrimonial", "companeros permanentes"]),
+            _c("divorcio", "Divorcio", "Por mutuo acuerdo (incluso ante notario) o contencioso por causales legales ante el juez de familia.",
+               ["divorcio", "cesacion de efectos civiles"]),
+        ]},
+    ]},
+    {"area": "Comercial", "temas": [
+        {"tema": "Derecho societario y títulos", "conceptos": [
+            _c("sas", "Sociedad por acciones simplificada", "Tipo societario flexible; responsabilidad de los accionistas limitada al monto de sus aportes, con excepciones.",
+               ["sas", "sociedad por acciones simplificada"]),
+            _c("titulos-valores", "Títulos valores", "Documentos necesarios para legitimar el ejercicio del derecho literal y autónomo que incorporan (letra, pagaré, cheque).",
+               ["titulo valor", "titulos valores", "pagare", "letra de cambio", "cheque", "literalidad", "autonomia"]),
+            _c("responsabilidad-administradores", "Deberes de los administradores", "Buena fe, lealtad y diligencia de un buen hombre de negocios; responden por los perjuicios causados con dolo o culpa.",
+               ["administradores", "deber de lealtad", "buen hombre de negocios"]),
+        ]},
+    ]},
+    {"area": "Procesal", "temas": [
+        {"tema": "Presupuestos del proceso", "conceptos": [
+            _c("competencia", "Competencia", "Factores objetivo, subjetivo, territorial, funcional y de conexión; distingue competencia de jurisdicción.",
+               ["competencia", "factor territorial", "cuantia", "jurisdiccion"]),
+            _c("legitimacion-causa", "Legitimación en la causa", "Relación entre las partes y la relación sustancial discutida; su falta lleva a sentencia desfavorable, no a nulidad.",
+               ["legitimacion en la causa"], ["legitimacion"]),
+            _c("notificacion", "Notificación", "Forma de poner en conocimiento las providencias; la notificación indebida puede generar nulidad.",
+               ["notificacion", "notificar", "emplazamiento"]),
+            _c("recursos-judiciales", "Recursos judiciales", "Reposición, apelación, queja, súplica, casación y revisión: procedencia, términos y efectos.",
+               ["recurso", "recursos", "apelacion", "reposicion", "casacion"]),
+        ]},
+    ]},
+    {"area": "Probatorio", "temas": [
+        {"tema": "Prueba", "conceptos": [
+            _c("carga-prueba", "Carga de la prueba", "A quién corresponde probar los hechos que alega; el juez puede distribuirla en ciertos casos.",
+               ["carga de la prueba", "carga dinamica", "onus probandi"]),
+            _c("cadena-custodia", "Cadena de custodia", "Procedimiento que garantiza la autenticidad (mismidad) de los elementos materiales probatorios.",
+               ["cadena de custodia", "mismidad"]),
+            _c("prueba-ilicita", "Prueba ilícita", "Obtenida con violación de derechos fundamentales; es nula de pleno derecho y debe excluirse.",
+               ["prueba ilicita", "prueba ilegal", "exclusion de la prueba", "regla de exclusion"]),
+        ]},
+    ]},
+]
+
+INDICE = {}
+for _a in MAPA:
+    for _t in _a["temas"]:
+        for _c_ in _t["conceptos"]:
+            INDICE[_c_["id"]] = {**_c_, "area": _a["area"], "tema": _t["tema"]}
+
+
+def emparejar(texto: str, area: str | None = None) -> str | None:
+    """Devuelve el id del concepto del mapa que mejor corresponde al texto, o None."""
+    t = " " + normalizar(texto) + " "
+    if not t.strip():
+        return None
+    mejor, largo = None, 0
+    for cid, c in INDICE.items():
+        claves = c["kw"] + (c["kwa"] if c["area"] == area else [])
+        for k in claves:
+            # palabra completa, salvo que la clave termine en "*" (prefijo: "atipic*" → atípica, atípico)
+            patron = " " + k[:-1] if k.endswith("*") else " " + k + " "
+            puntaje = len(k) + (0.5 if c["area"] == area else 0)
+            if patron in t and puntaje > largo:
+                mejor, largo = cid, puntaje
+    return mejor
+
+
+def id_libre(texto: str) -> str:
+    return "libre:" + normalizar(texto)[:60].replace(" ", "-")
+
+
+def estado_de(fila) -> str:
+    if fila is None:
+        return "sin_evaluar"
+    if fila["caja"] >= CAJA_DOMINADO:
+        return "dominado"
+    if fila["fallos"] and fila["caja"] <= 1:
+        return "debil"
+    return "en_progreso"
+
+
+def nivel_recomendado(promedio) -> str:
+    if promedio is None or promedio < 55:
+        return "basico"
+    if promedio < 75:
+        return "intermedio"
+    if promedio < 88:
+        return "avanzado"
+    return "experto"
+
+
+UTC_OFFSET_COLOMBIA = -5 * 3600  # Colombia no tiene horario de verano
+
+
+def fin_del_dia(ahora: float) -> float:
+    """Medianoche siguiente en hora de Colombia (los «repasos de hoy» vencen a esa hora)."""
+    local = ahora + UTC_OFFSET_COLOMBIA
+    return ahora + DIA - (local % DIA)
+
+
+def cuando(ts: float, ahora: float | None = None) -> str:
+    ahora = ahora or time.time()
+    dias = int((ts - ahora) // DIA) + 1 if ts > ahora else 0
+    return "hoy" if dias <= 0 else "mañana" if dias == 1 else f"en {dias} días"
+
+
+def crear_tabla(con):
+    con.executescript("""
+    CREATE TABLE IF NOT EXISTS conocimiento(
+        usuario TEXT NOT NULL, concepto_id TEXT NOT NULL, nombre TEXT NOT NULL, area TEXT,
+        aciertos INTEGER DEFAULT 0, fallos INTEGER DEFAULT 0, caja INTEGER DEFAULT 0,
+        proximo REAL, primer_visto REAL, ultimo_visto REAL, ultimo_fallo REAL, resuelto REAL,
+        PRIMARY KEY(usuario, concepto_id));
+    CREATE INDEX IF NOT EXISTS ix_conoc_proximo ON conocimiento(usuario, proximo);
+    """)
+
+
+def _actualizar(con, email, cid, nombre, area, resultado, ahora):
+    f = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
+    if f is None:
+        con.execute("INSERT INTO conocimiento(usuario,concepto_id,nombre,area,caja,proximo,primer_visto,ultimo_visto) "
+                    "VALUES(?,?,?,?,0,?,?,?)", (email, cid, nombre[:80], area, ahora + DIA, ahora, ahora))
+        f = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
+    if resultado == "fallo":
+        con.execute("UPDATE conocimiento SET fallos=fallos+1, caja=1, proximo=?, ultimo_fallo=?, ultimo_visto=?, "
+                    "resuelto=NULL WHERE usuario=? AND concepto_id=?",
+                    (ahora + INTERVALOS[1] * DIA, ahora, ahora, email, cid))
+    elif resultado == "acierto":
+        caja = min(5, f["caja"] + 1)
+        resuelto = f["resuelto"]
+        if caja >= CAJA_DOMINADO and f["fallos"] and not resuelto:
+            resuelto = ahora
+        con.execute("UPDATE conocimiento SET aciertos=aciertos+1, caja=?, proximo=?, ultimo_visto=?, resuelto=? "
+                    "WHERE usuario=? AND concepto_id=?",
+                    (caja, ahora + INTERVALOS[caja] * DIA, ahora, resuelto, email, cid))
+    else:
+        con.execute("UPDATE conocimiento SET ultimo_visto=? WHERE usuario=? AND concepto_id=?", (ahora, email, cid))
+
+
+def registrar_resultado(con, email: str, area: str, conceptos_caso, conceptos_debiles, total: int,
+                        foco: str | None = None, ahora: float | None = None,
+                        foco_nombre: str | None = None) -> list:
+    """Actualiza el modelo del estudiante tras una evaluación. Devuelve los cambios aplicados."""
+    ahora = ahora or time.time()
+
+    def resolver(texto):
+        cid = emparejar(texto, area)
+        if cid:
+            return cid, INDICE[cid]["nombre"], INDICE[cid]["area"]
+        nombre = str(texto).strip()[:80]
+        return (id_libre(nombre), nombre, area) if normalizar(nombre) else (None, None, None)
+
+    debiles = {}
+    for t in conceptos_debiles or []:
+        cid, nombre, a = resolver(t)
+        if cid:
+            debiles[cid] = (nombre, a)
+    evaluados = {}
+    for t in conceptos_caso or []:
+        cid, nombre, a = resolver(t)
+        if cid:
+            evaluados[cid] = (nombre, a)
+    if foco and foco in INDICE:
+        evaluados.setdefault(foco, (INDICE[foco]["nombre"], INDICE[foco]["area"]))
+    elif foco and foco.startswith("libre:") and foco_nombre:
+        evaluados.setdefault(foco, (str(foco_nombre)[:80], area))
+    cambios = []
+    for cid, (nombre, a) in debiles.items():
+        _actualizar(con, email, cid, nombre, a, "fallo", ahora)
+        cambios.append({"id": cid, "nombre": nombre, "resultado": "fallo"})
+    for cid, (nombre, a) in evaluados.items():
+        if cid in debiles:
+            continue
+        res = "acierto" if total >= UMBRAL_ACIERTO else "visto"
+        _actualizar(con, email, cid, nombre, a, res, ahora)
+        cambios.append({"id": cid, "nombre": nombre, "resultado": res})
+    return cambios
+
+
+def fila_publica(f, ahora=None) -> dict:
+    return {"id": f["concepto_id"], "nombre": f["nombre"], "area": f["area"], "estado": estado_de(f),
+            "aciertos": f["aciertos"], "fallos": f["fallos"], "caja": f["caja"],
+            "proximo": f["proximo"], "proximo_texto": cuando(f["proximo"], ahora) if f["proximo"] else None,
+            "tema": INDICE.get(f["concepto_id"], {}).get("tema")}
+
+
+def severidad(f) -> str:
+    if f["fallos"] >= 3 or (f["fallos"] >= 2 and f["aciertos"] == 0):
+        return "alta"
+    if f["fallos"] >= 2 or f["aciertos"] == 0:
+        return "media"
+    return "baja"

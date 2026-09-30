@@ -60,6 +60,18 @@ y regenerar el boletín.
   pistas y solución son gratis.
 - **Progreso:** casos evaluados, promedio por área y conceptos a reforzar (con acceso directo a
   "Enséñame" sobre ese concepto).
+- **Mi mapa del Derecho (modelo individual del conocimiento):** 61 conceptos en 9 áreas (área → tema →
+  concepto). Cada evaluación de un modular actualiza el estado de los conceptos del caso para ese
+  estudiante: *Dominado*, *En progreso*, *Débil* o *Sin evaluar*. Dos estudiantes que usan PULLEX
+  reciben entrenamientos distintos según lo que cada uno confunde.
+- **Banco de errores:** los conceptos que confundiste, cuántas veces, severidad y si ya los superaste.
+  Desde ahí: "Explícamelo" (chat en modo Enséñame) o "Practicar" (caso nuevo centrado en ese concepto).
+- **Repasos espaciados:** un error lleva el concepto a repaso al día siguiente; cada acierto aleja el
+  próximo repaso (1, 3, 7, 15 y 30 días). "Hoy" se calcula en hora de Colombia.
+- **Tablero de estudio en el inicio:** caso recomendado (con nivel sugerido según tu promedio en el
+  área), continuar el último caso sin responder, próximo repaso, tema débil y último modular.
+- **Escalera de ayuda en Modular Lab:** Pista 1 → Pista 2 → Explícame el concepto → Ver solución.
+  Detalle técnico en `docs/10-ACADEMIA.md`.
 - **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
   socrático), Examíname (simulacro oral) y Audita mi respuesta.
 - **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
@@ -127,7 +139,7 @@ repositorio, y defines en **Environment**:
 
 ```bash
 pip install -r requirements-dev.txt
-pytest tests                  # 49 pruebas: seguridad + regresión (no llaman a la API real)
+pytest tests                  # 68 pruebas: seguridad, regresión, Modular Lab y Academia (no llaman a la API real)
 pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
 ```
 

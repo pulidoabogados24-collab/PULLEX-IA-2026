@@ -89,10 +89,11 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','chat','config'].forEach(x=>{
+function ver(v){['inicio','modular','mapa','chat','config'].forEach(x=>{
   $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
+  if(v==='mapa')mapaInit();
   if(v==='inicio')cargarProgresoInicio();}
 
 async function cargarBoletin(forzar){
@@ -574,6 +575,7 @@ function pintarCapacidades(){
 }
 async function cargarProgresoInicio(){
   const el=$('progreso-inicio');
+  cargarTablero();
   if(CAMINO!=='aprender'){el.classList.add('hidden');return}
   try{
     const p=await api('/api/modular/progreso');
@@ -625,18 +627,35 @@ async function mlGenerar(variacionDe){
   }catch(e){toast(e.message)}
   if(listo)listo();
 }
+// Caso de repaso centrado en un concepto del mapa o del banco de errores.
+async function practicarConcepto(id,nombre,boton){
+  ver('modular');await mlInit();
+  const orig=boton?boton.textContent:'';if(boton){boton.disabled=true;boton.textContent='Generando…'}
+  toast('Preparando un caso para repasar «'+nombre+'»…');
+  const g=$('ml-generar');const listo=mlOcupado(g,'Generando caso…');
+  try{mlMostrarCaso(await api('/api/modular/caso',{body:{concepto_id:id}}))}catch(e){toast(e.message)}
+  listo();if(boton){boton.disabled=false;boton.textContent=orig}
+}
+async function mlAbrirCaso(id){
+  ver('modular');await mlInit();
+  try{mlMostrarCaso(await api('/api/modular/caso/'+encodeURIComponent(id)))}catch(e){toast(e.message)}
+}
+function explicarConcepto(nombre){
+  usarTool('Explícame el concepto «'+nombre+'» con un ejemplo sencillo y el error más común al aplicarlo en un caso.','ensename')}
+function examinarConcepto(nombre){usarTool('Examíname sobre el concepto «'+nombre+'».','examiname')}
 function mlMostrarCaso(c){
   ML.caso=c;ML.pistas=0;ML.evaluado=false;ML.confirmarSol=false;
   const nombreNivel=(ML.opciones&&ML.opciones.niveles.find(n=>n.id===c.nivel)||{}).nombre||c.nivel;
   const meta=$('ml-meta');meta.textContent='';
-  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']].forEach(([t,k])=>{
+  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']]
+   .concat(c.foco?[['Repaso: '+c.foco,'tag oro']]:[]).forEach(([t,k])=>{
     const s=document.createElement('span');s.className=k;s.textContent=t;meta.appendChild(s)});
   $('ml-cambio').classList.toggle('hidden',!c.cambio);$('ml-cambio').textContent=c.cambio||'';
   $('ml-titulo').textContent=c.titulo;
   $('ml-enunciado').innerHTML=md(c.enunciado);
   $('ml-pregunta').textContent=c.pregunta;
   $('ml-pistas').textContent='';$('ml-resp').value='';mlContar();
-  $('ml-btn-pista').disabled=!c.n_pistas;$('ml-btn-pista').textContent='Necesito una pista';
+  $('ml-btn-pista').disabled=false;$('ml-btn-pista').textContent=c.n_pistas?'Necesito una pista':'Explícame el concepto';
   $('ml-btn-sol').textContent='Ver solución';
   ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
   $('ml-caso').classList.remove('hidden');
@@ -646,13 +665,25 @@ function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length
   $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
 async function mlPista(){
   if(!ML.caso)return;
+  if(ML.pistas>=(ML.caso.n_pistas||0))return mlExplicame();
   try{
     const p=await api('/api/modular/pista',{body:{caso_id:ML.caso.id,n:ML.pistas}});
     const d=document.createElement('div');d.className='pista';
     const b=document.createElement('b');b.textContent='Pista '+(p.n+1)+': ';d.appendChild(b);
     d.appendChild(document.createTextNode(p.pista));$('ml-pistas').appendChild(d);
     ML.pistas++;
-    if(!p.quedan){$('ml-btn-pista').disabled=true;$('ml-btn-pista').textContent='Sin más pistas'}
+    if(!p.quedan){$('ml-btn-pista').textContent='Explícame el concepto'}
+  }catch(e){toast(e.message)}
+}
+// Tercer escalón de ayuda (después de las pistas y antes de la solución): una explicación del
+// concepto en el chat, sin resolver el caso.
+async function mlExplicame(){
+  try{
+    const d=await api('/api/modular/conceptos?caso_id='+ML.caso.id);
+    if(!d.conceptos.length){toast('Este caso no tiene conceptos registrados.');return}
+    usarTool('Estoy resolviendo un caso de práctica y no quiero que me des la respuesta. Explícame '+
+      (d.conceptos.length>1?'estos conceptos: ':'este concepto: ')+d.conceptos.join(', ')+
+      '. Usa un ejemplo distinto a mi caso.','ensename');
   }catch(e){toast(e.message)}
 }
 async function mlEvaluar(){
@@ -696,6 +727,16 @@ function mlMostrarEval(ev){
   if(ev.contraargumento){const c=document.createElement('div');c.className='ev-contra';
     const b=document.createElement('b');b.textContent='Argumento contrario que no consideraste: ';
     c.appendChild(b);c.appendChild(document.createTextNode(ev.contraargumento));p.appendChild(c)}
+  if(ev.conocimiento&&ev.conocimiento.length){
+    const box=document.createElement('div');box.className='aprendido';
+    const h4=document.createElement('h4');h4.textContent='Tu mapa se actualizó';box.appendChild(h4);
+    const ul=document.createElement('ul');
+    const txt={fallo:'lo confundiste: vuelve a aparecer en tus repasos mañana',acierto:'bien aplicado: el próximo repaso se aleja',visto:'registrado en tu mapa'};
+    ev.conocimiento.forEach(c=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=c.nombre;
+      li.appendChild(b);li.appendChild(document.createTextNode(' — '+(txt[c.resultado]||'')));ul.appendChild(li)});
+    box.appendChild(ul);
+    const ir=document.createElement('button');ir.type='button';ir.textContent='Ver mi mapa';ir.addEventListener('click',()=>ver('mapa'));
+    box.appendChild(ir);p.appendChild(box)}
   const acc=document.createElement('div');acc.className='ml-acc';
   [['Ver solución','bsec','mlSolucion'],['¿Qué cambia si…? (variación)','bsec','mlVariacion'],['Nuevo caso','bpri','mlNuevo']]
     .forEach(([t,k,f])=>{const b=document.createElement('button');b.className=k;b.textContent=t;b.dataset.click=f;acc.appendChild(b)});
@@ -756,6 +797,122 @@ async function mlProgreso(){
     p.a_reforzar.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;
       b.addEventListener('click',()=>usarTool('Quiero entender bien este concepto porque me equivoco con él: '+t,'ensename'));o.appendChild(b)});
     c.appendChild(o)}
+}
+
+// ------------------------------------------------------------------ Academia: tablero --
+const NOMBRE_EST={dominado:'Dominado',en_progreso:'En progreso',debil:'Débil',sin_evaluar:'Sin evaluar'};
+const NOMBRE_NIVEL={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado',experto:'Experto'};
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function estadoChip(est){return el('span','est '+est,NOMBRE_EST[est]||est)}
+function boton(txt,cls,fn){const b=el('button',cls,txt);b.type='button';b.addEventListener('click',()=>fn(b));return b}
+async function cargarTablero(){
+  const t=$('tablero');
+  if(CAMINO!=='aprender'){t.classList.add('hidden');return}
+  let r;try{r=await api('/api/academia/resumen')}catch(e){t.classList.add('hidden');return}
+  t.textContent='';
+  const card=(k,v,sub,acc,cls)=>{const c=el('div','tcard'+(cls?' '+cls:''));c.appendChild(el('div','k',k));
+    c.appendChild(el('div','v',v));if(sub)c.appendChild(el('div','s',sub));if(acc)c.appendChild(acc);t.appendChild(c)};
+  const rec=r.caso_recomendado;
+  if(rec){
+    const v=rec.concepto?rec.concepto+' · '+rec.area:rec.area;
+    card('Caso recomendado',v,rec.motivo+' Nivel sugerido: '+(NOMBRE_NIVEL[rec.nivel]||rec.nivel)+'.',
+      boton('Practicar ahora','bpri',b=>rec.concepto_id?practicarConcepto(rec.concepto_id,rec.concepto,b)
+        :(ver('modular'),mlInit().then(()=>mlElegir(rec.area,rec.nivel)))),'rec')}
+  if(r.continuar)card('Continuar estudiando',r.continuar.titulo,r.continuar.area+' · caso sin responder',
+    boton('Retomar caso','bsec',()=>mlAbrirCaso(r.continuar.caso_id)));
+  if(r.proximo_repaso&&(r.n_repasos_hoy>1||!rec||rec.concepto_id!==r.proximo_repaso.id)){const pr=r.proximo_repaso;
+    card('Próximo repaso',pr.nombre,pr.area+' · '+(r.n_repasos_hoy>1?r.n_repasos_hoy+' conceptos para hoy':'toca '+pr.proximo_texto),
+      boton('Ver repasos','bsec',()=>ver('mapa')))}
+  if(r.tema_debil&&(!rec||rec.concepto_id!==r.tema_debil.id))card('Tema débil',r.tema_debil.nombre,
+    'Lo has confundido '+r.tema_debil.fallos+(r.tema_debil.fallos===1?' vez':' veces')+'.',
+    boton('Explícamelo','bsec',()=>explicarConcepto(r.tema_debil.nombre)));
+  if(r.ultimo_modular)card('Último modular',r.ultimo_modular.titulo,r.ultimo_modular.area+' · '+r.ultimo_modular.puntaje+'/100',
+    boton('Mi mapa','bsec',()=>ver('mapa')));
+  t.classList.toggle('hidden',!t.children.length);
+}
+function mlElegir(area,nivel){
+  [['area',area,'ml-areas'],['nivel',nivel,'ml-niveles']].forEach(([k,v,id])=>{if(!v)return;ML[k]=v;
+    const items=k==='area'?ML.opciones.areas:ML.opciones.niveles.map(n=>n.id);
+    [...$(id).children].forEach((b,i)=>b.classList.toggle('on',items[i]===v))});
+  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'});
+  toast('Elegí '+area+(nivel?' · '+(NOMBRE_NIVEL[nivel]||nivel):'')+'. Pulsa «Generar caso».');
+}
+
+// ------------------------------------------------------------------ Academia: Mi mapa --
+const MAPA={datos:null,area:null,sel:null};
+async function mapaInit(){
+  let d,err,res;
+  try{[d,err,res]=await Promise.all([api('/api/academia/mapa'),api('/api/academia/errores'),api('/api/academia/resumen')])}
+  catch(e){toast(e.message);return}
+  MAPA.datos=d;
+  const rs=$('mapa-res');rs.textContent='';
+  ['dominado','en_progreso','debil','sin_evaluar'].forEach(k=>{const c=el('div');c.appendChild(el('b',null,d.resumen[k]));
+    c.appendChild(estadoChip(k));rs.appendChild(c)});
+  pintarRepasos(res);pintarErrores(err.errores);
+  if(!MAPA.area){const deb=d.areas.find(a=>a.resumen.debil);MAPA.area=(deb||d.areas[0]).area}
+  const ar=$('mapa-areas');ar.textContent='';
+  d.areas.forEach(a=>{const b=boton(a.area+(a.resumen.debil?' · '+a.resumen.debil+(a.resumen.debil===1?' débil':' débiles'):''),'',()=>{MAPA.area=a.area;MAPA.sel=null;pintarAreaMapa()});
+    b.setAttribute('role','tab');ar.appendChild(b)});
+  pintarAreaMapa();
+}
+function filaConcepto(c,extra,acciones){
+  const f=el('div','rep');const t=el('div','t');t.appendChild(el('b',null,c.nombre));
+  t.appendChild(el('span',null,extra));f.appendChild(t);
+  const a=el('div','racc');acciones.forEach(x=>a.appendChild(x));f.appendChild(a);return f;
+}
+function pintarRepasos(r){
+  const c=$('mapa-hoy-cuerpo');
+  if(!r.proximo_repaso){c.className='vacio';return}
+  c.className='rep-lista';c.textContent='';
+  const lista=r.repasos_hoy.length?r.repasos_hoy:[r.proximo_repaso];
+  if(!r.repasos_hoy.length)c.appendChild(el('div','vacio','Nada pendiente para hoy. Tu próximo repaso:'));
+  lista.forEach(x=>c.appendChild(filaConcepto(x,x.area+' · '+(x.proximo_texto==='hoy'?'toca hoy':'toca '+x.proximo_texto),
+    [estadoChip(x.estado),boton('Practicar','bpri',b=>practicarConcepto(x.id,x.nombre,b))])));
+}
+function pintarErrores(lista){
+  const c=$('mapa-err-cuerpo');
+  if(!lista.length){c.className='vacio';return}
+  c.className='rep-lista';c.textContent='';
+  lista.forEach(e=>{
+    const extra=e.area+' · lo confundiste '+e.frecuencia+(e.frecuencia===1?' vez':' veces')+(e.resuelto?' · superado':'');
+    const sev=el('span','sev '+e.severidad,e.resuelto?'superado':'severidad '+e.severidad);
+    const f=filaConcepto(e,extra,[sev,estadoChip(e.estado),
+      boton('Explícamelo','bsec',()=>explicarConcepto(e.nombre)),
+      boton('Practicar','bpri',b=>practicarConcepto(e.id,e.nombre,b))]);
+    if(e.resuelto)f.classList.add('superado');c.appendChild(f)});
+}
+function pintarAreaMapa(){
+  const a=MAPA.datos.areas.find(x=>x.area===MAPA.area);
+  [...$('mapa-areas').children].forEach((b,i)=>{const on=MAPA.datos.areas[i].area===a.area;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
+  const info=$('mapa-area-info');info.textContent='';
+  const partes=[['Dominados',a.resumen.dominado],['En progreso',a.resumen.en_progreso],['Débiles',a.resumen.debil]];
+  partes.forEach(([t,n],i)=>{info.appendChild(document.createTextNode((i?' · ':'')+t+': '));info.appendChild(el('b',null,n))});
+  info.appendChild(document.createTextNode(a.promedio!=null?' · Promedio en modulares: ':' · Aún sin modulares en esta área'));
+  if(a.promedio!=null){info.appendChild(el('b',null,a.promedio+'/100'))}
+  info.appendChild(document.createTextNode(' · Nivel sugerido: '));info.appendChild(el('b',null,NOMBRE_NIVEL[a.nivel_recomendado]));
+  const cont=$('mapa-temas');cont.textContent='';
+  a.temas.forEach(t=>{
+    const s=el('div','tema');s.appendChild(el('h4',null,t.tema));
+    const g=el('div','nodos');
+    t.conceptos.forEach(c=>{
+      const n=el('button','nodo '+c.estado);n.type='button';n.setAttribute('aria-expanded',MAPA.sel===c.id);
+      n.appendChild(el('span',null,c.nombre));n.appendChild(estadoChip(c.estado));
+      n.addEventListener('click',()=>{MAPA.sel=MAPA.sel===c.id?null:c.id;pintarAreaMapa()});
+      if(MAPA.sel===c.id)n.classList.add('sel');
+      g.appendChild(n);
+      if(MAPA.sel===c.id){
+        const d=el('div','nodo-det');d.appendChild(el('b',null,c.nombre));d.appendChild(el('p',null,c.desc));
+        const hist=c.aciertos||c.fallos?'Aciertos: '+c.aciertos+' · Errores: '+c.fallos+(c.proximo_texto?' · Próximo repaso: '+c.proximo_texto:''):'Aún no lo has practicado.';
+        d.appendChild(el('p',null,hist));
+        const acc=el('div','racc');
+        if(a.practicable)acc.appendChild(boton('Practicar este concepto','bpri',b=>practicarConcepto(c.id,c.nombre,b)));
+        acc.appendChild(boton('Explícamelo','bsec',()=>explicarConcepto(c.nombre)));
+        acc.appendChild(boton('Examíname','bsec',()=>examinarConcepto(c.nombre)));
+        d.appendChild(acc);g.appendChild(d);
+      }
+    });
+    s.appendChild(g);cont.appendChild(s);
+  });
 }
 
 // ---------------------------------------------------------------------------------------

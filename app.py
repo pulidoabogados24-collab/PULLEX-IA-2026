@@ -41,6 +41,8 @@ from fastapi.responses import HTMLResponse, StreamingResponse, Response
 from fastapi.staticfiles import StaticFiles
 import anthropic
 
+import academia
+
 load_dotenv()
 
 logging.basicConfig(level=os.getenv("PULLEX_LOG_LEVEL", "INFO"),
@@ -349,6 +351,7 @@ with closing(db()) as con:
     CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes(conv);
     CREATE INDEX IF NOT EXISTS ix_tokens_email ON tokens_accion(email, tipo);
     """)
+    academia.crear_tabla(con)
     con.commit()
     # Migración suave: si la base ya existía sin la columna email_verificado, se agrega.
     # Cuentas ya existentes (creadas antes de este cambio) quedan como no verificadas —
@@ -1265,7 +1268,8 @@ def _caso_publico(fila, datos: dict) -> dict:
     return {"id": fila["id"], "area": fila["area"], "nivel": fila["nivel"],
             "titulo": datos.get("titulo", "Caso"), "enunciado": datos.get("enunciado", ""),
             "pregunta": datos.get("pregunta", ""), "n_pistas": len(datos.get("pistas") or []),
-            "cambio": datos.get("cambio"), "padre_id": fila["padre_id"]}
+            "cambio": datos.get("cambio"), "padre_id": fila["padre_id"],
+            "foco": datos.get("foco_nombre") or None}
 
 
 def _caso_de(caso_id, email: str):
@@ -1294,9 +1298,20 @@ async def modular_caso(request: Request):
     u = usuario_actual(request)
     datos = await json_de(request)
     padre = None
+    foco = None
     if datos.get("variacion_de"):
         padre, padre_datos = _caso_de(datos["variacion_de"], u["email"])
         area, nivel = padre["area"], padre["nivel"]
+        if padre_datos.get("foco"):
+            foco = {"id": padre_datos["foco"], "nombre": padre_datos.get("foco_nombre") or ""}
+    elif datos.get("concepto_id"):
+        # Caso de repaso centrado en un concepto: solo del Mapa del Derecho o del propio banco de
+        # errores del estudiante (nunca texto libre enviado por el cliente al prompt).
+        foco = _concepto_permitido(str(datos["concepto_id"])[:80], u["email"])
+        area = foco["area"] if foco["area"] in MODULAR_AREAS else "Constitucional"
+        nivel = datos.get("nivel") or _nivel_recomendado(u["email"], area)
+        if nivel not in MODULAR_NIVELES:
+            raise HTTPException(400, "Elige un nivel válido")
     else:
         area = datos.get("area")
         nivel = datos.get("nivel", "basico")
@@ -1313,6 +1328,11 @@ async def modular_caso(request: Request):
                   "empiece por '¿Qué cambia si…' describiendo el hecho modificado.\n\nCASO ORIGINAL:\n"
                   + json.dumps({k: padre_datos.get(k) for k in ("titulo", "enunciado", "pregunta")},
                                ensure_ascii=False) + "\n\n" + MODULAR_FORMATO_CASO)
+    elif datos.get("concepto_id"):
+        pedido = (f"Crea un caso de Derecho {area} de nivel {MODULAR_NIVELES[nivel]} diseñado para "
+                  f"evaluar sobre todo el concepto «{foco['nombre']}» ({foco['desc']}). Un estudiante "
+                  "que confunda ese concepto debe equivocarse al resolverlo; incluye ese concepto en "
+                  "'conceptos'.\n\n" + MODULAR_FORMATO_CASO)
     else:
         pedido = (f"Crea un caso de Derecho {area} de nivel {MODULAR_NIVELES[nivel]}.\n\n"
                   + MODULAR_FORMATO_CASO)
@@ -1320,6 +1340,8 @@ async def modular_caso(request: Request):
         caso = llamar_json(pedido)
         if not caso.get("enunciado") or not caso.get("pregunta"):
             raise ValueError("caso incompleto")
+        if foco is not None:
+            caso["foco"], caso["foco_nombre"] = foco["id"], foco["nombre"]
     except Exception:
         reintegrar_consulta(u["email"])
         eid = _nuevo_error_id()
@@ -1398,8 +1420,11 @@ async def modular_evaluar(request: Request):
         con.execute("INSERT INTO modular_intentos(caso_id,usuario,respuesta,evaluacion,puntaje,creado) "
                     "VALUES(?,?,?,?,?,?)", (fila["id"], u["email"], respuesta,
                                             json.dumps(evaluacion, ensure_ascii=False), total, time.time()))
+        cambios = academia.registrar_resultado(con, u["email"], fila["area"], caso.get("conceptos") or [],
+                                               evaluacion["conceptos_debiles"], total, foco=caso.get("foco"),
+                                               foco_nombre=caso.get("foco_nombre"))
         con.commit()
-    return {**evaluacion, "restantes": max(0, restantes)}
+    return {**evaluacion, "conocimiento": cambios, "restantes": max(0, restantes)}
 
 
 @app.get("/api/modular/solucion")
@@ -1436,6 +1461,165 @@ def modular_progreso(request: Request):
             "por_area": areas,
             "a_reforzar": [c for c, _ in sorted(debiles.items(), key=lambda x: -x[1])][:5],
             "ultimos": total[-8:]}
+
+
+@app.get("/api/modular/caso/{caso_id}")
+def modular_caso_abrir(caso_id: int, request: Request):
+    """Reabre un caso propio (para «Continuar estudiando»). Nunca incluye la solución."""
+    u = usuario_actual(request)
+    fila, caso = _caso_de(caso_id, u["email"])
+    return _caso_publico(fila, caso)
+
+
+@app.get("/api/modular/conceptos")
+def modular_conceptos(caso_id: int, request: Request):
+    """Nombres de los conceptos que evalúa el caso: el paso «Explícame el concepto» después de
+    las pistas y antes de ver la solución."""
+    u = usuario_actual(request)
+    _, caso = _caso_de(caso_id, u["email"])
+    return {"conceptos": [str(c)[:80] for c in (caso.get("conceptos") or [])][:4]}
+
+
+# ------------------------------------------------------------ ACADEMIA --
+# Modelo individual del conocimiento: Mapa del Derecho, banco de errores y repasos espaciados.
+# Cada consulta filtra por el usuario autenticado; nadie ve el mapa ni los errores de otro.
+
+def _concepto_permitido(cid: str, email: str) -> dict:
+    if cid in academia.INDICE:
+        return academia.INDICE[cid]
+    with closing(db()) as con:
+        f = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
+    if not f:
+        raise HTTPException(404, "Concepto no encontrado")
+    return {"id": f["concepto_id"], "nombre": f["nombre"], "area": f["area"],
+            "desc": "concepto que el estudiante ha confundido antes", "tema": None}
+
+
+def _promedios_por_area(con, email: str) -> dict:
+    filas = con.execute("SELECT c.area, AVG(i.puntaje) p, COUNT(*) n FROM modular_intentos i "
+                        "JOIN modular_casos c ON c.id=i.caso_id WHERE i.usuario=? GROUP BY c.area",
+                        (email,)).fetchall()
+    return {f["area"]: (f["p"], f["n"]) for f in filas}
+
+
+def _nivel_recomendado(email: str, area: str) -> str:
+    with closing(db()) as con:
+        prom = _promedios_por_area(con, email).get(area)
+    return academia.nivel_recomendado(prom[0] if prom else None)
+
+
+@app.get("/api/academia/mapa")
+def academia_mapa(request: Request):
+    u = usuario_actual(request)
+    ahora = time.time()
+    with closing(db()) as con:
+        filas = {f["concepto_id"]: f for f in con.execute(
+            "SELECT * FROM conocimiento WHERE usuario=?", (u["email"],)).fetchall()}
+        promedios = _promedios_por_area(con, u["email"])
+    cuenta = {"dominado": 0, "en_progreso": 0, "debil": 0, "sin_evaluar": 0}
+    areas = []
+    for a in academia.MAPA:
+        temas, resumen = [], {"dominado": 0, "en_progreso": 0, "debil": 0, "sin_evaluar": 0}
+        for t in a["temas"]:
+            conceptos = []
+            for c in t["conceptos"]:
+                f = filas.get(c["id"])
+                est = academia.estado_de(f)
+                resumen[est] += 1
+                conceptos.append({"id": c["id"], "nombre": c["nombre"], "desc": c["desc"], "estado": est,
+                                  "aciertos": f["aciertos"] if f else 0, "fallos": f["fallos"] if f else 0,
+                                  "proximo_texto": academia.cuando(f["proximo"], ahora) if f and f["proximo"] else None})
+            temas.append({"tema": t["tema"], "conceptos": conceptos})
+        libres = [academia.fila_publica(f, ahora) for cid, f in filas.items()
+                  if cid.startswith("libre:") and f["area"] == a["area"]]
+        for x in libres:
+            resumen[x["estado"]] += 1
+            x["desc"] = "Concepto detectado en tus evaluaciones (fuera del mapa base)."
+        if libres:
+            temas.append({"tema": "Otros conceptos de tus casos", "conceptos": libres})
+        for k in cuenta:
+            cuenta[k] += resumen[k]
+        prom = promedios.get(a["area"])
+        areas.append({"area": a["area"], "temas": temas, "resumen": resumen,
+                      "practicable": a["area"] in MODULAR_AREAS,
+                      "promedio": round(prom[0]) if prom else None, "intentos": prom[1] if prom else 0,
+                      "nivel_recomendado": academia.nivel_recomendado(prom[0] if prom else None)})
+    return {"areas": areas, "resumen": cuenta,
+            "aviso": "Indicadores orientativos para tu estudio personal. No son una calificación académica."}
+
+
+@app.get("/api/academia/errores")
+def academia_errores(request: Request):
+    """Banco de errores: conceptos que el estudiante ha confundido, con frecuencia y severidad."""
+    u = usuario_actual(request)
+    ahora = time.time()
+    with closing(db()) as con:
+        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 "
+                            "ORDER BY resuelto IS NOT NULL, fallos DESC, ultimo_fallo DESC LIMIT 50",
+                            (u["email"],)).fetchall()
+    return {"errores": [{**academia.fila_publica(f, ahora), "frecuencia": f["fallos"],
+                         "severidad": academia.severidad(f), "primer_visto": f["primer_visto"],
+                         "ultimo_fallo": f["ultimo_fallo"], "resuelto": f["resuelto"]} for f in filas]}
+
+
+@app.get("/api/academia/resumen")
+def academia_resumen(request: Request):
+    """Tablero de estudio: continuar, próximo repaso, tema débil, caso recomendado, último modular."""
+    u = usuario_actual(request)
+    email, ahora = u["email"], time.time()
+    fin_de_hoy = academia.fin_del_dia(ahora)
+    with closing(db()) as con:
+        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? ORDER BY proximo", (email,)).fetchall()
+        pendiente = con.execute(
+            "SELECT c.* FROM modular_casos c WHERE c.usuario=? AND NOT EXISTS "
+            "(SELECT 1 FROM modular_intentos i WHERE i.caso_id=c.id) ORDER BY c.creado DESC LIMIT 1",
+            (email,)).fetchone()
+        ultimo = con.execute(
+            "SELECT c.area, c.datos, i.puntaje, i.creado FROM modular_intentos i JOIN modular_casos c "
+            "ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado DESC LIMIT 1", (email,)).fetchone()
+        promedios = _promedios_por_area(con, email)
+    estados = {"dominado": 0, "en_progreso": 0, "debil": 0}
+    for f in filas:
+        estados[academia.estado_de(f)] += 1
+    estados["sin_evaluar"] = sum(1 for cid in academia.INDICE if cid not in {f["concepto_id"] for f in filas})
+    hoy = [academia.fila_publica(f, ahora) for f in filas if f["proximo"] and f["proximo"] <= fin_de_hoy]
+    proximo = next((academia.fila_publica(f, ahora) for f in filas if f["proximo"]), None)
+    debiles = sorted((f for f in filas if academia.estado_de(f) == "debil"),
+                     key=lambda f: (-f["fallos"], -(f["ultimo_fallo"] or 0)))
+    tema_debil = academia.fila_publica(debiles[0], ahora) if debiles else None
+
+    def nivel(area):
+        p = promedios.get(area)
+        return academia.nivel_recomendado(p[0] if p else None)
+
+    if tema_debil and tema_debil["area"] in MODULAR_AREAS:
+        rec = {"area": tema_debil["area"], "concepto_id": tema_debil["id"], "concepto": tema_debil["nombre"],
+               "nivel": nivel(tema_debil["area"]), "motivo": "Es el concepto que más has confundido."}
+    elif proximo and proximo["area"] in MODULAR_AREAS:
+        rec = {"area": proximo["area"], "concepto_id": proximo["id"], "concepto": proximo["nombre"],
+               "nivel": nivel(proximo["area"]), "motivo": "Te toca repasarlo " + (proximo["proximo_texto"] or "pronto") + "."}
+    else:
+        preferidas = [a.split(" /")[0] for a in (preferencias_de(u).get("areas") or [])]
+        candidatas = [a for a in preferidas if a in MODULAR_AREAS] + MODULAR_AREAS
+        area = next((a for a in candidatas if a not in promedios), None)
+        if area:
+            rec = {"area": area, "concepto_id": None, "concepto": None, "nivel": "basico",
+                   "motivo": "Aún no has practicado esta área."}
+        else:
+            area = min(promedios, key=lambda a: promedios[a][0])
+            rec = {"area": area, "concepto_id": None, "concepto": None, "nivel": nivel(area),
+                   "motivo": "Es tu área con menor promedio."}
+    cont = None
+    if pendiente:
+        d = json.loads(pendiente["datos"])
+        cont = {"caso_id": pendiente["id"], "titulo": d.get("titulo", "Caso"), "area": pendiente["area"]}
+    ult = None
+    if ultimo:
+        d = json.loads(ultimo["datos"])
+        ult = {"titulo": d.get("titulo", "Caso"), "area": ultimo["area"], "puntaje": ultimo["puntaje"],
+               "fecha": ultimo["creado"]}
+    return {"estados": estados, "repasos_hoy": hoy[:6], "n_repasos_hoy": len(hoy), "proximo_repaso": proximo,
+            "tema_debil": tema_debil, "caso_recomendado": rec, "continuar": cont, "ultimo_modular": ult}
 
 
 # -------------------------------------------------------------- admin --

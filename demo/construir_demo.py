@@ -7,6 +7,7 @@ navegador o publicarla como página.
 import base64
 import json
 import re
+import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -19,8 +20,13 @@ def data_uri(ruta: Path, mime: str) -> str:
 
 html = (ST / "index.html").read_text(encoding="utf-8")
 app_js = (ST / "app.js").read_text(encoding="utf-8")
+# La demo es un solo archivo: no registra el service worker (no existe /sw.js fuera del servidor).
+app_js = app_js.replace("'serviceWorker' in navigator", "false&&'serviceWorker' in navigator")
 mock = (RAIZ / "demo" / "mock.js").read_text(encoding="utf-8")
 datos = json.loads((RAIZ / "demo" / "datos_demo.json").read_text(encoding="utf-8"))
+sys.path.insert(0, str(RAIZ))
+import academia  # noqa: E402  — el Mapa del Derecho es el mismo de la app real
+datos["mapa"] = academia.MAPA
 
 html = html.replace("<title>PULLEX IA — Asistente Jurídico Colombiano</title>", "<title>PULLEX IA Demo</title>")
 html = html.replace('<link rel="manifest" href="/manifest.webmanifest">', "")

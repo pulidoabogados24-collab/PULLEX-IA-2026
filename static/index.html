@@ -217,6 +217,53 @@ details.metodo summary{cursor:pointer;font-weight:700;color:var(--oro)}
 .prog-areas{display:grid;gap:7px}
 .vacio{color:var(--txt2);font-size:13.5px}
 @media(max-width:620px){.ev-grid,.prog-grid{grid-template-columns:1fr}.rub .r{grid-template-columns:1fr 60px;}.rub .bar{grid-column:1/-1;grid-row:2}}
+/* ---- Academia: tablero de estudio y Mi mapa ---- */
+.tablero{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:-4px 0 16px}
+.tcard{background:var(--azul2);border:1px solid var(--linea);border-radius:14px;padding:13px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tcard .k{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--txt2);font-weight:700}
+.tcard .v{font-size:15px;font-weight:700;color:var(--txt);line-height:1.3}
+.tcard .s{font-size:12.5px;color:var(--txt2);line-height:1.4}
+.tcard button{align-self:flex-start;margin-top:auto;padding:8px 12px;border-radius:9px;font-weight:800;font-size:12.5px}
+.tcard.rec{border-color:rgba(255,201,60,.55)}
+.tcard.rec .k{color:var(--oro)}
+@media(max-width:620px){.tablero{grid-template-columns:1fr}}
+.est{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:.3px;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.est::before{font-size:11px;line-height:1}
+.est.dominado{background:rgba(57,217,138,.14);color:var(--ok)} .est.dominado::before{content:'✓'}
+.est.en_progreso{background:rgba(255,201,60,.14);color:var(--oro)} .est.en_progreso::before{content:'◐'}
+.est.debil{background:rgba(255,159,67,.16);color:#ff9f43} .est.debil::before{content:'!'}
+.est.sin_evaluar{background:var(--azul3);color:var(--txt2)} .est.sin_evaluar::before{content:'○'}
+body.claro .est.dominado{color:#15803d} body.claro .est.debil{color:#b45309} body.claro .est.en_progreso{color:#8a6408}
+.mapa-res{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.mapa-res div{background:var(--azul2);border:1px solid var(--linea);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.mapa-res .est{align-self:flex-start}
+.mapa-res b{font-size:24px;font-variant-numeric:tabular-nums;line-height:1}
+@media(max-width:620px){.mapa-res{grid-template-columns:1fr 1fr}}
+.rep-lista{display:grid;gap:8px}
+.rep{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:10px 12px}
+.rep .t{flex:1;min-width:150px}
+.rep .t b{display:block;font-size:14px}
+.rep .t span{font-size:12px;color:var(--txt2)}
+.rep .racc{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rep .racc button,.nodo-det .racc button{padding:7px 11px;border-radius:9px;font-weight:800;font-size:12.5px}
+.sev{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:var(--azul3);color:var(--txt2)}
+.sev.alta{color:#ff6b6b} .sev.media{color:#ff9f43}
+.rep.superado{opacity:.7}
+.area-info{font-size:13px;color:var(--txt2);margin:10px 0 4px}
+.area-info b{color:var(--txt)}
+.tema{margin-top:14px}
+.tema h4{margin:0 0 8px;font-size:13px;letter-spacing:.4px;color:var(--txt)}
+.nodos{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.nodo{background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:10px 11px;text-align:left;color:var(--txt);display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:700}
+.nodo:hover,.nodo.sel{border-color:var(--oro)}
+.nodo.debil{border-left:3px solid #ff9f43} .nodo.dominado{border-left:3px solid var(--ok)} .nodo.en_progreso{border-left:3px solid var(--oro)}
+.nodo-det{grid-column:1/-1;background:var(--azul3);border:1px solid var(--oro);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.nodo-det p{margin:4px 0 8px;color:var(--txt2);line-height:1.5}
+.nodo-det .racc{display:flex;gap:6px;flex-wrap:wrap}
+.aprendido{margin-top:12px;background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:10px 13px;font-size:13.5px}
+.aprendido h4{margin:0 0 6px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--oro)}
+.aprendido ul{margin:0 0 6px;padding-left:18px;display:grid;gap:3px}
+.aprendido button{padding:0;background:none;color:var(--oro);font-weight:700;font-size:13px;text-decoration:underline}
 nav{overflow-x:auto}
 .h-logo{white-space:nowrap}
 textarea.inp{font-family:inherit;font-size:14.5px;line-height:1.55;resize:vertical}
@@ -383,6 +430,7 @@ nav button{white-space:nowrap}
   <nav>
     <button id="n-inicio" class="on" data-click="ver" data-arg-click="inicio">Inicio</button>
     <button id="n-modular" data-click="ver" data-arg-click="modular">Modular Lab</button>
+    <button id="n-mapa" data-click="ver" data-arg-click="mapa">Mi mapa</button>
     <button id="n-chat" data-click="ver" data-arg-click="chat">Consultar</button>
     <button id="n-config" data-click="ver" data-arg-click="config">Ajustes</button>
   </nav>
@@ -411,6 +459,7 @@ nav button{white-space:nowrap}
             <button id="cam-trabajar" data-click="elegirCamino" data-arg-click="trabajar">Estoy trabajando en un asunto</button>
           </div>
           <div class="progreso hidden" id="progreso-inicio"></div>
+          <div class="tablero hidden" id="tablero" aria-live="polite"></div>
           <div class="capgrid" id="capgrid"></div>
         </div>
 
@@ -479,6 +528,32 @@ nav button{white-space:nowrap}
         <div class="panel" id="ml-progreso">
           <h3>Tu progreso</h3>
           <div id="ml-prog-cuerpo" class="vacio">Cuando evalúes tu primer caso, aquí verás tu promedio por área y los conceptos que conviene reforzar.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-mapa" class="vista">
+      <div class="wrap">
+        <div class="ml-cab">
+          <p class="claim">PULLEX Academia</p>
+          <h2>Mi mapa del Derecho</h2>
+          <p>Tu mapa personal: qué dominas, qué estás aprendiendo y qué confundes. Se actualiza cada vez que PULLEX evalúa uno de tus modulares, y te propone repasos espaciados para que no olvides lo que ya corregiste.</p>
+        </div>
+        <div class="mapa-res" id="mapa-res"></div>
+        <div class="panel" id="mapa-hoy">
+          <h3>Para repasar</h3>
+          <div id="mapa-hoy-cuerpo" class="vacio">Cuando evalúes tu primer modular, aquí aparecerán los conceptos que te toca repasar.</div>
+        </div>
+        <div class="panel" id="mapa-errores">
+          <h3>Banco de errores</h3>
+          <div id="mapa-err-cuerpo" class="vacio">Aún no hay errores registrados. Cada concepto que confundas en un modular quedará aquí hasta que lo domines.</div>
+        </div>
+        <div class="panel">
+          <h3>Mapa del Derecho</h3>
+          <div class="opc" id="mapa-areas" role="tablist" aria-label="Área del Derecho"></div>
+          <div class="area-info" id="mapa-area-info"></div>
+          <div id="mapa-temas"></div>
+          <p class="nota-ia">Indicadores orientativos para tu estudio personal; no son una calificación académica. Las descripciones del mapa son de orientación: verifica cada norma en la fuente oficial.</p>
         </div>
       </div>
     </section>
