@@ -1,0 +1,17 @@
+# Archivos que NO deben subirse
+.env
+*.db
+usuarios.json
+app_secret.key
+__pycache__/
+venv/
+bd_vectorial/
+pullex.db
+
+# Secretos y llaves: nunca al repositorio
+.env.*
+!.env.example
+*.key
+*.pem
+.pytest_cache/
+.claude/
