@@ -1,4 +1,4 @@
-# ⚖️ PULLEX IA — Asistente Jurídico Colombiano (multiusuario)
+# PULLEX IA — Asistente Jurídico Colombiano (multiusuario)
 
 Aplicación web para **vender por suscripción a estudiantes de Derecho**.
 Cada estudiante tiene su cuenta con un **plan y un límite de consultas**; tú, como
@@ -14,7 +14,7 @@ web, boletín jurídico diario, adjuntar PDF/fotos, memoria y exportar a PDF/Exc
 ## Instalación local (5 minutos)
 
 ```bash
-cd lexcol-app
+cd pullex-ia
 python -m venv venv
 source venv/bin/activate            # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -47,6 +47,24 @@ python app.py
 Se crea solo al arrancar, con las variables `PULLEX_ADMIN_EMAIL` y `PULLEX_ADMIN_CLAVE`.
 **Cambia esa clave por una segura.** Con esa cuenta entras a `/admin` para gestionar estudiantes
 y regenerar el boletín.
+
+## Novedades (PULLEX Academia)
+
+- **Inicio con dos caminos:** "Estoy aprendiendo Derecho" y "Estoy trabajando en un asunto". Cada uno
+  muestra sus propias herramientas; la elección se recuerda en la cuenta.
+- **Modular Lab:** eliges área y nivel, PULLEX genera un caso tipo examen **sin mostrar la solución**,
+  respondes, pides hasta 2 pistas, y recibes una evaluación con rúbrica (problema 20, normas 20,
+  argumentación 20, aplicación 20, conclusión 10, claridad 10) con lo que identificaste, lo que omitiste,
+  la norma que faltó, el argumento contrario y cómo mejorar. Luego puedes ver la solución de referencia
+  o pedir una variación "¿Qué cambia si…?". Generar un caso y evaluar cuestan 1 consulta cada uno;
+  pistas y solución son gratis.
+- **Progreso:** casos evaluados, promedio por área y conceptos a reforzar (con acceso directo a
+  "Enséñame" sobre ese concepto).
+- **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
+  socrático), Examíname (simulacro oral) y Audita mi respuesta.
+- **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
+  con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
+  un modelo simulado (sin clave de API) en http://localhost:8000.
 
 ## Funciones
 
@@ -91,11 +109,30 @@ repositorio, y defines en **Environment**:
 
 ## Seguridad
 
-- Contraseñas cifradas (PBKDF2-SHA256, 200.000 iteraciones).
-- Sesiones con tokens firmados (HMAC), 14 días.
+- Contraseñas cifradas (PBKDF2-SHA256, 200.000 iteraciones, sal por usuario).
+- Sesiones con tokens firmados (HMAC), 14 días, **revocables**: cambiar o restablecer la contraseña
+  cierra las demás sesiones, y hay "Cerrar sesión en todos los dispositivos" en Configuración.
+- Cada conversación solo la puede ver, escribir o borrar su dueño (autorización por recurso).
+- Límite de intentos por IP **y por cuenta** en ingreso, recuperación y cambio de contraseña.
+- Cabeceras de seguridad y Content-Security-Policy estricta: ningún JavaScript en línea (los botones usan
+  `data-click` y un despachador con lista blanca en `static/app.js`); scripts de CDN con SRI.
+  **Regla para quien edite el frontend:** no agregar `onclick="..."` ni `<script>` en línea; la CSP los
+  bloquea y `tests/test_seguridad.py::test_WEB_006` falla si aparecen.
 - Enlaces de verificación/recuperación de un solo uso y con vencimiento (24h / 1h).
-- Límite de intentos (rate limiting) en registro, ingreso y los endpoints de correo.
-- Historial en SQLite (`pullex.db`).
+- Historial en SQLite (`pullex.db`). **Ojo:** en el plan gratuito de Render el disco es efímero;
+  descarga la base antes de cada despliegue hasta migrar a una base gestionada.
+- Estado verificado, hallazgos abiertos y plan: `docs/audit/` (empieza por `09-risks-current.md`).
+
+## Pruebas
+
+```bash
+pip install -r requirements-dev.txt
+pytest tests                  # 49 pruebas: seguridad + regresión (no llaman a la API real)
+pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
+```
+
+Con el servidor corriendo, `tests/e2e_navegador.py` repite las verificaciones en un navegador real
+(requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`).
 
 ## Advertencia
 

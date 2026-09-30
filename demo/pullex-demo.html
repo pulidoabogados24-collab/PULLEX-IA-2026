@@ -1,0 +1,1594 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PULLEX IA Demo</title>
+<meta name="theme-color" content="#0A1E3F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PULLEX IA">
+
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAoHUlEQVR4nO19W6xmyXXWWlX79l/Ofy59mZ6e8Xhsxsh2EsQ9kkGxYiWRQLwgBEJCoCABikA8gAQCoUjhgQdeEA8BWYII/AZYOIIYYiUoCgELZRzkxPg2Y89kfOl7n9Pn8t/23lW1eKhdtatq1z7dY3fv/5zuf+nvPvtatXetr9atVtXG8WufhC1tKUZs0w+wpYtLW3BsqZe24NhSL23BsaVe2oJjS720BceWemkLji310hYcW+qlLTi21EtbcGypl7bg2FIvbcGxpV7agmNLvbQFx5Z6aQuOLfXSFhxb6qUtOLbUS1twbKmXtuDYUi9twbGlXtqCY0u9tAWHQ4ibfoKLRVtwGEyQIlkTqfbIC0/Jph9gg4QABESkBCDj2TgtZqKci3IOSiFyQGyueVHpBQSHlgqKlAQAlubZ+Fo+vZKOZoicSNXrs2p+WC2OVb0GIEQGqOXrC4eSFwocCECkBAAgT7PpQT49yMZ7yBMpZLlaybriPEmK8fTqrjoQ9eqkmh/Vq2MlKgBAxg2wXhSUvAjgQAAiUkAKWZqO9/LJQTbZZ2muJFXVWlRnSkoiQgApRFWuGE+SLE+L3Wx6hURVLY+r+WG9PiUpABAZA0Sg5x8i+NzOldX8IyKSgDzJx9nkSjbZ59kYAOqqFFUp64qIMDQ/iYiACBB5kiRZkeUjQFT1ulw8qheHolxoMwXxOUfJ8wcO43qQBGQ8LdLxfj69khRTRCaqqirXUjReCWp7s2EwhVqDiACAFCLjSZrkRZqPAEiWy2pxVC2OZLUiks+x6frcgMOamQoAWJKn4718epCOZsgSKeq6LEVdkZIE0IgKzUokn6cEAESA+qh2aLRTQ8A4S5I8yYskz0EpsT4r50f18pGsy+fSdL384EAEIlIKgJCnSTHTZiZLMiWlVh9KSoAGP6jhQNTp6802kT1B2MgTasSL1lMAjPMkK9J8lKQZSVGtTqr5YbU6oefLdL204GiYpc3MJMmn2fQgG+/ztCCiuiprjQnNasMqBAcVvTID9AkLEee83SJtwLIkTfNRko84T5SoqsVRNT+qyzOSAhAvu1Fy6cBhIlfazMzG2WQ/mxzwfAzARF2KspRSkCJAAkDfnnB5HZEZGjgOZAgByZEk7sVG4RABAWCiUVJMkKGq1uX8qF4eifWcSBp1c/mMkssCDmtmKgBkaZFN9rLJQVrsIOOiruuqlLUJfsdFukVGXKF0tYlXSEQNeWc1UJAxnuZpPknzAgBkOS/nR9XykayWQJcv6nrBwdGwuYlmJlk62sumB+loxngqhairUopaSdWwHI1lEGVkgwwIj0MLGvIEQ3DWv6XZNHWhwRgRADDGeFZk+STJC1KyXp+V88N6eay06cqYGdW60Ci5sOCwkStCnqTFLJscZJM9xnOlVF2XoqqUkkDa9dDcc7R7y+VAobQqwxia9mQgMEKTw2z57OyW2RwiUAQALEnSbJQUk8Z0XR43pqus4cKbrhcNHFqVKyKFLOH5xEQzRwAgqkpUlZRCd1fbqNbfdKjDyI7R0MiSBiGt0WgNUufaCPs7Z7ugAS1ICAgBeZom+TgrJowlSpbV4lE5PxLr04scT7sg4GjNTETOspE2M5N8AsBEXYm6kkJoid2EM01TUmBmek18jsXgMrhVKHFtEjNIO2VaqJH2ln3saoOJkGGSFholyFBWq3J+VC2OZLlo42kXBiWbBYcbuUKW5nrgIx3NkHEhhKgqKWqlCHSKhZH/5vbzfRBzJOqeeLfG7AyImhpRDWXPU1eIhXxuIiXEGE+yIimmaT4CAFHOq/lhtXgk69XFMV03Ag7PzESeZePdbHKQjncZT5WUdVULUZFU1KbdtK2OHmf6zILzQWOFflOu6eUdk8OxXdDuhNrE2hlNfC0Iwpu/zZVW5BnTlaf5OBlN06wgkvXytDFdRQkAmzVdBwaHY2ayJBnt5JODdLzHk0IR1XUl60pJSW0mlucXUChwTVCre/GTiBP9LMEtpq5z1VCnrpjhY81d68d0SrPKVAvOLM3HWTHljen6qJwf1aHpOihEBgUHKYnIeD7JJgfZZD/JxgQo6krUtRTS9rnQbjCMRqRARgPEGOn1eHBOOb08lBlugcFd59blHiVXqgXP01bZeSord4gUAWKS5kkxzUYTxhMlympxVM6PxHpOSjR261A0GDgIkWc71/QAKSCTdS3qWgqhiJpBj34F3/ZMW1qr9zt39bLBMyZ8CRSojN674k8I9uEIwkftygzsLxMAoNG2OlJSTNNiigxFuSrnh+XpPZL1YPgYKtmHAJNkcvV1IirXpRJCKtKDHgyRIm2EFhQEhEZo2HZ17nCB4MWjOoCzXCMyFi4BBCHzmBzqr0tfQoTurnc29l7mNut7OZVpOwOISKyXYr1Adpjko2y8O736QVHO68URYjKMfhk2E0zpDJsKGWvNijgjDZFnGxjJEGW/Diic2/ubCtsiY5dbpvqFx55QazAwMAtlBvihteDOvrosdBEREUhWixMlRZJlkXKeJQ08NQERAd3Uq0iPNO1FbcuBGVxpsRS5CxtGAbR3OHUYuY+I5CGzYyR4haOjK4InBFshAnaRAT4yrNXiPr9XlykXPb8JEBlDRBjS3ACAjcxbidpk/iFy+GK7mOGo1+c697Zn3U5prmiEhntpcJdze0eBdV/CXEdoHe3423VVDHUPus4Xea9Pfc/xTGlYcLiWp21ehO5bm1Eyws6hZidiT9hyO3ZGczthUGZTWNQ4sIyO12UkGCGGQqZbZlsjRsf/zNVEqK0s+zYxeTQYDQsOwyZ0X5ciPEa/Fb3r+3phxB5oNy0ynDItB86PrMfqagLlzeN3tEl4l0077JggroJs+gO12opa37gD6QFoM9MhOx3KEZ4tgMBe5XDwfG3idVJ71u37DZfI5WnArahq8HWMUSHmUidcEtcm5Mghry4jM0xpVip5OI6++DOn4dVKVGag07Iex2wHjTWOq0HMRRSeNVEPyxzE8C7wd7s8Ble6oPNE1HLOvSsEdud927pas5nQgCU0Y6l9/EFpgxOpOy3V/OdGFXRwo6N33B17LYb8hBYZ5LDBDZh0fRB302WJpyPQZao92aL6nDK7pXl3dXSjlSbmfQekjc94o0BqRthFHZETHLKCXpeAxNCIHEQA1RkEdx2LWDjVk2gez8gRG2g1E9pHcp+9z3MJ39yJuPiFEASIGVi1bAIcvZHrMBPCVzcuBWrINTSoqnFRMacW1ielImrFwyN5x1HDDjkjzoAjMQacASIo1SiFyBM272s0W6t3PM/c83fIgjLsE8+75OgHv2uxg5PME/ZCryhPoCNAKfCNG/VPfmwhlckg9BjdRYNBZxjJtIca8K4rWFY4X/PDOT445ccLtqrgeMFIQZpQkVLCiQhU/B1dKLd1W63R0yqh5huYNqhWCFqPVe+jO6rptCTGc0I7pTGkdc3+2Ourf/lzd6BGR9rbshCM1dd0Xewc7+ufCkAhKBACK4lHZ+zd+8k795Kvfz/7v7+ffeW76eEpy1IaZwpQ549CMxkqdMytUkR/FDcSLjENARtByObA0fZJvdc2EzravL24/ePqBcdFNf2sliiXTNWIAK2aQueuZjpk33FTXrCtfVcEzmjMaXxNvnqj/omEQKFc47dup//9d0ef/T+j33k3B4CdkVJKv1Kg/owwiGhLV4C1Gg39/IMhaXPgcByBoHd7EYhoQmVfMo5mNxBHIgSmC3WNAVco9B7v2TbVNJNjJKoK9Bx9zuCjr1UffaP8uz9z+vnfHf3iF3Z+8+t5kVKegFRuWTbzoxkhjJhSHRxQ5NhAtBFX1rXGW2kQ7x+x+GkEGeT9NYl4Ovv7aZKZP0cAxJA4I4ZERHUJ5SnjnP78n5r/j39y/5d+7vBgok5XLOHeKzsywx2wp/BFvOObCXLAZsBhjU4jah2xHZG2Mfx0YGRMf4saUi03B/ghAEeSCso5k4p+9mfOfu3n7/34R8qjOUuYY0SR+74d3dInIV4YydH2EjJhLitJfLFqtwLQRAWM/duwy3TwweChx3qJMSKg1Sn72Kv15//RvT/zh1dHC8ZZ+4yOzHhs/HTDtAnJ0SgHbFLAHPL1jHe01z+0Srlr3TX82sAvYbRe4d6I/uPfe/CpH1mfLJFzHQR3AR6TGW3/2Dw+NqVWAnvMjNOGsuGxzdTchQ0QjMRWBGpYodH5MaR1CdNcfebvHH7khliWjDMrM2KdorP5ZC3wDGljBqnHS6/rB96CmxMKfjPZdiZq/NBWSW1ErQQ/xmC5xldfqv/FX32E3mIOQfwUfKsziLtvTIRseAVjAnBkRsB+6uDBlSgtDJp8IQIyUrmBxYAGac+POKPlGf7ZP7H8y59YnC4ZZzHPw1OPDrype9GgtKE4B/mpN63McNnfzQn1wdIgCzGMmREoIqVTVXvblAgUPVFaJhGY9YGIRbl7/u2AStDf/umzX35zLJSvVij2Xs2pPt9tONpYEIy8uScAptt7l3hn3cvMUXJtF2oO2S3PyjM3me00oSR54obnBAggsKpYJZAxQhfJsfKbbQKGsF7jH/1w+akfXf+XN0e7EyWUvSb+XhfAGAXYbPjcSZmj0K8DT7KEx/XtziiuW0wjmimwaNptRTAq1Be+PP3sb8+mhVLkIMqpwxabcprk6uqO/Ngr1R//UHn9QCyXTCoTge2UH24TCYJxQn/ujyz/65dG1KaYdN6LvDhqT6HD0cbzOSAmVKPi1OE2WWi1XG0C0gRARIq8uYk+SYk8UV9+r/jMFw6SHSGUW1IwlGGeRAFwGqX0+vX6b37q5G/95EmewLp28HEuMcB6jZ/8+OrqTM7XjDPlV+GW0uOebAIeGwEHGVZC7KV9ZLRdqJXXbs+yi68QAqCbdXduSq6CUaaSHXEwlUK1xQC5TDNLTTYCiUjB799P/v5nrv3ql8f/5m/cv3kgVxXwJ8IHVRJe3pUfvVl/8e18krv1OHrIkxfkismNRNA3HD7vnHB1cHBZc9aIZRMwd3NC7V9qTNSoD6GvUwRCoVAgFQgJovkfpUKhQCiQCoVEKVEoFBKkREVQpHRlJn79K+O/8q9fOltBwnpr8WsEIWGUqx/7QCVq9OUNta/Z2KeaHKQESmYoGhocBMEwUmfHyokfJCe02W8Y1uPKKgWmjKauJ84JBUVQS7w6k1/85ujf/9ZsnEshn8RhJqUIOb1yICKvDXaIOOweoTk+LA0NDof95LSF3wihaDGXOQ4wGLHf0dEE0KxJaRnjoKTZBAXKgErDy0ju4JECSdaQVJCl9Lk3J6crxhEU9ddltgGABNzYE0lKSnmyAgDOmc/itcCwNLzkgNh7uj59vBU0K42d0dzlyKGwZUNN47YvWbVE0UsBoTOJyBNNiiBL1Nt3s9tHPEmoHebr1uVsKwX7E5lxpdpTwVOHe1HtOxhdpG+8dQR6u+1MGYOufebL/0bJ96sVffF5vKDuY4SECLXAeyec4xPFYQFIKtgdqYQTKT9CHusSvfb6gLSpCKm7FTW3yPEg2n171jsBEDQmEZFCV4e5pGxnboMKzqCHU1r4hA0q27oUaePm8Zl8RKij6RjYG+RUTQRO5CYyrD8sbSj73Eu4jfDYC4MaWPgn3LuC5jPOSihh7GkAewEAhGG07m0OUKyIIcgSdX0mhICOHIpWSgCwLJkkcHIVnLrCh2kivLFR3IFocLXSqnqHWjHuG4BoFUqkRxvAeO6PM/DmFBn8AFo2t5XZ4z2d1Q1NMKgEvPFS/fKeqKVjyPb/iACR5iXqz3uYAl2vHOyKAwjONBiCOMafPW1AclA7zcg6Hx1bnSIionckypMfBKDzOTBILPOuJ4p09ogcIugeA+CMqor/hT95ulPI4yXnCI9VK4qQI917xMoa85SaxGPy5J8TwUMIQboB4TE4OLBjSjh/3MvAkbkmiNgRxui2LOrEcALw1IqrJQgAQTXrklO88c81BRkDjnR4wn/qD81/9idOzlbItPy3cU6/LrutJcft40RJHW7thszNHeT8c3vJ4LRRydGHDGjaBB190xEt4eiVu6N09NyGwztSiYAYQsIp4eTMrUMjovQBI/MVkIHUssSqYj/1Y/NP//W7CaNKIKJfRUzuACAiLUr2zv0UGXRvIKtv+2TGJuCxkbmy0GPdk9tt0TEoWx0EvoaJl29ciP4HAIBFieIkva8ApNvrXT3SJqEhIz2b7eMfLP/ij5/+tT99nHIqa8aebMIRASUIZ0v8ve+kWWo+C9MQgrYwDCoi70abmZ0wNDge944N+wOZEVsn1L8FAjFOANEVLJtnWJb4iTcW/+Av3R5lSpH5iFtzsZFJxrdM9JD9VHz0ZvXh69XuSJ2tWFkjQ/V4LwVAP0ma09e+n94+SlIvCBbosLid4SQmD0pDg8OPaQadxGoKIvjB1gltblEARL1IRKRliZ/4yOKnf/TsSbirjRipsBJYCTxaMJ3s88T8IkmYJeq33hqfrvjuWEhqLabmMZE69rOjk+D8IeZnRRtaggEddeFtgJGhrZffnvNslA4oml2tU4xB2k+LEs9WT/z6CAiECAyBdWbyPv5upPmK/cbXRoyRE8wjcGJe1P9e/fbxs6UNJvugw2bzN8wJ7fo1ndutEWl3tcXxuBxSBsDY+2/y93+HJJzk9KV38zffyUeZko1H1ZoZOhJqwBHIRdQXbCTQsdklGCDoKH7CTddT8SWNb79CcMkTRC2HISLKuPrPb+7MV3xvIszUamfmZpt0ENGF2kHfyLtsLPvcbLWCgbo5oe3FMfekx3Yh0kMeG2pRn4hglKqvfC//3Jemk0Iv+G6RTnZ1KvDdJLMR9cWHowHB0fHP3O7uBi6MeLXapRM/bQvwGxbacAGpeLrQwCQVppz+1a/v3T/le2MpdUpiw/Jgtf/O0zZncVP4GG5sRY+GOVKztUndvv/DrBPaosY1SMnvjYNtAwiJu2P5+S9PP/vbO7ORsgpFv4MdfTNuiq9Q7Ms0QNKoV0OaH8NJDp3FYBKLO3ZGaz64y7UETda1Qixp2661ZI2R35HWQ20rwiKVt4+SX/jcVaLGdHBe3rU6O/IvzDYhRAYApOKrgT8jGgocCNC4EN5hanNCW+nq7AROXbDprs9nkUCg0yzUxtY80U+iv83wD//D9W/dy3bHUkgHGSYrurNsEdnYfUjNVGAZOfXMaEiDlEhKb/4hkb8UnP52/JOMNLnyoJUu1kIlPWmZ/PiZW+wz2W7SToiAAPdG8hd++fqvfHm6O1ZShgOFjl/mv3CLDHIEDTBkQECghgT8YDaHM37hGJ3knINITiiFJZC3Z7bIv8ewyBfez36bAEgq4AxmI/nPP3/1F3/tYDZSOlrePlskGG6R4bLeR4zuVKpjmjxLGtJbIVKSYdp1QUNh4fEaQm4Qhsea4t2xFXNkQCICRTgpVFXjP/5P1//tbx6M83ZmmzOIYoVj972iCkUbpPrbXs+pWiEiJWueFQARe6IvJ7TTXtGQuT9sSaDOzSF96kQASmHKaTaSv/fd0c9/7vr//uZ4NpZaTAQ5ocZd923u8JtOrtgAQOA8JVmTkk+0LsBToiElh1KiSkYcrXkBAIGXH5EZfjM5xYFzl+mIVqEH/fKZEDVJQ5hy2hnLowX/9K9e/fRvHJws+d5EyobfkZxQihqjftn+NiJPpajIRtsHocG8FQQiKWqGrFkMzBgYvjZp2w/8rUictDHtw2Vcbcd0fdk2qAJgsoDQypvYNfFtXSIBcAYJoyJViPhwzj/3O/u/9D/3v3arGGdyp5BSaanVIMDxsds3NK/Yr1CsiYaMJ5ko50AKkJ/f0k+Rhvt0KCAoURIQIlMksF3homs+OPeERyxZZxe7ZicR6fStsEizRwCcKbNI6BOBQ+8yhIwTIC1KfjjnX/ne9H+9Pfni25O37+acqd2RVAqEcpdI1vWFmsO8XzfOH1haBACIyJJULkpQBMm5Euep0oBqBRnJGogYZ0qa3qTJwsDxPHoSfBw7wwTYg54NzSQj7OOzIkgYPZwnD+cp76xoeN4bAJQ1vPsgf+d+/vVbxdduF4dzvq5YnqppIQGa9YoxQDc5/1xF6emHuFxsXpQlgIxE/cRP+nRoMHAQAEhRAhBjvNGjrjXRlxMaygyrstuhF8N3LyWIOlu2GKlwbyz/3Rev/bNfublvh0kd7jgmZJPUafQA6jTSukaeQJ6ojFMxEaqZnN3WYdDenxMKQRsEYqUFEiniSQZASpTwflKMfngaTnIgMlWXStaMp94JrRyiL90TESMnCA/W3HPKIwJS1LfOvRYsUoIQWAuUThyidYi9EK3VEgQI40yx3EyeBpIqkPMIj80JtUj0LSXo7hEAKe3iiWrpdahnT4MO2RNJUS6SYteaYbE3Jf+v204tx1yx4tivlsUEfg5pqJqIbGYXNaFUd8kP152CRpRgo8uIQHidPPKE9h3iMsOLkTumla3LI0zSkRKVEqUeYRmMBqwMEZSS1ZIlCTI/g7jbgIbb7v1O9/YuahW45ot2aoNV7J2f8nZtWa1e0nNfmwtMqNV+xtMbs/FA5/kgGPhi3qa5CsEXjWFrEBAgS7KxWM9JDTokC4OCgwAQZbkEIsYTCEVE0C4d0Nh9YxZAiwgKFDaRUS79P8tqw6v+UZ32Wdy6upEUAi/I5ebpBO9lH7SnLvNeSMB4wtJMVAvwJ+cPQEOKKQJkolwAKcbTTkK1Y8OHVkjbvo/5dry9juziLfHPYvizId3sbp+XFoHuwWYvfEIyh7EJpfjvFdzV6tTgbLOlLyKSPCsAUJQLYGxAewNg4InUiKhkJatlmuXNkeYMtYx2VXZL5F937rfjjWKJSgFzDTlMau4O4y6tqLDnO3W1O15OaO8IEASQcHYoUhcBJfkESMpyicNaozD4LHskJarlSZJmyFk4l9k2SCjdEcCObj/u2/GmnY1aiVP7mT59XctJV04Ez9CaJGAvd0gDos3vAv9vRFG6aAvrahwk5Nl4t16eKFENbHDAJpZgwHp1TEA8yYFUrKeC34JkhDtRy/hAwntWSwOL8z/G085Vc7WV+XiDV0MAgjiPjRZwx4Y7vZwi72VAFVYAAESKpwVPi2p5AjC0NQqDg4MQmSgXVFdplptWiIprX8cYFYLeLeTf0t5rlUrfz7kKDNMcfeaV6dSF0Sd8fzmh7SNE1GjTDex7pKMdUqpeHSPygXUKbGJNMEZSVKtjnhWIiEFLteQGL1rJYJo8uKvDBsvuXl/FrdA3LbvqolUobl1tSEOrHIf7HekSj9E/9iCmo5ko57Iuhxypt7SZBeOq5TFjLElzP2Lxw387Xh/QZsV5akWpQMLbzR6jr3+dUGyNli4HjSKMUiyDFAwSSSmWFmkxrZaPgOTwOgU28o03ZLxencpqlRYT0yCuo+C3F4FVAJ7MCHW/wwbz2aZzDNL2Yq+ysPZ2t3+dUKuZTAjMVyjkP6GnUMK6TKxeG+Aqn+4DqWp+iMg6DzYEbeQbb0iyKucP07xgPGk42banFwl17Ayneaw5D5G74HERUgJQrqcUZxWE/IjtaeP4feeEerOtyDyyKy0JeZJPDsrFkaxWQ+ZwuLSRtc8JkZVnD0nJNB9HMoGbq1xd7krcmFLXZH1e6wb1/dq7XVD0yKSIRHEHUWxolR57l/d6zo6VnI31SyobzVialacPNqFPGtrQIrXIZb2ql8dpMUEMREPT3u64qxc/dXf9uxzZAedESHWgo+WdrzEw2O/ENC3b3Uiol5vi3hU8IQSbZMtFv+p8ekWWy3p1shE/RdPmVjAmWp/dZ5wneU6BYnZmOpn+5Db9Y+R/Y4fCeWql6eXNR/m8Hh9JAPE23ZxQNxJ6vjvhlhOChrwTSErybJSOdtan90mJjZiimjYFDkLG6+WxWJ/l45lvwLW9MzaqQb0OhWdFmFBYLzXAOa/hrbpoo1q2l7frhBqp0o7H9isUx+FtxmOtzCD7bRACKnavk6zL+cMNig3Y6NrnSEotj2/xJE+zkV1EzZ8D59t65P3xthuJY3b10n/kjLGEv7asqLg3B1xt1QowMtk8/sX2EaKyxy/ccWz0M+i5fqREmk/yyZXl8R1Vr2HYBI6ANlg3IePV4lG9Oikmu2gS4JoRCnsRdLbaIZieLkWPj5B6NsXjeyZ5+oycf649EQmCx4Bn5IWTjAhmygERQLF7Q4mqPL2HbJNiAzb91QQEUqtHt1iSpvlYCw8brLbd1Bu5ha7ZQQGnXOlwrlppNJcrHJwyvR7fmgUEELrRrvTqGan3gNT8cUdxm2Q0JbN8J5vsrY5vbWSkLaDNgoMQk2r5qF4e55NdZAzIBg2c8Y5QZnhb8XU71WMipERemg+0/4ebjXXgMDRm8pgSQmOzu0fg14cmcKd7xGj/hqxW69P7GxcbsGlwAAAAwfLou8hYPp65wsO7Ihwacztrt9ODfzb26w7tBnW1tbSldJDhwLYPFrF6WnHVjuKikjKbXknHu8uj75GsNzKYEtDGwUHIeb06XR3fzqezJM2pSfKPeSrN8VbGx0sExxjtG1sJy4zW5vkgTykntLEs0A2TIpBSPM0nB6+UZw/L0wfIkt4RmQFp4+AAIELG149uyXJV7Bzo7Hsnr6KnA5H7x/7fiASlQIY/DI504+dd7QTwtHNCTSFkTFEjIGi8fxMAFw+/cwFERkMX4aPDAIhK1ouH781e+Xg+2imXJ00OfnfuObn91255XTphNM5Ewhh401u0gwAIIBRMM5FydzJTpC4yYzha7FOsrnYGQyNleqKrzjkEAEQTzgEEUEpm4718emX+4F1ZLZClG7c2NF0McBAhT6rl0frkXjG7Lqq1qEvmLSHbsRkD0AAAgCLIE/WNO5N/+t/ekL7maASDibzmCX3z7rhIlYrkeka8CWhvjVhETgl2J5yZ4nnqdnBAKxSeTa68Vq1O1id3kSUXBBlwUcABumux5eF30mJnvHd1fnhXLyBmbXmr+2PugumXhAlTt46Lbz8Yu2cdu9WMlxFkiSoS1URSQ8+zue1J1gl17uizh1qpYuURtekcOLn6GiJb3H+XSG02JBrQhQEHACJToprf+/buqz9SzA5Wxw/spwyoVSix+IHp1vpcwmk3Eeas+x1y717SE1y7K5m2dugTrRMaPInzIO0JE7zRpTkiRcnx/ivZeP/0zjdEOb9QYgMuhEHaEiFL6vXJ/MF7+Wgnm8zMNzbJmPnQQYbhrT2PQETG/ESpQBJKCc4R/TPLa3XNUoOjp58TqgWfxh2CkiKf7I33X14++l559gD5xUIGXCjJAQAAhDxdn9xNi8l494asK1GtGLLGGIz01M4aGAS+y9n1dwwj0fAu0DitedEW7dToHgkfPhbTdGJ45htEiEBSJtl4evX1anW8PPwOIr8IvmtAF0pyAAAAESLOH75XrU4n+y8laa4iq6SF/d12347h0DOEO2BOKJj5LC0ylGJJNr3+YUVyfvfbRHQRQl5dunjgAABkpNT87tskyvH+SzwJP3ylqbX9jGUQOjURtLj86rNddKHW9PDlQSx+6rirXl2mtNbkQW3gMja5/jpP0rM735RidaGMUJcuJDiAEJkU5emdt4DUZO8lxrhjf0CbDQFO89u/cVZByIDY3lPPCUXP1Wqmce1cfT0tdk7vvlWvThEvnKlh6WKCAwAIkYtyfnb3bcbT8d51BOZ4HA0DQke3U0jnf3AY51FrcTzVnFAAIDKhdyIAmlx5LZvsn939VjU/vGjuSUAXFhzQOC/L49O7byVZMTl4CdDiAwAAqZnPErgKAVg2mxNKpi69Mbn2wWLn6tmDd8rTexcnEtpHFxkcoPFRzQ9P77yVpMVk/wYy1tgfFGNRzJncbE4okrEzAKbXXi+mV8/uvbN+dPsijMg/li44OMDi4+TON5Mkmxy8zLi2P2KLvNqgSLwkoy4M2591TmjznyIEnF77UD49OLv3rfWJRsYloIsPDmj0y+Lo5M43WJJMDm4ynpISrQ4ILYP2xk5Jjgp69jmhyJCUQs6m1z+UTfbO7ry9Prl7WZABlwQc0Noft76BgDtXP5DkY6V0/COq+x9Tmqd7yPkX2C5h0bG6jLyw4bbGdkEkIXg6mt34g+lodnbnrfXpPWQXLep4Hl0WcECDj9XJya2vyno1vfpqPt4lZ/nPnpEOsztUTigZaaOkSMe7s5c/gshPbn21PHtwwX2TLl0icIDGh6xXJ7e+Vp0dTvZvFrtXm9QuS20spE+imMFRgKedE9rkzSMBKVnMru3ceENWq5Nb/69enlw6ZMDFG1t5LBEiByVP7741rlfjg1eTNF8e35OiZgwpYoySz0gEX3JgHETva51QN6UISElkyeTKB4rZtfXpvfn9d0mJy4gMAMDxa5/c9DP8gERK5jvXJtc+jMiWx/eq1SkitsPjzUWhfjEA0d+Op7h4cXJCycWSq03MvnZUzccbZVJMJ1df40m+ePje6vgOAsCGFlD44enSSY6WkCXl2X1RzqfX/sD0yivrebE6fUhSGncgPh77JN+Ob2/o8pQiW3osDRCK3Rvjg5uyXJ58/6v16tiYn5cSGXCpJQcAAKBOGBvtvzo++IAU1er4fr2eI6I/RkoQzjBz9U0gCmxCIYV2qGNgGBAhEBHJJJ+MD26mo93V8Z3Fw/dIiksR5jqfLjs4oGGjEun4YHrt9SSfrueP1qcPlawQGfiqw4Y1oB096WM/hOIkYoWQtjDy2fXx3ktKisXD98qz+wh4eVWJS88BODQhKYE8He3dHO/fJKLVyf1yeQLmc70AFOSE6oPgbXeDrtYRCesjkkCQjmbjg1eSrFie3FsdfU/V60sU43osPTfgACNCZFJMx1dfz8f7dTlfnTwQ5QIAmi86n5cT2hddJW+sjgCIiBTPRqPdl/LpgSjn84ffqRdHiAgXNTPjB6PnCRyakEgCYr5zfXLwKk+KcnmyPn0o6xUiAjLqyTeOhDRay0MXjKAUkWJJVsyuF7OrpOTq0e3VyW1jYTxv9PyBA6wIYUlWzG6M9l9GlqzPjtZnhyQrAP2RFehBBnRMDb2piBQmaTG9UsyuI+Lq9N7q0W1ZrxhjAM+DhdGl5xIcmhBIKVI8HY32Xi52bwBROT8qF8dKrAmwXYssbmeYHaUAFONZNtkvZtdYkpZnD1dH3xflHJBtahHIYeg5BocmJFJAKsmno/2b2fQKAFaL43J+JOqVMVfbkVTD6Ub2ABBLi3xyUOxcQcar5fHq0a16eQIIFzbx8ynScw8OTUgkgYjnk2L2UjG7joxXq9Py7EhUC5ISGWtDq0REChFZNsonB/l0HwHL+eHq5K5Yn+pp3+elJj5H9IKAAxphQAqIWFoUs+vF7AZLM1muyuWjanmi6hpAASJjPB3N8ulBkk9JifXZg/XJPVnOAdBg6PmHhaYXBxyWtBRRLCmyyX4+u54WMyJVLY7r9VmSjbPpHuOpLJfl2f1yfiirFSA62ucFohcQHJoQSBFJRJ4UO/nOtXznCvKMlKgWj8qzB/XyhFSNyM16fi8WLDS9sOAAADPHSEkAYGmRjmaiXEgdNHthDItz6BKPyj4F0gFTlgAAiao8vY+IDixeaGTAiw6OhnRoHJ3JZy86LDRdrjTBZ01bTHi0BceWemkLji310hYcW+qlLTi21EtbcGypl7bg2FIvbcGxpV7agmNLvbQFx5Z6aQuOLfXSFhxb6qUtOLbUS1twbKmXtuDYUi9twbGlXtqCY0u9tAXHlnppC44t9dL/B5HRvAjJyflvAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,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">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js" integrity="sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+:root{
+  --azul:#0A1E3F; --azul2:#0E2A57; --azul3:#12356e; --linea:#1c3f74;
+  --oro:#FFC93C; --oro2:#FDB813; --oro-d:#c9971f;
+  --txt:#eaf0fb; --txt2:#a9bad6; --ok:#39d98a; --mal:#ff6b6b; --radio:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+  background:var(--azul);color:var(--txt);overflow:hidden}
+body.claro{--azul:#eef3fb;--azul2:#ffffff;--azul3:#e6eefa;--linea:#d3deef;--txt:#14243f;--txt2:#5b6b86}
+a{color:var(--oro)} button{font-family:inherit;cursor:pointer;border:0}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--linea);border-radius:9px}
+.tricolor{height:4px;background:linear-gradient(90deg,var(--oro) 0 33%,#0033a0 33% 66%,#ce1126 66% 100%)}
+
+#auth{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:radial-gradient(1100px 500px at 50% -10%,rgba(255,201,60,.16),transparent),var(--azul);overflow:auto}
+.card{width:100%;max-width:410px;background:var(--azul2);border:1px solid var(--linea);border-radius:22px;
+  padding:30px 26px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:8px}
+.escudo{width:74px;height:74px;border-radius:20px;background:linear-gradient(160deg,var(--oro),var(--oro-d));
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(253,184,19,.35)}
+.escudo svg{width:44px;height:44px}
+.logo-t{font-size:27px;font-weight:800;letter-spacing:3px;color:#fff}
+.logo-t b{color:var(--oro)}
+.logo-s{font-size:11px;color:var(--txt2);letter-spacing:1px;text-align:center;margin-top:-6px}
+.tabs{display:flex;background:var(--azul);border-radius:12px;padding:5px;margin:18px 0}
+.tabs button{flex:1;padding:10px;border-radius:9px;background:transparent;color:var(--txt2);font-weight:700;font-size:14px}
+.tabs button.on{background:var(--oro);color:#20170a}
+label.lb{display:block;font-size:12px;color:var(--txt2);margin:12px 0 5px;font-weight:600}
+.inp{width:100%;padding:13px 14px;border-radius:12px;background:var(--azul);border:1px solid var(--linea);
+  color:var(--txt);font-size:15px;outline:none}
+.inp:focus{border-color:var(--oro)}
+.btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(180deg,var(--oro),var(--oro2));
+  color:#20170a;font-weight:800;font-size:15px;margin-top:16px;letter-spacing:.3px}
+.btn:active{transform:translateY(1px)}
+.btn.sec{background:transparent;border:1px solid var(--linea);color:var(--txt)}
+.msg-e{color:var(--mal);font-size:13px;margin-top:10px;min-height:16px;text-align:center}
+.nota{font-size:11.5px;color:var(--txt2);text-align:center;margin-top:14px;line-height:1.5}
+
+#app{display:flex;flex-direction:column;height:100%}
+header{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--azul2);border-bottom:1px solid var(--linea)}
+.h-logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:2px}
+.h-logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,var(--oro),var(--oro-d));
+  display:flex;align-items:center;justify-content:center}
+.h-logo .dot svg{width:18px;height:18px}
+.h-logo span b{color:var(--oro)}
+.creditos{margin-left:auto;display:flex;align-items:center;gap:6px;background:var(--azul);border:1px solid var(--linea);
+  border-radius:999px;padding:6px 12px;font-size:12.5px}
+.creditos b{color:var(--oro)}
+.ic{width:40px;height:40px;border-radius:11px;background:var(--azul);border:1px solid var(--linea);
+  display:flex;align-items:center;justify-content:center;color:var(--txt)}
+.ic svg{width:19px;height:19px}
+nav{display:flex;background:var(--azul2);border-bottom:1px solid var(--linea);padding:0 8px}
+nav button{padding:13px 16px;background:transparent;color:var(--txt2);font-weight:700;font-size:14px;border-bottom:3px solid transparent}
+nav button.on{color:var(--oro);border-color:var(--oro)}
+main{flex:1;overflow:auto;position:relative}
+.vista{display:none;height:100%}
+.vista.on{display:block}
+.wrap{max-width:840px;margin:0 auto;padding:18px 16px 30px}
+
+.hero{background:linear-gradient(150deg,var(--azul2),var(--azul3));border:1px solid var(--linea);border-radius:var(--radio);padding:20px;margin-bottom:16px}
+.hero h2{margin:.2em 0;font-size:22px}
+.hero .claim{color:var(--oro);font-weight:700;font-size:13px;letter-spacing:.4px;margin:.1em 0 .5em}
+.hero p{color:var(--txt2);margin:.3em 0;font-size:14px}
+.hero .cta{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.hero .cta button{padding:11px 16px;border-radius:11px;font-weight:800;font-size:14px}
+.capgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:700px){.capgrid{grid-template-columns:1fr 1fr}}
+.captarj{background:var(--azul2);border:1px solid var(--linea);border-radius:14px;padding:15px 13px;text-align:left;
+  display:flex;flex-direction:column;gap:8px;transition:border-color .15s,transform .15s}
+.captarj:hover{border-color:var(--oro);transform:translateY(-2px)}
+.captarj .ci{width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,var(--oro),var(--oro-d));
+  display:flex;align-items:center;justify-content:center;color:#20170a}
+.captarj b{font-size:13.5px;color:var(--txt)}
+.captarj span{font-size:11.5px;color:var(--txt2);line-height:1.35}
+.bpri{background:linear-gradient(180deg,var(--oro),var(--oro2));color:#20170a}
+.bsec{background:var(--azul);border:1px solid var(--linea);color:var(--txt)}
+.panel{background:var(--azul2);border:1px solid var(--linea);border-radius:var(--radio);padding:18px 20px;margin-bottom:14px}
+.panel h3{margin:.1em 0 .5em;font-size:16px;display:flex;align-items:center;gap:8px}
+.md{line-height:1.6;font-size:14.5px;word-wrap:break-word}
+.md h2{font-size:17px;border-bottom:1px solid var(--linea);padding-bottom:6px;margin-top:1.2em;color:var(--oro)}
+.md h3{font-size:15px}
+.md a{word-break:break-word}
+.md table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}
+.md th,.md td{border:1px solid var(--linea);padding:7px 9px;text-align:left}
+.md th{background:var(--azul3)}
+.md code{background:var(--azul);padding:2px 6px;border-radius:6px;font-size:13px}
+.md pre{background:var(--azul);padding:12px;border-radius:10px;overflow:auto}
+.skel{height:14px;background:linear-gradient(90deg,var(--linea),var(--azul3),var(--linea));
+  background-size:200% 100%;animation:sk 1.2s infinite;border-radius:6px;margin:9px 0}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+#chat{display:flex;flex-direction:column;height:100%}
+.hist{flex:1;overflow:auto;padding:16px}
+.hilo{max-width:840px;margin:0 auto}
+.b{display:flex;gap:11px;margin:14px 0;animation:ap .25s ease}
+@keyframes ap{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.b .av{width:34px;height:34px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
+.b.user .av{background:var(--azul3);color:var(--txt);border:1px solid var(--linea)}
+.b.ia .av{background:linear-gradient(160deg,var(--oro),var(--oro-d));color:#20170a}
+.b .bd{background:var(--azul2);border:1px solid var(--linea);border-radius:14px;padding:12px 15px;max-width:calc(100% - 50px)}
+.b.user .bd{background:var(--azul3)}
+.b .adj{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.b .adj .ch{font-size:11px;background:var(--azul);border:1px solid var(--linea);border-radius:8px;padding:4px 8px;color:var(--txt2)}
+.acc{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.acc button{font-size:11.5px;background:var(--azul);border:1px solid var(--linea);color:var(--txt2);border-radius:8px;padding:5px 10px;font-weight:600}
+.acc button:hover{color:var(--oro);border-color:var(--oro)}
+.cursor::after{content:'▋';color:var(--oro);animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+.sugs{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:840px;margin:10px auto}
+.sugs button{text-align:left;background:var(--azul2);border:1px solid var(--linea);border-radius:12px;padding:13px;color:var(--txt);font-size:13px;line-height:1.4}
+.sugs button b{color:var(--oro);display:block;margin-bottom:2px;font-size:13px}
+@media(max-width:560px){.sugs{grid-template-columns:1fr}}
+.barra{border-top:1px solid var(--linea);background:var(--azul2);padding:10px 12px}
+.opts{display:flex;gap:7px;max-width:840px;margin:0 auto 8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--azul);border:1px solid var(--linea);
+  border-radius:999px;padding:6px 11px;color:var(--txt2);cursor:pointer}
+.chip.on{border-color:var(--oro);color:var(--oro)}
+.chip select{background:transparent;border:0;color:inherit;font-size:12px;outline:none}
+.adjfila{display:flex;flex-wrap:wrap;gap:6px;max-width:840px;margin:0 auto 8px}
+.adjfila .ch{font-size:11.5px;background:var(--azul);border:1px solid var(--oro);border-radius:8px;padding:5px 9px;
+  color:var(--oro);display:flex;align-items:center;gap:6px}
+.adjfila .ch b{cursor:pointer;color:var(--mal)}
+.entrada{display:flex;gap:8px;max-width:840px;margin:0 auto;align-items:flex-end}
+.entrada textarea{flex:1;resize:none;max-height:150px;padding:13px 14px;border-radius:14px;background:var(--azul);
+  border:1px solid var(--linea);color:var(--txt);font-size:15px;outline:none;font-family:inherit;line-height:1.4}
+.entrada textarea:focus{border-color:var(--oro)}
+.env,.clip{width:48px;height:48px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center}
+.env{background:linear-gradient(180deg,var(--oro),var(--oro2));color:#20170a}
+.env:disabled{opacity:.5}
+.clip{background:var(--azul);border:1px solid var(--linea);color:var(--txt)}
+.env svg,.clip svg{width:21px;height:21px}
+.aviso{font-size:11px;color:var(--txt2);text-align:center;max-width:840px;margin:8px auto 0}
+.nota-ia{font-size:11.5px;color:var(--txt2);margin:8px 0 0;padding:7px 10px;border-left:2px solid var(--oro);line-height:1.5}
+
+.areas{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+
+/* ---- Inicio: dos caminos ---- */
+.hoy{margin:4px 0 16px}
+.hoy h3{font-size:15px;margin:0 0 10px;color:var(--txt)}
+.caminos{display:inline-flex;background:var(--azul2);border:1px solid var(--linea);border-radius:12px;padding:4px;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.caminos button{padding:9px 14px;border-radius:9px;background:transparent;color:var(--txt2);font-weight:700;font-size:13.5px}
+.caminos button.on{background:var(--oro);color:#20170a}
+.progreso{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:var(--azul2);border:1px solid var(--linea);
+  border-radius:12px;padding:10px 14px;margin:-4px 0 16px;font-size:13px;color:var(--txt2)}
+.progreso b{color:var(--txt);font-variant-numeric:tabular-nums}
+.progreso .ref{color:var(--oro);font-weight:700}
+
+/* ---- Modular Lab ---- */
+.ml-cab{margin:2px 0 14px}
+.ml-cab h2{margin:0 0 4px;font-size:22px}
+.ml-cab .claim{color:var(--oro);font-weight:700;font-size:12.5px;letter-spacing:.6px;text-transform:uppercase;margin:0}
+.ml-cab p{color:var(--txt2);margin:.35em 0 0;font-size:14px;max-width:62ch}
+.lb2{font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--txt2);font-weight:700;margin:12px 0 7px}
+.opc{display:flex;flex-wrap:wrap;gap:7px}
+.opc button{font-size:13px;padding:8px 13px;border-radius:999px;background:var(--azul);border:1px solid var(--linea);color:var(--txt2)}
+.opc button.on{background:var(--oro);border-color:var(--oro);color:#20170a;font-weight:700}
+.ml-costo{font-size:12px;color:var(--txt2);margin:10px 0 0}
+.ml-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--azul3);color:var(--txt2)}
+.tag.oro{background:rgba(255,201,60,.14);color:var(--oro)}
+.ml-cambio{background:rgba(255,201,60,.1);border:1px solid rgba(255,201,60,.4);border-radius:10px;padding:9px 12px;font-size:13.5px;margin-bottom:10px}
+.ml-titulo{font-size:18px;margin:.2em 0 .5em}
+.ml-pregunta{border-left:3px solid var(--oro);padding:8px 12px;margin:12px 0;background:var(--azul);border-radius:0 10px 10px 0;font-weight:600;font-size:14.5px}
+details.metodo{border:1px solid var(--linea);border-radius:10px;padding:9px 12px;margin:10px 0;font-size:13.5px}
+details.metodo summary{cursor:pointer;font-weight:700;color:var(--oro)}
+.metodo ol{margin:10px 0 2px;padding:0;list-style:none;display:grid;gap:7px}
+.metodo li{display:grid;grid-template-columns:26px 1fr;gap:8px;color:var(--txt2)}
+.metodo li b{color:var(--txt)}
+.metodo .letra{width:24px;height:24px;border-radius:7px;background:var(--azul3);color:var(--oro);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+.pista{background:var(--azul);border:1px dashed var(--oro);border-radius:10px;padding:9px 12px;font-size:13.5px;margin:8px 0}
+.pista b{color:var(--oro)}
+.ml-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ml-acc button{padding:11px 15px;border-radius:11px;font-weight:800;font-size:13.5px}
+.ml-acc button:disabled{opacity:.55;cursor:default}
+.ml-cuenta{font-size:12px;color:var(--txt2);margin-top:6px;text-align:right}
+.ev-cab{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.ev-total{font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.ev-total small{font-size:16px;color:var(--txt2);font-weight:600}
+.ev-com{flex:1;min-width:200px;color:var(--txt2);font-size:14px}
+.rub{display:grid;gap:9px;margin:6px 0 14px}
+.rub .r{display:grid;grid-template-columns:minmax(150px,1.2fr) 3fr 52px;gap:10px;align-items:center;font-size:13px}
+.rub .bar{height:9px;border-radius:99px;background:var(--azul3);overflow:hidden}
+.rub .bar i{display:block;height:100%;border-radius:99px;background:var(--oro)}
+.rub .bar i.bajo{background:#ff9f43}
+.rub .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt2)}
+.ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ev-box{background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:11px 13px;min-width:0}
+.ev-box h4{margin:0 0 6px;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.ev-box ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+.ev-box.bien h4{color:var(--ok)} .ev-box.falta h4{color:#ff9f43} .ev-box.norma h4{color:var(--oro)} .ev-box.mejora h4{color:var(--txt)}
+.ev-contra{margin-top:10px;font-size:13.5px;background:var(--azul);border-left:3px solid #ff9f43;padding:9px 12px;border-radius:0 10px 10px 0}
+.sol-norma{display:grid;gap:6px;margin:6px 0 10px}
+.sol-norma div{font-size:13.5px}
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.prog-n{background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:10px 12px}
+.prog-n b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.prog-n span{font-size:12px;color:var(--txt2)}
+.prog-areas{display:grid;gap:7px}
+.vacio{color:var(--txt2);font-size:13.5px}
+@media(max-width:620px){.ev-grid,.prog-grid{grid-template-columns:1fr}.rub .r{grid-template-columns:1fr 60px;}.rub .bar{grid-column:1/-1;grid-row:2}}
+nav{overflow-x:auto}
+.h-logo{white-space:nowrap}
+textarea.inp{font-family:inherit;font-size:14.5px;line-height:1.55;resize:vertical}
+@media(max-width:560px){
+  .creditos .cp{display:none}
+  nav button{padding:13px 12px}
+  .opts .chip[data-click="imprimirPDF"],.opts .chip[data-click="exportarExcel"]{display:none}
+}
+nav button{white-space:nowrap}
+.area{font-size:12.5px;padding:8px 12px;border-radius:999px;background:var(--azul);border:1px solid var(--linea);
+  color:var(--txt2);cursor:pointer;user-select:none}
+.area.on{background:var(--oro);color:#20170a;border-color:var(--oro);font-weight:700}
+.fila{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--linea);gap:12px}
+.fila:last-child{border:0}
+.fila .t{font-size:14px}.fila .d{font-size:12px;color:var(--txt2)}
+.sw{width:46px;height:26px;border-radius:999px;background:var(--linea);position:relative;flex:none;cursor:pointer}
+.sw::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}
+.sw.on{background:var(--oro)}.sw.on::after{left:23px}
+
+/* ---- Consultar: historial de conversaciones ---- */
+.chat-lay{display:flex;height:100%;position:relative}
+.chat-lay #chat{flex:1;min-width:0}
+.convs{width:250px;flex:none;display:flex;flex-direction:column;min-height:0;background:var(--azul2);
+  border-right:1px solid var(--linea);padding:12px 10px 10px}
+.convs-cab{display:flex;gap:8px;align-items:center}
+.convs-nueva{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:11px;font-weight:800;font-size:13.5px}
+.convs-cerrar{display:none;width:38px;height:38px}
+.convs .lb2{margin:16px 6px 6px}
+.convs-lista{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px;min-height:0;margin:0 -4px;padding:0 4px}
+.conv{display:flex;align-items:center;border-radius:10px;border:1px solid transparent;position:relative}
+.conv:hover{background:var(--azul3)}
+.conv.on{background:var(--azul3);border-color:var(--linea)}
+.conv.on::before{content:'';position:absolute;left:-1px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--oro)}
+.conv-t{flex:1;min-width:0;text-align:left;background:transparent;color:var(--txt);font-size:13px;padding:9px 4px 9px 11px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv.on .conv-t{font-weight:700}
+.conv-x{width:30px;height:30px;margin-right:3px;border-radius:8px;background:transparent;color:var(--txt2);flex:none;
+  display:flex;align-items:center;justify-content:center;opacity:0}
+.conv:hover .conv-x,.conv.on .conv-x,.conv-x:focus-visible{opacity:1}
+.conv-x:hover{color:var(--mal);background:var(--azul)}
+.conv-conf{border:1px solid var(--mal);background:var(--azul);border-radius:10px;padding:9px 10px;font-size:12.5px;margin:2px 0}
+.conv-conf p{margin:0 0 8px;color:var(--txt)}
+.conv-conf div{display:flex;gap:6px}
+.conv-conf button{flex:1;padding:7px 8px;border-radius:8px;font-size:12.5px;font-weight:700}
+.conv-conf .borrar{background:var(--mal);color:#fff}
+.convs-vacio{font-size:13px;color:var(--txt2);padding:8px 6px;line-height:1.5}
+.convs-vacio b{display:block;color:var(--txt);margin-bottom:2px}
+.chip-hist{display:none}
+.convs-velo{display:none}
+@media(max-width:759px){
+  .convs{position:absolute;top:0;left:0;bottom:0;z-index:30;width:min(300px,86vw);transform:translateX(-102%);
+    transition:transform .2s ease;box-shadow:12px 0 40px rgba(0,0,0,.35);visibility:hidden}
+  .chat-lay.hist-abierto .convs{transform:none;visibility:visible}
+  .chat-lay.hist-abierto .convs-velo{display:block;position:absolute;inset:0;background:rgba(4,10,22,.55);z-index:25}
+  .convs-cerrar{display:flex}
+  .conv-x{opacity:1}
+  .chip-hist{display:inline-flex}
+}
+
+/* ---- Document Studio ---- */
+.modal .card.escrito-card{max-width:580px;max-height:calc(100dvh - 40px);overflow:auto;padding:24px 22px}
+.escrito-card h3{margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.escrito-card .intro{font-size:12.5px;color:var(--txt2);margin:0 0 4px;line-height:1.5}
+.es-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.es-grid .ancho{grid-column:1/-1}
+.es-campo label{display:block;font-size:12.5px;color:var(--txt);margin:12px 0 5px;font-weight:600}
+.es-campo label .req{color:var(--oro);margin-left:2px}
+.es-campo label .opc-t{color:var(--txt2);font-weight:400}
+.es-campo .inp{font-size:14.5px;padding:11px 12px}
+.es-campo textarea.inp{min-height:84px}
+.es-campo select.inp{appearance:auto}
+.es-campo .inp.error{border-color:var(--mal)}
+.es-campo .err{color:var(--mal);font-size:12px;margin-top:4px}
+.es-pie{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.es-pie button{flex:1;min-width:150px;margin-top:0}
+.es-nota{font-size:11.5px;color:var(--txt2);margin:12px 0 0;line-height:1.5}
+@media(max-width:560px){.es-grid{grid-template-columns:1fr}.modal .card.escrito-card{padding:20px 16px}.modal:has(.escrito-card){padding:12px}}
+
+.modal{position:fixed;inset:0;background:rgba(4,10,22,.66);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
+.modal .card{max-width:430px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--azul3);border:1px solid var(--oro);
+  color:var(--txt);padding:11px 18px;border-radius:12px;font-size:13.5px;z-index:80;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+
+.banner-verif{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;text-align:center;
+  background:linear-gradient(90deg,rgba(255,201,60,.18),rgba(255,201,60,.08));
+  border-bottom:1px solid var(--linea);padding:9px 14px;font-size:12.5px;color:var(--txt)}
+.banner-verif button{background:transparent;border:1px solid var(--oro);color:var(--oro);
+  border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700;flex:none}
+.banner-verif button:disabled{opacity:.6}
+
+@media print{
+  body{overflow:visible;background:#fff;color:#000}
+  header,nav,.barra,.acc,.sugs,#auth,.creditos,.ic,.convs,.convs-velo{display:none!important}
+  main,.vista,#chat,.hist{height:auto!important;overflow:visible!important}
+  .b .bd{border:0;background:#fff;max-width:100%}
+  .b.user{display:none}
+  .md a{color:#000;text-decoration:underline}
+}
+</style>
+</head>
+<body class="oscuro">
+<style>
+body{display:flex;flex-direction:column}
+.demo-cinta{flex:none;height:30px;line-height:30px;padding:0 12px;box-sizing:content-box;
+  padding-top:env(safe-area-inset-top,0px);background:#FFC93C;color:#20170a;
+  font:600 12.5px/30px 'Segoe UI',system-ui,sans-serif;text-align:center;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.demo-cinta b{font-weight:800}
+#app{flex:1;min-height:0;height:auto}
+#auth{top:calc(30px + env(safe-area-inset-top,0px))}
+</style>
+<div class="demo-cinta"><b>Demostración</b> · datos de ejemplo</div>
+
+<div class="tricolor"></div>
+
+<div id="auth">
+  <div class="card">
+    <div class="brand">
+      <div class="escudo">
+        <svg viewBox="0 0 200 200" width="44" height="44">
+          <path d="M100 15 L170 40 L170 100 C170 145 140 175 100 190 C60 175 30 145 30 100 L30 40 Z"
+                fill="#12356e" stroke="#0A1E3F" stroke-width="3"/>
+          <path d="M75 55 L75 150 L92 150 L92 115 L112 115 C132 115 144 100 144 82 C144 64 132 55 112 55 Z
+                    M92 72 L110 72 C118 72 122 76 122 82 C122 88 118 92 110 92 L92 92 Z" fill="#20170a"/>
+        </svg>
+      </div>
+      <div class="logo-t">PUL<b>LEX</b> IA</div>
+      <div class="logo-s">ASISTENTE JURÍDICO · DERECHO COLOMBIANO</div>
+    </div>
+    <div class="tabs">
+      <button id="t-ing" class="on" data-click="modoAuth" data-arg-click="ingresar">Ingresar</button>
+      <button id="t-reg" data-click="modoAuth" data-arg-click="registrar">Crear cuenta</button>
+    </div>
+    <div id="f-reg" class="hidden">
+      <label class="lb">Nombre completo</label>
+      <input id="r-nombre" class="inp" placeholder="Tu nombre">
+    </div>
+    <label class="lb">Correo</label>
+    <input id="a-email" class="inp" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="username">
+    <label class="lb">Contraseña</label>
+    <input id="a-clave" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="current-password">
+    <button id="a-btn" class="btn" data-click="enviarAuth">Ingresar</button>
+    <div id="a-olvido" style="text-align:center;margin-top:10px;font-size:12.5px">
+      <a href="#" data-click="abrirRecuperar" data-prevenir-click>¿Olvidaste tu contraseña?</a>
+    </div>
+    <div id="a-msg" class="msg-e"></div>
+    <div class="nota">Al crear tu cuenta recibes <b>10 consultas gratis</b> de prueba.<br>
+      Información orientativa; no reemplaza a un abogado.<br>
+      ¿Dudas o soporte? <a href="mailto:Pulidoabogados24@gmail.com">Pulidoabogados24@gmail.com</a></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="h-logo">
+      <span class="dot"><svg viewBox="0 0 200 200" width="18" height="18">
+        <path d="M75 55 L75 150 L92 150 L92 115 L112 115 C132 115 144 100 144 82 C144 64 132 55 112 55 Z
+                  M92 72 L110 72 C118 72 122 76 122 82 C122 88 118 92 110 92 L92 92 Z" fill="#20170a"/>
+      </svg></span>
+      <span>PUL<b>LEX</b> IA</span>
+    </div>
+    <div class="creditos" title="Consultas disponibles"><span class="cp"><span id="c-plan">—</span> ·</span> <b id="c-rest">—</b> consultas</div>
+    <button class="ic hidden" id="btn-instalar-ic" title="Instalar app" data-click="instalarApp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    </button>
+    <button class="ic" title="Salir" data-click="salir">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l5-5-5-5M21 12H9M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+    </button>
+  </header>
+
+  <div id="banner-verif" class="banner-verif hidden">
+    <span>Aún no has verificado tu correo. Hazlo para no perder acceso a tu cuenta.</span>
+    <button id="btn-reenviar-verif" data-click="reenviarVerificacion">Reenviar correo</button>
+  </div>
+
+  <nav>
+    <button id="n-inicio" class="on" data-click="ver" data-arg-click="inicio">Inicio</button>
+    <button id="n-modular" data-click="ver" data-arg-click="modular">Modular Lab</button>
+    <button id="n-chat" data-click="ver" data-arg-click="chat">Consultar</button>
+    <button id="n-config" data-click="ver" data-arg-click="config">Ajustes</button>
+  </nav>
+
+  <main>
+    <section id="v-inicio" class="vista on">
+      <div class="wrap">
+        <div class="hero">
+          <h2>Hola, <span id="h-nombre">estudiante</span></h2>
+          <p class="claim">El criterio jurídico, amplificado.</p>
+          <p>Soy PULLEX IA. Te acompaño con temas de derecho colombiano y también con lo que necesites: dudas, estudio o lo que se te ocurra. Escríbeme sin preocuparte por “preguntar bien”.</p>
+          <div class="cta">
+            <button class="bpri" data-click="ver" data-arg-click="chat">Nueva consulta</button>
+            <button class="bsec" data-click="cargarBoletin" data-arg-click="true">Actualizar boletín</button>
+            <button class="bsec hidden" id="btn-instalar-hero" data-click="instalarApp">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Instalar app
+            </button>
+          </div>
+        </div>
+
+        <div class="hoy">
+          <h3>¿Qué quieres hacer hoy?</h3>
+          <div class="caminos" role="group" aria-label="Cómo vas a usar PULLEX">
+            <button id="cam-aprender" class="on" data-click="elegirCamino" data-arg-click="aprender">Estoy aprendiendo Derecho</button>
+            <button id="cam-trabajar" data-click="elegirCamino" data-arg-click="trabajar">Estoy trabajando en un asunto</button>
+          </div>
+          <div class="progreso hidden" id="progreso-inicio"></div>
+          <div class="capgrid" id="capgrid"></div>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Boletín jurídico del día <span id="b-fecha" style="font-size:12px;color:var(--txt2);font-weight:400"></span></h3>
+          <div id="boletin" class="md">
+            <div class="skel" style="width:90%"></div><div class="skel" style="width:80%"></div>
+            <div class="skel" style="width:85%"></div><div class="skel" style="width:70%"></div>
+          </div>
+        </div>
+        <p class="aviso">El boletín lo genera la IA automáticamente con búsqueda web, una vez al día, y nadie lo revisa antes de publicarse. Una sentencia o norma citada aquí puede estar mal: verifícala en la fuente oficial antes de usarla.</p>
+      </div>
+    </section>
+
+    <section id="v-modular" class="vista">
+      <div class="wrap">
+        <div class="ml-cab">
+          <p class="claim">PULLEX Academia</p>
+          <h2>Modular Lab</h2>
+          <p>Entrena cómo se resuelve un caso de examen. Primero lo intentas tú; después PULLEX evalúa tu respuesta con una rúbrica y te dice qué omitiste y cómo mejorar.</p>
+        </div>
+
+        <div class="panel" id="ml-config">
+          <h3>Elige el caso</h3>
+          <div class="lb2">Área</div>
+          <div class="opc" id="ml-areas"></div>
+          <div class="lb2">Nivel</div>
+          <div class="opc" id="ml-niveles"></div>
+          <div class="ml-acc"><button class="bpri" id="ml-generar" data-click="mlGenerar">Generar caso</button></div>
+          <p class="ml-costo">Generar un caso y evaluar tu respuesta usan una consulta cada uno. Las pistas y la solución son gratis.</p>
+        </div>
+
+        <div class="panel hidden" id="ml-caso">
+          <div class="ml-meta" id="ml-meta"></div>
+          <div class="ml-cambio hidden" id="ml-cambio"></div>
+          <h3 class="ml-titulo" id="ml-titulo"></h3>
+          <div class="md" id="ml-enunciado"></div>
+          <div class="ml-pregunta" id="ml-pregunta"></div>
+          <details class="metodo">
+            <summary>Método PULLEX: cómo abordar el caso</summary>
+            <ol>
+              <li><span class="letra">P</span><span><b>Problema.</b> ¿Qué pregunta jurídica hay que resolver?</span></li>
+              <li><span class="letra">U</span><span><b>Ubicación normativa.</b> ¿Qué rama, código e institución intervienen?</span></li>
+              <li><span class="letra">L</span><span><b>Lectura de los hechos.</b> ¿Cuáles son jurídicamente relevantes y cuáles distraen?</span></li>
+              <li><span class="letra">L</span><span><b>Legalidad.</b> ¿Qué norma vigente regula el asunto y qué requisitos exige?</span></li>
+              <li><span class="letra">E</span><span><b>Evidencia y precedente.</b> ¿Qué prueba y qué jurisprudencia importan?</span></li>
+              <li><span class="letra">X</span><span><b>Examen crítico.</b> Aplica cada requisito a los hechos, uno por uno.</span></li>
+              <li><span class="letra">I</span><span><b>Interpretación.</b> ¿Qué diría la contraparte? ¿Hay excepción?</span></li>
+              <li><span class="letra">A</span><span><b>Argumentación.</b> Cierra con una conclusión defendible.</span></li>
+            </ol>
+          </details>
+          <div id="ml-pistas"></div>
+          <div class="lb2">Tu respuesta</div>
+          <textarea id="ml-resp" class="inp" rows="9" placeholder="Escribe tu respuesta como en el examen: problema jurídico, normas, aplicación a los hechos y conclusión." data-input="mlContar"></textarea>
+          <div class="ml-cuenta" id="ml-cuenta">0 palabras</div>
+          <div class="ml-acc">
+            <button class="bsec" id="ml-btn-pista" data-click="mlPista">Necesito una pista</button>
+            <button class="bpri" id="ml-btn-eval" data-click="mlEvaluar">Evaluar mi respuesta</button>
+            <button class="bsec" id="ml-btn-sol" data-click="mlSolucion">Ver solución</button>
+          </div>
+        </div>
+
+        <div class="panel hidden" id="ml-eval"></div>
+        <div class="panel hidden" id="ml-sol"></div>
+
+        <div class="panel" id="ml-progreso">
+          <h3>Tu progreso</h3>
+          <div id="ml-prog-cuerpo" class="vacio">Cuando evalúes tu primer caso, aquí verás tu promedio por área y los conceptos que conviene reforzar.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-chat" class="vista">
+     <div class="chat-lay" id="chat-lay">
+      <aside class="convs" id="convs" aria-label="Historial de consultas">
+        <div class="convs-cab">
+          <button class="bpri convs-nueva" id="btn-nueva" data-click="nuevaConsulta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Nueva consulta</button>
+          <button class="ic convs-cerrar" title="Cerrar historial" aria-label="Cerrar historial" data-click="toggleHistorial">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="lb2">Tus consultas</div>
+        <div class="convs-lista" id="convs-lista"></div>
+      </aside>
+      <div class="convs-velo" data-click="toggleHistorial"></div>
+      <div id="chat">
+        <div class="hist" id="hist">
+          <div class="hilo" id="hilo"></div>
+          <div class="sugs" id="sugs">
+            <button data-click="sug" data-pasa-click="this"><b>Redactar una tutela</b><span>Necesito proteger mi derecho a la salud contra mi EPS.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Explícame fácil</b><span>No sé nada de derecho, ayúdame a entender un problema.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Liquidación laboral</b><span>Calcula prestaciones de un contrato a término indefinido.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Derecho de petición</b><span>Ayúdame a redactar un derecho de petición a una entidad.</span></button>
+          </div>
+        </div>
+        <div class="barra">
+          <div class="adjfila" id="adjfila"></div>
+          <div class="opts">
+            <span class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" role="button" aria-controls="convs"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg> Historial</span>
+            <span class="chip on" id="chip-web" data-click="toggleWeb">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+              Buscar en internet</span>
+            <span class="chip"><select id="modo">
+              <option value="auto">Modo automático</option>
+              <option value="profesional">Técnico (abogado)</option>
+              <option value="ciudadano">Sencillo (ciudadano)</option>
+            </select></span>
+            <span class="chip"><select id="estilo" aria-label="Forma de respuesta">
+              <option value="directo">Respuesta directa</option>
+              <option value="ensename">Enséñame</option>
+              <option value="conmigo">Resuélvelo conmigo</option>
+              <option value="examiname">Examíname</option>
+              <option value="auditar">Audita mi respuesta</option>
+            </select></span>
+            <span class="chip" data-click="abrirTools"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Herramientas</span>
+            <span class="chip" data-click="imprimirPDF"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</span>
+            <span class="chip" data-click="exportarExcel"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Excel</span>
+          </div>
+          <div class="entrada">
+            <input type="file" id="file" class="hidden" multiple accept="image/*,application/pdf" data-change="tomarArchivos" data-pasa-change="event">
+            <button class="clip" title="Adjuntar PDF, foto o documento" data-click="abrirSelectorArchivo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3 3 0 0 1 4.24 4.24l-9.2 9.19a1 1 0 0 1-1.41-1.41l8.49-8.49"/></svg>
+            </button>
+            <textarea id="txt" rows="1" placeholder="Escríbeme lo que necesites…" data-input="autoAlto" data-pasa-input="this" data-keydown="teclas" data-pasa-keydown="event"></textarea>
+            <button class="env" id="env" data-click="enviar" title="Enviar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#20170a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+          <p class="aviso">PULLEX IA puede equivocarse. En temas legales, verifica en la fuente oficial. No sustituye a un abogado.</p>
+        </div>
+      </div>
+     </div>
+    </section>
+
+    <section id="v-config" class="vista">
+      <div class="wrap">
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg> Mi cuenta</h3>
+          <div class="fila"><div><div class="t" id="cf-nombre">—</div><div class="d" id="cf-email">—</div></div></div>
+          <div class="fila"><div class="t">Plan actual</div><div class="t" id="cf-plan" style="color:var(--oro);font-weight:700">—</div></div>
+          <div class="fila"><div class="t">Consultas usadas</div><div class="t" id="cf-uso">—</div></div>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-6 6c0 2.2 1 3.4 2 4.3.7.7 1 1.3 1 2.2h6c0-.9.3-1.5 1-2.2 1-.9 2-2.1 2-4.3a6 6 0 0 0-6-6z"/></svg> Memoria de PULLEX</h3>
+          <div class="d" style="font-size:12px;color:var(--txt2);margin-bottom:6px">Escribe lo que quieras que PULLEX recuerde de ti (tu carrera, semestre, cómo prefieres las respuestas, tus casos frecuentes). Lo tendrá en cuenta siempre.</div>
+          <textarea id="cf-memoria" class="inp" rows="3" placeholder="Ej.: Soy estudiante de 6º semestre, me gusta que me expliquen con ejemplos y paso a paso."></textarea>
+          <button class="btn sec" style="margin-top:8px" data-click="guardarMemoria">Guardar memoria</button>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Personalización</h3>
+          <div>
+            <div class="t" style="font-size:14px;margin-bottom:2px">Áreas de interés</div>
+            <div class="d" style="font-size:12px;color:var(--txt2)">La IA prioriza estas materias (máx. 6).</div>
+            <div class="areas" id="areas"></div>
+          </div>
+          <div class="fila" style="margin-top:8px"><div><div class="t">Modo por defecto</div><div class="d">Registro de las respuestas</div></div>
+            <select id="cf-modo" class="inp" style="width:auto" data-change="guardarPrefs">
+              <option value="auto">Automático</option><option value="profesional">Técnico</option><option value="ciudadano">Sencillo</option>
+            </select></div>
+          <div class="fila"><div><div class="t">Buscar en internet por defecto</div><div class="d">Verifica con fuentes actuales</div></div>
+            <div class="sw" id="cf-web" data-click="togglePref" data-pasa-click="this"></div></div>
+          <div class="fila"><div><div class="t">Tema claro</div><div class="d">Cambia la apariencia</div></div>
+            <div class="sw" id="cf-tema" data-click="toggleTema" data-pasa-click="this"></div></div>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Seguridad</h3>
+          <button class="btn sec" data-click="abrirClave">Cambiar contraseña</button>
+          <button class="btn sec" style="margin-top:8px" data-click="cerrarSesiones">Cerrar sesión en todos los dispositivos</button>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg> Planes</h3>
+          <div id="planes"></div>
+          <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta.</p>
+        </div>
+
+        <div class="panel">
+          <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 6l10 7L22 6"/></svg> Contacto y soporte</h3>
+          <div class="d" style="font-size:12px;color:var(--txt2);margin-bottom:10px">
+            ¿Problemas con tu cuenta, tu plan, o quieres hablar con un abogado directamente?
+            Escríbenos y te respondemos por correo.
+          </div>
+          <a class="btn sec" style="display:block;text-align:center;text-decoration:none"
+             href="mailto:Pulidoabogados24@gmail.com?subject=Soporte%20PULLEX%20IA">
+             Pulidoabogados24@gmail.com
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="m-clave" class="modal hidden">
+  <div class="card">
+    <h3 style="margin-top:0">Cambiar contraseña</h3>
+    <label class="lb">Contraseña actual</label>
+    <input id="k-act" class="inp" type="password">
+    <label class="lb">Nueva contraseña</label>
+    <input id="k-new" class="inp" type="password" placeholder="Mínimo 8 caracteres">
+    <div id="k-msg" class="msg-e"></div>
+    <button class="btn" data-click="guardarClave">Guardar</button>
+    <button class="btn sec" data-click="cerrarClave">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-recuperar" class="modal hidden">
+  <div class="card">
+    <h3 style="margin-top:0">Recuperar contraseña</h3>
+    <p style="font-size:12.5px;color:var(--txt2);margin-top:0">Escribe tu correo. Si tienes una cuenta con nosotros, te llegará un enlace para elegir una nueva contraseña.</p>
+    <label class="lb">Correo</label>
+    <input id="rec-email" class="inp" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="username">
+    <div id="rec-msg" class="msg-e"></div>
+    <button class="btn" id="rec-btn" data-click="enviarRecuperar">Enviar enlace</button>
+    <button class="btn sec" data-click="cerrarRecuperar">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-tools" class="modal hidden">
+  <div class="card" style="max-width:520px">
+    <h3 style="margin-top:0;display:flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Herramientas jurídicas</h3>
+    <p style="font-size:12.5px;color:var(--txt2);margin-top:0">Elige una y PULLEX arma la consulta por ti. Solo completa los datos que te pida.</p>
+    <div id="tools-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0"></div>
+    <button class="btn sec" data-click="cerrarTools">Cerrar</button>
+  </div>
+</div>
+
+<div id="m-escrito" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="es-titulo">
+  <div class="card escrito-card">
+    <h3 id="es-titulo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Redactar un escrito</h3>
+    <p class="intro">Completa los datos y PULLEX arma el borrador con la estructura procesal colombiana. Si no tienes un dato, déjalo en blanco: quedará marcado entre corchetes para que lo completes.</p>
+    <div class="lb2">Tipo de escrito</div>
+    <div class="opc" id="es-tipos">
+      <button type="button" id="es-tipo-tutela" class="on" data-click="escritoTipo" data-arg-click="tutela">Acción de tutela</button>
+      <button type="button" id="es-tipo-peticion" data-click="escritoTipo" data-arg-click="peticion">Derecho de petición</button>
+    </div>
+    <div id="es-campos"></div>
+    <div id="es-msg" class="msg-e" style="text-align:left"></div>
+    <div class="es-pie">
+      <button class="btn sec" data-click="cerrarEscrito">Cancelar</button>
+      <button class="btn" id="es-enviar" data-click="enviarEscrito">Redactar borrador</button>
+    </div>
+    <p class="es-nota">Usa una consulta. El resultado es un borrador generado por IA: revísalo, completa lo que esté entre corchetes y verifica la vigencia de las normas antes de presentarlo.</p>
+  </div>
+</div>
+
+<script>window.__DEMO_DATOS__={"casos": {"Constitucional": {"caso": {"titulo": "El medicamento que la EPS no entrega", "enunciado": "Lucía Martínez, de 34 años, trabaja como auxiliar contable y gana un salario mínimo. Está afiliada al régimen contributivo en la EPS Salud Andina (nombre ficticio). En marzo fue diagnosticada con artritis reumatoide y su reumatóloga, adscrita a la EPS, le formuló un medicamento biológico que debe aplicarse cada dos semanas.\n\nEl 2 de mayo la EPS le respondió por escrito que no autorizaba el medicamento porque «no hace parte de los servicios financiados con la UPC» y le sugirió «acudir a los mecanismos administrativos correspondientes». Lucía lleva cuatro semanas sin tratamiento; el dolor le impide trabajar con normalidad y su médica dejó constancia en la historia clínica de que la demora puede causar daño articular irreversible.\n\nLucía vive con sus dos hijos menores de edad. Su hermano le recomienda esperar a que la EPS «cambie de opinión». Hoy, 30 de mayo, Lucía quiere saber qué puede hacer.", "pregunta": "¿Procede la acción de tutela para que la EPS entregue el medicamento? Identifica el problema jurídico, los requisitos de procedencia y qué debería ordenar el juez.", "pistas": ["Antes del fondo, revisa la procedencia: ¿quién puede presentarla y contra quién?, ¿existe otro medio de defensa eficaz?, ¿el tiempo transcurrido desde la negativa es razonable?", "La salud es un derecho fundamental autónomo según la Ley Estatutaria de Salud. ¿Qué peso tiene que el medicamento lo haya ordenado la médica tratante adscrita a la EPS?"], "conceptos": ["Procedencia de la tutela", "Subsidiariedad", "Inmediatez", "Derecho fundamental a la salud", "Orden del médico tratante"], "solucion": {"problema_juridico": "¿Vulnera la EPS el derecho fundamental a la salud de Lucía al negar un medicamento ordenado por su médica tratante con el argumento de que no está financiado con la UPC, y procede la tutela para protegerlo?", "normas": [{"norma": "Artículo 86 de la Constitución", "para_que": "consagra la acción de tutela y sus condiciones de procedencia."}, {"norma": "Artículo 49 de la Constitución", "para_que": "reconoce la atención en salud como servicio público a cargo del Estado."}, {"norma": "Ley 1751 de 2015 (Estatutaria de Salud)", "para_que": "define la salud como derecho fundamental autónomo y proscribe las barreras administrativas al acceso (verificar los artículos exactos)."}, {"norma": "Decreto 2591 de 1991", "para_que": "reglamenta la tutela: legitimación, trámite y término para fallar."}], "analisis": "**Legitimación.** Lucía es la titular del derecho y la EPS presta un servicio público de salud, por lo que la tutela procede contra ella.\n\n**Inmediatez.** Acude pocas semanas después de la negativa del 2 de mayo: es un plazo razonable.\n\n**Subsidiariedad.** Aunque existen mecanismos ante la EPS y ante la Superintendencia Nacional de Salud, la jurisprudencia constitucional ha admitido la tutela cuando esos medios no son eficaces frente a un riesgo actual. Aquí hay constancia médica de daño irreversible por la demora.\n\n**Fondo.** La negativa se funda en un criterio de financiación, no en uno médico. La orden de la médica tratante adscrita a la EPS es el criterio principal para establecer qué necesita la paciente, y que un medicamento no esté financiado con la UPC no autoriza a negarlo: obliga a gestionarlo por el mecanismo de financiación que corresponda.", "contraargumento": "La EPS puede sostener que existe un mecanismo propio ante la Superintendencia Nacional de Salud y que la tutela no es el camino. No prospera cuando, como aquí, ese medio no ofrece protección oportuna frente a un perjuicio acreditado por la médica tratante; podría prosperar si no hubiera urgencia ni riesgo documentado.", "conclusion": "Procede la tutela. El juez debería amparar el derecho a la salud y ordenar a la EPS autorizar y entregar el medicamento en un término breve (por ejemplo, 48 horas), además de garantizar la continuidad del tratamiento que ordene la médica tratante.", "errores_comunes": ["Confundir subsidiariedad con inmediatez.", "Concluir que no procede porque el medicamento está «por fuera del plan», sin analizar la orden médica.", "Omitir la constancia del riesgo de daño irreversible, que es el hecho decisivo del caso."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["vulnera", "problema"], ["salud"], ["tutela"]], "normas": [["86"], ["1751", "estatutaria"], ["2591"], ["49"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["inmediat"], ["subsidiar", "otro medio"]], "aplicacion": [["medic", "tratante"], ["irreversible", "daño"], ["upc", "financia"]], "conclusion": [["procede"], ["ordenar", "ordene", "entregar", "entregue"]]}, "aciertos": [{"si_hay": ["salud"], "texto": "Planteaste que el derecho en juego es la salud."}, {"si_hay": ["tratante", "médic"], "texto": "Diste peso a la orden de la médica tratante."}, {"si_hay": ["procede"], "texto": "Llegaste a una conclusión clara sobre la procedencia."}, {"si_hay": ["inmediat"], "texto": "Analizaste la inmediatez."}], "acierto_base": "Identificaste que el caso trata sobre una EPS y un medicamento.", "omisiones": [{"si_falta": ["inmediat"], "texto": "No analizaste la inmediatez: la tutela se presenta pocas semanas después de la negativa."}, {"si_falta": ["subsidiar", "otro medio"], "texto": "No explicaste por qué los mecanismos ante la EPS o la Superintendencia no son eficaces aquí."}, {"si_falta": ["irreversible", "daño"], "texto": "No usaste la constancia médica del riesgo de daño irreversible, el hecho decisivo."}], "normas_clave": [{"si_falta": ["1751", "estatutaria"], "norma": "Ley 1751 de 2015 (Estatutaria de Salud)"}], "conceptos_clave": [{"concepto": "Inmediatez", "si_falta": ["inmediat"]}, {"concepto": "Subsidiariedad", "si_falta": ["subsidiar"]}], "contraargumento": "La EPS dirá que existe un mecanismo ante la Superintendencia Nacional de Salud; responde por qué no es eficaz frente al riesgo acreditado.", "como_mejorar": ["Analiza cada requisito de procedencia por separado: legitimación, inmediatez y subsidiariedad.", "Conecta cada hecho del caso con el requisito que prueba.", "Cierra diciendo qué debe ordenar el juez y en qué plazo."], "comentario_bien": "Muy buena estructura: identificas el problema y aplicas los requisitos a los hechos.", "comentario_mejorar": "Vas bien encaminado; lo que más suma puntos ahora es ordenar el análisis de procedencia."}}, "variacion": {"titulo": "El medicamento que llegó tarde", "cambio": "¿Qué cambia si Lucía presentó la tutela ocho meses después de la negativa y, antes del fallo, la EPS ya le había entregado el medicamento?", "enunciado": "Los hechos son los mismos del caso anterior, con dos diferencias. Lucía no presentó la tutela en mayo: la radicó ocho meses después de la negativa, cuando su hermano la convenció de hacerlo. Y dos días después de ser notificada de la tutela, la EPS autorizó y entregó el medicamento, que Lucía ya se está aplicando cada dos semanas.", "pregunta": "¿Cómo debe decidir el juez? Analiza la inmediatez y el efecto de la entrega del medicamento sobre la tutela.", "pistas": ["El paso del tiempo afecta un requisito de procedencia. ¿Es la inmediatez un plazo fijo o un criterio de razonabilidad?", "Si la EPS ya entregó el medicamento, ¿qué queda por ordenar? Piensa en la carencia actual de objeto."], "conceptos": ["Inmediatez", "Carencia actual de objeto", "Hecho superado"], "solucion": {"problema_juridico": "¿Debe el juez amparar el derecho a la salud cuando la tutela se presentó ocho meses después de la negativa y la EPS entregó el medicamento durante el trámite?", "normas": [{"norma": "Artículo 86 de la Constitución", "para_que": "procedencia de la tutela."}, {"norma": "Decreto 2591 de 1991", "para_que": "trámite y alcance de la orden del juez."}], "analisis": "**Inmediatez.** No es un plazo fijo: se valora si el tiempo es razonable. Ocho meses pueden justificarse si la afectación a la salud persiste, porque la vulneración es actual y continua.\n\n**Carencia actual de objeto.** Como la EPS entregó el medicamento durante el trámite, la pretensión quedó satisfecha: se configura un hecho superado. El juez ya no tiene nada que ordenar sobre la entrega.", "contraargumento": "Podría pedirse que el juez igual se pronuncie de fondo para prevenir que la EPS repita la negativa. Es posible cuando el caso lo amerita, pero no cambia que la orden de entrega ya no es necesaria.", "conclusion": "El juez debería declarar la carencia actual de objeto por hecho superado, y puede prevenir a la EPS para que no vuelva a negar el tratamiento ordenado por la médica tratante.", "errores_comunes": ["Declarar improcedente la tutela solo por el paso de ocho meses, sin valorar la continuidad de la afectación.", "Ordenar entregar un medicamento que ya fue entregado."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["inmediat"], ["hecho superado", "carencia"], ["tutela"]], "normas": [["86"], ["2591"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["razonab"], ["continu", "persist", "actual"]], "aplicacion": [["ocho meses", "8 meses"], ["entreg"]], "conclusion": [["carencia actual", "hecho superado"], ["prevenir", "prevenga", "prevención"]]}, "aciertos": [{"si_hay": ["razonab"], "texto": "Entendiste la inmediatez como un criterio de razonabilidad y no como un plazo fijo."}, {"si_hay": ["hecho superado", "carencia"], "texto": "Identificaste la carencia actual de objeto por hecho superado."}, {"si_hay": ["prevenir", "prevenga", "prevención"], "texto": "Consideraste que el juez puede prevenir a la EPS para que no repita la negativa."}], "acierto_base": "Identificaste que en este caso pesan el paso del tiempo y la entrega del medicamento.", "omisiones": [{"si_falta": ["inmediat"], "texto": "No analizaste la inmediatez: la tutela se presentó ocho meses después de la negativa."}, {"si_falta": ["hecho superado", "carencia"], "texto": "No identificaste la carencia actual de objeto: la EPS entregó el medicamento durante el trámite."}, {"si_falta": ["continu", "persist", "actual"], "texto": "No explicaste por qué la afectación seguía siendo actual pese al paso del tiempo."}], "normas_clave": [{"si_falta": ["2591"], "norma": "Decreto 2591 de 1991 (trámite de la tutela y alcance de la orden del juez)"}], "conceptos_clave": [{"concepto": "Inmediatez", "si_falta": ["inmediat"]}, {"concepto": "Carencia actual de objeto", "si_falta": ["carencia"]}, {"concepto": "Hecho superado", "si_falta": ["hecho superado"]}], "contraargumento": "La EPS pedirá que se declare improcedente por falta de inmediatez; responde por qué ocho meses pueden ser razonables si la afectación a la salud continuaba.", "como_mejorar": ["Separa los dos problemas: primero la procedencia (inmediatez) y luego el efecto de la entrega del medicamento.", "Explica qué es el hecho superado y qué consecuencia tiene sobre la orden del juez.", "Cierra diciendo exactamente cómo debe fallar el juez."], "comentario_bien": "Muy bien: distingues la procedencia del efecto de la entrega del medicamento.", "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es separar la inmediatez del hecho superado."}}}, "Penal": {"caso": {"titulo": "El termo contra la botella rota", "enunciado": "El sábado 7 de febrero de 2026, hacia las 11:30 p. m., Camilo Herrera Díaz, de 29 años, salía de la panadería de su barrio con un termo metálico de café en la mano. En la acera lo abordó Ernesto Pineda Gil, con quien tres semanas antes había tenido una discusión verbal por un puesto de parqueo. Ernesto, visiblemente embriagado, rompió una botella de vidrio contra el andén y, sin mediar palabra, se abalanzó sobre Camilo lanzándole cortes hacia la cara. Camilo alcanzó a cubrirse y sufrió una herida superficial en el antebrazo izquierdo.\n\nCuando Ernesto levantó de nuevo la botella, Camilo le dio un solo golpe con el termo en el brazo con el que la sostenía. Ernesto soltó la botella y cayó sentado. Camilo retrocedió de inmediato y no volvió a tocarlo; el panadero, que presenció todo, llamó a la Policía.\n\nErnesto sufrió una fractura en el antebrazo, por la que el Instituto Nacional de Medicina Legal le dictaminó una incapacidad médico legal. Su familia presentó denuncia penal contra Camilo por lesiones personales y sostiene que «el golpe fue una venganza por lo del parqueo».", "pregunta": "¿Es Camilo penalmente responsable por las lesiones que le causó a Ernesto? Analiza la conducta con la estructura de la teoría del delito y determina si concurre alguna causal de ausencia de responsabilidad.", "pistas": ["No te quedes en el resultado: una conducta puede encajar en un tipo penal y aun así no ser punible. Recorre en orden tipicidad, antijuridicidad y culpabilidad.", "Revisa las causales de ausencia de responsabilidad del Código Penal. ¿Qué requisitos debe cumplir quien se defiende de un ataque y qué hecho del caso prueba cada uno?"], "conceptos": ["Estructura de la conducta punible", "Legítima defensa", "Agresión injusta y actual", "Proporcionalidad de la defensa"], "solucion": {"problema_juridico": "¿Responde penalmente Camilo por las lesiones personales causadas a Ernesto, o su conducta, aunque típica, está amparada por la legítima defensa como causal de ausencia de responsabilidad?", "normas": [{"norma": "Artículo 9 de la Ley 599 de 2000 (Código Penal)", "para_que": "exige que la conducta sea típica, antijurídica y culpable para que sea punible."}, {"norma": "Artículo 11 del Código Penal", "para_que": "define la antijuridicidad: la conducta debe lesionar o poner en peligro, sin justa causa, el bien jurídico."}, {"norma": "Artículo 32, numeral 6, del Código Penal", "para_que": "consagra la legítima defensa: defensa de un derecho propio o ajeno contra injusta agresión actual o inminente, siempre que sea proporcionada."}, {"norma": "Artículo 111 y siguientes del Código Penal", "para_que": "tipifican las lesiones personales; la modalidad concreta depende del dictamen de Medicina Legal (verificar el artículo aplicable)."}], "analisis": "**Tipicidad.** Camilo golpeó a Ernesto y le causó una fractura, sabiendo que el golpe podía herirlo y queriendo darlo: la conducta encaja, en principio, en el tipo de lesiones personales dolosas. Que sea típica no la hace punible todavía.\n\n**Antijuridicidad: legítima defensa.** El artículo 32, numeral 6, del Código Penal excluye la responsabilidad de quien obra por la necesidad de defenderse de una agresión injusta, actual o inminente, con una defensa proporcionada. Los hechos prueban cada requisito:\n\n- *Agresión injusta:* Ernesto atacó con una botella rota sin que Camilo lo provocara. La discusión de tres semanas antes no autoriza a nadie a agredir ni convierte a Camilo en provocador.\n- *Agresión actual:* el ataque estaba en curso; Ernesto ya lo había herido y volvía a levantar la botella.\n- *Necesidad y proporcionalidad:* frente a un objeto cortante dirigido a la cara, un solo golpe al brazo que lo sostenía es un medio razonable para neutralizar el peligro. La proporcionalidad no exige igualdad de armas ni de resultados, sino una reacción razonable frente a la magnitud del ataque.\n- *Límite de la defensa:* Camilo se detuvo cuando Ernesto soltó la botella y no volvió a golpearlo, lo que muestra que actuó para defenderse y no para vengarse.\n\nQue Ernesto estuviera embriagado no vuelve lícita su agresión. La fractura es un resultado grave, pero proviene de una defensa que se mantuvo dentro de sus límites. Como la conducta está justificada, no hace falta llegar a la culpabilidad.", "contraargumento": "La familia de Ernesto puede sostener que una fractura es un daño excesivo o que Camilo actuó por la rencilla del parqueo. No prospera: el golpe fue único, dirigido al brazo armado y dado mientras la agresión seguía; la rencilla previa no desvirtúa que en ese momento se estaba defendiendo, y lo confirma que se detuvo apenas cesó el peligro. Sí cambiaría la solución si se probara que Camilo siguió golpeando después de que Ernesto soltó la botella.", "conclusion": "Camilo no es penalmente responsable. Su conducta es típica, pero está justificada por la legítima defensa: falta la antijuridicidad y, por tanto, no hay conducta punible. La Fiscalía no debería llevar el caso a juicio; lo procedente es terminar la actuación por la vía que corresponda a la etapa en que se encuentre (por ejemplo, solicitar la preclusión por existir una causal que excluye la responsabilidad; verificar el artículo exacto en la Ley 906 de 2004).", "errores_comunes": ["Concluir que hay delito solo porque hubo una lesión grave, sin pasar por la antijuridicidad.", "Exigir que Camilo usara un medio equivalente o que el daño causado fuera igual al recibido: la proporcionalidad no es una igualdad matemática.", "Tratar la discusión previa del parqueo como provocación o como prueba de que no se estaba defendiendo.", "Confundir la legítima defensa, que justifica la conducta, con la ira o intenso dolor, que solo atenúa la pena."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["legítima defensa"], ["lesion"], ["responsab", "punib"]], "normas": [["32"], ["599", "código penal"], ["111", "lesiones personales"], ["artículo 9", "art. 9", "art 9", "artículo 11", "art. 11"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["actual", "inminente"], ["proporcion"], ["injusta"]], "aplicacion": [["botella"], ["termo", "un solo golpe", "único golpe"], ["parqueo", "discusión previa", "rencilla"], ["embriag", "borracho", "ebrio"]], "conclusion": [["no es responsable", "no responde", "no es penalmente responsable", "justificad", "no hay delito", "no es punible", "no hay conducta punible", "preclu", "absol", "no hay responsabilidad"]]}, "aciertos": [{"si_hay": ["legítima defensa"], "texto": "Identificaste la legítima defensa como la institución central del caso."}, {"si_hay": ["antijurid"], "texto": "Ubicaste la legítima defensa en la antijuridicidad, después de afirmar la tipicidad."}, {"si_hay": ["actual", "inminente"], "texto": "Verificaste que la agresión estaba en curso cuando Camilo golpeó."}, {"si_hay": ["proporcion"], "texto": "Analizaste la proporcionalidad de la defensa."}], "acierto_base": "Identificaste que el caso gira en torno a las lesiones que Camilo causó al defenderse.", "omisiones": [{"si_falta": ["tipic"], "texto": "No analizaste la tipicidad: la conducta sí encaja en el tipo de lesiones personales, y hay que decirlo antes de justificarla."}, {"si_falta": ["actual", "inminente"], "texto": "No verificaste que la agresión fuera actual: es el requisito que decide el caso (Ernesto volvía a levantar la botella)."}, {"si_falta": ["proporcion"], "texto": "No explicaste por qué un solo golpe con el termo es proporcionado frente a una botella rota dirigida a la cara."}, {"si_falta": ["parqueo", "discusión previa", "rencilla", "provoc"], "texto": "No descartaste el hecho distractor: la discusión por el parqueo no es provocación ni desvirtúa la defensa."}], "normas_clave": [{"si_falta": ["32"], "norma": "Artículo 32, numeral 6, del Código Penal (legítima defensa)"}, {"si_falta": ["artículo 9", "art. 9", "art 9"], "norma": "Artículo 9 del Código Penal (la conducta punible debe ser típica, antijurídica y culpable)"}], "conceptos_clave": [{"concepto": "Legítima defensa", "si_falta": ["legítima defensa"]}, {"concepto": "Agresión injusta y actual", "si_falta": ["actual", "inminente"]}, {"concepto": "Proporcionalidad de la defensa", "si_falta": ["proporcion"]}, {"concepto": "Estructura de la conducta punible", "si_falta": ["antijurid"]}], "contraargumento": "La familia de Ernesto dirá que una fractura es un daño excesivo; responde por qué un golpe único al brazo armado, mientras el ataque seguía, es una defensa proporcionada.", "como_mejorar": ["Recorre en orden tipicidad, antijuridicidad y culpabilidad; no saltes directo a la conclusión.", "Analiza cada requisito de la legítima defensa por separado y conéctalo con un hecho concreto.", "Cierra diciendo qué consecuencia procesal tiene la causal: el caso no debería llegar a juicio."], "comentario_bien": "Muy buen análisis: recorres la teoría del delito y aplicas cada requisito de la legítima defensa a los hechos.", "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es verificar uno por uno los requisitos de la legítima defensa."}}, "variacion": {"titulo": "El golpe después de la huida", "cambio": "¿Qué cambia si Camilo golpeó a Ernesto cuando este ya había soltado la botella y se estaba alejando?", "enunciado": "Los hechos son los mismos del caso anterior, con una diferencia en el momento del golpe. Cuando Ernesto se abalanzó con la botella rota y le causó la herida superficial, Camilo lo empujó con fuerza; Ernesto soltó la botella, que rodó hasta la calle, y empezó a alejarse caminando, sin mirar atrás. El empujón no le causó ninguna lesión.\n\nCamilo, furioso, lo siguió unos veinte metros y le dio con el termo el golpe en el brazo que le produjo la fractura. En ese momento Ernesto estaba desarmado y no hizo ningún gesto de volver a atacar.", "pregunta": "¿Puede Camilo invocar la legítima defensa por el golpe que le fracturó el brazo a Ernesto? Si no, ¿responde penalmente y hay alguna figura que incida en su pena?", "pistas": ["Repasa los requisitos de la legítima defensa uno por uno. ¿Cuál de ellos depende del momento exacto en que se da el golpe?", "Que la reacción no esté justificada no significa que el ataque previo de Ernesto sea irrelevante: piensa en si puede tener algún efecto sobre la pena."], "conceptos": ["Actualidad de la agresión", "Legítima defensa", "Ira o intenso dolor"], "solucion": {"problema_juridico": "¿Está amparado por la legítima defensa el golpe que Camilo le dio a Ernesto cuando este ya estaba desarmado y se alejaba, o responde Camilo por lesiones personales dolosas?", "normas": [{"norma": "Artículo 32, numeral 6, del Código Penal (Ley 599 de 2000)", "para_que": "exige que la agresión sea actual o inminente; aquí ese requisito falta."}, {"norma": "Artículo 111 y siguientes del Código Penal", "para_que": "tipifican las lesiones personales; la modalidad concreta depende del dictamen de Medicina Legal (verificar el artículo aplicable)."}, {"norma": "Artículo 57 del Código Penal", "para_que": "ira o intenso dolor: disminuye la pena de quien actúa en ese estado causado por un comportamiento ajeno grave e injustificado."}], "analisis": "**Tipicidad.** Igual que en el caso original, golpear a Ernesto y fracturarle el brazo encaja en el tipo de lesiones personales dolosas.\n\n**Antijuridicidad: no hay legítima defensa.** La legítima defensa exige una agresión actual o inminente. Cuando Camilo dio el golpe, Ernesto ya había soltado la botella, estaba desarmado y se alejaba: el peligro había cesado. Un golpe dado después de que la agresión terminó no es defensa, sino una reacción contra quien ya no atacaba. Tampoco se trata, según la posición mayoritaria, de un exceso en la legítima defensa, que supone que la agresión todavía existía y que la defensa se desbordó.\n\n**Culpabilidad y pena.** Camilo sabía lo que hacía y podía actuar de otro modo, así que la conducta es culpable. Sin embargo, actuó furioso inmediatamente después de haber sido atacado y herido con una botella rota. Eso puede encajar en la ira o intenso dolor (artículo 57 del Código Penal), que no elimina la responsabilidad pero sí disminuye la pena, si se prueba que ese estado fue causado por el comportamiento grave e injustificado de Ernesto.", "contraargumento": "La defensa de Camilo puede sostener que todo ocurrió en segundos y que él creía que el ataque continuaba. Solo prosperaría si se probara que Ernesto conservaba un arma o hacía gestos de volver a atacar (agresión inminente), o que Camilo creyó de manera invencible que el peligro seguía (error sobre los presupuestos de la causal; verificar el numeral exacto del artículo 32). Con un agresor desarmado que se aleja y al que hay que perseguir veinte metros, esa tesis no es creíble.", "conclusion": "Camilo no puede invocar la legítima defensa, porque la agresión ya había cesado cuando golpeó. Responde por lesiones personales dolosas, cuya modalidad y pena dependen del dictamen de Medicina Legal, y puede pedir que se le reconozca la ira o intenso dolor para disminuir la pena si prueba que actuó en ese estado a causa del ataque de Ernesto.", "errores_comunes": ["Mantener la legítima defensa porque Ernesto «empezó», sin revisar si la agresión seguía siendo actual.", "Llamar «exceso en la legítima defensa» a un golpe dado cuando el ataque ya había terminado.", "Pensar que la ira o intenso dolor absuelve: solo disminuye la pena."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["legítima defensa"], ["lesion"], ["actual", "cesó", "termin"]], "normas": [["32"], ["57", "ira o intenso", "ira e intenso", "intenso dolor"], ["599", "código penal"], ["111", "lesiones personales"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["actual", "inminente"], ["cesó", "termin", "ya no", "desarmado"]], "aplicacion": [["soltó", "desarmado"], ["alejab", "veinte metros", "20 metros", "huía", "se iba"], ["furioso", "rabia", "enojo"]], "conclusion": [["no puede invocar", "no hay legítima defensa", "no procede la legítima defensa", "no se configura", "no opera", "debe responder", "sí responde", "responde penalmente", "es responsable"], ["intenso dolor", "estado de ira", "atenu", "disminu"]]}, "aciertos": [{"si_hay": ["actual", "inminente"], "texto": "Identificaste que la actualidad de la agresión es lo que decide el caso."}, {"si_hay": ["desarmado", "soltó"], "texto": "Usaste el hecho clave: Ernesto ya estaba desarmado y se alejaba."}, {"si_hay": ["intenso dolor", "estado de ira"], "texto": "Consideraste la ira o intenso dolor como posible atenuante."}, {"si_hay": ["exceso"], "texto": "Te ocupaste de la diferencia con el exceso en la legítima defensa."}], "acierto_base": "Identificaste que el caso gira en torno al golpe que Camilo dio después del ataque.", "omisiones": [{"si_falta": ["actual", "inminente", "cesó"], "texto": "No explicaste que la agresión ya había cesado cuando Camilo golpeó: sin agresión actual no hay legítima defensa."}, {"si_falta": ["intenso dolor", "estado de ira", "atenu"], "texto": "No consideraste la ira o intenso dolor, que puede disminuir la pena por el ataque previo de Ernesto."}, {"si_falta": ["exceso"], "texto": "No descartaste el exceso en la legítima defensa, que supone una agresión todavía en curso."}], "normas_clave": [{"si_falta": ["32"], "norma": "Artículo 32, numeral 6, del Código Penal (legítima defensa)"}, {"si_falta": ["57", "intenso dolor"], "norma": "Artículo 57 del Código Penal (ira o intenso dolor)"}], "conceptos_clave": [{"concepto": "Actualidad de la agresión", "si_falta": ["actual", "inminente", "cesó"]}, {"concepto": "Ira o intenso dolor", "si_falta": ["intenso dolor", "estado de ira"]}, {"concepto": "Legítima defensa", "si_falta": ["legítima defensa"]}], "contraargumento": "La defensa de Camilo dirá que todo ocurrió en segundos y que creía seguir en peligro; responde por qué no es creíble frente a un agresor desarmado que se alejaba.", "como_mejorar": ["Identifica el requisito de la legítima defensa que falla y el hecho que lo prueba.", "Distingue la legítima defensa (justifica) de la ira o intenso dolor (solo disminuye la pena).", "Cierra diciendo por qué responde Camilo y qué puede alegar sobre la pena."], "comentario_bien": "Muy bien: ves que el momento del golpe cambia la solución y no confundes justificación con atenuante.", "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es explicar por qué la agresión ya no era actual."}}}, "Laboral": {"caso": {"titulo": "La diseñadora con cuenta de cobro", "enunciado": "Daniela Suárez Ortiz, diseñadora gráfica de 27 años, firmó el 1 de febrero de 2025 un «contrato de prestación de servicios profesionales» con Café Montaña S.A.S. (empresa ficticia), que se fue renovando cada tres meses. El contrato decía que Daniela actuaba «con plena autonomía técnica y administrativa» y que «no existe relación laboral». Recibía $3.200.000 fijos cada mes, contra una cuenta de cobro, y ella misma pagaba sus aportes a seguridad social como independiente.\n\nEn la práctica, Daniela trabajaba en la oficina de la empresa de lunes a viernes, de 8:00 a. m. a 5:00 p. m., registraba su entrada con huella, usaba un computador de la empresa y recibía cada mañana, por chat, las tareas que le asignaba el jefe de mercadeo. Para faltar debía pedirle permiso, y en octubre de 2025 recibió un «llamado de atención» escrito por llegar tarde tres veces.\n\nAlgunos fines de semana Daniela diseñaba logotipos para clientes propios. El 15 de enero de 2026 la empresa le informó por correo electrónico que no renovaría el contrato, que terminó el 31 de enero de 2026. Nunca recibió pagos por cesantías, prima de servicios ni vacaciones.", "pregunta": "¿Existió un contrato de trabajo entre Daniela y Café Montaña S.A.S., pese al contrato de prestación de servicios? Identifica el problema jurídico, analiza los elementos del contrato de trabajo y la presunción legal, y señala qué podría reclamar Daniela.", "pistas": ["El nombre que las partes le dan al contrato no es decisivo. ¿Qué principio constitucional ordena mirar cómo se ejecutó realmente la relación?", "Revisa los tres elementos esenciales del contrato de trabajo en el Código Sustantivo del Trabajo y la presunción que favorece a quien presta un servicio personal. ¿Qué hechos prueban cada elemento y a quién le toca probar lo contrario?"], "conceptos": ["Primacía de la realidad", "Elementos del contrato de trabajo", "Subordinación", "Presunción de contrato de trabajo"], "solucion": {"problema_juridico": "¿Se configuró un contrato de trabajo entre Daniela y Café Montaña S.A.S., a pesar de que firmaron un contrato de prestación de servicios, y qué consecuencias tiene esa declaración?", "normas": [{"norma": "Artículo 53 de la Constitución", "para_que": "consagra la primacía de la realidad sobre las formalidades establecidas por los sujetos de las relaciones laborales."}, {"norma": "Artículo 23 del Código Sustantivo del Trabajo", "para_que": "fija los elementos esenciales (actividad personal, continuada subordinación y salario) y dispone que, reunidos, hay contrato de trabajo sin importar el nombre que se le dé."}, {"norma": "Artículo 24 del Código Sustantivo del Trabajo", "para_que": "presume que toda relación de trabajo personal está regida por un contrato de trabajo."}, {"norma": "Artículo 64 del Código Sustantivo del Trabajo", "para_que": "regula la indemnización por terminación unilateral sin justa causa; su procedencia y monto dependen de la modalidad del contrato que se declare (verificar)."}, {"norma": "Normas del CST sobre cesantías, prima de servicios y vacaciones", "para_que": "fundamentan las prestaciones y la compensación que deben liquidarse (verificar los artículos exactos)."}], "analisis": "**Primacía de la realidad.** El artículo 53 de la Constitución obliga a mirar cómo se ejecutó la relación, no cómo la llamaron las partes. Las cláusulas de «autonomía» y de «no existe relación laboral» son formas: ceden si los hechos muestran otra cosa.\n\n**Elementos del contrato de trabajo (art. 23 CST).**\n\n- *Actividad personal:* Daniela hacía el trabajo ella misma, en la oficina y con los equipos de la empresa.\n- *Continuada subordinación:* cumplía un horario fijo controlado con huella, recibía órdenes diarias del jefe de mercadeo, pedía permiso para faltar y recibió un llamado de atención, que es expresión del poder disciplinario del empleador.\n- *Salario:* recibía un pago fijo mensual como retribución de su trabajo; llamarlo «honorarios» y cobrarlo con cuenta de cobro no cambia su naturaleza.\n\n**Presunción (art. 24 CST).** Como Daniela prestó un servicio personal, se presume el contrato de trabajo y es la empresa la que debe probar que había autonomía real. Con estos hechos no puede hacerlo.\n\n**El hecho distractor.** Que Daniela atendiera clientes propios los fines de semana no desvirtúa el contrato: la exclusividad no es un elemento esencial y el CST admite que un trabajador tenga más de un empleador (verificar el artículo exacto sobre coexistencia de contratos).", "contraargumento": "La empresa dirá que Daniela firmó libremente un contrato de prestación de servicios, que tenía clientes propios y que pagaba su seguridad social como independiente. No prospera: lo escrito en el contrato no prevalece sobre la realidad, y ninguno de esos hechos desvirtúa la subordinación probada con el horario, la huella, las órdenes diarias y el llamado de atención. Prosperaría si la empresa probara que Daniela organizaba su trabajo con autonomía real y que solo había coordinación de entregas.", "conclusion": "Sí existió un contrato de trabajo. Daniela puede demandar ante la jurisdicción ordinaria laboral para que se declare la relación laboral desde el 1 de febrero de 2025 y se condene a la empresa a pagar las prestaciones sociales (cesantías, intereses sobre las cesantías y prima de servicios), la compensación de las vacaciones y los aportes a seguridad social a cargo del empleador, además de la indemnización por terminación sin justa causa si, según la modalidad del contrato que se declare, procede. Las sanciones por mora, como la indemnización moratoria del artículo 65 del CST, no son automáticas: dependen de que el empleador haya actuado de mala fe. Verifica la vigencia de las normas en SUIN-Juriscol, incluidas las reformas laborales recientes.", "errores_comunes": ["Resolver el caso por el nombre del contrato o por la cláusula que niega la relación laboral.", "Exigir exclusividad o tratar el trabajo con clientes propios como prueba de independencia.", "Olvidar la presunción del artículo 24 del CST y poner toda la carga de la prueba en Daniela.", "Afirmar que la indemnización moratoria procede de manera automática."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["contrato de trabajo", "relación laboral", "contrato realidad"], ["prestación de servicios"], ["existi", "configur", "declar"]], "normas": [["53"], ["23"], ["24"], ["sustantivo del trabajo", "cst"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["subordina"], ["realidad"], ["presun", "presume"]], "aplicacion": [["horario", "huella"], ["llamado de atención", "permiso", "órdenes", "jefe"], ["pago fijo", "mensual", "honorarios", "cuenta de cobro", "3.200.000"], ["fines de semana", "clientes propios", "exclusiv"]], "conclusion": [["sí existió", "existió un contrato de trabajo", "hay contrato de trabajo", "existe contrato de trabajo", "existe un contrato de trabajo", "hubo contrato de trabajo", "se declare", "declarar"], ["cesantías", "prima", "vacaciones", "prestaciones"]]}, "aciertos": [{"si_hay": ["realidad"], "texto": "Aplicaste la primacía de la realidad sobre las formas."}, {"si_hay": ["subordina"], "texto": "Identificaste la subordinación como el elemento decisivo."}, {"si_hay": ["presun", "presume"], "texto": "Usaste la presunción de contrato de trabajo."}, {"si_hay": ["cesantías", "prima", "prestaciones"], "texto": "Señalaste las consecuencias económicas de la declaración."}], "acierto_base": "Identificaste que el caso trata sobre la naturaleza real del vínculo de Daniela con la empresa.", "omisiones": [{"si_falta": ["realidad"], "texto": "No invocaste la primacía de la realidad sobre las formas (art. 53 de la Constitución): es la razón por la que el nombre del contrato no decide."}, {"si_falta": ["subordina"], "texto": "No analizaste la subordinación con los hechos: horario con huella, órdenes diarias, permisos y el llamado de atención."}, {"si_falta": ["presun", "presume"], "texto": "No usaste la presunción del artículo 24 del CST, que traslada a la empresa la carga de probar la autonomía."}, {"si_falta": ["fines de semana", "clientes propios", "exclusiv"], "texto": "No descartaste el hecho distractor: trabajar para clientes propios los fines de semana no desvirtúa el contrato."}], "normas_clave": [{"si_falta": ["53"], "norma": "Artículo 53 de la Constitución (primacía de la realidad)"}, {"si_falta": ["23"], "norma": "Artículo 23 del CST (elementos esenciales del contrato de trabajo)"}, {"si_falta": ["24"], "norma": "Artículo 24 del CST (presunción de contrato de trabajo)"}], "conceptos_clave": [{"concepto": "Primacía de la realidad", "si_falta": ["realidad"]}, {"concepto": "Subordinación", "si_falta": ["subordina"]}, {"concepto": "Presunción de contrato de trabajo", "si_falta": ["presun", "presume"]}, {"concepto": "Elementos del contrato de trabajo", "si_falta": ["elemento", "actividad personal", "prestación personal"]}], "contraargumento": "La empresa dirá que Daniela firmó libremente y pagaba su seguridad social como independiente; responde por qué la forma en que se ejecutó la relación prevalece sobre lo que dice el papel.", "como_mejorar": ["Analiza los tres elementos del contrato de trabajo por separado, cada uno con sus hechos.", "Explica quién tiene la carga de la prueba gracias a la presunción del artículo 24 del CST.", "Cierra con lo que Daniela puede reclamar y ante qué jurisdicción."], "comentario_bien": "Muy buen análisis: aplicas la primacía de la realidad y pruebas cada elemento con los hechos.", "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es probar la subordinación con hechos concretos y usar la presunción."}}, "variacion": {"titulo": "La diseñadora que cobraba por pieza", "cambio": "¿Qué cambia si Daniela trabajaba con autonomía real, desde su propio estudio y sin horario, y cobraba por cada pieza entregada?", "enunciado": "Las partes, las fechas y el contrato firmado son los mismos del caso anterior, pero la relación se ejecutó de otra manera. Daniela trabajaba desde su propio estudio, con sus propios equipos, sin horario ni registro de entrada, y decidía cómo y cuándo hacer cada diseño.\n\nLa empresa le enviaba solicitudes con la fecha de entrega y el manual de marca que debía respetar; Daniela podía aceptarlas o rechazarlas, y en 2025 rechazó varias sin ninguna consecuencia. Cobraba una tarifa pactada por cada pieza entregada y aprobada, por lo que sus ingresos variaban de un mes a otro. Nunca pidió permisos ni recibió llamados de atención, y atendía a otros clientes cuando quería.", "pregunta": "¿Existió un contrato de trabajo entre Daniela y Café Montaña S.A.S.? Analiza la presunción legal y si la empresa logra desvirtuarla.", "pistas": ["La presunción de contrato de trabajo sigue aplicando porque hubo un servicio personal. La pregunta es si los hechos la desvirtúan.", "Distingue subordinación de coordinación: fijar fechas de entrega y exigir un estándar de calidad, ¿es lo mismo que dar órdenes sobre cómo, cuándo y dónde trabajar?"], "conceptos": ["Presunción de contrato de trabajo", "Subordinación y coordinación", "Autonomía técnica y administrativa"], "solucion": {"problema_juridico": "¿Desvirtuó Café Montaña S.A.S. la presunción de contrato de trabajo al demostrar que Daniela prestaba sus servicios con autonomía real y cobraba por resultado?", "normas": [{"norma": "Artículo 24 del Código Sustantivo del Trabajo", "para_que": "presume el contrato de trabajo en toda relación de trabajo personal; es una presunción legal que admite prueba en contrario."}, {"norma": "Artículo 23 del Código Sustantivo del Trabajo", "para_que": "exige la continuada subordinación como elemento esencial: sin ella no hay contrato de trabajo."}, {"norma": "Artículo 53 de la Constitución", "para_que": "la primacía de la realidad también opera aquí: la ejecución real coincide con lo pactado."}], "analisis": "**La presunción sigue aplicando.** Daniela prestó un servicio personal, así que se presume el contrato de trabajo (art. 24 CST). Pero es una presunción legal: admite prueba en contrario, y la empresa puede desvirtuarla demostrando que no hubo subordinación.\n\n**No hay subordinación, sino coordinación.** Daniela decidía cómo, cuándo y dónde trabajaba, usaba sus propios medios y podía rechazar encargos sin consecuencia. Que la empresa fijara fechas de entrega y exigiera respetar el manual de marca es coordinación propia de cualquier contrato de servicios: define el resultado esperado, no dirige la forma de trabajar. No hubo horario, permisos ni poder disciplinario.\n\n**La remuneración por resultado.** El pago por pieza aprobada, variable de un mes a otro, refuerza que se contrató un resultado. Por sí solo no sería decisivo, porque también existe el salario por unidad de obra, pero sumado a la autonomía muestra un trabajo independiente.\n\n**Primacía de la realidad.** El principio no solo sirve para descubrir contratos de trabajo ocultos: aquí la realidad de la ejecución confirma lo que las partes firmaron.", "contraargumento": "Daniela podría sostener que la relación duró un año, que la empresa era su cliente principal y que debía cumplir el manual de marca. No prospera: la duración y la dependencia económica no equivalen a subordinación, y cumplir estándares de calidad es coordinación. Prosperaría si se probara que, en la práctica, la empresa le imponía horarios, le daba órdenes sobre la forma de trabajar o la sancionaba.", "conclusion": "No existió contrato de trabajo: la empresa desvirtuó la presunción y la relación fue un contrato de prestación de servicios independiente, de naturaleza civil o comercial. Daniela no tiene derecho a prestaciones sociales ni a indemnizaciones laborales; solo puede reclamar lo que se le deba según el contrato, por ejemplo piezas entregadas y no pagadas.", "errores_comunes": ["Declarar el contrato de trabajo solo porque hubo un servicio personal, olvidando que la presunción admite prueba en contrario.", "Confundir fechas de entrega y estándares de calidad con subordinación.", "Tratar la dependencia económica de un cliente principal como si fuera subordinación."]}, "claves_evaluacion": {"rubrica_claves": {"problema": [["contrato de trabajo", "relación laboral"], ["presun", "presume"], ["desvirtu", "prueba en contrario"]], "normas": [["24"], ["23"], ["53"]], "argumentacion": [["porque", "ya que", "dado que", "puesto que"], ["subordina"], ["coordina"], ["autonom"]], "aplicacion": [["estudio", "sus equipos", "propios equipos", "propios medios"], ["horario"], ["pieza", "por resultado", "tarifa"], ["rechaz"]], "conclusion": [["no existió", "no hay contrato de trabajo", "no existe contrato de trabajo", "no hubo contrato de trabajo", "no se configura", "no se configuró", "servicios independiente", "civil o comercial"]]}, "aciertos": [{"si_hay": ["coordina"], "texto": "Distinguiste coordinación de subordinación."}, {"si_hay": ["desvirtu", "prueba en contrario"], "texto": "Reconociste que la presunción admite prueba en contrario."}, {"si_hay": ["pieza", "por resultado", "tarifa"], "texto": "Valoraste el pago por resultado."}, {"si_hay": ["rechaz"], "texto": "Usaste que Daniela podía rechazar encargos sin consecuencia."}], "acierto_base": "Identificaste que el caso trata sobre si el vínculo de Daniela era laboral o independiente.", "omisiones": [{"si_falta": ["presun", "presume"], "texto": "No partiste de la presunción del artículo 24 del CST: hubo servicio personal, así que la pregunta es si la empresa la desvirtuó."}, {"si_falta": ["coordina"], "texto": "No distinguiste la coordinación (fechas de entrega, manual de marca) de la subordinación."}, {"si_falta": ["rechaz"], "texto": "No usaste un hecho clave: Daniela podía rechazar encargos sin consecuencia."}], "normas_clave": [{"si_falta": ["24"], "norma": "Artículo 24 del CST (presunción de contrato de trabajo, que admite prueba en contrario)"}, {"si_falta": ["23"], "norma": "Artículo 23 del CST (la subordinación como elemento esencial)"}], "conceptos_clave": [{"concepto": "Presunción de contrato de trabajo", "si_falta": ["presun", "presume"]}, {"concepto": "Subordinación y coordinación", "si_falta": ["coordina"]}, {"concepto": "Autonomía técnica y administrativa", "si_falta": ["autonom"]}], "contraargumento": "Daniela dirá que la relación duró un año y que la empresa era su cliente principal; responde por qué la dependencia económica no equivale a subordinación.", "como_mejorar": ["Parte de la presunción y luego examina si los hechos la desvirtúan.", "Contrasta cada hecho con la diferencia entre coordinar un resultado y dirigir la forma de trabajar.", "Cierra con lo que Daniela sí puede reclamar según el contrato."], "comentario_bien": "Muy bien: usas la presunción y la desvirtúas con hechos concretos de autonomía.", "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es distinguir coordinación de subordinación."}}}}, "chat": {"escrito": "**Borrador de acción de tutela** _(ejemplo de la demostración, con datos genéricos)_\n\nSeñor(a)\n**JUEZ DE LA REPÚBLICA (REPARTO)**\n[Ciudad]\nE. S. D.\n\n**Referencia:** Acción de tutela\n**Accionante:** [Nombre completo], identificado(a) con [tipo y número de documento]\n**Accionado:** [Entidad o particular]\n\n[Nombre completo], mayor de edad, domiciliado(a) en [ciudad], actuando en nombre propio, presento **acción de tutela** con fundamento en el artículo 86 de la Constitución Política y el Decreto 2591 de 1991, para que se protejan mis derechos fundamentales a [derechos vulnerados], con base en lo siguiente:\n\n## I. Hechos\n\n1. El [fecha], [describa el primer hecho].\n2. El [fecha], solicité a [entidad] [lo solicitado]. A la fecha [no he recibido respuesta / la respuesta fue negativa].\n3. [Explique la afectación actual y por qué es grave].\n\n## II. Derechos fundamentales vulnerados\n\n[Derecho 1] y [derecho 2], por las razones expuestas en los hechos.\n\n## III. Fundamentos de derecho\n\n- **Artículo 86 de la Constitución Política:** toda persona puede reclamar ante los jueces la protección inmediata de sus derechos fundamentales cuando resulten vulnerados o amenazados por la acción o la omisión de una autoridad pública o, en los casos que señala la ley, de particulares.\n- **Decreto 2591 de 1991:** reglamenta el trámite de la acción de tutela.\n- [Normas especiales aplicables al caso, por verificar].\n\n## IV. Procedencia\n\n- **Legitimación por activa:** actúo en nombre propio como titular de los derechos.\n- **Legitimación por pasiva:** [entidad] es a quien se atribuye la vulneración.\n- **Subsidiariedad:** [explique por qué no existe otro medio de defensa eficaz o por qué hay un perjuicio irremediable].\n- **Inmediatez:** la vulneración ocurrió el [fecha] y continúa, por lo que la acción se presenta en un término razonable.\n\n## V. Pretensiones\n\n1. **TUTELAR** mis derechos fundamentales a [derechos].\n2. **ORDENAR** a [entidad] que, en el término de [número] horas contado desde la notificación del fallo, [acción concreta].\n\n## VI. Pruebas y anexos\n\n1. Copia de mi documento de identidad.\n2. [Copia de la solicitud presentada y de la respuesta, si existe].\n3. [Otros documentos].\n\n## VII. Juramento\n\nManifiesto bajo la gravedad del juramento que no he presentado otra acción de tutela por los mismos hechos y derechos.\n\n## VIII. Notificaciones\n\n- **Accionante:** [dirección], [correo electrónico], [teléfono].\n- **Accionado:** [dirección o correo de notificaciones judiciales de la entidad].\n\nAtentamente,\n\n[Firma]\n[Nombre completo]\n[Documento de identidad]\n\n---\n**Antes de presentarlo:** completa todo lo que está entre corchetes y verifica la vigencia de las normas citadas en SUIN-Juriscol o en la Secretaría del Senado.\n\n_Esta información es orientación general, no asesoría jurídica personalizada. Para tu caso concreto consulta a un abogado._", "escrito_peticion": "**Borrador de derecho de petición** _(ejemplo de la demostración, con datos genéricos)_\n\n[Ciudad], [fecha]\n\nSeñores\n**[ENTIDAD DESTINATARIA]**\n[Dirección o correo de la entidad]\n\n**Referencia:** Derecho de petición\n\n[Nombre completo], identificado(a) con [tipo y número de documento], en ejercicio del derecho fundamental de petición, presento respetuosamente la siguiente solicitud:\n\n## I. Hechos\n\n1. [Hecho 1, con fecha].\n2. [Hecho 2].\n\n## II. Peticiones\n\n1. [Petición concreta 1].\n2. [Petición concreta 2].\n\n## III. Fundamentos de derecho\n\n- **Artículo 23 de la Constitución Política:** toda persona tiene derecho a presentar peticiones respetuosas a las autoridades y a obtener pronta resolución.\n- **Ley 1755 de 2015:** regula el derecho fundamental de petición.\n\n## IV. Término para responder\n\nLa ley fija un término general de respuesta y términos especiales para algunas peticiones (por ejemplo, solicitudes de documentos o consultas). **Verifica el término que aplica a tu caso antes de contar los días.**\n\n## V. Anexos\n\n[Documentos que soportan la petición].\n\n## VI. Notificaciones\n\nRecibiré la respuesta en: [correo electrónico o dirección física].\n\nAtentamente,\n\n[Firma]\n[Nombre completo]\n\n---\n**Antes de enviarlo:** completa lo que está entre corchetes y verifica la vigencia de las normas en la fuente oficial.\n\n_Esta información es orientación general, no asesoría jurídica personalizada. Para tu caso concreto consulta a un abogado._", "directo": "**Respuesta corta:** la acción de tutela es un mecanismo para pedirle a un juez que proteja de inmediato un derecho fundamental que está siendo vulnerado o amenazado por una autoridad o, en ciertos casos, por un particular.\n\n**Dónde está:** artículo 86 de la Constitución, reglamentado por el Decreto 2591 de 1991.\n\n**Cuándo procede (requisitos generales):**\n\n- *Legitimación:* la presenta el titular del derecho (o alguien en su nombre) contra quien lo vulnera.\n- *Subsidiariedad:* no debe existir otro medio de defensa judicial eficaz, salvo que se use como mecanismo transitorio para evitar un perjuicio irremediable.\n- *Inmediatez:* debe presentarse en un tiempo razonable desde la vulneración.\n\n**Cómo funciona:** no requiere abogado; se presenta por escrito y, en casos de urgencia o si la persona no sabe escribir, también de forma verbal. El juez debe decidir en un plazo máximo de diez días.\n\n**Ejemplo típico:** una EPS que niega un medicamento ordenado por el médico tratante, poniendo en riesgo la salud del paciente.\n\n---\n**Confianza:** Alta — es una institución constitucional estable.\n**Fuentes:** Constitución, art. 86; Decreto 2591 de 1991. Verifica la vigencia en SUIN-Juriscol.\n\n_Esta información es orientación general, no asesoría jurídica personalizada._", "conmigo": "Vamos a resolverlo juntos, paso a paso.\n\nPrimera pregunta: **¿cuál es el problema jurídico?** Intenta formularlo en una sola frase, empezando por «¿Vulnera…?». Piensa en quién actúa, qué derecho está en juego y por qué razón la EPS negó el medicamento.", "ensename": "**La idea central:** la tutela es un mecanismo rápido para proteger derechos fundamentales cuando no hay otro camino eficaz.\n\n**Un ejemplo cotidiano:** si tu EPS te niega un medicamento que tu médico te ordenó y cada semana sin él empeoras, esperar un proceso largo no te sirve: la tutela sí, porque el juez decide en días.\n\n**La norma:** artículo 86 de la Constitución, reglamentado por el Decreto 2591 de 1991. Verifica la vigencia en la fuente oficial.\n\n**El error más común:** confundir *subsidiariedad* (que no haya otro medio eficaz) con *inmediatez* (que se presente en un tiempo razonable). Son requisitos distintos.\n\n**Para comprobar que quedó claro:** si Lucía hubiera esperado dos años para presentar la tutela, ¿qué requisito estaría en riesgo?", "examiname": "Empecemos el examen. Responde con fundamento.\n\n**Pregunta 1 de 5:** ¿Cuáles son los requisitos generales de procedencia de la acción de tutela y en qué norma se fundamentan?", "auditar": "Pégame tu respuesta completa al caso y la evaluaré con la rúbrica: problema jurídico, marco normativo, argumentación, aplicación a los hechos, conclusión y claridad."}};</script>
+<script>// =========================================================================================
+// PULLEX IA — capa de demostración. Reemplaza fetch() por un servidor simulado en memoria para
+// que la app completa funcione sin backend ni clave de IA. Solo se usa en la página de demo.
+// =========================================================================================
+(function(){
+const D=window.__DEMO_DATOS__;
+const esperar=ms=>new Promise(r=>setTimeout(r,ms));
+const PLANES={prueba:{nombre:'Prueba gratis',limite:10,precio:0},basico:{nombre:'Básico',limite:200,precio:30000},
+  pro:{nombre:'Pro',limite:500,precio:45000},premium:{nombre:'Premium',limite:1000,precio:60000}};
+const AREAS=['Constitucional / Tutela','Penal','Civil','Familia','Laboral','Administrativo','Comercial / Societario',
+  'Marcas / Propiedad Intelectual','Consumidor','Tributario'];
+const RUBRICA=[['problema','Identificación del problema',20],['normas','Marco normativo',20],['argumentacion','Argumentación',20],
+  ['aplicacion','Aplicación a los hechos',20],['conclusion','Conclusión',10],['claridad','Claridad jurídica',10]];
+const S={perfil:null,convs:[],msgs:{},casos:{},intentos:[],sig:1};
+function perfilBase(nombre,email){return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:'pro',
+  plan_nombre:'Pro',limite:500,usadas:12,restantes:488,activo:true,es_admin:false,email_verificado:true,
+  preferencias:{areas:['Constitucional / Tutela','Penal'],modo:'auto',tema:'oscuro',web:true,memoria:'',camino:'aprender'}}}
+function json(d,st){return new Response(JSON.stringify(d),{status:st||200,headers:{'content-type':'application/json'}})}
+function error(st,m){return json({detail:m},st)}
+function gastar(){const p=S.perfil;p.usadas++;p.restantes=p.limite-p.usadas;return p.restantes}
+function trozos(t,n){const r=[];for(let i=0;i<t.length;i+=n)r.push(t.slice(i,i+n));return r}
+function publico(c){return {id:c.id,area:c.area,nivel:c.nivel,titulo:c.d.titulo,enunciado:c.d.enunciado,pregunta:c.d.pregunta,
+  n_pistas:(c.d.pistas||[]).length,cambio:c.d.cambio||null,padre_id:c.padre||null}}
+// Evaluación simulada y genérica: cada caso de datos_demo.json trae sus `claves_evaluacion` (palabras clave por
+// criterio de la rúbrica, aciertos, omisiones, normas y conceptos). La misma lógica está en servidor_simulado.py.
+const sinTildes=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function evaluar(resp,caso){
+  const r=sinTildes(resp);const k=(caso&&caso.claves_evaluacion)||{};
+  const t=ks=>(ks||[]).some(x=>r.includes(sinTildes(x)));
+  const grupos=k.rubrica_claves||{};const p={};
+  RUBRICA.forEach(([id,,m])=>{
+    if(id==='claridad'){p[id]=resp.length>250?9:7;return}
+    const g=grupos[id]||[];const base=Math.round(m*0.4);
+    p[id]=g.length?base+Math.round((m-1-base)*g.filter(t).length/g.length):base});
+  const omit=(k.omisiones||[]).filter(o=>!t(o.si_falta)).map(o=>o.texto);
+  const ident=(k.aciertos||[]).filter(a=>t(a.si_hay)).map(a=>a.texto);
+  const rub=RUBRICA.map(([id,n,m])=>({id,nombre:n,max:m,puntaje:Math.min(m,p[id])}));
+  return {total:rub.reduce((a,b)=>a+b.puntaje,0),puntajes:p,rubrica:rub,
+    identificaste:ident.length?ident:[k.acierto_base||'Identificaste el tema general del caso.'],
+    omitiste:omit.length?omit:['Nada importante: cubriste los puntos principales.'],
+    norma_faltante:(k.normas_clave||[]).filter(n=>!t(n.si_falta)).map(n=>n.norma),
+    contraargumento:k.contraargumento||'',como_mejorar:k.como_mejorar||[],
+    conceptos_debiles:(k.conceptos_clave||[]).filter(c=>!t(c.si_falta)).map(c=>c.concepto),
+    comentario:omit.length>1?(k.comentario_mejorar||'Vas bien encaminado.'):(k.comentario_bien||'Muy buena estructura.')};
+}
+function progreso(){
+  const por={},deb={};S.intentos.forEach(i=>{(por[i.area]=por[i.area]||[]).push(i.total);
+    i.debiles.forEach(c=>deb[c]=(deb[c]||0)+1)});
+  const areas=Object.entries(por).map(([a,v])=>({area:a,intentos:v.length,promedio:Math.round(v.reduce((x,y)=>x+y,0)/v.length)}))
+    .sort((a,b)=>a.promedio-b.promedio);
+  const tot=S.intentos.map(i=>i.total);
+  return {resueltos:tot.length,promedio:tot.length?Math.round(tot.reduce((x,y)=>x+y,0)/tot.length):null,por_area:areas,
+    a_reforzar:Object.entries(deb).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,5),ultimos:tot.slice(-8)};
+}
+function sse(textos){
+  const enc=new TextEncoder();
+  return new Response(new ReadableStream({async start(c){
+    c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'restantes',restantes:S.perfil.restantes})+'\n\n'));
+    await esperar(500);
+    for(const t of textos){c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'texto',texto:t})+'\n\n'));await esperar(18)}
+    c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fin'})+'\n\n'));c.close();
+  }}),{headers:{'content-type':'text/event-stream'}});
+}
+async function manejar(url,o){
+  const partes=String(url).replace(/^https?:\/\/[^/]+/,'').split('?');const ruta=partes[0];
+  const qs=new URLSearchParams(partes[1]||'');const m=(o&&o.method)||'GET';
+  let b={};try{b=o&&o.body?JSON.parse(o.body):{}}catch(e){}
+  await esperar(ruta.startsWith('/api/modular/caso')||ruta.startsWith('/api/modular/evaluar')?900:150);
+  if(ruta==='/api/login'||ruta==='/api/registro'){
+    S.perfil=perfilBase(b.nombre&&b.nombre.trim()||'Valentina Ríos',b.email||'demo@pullex.co');
+    return json({token:'demo',perfil:S.perfil});}
+  if(!S.perfil)return error(401,'No autenticado');
+  if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false});
+  if(ruta==='/api/boletin')return json({fecha:new Date().toISOString().slice(0,10),contenido:
+    '## Boletín de demostración\n\nEn la app real, aquí aparece cada día un boletín con noticias jurídicas, jurisprudencia reciente y novedades normativas de Colombia, generado con búsqueda web en fuentes oficiales.\n\n_Esta página es una demostración: no muestra noticias reales._'});
+  if(ruta==='/api/preferencias'){Object.assign(S.perfil.preferencias,b);return json({ok:true,preferencias:S.perfil.preferencias})}
+  if(ruta==='/api/conversaciones'&&m==='POST'){const id=S.sig++;S.convs.unshift({id,titulo:'Nueva consulta',t:0});S.msgs[id]=[];return json({id,titulo:'Nueva consulta'})}
+  if(ruta==='/api/conversaciones')return json(S.convs.filter(c=>(S.msgs[c.id]||[]).length)
+    .sort((x,y)=>y.t-x.t).map(c=>({id:c.id,titulo:c.titulo,actualizada:c.t})));
+  const rc=ruta.match(/^\/api\/conversaciones\/(\d+)(\/mensajes|\/titulo)?$/);
+  if(rc){const conv=S.convs.find(c=>c.id===+rc[1]);if(!conv)return error(404,'Conversación no encontrada');
+    if(rc[2]==='/mensajes')return json(S.msgs[conv.id]||[]);
+    if(rc[2]==='/titulo'){const t=String(b.titulo||'').replace(/\s+/g,' ').trim().slice(0,80);
+      if(!t)return error(400,'Escribe un título');conv.titulo=t;return json({ok:true,titulo:t})}
+    if(m==='DELETE'){S.convs=S.convs.filter(c=>c!==conv);delete S.msgs[conv.id];return json({ok:true})}}
+  if(ruta==='/api/chat'){
+    const conv=S.convs.find(c=>c.id===+b.conversacion);if(!conv)return error(404,'Conversación no encontrada');
+    const msj=String(b.mensaje||'').trim();const hist=S.msgs[conv.id]=S.msgs[conv.id]||[];
+    if(!hist.length)conv.titulo=msj.slice(0,60)+(msj.length>60?'…':'');
+    // Document Studio: el mensaje empieza con «SOLICITUD DE REDACCIÓN — …»
+    const pl=msj.split('\n')[0];
+    const txt=pl.startsWith('SOLICITUD DE REDACCIÓN')?(pl.includes('PETICIÓN')?D.chat.escrito_peticion:D.chat.escrito)
+      :(D.chat[b.estilo]||D.chat.directo);
+    hist.push({rol:'user',contenido:msj},{rol:'assistant',contenido:txt});conv.t=Date.now();
+    gastar();return sse(trozos(txt,24));}
+  if(ruta==='/api/modular/opciones')return json({areas:['Constitucional','Penal','Civil','Laboral','Administrativo','Comercial','Familia','Procesal','Probatorio'],
+    niveles:[{id:'basico',nombre:'Básico'},{id:'intermedio',nombre:'Intermedio'},{id:'avanzado',nombre:'Avanzado'},{id:'experto',nombre:'Experto'}],
+    rubrica:RUBRICA.map(([id,n,mx])=>({id,nombre:n,max:mx}))});
+  if(ruta==='/api/modular/caso'){
+    let c;
+    if(b.variacion_de){const p=S.casos[b.variacion_de];if(!p)return error(404,'Caso no encontrado');
+      c={id:S.sig++,area:p.area,nivel:p.nivel,d:D.casos[p.area].variacion,padre:p.id}}
+    else{
+      const banco=D.casos[b.area];
+      if(!banco){const hay=Object.keys(D.casos);
+        return error(503,'En esta demostración el banco de casos trae casos de Derecho '+hay.slice(0,-1).join(', ')+' y '+hay[hay.length-1]+
+          '. Elige una de esas áreas para verlos; en la app real se genera un caso nuevo de cualquier área.')}
+      c={id:S.sig++,area:b.area,nivel:b.nivel||'basico',d:banco.caso,padre:null}}
+    S.casos[c.id]=c;return json({...publico(c),restantes:gastar()});}
+  if(ruta==='/api/modular/pista'){const c=S.casos[b.caso_id];const n=b.n||0;const ps=c.d.pistas||[];
+    if(n>=ps.length)return error(404,'No hay más pistas para este caso');return json({n,pista:ps[n],quedan:ps.length-n-1})}
+  if(ruta==='/api/modular/evaluar'){const c=S.casos[b.caso_id];const r=(b.respuesta||'').trim();
+    if(r.length<40)return error(400,'Escribe una respuesta más completa antes de evaluarla (mínimo unas líneas).');
+    const ev=evaluar(r,c.d);S.intentos.push({area:c.area,total:ev.total,debiles:ev.conceptos_debiles});
+    return json({...ev,restantes:gastar()});}
+  if(ruta==='/api/modular/solucion'){const c=S.casos[qs.get('caso_id')];const s=c.d.solucion;
+    return json({...s,conceptos:c.d.conceptos||[]})}
+  if(ruta==='/api/modular/progreso')return json(progreso());
+  if(ruta==='/api/cambiar-clave')return json({ok:true,token:'demo'});
+  if(['/api/cerrar-sesiones','/api/reenviar-verificacion','/api/recuperar-clave'].includes(ruta))
+    return json({ok:true,mensaje:'En la demostración no se envían correos.'});
+  return error(404,'Esta función no está disponible en la demostración.');
+}
+const original=window.fetch.bind(window);
+window.fetch=(url,o)=>{const s=String(url);
+  if(/^(https?:\/\/[^/]+)?\/api\//.test(s))return manejar(s,o);
+  return original(url,o)};
+})();
+</script>
+<script>// Si el CDN falla o su contenido no coincide con la huella (integrity), las librerías no
+// cargan: la app sigue funcionando y muestra las respuestas como texto plano seguro.
+const LIBS_OK=typeof marked!=='undefined'&&typeof DOMPurify!=='undefined';
+if(LIBS_OK)marked.setOptions({breaks:true});
+const $=id=>document.getElementById(id);
+let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
+function auth(){return {'Authorization':'Bearer '+TOKEN}}
+function md(t){return LIBS_OK?DOMPurify.sanitize(marked.parse(t||'')):esc(t).replace(/\n/g,'<br>')}
+function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+
+let modoActual='ingresar';
+function modoAuth(m){modoActual=m;
+  $('t-ing').classList.toggle('on',m==='ingresar');$('t-reg').classList.toggle('on',m==='registrar');
+  $('f-reg').classList.toggle('hidden',m!=='registrar');
+  $('a-olvido').classList.toggle('hidden',m!=='ingresar');
+  $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
+function abrirRecuperar(){$('m-recuperar').classList.remove('hidden');$('rec-msg').className='msg-e';$('rec-msg').textContent='';
+  $('rec-email').value=$('a-email').value||'';}
+function cerrarRecuperar(){$('m-recuperar').classList.add('hidden')}
+async function enviarRecuperar(){
+  const email=$('rec-email').value.trim();
+  if(!email){$('rec-msg').className='msg-e';$('rec-msg').textContent='Escribe tu correo.';return}
+  $('rec-btn').disabled=true;$('rec-btn').textContent='Enviando…';
+  try{
+    await fetch('/api/recuperar-clave',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email})});
+    $('rec-msg').className='msg-e';$('rec-msg').style.color='var(--ok)';
+    $('rec-msg').textContent='Si ese correo tiene una cuenta, te llegará un enlace en unos minutos. Revisa también spam.';
+  }catch(e){
+    $('rec-msg').className='msg-e';$('rec-msg').style.color='';
+    $('rec-msg').textContent='Error de conexión. Intenta de nuevo.';
+  }
+  $('rec-btn').disabled=false;$('rec-btn').textContent='Enviar enlace';
+}
+async function enviarAuth(){
+  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
+  const url=modoActual==='registrar'?'/api/registro':'/api/login';
+  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(cuerpo)});
+    const d=await r.json();
+    if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';return}
+    TOKEN=d.token;PERFIL=d.perfil;iniciar();
+  }catch(e){$('a-msg').textContent='Error de conexión'}
+}
+const CAPACIDADES=[
+  {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
+   d:'Identifica normas aplicables y contrasta líneas jurisprudenciales.',
+   p:'Necesito investigar qué normas y jurisprudencia aplican a mi caso. Pregúntame primero de qué se trata.'},
+  {ic:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
+   t:'Redacción de escritos',d:'Tutelas y derechos de petición con un formulario guiado y estructura procesal.',
+   abrir:'escrito'},
+  {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+   t:'Análisis de casos',d:'Hechos, pretensiones, riesgos y estrategia.',
+   p:'Quiero que analices mi caso. Pregúntame los hechos, qué pretendo lograr, y evalúa riesgos y estrategia.'},
+  {ic:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
+   t:'Cálculos jurídicos',d:'Liquidaciones laborales, términos procesales e intereses.',
+   p:'Ayúdame con un cálculo jurídico (liquidación laboral, término procesal o intereses). Pregúntame los datos.'},
+];
+async function iniciar(){
+  $('auth').classList.add('hidden');$('app').classList.remove('hidden');
+  try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
+  aplicarPerfil();aplicarTema(PERFIL.preferencias.tema);
+  $('modo').value=PERFIL.preferencias.modo||'auto';
+  WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
+}
+function aplicarPerfil(){
+  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').split(' ')[0];
+  $('c-plan').textContent=PERFIL.plan_nombre;$('c-rest').textContent=PERFIL.restantes;
+  $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
+  $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
+  $('cf-modo').value=PERFIL.preferencias.modo||'auto';
+  $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
+  $('cf-tema').classList.toggle('on',PERFIL.preferencias.tema==='claro');
+  $('cf-memoria').value=PERFIL.preferencias.memoria||'';
+  $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
+  pintarAreas();pintarPlanes();
+}
+function pintarAreas(){
+  const cont=$('areas');cont.innerHTML='';const sel=PERFIL.preferencias.areas||[];
+  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('div');
+    el.className='area'+(sel.includes(a)?' on':'');el.textContent=a;
+    el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
+}
+function pintarPlanes(){
+  const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
+  ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
+    el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
+      <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
+}
+function ver(v){['inicio','modular','chat','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
+  if(v==='chat')cargarConvs();else cerrarHistorial();
+  if(v==='modular')mlInit();
+  if(v==='inicio')cargarProgresoInicio();}
+
+async function cargarBoletin(forzar){
+  if(forzar)$('boletin').innerHTML='<div class="skel" style="width:90%"></div><div class="skel" style="width:75%"></div>';
+  try{
+    const admin=forzar&&PERFIL.es_admin;
+    const d=await(await fetch(admin?'/api/admin/boletin/regenerar':'/api/boletin',
+      {method:admin?'POST':'GET',headers:auth()})).json();
+    $('boletin').innerHTML=md(d.contenido);$('b-fecha').textContent=d.fecha?('· '+d.fecha):'';
+  }catch(e){$('boletin').textContent='No se pudo cargar el boletín.'}
+}
+
+function pintarWeb(){$('chip-web').classList.toggle('on',WEB)}
+function toggleWeb(){WEB=!WEB;pintarWeb()}
+function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
+function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
+function sug(b){const s=b.querySelector('span');$('txt').value=s?s.textContent:b.textContent;autoAlto($('txt'));$('txt').focus()}
+// La conversación se crea en el servidor al enviar el primer mensaje (no al abrir el chat),
+// para que el historial no se llene de consultas vacías.
+async function nuevaConv(){
+  try{const d=await(await fetch('/api/conversaciones',{method:'POST',headers:auth()})).json();
+    CONV=d.id;}catch(e){}
+}
+
+// ------------------------------------------------------------ historial de consultas --
+let CONVS=[], CARGA_CONV=0;
+const ICO_BORRAR='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg>';
+function esEscritorio(){return window.matchMedia('(min-width:760px)').matches}
+function toggleHistorial(){$('chat-lay').classList.toggle('hist-abierto')}
+function cerrarHistorial(){$('chat-lay').classList.remove('hist-abierto')}
+async function cargarConvs(){
+  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){}
+}
+function pintarConvs(){
+  const l=$('convs-lista');l.textContent='';
+  if(!CONVS.length){const v=document.createElement('div');v.className='convs-vacio';
+    const b=document.createElement('b');b.textContent='Aún no tienes consultas guardadas';v.appendChild(b);
+    v.appendChild(document.createTextNode('Cuando escribas tu primera consulta, aparecerá aquí para que la retomes cuando quieras.'));
+    l.appendChild(v);return}
+  CONVS.forEach(c=>{
+    const f=document.createElement('div');f.className='conv'+(c.id===CONV?' on':'');
+    const t=document.createElement('button');t.className='conv-t';t.type='button';
+    t.textContent=c.titulo||'Consulta';t.title=c.titulo||'';
+    if(c.id===CONV)t.setAttribute('aria-current','true');
+    t.addEventListener('click',()=>abrirConv(c.id));
+    const x=document.createElement('button');x.className='conv-x';x.type='button';
+    x.title='Borrar consulta';x.setAttribute('aria-label','Borrar consulta');x.innerHTML=ICO_BORRAR;
+    x.addEventListener('click',()=>confirmarBorrado(c));
+    f.appendChild(t);f.appendChild(x);l.appendChild(f);
+  });
+}
+function confirmarBorrado(c){
+  if(enviando&&c.id===CONV){toast('Espera a que termine la respuesta para borrar esta consulta.');return}
+  pintarConvs(); // cierra cualquier otra confirmación abierta
+  const destino=[...$('convs-lista').children][CONVS.indexOf(c)];if(!destino)return;
+  const k=document.createElement('div');k.className='conv-conf';
+  const p=document.createElement('p');p.textContent='¿Borrar «'+(c.titulo||'Consulta')+'»? No se puede deshacer.';
+  const acc=document.createElement('div');
+  const no=document.createElement('button');no.type='button';no.className='bsec';no.textContent='Cancelar';
+  no.addEventListener('click',pintarConvs);
+  const si=document.createElement('button');si.type='button';si.className='borrar';si.textContent='Borrar';
+  si.addEventListener('click',()=>borrarConv(c.id,si));
+  acc.appendChild(no);acc.appendChild(si);k.appendChild(p);k.appendChild(acc);
+  destino.replaceWith(k);si.focus();
+}
+async function borrarConv(id,boton){
+  if(boton){boton.disabled=true;boton.textContent='Borrando…'}
+  try{
+    const r=await fetch('/api/conversaciones/'+id,{method:'DELETE',headers:auth()});
+    if(!r.ok&&r.status!==404)throw new Error();
+    CONVS=CONVS.filter(c=>c.id!==id);
+    if(id===CONV)nuevaConsulta();else pintarConvs();
+    toast('Consulta borrada');
+  }catch(e){toast('No se pudo borrar. Intenta de nuevo.');pintarConvs()}
+}
+function nuevaConsulta(){
+  if(enviando){toast('Espera a que termine la respuesta actual.');return false}
+  CARGA_CONV++;CONV=null;$('hilo').innerHTML='';$('sugs').classList.remove('hidden');
+  pintarConvs();cerrarHistorial();
+  if(esEscritorio()&&$('v-chat').classList.contains('on'))$('txt').focus();
+  return true;
+}
+async function abrirConv(id){
+  if(id===CONV&&$('hilo').children.length){cerrarHistorial();return}
+  if(enviando){toast('Espera a que termine la respuesta actual.');return}
+  const turno=++CARGA_CONV;CONV=id;pintarConvs();cerrarHistorial();
+  $('sugs').classList.add('hidden');
+  $('hilo').innerHTML='<div class="skel" style="width:70%;margin-top:20px"></div><div class="skel" style="width:88%"></div><div class="skel" style="width:60%"></div>';
+  try{
+    const msgs=await api('/api/conversaciones/'+id+'/mensajes');
+    if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
+    $('hilo').innerHTML='';
+    msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido)});
+    if(!msgs.length)$('sugs').classList.remove('hidden');
+  }catch(e){
+    if(turno!==CARGA_CONV)return;
+    toast('No se pudo abrir esa consulta.');CONV=null;$('hilo').innerHTML='';$('sugs').classList.remove('hidden');cargarConvs();
+  }
+}
+function tomarArchivos(ev){
+  [...ev.target.files].forEach(f=>{
+    if(f.size>7*1024*1024){toast('“'+f.name+'” supera 7 MB');return}
+    const r=new FileReader();
+    r.onload=()=>{ADJ.push({nombre:f.name,tipo:f.type.startsWith('image/')?'image':'document',
+      media_type:f.type||'application/pdf',datos:r.result.split(',')[1]});pintarAdj();};
+    r.readAsDataURL(f);
+  });ev.target.value='';
+}
+function icoAdj(tipo){return tipo==='image'
+  ?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>'
+  :'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'}
+function pintarAdj(){const c=$('adjfila');c.innerHTML='';
+  ADJ.forEach((a,i)=>{const e=document.createElement('div');e.className='ch';
+    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <b>✕</b>';
+    e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
+function burbuja(rol,texto,adj){
+  const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
+  b.innerHTML=`<div class="av">${rol==='user'?'Tú':'PX'}</div><div class="bd"><div class="md"></div></div>`;
+  b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
+  if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
+    adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
+      s.innerHTML=icoAdj(a.tipo)+esc(a.nombre);d.appendChild(s)});
+    b.querySelector('.bd').appendChild(d);}
+  $('hilo').appendChild(b);scroll();return b;
+}
+function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
+
+// opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
+async function enviar(opc){
+  const texto=$('txt').value.trim();
+  if((!texto&&!ADJ.length)||enviando)return;
+  if(PERFIL.restantes<=0){toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
+  enviando=true;$('env').disabled=true;
+  if(!CONV)await nuevaConv();
+  const cid=CONV;
+  $('sugs').classList.add('hidden');
+  const adjEnvio=ADJ.slice();
+  burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
+  const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
+  let buffer='',raf=null;
+  const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+      body:JSON.stringify({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio})});
+    if(!r.ok){const d=await r.json().catch(()=>({}));cont.classList.remove('cursor');
+      cont.innerHTML=md('**Aviso:** '+(d.detail||'No se pudo procesar.'));
+      enviando=false;$('env').disabled=false;if(r.status===402||r.status===403)ver('config');return}
+    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
+    while(true){const {value,done}=await rd.read();if(done)break;
+      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
+      for(const l of lineas){if(!l.startsWith('data: '))continue;
+        const ev=JSON.parse(l.slice(6));
+        if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
+        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+      }
+    }
+  }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
+  if(raf)cancelAnimationFrame(raf);
+  cont.classList.remove('cursor');cont.innerHTML=md(buffer);
+  if(buffer.trim())accionesResp(bIA,buffer);scroll();
+  enviando=false;$('env').disabled=false;
+  PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
+  // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
+  if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
+  cargarConvs();
+}
+function accionesResp(b,texto){
+  const a=document.createElement('div');a.className='acc';
+  a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
+  const [c,d,p]=a.querySelectorAll('button');
+  c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
+  d.onclick=()=>descargar('pullex-respuesta.txt',texto);
+  p.onclick=imprimirPDF;
+  b.querySelector('.bd').appendChild(a);
+  // "Confianza" y "Fuentes" las escribe el propio modelo: se rotulan como autoevaluación
+  // para que nadie las lea como una verificación hecha por PULLEX (hallazgo AI-2).
+  if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
+    n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
+    b.querySelector('.bd').appendChild(n);}
+}
+function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
+  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
+function imprimirPDF(){window.print()}
+function exportarExcel(){
+  const tablas=$('hilo').querySelectorAll('.b.ia table');
+  if(!tablas.length){toast('No hay tablas para exportar. Pide una liquidación o un cuadro.');return}
+  const t=tablas[tablas.length-1];let csv=[];
+  t.querySelectorAll('tr').forEach(tr=>{csv.push([...tr.querySelectorAll('th,td')]
+    .map(x=>'"'+x.textContent.replace(/"/g,'""')+'"').join(','))});
+  const bl=new Blob(['﻿'+csv.join('\n')],{type:'text/csv;charset=utf-8'});
+  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download='pullex-liquidacion.csv';a.click();
+  URL.revokeObjectURL(u);toast('Descargado (ábrelo en Excel)');
+}
+
+async function guardarPrefs(){
+  const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
+  const body={areas,modo:$('cf-modo').value,tema:document.body.classList.contains('claro')?'claro':'oscuro',
+    web:$('cf-web').classList.contains('on')};
+  try{const d=await(await fetch('/api/preferencias',{method:'POST',
+    headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
+    WEB=d.preferencias.web;pintarWeb();}catch(e){}
+}
+async function guardarMemoria(){
+  try{await fetch('/api/preferencias',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+    body:JSON.stringify({memoria:$('cf-memoria').value})});
+    PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
+}
+function togglePref(el){el.classList.toggle('on');guardarPrefs()}
+function toggleTema(el){el.classList.toggle('on');aplicarTema(el.classList.contains('on')?'claro':'oscuro');guardarPrefs()}
+function aplicarTema(t){document.body.classList.toggle('claro',t==='claro');
+  document.body.classList.toggle('oscuro',t!=='claro');
+  document.querySelector('meta[name=theme-color]').content=t==='claro'?'#eef3fb':'#0A1E3F'}
+
+const ICONOS_TOOL={
+  tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
+  peticion:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/>',
+  liquidacion:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1 1-1.5 3-1.5s3 .8 3 2-1.2 1.7-3 2-3 .8-3 2 1.2 2 3 2 3-.5 3-1.5"/>',
+  sentencia:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+  termino:'<rect x="3" y="4" width="18" height="18" rx="2.5"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4l3 2"/>',
+  demanda:'<path d="M12 2l8 4v5c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6z"/>',
+  empresa:'<path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5M9 12h.01M15 12h.01M9 8h.01M15 8h.01"/>',
+  marca:'<circle cx="12" cy="12" r="9"/><path d="M9 8v8M9 12h3.5a2 2 0 1 0 0-4H9M9 12h4a2 2 0 1 1 0 4H9"/>',
+  reporte:'<path d="M3 17l6-6 4 4 8-8M21 7v6h-6"/>',
+  alimentos:'<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 21c0-3.9 2.7-6 6-6s6 2.1 6 6M14 21c0-2.8 1.8-5 4-5s4 2.2 4 5"/>',
+};
+function icoTool(nombre,size=18){return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONOS_TOOL[nombre]}</svg>`}
+const HERRAMIENTAS=[
+  {i:'tutela',t:'Redactar tutela',p:'Ayúdame a redactar una acción de tutela. Pregúntame primero, uno por uno, los datos que necesitas (mis datos, la entidad accionada, el derecho fundamental vulnerado y los hechos) y luego arma el escrito completo.'},
+  {i:'peticion',t:'Derecho de petición',p:'Ayúdame a redactar un derecho de petición. Pregúntame a qué entidad va dirigido, qué solicito y los hechos, y luego redacta el escrito formal.'},
+  {i:'liquidacion',t:'Liquidación laboral',p:'Calcula una liquidación laboral (cesantías, intereses, prima, vacaciones e indemnización si aplica). Pregúntame el salario, las fechas de inicio y fin, el tipo de contrato y si hubo auxilio de transporte. Muestra el resultado en una TABLA.'},
+  {i:'sentencia',t:'Entender una sentencia',p:'Te voy a pasar una sentencia (o la adjunto). Explícamela en palabras simples: qué decidió, por qué, y la regla que fija. No uses tecnicismos sin explicarlos.'},
+  {i:'termino',t:'Calcular un término',p:'Ayúdame a calcular un término procesal. Pregúntame de qué actuación se trata, la fecha de inicio y si son días hábiles o calendario, y adviérteme sobre suspensiones o vacancias.'},
+  {i:'demanda',t:'Contestar una demanda',p:'Me demandaron y necesito contestar. Pregúntame los datos del proceso y los hechos, y ayúdame con el pronunciamiento sobre los hechos y las excepciones de mérito.'},
+  {i:'empresa',t:'Crear una empresa (SAS)',p:'Quiero constituir una SAS en Colombia. Explícame el paso a paso y ayúdame con lo que necesito (objeto social, capital, trámite en Cámara de Comercio).'},
+  {i:'marca',t:'Registrar una marca',p:'Quiero registrar una marca ante la SIC. Explícame el proceso, la clasificación de Niza y la búsqueda de antecedentes, y guíame paso a paso.'},
+  {i:'reporte',t:'Reporte en centrales de riesgo',p:'Tengo un problema con un reporte en Datacrédito/centrales de riesgo. Explícame mis derechos (habeas data) y ayúdame a redactar el reclamo.'},
+  {i:'alimentos',t:'Cuota de alimentos',p:'Necesito orientación sobre una cuota de alimentos para un menor. Pregúntame los datos y explícame las opciones y a dónde acudir.'},
+];
+function abrirTools(){
+  const g=$('tools-grid');g.innerHTML='';
+  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');
+    b.className='bsec';b.style.cssText='text-align:left;padding:12px;border-radius:11px;font-size:13px;line-height:1.3';
+    b.innerHTML=`<div style="color:var(--oro)">${icoTool(h.i)}</div><b style="color:var(--oro)">${h.t}</b>`;
+    b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
+  $('m-tools').classList.remove('hidden');
+}
+function cerrarTools(){$('m-tools').classList.add('hidden')}
+function usarTool(p,estilo){$('estilo').value=estilo||'directo';cerrarTools();ver('chat');
+  // Cada herramienta es un asunto nuevo: se abre en una consulta nueva (la anterior queda en el historial).
+  if($('hilo').children.length&&!enviando)nuevaConsulta();
+  $('txt').value=p;autoAlto($('txt'));$('txt').focus();
+  toast('Ajusta los datos si quieres y presiona enviar')}
+
+// -------------------------------------------------------------------- Document Studio --
+// Formulario guiado que arma una solicitud estructurada y la envía al chat como una consulta
+// nueva. Los datos del usuario solo se tratan como texto (textContent / value), nunca como HTML.
+const ESCRITO_ENCABEZADO='SOLICITUD DE REDACCIÓN';
+const ESCRITOS={
+  tutela:{nombre:'Acción de tutela',campos:[
+    {id:'nombre',l:'Nombre de quien presenta la tutela',req:1,ph:'Nombre completo',auto:'name'},
+    {id:'ident',l:'Identificación',ph:'Tipo y número de documento'},
+    {id:'ciudad',l:'Ciudad',req:1,ph:'Ej.: Bogotá',auto:'address-level2'},
+    {id:'contra',l:'¿Contra quién? (entidad o particular)',req:1,ph:'Ej.: mi EPS, un fondo de pensiones, la alcaldía'},
+    {id:'derechos',l:'Derecho(s) que consideras vulnerado(s)',req:1,ancho:1,ph:'Ej.: salud, vida digna, petición, debido proceso'},
+    {id:'hechos',l:'Hechos: qué pasó y cuándo',req:1,ancho:1,filas:5,ph:'Cuenta en orden lo ocurrido, con fechas aunque sean aproximadas.'},
+    {id:'previas',l:'Actuaciones previas',ancho:1,filas:3,ph:'¿Ya le pediste algo a la entidad? ¿Cuándo y qué te respondió?'},
+    {id:'pide',l:'¿Qué le pides al juez?',req:1,ancho:1,filas:3,ph:'Ej.: que ordene a la EPS entregar el medicamento formulado.'},
+    {id:'urgente',l:'¿Hay un perjuicio urgente?',opciones:['No lo sé','Sí','No']},
+    {id:'urgencia',l:'Si es urgente, ¿por qué?',ph:'Ej.: riesgo para la salud o la vida'},
+  ]},
+  peticion:{nombre:'Derecho de petición',campos:[
+    {id:'nombre',l:'Nombre de quien hace la petición',req:1,ph:'Nombre completo',auto:'name'},
+    {id:'ident',l:'Identificación',ph:'Tipo y número de documento'},
+    {id:'entidad',l:'Entidad o persona a la que va dirigida',req:1,ancho:1,ph:'Ej.: la alcaldía de tu municipio, tu EPS, una empresa'},
+    {id:'solicita',l:'¿Qué solicitas?',req:1,ancho:1,filas:3,ph:'Ej.: copia de mi historia laboral; que corrijan un dato.'},
+    {id:'hechos',l:'Hechos y fundamento',req:1,ancho:1,filas:4,ph:'¿Por qué lo pides? Cuenta lo ocurrido en orden.'},
+    {id:'medio',l:'¿Dónde quieres recibir la respuesta?',req:1,ancho:1,ph:'Correo electrónico o dirección física',auto:'email'},
+  ]},
+};
+let ES_TIPO='tutela';
+function esCampo(tipo,id){return $('es-'+tipo+'-'+id)}
+function construirEscrito(){
+  const cont=$('es-campos');if(cont.children.length)return;
+  Object.entries(ESCRITOS).forEach(([tipo,def])=>{
+    const g=document.createElement('div');g.className='es-grid';g.id='es-grupo-'+tipo;
+    def.campos.forEach(c=>{
+      const w=document.createElement('div');w.className='es-campo'+(c.ancho?' ancho':'');
+      const lb=document.createElement('label');const idc='es-'+tipo+'-'+c.id;lb.htmlFor=idc;
+      lb.appendChild(document.createTextNode(c.l));
+      const m=document.createElement('span');
+      if(c.req){m.className='req';m.textContent='*';m.setAttribute('aria-hidden','true')}
+      else if(!c.opciones){m.className='opc-t';m.textContent=' (opcional)'}
+      lb.appendChild(m);w.appendChild(lb);
+      let el;
+      if(c.opciones){el=document.createElement('select');
+        c.opciones.forEach(o=>{const op=document.createElement('option');op.textContent=o;el.appendChild(op)})}
+      else if(c.filas){el=document.createElement('textarea');el.rows=c.filas}
+      else{el=document.createElement('input');el.type='text'}
+      el.id=idc;el.className='inp';if(c.ph)el.placeholder=c.ph;if(c.auto)el.autocomplete=c.auto;
+      if(c.req){el.required=true;el.setAttribute('aria-required','true')}
+      el.maxLength=c.filas?4000:300;
+      el.addEventListener('input',()=>esLimpiarError(el));
+      w.appendChild(el);g.appendChild(w);
+    });
+    cont.appendChild(g);
+  });
+}
+function esLimpiarError(el){el.classList.remove('error');el.removeAttribute('aria-invalid');
+  const e=el.parentNode.querySelector('.err');if(e)e.remove()}
+function escritoTipo(t){
+  ES_TIPO=ESCRITOS[t]?t:'tutela';
+  Object.keys(ESCRITOS).forEach(k=>{$('es-tipo-'+k).classList.toggle('on',k===ES_TIPO);
+    $('es-tipo-'+k).setAttribute('aria-pressed',String(k===ES_TIPO));
+    $('es-grupo-'+k).classList.toggle('hidden',k!==ES_TIPO)});
+  $('es-msg').textContent='';
+}
+function abrirEscrito(tipo){
+  construirEscrito();escritoTipo(typeof tipo==='string'?tipo:ES_TIPO);
+  $('m-escrito').classList.remove('hidden');$('m-escrito').querySelector('.card').scrollTop=0;
+  if(esEscritorio())esCampo(ES_TIPO,'nombre').focus();
+}
+function cerrarEscrito(){$('m-escrito').classList.add('hidden')}
+function valoresEscrito(tipo){const v={};ESCRITOS[tipo].campos.forEach(c=>{v[c.id]=esCampo(tipo,c.id).value.trim()});return v}
+function validarEscrito(tipo){
+  let primero=null;
+  ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);esLimpiarError(el);
+    if(c.req&&!el.value.trim()){el.classList.add('error');el.setAttribute('aria-invalid','true');
+      const e=document.createElement('div');e.className='err';e.textContent='Este dato es obligatorio.';el.after(e);
+      if(!primero)primero=el}});
+  return primero;
+}
+function textoEscrito(tipo,v){
+  const falta=t=>v[t]||'[no indicado]';
+  const cierre=['',
+    '- Marca entre corchetes [ ] todo dato que falte o que yo deba completar (por ejemplo, [número de cédula] o [dirección para notificaciones]).',
+    '- No inventes números de sentencias, radicados, fechas ni datos de las partes. Si mencionas jurisprudencia de la que no tengas certeza, indícalo para que la verifique.',
+    '- Al final, advierte que se debe verificar la vigencia de las normas citadas en la fuente oficial (SUIN-Juriscol o Secretaría del Senado) antes de presentar el escrito.'];
+  if(tipo==='tutela')return [
+    ESCRITO_ENCABEZADO+' — ACCIÓN DE TUTELA','',
+    'Redacta el borrador completo de una acción de tutela con estos datos:','',
+    'ACCIONANTE','- Nombre: '+falta('nombre'),'- Identificación: '+falta('ident'),'- Ciudad: '+falta('ciudad'),'',
+    'ACCIONADO (entidad o particular)',falta('contra'),'',
+    'DERECHOS FUNDAMENTALES QUE CONSIDERO VULNERADOS',falta('derechos'),'',
+    'HECHOS',falta('hechos'),'',
+    'ACTUACIONES PREVIAS',v.previas||'No indicadas.','',
+    'LO QUE PIDO AL JUEZ',falta('pide'),'',
+    'PERJUICIO URGENTE',(v.urgente||'No lo sé')+(v.urgencia?' — '+v.urgencia:''),'',
+    'INSTRUCCIONES PARA EL BORRADOR',
+    '- Usa la estructura procesal colombiana: juez competente (juez de la República, reparto) en la ciudad indicada; identificación de las partes; hechos numerados; derechos fundamentales vulnerados; fundamentos de derecho (artículo 86 de la Constitución Política y Decreto 2591 de 1991, y otras normas solo si son pertinentes); procedencia (legitimación en la causa por activa y por pasiva, subsidiariedad e inmediatez); pretensiones; pruebas y anexos; juramento de no haber presentado otra acción de tutela por los mismos hechos y derechos; notificaciones; firma.',
+    '- Si hay un perjuicio urgente, incluye la solicitud de medida provisional prevista en el Decreto 2591 de 1991 y sustenta por qué no da espera.',
+    ...cierre].join('\n');
+  return [
+    ESCRITO_ENCABEZADO+' — DERECHO DE PETICIÓN','',
+    'Redacta el borrador completo de un derecho de petición con estos datos:','',
+    'PETICIONARIO','- Nombre: '+falta('nombre'),'- Identificación: '+falta('ident'),'',
+    'DESTINATARIO',falta('entidad'),'',
+    'LO QUE SOLICITO',falta('solicita'),'',
+    'HECHOS Y FUNDAMENTO',falta('hechos'),'',
+    'MEDIO PARA RECIBIR LA RESPUESTA',falta('medio'),'',
+    'INSTRUCCIONES PARA EL BORRADOR',
+    '- Usa la estructura formal colombiana: ciudad y fecha; destinatario; referencia; identificación del peticionario; hechos numerados; peticiones concretas y numeradas; fundamentos de derecho (artículo 23 de la Constitución Política y Ley 1755 de 2015); anexos; dirección para notificaciones; firma.',
+    '- Indica el término legal que tiene la entidad para responder según el tipo de petición, advirtiendo que ese término debe verificarse.',
+    ...cierre].join('\n');
+}
+function enviarEscrito(){
+  if(enviando){toast('Espera a que termine la respuesta actual.');return}
+  const tipo=ES_TIPO;const malo=validarEscrito(tipo);
+  if(malo){$('es-msg').textContent='Completa los campos marcados para poder redactar el borrador.';malo.focus();return}
+  if(PERFIL.restantes<=0){cerrarEscrito();toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
+  const v=valoresEscrito(tipo);
+  const titulo=tipo==='tutela'?'Tutela contra '+v.contra:'Petición a '+v.entidad;
+  cerrarEscrito();$('estilo').value='directo';ver('chat');
+  if(!nuevaConsulta())return;
+  $('txt').value=textoEscrito(tipo,v);
+  ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);el.value=c.opciones?c.opciones[0]:''});
+  enviar({titulo});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('m-escrito').classList.contains('hidden'))cerrarEscrito()});
+function abrirClave(){$('m-clave').classList.remove('hidden');$('k-msg').textContent=''}
+function cerrarClave(){$('m-clave').classList.add('hidden');$('k-act').value='';$('k-new').value=''}
+async function guardarClave(){
+  const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+    body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
+  const d=await r.json();if(!r.ok){$('k-msg').textContent=d.detail||'No se pudo';return}
+  if(d.token)TOKEN=d.token; // las demás sesiones quedaron cerradas; esta sigue con token nuevo
+  cerrarClave();toast('Contraseña actualizada. Se cerró la sesión en tus otros dispositivos.');
+}
+async function cerrarSesiones(){
+  if(!confirm('Se cerrará tu sesión en todos los dispositivos, incluido este. ¿Continuar?'))return;
+  try{await fetch('/api/cerrar-sesiones',{method:'POST',headers:auth()})}catch(e){}
+  salir();
+}
+async function reenviarVerificacion(){
+  const b=$('btn-reenviar-verif');const t0=b.textContent;b.disabled=true;b.textContent='Enviando…';
+  try{
+    const r=await fetch('/api/reenviar-verificacion',{method:'POST',headers:auth()});
+    const d=await r.json().catch(()=>({}));
+    toast(r.ok?(d.mensaje||'Te enviamos un correo de verificación'):(d.detail||'No se pudo enviar. Intenta más tarde.'));
+  }catch(e){toast('Error de conexión')}
+  b.disabled=false;b.textContent=t0;
+}
+function salir(){TOKEN=null;PERFIL=null;CONV=null;location.reload()}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+
+// -------------------------------------------------------- instalar como app --
+let DEFERRED_INSTALL=null;
+const esStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+function mostrarBotonInstalar(){
+  if(esStandalone())return; // ya está instalada, no mostrar nada
+  $('btn-instalar-ic').classList.remove('hidden');
+  $('btn-instalar-hero').classList.remove('hidden');
+}
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar();
+});
+window.addEventListener('appinstalled',()=>{
+  DEFERRED_INSTALL=null;$('btn-instalar-ic').classList.add('hidden');$('btn-instalar-hero').classList.add('hidden');
+  toast('PULLEX IA instalada');
+});
+async function instalarApp(){
+  if(DEFERRED_INSTALL){
+    DEFERRED_INSTALL.prompt();
+    const r=await DEFERRED_INSTALL.userChoice;
+    if(r.outcome==='accepted')toast('Instalando…');
+    DEFERRED_INSTALL=null;
+    return;
+  }
+  if(esIOS()){
+    toast('En Safari: toca Compartir (□↑) y luego "Agregar a pantalla de inicio"');
+    return;
+  }
+  toast('Busca "Instalar app" en el menú de tu navegador');
+}
+// Android/Chrome dispara beforeinstallprompt de forma asíncrona; en iOS nunca llega,
+// así que mostramos el botón igual (con instrucciones manuales) salvo que ya esté instalada.
+if(esIOS()&&!esStandalone())mostrarBotonInstalar();
+function abrirSelectorArchivo(){document.getElementById('file').click()}
+
+// =========================================================================================
+// PULLEX Academia — dos caminos en el inicio y Modular Lab
+// =========================================================================================
+const APRENDER=[
+  {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+   t:'Practicar un modular',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
+  {ic:'<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
+   t:'Enséñame un tema',d:'Explicación por capas, con ejemplo, norma y el error más común.',
+   p:'Quiero aprender este tema: ',estilo:'ensename'},
+  {ic:'<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+   t:'Resuélvelo conmigo',d:'Tutor socrático: te guía con preguntas hasta que llegas a la respuesta.',
+   p:'Quiero resolver este caso paso a paso contigo: ',estilo:'conmigo'},
+  {ic:'<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M6 10v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>',
+   t:'Examíname',d:'Simulacro oral: una pregunta a la vez, exige fundamento y cambia los hechos.',
+   p:'Examíname sobre: ',estilo:'examiname'},
+];
+let CAMINO='aprender';
+function elegirCamino(c){
+  CAMINO=c==='trabajar'?'trabajar':'aprender';
+  $('cam-aprender').classList.toggle('on',CAMINO==='aprender');
+  $('cam-trabajar').classList.toggle('on',CAMINO==='trabajar');
+  pintarCapacidades();cargarProgresoInicio();
+  if(PERFIL&&PERFIL.preferencias.camino!==CAMINO){PERFIL.preferencias.camino=CAMINO;
+    fetch('/api/preferencias',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+      body:JSON.stringify({camino:CAMINO})}).catch(()=>{});}
+}
+function pintarCapacidades(){
+  const g=$('capgrid');g.innerHTML='';
+  (CAMINO==='trabajar'?CAPACIDADES:APRENDER).forEach(c=>{
+    const b=document.createElement('button');b.className='captarj';
+    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
+    const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
+    b.appendChild(t);b.appendChild(d);
+    b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
+    g.appendChild(b);
+  });
+}
+async function cargarProgresoInicio(){
+  const el=$('progreso-inicio');
+  if(CAMINO!=='aprender'){el.classList.add('hidden');return}
+  try{
+    const p=await api('/api/modular/progreso');
+    if(!p.resueltos){el.classList.add('hidden');return}
+    el.textContent='';
+    const item=(txt,val,cls)=>{const s=document.createElement('span');s.appendChild(document.createTextNode(txt+' '));
+      const b=document.createElement('b');b.textContent=val;if(cls)b.className=cls;s.appendChild(b);el.appendChild(s)};
+    item('Modulares resueltos',p.resueltos);
+    item('Promedio',p.promedio+'/100');
+    if(p.a_reforzar&&p.a_reforzar.length)item('Refuerza',p.a_reforzar[0],'ref');
+    el.classList.remove('hidden');
+  }catch(e){el.classList.add('hidden')}
+}
+
+async function api(url,opts){
+  const o=opts||{};const h={...auth()};if(o.body)h['content-type']='application/json';
+  const r=await fetch(url,{method:o.body?'POST':'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.detail||'No se pudo completar la solicitud.');
+  if(typeof d.restantes==='number'&&PERFIL){PERFIL.restantes=d.restantes;$('c-rest').textContent=d.restantes;
+    PERFIL.usadas=PERFIL.limite-d.restantes;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite}
+  return d;
+}
+
+// ------------------------------------------------------------------------ Modular Lab --
+const ML={opciones:null,area:null,nivel:'basico',caso:null,pistas:0,evaluado:false,confirmarSol:false};
+async function mlInit(){
+  if(!ML.opciones){
+    try{ML.opciones=await api('/api/modular/opciones')}catch(e){toast(e.message);return}
+    ML.area=ML.opciones.areas[0];
+    const hacer=(cont,items,clave,actual)=>{cont.textContent='';items.forEach(it=>{
+      const b=document.createElement('button');b.type='button';b.textContent=it.nombre||it;
+      const val=it.id||it;if(val===ML[clave])b.classList.add('on');
+      b.addEventListener('click',()=>{ML[clave]=val;[...cont.children].forEach(x=>x.classList.toggle('on',x===b))});
+      cont.appendChild(b)})};
+    hacer($('ml-areas'),ML.opciones.areas,'area');
+    hacer($('ml-niveles'),ML.opciones.niveles,'nivel');
+  }
+  mlProgreso();
+}
+function mlOcupado(boton,texto){const t=boton.textContent;boton.disabled=true;boton.textContent=texto;
+  return ()=>{boton.disabled=false;boton.textContent=t}}
+async function mlGenerar(variacionDe){
+  const b=variacionDe?null:$('ml-generar');const listo=b?mlOcupado(b,'Generando caso…'):null;
+  if(variacionDe)toast('Preparando la variación del caso…');
+  try{
+    const c=await api('/api/modular/caso',{body:variacionDe?{variacion_de:variacionDe}:{area:ML.area,nivel:ML.nivel}});
+    mlMostrarCaso(c);
+  }catch(e){toast(e.message)}
+  if(listo)listo();
+}
+function mlMostrarCaso(c){
+  ML.caso=c;ML.pistas=0;ML.evaluado=false;ML.confirmarSol=false;
+  const nombreNivel=(ML.opciones&&ML.opciones.niveles.find(n=>n.id===c.nivel)||{}).nombre||c.nivel;
+  const meta=$('ml-meta');meta.textContent='';
+  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']].forEach(([t,k])=>{
+    const s=document.createElement('span');s.className=k;s.textContent=t;meta.appendChild(s)});
+  $('ml-cambio').classList.toggle('hidden',!c.cambio);$('ml-cambio').textContent=c.cambio||'';
+  $('ml-titulo').textContent=c.titulo;
+  $('ml-enunciado').innerHTML=md(c.enunciado);
+  $('ml-pregunta').textContent=c.pregunta;
+  $('ml-pistas').textContent='';$('ml-resp').value='';mlContar();
+  $('ml-btn-pista').disabled=!c.n_pistas;$('ml-btn-pista').textContent='Necesito una pista';
+  $('ml-btn-sol').textContent='Ver solución';
+  ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
+  $('ml-caso').classList.remove('hidden');
+  $('ml-caso').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length;
+  $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
+async function mlPista(){
+  if(!ML.caso)return;
+  try{
+    const p=await api('/api/modular/pista',{body:{caso_id:ML.caso.id,n:ML.pistas}});
+    const d=document.createElement('div');d.className='pista';
+    const b=document.createElement('b');b.textContent='Pista '+(p.n+1)+': ';d.appendChild(b);
+    d.appendChild(document.createTextNode(p.pista));$('ml-pistas').appendChild(d);
+    ML.pistas++;
+    if(!p.quedan){$('ml-btn-pista').disabled=true;$('ml-btn-pista').textContent='Sin más pistas'}
+  }catch(e){toast(e.message)}
+}
+async function mlEvaluar(){
+  if(!ML.caso)return;
+  const resp=$('ml-resp').value.trim();
+  if(resp.length<40){toast('Escribe una respuesta más completa antes de evaluarla.');$('ml-resp').focus();return}
+  const listo=mlOcupado($('ml-btn-eval'),'Evaluando…');
+  try{const ev=await api('/api/modular/evaluar',{body:{caso_id:ML.caso.id,respuesta:resp}});
+    ML.evaluado=true;mlMostrarEval(ev);mlProgreso();}catch(e){toast(e.message)}
+  listo();
+}
+function mlLista(titulo,clase,items){
+  const box=document.createElement('div');box.className='ev-box '+clase;
+  const h=document.createElement('h4');h.textContent=titulo;box.appendChild(h);
+  const ul=document.createElement('ul');
+  (items&&items.length?items:['—']).forEach(t=>{const li=document.createElement('li');li.textContent=t;ul.appendChild(li)});
+  box.appendChild(ul);return box;
+}
+function mlMostrarEval(ev){
+  const p=$('ml-eval');p.textContent='';
+  const h=document.createElement('h3');h.textContent='Tu evaluación';p.appendChild(h);
+  const cab=document.createElement('div');cab.className='ev-cab';
+  const tot=document.createElement('div');tot.className='ev-total';tot.textContent=ev.total;
+  const sm=document.createElement('small');sm.textContent=' / 100';tot.appendChild(sm);cab.appendChild(tot);
+  const com=document.createElement('div');com.className='ev-com';com.textContent=ev.comentario||'';cab.appendChild(com);
+  p.appendChild(cab);
+  const rub=document.createElement('div');rub.className='rub';
+  ev.rubrica.forEach(r=>{const f=document.createElement('div');f.className='r';
+    const n=document.createElement('span');n.textContent=r.nombre;
+    const bar=document.createElement('div');bar.className='bar';const i=document.createElement('i');
+    const pct=Math.round(100*r.puntaje/r.max);i.style.width=pct+'%';if(pct<60)i.className='bajo';bar.appendChild(i);
+    const v=document.createElement('span');v.className='n';v.textContent=r.puntaje+'/'+r.max;
+    f.appendChild(n);f.appendChild(bar);f.appendChild(v);rub.appendChild(f)});
+  p.appendChild(rub);
+  const g=document.createElement('div');g.className='ev-grid';
+  g.appendChild(mlLista('Lo que identificaste','bien',ev.identificaste));
+  g.appendChild(mlLista('Lo que omitiste','falta',ev.omitiste));
+  g.appendChild(mlLista('Norma o institución que faltó','norma',ev.norma_faltante));
+  g.appendChild(mlLista('Cómo mejorar','mejora',ev.como_mejorar));
+  p.appendChild(g);
+  if(ev.contraargumento){const c=document.createElement('div');c.className='ev-contra';
+    const b=document.createElement('b');b.textContent='Argumento contrario que no consideraste: ';
+    c.appendChild(b);c.appendChild(document.createTextNode(ev.contraargumento));p.appendChild(c)}
+  const acc=document.createElement('div');acc.className='ml-acc';
+  [['Ver solución','bsec','mlSolucion'],['¿Qué cambia si…? (variación)','bsec','mlVariacion'],['Nuevo caso','bpri','mlNuevo']]
+    .forEach(([t,k,f])=>{const b=document.createElement('button');b.className=k;b.textContent=t;b.dataset.click=f;acc.appendChild(b)});
+  p.appendChild(acc);
+  const nota=document.createElement('p');nota.className='nota-ia';
+  nota.textContent='Evaluación orientativa generada por IA para practicar. No reemplaza la calificación de un docente.';
+  p.appendChild(nota);
+  p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function mlSolucion(){
+  if(!ML.caso)return;
+  if(!ML.evaluado&&!ML.confirmarSol){ML.confirmarSol=true;
+    $('ml-btn-sol').textContent='¿Seguro? Aún no la has intentado · Ver de todas formas';return}
+  try{
+    const s=await api('/api/modular/solucion?caso_id='+ML.caso.id);
+    const p=$('ml-sol');p.textContent='';
+    const h=document.createElement('h3');h.textContent='Solución de referencia';p.appendChild(h);
+    const bloque=(t,txt)=>{if(!txt)return;const l=document.createElement('div');l.className='lb2';l.textContent=t;p.appendChild(l);
+      const d=document.createElement('div');d.className='md';d.innerHTML=md(txt);p.appendChild(d)};
+    bloque('Problema jurídico',s.problema_juridico);
+    if(s.normas&&s.normas.length){const l=document.createElement('div');l.className='lb2';l.textContent='Marco normativo';p.appendChild(l);
+      const c=document.createElement('div');c.className='sol-norma';
+      s.normas.forEach(n=>{const d=document.createElement('div');const b=document.createElement('b');b.textContent=(n.norma||'')+': ';
+        d.appendChild(b);d.appendChild(document.createTextNode(n.para_que||''));c.appendChild(d)});p.appendChild(c)}
+    bloque('Análisis',s.analisis);bloque('Argumento contrario',s.contraargumento);bloque('Conclusión',s.conclusion);
+    if(s.errores_comunes&&s.errores_comunes.length)p.appendChild(mlLista('Errores comunes en este caso','falta',s.errores_comunes));
+    const nota=document.createElement('p');nota.className='nota-ia';
+    nota.textContent='Solución generada por IA. Verifica la vigencia de cada norma en la fuente oficial antes de estudiarla como definitiva.';
+    p.appendChild(nota);
+    p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){toast(e.message)}
+}
+function mlVariacion(){if(ML.caso)mlGenerar(ML.caso.id)}
+function mlNuevo(){['ml-caso','ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));ML.caso=null;
+  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'})}
+async function mlProgreso(){
+  let p;try{p=await api('/api/modular/progreso')}catch(e){return}
+  const c=$('ml-prog-cuerpo');if(!p.resueltos)return;
+  c.className='';c.textContent='';
+  const g=document.createElement('div');g.className='prog-grid';
+  const varias=p.por_area.length>1;
+  [[p.resueltos,'casos evaluados'],[p.promedio+'/100','promedio general'],
+   [varias?p.por_area[0].area:(p.ultimos.length?p.ultimos[p.ultimos.length-1]+'/100':'—'),
+    varias?'área con menor promedio':'último caso']].forEach(([v,t])=>{
+    const d=document.createElement('div');d.className='prog-n';const b=document.createElement('b');b.textContent=v;
+    const s=document.createElement('span');s.textContent=t;d.appendChild(b);d.appendChild(s);g.appendChild(d)});
+  c.appendChild(g);
+  const rub=document.createElement('div');rub.className='rub';
+  p.por_area.forEach(a=>{const f=document.createElement('div');f.className='r';
+    const n=document.createElement('span');n.textContent=a.area+' ('+a.intentos+')';
+    const bar=document.createElement('div');bar.className='bar';const i=document.createElement('i');i.style.width=a.promedio+'%';
+    if(a.promedio<60)i.className='bajo';bar.appendChild(i);
+    const v=document.createElement('span');v.className='n';v.textContent=a.promedio;
+    f.appendChild(n);f.appendChild(bar);f.appendChild(v);rub.appendChild(f)});
+  c.appendChild(rub);
+  if(p.a_reforzar&&p.a_reforzar.length){const l=document.createElement('div');l.className='lb2';l.textContent='Conceptos para reforzar';c.appendChild(l);
+    const o=document.createElement('div');o.className='opc';
+    p.a_reforzar.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;
+      b.addEventListener('click',()=>usarTool('Quiero entender bien este concepto porque me equivoco con él: '+t,'ensename'));o.appendChild(b)});
+    c.appendChild(o)}
+}
+
+// ---------------------------------------------------------------------------------------
+// Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
+// en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
+// en línea. Solo se ejecutan funciones de esta lista blanca.
+const ACCIONES={abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+function despachar(tipo,ev){
+  const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
+  const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
+  const T=tipo[0].toUpperCase()+tipo.slice(1);
+  if(('prevenir'+T) in el.dataset)ev.preventDefault();
+  const pasa=el.dataset['pasa'+T];
+  if(pasa==='this')return fn(el);
+  if(pasa==='event')return fn(ev);
+  if(('arg'+T) in el.dataset){const a=el.dataset['arg'+T];return fn(a==='true'?true:a==='false'?false:a)}
+  return fn();
+}
+['click','change','input','keydown'].forEach(t=>document.addEventListener(t,ev=>despachar(t,ev)));
+
+
+document.addEventListener('DOMContentLoaded',()=>{});
+(function(){const e=document.getElementById('a-email'),c=document.getElementById('a-clave');
+  if(e&&!e.value)e.value='demo@pullex.co';if(c&&!c.value)c.value='demostracion';})();
+// En la demostración no se pueden descargar archivos ni imprimir: se avisa en vez de no hacer nada.
+(function(){const aviso=()=>toast('En la app real esto descarga el archivo; la demostración no guarda archivos.');
+  descargar=aviso;imprimirPDF=aviso;exportarExcel=aviso;
+  ACCIONES.imprimirPDF=aviso;ACCIONES.exportarExcel=aviso;})();
+</script>
+</body>
+</html>

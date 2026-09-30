@@ -40,13 +40,13 @@ select,input.min{background:var(--azul);border:1px solid var(--linea);color:var(
   <label>Correo</label><input id="e" class="inp" type="email">
   <label>Contraseña</label><input id="c" class="inp" type="password">
   <div id="msg" class="msg"></div>
-  <button class="btn" style="width:100%;margin-top:12px" onclick="entrar()">Ingresar</button>
+  <button class="btn" style="width:100%;margin-top:12px" data-click="entrar">Ingresar</button>
 </div>
 
 <div id="panel" class="wrap" style="display:none">
   <div class="top">
-    <button onclick="cargar()">↻ Refrescar</button>
-    <button onclick="regenBoletin()">📅 Regenerar boletín</button>
+    <button data-click="cargar">↻ Refrescar</button>
+    <button data-click="regenBoletin">📅 Regenerar boletín</button>
     <a href="/" style="margin-left:auto;color:var(--oro)">← Ir a la app</a>
   </div>
   <div class="stats" id="stats"></div>
@@ -57,80 +57,6 @@ select,input.min{background:var(--azul);border:1px solid var(--linea);color:var(
   </table>
 </div>
 
-<script>
-const $=id=>document.getElementById(id);let TOKEN=null,PLANES={};
-async function entrar(){
-  $('msg').textContent='';
-  try{
-    const r=await fetch('/api/login',{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({email:$('e').value.trim(),clave:$('c').value})});
-    const d=await r.json();
-    if(!r.ok){$('msg').textContent=d.detail||'No se pudo';return}
-    if(!d.perfil.es_admin){$('msg').textContent='Esta cuenta no es de administrador';return}
-    TOKEN=d.token;$('login').style.display='none';$('panel').style.display='block';cargar();
-  }catch(e){$('msg').textContent='Error de conexión'}
-}
-async function cargar(){
-  const d=await(await fetch('/api/admin/usuarios',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
-  PLANES=d.planes;const us=d.usuarios;
-  const activos=us.filter(u=>u.activo&&!u.es_admin).length;
-  const total=us.filter(u=>!u.es_admin).length;
-  const pagos=us.filter(u=>u.plan!=='prueba'&&!u.es_admin).length;
-  $('stats').innerHTML=`
-    <div class="stat"><div class="n">${total}</div><div class="l">Estudiantes</div></div>
-    <div class="stat"><div class="n">${activos}</div><div class="l">Activos</div></div>
-    <div class="stat"><div class="n">${pagos}</div><div class="l">Con plan pago</div></div>`;
-  cargarNegocio();
-  const tb=$('tb');tb.innerHTML='';
-  us.forEach(u=>{
-    const tr=document.createElement('tr');
-    const opts=Object.keys(PLANES).map(k=>`<option value="${k}" ${u.plan===k?'selected':''}>${PLANES[k].nombre}</option>`).join('');
-    tr.innerHTML=`
-      <td>${u.nombre}<br><span style="color:var(--txt2);font-size:11px">${u.email}</span>${u.es_admin?' 👑':''}</td>
-      <td><select class="min" id="p-${u.email}">${opts}</select></td>
-      <td>${u.usadas}/${u.limite}</td>
-      <td><span class="pill ${u.activo?'on-p':'off-p'}" id="s-${u.email}">${u.activo?'Activo':'Inactivo'}</span></td>
-      <td>
-        <button class="bx" onclick="guardar('${u.email}',true)">Activar</button>
-        <button class="bx" style="background:var(--azul3);color:var(--txt)" onclick="guardar('${u.email}',false)">Desactivar</button>
-        <button class="bx" style="background:var(--azul3);color:var(--txt)" onclick="guardar('${u.email}',null,true)">Reiniciar uso</button>
-        <button class="bx" style="background:var(--azul3);color:var(--txt)" onclick="resetClave('${u.email}')">🔑 Clave</button>
-      </td>`;
-    tb.appendChild(tr);
-  });
-}
-async function cargarNegocio(){
-  try{
-    const m=await(await fetch('/api/admin/metricas',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
-    const cop=n=>'$'+Number(n||0).toLocaleString('es-CO');
-    $('negocio').innerHTML=`
-      <div class="stat"><div class="n" style="color:var(--ok)">${cop(m.ingreso_mensual_estimado)}</div><div class="l">Ingreso mensual estimado</div></div>
-      <div class="stat"><div class="n" style="color:#ff9f43">${cop(m.costo_api_estimado)}</div><div class="l">Costo API estimado</div></div>
-      <div class="stat"><div class="n">${cop(m.margen_estimado)}</div><div class="l">Margen estimado</div></div>
-      <div class="stat"><div class="n">${m.consultas_totales}</div><div class="l">Consultas usadas</div></div>`;
-  }catch(e){$('negocio').innerHTML=''}
-}
-async function resetClave(email){
-  if(!confirm('¿Generar una contraseña temporal para '+email+'?'))return;
-  const r=await fetch('/api/admin/reset-clave',{method:'POST',
-    headers:{'Authorization':'Bearer '+TOKEN,'content-type':'application/json'},body:JSON.stringify({email})});
-  const d=await r.json();
-  if(r.ok)prompt('Entrégale esta contraseña temporal al estudiante (la cambia al entrar):',d.temporal);
-  else alert('No se pudo');
-}
-async function guardar(email,activo,reiniciar){
-  const plan=$('p-'+email).value;
-  const body={email,plan};
-  if(activo!==null&&activo!==undefined)body.activo=activo;
-  if(reiniciar)body.reiniciar=true;
-  const r=await fetch('/api/admin/actualizar',{method:'POST',
-    headers:{'Authorization':'Bearer '+TOKEN,'content-type':'application/json'},body:JSON.stringify(body)});
-  if(r.ok)cargar();else alert('No se pudo actualizar');
-}
-async function regenBoletin(){
-  await fetch('/api/admin/boletin/regenerar',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN}});
-  alert('Boletín regenerado');
-}
-</script>
+<script src="/static/admin.js"></script>
 </body>
 </html>

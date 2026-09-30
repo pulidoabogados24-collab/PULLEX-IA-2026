@@ -1,0 +1,1337 @@
+{
+ "casos": {
+  "Constitucional": {
+   "caso": {
+    "titulo": "El medicamento que la EPS no entrega",
+    "enunciado": "Lucía Martínez, de 34 años, trabaja como auxiliar contable y gana un salario mínimo. Está afiliada al régimen contributivo en la EPS Salud Andina (nombre ficticio). En marzo fue diagnosticada con artritis reumatoide y su reumatóloga, adscrita a la EPS, le formuló un medicamento biológico que debe aplicarse cada dos semanas.\n\nEl 2 de mayo la EPS le respondió por escrito que no autorizaba el medicamento porque «no hace parte de los servicios financiados con la UPC» y le sugirió «acudir a los mecanismos administrativos correspondientes». Lucía lleva cuatro semanas sin tratamiento; el dolor le impide trabajar con normalidad y su médica dejó constancia en la historia clínica de que la demora puede causar daño articular irreversible.\n\nLucía vive con sus dos hijos menores de edad. Su hermano le recomienda esperar a que la EPS «cambie de opinión». Hoy, 30 de mayo, Lucía quiere saber qué puede hacer.",
+    "pregunta": "¿Procede la acción de tutela para que la EPS entregue el medicamento? Identifica el problema jurídico, los requisitos de procedencia y qué debería ordenar el juez.",
+    "pistas": [
+     "Antes del fondo, revisa la procedencia: ¿quién puede presentarla y contra quién?, ¿existe otro medio de defensa eficaz?, ¿el tiempo transcurrido desde la negativa es razonable?",
+     "La salud es un derecho fundamental autónomo según la Ley Estatutaria de Salud. ¿Qué peso tiene que el medicamento lo haya ordenado la médica tratante adscrita a la EPS?"
+    ],
+    "conceptos": [
+     "Procedencia de la tutela",
+     "Subsidiariedad",
+     "Inmediatez",
+     "Derecho fundamental a la salud",
+     "Orden del médico tratante"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Vulnera la EPS el derecho fundamental a la salud de Lucía al negar un medicamento ordenado por su médica tratante con el argumento de que no está financiado con la UPC, y procede la tutela para protegerlo?",
+     "normas": [
+      {
+       "norma": "Artículo 86 de la Constitución",
+       "para_que": "consagra la acción de tutela y sus condiciones de procedencia."
+      },
+      {
+       "norma": "Artículo 49 de la Constitución",
+       "para_que": "reconoce la atención en salud como servicio público a cargo del Estado."
+      },
+      {
+       "norma": "Ley 1751 de 2015 (Estatutaria de Salud)",
+       "para_que": "define la salud como derecho fundamental autónomo y proscribe las barreras administrativas al acceso (verificar los artículos exactos)."
+      },
+      {
+       "norma": "Decreto 2591 de 1991",
+       "para_que": "reglamenta la tutela: legitimación, trámite y término para fallar."
+      }
+     ],
+     "analisis": "**Legitimación.** Lucía es la titular del derecho y la EPS presta un servicio público de salud, por lo que la tutela procede contra ella.\n\n**Inmediatez.** Acude pocas semanas después de la negativa del 2 de mayo: es un plazo razonable.\n\n**Subsidiariedad.** Aunque existen mecanismos ante la EPS y ante la Superintendencia Nacional de Salud, la jurisprudencia constitucional ha admitido la tutela cuando esos medios no son eficaces frente a un riesgo actual. Aquí hay constancia médica de daño irreversible por la demora.\n\n**Fondo.** La negativa se funda en un criterio de financiación, no en uno médico. La orden de la médica tratante adscrita a la EPS es el criterio principal para establecer qué necesita la paciente, y que un medicamento no esté financiado con la UPC no autoriza a negarlo: obliga a gestionarlo por el mecanismo de financiación que corresponda.",
+     "contraargumento": "La EPS puede sostener que existe un mecanismo propio ante la Superintendencia Nacional de Salud y que la tutela no es el camino. No prospera cuando, como aquí, ese medio no ofrece protección oportuna frente a un perjuicio acreditado por la médica tratante; podría prosperar si no hubiera urgencia ni riesgo documentado.",
+     "conclusion": "Procede la tutela. El juez debería amparar el derecho a la salud y ordenar a la EPS autorizar y entregar el medicamento en un término breve (por ejemplo, 48 horas), además de garantizar la continuidad del tratamiento que ordene la médica tratante.",
+     "errores_comunes": [
+      "Confundir subsidiariedad con inmediatez.",
+      "Concluir que no procede porque el medicamento está «por fuera del plan», sin analizar la orden médica.",
+      "Omitir la constancia del riesgo de daño irreversible, que es el hecho decisivo del caso."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "vulnera",
+        "problema"
+       ],
+       [
+        "salud"
+       ],
+       [
+        "tutela"
+       ]
+      ],
+      "normas": [
+       [
+        "86"
+       ],
+       [
+        "1751",
+        "estatutaria"
+       ],
+       [
+        "2591"
+       ],
+       [
+        "49"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "inmediat"
+       ],
+       [
+        "subsidiar",
+        "otro medio"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "medic",
+        "tratante"
+       ],
+       [
+        "irreversible",
+        "daño"
+       ],
+       [
+        "upc",
+        "financia"
+       ]
+      ],
+      "conclusion": [
+       [
+        "procede"
+       ],
+       [
+        "ordenar",
+        "ordene",
+        "entregar",
+        "entregue"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "salud"
+       ],
+       "texto": "Planteaste que el derecho en juego es la salud."
+      },
+      {
+       "si_hay": [
+        "tratante",
+        "médic"
+       ],
+       "texto": "Diste peso a la orden de la médica tratante."
+      },
+      {
+       "si_hay": [
+        "procede"
+       ],
+       "texto": "Llegaste a una conclusión clara sobre la procedencia."
+      },
+      {
+       "si_hay": [
+        "inmediat"
+       ],
+       "texto": "Analizaste la inmediatez."
+      }
+     ],
+     "acierto_base": "Identificaste que el caso trata sobre una EPS y un medicamento.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "inmediat"
+       ],
+       "texto": "No analizaste la inmediatez: la tutela se presenta pocas semanas después de la negativa."
+      },
+      {
+       "si_falta": [
+        "subsidiar",
+        "otro medio"
+       ],
+       "texto": "No explicaste por qué los mecanismos ante la EPS o la Superintendencia no son eficaces aquí."
+      },
+      {
+       "si_falta": [
+        "irreversible",
+        "daño"
+       ],
+       "texto": "No usaste la constancia médica del riesgo de daño irreversible, el hecho decisivo."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "1751",
+        "estatutaria"
+       ],
+       "norma": "Ley 1751 de 2015 (Estatutaria de Salud)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Inmediatez",
+       "si_falta": [
+        "inmediat"
+       ]
+      },
+      {
+       "concepto": "Subsidiariedad",
+       "si_falta": [
+        "subsidiar"
+       ]
+      }
+     ],
+     "contraargumento": "La EPS dirá que existe un mecanismo ante la Superintendencia Nacional de Salud; responde por qué no es eficaz frente al riesgo acreditado.",
+     "como_mejorar": [
+      "Analiza cada requisito de procedencia por separado: legitimación, inmediatez y subsidiariedad.",
+      "Conecta cada hecho del caso con el requisito que prueba.",
+      "Cierra diciendo qué debe ordenar el juez y en qué plazo."
+     ],
+     "comentario_bien": "Muy buena estructura: identificas el problema y aplicas los requisitos a los hechos.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma puntos ahora es ordenar el análisis de procedencia."
+    }
+   },
+   "variacion": {
+    "titulo": "El medicamento que llegó tarde",
+    "cambio": "¿Qué cambia si Lucía presentó la tutela ocho meses después de la negativa y, antes del fallo, la EPS ya le había entregado el medicamento?",
+    "enunciado": "Los hechos son los mismos del caso anterior, con dos diferencias. Lucía no presentó la tutela en mayo: la radicó ocho meses después de la negativa, cuando su hermano la convenció de hacerlo. Y dos días después de ser notificada de la tutela, la EPS autorizó y entregó el medicamento, que Lucía ya se está aplicando cada dos semanas.",
+    "pregunta": "¿Cómo debe decidir el juez? Analiza la inmediatez y el efecto de la entrega del medicamento sobre la tutela.",
+    "pistas": [
+     "El paso del tiempo afecta un requisito de procedencia. ¿Es la inmediatez un plazo fijo o un criterio de razonabilidad?",
+     "Si la EPS ya entregó el medicamento, ¿qué queda por ordenar? Piensa en la carencia actual de objeto."
+    ],
+    "conceptos": [
+     "Inmediatez",
+     "Carencia actual de objeto",
+     "Hecho superado"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Debe el juez amparar el derecho a la salud cuando la tutela se presentó ocho meses después de la negativa y la EPS entregó el medicamento durante el trámite?",
+     "normas": [
+      {
+       "norma": "Artículo 86 de la Constitución",
+       "para_que": "procedencia de la tutela."
+      },
+      {
+       "norma": "Decreto 2591 de 1991",
+       "para_que": "trámite y alcance de la orden del juez."
+      }
+     ],
+     "analisis": "**Inmediatez.** No es un plazo fijo: se valora si el tiempo es razonable. Ocho meses pueden justificarse si la afectación a la salud persiste, porque la vulneración es actual y continua.\n\n**Carencia actual de objeto.** Como la EPS entregó el medicamento durante el trámite, la pretensión quedó satisfecha: se configura un hecho superado. El juez ya no tiene nada que ordenar sobre la entrega.",
+     "contraargumento": "Podría pedirse que el juez igual se pronuncie de fondo para prevenir que la EPS repita la negativa. Es posible cuando el caso lo amerita, pero no cambia que la orden de entrega ya no es necesaria.",
+     "conclusion": "El juez debería declarar la carencia actual de objeto por hecho superado, y puede prevenir a la EPS para que no vuelva a negar el tratamiento ordenado por la médica tratante.",
+     "errores_comunes": [
+      "Declarar improcedente la tutela solo por el paso de ocho meses, sin valorar la continuidad de la afectación.",
+      "Ordenar entregar un medicamento que ya fue entregado."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "inmediat"
+       ],
+       [
+        "hecho superado",
+        "carencia"
+       ],
+       [
+        "tutela"
+       ]
+      ],
+      "normas": [
+       [
+        "86"
+       ],
+       [
+        "2591"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "razonab"
+       ],
+       [
+        "continu",
+        "persist",
+        "actual"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "ocho meses",
+        "8 meses"
+       ],
+       [
+        "entreg"
+       ]
+      ],
+      "conclusion": [
+       [
+        "carencia actual",
+        "hecho superado"
+       ],
+       [
+        "prevenir",
+        "prevenga",
+        "prevención"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "razonab"
+       ],
+       "texto": "Entendiste la inmediatez como un criterio de razonabilidad y no como un plazo fijo."
+      },
+      {
+       "si_hay": [
+        "hecho superado",
+        "carencia"
+       ],
+       "texto": "Identificaste la carencia actual de objeto por hecho superado."
+      },
+      {
+       "si_hay": [
+        "prevenir",
+        "prevenga",
+        "prevención"
+       ],
+       "texto": "Consideraste que el juez puede prevenir a la EPS para que no repita la negativa."
+      }
+     ],
+     "acierto_base": "Identificaste que en este caso pesan el paso del tiempo y la entrega del medicamento.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "inmediat"
+       ],
+       "texto": "No analizaste la inmediatez: la tutela se presentó ocho meses después de la negativa."
+      },
+      {
+       "si_falta": [
+        "hecho superado",
+        "carencia"
+       ],
+       "texto": "No identificaste la carencia actual de objeto: la EPS entregó el medicamento durante el trámite."
+      },
+      {
+       "si_falta": [
+        "continu",
+        "persist",
+        "actual"
+       ],
+       "texto": "No explicaste por qué la afectación seguía siendo actual pese al paso del tiempo."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "2591"
+       ],
+       "norma": "Decreto 2591 de 1991 (trámite de la tutela y alcance de la orden del juez)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Inmediatez",
+       "si_falta": [
+        "inmediat"
+       ]
+      },
+      {
+       "concepto": "Carencia actual de objeto",
+       "si_falta": [
+        "carencia"
+       ]
+      },
+      {
+       "concepto": "Hecho superado",
+       "si_falta": [
+        "hecho superado"
+       ]
+      }
+     ],
+     "contraargumento": "La EPS pedirá que se declare improcedente por falta de inmediatez; responde por qué ocho meses pueden ser razonables si la afectación a la salud continuaba.",
+     "como_mejorar": [
+      "Separa los dos problemas: primero la procedencia (inmediatez) y luego el efecto de la entrega del medicamento.",
+      "Explica qué es el hecho superado y qué consecuencia tiene sobre la orden del juez.",
+      "Cierra diciendo exactamente cómo debe fallar el juez."
+     ],
+     "comentario_bien": "Muy bien: distingues la procedencia del efecto de la entrega del medicamento.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es separar la inmediatez del hecho superado."
+    }
+   }
+  },
+  "Penal": {
+   "caso": {
+    "titulo": "El termo contra la botella rota",
+    "enunciado": "El sábado 7 de febrero de 2026, hacia las 11:30 p. m., Camilo Herrera Díaz, de 29 años, salía de la panadería de su barrio con un termo metálico de café en la mano. En la acera lo abordó Ernesto Pineda Gil, con quien tres semanas antes había tenido una discusión verbal por un puesto de parqueo. Ernesto, visiblemente embriagado, rompió una botella de vidrio contra el andén y, sin mediar palabra, se abalanzó sobre Camilo lanzándole cortes hacia la cara. Camilo alcanzó a cubrirse y sufrió una herida superficial en el antebrazo izquierdo.\n\nCuando Ernesto levantó de nuevo la botella, Camilo le dio un solo golpe con el termo en el brazo con el que la sostenía. Ernesto soltó la botella y cayó sentado. Camilo retrocedió de inmediato y no volvió a tocarlo; el panadero, que presenció todo, llamó a la Policía.\n\nErnesto sufrió una fractura en el antebrazo, por la que el Instituto Nacional de Medicina Legal le dictaminó una incapacidad médico legal. Su familia presentó denuncia penal contra Camilo por lesiones personales y sostiene que «el golpe fue una venganza por lo del parqueo».",
+    "pregunta": "¿Es Camilo penalmente responsable por las lesiones que le causó a Ernesto? Analiza la conducta con la estructura de la teoría del delito y determina si concurre alguna causal de ausencia de responsabilidad.",
+    "pistas": [
+     "No te quedes en el resultado: una conducta puede encajar en un tipo penal y aun así no ser punible. Recorre en orden tipicidad, antijuridicidad y culpabilidad.",
+     "Revisa las causales de ausencia de responsabilidad del Código Penal. ¿Qué requisitos debe cumplir quien se defiende de un ataque y qué hecho del caso prueba cada uno?"
+    ],
+    "conceptos": [
+     "Estructura de la conducta punible",
+     "Legítima defensa",
+     "Agresión injusta y actual",
+     "Proporcionalidad de la defensa"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Responde penalmente Camilo por las lesiones personales causadas a Ernesto, o su conducta, aunque típica, está amparada por la legítima defensa como causal de ausencia de responsabilidad?",
+     "normas": [
+      {
+       "norma": "Artículo 9 de la Ley 599 de 2000 (Código Penal)",
+       "para_que": "exige que la conducta sea típica, antijurídica y culpable para que sea punible."
+      },
+      {
+       "norma": "Artículo 11 del Código Penal",
+       "para_que": "define la antijuridicidad: la conducta debe lesionar o poner en peligro, sin justa causa, el bien jurídico."
+      },
+      {
+       "norma": "Artículo 32, numeral 6, del Código Penal",
+       "para_que": "consagra la legítima defensa: defensa de un derecho propio o ajeno contra injusta agresión actual o inminente, siempre que sea proporcionada."
+      },
+      {
+       "norma": "Artículo 111 y siguientes del Código Penal",
+       "para_que": "tipifican las lesiones personales; la modalidad concreta depende del dictamen de Medicina Legal (verificar el artículo aplicable)."
+      }
+     ],
+     "analisis": "**Tipicidad.** Camilo golpeó a Ernesto y le causó una fractura, sabiendo que el golpe podía herirlo y queriendo darlo: la conducta encaja, en principio, en el tipo de lesiones personales dolosas. Que sea típica no la hace punible todavía.\n\n**Antijuridicidad: legítima defensa.** El artículo 32, numeral 6, del Código Penal excluye la responsabilidad de quien obra por la necesidad de defenderse de una agresión injusta, actual o inminente, con una defensa proporcionada. Los hechos prueban cada requisito:\n\n- *Agresión injusta:* Ernesto atacó con una botella rota sin que Camilo lo provocara. La discusión de tres semanas antes no autoriza a nadie a agredir ni convierte a Camilo en provocador.\n- *Agresión actual:* el ataque estaba en curso; Ernesto ya lo había herido y volvía a levantar la botella.\n- *Necesidad y proporcionalidad:* frente a un objeto cortante dirigido a la cara, un solo golpe al brazo que lo sostenía es un medio razonable para neutralizar el peligro. La proporcionalidad no exige igualdad de armas ni de resultados, sino una reacción razonable frente a la magnitud del ataque.\n- *Límite de la defensa:* Camilo se detuvo cuando Ernesto soltó la botella y no volvió a golpearlo, lo que muestra que actuó para defenderse y no para vengarse.\n\nQue Ernesto estuviera embriagado no vuelve lícita su agresión. La fractura es un resultado grave, pero proviene de una defensa que se mantuvo dentro de sus límites. Como la conducta está justificada, no hace falta llegar a la culpabilidad.",
+     "contraargumento": "La familia de Ernesto puede sostener que una fractura es un daño excesivo o que Camilo actuó por la rencilla del parqueo. No prospera: el golpe fue único, dirigido al brazo armado y dado mientras la agresión seguía; la rencilla previa no desvirtúa que en ese momento se estaba defendiendo, y lo confirma que se detuvo apenas cesó el peligro. Sí cambiaría la solución si se probara que Camilo siguió golpeando después de que Ernesto soltó la botella.",
+     "conclusion": "Camilo no es penalmente responsable. Su conducta es típica, pero está justificada por la legítima defensa: falta la antijuridicidad y, por tanto, no hay conducta punible. La Fiscalía no debería llevar el caso a juicio; lo procedente es terminar la actuación por la vía que corresponda a la etapa en que se encuentre (por ejemplo, solicitar la preclusión por existir una causal que excluye la responsabilidad; verificar el artículo exacto en la Ley 906 de 2004).",
+     "errores_comunes": [
+      "Concluir que hay delito solo porque hubo una lesión grave, sin pasar por la antijuridicidad.",
+      "Exigir que Camilo usara un medio equivalente o que el daño causado fuera igual al recibido: la proporcionalidad no es una igualdad matemática.",
+      "Tratar la discusión previa del parqueo como provocación o como prueba de que no se estaba defendiendo.",
+      "Confundir la legítima defensa, que justifica la conducta, con la ira o intenso dolor, que solo atenúa la pena."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "legítima defensa"
+       ],
+       [
+        "lesion"
+       ],
+       [
+        "responsab",
+        "punib"
+       ]
+      ],
+      "normas": [
+       [
+        "32"
+       ],
+       [
+        "599",
+        "código penal"
+       ],
+       [
+        "111",
+        "lesiones personales"
+       ],
+       [
+        "artículo 9",
+        "art. 9",
+        "art 9",
+        "artículo 11",
+        "art. 11"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "actual",
+        "inminente"
+       ],
+       [
+        "proporcion"
+       ],
+       [
+        "injusta"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "botella"
+       ],
+       [
+        "termo",
+        "un solo golpe",
+        "único golpe"
+       ],
+       [
+        "parqueo",
+        "discusión previa",
+        "rencilla"
+       ],
+       [
+        "embriag",
+        "borracho",
+        "ebrio"
+       ]
+      ],
+      "conclusion": [
+       [
+        "no es responsable",
+        "no responde",
+        "no es penalmente responsable",
+        "justificad",
+        "no hay delito",
+        "no es punible",
+        "no hay conducta punible",
+        "preclu",
+        "absol",
+        "no hay responsabilidad"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "legítima defensa"
+       ],
+       "texto": "Identificaste la legítima defensa como la institución central del caso."
+      },
+      {
+       "si_hay": [
+        "antijurid"
+       ],
+       "texto": "Ubicaste la legítima defensa en la antijuridicidad, después de afirmar la tipicidad."
+      },
+      {
+       "si_hay": [
+        "actual",
+        "inminente"
+       ],
+       "texto": "Verificaste que la agresión estaba en curso cuando Camilo golpeó."
+      },
+      {
+       "si_hay": [
+        "proporcion"
+       ],
+       "texto": "Analizaste la proporcionalidad de la defensa."
+      }
+     ],
+     "acierto_base": "Identificaste que el caso gira en torno a las lesiones que Camilo causó al defenderse.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "tipic"
+       ],
+       "texto": "No analizaste la tipicidad: la conducta sí encaja en el tipo de lesiones personales, y hay que decirlo antes de justificarla."
+      },
+      {
+       "si_falta": [
+        "actual",
+        "inminente"
+       ],
+       "texto": "No verificaste que la agresión fuera actual: es el requisito que decide el caso (Ernesto volvía a levantar la botella)."
+      },
+      {
+       "si_falta": [
+        "proporcion"
+       ],
+       "texto": "No explicaste por qué un solo golpe con el termo es proporcionado frente a una botella rota dirigida a la cara."
+      },
+      {
+       "si_falta": [
+        "parqueo",
+        "discusión previa",
+        "rencilla",
+        "provoc"
+       ],
+       "texto": "No descartaste el hecho distractor: la discusión por el parqueo no es provocación ni desvirtúa la defensa."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "32"
+       ],
+       "norma": "Artículo 32, numeral 6, del Código Penal (legítima defensa)"
+      },
+      {
+       "si_falta": [
+        "artículo 9",
+        "art. 9",
+        "art 9"
+       ],
+       "norma": "Artículo 9 del Código Penal (la conducta punible debe ser típica, antijurídica y culpable)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Legítima defensa",
+       "si_falta": [
+        "legítima defensa"
+       ]
+      },
+      {
+       "concepto": "Agresión injusta y actual",
+       "si_falta": [
+        "actual",
+        "inminente"
+       ]
+      },
+      {
+       "concepto": "Proporcionalidad de la defensa",
+       "si_falta": [
+        "proporcion"
+       ]
+      },
+      {
+       "concepto": "Estructura de la conducta punible",
+       "si_falta": [
+        "antijurid"
+       ]
+      }
+     ],
+     "contraargumento": "La familia de Ernesto dirá que una fractura es un daño excesivo; responde por qué un golpe único al brazo armado, mientras el ataque seguía, es una defensa proporcionada.",
+     "como_mejorar": [
+      "Recorre en orden tipicidad, antijuridicidad y culpabilidad; no saltes directo a la conclusión.",
+      "Analiza cada requisito de la legítima defensa por separado y conéctalo con un hecho concreto.",
+      "Cierra diciendo qué consecuencia procesal tiene la causal: el caso no debería llegar a juicio."
+     ],
+     "comentario_bien": "Muy buen análisis: recorres la teoría del delito y aplicas cada requisito de la legítima defensa a los hechos.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es verificar uno por uno los requisitos de la legítima defensa."
+    }
+   },
+   "variacion": {
+    "titulo": "El golpe después de la huida",
+    "cambio": "¿Qué cambia si Camilo golpeó a Ernesto cuando este ya había soltado la botella y se estaba alejando?",
+    "enunciado": "Los hechos son los mismos del caso anterior, con una diferencia en el momento del golpe. Cuando Ernesto se abalanzó con la botella rota y le causó la herida superficial, Camilo lo empujó con fuerza; Ernesto soltó la botella, que rodó hasta la calle, y empezó a alejarse caminando, sin mirar atrás. El empujón no le causó ninguna lesión.\n\nCamilo, furioso, lo siguió unos veinte metros y le dio con el termo el golpe en el brazo que le produjo la fractura. En ese momento Ernesto estaba desarmado y no hizo ningún gesto de volver a atacar.",
+    "pregunta": "¿Puede Camilo invocar la legítima defensa por el golpe que le fracturó el brazo a Ernesto? Si no, ¿responde penalmente y hay alguna figura que incida en su pena?",
+    "pistas": [
+     "Repasa los requisitos de la legítima defensa uno por uno. ¿Cuál de ellos depende del momento exacto en que se da el golpe?",
+     "Que la reacción no esté justificada no significa que el ataque previo de Ernesto sea irrelevante: piensa en si puede tener algún efecto sobre la pena."
+    ],
+    "conceptos": [
+     "Actualidad de la agresión",
+     "Legítima defensa",
+     "Ira o intenso dolor"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Está amparado por la legítima defensa el golpe que Camilo le dio a Ernesto cuando este ya estaba desarmado y se alejaba, o responde Camilo por lesiones personales dolosas?",
+     "normas": [
+      {
+       "norma": "Artículo 32, numeral 6, del Código Penal (Ley 599 de 2000)",
+       "para_que": "exige que la agresión sea actual o inminente; aquí ese requisito falta."
+      },
+      {
+       "norma": "Artículo 111 y siguientes del Código Penal",
+       "para_que": "tipifican las lesiones personales; la modalidad concreta depende del dictamen de Medicina Legal (verificar el artículo aplicable)."
+      },
+      {
+       "norma": "Artículo 57 del Código Penal",
+       "para_que": "ira o intenso dolor: disminuye la pena de quien actúa en ese estado causado por un comportamiento ajeno grave e injustificado."
+      }
+     ],
+     "analisis": "**Tipicidad.** Igual que en el caso original, golpear a Ernesto y fracturarle el brazo encaja en el tipo de lesiones personales dolosas.\n\n**Antijuridicidad: no hay legítima defensa.** La legítima defensa exige una agresión actual o inminente. Cuando Camilo dio el golpe, Ernesto ya había soltado la botella, estaba desarmado y se alejaba: el peligro había cesado. Un golpe dado después de que la agresión terminó no es defensa, sino una reacción contra quien ya no atacaba. Tampoco se trata, según la posición mayoritaria, de un exceso en la legítima defensa, que supone que la agresión todavía existía y que la defensa se desbordó.\n\n**Culpabilidad y pena.** Camilo sabía lo que hacía y podía actuar de otro modo, así que la conducta es culpable. Sin embargo, actuó furioso inmediatamente después de haber sido atacado y herido con una botella rota. Eso puede encajar en la ira o intenso dolor (artículo 57 del Código Penal), que no elimina la responsabilidad pero sí disminuye la pena, si se prueba que ese estado fue causado por el comportamiento grave e injustificado de Ernesto.",
+     "contraargumento": "La defensa de Camilo puede sostener que todo ocurrió en segundos y que él creía que el ataque continuaba. Solo prosperaría si se probara que Ernesto conservaba un arma o hacía gestos de volver a atacar (agresión inminente), o que Camilo creyó de manera invencible que el peligro seguía (error sobre los presupuestos de la causal; verificar el numeral exacto del artículo 32). Con un agresor desarmado que se aleja y al que hay que perseguir veinte metros, esa tesis no es creíble.",
+     "conclusion": "Camilo no puede invocar la legítima defensa, porque la agresión ya había cesado cuando golpeó. Responde por lesiones personales dolosas, cuya modalidad y pena dependen del dictamen de Medicina Legal, y puede pedir que se le reconozca la ira o intenso dolor para disminuir la pena si prueba que actuó en ese estado a causa del ataque de Ernesto.",
+     "errores_comunes": [
+      "Mantener la legítima defensa porque Ernesto «empezó», sin revisar si la agresión seguía siendo actual.",
+      "Llamar «exceso en la legítima defensa» a un golpe dado cuando el ataque ya había terminado.",
+      "Pensar que la ira o intenso dolor absuelve: solo disminuye la pena."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "legítima defensa"
+       ],
+       [
+        "lesion"
+       ],
+       [
+        "actual",
+        "cesó",
+        "termin"
+       ]
+      ],
+      "normas": [
+       [
+        "32"
+       ],
+       [
+        "57",
+        "ira o intenso",
+        "ira e intenso",
+        "intenso dolor"
+       ],
+       [
+        "599",
+        "código penal"
+       ],
+       [
+        "111",
+        "lesiones personales"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "actual",
+        "inminente"
+       ],
+       [
+        "cesó",
+        "termin",
+        "ya no",
+        "desarmado"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "soltó",
+        "desarmado"
+       ],
+       [
+        "alejab",
+        "veinte metros",
+        "20 metros",
+        "huía",
+        "se iba"
+       ],
+       [
+        "furioso",
+        "rabia",
+        "enojo"
+       ]
+      ],
+      "conclusion": [
+       [
+        "no puede invocar",
+        "no hay legítima defensa",
+        "no procede la legítima defensa",
+        "no se configura",
+        "no opera",
+        "debe responder",
+        "sí responde",
+        "responde penalmente",
+        "es responsable"
+       ],
+       [
+        "intenso dolor",
+        "estado de ira",
+        "atenu",
+        "disminu"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "actual",
+        "inminente"
+       ],
+       "texto": "Identificaste que la actualidad de la agresión es lo que decide el caso."
+      },
+      {
+       "si_hay": [
+        "desarmado",
+        "soltó"
+       ],
+       "texto": "Usaste el hecho clave: Ernesto ya estaba desarmado y se alejaba."
+      },
+      {
+       "si_hay": [
+        "intenso dolor",
+        "estado de ira"
+       ],
+       "texto": "Consideraste la ira o intenso dolor como posible atenuante."
+      },
+      {
+       "si_hay": [
+        "exceso"
+       ],
+       "texto": "Te ocupaste de la diferencia con el exceso en la legítima defensa."
+      }
+     ],
+     "acierto_base": "Identificaste que el caso gira en torno al golpe que Camilo dio después del ataque.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "actual",
+        "inminente",
+        "cesó"
+       ],
+       "texto": "No explicaste que la agresión ya había cesado cuando Camilo golpeó: sin agresión actual no hay legítima defensa."
+      },
+      {
+       "si_falta": [
+        "intenso dolor",
+        "estado de ira",
+        "atenu"
+       ],
+       "texto": "No consideraste la ira o intenso dolor, que puede disminuir la pena por el ataque previo de Ernesto."
+      },
+      {
+       "si_falta": [
+        "exceso"
+       ],
+       "texto": "No descartaste el exceso en la legítima defensa, que supone una agresión todavía en curso."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "32"
+       ],
+       "norma": "Artículo 32, numeral 6, del Código Penal (legítima defensa)"
+      },
+      {
+       "si_falta": [
+        "57",
+        "intenso dolor"
+       ],
+       "norma": "Artículo 57 del Código Penal (ira o intenso dolor)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Actualidad de la agresión",
+       "si_falta": [
+        "actual",
+        "inminente",
+        "cesó"
+       ]
+      },
+      {
+       "concepto": "Ira o intenso dolor",
+       "si_falta": [
+        "intenso dolor",
+        "estado de ira"
+       ]
+      },
+      {
+       "concepto": "Legítima defensa",
+       "si_falta": [
+        "legítima defensa"
+       ]
+      }
+     ],
+     "contraargumento": "La defensa de Camilo dirá que todo ocurrió en segundos y que creía seguir en peligro; responde por qué no es creíble frente a un agresor desarmado que se alejaba.",
+     "como_mejorar": [
+      "Identifica el requisito de la legítima defensa que falla y el hecho que lo prueba.",
+      "Distingue la legítima defensa (justifica) de la ira o intenso dolor (solo disminuye la pena).",
+      "Cierra diciendo por qué responde Camilo y qué puede alegar sobre la pena."
+     ],
+     "comentario_bien": "Muy bien: ves que el momento del golpe cambia la solución y no confundes justificación con atenuante.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es explicar por qué la agresión ya no era actual."
+    }
+   }
+  },
+  "Laboral": {
+   "caso": {
+    "titulo": "La diseñadora con cuenta de cobro",
+    "enunciado": "Daniela Suárez Ortiz, diseñadora gráfica de 27 años, firmó el 1 de febrero de 2025 un «contrato de prestación de servicios profesionales» con Café Montaña S.A.S. (empresa ficticia), que se fue renovando cada tres meses. El contrato decía que Daniela actuaba «con plena autonomía técnica y administrativa» y que «no existe relación laboral». Recibía $3.200.000 fijos cada mes, contra una cuenta de cobro, y ella misma pagaba sus aportes a seguridad social como independiente.\n\nEn la práctica, Daniela trabajaba en la oficina de la empresa de lunes a viernes, de 8:00 a. m. a 5:00 p. m., registraba su entrada con huella, usaba un computador de la empresa y recibía cada mañana, por chat, las tareas que le asignaba el jefe de mercadeo. Para faltar debía pedirle permiso, y en octubre de 2025 recibió un «llamado de atención» escrito por llegar tarde tres veces.\n\nAlgunos fines de semana Daniela diseñaba logotipos para clientes propios. El 15 de enero de 2026 la empresa le informó por correo electrónico que no renovaría el contrato, que terminó el 31 de enero de 2026. Nunca recibió pagos por cesantías, prima de servicios ni vacaciones.",
+    "pregunta": "¿Existió un contrato de trabajo entre Daniela y Café Montaña S.A.S., pese al contrato de prestación de servicios? Identifica el problema jurídico, analiza los elementos del contrato de trabajo y la presunción legal, y señala qué podría reclamar Daniela.",
+    "pistas": [
+     "El nombre que las partes le dan al contrato no es decisivo. ¿Qué principio constitucional ordena mirar cómo se ejecutó realmente la relación?",
+     "Revisa los tres elementos esenciales del contrato de trabajo en el Código Sustantivo del Trabajo y la presunción que favorece a quien presta un servicio personal. ¿Qué hechos prueban cada elemento y a quién le toca probar lo contrario?"
+    ],
+    "conceptos": [
+     "Primacía de la realidad",
+     "Elementos del contrato de trabajo",
+     "Subordinación",
+     "Presunción de contrato de trabajo"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Se configuró un contrato de trabajo entre Daniela y Café Montaña S.A.S., a pesar de que firmaron un contrato de prestación de servicios, y qué consecuencias tiene esa declaración?",
+     "normas": [
+      {
+       "norma": "Artículo 53 de la Constitución",
+       "para_que": "consagra la primacía de la realidad sobre las formalidades establecidas por los sujetos de las relaciones laborales."
+      },
+      {
+       "norma": "Artículo 23 del Código Sustantivo del Trabajo",
+       "para_que": "fija los elementos esenciales (actividad personal, continuada subordinación y salario) y dispone que, reunidos, hay contrato de trabajo sin importar el nombre que se le dé."
+      },
+      {
+       "norma": "Artículo 24 del Código Sustantivo del Trabajo",
+       "para_que": "presume que toda relación de trabajo personal está regida por un contrato de trabajo."
+      },
+      {
+       "norma": "Artículo 64 del Código Sustantivo del Trabajo",
+       "para_que": "regula la indemnización por terminación unilateral sin justa causa; su procedencia y monto dependen de la modalidad del contrato que se declare (verificar)."
+      },
+      {
+       "norma": "Normas del CST sobre cesantías, prima de servicios y vacaciones",
+       "para_que": "fundamentan las prestaciones y la compensación que deben liquidarse (verificar los artículos exactos)."
+      }
+     ],
+     "analisis": "**Primacía de la realidad.** El artículo 53 de la Constitución obliga a mirar cómo se ejecutó la relación, no cómo la llamaron las partes. Las cláusulas de «autonomía» y de «no existe relación laboral» son formas: ceden si los hechos muestran otra cosa.\n\n**Elementos del contrato de trabajo (art. 23 CST).**\n\n- *Actividad personal:* Daniela hacía el trabajo ella misma, en la oficina y con los equipos de la empresa.\n- *Continuada subordinación:* cumplía un horario fijo controlado con huella, recibía órdenes diarias del jefe de mercadeo, pedía permiso para faltar y recibió un llamado de atención, que es expresión del poder disciplinario del empleador.\n- *Salario:* recibía un pago fijo mensual como retribución de su trabajo; llamarlo «honorarios» y cobrarlo con cuenta de cobro no cambia su naturaleza.\n\n**Presunción (art. 24 CST).** Como Daniela prestó un servicio personal, se presume el contrato de trabajo y es la empresa la que debe probar que había autonomía real. Con estos hechos no puede hacerlo.\n\n**El hecho distractor.** Que Daniela atendiera clientes propios los fines de semana no desvirtúa el contrato: la exclusividad no es un elemento esencial y el CST admite que un trabajador tenga más de un empleador (verificar el artículo exacto sobre coexistencia de contratos).",
+     "contraargumento": "La empresa dirá que Daniela firmó libremente un contrato de prestación de servicios, que tenía clientes propios y que pagaba su seguridad social como independiente. No prospera: lo escrito en el contrato no prevalece sobre la realidad, y ninguno de esos hechos desvirtúa la subordinación probada con el horario, la huella, las órdenes diarias y el llamado de atención. Prosperaría si la empresa probara que Daniela organizaba su trabajo con autonomía real y que solo había coordinación de entregas.",
+     "conclusion": "Sí existió un contrato de trabajo. Daniela puede demandar ante la jurisdicción ordinaria laboral para que se declare la relación laboral desde el 1 de febrero de 2025 y se condene a la empresa a pagar las prestaciones sociales (cesantías, intereses sobre las cesantías y prima de servicios), la compensación de las vacaciones y los aportes a seguridad social a cargo del empleador, además de la indemnización por terminación sin justa causa si, según la modalidad del contrato que se declare, procede. Las sanciones por mora, como la indemnización moratoria del artículo 65 del CST, no son automáticas: dependen de que el empleador haya actuado de mala fe. Verifica la vigencia de las normas en SUIN-Juriscol, incluidas las reformas laborales recientes.",
+     "errores_comunes": [
+      "Resolver el caso por el nombre del contrato o por la cláusula que niega la relación laboral.",
+      "Exigir exclusividad o tratar el trabajo con clientes propios como prueba de independencia.",
+      "Olvidar la presunción del artículo 24 del CST y poner toda la carga de la prueba en Daniela.",
+      "Afirmar que la indemnización moratoria procede de manera automática."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "contrato de trabajo",
+        "relación laboral",
+        "contrato realidad"
+       ],
+       [
+        "prestación de servicios"
+       ],
+       [
+        "existi",
+        "configur",
+        "declar"
+       ]
+      ],
+      "normas": [
+       [
+        "53"
+       ],
+       [
+        "23"
+       ],
+       [
+        "24"
+       ],
+       [
+        "sustantivo del trabajo",
+        "cst"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "subordina"
+       ],
+       [
+        "realidad"
+       ],
+       [
+        "presun",
+        "presume"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "horario",
+        "huella"
+       ],
+       [
+        "llamado de atención",
+        "permiso",
+        "órdenes",
+        "jefe"
+       ],
+       [
+        "pago fijo",
+        "mensual",
+        "honorarios",
+        "cuenta de cobro",
+        "3.200.000"
+       ],
+       [
+        "fines de semana",
+        "clientes propios",
+        "exclusiv"
+       ]
+      ],
+      "conclusion": [
+       [
+        "sí existió",
+        "existió un contrato de trabajo",
+        "hay contrato de trabajo",
+        "existe contrato de trabajo",
+        "existe un contrato de trabajo",
+        "hubo contrato de trabajo",
+        "se declare",
+        "declarar"
+       ],
+       [
+        "cesantías",
+        "prima",
+        "vacaciones",
+        "prestaciones"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "realidad"
+       ],
+       "texto": "Aplicaste la primacía de la realidad sobre las formas."
+      },
+      {
+       "si_hay": [
+        "subordina"
+       ],
+       "texto": "Identificaste la subordinación como el elemento decisivo."
+      },
+      {
+       "si_hay": [
+        "presun",
+        "presume"
+       ],
+       "texto": "Usaste la presunción de contrato de trabajo."
+      },
+      {
+       "si_hay": [
+        "cesantías",
+        "prima",
+        "prestaciones"
+       ],
+       "texto": "Señalaste las consecuencias económicas de la declaración."
+      }
+     ],
+     "acierto_base": "Identificaste que el caso trata sobre la naturaleza real del vínculo de Daniela con la empresa.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "realidad"
+       ],
+       "texto": "No invocaste la primacía de la realidad sobre las formas (art. 53 de la Constitución): es la razón por la que el nombre del contrato no decide."
+      },
+      {
+       "si_falta": [
+        "subordina"
+       ],
+       "texto": "No analizaste la subordinación con los hechos: horario con huella, órdenes diarias, permisos y el llamado de atención."
+      },
+      {
+       "si_falta": [
+        "presun",
+        "presume"
+       ],
+       "texto": "No usaste la presunción del artículo 24 del CST, que traslada a la empresa la carga de probar la autonomía."
+      },
+      {
+       "si_falta": [
+        "fines de semana",
+        "clientes propios",
+        "exclusiv"
+       ],
+       "texto": "No descartaste el hecho distractor: trabajar para clientes propios los fines de semana no desvirtúa el contrato."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "53"
+       ],
+       "norma": "Artículo 53 de la Constitución (primacía de la realidad)"
+      },
+      {
+       "si_falta": [
+        "23"
+       ],
+       "norma": "Artículo 23 del CST (elementos esenciales del contrato de trabajo)"
+      },
+      {
+       "si_falta": [
+        "24"
+       ],
+       "norma": "Artículo 24 del CST (presunción de contrato de trabajo)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Primacía de la realidad",
+       "si_falta": [
+        "realidad"
+       ]
+      },
+      {
+       "concepto": "Subordinación",
+       "si_falta": [
+        "subordina"
+       ]
+      },
+      {
+       "concepto": "Presunción de contrato de trabajo",
+       "si_falta": [
+        "presun",
+        "presume"
+       ]
+      },
+      {
+       "concepto": "Elementos del contrato de trabajo",
+       "si_falta": [
+        "elemento",
+        "actividad personal",
+        "prestación personal"
+       ]
+      }
+     ],
+     "contraargumento": "La empresa dirá que Daniela firmó libremente y pagaba su seguridad social como independiente; responde por qué la forma en que se ejecutó la relación prevalece sobre lo que dice el papel.",
+     "como_mejorar": [
+      "Analiza los tres elementos del contrato de trabajo por separado, cada uno con sus hechos.",
+      "Explica quién tiene la carga de la prueba gracias a la presunción del artículo 24 del CST.",
+      "Cierra con lo que Daniela puede reclamar y ante qué jurisdicción."
+     ],
+     "comentario_bien": "Muy buen análisis: aplicas la primacía de la realidad y pruebas cada elemento con los hechos.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es probar la subordinación con hechos concretos y usar la presunción."
+    }
+   },
+   "variacion": {
+    "titulo": "La diseñadora que cobraba por pieza",
+    "cambio": "¿Qué cambia si Daniela trabajaba con autonomía real, desde su propio estudio y sin horario, y cobraba por cada pieza entregada?",
+    "enunciado": "Las partes, las fechas y el contrato firmado son los mismos del caso anterior, pero la relación se ejecutó de otra manera. Daniela trabajaba desde su propio estudio, con sus propios equipos, sin horario ni registro de entrada, y decidía cómo y cuándo hacer cada diseño.\n\nLa empresa le enviaba solicitudes con la fecha de entrega y el manual de marca que debía respetar; Daniela podía aceptarlas o rechazarlas, y en 2025 rechazó varias sin ninguna consecuencia. Cobraba una tarifa pactada por cada pieza entregada y aprobada, por lo que sus ingresos variaban de un mes a otro. Nunca pidió permisos ni recibió llamados de atención, y atendía a otros clientes cuando quería.",
+    "pregunta": "¿Existió un contrato de trabajo entre Daniela y Café Montaña S.A.S.? Analiza la presunción legal y si la empresa logra desvirtuarla.",
+    "pistas": [
+     "La presunción de contrato de trabajo sigue aplicando porque hubo un servicio personal. La pregunta es si los hechos la desvirtúan.",
+     "Distingue subordinación de coordinación: fijar fechas de entrega y exigir un estándar de calidad, ¿es lo mismo que dar órdenes sobre cómo, cuándo y dónde trabajar?"
+    ],
+    "conceptos": [
+     "Presunción de contrato de trabajo",
+     "Subordinación y coordinación",
+     "Autonomía técnica y administrativa"
+    ],
+    "solucion": {
+     "problema_juridico": "¿Desvirtuó Café Montaña S.A.S. la presunción de contrato de trabajo al demostrar que Daniela prestaba sus servicios con autonomía real y cobraba por resultado?",
+     "normas": [
+      {
+       "norma": "Artículo 24 del Código Sustantivo del Trabajo",
+       "para_que": "presume el contrato de trabajo en toda relación de trabajo personal; es una presunción legal que admite prueba en contrario."
+      },
+      {
+       "norma": "Artículo 23 del Código Sustantivo del Trabajo",
+       "para_que": "exige la continuada subordinación como elemento esencial: sin ella no hay contrato de trabajo."
+      },
+      {
+       "norma": "Artículo 53 de la Constitución",
+       "para_que": "la primacía de la realidad también opera aquí: la ejecución real coincide con lo pactado."
+      }
+     ],
+     "analisis": "**La presunción sigue aplicando.** Daniela prestó un servicio personal, así que se presume el contrato de trabajo (art. 24 CST). Pero es una presunción legal: admite prueba en contrario, y la empresa puede desvirtuarla demostrando que no hubo subordinación.\n\n**No hay subordinación, sino coordinación.** Daniela decidía cómo, cuándo y dónde trabajaba, usaba sus propios medios y podía rechazar encargos sin consecuencia. Que la empresa fijara fechas de entrega y exigiera respetar el manual de marca es coordinación propia de cualquier contrato de servicios: define el resultado esperado, no dirige la forma de trabajar. No hubo horario, permisos ni poder disciplinario.\n\n**La remuneración por resultado.** El pago por pieza aprobada, variable de un mes a otro, refuerza que se contrató un resultado. Por sí solo no sería decisivo, porque también existe el salario por unidad de obra, pero sumado a la autonomía muestra un trabajo independiente.\n\n**Primacía de la realidad.** El principio no solo sirve para descubrir contratos de trabajo ocultos: aquí la realidad de la ejecución confirma lo que las partes firmaron.",
+     "contraargumento": "Daniela podría sostener que la relación duró un año, que la empresa era su cliente principal y que debía cumplir el manual de marca. No prospera: la duración y la dependencia económica no equivalen a subordinación, y cumplir estándares de calidad es coordinación. Prosperaría si se probara que, en la práctica, la empresa le imponía horarios, le daba órdenes sobre la forma de trabajar o la sancionaba.",
+     "conclusion": "No existió contrato de trabajo: la empresa desvirtuó la presunción y la relación fue un contrato de prestación de servicios independiente, de naturaleza civil o comercial. Daniela no tiene derecho a prestaciones sociales ni a indemnizaciones laborales; solo puede reclamar lo que se le deba según el contrato, por ejemplo piezas entregadas y no pagadas.",
+     "errores_comunes": [
+      "Declarar el contrato de trabajo solo porque hubo un servicio personal, olvidando que la presunción admite prueba en contrario.",
+      "Confundir fechas de entrega y estándares de calidad con subordinación.",
+      "Tratar la dependencia económica de un cliente principal como si fuera subordinación."
+     ]
+    },
+    "claves_evaluacion": {
+     "rubrica_claves": {
+      "problema": [
+       [
+        "contrato de trabajo",
+        "relación laboral"
+       ],
+       [
+        "presun",
+        "presume"
+       ],
+       [
+        "desvirtu",
+        "prueba en contrario"
+       ]
+      ],
+      "normas": [
+       [
+        "24"
+       ],
+       [
+        "23"
+       ],
+       [
+        "53"
+       ]
+      ],
+      "argumentacion": [
+       [
+        "porque",
+        "ya que",
+        "dado que",
+        "puesto que"
+       ],
+       [
+        "subordina"
+       ],
+       [
+        "coordina"
+       ],
+       [
+        "autonom"
+       ]
+      ],
+      "aplicacion": [
+       [
+        "estudio",
+        "sus equipos",
+        "propios equipos",
+        "propios medios"
+       ],
+       [
+        "horario"
+       ],
+       [
+        "pieza",
+        "por resultado",
+        "tarifa"
+       ],
+       [
+        "rechaz"
+       ]
+      ],
+      "conclusion": [
+       [
+        "no existió",
+        "no hay contrato de trabajo",
+        "no existe contrato de trabajo",
+        "no hubo contrato de trabajo",
+        "no se configura",
+        "no se configuró",
+        "servicios independiente",
+        "civil o comercial"
+       ]
+      ]
+     },
+     "aciertos": [
+      {
+       "si_hay": [
+        "coordina"
+       ],
+       "texto": "Distinguiste coordinación de subordinación."
+      },
+      {
+       "si_hay": [
+        "desvirtu",
+        "prueba en contrario"
+       ],
+       "texto": "Reconociste que la presunción admite prueba en contrario."
+      },
+      {
+       "si_hay": [
+        "pieza",
+        "por resultado",
+        "tarifa"
+       ],
+       "texto": "Valoraste el pago por resultado."
+      },
+      {
+       "si_hay": [
+        "rechaz"
+       ],
+       "texto": "Usaste que Daniela podía rechazar encargos sin consecuencia."
+      }
+     ],
+     "acierto_base": "Identificaste que el caso trata sobre si el vínculo de Daniela era laboral o independiente.",
+     "omisiones": [
+      {
+       "si_falta": [
+        "presun",
+        "presume"
+       ],
+       "texto": "No partiste de la presunción del artículo 24 del CST: hubo servicio personal, así que la pregunta es si la empresa la desvirtuó."
+      },
+      {
+       "si_falta": [
+        "coordina"
+       ],
+       "texto": "No distinguiste la coordinación (fechas de entrega, manual de marca) de la subordinación."
+      },
+      {
+       "si_falta": [
+        "rechaz"
+       ],
+       "texto": "No usaste un hecho clave: Daniela podía rechazar encargos sin consecuencia."
+      }
+     ],
+     "normas_clave": [
+      {
+       "si_falta": [
+        "24"
+       ],
+       "norma": "Artículo 24 del CST (presunción de contrato de trabajo, que admite prueba en contrario)"
+      },
+      {
+       "si_falta": [
+        "23"
+       ],
+       "norma": "Artículo 23 del CST (la subordinación como elemento esencial)"
+      }
+     ],
+     "conceptos_clave": [
+      {
+       "concepto": "Presunción de contrato de trabajo",
+       "si_falta": [
+        "presun",
+        "presume"
+       ]
+      },
+      {
+       "concepto": "Subordinación y coordinación",
+       "si_falta": [
+        "coordina"
+       ]
+      },
+      {
+       "concepto": "Autonomía técnica y administrativa",
+       "si_falta": [
+        "autonom"
+       ]
+      }
+     ],
+     "contraargumento": "Daniela dirá que la relación duró un año y que la empresa era su cliente principal; responde por qué la dependencia económica no equivale a subordinación.",
+     "como_mejorar": [
+      "Parte de la presunción y luego examina si los hechos la desvirtúan.",
+      "Contrasta cada hecho con la diferencia entre coordinar un resultado y dirigir la forma de trabajar.",
+      "Cierra con lo que Daniela sí puede reclamar según el contrato."
+     ],
+     "comentario_bien": "Muy bien: usas la presunción y la desvirtúas con hechos concretos de autonomía.",
+     "comentario_mejorar": "Vas bien encaminado; lo que más suma ahora es distinguir coordinación de subordinación."
+    }
+   }
+  }
+ },
+ "chat": {
+  "escrito": "**Borrador de acción de tutela** _(ejemplo de la demostración, con datos genéricos)_\n\nSeñor(a)\n**JUEZ DE LA REPÚBLICA (REPARTO)**\n[Ciudad]\nE. S. D.\n\n**Referencia:** Acción de tutela\n**Accionante:** [Nombre completo], identificado(a) con [tipo y número de documento]\n**Accionado:** [Entidad o particular]\n\n[Nombre completo], mayor de edad, domiciliado(a) en [ciudad], actuando en nombre propio, presento **acción de tutela** con fundamento en el artículo 86 de la Constitución Política y el Decreto 2591 de 1991, para que se protejan mis derechos fundamentales a [derechos vulnerados], con base en lo siguiente:\n\n## I. Hechos\n\n1. El [fecha], [describa el primer hecho].\n2. El [fecha], solicité a [entidad] [lo solicitado]. A la fecha [no he recibido respuesta / la respuesta fue negativa].\n3. [Explique la afectación actual y por qué es grave].\n\n## II. Derechos fundamentales vulnerados\n\n[Derecho 1] y [derecho 2], por las razones expuestas en los hechos.\n\n## III. Fundamentos de derecho\n\n- **Artículo 86 de la Constitución Política:** toda persona puede reclamar ante los jueces la protección inmediata de sus derechos fundamentales cuando resulten vulnerados o amenazados por la acción o la omisión de una autoridad pública o, en los casos que señala la ley, de particulares.\n- **Decreto 2591 de 1991:** reglamenta el trámite de la acción de tutela.\n- [Normas especiales aplicables al caso, por verificar].\n\n## IV. Procedencia\n\n- **Legitimación por activa:** actúo en nombre propio como titular de los derechos.\n- **Legitimación por pasiva:** [entidad] es a quien se atribuye la vulneración.\n- **Subsidiariedad:** [explique por qué no existe otro medio de defensa eficaz o por qué hay un perjuicio irremediable].\n- **Inmediatez:** la vulneración ocurrió el [fecha] y continúa, por lo que la acción se presenta en un término razonable.\n\n## V. Pretensiones\n\n1. **TUTELAR** mis derechos fundamentales a [derechos].\n2. **ORDENAR** a [entidad] que, en el término de [número] horas contado desde la notificación del fallo, [acción concreta].\n\n## VI. Pruebas y anexos\n\n1. Copia de mi documento de identidad.\n2. [Copia de la solicitud presentada y de la respuesta, si existe].\n3. [Otros documentos].\n\n## VII. Juramento\n\nManifiesto bajo la gravedad del juramento que no he presentado otra acción de tutela por los mismos hechos y derechos.\n\n## VIII. Notificaciones\n\n- **Accionante:** [dirección], [correo electrónico], [teléfono].\n- **Accionado:** [dirección o correo de notificaciones judiciales de la entidad].\n\nAtentamente,\n\n[Firma]\n[Nombre completo]\n[Documento de identidad]\n\n---\n**Antes de presentarlo:** completa todo lo que está entre corchetes y verifica la vigencia de las normas citadas en SUIN-Juriscol o en la Secretaría del Senado.\n\n_Esta información es orientación general, no asesoría jurídica personalizada. Para tu caso concreto consulta a un abogado._",
+  "escrito_peticion": "**Borrador de derecho de petición** _(ejemplo de la demostración, con datos genéricos)_\n\n[Ciudad], [fecha]\n\nSeñores\n**[ENTIDAD DESTINATARIA]**\n[Dirección o correo de la entidad]\n\n**Referencia:** Derecho de petición\n\n[Nombre completo], identificado(a) con [tipo y número de documento], en ejercicio del derecho fundamental de petición, presento respetuosamente la siguiente solicitud:\n\n## I. Hechos\n\n1. [Hecho 1, con fecha].\n2. [Hecho 2].\n\n## II. Peticiones\n\n1. [Petición concreta 1].\n2. [Petición concreta 2].\n\n## III. Fundamentos de derecho\n\n- **Artículo 23 de la Constitución Política:** toda persona tiene derecho a presentar peticiones respetuosas a las autoridades y a obtener pronta resolución.\n- **Ley 1755 de 2015:** regula el derecho fundamental de petición.\n\n## IV. Término para responder\n\nLa ley fija un término general de respuesta y términos especiales para algunas peticiones (por ejemplo, solicitudes de documentos o consultas). **Verifica el término que aplica a tu caso antes de contar los días.**\n\n## V. Anexos\n\n[Documentos que soportan la petición].\n\n## VI. Notificaciones\n\nRecibiré la respuesta en: [correo electrónico o dirección física].\n\nAtentamente,\n\n[Firma]\n[Nombre completo]\n\n---\n**Antes de enviarlo:** completa lo que está entre corchetes y verifica la vigencia de las normas en la fuente oficial.\n\n_Esta información es orientación general, no asesoría jurídica personalizada. Para tu caso concreto consulta a un abogado._",
+  "directo": "**Respuesta corta:** la acción de tutela es un mecanismo para pedirle a un juez que proteja de inmediato un derecho fundamental que está siendo vulnerado o amenazado por una autoridad o, en ciertos casos, por un particular.\n\n**Dónde está:** artículo 86 de la Constitución, reglamentado por el Decreto 2591 de 1991.\n\n**Cuándo procede (requisitos generales):**\n\n- *Legitimación:* la presenta el titular del derecho (o alguien en su nombre) contra quien lo vulnera.\n- *Subsidiariedad:* no debe existir otro medio de defensa judicial eficaz, salvo que se use como mecanismo transitorio para evitar un perjuicio irremediable.\n- *Inmediatez:* debe presentarse en un tiempo razonable desde la vulneración.\n\n**Cómo funciona:** no requiere abogado; se presenta por escrito y, en casos de urgencia o si la persona no sabe escribir, también de forma verbal. El juez debe decidir en un plazo máximo de diez días.\n\n**Ejemplo típico:** una EPS que niega un medicamento ordenado por el médico tratante, poniendo en riesgo la salud del paciente.\n\n---\n**Confianza:** Alta — es una institución constitucional estable.\n**Fuentes:** Constitución, art. 86; Decreto 2591 de 1991. Verifica la vigencia en SUIN-Juriscol.\n\n_Esta información es orientación general, no asesoría jurídica personalizada._",
+  "conmigo": "Vamos a resolverlo juntos, paso a paso.\n\nPrimera pregunta: **¿cuál es el problema jurídico?** Intenta formularlo en una sola frase, empezando por «¿Vulnera…?». Piensa en quién actúa, qué derecho está en juego y por qué razón la EPS negó el medicamento.",
+  "ensename": "**La idea central:** la tutela es un mecanismo rápido para proteger derechos fundamentales cuando no hay otro camino eficaz.\n\n**Un ejemplo cotidiano:** si tu EPS te niega un medicamento que tu médico te ordenó y cada semana sin él empeoras, esperar un proceso largo no te sirve: la tutela sí, porque el juez decide en días.\n\n**La norma:** artículo 86 de la Constitución, reglamentado por el Decreto 2591 de 1991. Verifica la vigencia en la fuente oficial.\n\n**El error más común:** confundir *subsidiariedad* (que no haya otro medio eficaz) con *inmediatez* (que se presente en un tiempo razonable). Son requisitos distintos.\n\n**Para comprobar que quedó claro:** si Lucía hubiera esperado dos años para presentar la tutela, ¿qué requisito estaría en riesgo?",
+  "examiname": "Empecemos el examen. Responde con fundamento.\n\n**Pregunta 1 de 5:** ¿Cuáles son los requisitos generales de procedencia de la acción de tutela y en qué norma se fundamentan?",
+  "auditar": "Pégame tu respuesta completa al caso y la evaluaré con la rúbrica: problema jurídico, marco normativo, argumentación, aplicación a los hechos, conclusión y claridad."
+ }
+}

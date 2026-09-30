@@ -53,48 +53,12 @@ a{color:var(--oro);text-decoration:none;font-size:13px}
     <input id="clave1" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
     <label class="lb">Confirma la contraseña</label>
     <input id="clave2" class="inp" type="password" placeholder="Repítela" autocomplete="new-password">
-    <button id="btn" class="btn" onclick="enviar()">Guardar nueva contraseña</button>
+    <button id="btn" class="btn" data-click="enviar">Guardar nueva contraseña</button>
     <div id="msg" class="msg"></div>
   </div>
 
   <a class="volver" href="/">← Volver a PULLEX IA</a>
 </div>
-<script>
-const params = new URLSearchParams(location.search);
-const token = params.get('token') || '';
-const $ = id => document.getElementById(id);
-
-if (!token) {
-  $('titulo').textContent = 'Enlace incompleto';
-  $('desc').textContent = 'Este enlace no trae la información necesaria. Pide uno nuevo desde la app.';
-  $('formulario').style.display = 'none';
-}
-
-async function enviar(){
-  const c1 = $('clave1').value, c2 = $('clave2').value;
-  $('msg').className = 'msg';
-  if (c1.length < 8) { $('msg').className='msg err'; $('msg').textContent='Mínimo 8 caracteres.'; return; }
-  if (c1 !== c2) { $('msg').className='msg err'; $('msg').textContent='Las contraseñas no coinciden.'; return; }
-  $('btn').disabled = true; $('btn').textContent = 'Guardando…';
-  try{
-    const r = await fetch('/api/restablecer-clave', {
-      method:'POST', headers:{'content-type':'application/json'},
-      body: JSON.stringify({token, clave: c1})
-    });
-    const d = await r.json().catch(()=>({}));
-    if (!r.ok) {
-      $('msg').className='msg err'; $('msg').textContent = d.detail || 'No se pudo actualizar.';
-      $('btn').disabled = false; $('btn').textContent = 'Guardar nueva contraseña';
-      return;
-    }
-    $('titulo').textContent = 'Contraseña actualizada';
-    $('desc').textContent = 'Ya puedes iniciar sesión con tu nueva contraseña.';
-    $('formulario').style.display = 'none';
-  }catch(e){
-    $('msg').className='msg err'; $('msg').textContent = 'Error de conexión. Intenta de nuevo.';
-    $('btn').disabled = false; $('btn').textContent = 'Guardar nueva contraseña';
-  }
-}
-</script>
+<script src="/static/restablecer.js"></script>
 </body>
 </html>

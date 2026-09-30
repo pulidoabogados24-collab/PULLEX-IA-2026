@@ -1,0 +1,778 @@
+// Si el CDN falla o su contenido no coincide con la huella (integrity), las librerías no
+// cargan: la app sigue funcionando y muestra las respuestas como texto plano seguro.
+const LIBS_OK=typeof marked!=='undefined'&&typeof DOMPurify!=='undefined';
+if(LIBS_OK)marked.setOptions({breaks:true});
+const $=id=>document.getElementById(id);
+let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
+function auth(){return {'Authorization':'Bearer '+TOKEN}}
+function md(t){return LIBS_OK?DOMPurify.sanitize(marked.parse(t||'')):esc(t).replace(/\n/g,'<br>')}
+function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+
+let modoActual='ingresar';
+function modoAuth(m){modoActual=m;
+  $('t-ing').classList.toggle('on',m==='ingresar');$('t-reg').classList.toggle('on',m==='registrar');
+  $('f-reg').classList.toggle('hidden',m!=='registrar');
+  $('a-olvido').classList.toggle('hidden',m!=='ingresar');
+  $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
+function abrirRecuperar(){$('m-recuperar').classList.remove('hidden');$('rec-msg').className='msg-e';$('rec-msg').textContent='';
+  $('rec-email').value=$('a-email').value||'';}
+function cerrarRecuperar(){$('m-recuperar').classList.add('hidden')}
+async function enviarRecuperar(){
+  const email=$('rec-email').value.trim();
+  if(!email){$('rec-msg').className='msg-e';$('rec-msg').textContent='Escribe tu correo.';return}
+  $('rec-btn').disabled=true;$('rec-btn').textContent='Enviando…';
+  try{
+    await fetch('/api/recuperar-clave',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email})});
+    $('rec-msg').className='msg-e';$('rec-msg').style.color='var(--ok)';
+    $('rec-msg').textContent='Si ese correo tiene una cuenta, te llegará un enlace en unos minutos. Revisa también spam.';
+  }catch(e){
+    $('rec-msg').className='msg-e';$('rec-msg').style.color='';
+    $('rec-msg').textContent='Error de conexión. Intenta de nuevo.';
+  }
+  $('rec-btn').disabled=false;$('rec-btn').textContent='Enviar enlace';
+}
+async function enviarAuth(){
+  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
+  const url=modoActual==='registrar'?'/api/registro':'/api/login';
+  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(cuerpo)});
+    const d=await r.json();
+    if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';return}
+    TOKEN=d.token;PERFIL=d.perfil;iniciar();
+  }catch(e){$('a-msg').textContent='Error de conexión'}
+}
+const CAPACIDADES=[
+  {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
+   d:'Identifica normas aplicables y contrasta líneas jurisprudenciales.',
+   p:'Necesito investigar qué normas y jurisprudencia aplican a mi caso. Pregúntame primero de qué se trata.'},
+  {ic:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
+   t:'Redacción de escritos',d:'Tutelas y derechos de petición con un formulario guiado y estructura procesal.',
+   abrir:'escrito'},
+  {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+   t:'Análisis de casos',d:'Hechos, pretensiones, riesgos y estrategia.',
+   p:'Quiero que analices mi caso. Pregúntame los hechos, qué pretendo lograr, y evalúa riesgos y estrategia.'},
+  {ic:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
+   t:'Cálculos jurídicos',d:'Liquidaciones laborales, términos procesales e intereses.',
+   p:'Ayúdame con un cálculo jurídico (liquidación laboral, término procesal o intereses). Pregúntame los datos.'},
+];
+async function iniciar(){
+  $('auth').classList.add('hidden');$('app').classList.remove('hidden');
+  try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
+  aplicarPerfil();aplicarTema(PERFIL.preferencias.tema);
+  $('modo').value=PERFIL.preferencias.modo||'auto';
+  WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
+}
+function aplicarPerfil(){
+  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').split(' ')[0];
+  $('c-plan').textContent=PERFIL.plan_nombre;$('c-rest').textContent=PERFIL.restantes;
+  $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
+  $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
+  $('cf-modo').value=PERFIL.preferencias.modo||'auto';
+  $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
+  $('cf-tema').classList.toggle('on',PERFIL.preferencias.tema==='claro');
+  $('cf-memoria').value=PERFIL.preferencias.memoria||'';
+  $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
+  pintarAreas();pintarPlanes();
+}
+function pintarAreas(){
+  const cont=$('areas');cont.innerHTML='';const sel=PERFIL.preferencias.areas||[];
+  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('div');
+    el.className='area'+(sel.includes(a)?' on':'');el.textContent=a;
+    el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
+}
+function pintarPlanes(){
+  const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
+  ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
+    el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
+      <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
+}
+function ver(v){['inicio','modular','chat','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
+  if(v==='chat')cargarConvs();else cerrarHistorial();
+  if(v==='modular')mlInit();
+  if(v==='inicio')cargarProgresoInicio();}
+
+async function cargarBoletin(forzar){
+  if(forzar)$('boletin').innerHTML='<div class="skel" style="width:90%"></div><div class="skel" style="width:75%"></div>';
+  try{
+    const admin=forzar&&PERFIL.es_admin;
+    const d=await(await fetch(admin?'/api/admin/boletin/regenerar':'/api/boletin',
+      {method:admin?'POST':'GET',headers:auth()})).json();
+    $('boletin').innerHTML=md(d.contenido);$('b-fecha').textContent=d.fecha?('· '+d.fecha):'';
+  }catch(e){$('boletin').textContent='No se pudo cargar el boletín.'}
+}
+
+function pintarWeb(){$('chip-web').classList.toggle('on',WEB)}
+function toggleWeb(){WEB=!WEB;pintarWeb()}
+function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
+function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
+function sug(b){const s=b.querySelector('span');$('txt').value=s?s.textContent:b.textContent;autoAlto($('txt'));$('txt').focus()}
+// La conversación se crea en el servidor al enviar el primer mensaje (no al abrir el chat),
+// para que el historial no se llene de consultas vacías.
+async function nuevaConv(){
+  try{const d=await(await fetch('/api/conversaciones',{method:'POST',headers:auth()})).json();
+    CONV=d.id;}catch(e){}
+}
+
+// ------------------------------------------------------------ historial de consultas --
+let CONVS=[], CARGA_CONV=0;
+const ICO_BORRAR='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg>';
+function esEscritorio(){return window.matchMedia('(min-width:760px)').matches}
+function toggleHistorial(){$('chat-lay').classList.toggle('hist-abierto')}
+function cerrarHistorial(){$('chat-lay').classList.remove('hist-abierto')}
+async function cargarConvs(){
+  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){}
+}
+function pintarConvs(){
+  const l=$('convs-lista');l.textContent='';
+  if(!CONVS.length){const v=document.createElement('div');v.className='convs-vacio';
+    const b=document.createElement('b');b.textContent='Aún no tienes consultas guardadas';v.appendChild(b);
+    v.appendChild(document.createTextNode('Cuando escribas tu primera consulta, aparecerá aquí para que la retomes cuando quieras.'));
+    l.appendChild(v);return}
+  CONVS.forEach(c=>{
+    const f=document.createElement('div');f.className='conv'+(c.id===CONV?' on':'');
+    const t=document.createElement('button');t.className='conv-t';t.type='button';
+    t.textContent=c.titulo||'Consulta';t.title=c.titulo||'';
+    if(c.id===CONV)t.setAttribute('aria-current','true');
+    t.addEventListener('click',()=>abrirConv(c.id));
+    const x=document.createElement('button');x.className='conv-x';x.type='button';
+    x.title='Borrar consulta';x.setAttribute('aria-label','Borrar consulta');x.innerHTML=ICO_BORRAR;
+    x.addEventListener('click',()=>confirmarBorrado(c));
+    f.appendChild(t);f.appendChild(x);l.appendChild(f);
+  });
+}
+function confirmarBorrado(c){
+  if(enviando&&c.id===CONV){toast('Espera a que termine la respuesta para borrar esta consulta.');return}
+  pintarConvs(); // cierra cualquier otra confirmación abierta
+  const destino=[...$('convs-lista').children][CONVS.indexOf(c)];if(!destino)return;
+  const k=document.createElement('div');k.className='conv-conf';
+  const p=document.createElement('p');p.textContent='¿Borrar «'+(c.titulo||'Consulta')+'»? No se puede deshacer.';
+  const acc=document.createElement('div');
+  const no=document.createElement('button');no.type='button';no.className='bsec';no.textContent='Cancelar';
+  no.addEventListener('click',pintarConvs);
+  const si=document.createElement('button');si.type='button';si.className='borrar';si.textContent='Borrar';
+  si.addEventListener('click',()=>borrarConv(c.id,si));
+  acc.appendChild(no);acc.appendChild(si);k.appendChild(p);k.appendChild(acc);
+  destino.replaceWith(k);si.focus();
+}
+async function borrarConv(id,boton){
+  if(boton){boton.disabled=true;boton.textContent='Borrando…'}
+  try{
+    const r=await fetch('/api/conversaciones/'+id,{method:'DELETE',headers:auth()});
+    if(!r.ok&&r.status!==404)throw new Error();
+    CONVS=CONVS.filter(c=>c.id!==id);
+    if(id===CONV)nuevaConsulta();else pintarConvs();
+    toast('Consulta borrada');
+  }catch(e){toast('No se pudo borrar. Intenta de nuevo.');pintarConvs()}
+}
+function nuevaConsulta(){
+  if(enviando){toast('Espera a que termine la respuesta actual.');return false}
+  CARGA_CONV++;CONV=null;$('hilo').innerHTML='';$('sugs').classList.remove('hidden');
+  pintarConvs();cerrarHistorial();
+  if(esEscritorio()&&$('v-chat').classList.contains('on'))$('txt').focus();
+  return true;
+}
+async function abrirConv(id){
+  if(id===CONV&&$('hilo').children.length){cerrarHistorial();return}
+  if(enviando){toast('Espera a que termine la respuesta actual.');return}
+  const turno=++CARGA_CONV;CONV=id;pintarConvs();cerrarHistorial();
+  $('sugs').classList.add('hidden');
+  $('hilo').innerHTML='<div class="skel" style="width:70%;margin-top:20px"></div><div class="skel" style="width:88%"></div><div class="skel" style="width:60%"></div>';
+  try{
+    const msgs=await api('/api/conversaciones/'+id+'/mensajes');
+    if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
+    $('hilo').innerHTML='';
+    msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido)});
+    if(!msgs.length)$('sugs').classList.remove('hidden');
+  }catch(e){
+    if(turno!==CARGA_CONV)return;
+    toast('No se pudo abrir esa consulta.');CONV=null;$('hilo').innerHTML='';$('sugs').classList.remove('hidden');cargarConvs();
+  }
+}
+function tomarArchivos(ev){
+  [...ev.target.files].forEach(f=>{
+    if(f.size>7*1024*1024){toast('“'+f.name+'” supera 7 MB');return}
+    const r=new FileReader();
+    r.onload=()=>{ADJ.push({nombre:f.name,tipo:f.type.startsWith('image/')?'image':'document',
+      media_type:f.type||'application/pdf',datos:r.result.split(',')[1]});pintarAdj();};
+    r.readAsDataURL(f);
+  });ev.target.value='';
+}
+function icoAdj(tipo){return tipo==='image'
+  ?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>'
+  :'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'}
+function pintarAdj(){const c=$('adjfila');c.innerHTML='';
+  ADJ.forEach((a,i)=>{const e=document.createElement('div');e.className='ch';
+    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <b>✕</b>';
+    e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
+function burbuja(rol,texto,adj){
+  const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
+  b.innerHTML=`<div class="av">${rol==='user'?'Tú':'PX'}</div><div class="bd"><div class="md"></div></div>`;
+  b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
+  if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
+    adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
+      s.innerHTML=icoAdj(a.tipo)+esc(a.nombre);d.appendChild(s)});
+    b.querySelector('.bd').appendChild(d);}
+  $('hilo').appendChild(b);scroll();return b;
+}
+function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
+
+// opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
+async function enviar(opc){
+  const texto=$('txt').value.trim();
+  if((!texto&&!ADJ.length)||enviando)return;
+  if(PERFIL.restantes<=0){toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
+  enviando=true;$('env').disabled=true;
+  if(!CONV)await nuevaConv();
+  const cid=CONV;
+  $('sugs').classList.add('hidden');
+  const adjEnvio=ADJ.slice();
+  burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
+  const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
+  let buffer='',raf=null;
+  const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+      body:JSON.stringify({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio})});
+    if(!r.ok){const d=await r.json().catch(()=>({}));cont.classList.remove('cursor');
+      cont.innerHTML=md('**Aviso:** '+(d.detail||'No se pudo procesar.'));
+      enviando=false;$('env').disabled=false;if(r.status===402||r.status===403)ver('config');return}
+    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
+    while(true){const {value,done}=await rd.read();if(done)break;
+      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
+      for(const l of lineas){if(!l.startsWith('data: '))continue;
+        const ev=JSON.parse(l.slice(6));
+        if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
+        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+      }
+    }
+  }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
+  if(raf)cancelAnimationFrame(raf);
+  cont.classList.remove('cursor');cont.innerHTML=md(buffer);
+  if(buffer.trim())accionesResp(bIA,buffer);scroll();
+  enviando=false;$('env').disabled=false;
+  PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
+  // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
+  if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
+  cargarConvs();
+}
+function accionesResp(b,texto){
+  const a=document.createElement('div');a.className='acc';
+  a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
+  const [c,d,p]=a.querySelectorAll('button');
+  c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
+  d.onclick=()=>descargar('pullex-respuesta.txt',texto);
+  p.onclick=imprimirPDF;
+  b.querySelector('.bd').appendChild(a);
+  // "Confianza" y "Fuentes" las escribe el propio modelo: se rotulan como autoevaluación
+  // para que nadie las lea como una verificación hecha por PULLEX (hallazgo AI-2).
+  if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
+    n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
+    b.querySelector('.bd').appendChild(n);}
+}
+function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
+  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
+function imprimirPDF(){window.print()}
+function exportarExcel(){
+  const tablas=$('hilo').querySelectorAll('.b.ia table');
+  if(!tablas.length){toast('No hay tablas para exportar. Pide una liquidación o un cuadro.');return}
+  const t=tablas[tablas.length-1];let csv=[];
+  t.querySelectorAll('tr').forEach(tr=>{csv.push([...tr.querySelectorAll('th,td')]
+    .map(x=>'"'+x.textContent.replace(/"/g,'""')+'"').join(','))});
+  const bl=new Blob(['﻿'+csv.join('\n')],{type:'text/csv;charset=utf-8'});
+  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download='pullex-liquidacion.csv';a.click();
+  URL.revokeObjectURL(u);toast('Descargado (ábrelo en Excel)');
+}
+
+async function guardarPrefs(){
+  const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
+  const body={areas,modo:$('cf-modo').value,tema:document.body.classList.contains('claro')?'claro':'oscuro',
+    web:$('cf-web').classList.contains('on')};
+  try{const d=await(await fetch('/api/preferencias',{method:'POST',
+    headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
+    WEB=d.preferencias.web;pintarWeb();}catch(e){}
+}
+async function guardarMemoria(){
+  try{await fetch('/api/preferencias',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+    body:JSON.stringify({memoria:$('cf-memoria').value})});
+    PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
+}
+function togglePref(el){el.classList.toggle('on');guardarPrefs()}
+function toggleTema(el){el.classList.toggle('on');aplicarTema(el.classList.contains('on')?'claro':'oscuro');guardarPrefs()}
+function aplicarTema(t){document.body.classList.toggle('claro',t==='claro');
+  document.body.classList.toggle('oscuro',t!=='claro');
+  document.querySelector('meta[name=theme-color]').content=t==='claro'?'#eef3fb':'#0A1E3F'}
+
+const ICONOS_TOOL={
+  tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
+  peticion:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/>',
+  liquidacion:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1 1-1.5 3-1.5s3 .8 3 2-1.2 1.7-3 2-3 .8-3 2 1.2 2 3 2 3-.5 3-1.5"/>',
+  sentencia:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+  termino:'<rect x="3" y="4" width="18" height="18" rx="2.5"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4l3 2"/>',
+  demanda:'<path d="M12 2l8 4v5c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6z"/>',
+  empresa:'<path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5M9 12h.01M15 12h.01M9 8h.01M15 8h.01"/>',
+  marca:'<circle cx="12" cy="12" r="9"/><path d="M9 8v8M9 12h3.5a2 2 0 1 0 0-4H9M9 12h4a2 2 0 1 1 0 4H9"/>',
+  reporte:'<path d="M3 17l6-6 4 4 8-8M21 7v6h-6"/>',
+  alimentos:'<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 21c0-3.9 2.7-6 6-6s6 2.1 6 6M14 21c0-2.8 1.8-5 4-5s4 2.2 4 5"/>',
+};
+function icoTool(nombre,size=18){return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONOS_TOOL[nombre]}</svg>`}
+const HERRAMIENTAS=[
+  {i:'tutela',t:'Redactar tutela',p:'Ayúdame a redactar una acción de tutela. Pregúntame primero, uno por uno, los datos que necesitas (mis datos, la entidad accionada, el derecho fundamental vulnerado y los hechos) y luego arma el escrito completo.'},
+  {i:'peticion',t:'Derecho de petición',p:'Ayúdame a redactar un derecho de petición. Pregúntame a qué entidad va dirigido, qué solicito y los hechos, y luego redacta el escrito formal.'},
+  {i:'liquidacion',t:'Liquidación laboral',p:'Calcula una liquidación laboral (cesantías, intereses, prima, vacaciones e indemnización si aplica). Pregúntame el salario, las fechas de inicio y fin, el tipo de contrato y si hubo auxilio de transporte. Muestra el resultado en una TABLA.'},
+  {i:'sentencia',t:'Entender una sentencia',p:'Te voy a pasar una sentencia (o la adjunto). Explícamela en palabras simples: qué decidió, por qué, y la regla que fija. No uses tecnicismos sin explicarlos.'},
+  {i:'termino',t:'Calcular un término',p:'Ayúdame a calcular un término procesal. Pregúntame de qué actuación se trata, la fecha de inicio y si son días hábiles o calendario, y adviérteme sobre suspensiones o vacancias.'},
+  {i:'demanda',t:'Contestar una demanda',p:'Me demandaron y necesito contestar. Pregúntame los datos del proceso y los hechos, y ayúdame con el pronunciamiento sobre los hechos y las excepciones de mérito.'},
+  {i:'empresa',t:'Crear una empresa (SAS)',p:'Quiero constituir una SAS en Colombia. Explícame el paso a paso y ayúdame con lo que necesito (objeto social, capital, trámite en Cámara de Comercio).'},
+  {i:'marca',t:'Registrar una marca',p:'Quiero registrar una marca ante la SIC. Explícame el proceso, la clasificación de Niza y la búsqueda de antecedentes, y guíame paso a paso.'},
+  {i:'reporte',t:'Reporte en centrales de riesgo',p:'Tengo un problema con un reporte en Datacrédito/centrales de riesgo. Explícame mis derechos (habeas data) y ayúdame a redactar el reclamo.'},
+  {i:'alimentos',t:'Cuota de alimentos',p:'Necesito orientación sobre una cuota de alimentos para un menor. Pregúntame los datos y explícame las opciones y a dónde acudir.'},
+];
+function abrirTools(){
+  const g=$('tools-grid');g.innerHTML='';
+  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');
+    b.className='bsec';b.style.cssText='text-align:left;padding:12px;border-radius:11px;font-size:13px;line-height:1.3';
+    b.innerHTML=`<div style="color:var(--oro)">${icoTool(h.i)}</div><b style="color:var(--oro)">${h.t}</b>`;
+    b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
+  $('m-tools').classList.remove('hidden');
+}
+function cerrarTools(){$('m-tools').classList.add('hidden')}
+function usarTool(p,estilo){$('estilo').value=estilo||'directo';cerrarTools();ver('chat');
+  // Cada herramienta es un asunto nuevo: se abre en una consulta nueva (la anterior queda en el historial).
+  if($('hilo').children.length&&!enviando)nuevaConsulta();
+  $('txt').value=p;autoAlto($('txt'));$('txt').focus();
+  toast('Ajusta los datos si quieres y presiona enviar')}
+
+// -------------------------------------------------------------------- Document Studio --
+// Formulario guiado que arma una solicitud estructurada y la envía al chat como una consulta
+// nueva. Los datos del usuario solo se tratan como texto (textContent / value), nunca como HTML.
+const ESCRITO_ENCABEZADO='SOLICITUD DE REDACCIÓN';
+const ESCRITOS={
+  tutela:{nombre:'Acción de tutela',campos:[
+    {id:'nombre',l:'Nombre de quien presenta la tutela',req:1,ph:'Nombre completo',auto:'name'},
+    {id:'ident',l:'Identificación',ph:'Tipo y número de documento'},
+    {id:'ciudad',l:'Ciudad',req:1,ph:'Ej.: Bogotá',auto:'address-level2'},
+    {id:'contra',l:'¿Contra quién? (entidad o particular)',req:1,ph:'Ej.: mi EPS, un fondo de pensiones, la alcaldía'},
+    {id:'derechos',l:'Derecho(s) que consideras vulnerado(s)',req:1,ancho:1,ph:'Ej.: salud, vida digna, petición, debido proceso'},
+    {id:'hechos',l:'Hechos: qué pasó y cuándo',req:1,ancho:1,filas:5,ph:'Cuenta en orden lo ocurrido, con fechas aunque sean aproximadas.'},
+    {id:'previas',l:'Actuaciones previas',ancho:1,filas:3,ph:'¿Ya le pediste algo a la entidad? ¿Cuándo y qué te respondió?'},
+    {id:'pide',l:'¿Qué le pides al juez?',req:1,ancho:1,filas:3,ph:'Ej.: que ordene a la EPS entregar el medicamento formulado.'},
+    {id:'urgente',l:'¿Hay un perjuicio urgente?',opciones:['No lo sé','Sí','No']},
+    {id:'urgencia',l:'Si es urgente, ¿por qué?',ph:'Ej.: riesgo para la salud o la vida'},
+  ]},
+  peticion:{nombre:'Derecho de petición',campos:[
+    {id:'nombre',l:'Nombre de quien hace la petición',req:1,ph:'Nombre completo',auto:'name'},
+    {id:'ident',l:'Identificación',ph:'Tipo y número de documento'},
+    {id:'entidad',l:'Entidad o persona a la que va dirigida',req:1,ancho:1,ph:'Ej.: la alcaldía de tu municipio, tu EPS, una empresa'},
+    {id:'solicita',l:'¿Qué solicitas?',req:1,ancho:1,filas:3,ph:'Ej.: copia de mi historia laboral; que corrijan un dato.'},
+    {id:'hechos',l:'Hechos y fundamento',req:1,ancho:1,filas:4,ph:'¿Por qué lo pides? Cuenta lo ocurrido en orden.'},
+    {id:'medio',l:'¿Dónde quieres recibir la respuesta?',req:1,ancho:1,ph:'Correo electrónico o dirección física',auto:'email'},
+  ]},
+};
+let ES_TIPO='tutela';
+function esCampo(tipo,id){return $('es-'+tipo+'-'+id)}
+function construirEscrito(){
+  const cont=$('es-campos');if(cont.children.length)return;
+  Object.entries(ESCRITOS).forEach(([tipo,def])=>{
+    const g=document.createElement('div');g.className='es-grid';g.id='es-grupo-'+tipo;
+    def.campos.forEach(c=>{
+      const w=document.createElement('div');w.className='es-campo'+(c.ancho?' ancho':'');
+      const lb=document.createElement('label');const idc='es-'+tipo+'-'+c.id;lb.htmlFor=idc;
+      lb.appendChild(document.createTextNode(c.l));
+      const m=document.createElement('span');
+      if(c.req){m.className='req';m.textContent='*';m.setAttribute('aria-hidden','true')}
+      else if(!c.opciones){m.className='opc-t';m.textContent=' (opcional)'}
+      lb.appendChild(m);w.appendChild(lb);
+      let el;
+      if(c.opciones){el=document.createElement('select');
+        c.opciones.forEach(o=>{const op=document.createElement('option');op.textContent=o;el.appendChild(op)})}
+      else if(c.filas){el=document.createElement('textarea');el.rows=c.filas}
+      else{el=document.createElement('input');el.type='text'}
+      el.id=idc;el.className='inp';if(c.ph)el.placeholder=c.ph;if(c.auto)el.autocomplete=c.auto;
+      if(c.req){el.required=true;el.setAttribute('aria-required','true')}
+      el.maxLength=c.filas?4000:300;
+      el.addEventListener('input',()=>esLimpiarError(el));
+      w.appendChild(el);g.appendChild(w);
+    });
+    cont.appendChild(g);
+  });
+}
+function esLimpiarError(el){el.classList.remove('error');el.removeAttribute('aria-invalid');
+  const e=el.parentNode.querySelector('.err');if(e)e.remove()}
+function escritoTipo(t){
+  ES_TIPO=ESCRITOS[t]?t:'tutela';
+  Object.keys(ESCRITOS).forEach(k=>{$('es-tipo-'+k).classList.toggle('on',k===ES_TIPO);
+    $('es-tipo-'+k).setAttribute('aria-pressed',String(k===ES_TIPO));
+    $('es-grupo-'+k).classList.toggle('hidden',k!==ES_TIPO)});
+  $('es-msg').textContent='';
+}
+function abrirEscrito(tipo){
+  construirEscrito();escritoTipo(typeof tipo==='string'?tipo:ES_TIPO);
+  $('m-escrito').classList.remove('hidden');$('m-escrito').querySelector('.card').scrollTop=0;
+  if(esEscritorio())esCampo(ES_TIPO,'nombre').focus();
+}
+function cerrarEscrito(){$('m-escrito').classList.add('hidden')}
+function valoresEscrito(tipo){const v={};ESCRITOS[tipo].campos.forEach(c=>{v[c.id]=esCampo(tipo,c.id).value.trim()});return v}
+function validarEscrito(tipo){
+  let primero=null;
+  ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);esLimpiarError(el);
+    if(c.req&&!el.value.trim()){el.classList.add('error');el.setAttribute('aria-invalid','true');
+      const e=document.createElement('div');e.className='err';e.textContent='Este dato es obligatorio.';el.after(e);
+      if(!primero)primero=el}});
+  return primero;
+}
+function textoEscrito(tipo,v){
+  const falta=t=>v[t]||'[no indicado]';
+  const cierre=['',
+    '- Marca entre corchetes [ ] todo dato que falte o que yo deba completar (por ejemplo, [número de cédula] o [dirección para notificaciones]).',
+    '- No inventes números de sentencias, radicados, fechas ni datos de las partes. Si mencionas jurisprudencia de la que no tengas certeza, indícalo para que la verifique.',
+    '- Al final, advierte que se debe verificar la vigencia de las normas citadas en la fuente oficial (SUIN-Juriscol o Secretaría del Senado) antes de presentar el escrito.'];
+  if(tipo==='tutela')return [
+    ESCRITO_ENCABEZADO+' — ACCIÓN DE TUTELA','',
+    'Redacta el borrador completo de una acción de tutela con estos datos:','',
+    'ACCIONANTE','- Nombre: '+falta('nombre'),'- Identificación: '+falta('ident'),'- Ciudad: '+falta('ciudad'),'',
+    'ACCIONADO (entidad o particular)',falta('contra'),'',
+    'DERECHOS FUNDAMENTALES QUE CONSIDERO VULNERADOS',falta('derechos'),'',
+    'HECHOS',falta('hechos'),'',
+    'ACTUACIONES PREVIAS',v.previas||'No indicadas.','',
+    'LO QUE PIDO AL JUEZ',falta('pide'),'',
+    'PERJUICIO URGENTE',(v.urgente||'No lo sé')+(v.urgencia?' — '+v.urgencia:''),'',
+    'INSTRUCCIONES PARA EL BORRADOR',
+    '- Usa la estructura procesal colombiana: juez competente (juez de la República, reparto) en la ciudad indicada; identificación de las partes; hechos numerados; derechos fundamentales vulnerados; fundamentos de derecho (artículo 86 de la Constitución Política y Decreto 2591 de 1991, y otras normas solo si son pertinentes); procedencia (legitimación en la causa por activa y por pasiva, subsidiariedad e inmediatez); pretensiones; pruebas y anexos; juramento de no haber presentado otra acción de tutela por los mismos hechos y derechos; notificaciones; firma.',
+    '- Si hay un perjuicio urgente, incluye la solicitud de medida provisional prevista en el Decreto 2591 de 1991 y sustenta por qué no da espera.',
+    ...cierre].join('\n');
+  return [
+    ESCRITO_ENCABEZADO+' — DERECHO DE PETICIÓN','',
+    'Redacta el borrador completo de un derecho de petición con estos datos:','',
+    'PETICIONARIO','- Nombre: '+falta('nombre'),'- Identificación: '+falta('ident'),'',
+    'DESTINATARIO',falta('entidad'),'',
+    'LO QUE SOLICITO',falta('solicita'),'',
+    'HECHOS Y FUNDAMENTO',falta('hechos'),'',
+    'MEDIO PARA RECIBIR LA RESPUESTA',falta('medio'),'',
+    'INSTRUCCIONES PARA EL BORRADOR',
+    '- Usa la estructura formal colombiana: ciudad y fecha; destinatario; referencia; identificación del peticionario; hechos numerados; peticiones concretas y numeradas; fundamentos de derecho (artículo 23 de la Constitución Política y Ley 1755 de 2015); anexos; dirección para notificaciones; firma.',
+    '- Indica el término legal que tiene la entidad para responder según el tipo de petición, advirtiendo que ese término debe verificarse.',
+    ...cierre].join('\n');
+}
+function enviarEscrito(){
+  if(enviando){toast('Espera a que termine la respuesta actual.');return}
+  const tipo=ES_TIPO;const malo=validarEscrito(tipo);
+  if(malo){$('es-msg').textContent='Completa los campos marcados para poder redactar el borrador.';malo.focus();return}
+  if(PERFIL.restantes<=0){cerrarEscrito();toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
+  const v=valoresEscrito(tipo);
+  const titulo=tipo==='tutela'?'Tutela contra '+v.contra:'Petición a '+v.entidad;
+  cerrarEscrito();$('estilo').value='directo';ver('chat');
+  if(!nuevaConsulta())return;
+  $('txt').value=textoEscrito(tipo,v);
+  ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);el.value=c.opciones?c.opciones[0]:''});
+  enviar({titulo});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('m-escrito').classList.contains('hidden'))cerrarEscrito()});
+function abrirClave(){$('m-clave').classList.remove('hidden');$('k-msg').textContent=''}
+function cerrarClave(){$('m-clave').classList.add('hidden');$('k-act').value='';$('k-new').value=''}
+async function guardarClave(){
+  const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+    body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
+  const d=await r.json();if(!r.ok){$('k-msg').textContent=d.detail||'No se pudo';return}
+  if(d.token)TOKEN=d.token; // las demás sesiones quedaron cerradas; esta sigue con token nuevo
+  cerrarClave();toast('Contraseña actualizada. Se cerró la sesión en tus otros dispositivos.');
+}
+async function cerrarSesiones(){
+  if(!confirm('Se cerrará tu sesión en todos los dispositivos, incluido este. ¿Continuar?'))return;
+  try{await fetch('/api/cerrar-sesiones',{method:'POST',headers:auth()})}catch(e){}
+  salir();
+}
+async function reenviarVerificacion(){
+  const b=$('btn-reenviar-verif');const t0=b.textContent;b.disabled=true;b.textContent='Enviando…';
+  try{
+    const r=await fetch('/api/reenviar-verificacion',{method:'POST',headers:auth()});
+    const d=await r.json().catch(()=>({}));
+    toast(r.ok?(d.mensaje||'Te enviamos un correo de verificación'):(d.detail||'No se pudo enviar. Intenta más tarde.'));
+  }catch(e){toast('Error de conexión')}
+  b.disabled=false;b.textContent=t0;
+}
+function salir(){TOKEN=null;PERFIL=null;CONV=null;location.reload()}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+
+// -------------------------------------------------------- instalar como app --
+let DEFERRED_INSTALL=null;
+const esStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+function mostrarBotonInstalar(){
+  if(esStandalone())return; // ya está instalada, no mostrar nada
+  $('btn-instalar-ic').classList.remove('hidden');
+  $('btn-instalar-hero').classList.remove('hidden');
+}
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar();
+});
+window.addEventListener('appinstalled',()=>{
+  DEFERRED_INSTALL=null;$('btn-instalar-ic').classList.add('hidden');$('btn-instalar-hero').classList.add('hidden');
+  toast('PULLEX IA instalada');
+});
+async function instalarApp(){
+  if(DEFERRED_INSTALL){
+    DEFERRED_INSTALL.prompt();
+    const r=await DEFERRED_INSTALL.userChoice;
+    if(r.outcome==='accepted')toast('Instalando…');
+    DEFERRED_INSTALL=null;
+    return;
+  }
+  if(esIOS()){
+    toast('En Safari: toca Compartir (□↑) y luego "Agregar a pantalla de inicio"');
+    return;
+  }
+  toast('Busca "Instalar app" en el menú de tu navegador');
+}
+// Android/Chrome dispara beforeinstallprompt de forma asíncrona; en iOS nunca llega,
+// así que mostramos el botón igual (con instrucciones manuales) salvo que ya esté instalada.
+if(esIOS()&&!esStandalone())mostrarBotonInstalar();
+function abrirSelectorArchivo(){document.getElementById('file').click()}
+
+// =========================================================================================
+// PULLEX Academia — dos caminos en el inicio y Modular Lab
+// =========================================================================================
+const APRENDER=[
+  {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+   t:'Practicar un modular',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
+  {ic:'<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
+   t:'Enséñame un tema',d:'Explicación por capas, con ejemplo, norma y el error más común.',
+   p:'Quiero aprender este tema: ',estilo:'ensename'},
+  {ic:'<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+   t:'Resuélvelo conmigo',d:'Tutor socrático: te guía con preguntas hasta que llegas a la respuesta.',
+   p:'Quiero resolver este caso paso a paso contigo: ',estilo:'conmigo'},
+  {ic:'<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M6 10v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>',
+   t:'Examíname',d:'Simulacro oral: una pregunta a la vez, exige fundamento y cambia los hechos.',
+   p:'Examíname sobre: ',estilo:'examiname'},
+];
+let CAMINO='aprender';
+function elegirCamino(c){
+  CAMINO=c==='trabajar'?'trabajar':'aprender';
+  $('cam-aprender').classList.toggle('on',CAMINO==='aprender');
+  $('cam-trabajar').classList.toggle('on',CAMINO==='trabajar');
+  pintarCapacidades();cargarProgresoInicio();
+  if(PERFIL&&PERFIL.preferencias.camino!==CAMINO){PERFIL.preferencias.camino=CAMINO;
+    fetch('/api/preferencias',{method:'POST',headers:{...auth(),'content-type':'application/json'},
+      body:JSON.stringify({camino:CAMINO})}).catch(()=>{});}
+}
+function pintarCapacidades(){
+  const g=$('capgrid');g.innerHTML='';
+  (CAMINO==='trabajar'?CAPACIDADES:APRENDER).forEach(c=>{
+    const b=document.createElement('button');b.className='captarj';
+    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
+    const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
+    b.appendChild(t);b.appendChild(d);
+    b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
+    g.appendChild(b);
+  });
+}
+async function cargarProgresoInicio(){
+  const el=$('progreso-inicio');
+  if(CAMINO!=='aprender'){el.classList.add('hidden');return}
+  try{
+    const p=await api('/api/modular/progreso');
+    if(!p.resueltos){el.classList.add('hidden');return}
+    el.textContent='';
+    const item=(txt,val,cls)=>{const s=document.createElement('span');s.appendChild(document.createTextNode(txt+' '));
+      const b=document.createElement('b');b.textContent=val;if(cls)b.className=cls;s.appendChild(b);el.appendChild(s)};
+    item('Modulares resueltos',p.resueltos);
+    item('Promedio',p.promedio+'/100');
+    if(p.a_reforzar&&p.a_reforzar.length)item('Refuerza',p.a_reforzar[0],'ref');
+    el.classList.remove('hidden');
+  }catch(e){el.classList.add('hidden')}
+}
+
+async function api(url,opts){
+  const o=opts||{};const h={...auth()};if(o.body)h['content-type']='application/json';
+  const r=await fetch(url,{method:o.body?'POST':'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.detail||'No se pudo completar la solicitud.');
+  if(typeof d.restantes==='number'&&PERFIL){PERFIL.restantes=d.restantes;$('c-rest').textContent=d.restantes;
+    PERFIL.usadas=PERFIL.limite-d.restantes;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite}
+  return d;
+}
+
+// ------------------------------------------------------------------------ Modular Lab --
+const ML={opciones:null,area:null,nivel:'basico',caso:null,pistas:0,evaluado:false,confirmarSol:false};
+async function mlInit(){
+  if(!ML.opciones){
+    try{ML.opciones=await api('/api/modular/opciones')}catch(e){toast(e.message);return}
+    ML.area=ML.opciones.areas[0];
+    const hacer=(cont,items,clave,actual)=>{cont.textContent='';items.forEach(it=>{
+      const b=document.createElement('button');b.type='button';b.textContent=it.nombre||it;
+      const val=it.id||it;if(val===ML[clave])b.classList.add('on');
+      b.addEventListener('click',()=>{ML[clave]=val;[...cont.children].forEach(x=>x.classList.toggle('on',x===b))});
+      cont.appendChild(b)})};
+    hacer($('ml-areas'),ML.opciones.areas,'area');
+    hacer($('ml-niveles'),ML.opciones.niveles,'nivel');
+  }
+  mlProgreso();
+}
+function mlOcupado(boton,texto){const t=boton.textContent;boton.disabled=true;boton.textContent=texto;
+  return ()=>{boton.disabled=false;boton.textContent=t}}
+async function mlGenerar(variacionDe){
+  const b=variacionDe?null:$('ml-generar');const listo=b?mlOcupado(b,'Generando caso…'):null;
+  if(variacionDe)toast('Preparando la variación del caso…');
+  try{
+    const c=await api('/api/modular/caso',{body:variacionDe?{variacion_de:variacionDe}:{area:ML.area,nivel:ML.nivel}});
+    mlMostrarCaso(c);
+  }catch(e){toast(e.message)}
+  if(listo)listo();
+}
+function mlMostrarCaso(c){
+  ML.caso=c;ML.pistas=0;ML.evaluado=false;ML.confirmarSol=false;
+  const nombreNivel=(ML.opciones&&ML.opciones.niveles.find(n=>n.id===c.nivel)||{}).nombre||c.nivel;
+  const meta=$('ml-meta');meta.textContent='';
+  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']].forEach(([t,k])=>{
+    const s=document.createElement('span');s.className=k;s.textContent=t;meta.appendChild(s)});
+  $('ml-cambio').classList.toggle('hidden',!c.cambio);$('ml-cambio').textContent=c.cambio||'';
+  $('ml-titulo').textContent=c.titulo;
+  $('ml-enunciado').innerHTML=md(c.enunciado);
+  $('ml-pregunta').textContent=c.pregunta;
+  $('ml-pistas').textContent='';$('ml-resp').value='';mlContar();
+  $('ml-btn-pista').disabled=!c.n_pistas;$('ml-btn-pista').textContent='Necesito una pista';
+  $('ml-btn-sol').textContent='Ver solución';
+  ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
+  $('ml-caso').classList.remove('hidden');
+  $('ml-caso').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length;
+  $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
+async function mlPista(){
+  if(!ML.caso)return;
+  try{
+    const p=await api('/api/modular/pista',{body:{caso_id:ML.caso.id,n:ML.pistas}});
+    const d=document.createElement('div');d.className='pista';
+    const b=document.createElement('b');b.textContent='Pista '+(p.n+1)+': ';d.appendChild(b);
+    d.appendChild(document.createTextNode(p.pista));$('ml-pistas').appendChild(d);
+    ML.pistas++;
+    if(!p.quedan){$('ml-btn-pista').disabled=true;$('ml-btn-pista').textContent='Sin más pistas'}
+  }catch(e){toast(e.message)}
+}
+async function mlEvaluar(){
+  if(!ML.caso)return;
+  const resp=$('ml-resp').value.trim();
+  if(resp.length<40){toast('Escribe una respuesta más completa antes de evaluarla.');$('ml-resp').focus();return}
+  const listo=mlOcupado($('ml-btn-eval'),'Evaluando…');
+  try{const ev=await api('/api/modular/evaluar',{body:{caso_id:ML.caso.id,respuesta:resp}});
+    ML.evaluado=true;mlMostrarEval(ev);mlProgreso();}catch(e){toast(e.message)}
+  listo();
+}
+function mlLista(titulo,clase,items){
+  const box=document.createElement('div');box.className='ev-box '+clase;
+  const h=document.createElement('h4');h.textContent=titulo;box.appendChild(h);
+  const ul=document.createElement('ul');
+  (items&&items.length?items:['—']).forEach(t=>{const li=document.createElement('li');li.textContent=t;ul.appendChild(li)});
+  box.appendChild(ul);return box;
+}
+function mlMostrarEval(ev){
+  const p=$('ml-eval');p.textContent='';
+  const h=document.createElement('h3');h.textContent='Tu evaluación';p.appendChild(h);
+  const cab=document.createElement('div');cab.className='ev-cab';
+  const tot=document.createElement('div');tot.className='ev-total';tot.textContent=ev.total;
+  const sm=document.createElement('small');sm.textContent=' / 100';tot.appendChild(sm);cab.appendChild(tot);
+  const com=document.createElement('div');com.className='ev-com';com.textContent=ev.comentario||'';cab.appendChild(com);
+  p.appendChild(cab);
+  const rub=document.createElement('div');rub.className='rub';
+  ev.rubrica.forEach(r=>{const f=document.createElement('div');f.className='r';
+    const n=document.createElement('span');n.textContent=r.nombre;
+    const bar=document.createElement('div');bar.className='bar';const i=document.createElement('i');
+    const pct=Math.round(100*r.puntaje/r.max);i.style.width=pct+'%';if(pct<60)i.className='bajo';bar.appendChild(i);
+    const v=document.createElement('span');v.className='n';v.textContent=r.puntaje+'/'+r.max;
+    f.appendChild(n);f.appendChild(bar);f.appendChild(v);rub.appendChild(f)});
+  p.appendChild(rub);
+  const g=document.createElement('div');g.className='ev-grid';
+  g.appendChild(mlLista('Lo que identificaste','bien',ev.identificaste));
+  g.appendChild(mlLista('Lo que omitiste','falta',ev.omitiste));
+  g.appendChild(mlLista('Norma o institución que faltó','norma',ev.norma_faltante));
+  g.appendChild(mlLista('Cómo mejorar','mejora',ev.como_mejorar));
+  p.appendChild(g);
+  if(ev.contraargumento){const c=document.createElement('div');c.className='ev-contra';
+    const b=document.createElement('b');b.textContent='Argumento contrario que no consideraste: ';
+    c.appendChild(b);c.appendChild(document.createTextNode(ev.contraargumento));p.appendChild(c)}
+  const acc=document.createElement('div');acc.className='ml-acc';
+  [['Ver solución','bsec','mlSolucion'],['¿Qué cambia si…? (variación)','bsec','mlVariacion'],['Nuevo caso','bpri','mlNuevo']]
+    .forEach(([t,k,f])=>{const b=document.createElement('button');b.className=k;b.textContent=t;b.dataset.click=f;acc.appendChild(b)});
+  p.appendChild(acc);
+  const nota=document.createElement('p');nota.className='nota-ia';
+  nota.textContent='Evaluación orientativa generada por IA para practicar. No reemplaza la calificación de un docente.';
+  p.appendChild(nota);
+  p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function mlSolucion(){
+  if(!ML.caso)return;
+  if(!ML.evaluado&&!ML.confirmarSol){ML.confirmarSol=true;
+    $('ml-btn-sol').textContent='¿Seguro? Aún no la has intentado · Ver de todas formas';return}
+  try{
+    const s=await api('/api/modular/solucion?caso_id='+ML.caso.id);
+    const p=$('ml-sol');p.textContent='';
+    const h=document.createElement('h3');h.textContent='Solución de referencia';p.appendChild(h);
+    const bloque=(t,txt)=>{if(!txt)return;const l=document.createElement('div');l.className='lb2';l.textContent=t;p.appendChild(l);
+      const d=document.createElement('div');d.className='md';d.innerHTML=md(txt);p.appendChild(d)};
+    bloque('Problema jurídico',s.problema_juridico);
+    if(s.normas&&s.normas.length){const l=document.createElement('div');l.className='lb2';l.textContent='Marco normativo';p.appendChild(l);
+      const c=document.createElement('div');c.className='sol-norma';
+      s.normas.forEach(n=>{const d=document.createElement('div');const b=document.createElement('b');b.textContent=(n.norma||'')+': ';
+        d.appendChild(b);d.appendChild(document.createTextNode(n.para_que||''));c.appendChild(d)});p.appendChild(c)}
+    bloque('Análisis',s.analisis);bloque('Argumento contrario',s.contraargumento);bloque('Conclusión',s.conclusion);
+    if(s.errores_comunes&&s.errores_comunes.length)p.appendChild(mlLista('Errores comunes en este caso','falta',s.errores_comunes));
+    const nota=document.createElement('p');nota.className='nota-ia';
+    nota.textContent='Solución generada por IA. Verifica la vigencia de cada norma en la fuente oficial antes de estudiarla como definitiva.';
+    p.appendChild(nota);
+    p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){toast(e.message)}
+}
+function mlVariacion(){if(ML.caso)mlGenerar(ML.caso.id)}
+function mlNuevo(){['ml-caso','ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));ML.caso=null;
+  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'})}
+async function mlProgreso(){
+  let p;try{p=await api('/api/modular/progreso')}catch(e){return}
+  const c=$('ml-prog-cuerpo');if(!p.resueltos)return;
+  c.className='';c.textContent='';
+  const g=document.createElement('div');g.className='prog-grid';
+  const varias=p.por_area.length>1;
+  [[p.resueltos,'casos evaluados'],[p.promedio+'/100','promedio general'],
+   [varias?p.por_area[0].area:(p.ultimos.length?p.ultimos[p.ultimos.length-1]+'/100':'—'),
+    varias?'área con menor promedio':'último caso']].forEach(([v,t])=>{
+    const d=document.createElement('div');d.className='prog-n';const b=document.createElement('b');b.textContent=v;
+    const s=document.createElement('span');s.textContent=t;d.appendChild(b);d.appendChild(s);g.appendChild(d)});
+  c.appendChild(g);
+  const rub=document.createElement('div');rub.className='rub';
+  p.por_area.forEach(a=>{const f=document.createElement('div');f.className='r';
+    const n=document.createElement('span');n.textContent=a.area+' ('+a.intentos+')';
+    const bar=document.createElement('div');bar.className='bar';const i=document.createElement('i');i.style.width=a.promedio+'%';
+    if(a.promedio<60)i.className='bajo';bar.appendChild(i);
+    const v=document.createElement('span');v.className='n';v.textContent=a.promedio;
+    f.appendChild(n);f.appendChild(bar);f.appendChild(v);rub.appendChild(f)});
+  c.appendChild(rub);
+  if(p.a_reforzar&&p.a_reforzar.length){const l=document.createElement('div');l.className='lb2';l.textContent='Conceptos para reforzar';c.appendChild(l);
+    const o=document.createElement('div');o.className='opc';
+    p.a_reforzar.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;
+      b.addEventListener('click',()=>usarTool('Quiero entender bien este concepto porque me equivoco con él: '+t,'ensename'));o.appendChild(b)});
+    c.appendChild(o)}
+}
+
+// ---------------------------------------------------------------------------------------
+// Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
+// en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
+// en línea. Solo se ejecutan funciones de esta lista blanca.
+const ACCIONES={abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+function despachar(tipo,ev){
+  const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
+  const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
+  const T=tipo[0].toUpperCase()+tipo.slice(1);
+  if(('prevenir'+T) in el.dataset)ev.preventDefault();
+  const pasa=el.dataset['pasa'+T];
+  if(pasa==='this')return fn(el);
+  if(pasa==='event')return fn(ev);
+  if(('arg'+T) in el.dataset){const a=el.dataset['arg'+T];return fn(a==='true'?true:a==='false'?false:a)}
+  return fn();
+}
+['click','change','input','keydown'].forEach(t=>document.addEventListener(t,ev=>despachar(t,ev)));
+

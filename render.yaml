@@ -23,7 +23,9 @@ services:
       - key: RESEND_API_KEY           # opcional: sin ella no se envían correos de
         sync: false                   # verificación/recuperación, pero la app arranca igual.
                                        # Consíguela gratis en resend.com.
-      - key: PULLEX_EMAIL_FROM        # remitente que verás en los correos enviados
-        value: "PULLEX IA <onboarding@resend.dev>"
+      - key: PULLEX_EMAIL_FROM        # remitente de los correos. OJO: onboarding@resend.dev es el
+        value: "PULLEX IA <onboarding@resend.dev>"  # remitente de pruebas de Resend y solo entrega a
+                                       # tu propio correo. Para que les llegue a los estudiantes,
+                                       # verifica tu dominio en Resend y cambia este valor.
       - key: PULLEX_APP_URL           # cámbiala por tu URL real de Render tras el primer deploy
         value: https://pullex-ia.onrender.com

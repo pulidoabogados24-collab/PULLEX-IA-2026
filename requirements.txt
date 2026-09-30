@@ -1,8 +1,11 @@
-# LEXCOL App — dependencias
-fastapi>=0.110.0
-uvicorn>=0.29.0
-anthropic>=0.40.0
-python-dotenv>=1.0.0
+# PULLEX IA — dependencias de producción.
+# Versiones fijadas a las probadas (30-sep-2026, Python 3.11). Para actualizar: subir la
+# versión aquí, reinstalar, correr `pytest tests` y `pip-audit -r requirements.txt`.
+# requirements.lock contiene el árbol completo (dependencias transitivas) de esa instalación.
+fastapi==0.142.1
+uvicorn==0.54.0
+anthropic==1.9.0
+python-dotenv==1.2.3
 
 # Opcionales (solo si conectas el corpus vectorial de lexcol-rag):
 # chromadb>=0.5.0

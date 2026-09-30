@@ -1,8 +1,9 @@
 # 05 — VISIÓN Y ROADMAP DE PRODUCTO
 
 ## Visión
-Ser la mejor IA jurídica de Colombia. Playa de desembarco: estudiantes de Derecho de la
-USTA Villavicencio (mercado que el fundador conoce y puede atender personalmente).
+Plataforma de inteligencia jurídica colombiana con método y fuentes verificables. Mercado
+inicial: estudiantes de Derecho en Villavicencio (mercado que el fundador conoce y puede
+atender personalmente). Regla de marca: el producto no menciona ninguna institución educativa.
 
 ## MVP — YA CONSTRUIDO (V1)
 - Cuentas de estudiante, planes con límite (Prueba 10 / Básico 200 / Pro 500 / Premium 1.000).
@@ -32,8 +33,8 @@ USTA Villavicencio (mercado que el fundador conoce y puede atender personalmente
 ## Estrategia de crecimiento
 1. **Semilla (mes 1):** 10–20 compañeros de confianza a precio de lanzamiento; feedback semanal.
 2. **Boca a boca (mes 2-3):** referidos ("trae un amigo → mes con descuento"); grupos de estudio.
-3. **Institucional (mes 4+):** propuesta formal a semillero/consultorio jurídico (SIN usar la
-   marca USTA sin convenio); luego otras facultades de Derecho de Villavicencio y el Meta.
+3. **Institucional (mes 4+):** propuesta formal a semilleros y consultorios jurídicos (sin usar
+   marcas de instituciones sin convenio escrito); luego otras facultades de Derecho de la región.
 
 ## Regla de priorización
 Toda funcionalidad nueva se evalúa con la ficha de 43-FEATURE (valor usuario, valor negocio,

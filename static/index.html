@@ -11,8 +11,8 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
 <link rel="icon" href="/static/favicon.png">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js" integrity="sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 :root{
   --azul:#0A1E3F; --azul2:#0E2A57; --azul3:#12356e; --linea:#1c3f74;
@@ -149,8 +149,83 @@ main{flex:1;overflow:auto;position:relative}
 .clip{background:var(--azul);border:1px solid var(--linea);color:var(--txt)}
 .env svg,.clip svg{width:21px;height:21px}
 .aviso{font-size:11px;color:var(--txt2);text-align:center;max-width:840px;margin:8px auto 0}
+.nota-ia{font-size:11.5px;color:var(--txt2);margin:8px 0 0;padding:7px 10px;border-left:2px solid var(--oro);line-height:1.5}
 
 .areas{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+
+/* ---- Inicio: dos caminos ---- */
+.hoy{margin:4px 0 16px}
+.hoy h3{font-size:15px;margin:0 0 10px;color:var(--txt)}
+.caminos{display:inline-flex;background:var(--azul2);border:1px solid var(--linea);border-radius:12px;padding:4px;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.caminos button{padding:9px 14px;border-radius:9px;background:transparent;color:var(--txt2);font-weight:700;font-size:13.5px}
+.caminos button.on{background:var(--oro);color:#20170a}
+.progreso{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:var(--azul2);border:1px solid var(--linea);
+  border-radius:12px;padding:10px 14px;margin:-4px 0 16px;font-size:13px;color:var(--txt2)}
+.progreso b{color:var(--txt);font-variant-numeric:tabular-nums}
+.progreso .ref{color:var(--oro);font-weight:700}
+
+/* ---- Modular Lab ---- */
+.ml-cab{margin:2px 0 14px}
+.ml-cab h2{margin:0 0 4px;font-size:22px}
+.ml-cab .claim{color:var(--oro);font-weight:700;font-size:12.5px;letter-spacing:.6px;text-transform:uppercase;margin:0}
+.ml-cab p{color:var(--txt2);margin:.35em 0 0;font-size:14px;max-width:62ch}
+.lb2{font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--txt2);font-weight:700;margin:12px 0 7px}
+.opc{display:flex;flex-wrap:wrap;gap:7px}
+.opc button{font-size:13px;padding:8px 13px;border-radius:999px;background:var(--azul);border:1px solid var(--linea);color:var(--txt2)}
+.opc button.on{background:var(--oro);border-color:var(--oro);color:#20170a;font-weight:700}
+.ml-costo{font-size:12px;color:var(--txt2);margin:10px 0 0}
+.ml-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--azul3);color:var(--txt2)}
+.tag.oro{background:rgba(255,201,60,.14);color:var(--oro)}
+.ml-cambio{background:rgba(255,201,60,.1);border:1px solid rgba(255,201,60,.4);border-radius:10px;padding:9px 12px;font-size:13.5px;margin-bottom:10px}
+.ml-titulo{font-size:18px;margin:.2em 0 .5em}
+.ml-pregunta{border-left:3px solid var(--oro);padding:8px 12px;margin:12px 0;background:var(--azul);border-radius:0 10px 10px 0;font-weight:600;font-size:14.5px}
+details.metodo{border:1px solid var(--linea);border-radius:10px;padding:9px 12px;margin:10px 0;font-size:13.5px}
+details.metodo summary{cursor:pointer;font-weight:700;color:var(--oro)}
+.metodo ol{margin:10px 0 2px;padding:0;list-style:none;display:grid;gap:7px}
+.metodo li{display:grid;grid-template-columns:26px 1fr;gap:8px;color:var(--txt2)}
+.metodo li b{color:var(--txt)}
+.metodo .letra{width:24px;height:24px;border-radius:7px;background:var(--azul3);color:var(--oro);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+.pista{background:var(--azul);border:1px dashed var(--oro);border-radius:10px;padding:9px 12px;font-size:13.5px;margin:8px 0}
+.pista b{color:var(--oro)}
+.ml-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ml-acc button{padding:11px 15px;border-radius:11px;font-weight:800;font-size:13.5px}
+.ml-acc button:disabled{opacity:.55;cursor:default}
+.ml-cuenta{font-size:12px;color:var(--txt2);margin-top:6px;text-align:right}
+.ev-cab{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.ev-total{font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.ev-total small{font-size:16px;color:var(--txt2);font-weight:600}
+.ev-com{flex:1;min-width:200px;color:var(--txt2);font-size:14px}
+.rub{display:grid;gap:9px;margin:6px 0 14px}
+.rub .r{display:grid;grid-template-columns:minmax(150px,1.2fr) 3fr 52px;gap:10px;align-items:center;font-size:13px}
+.rub .bar{height:9px;border-radius:99px;background:var(--azul3);overflow:hidden}
+.rub .bar i{display:block;height:100%;border-radius:99px;background:var(--oro)}
+.rub .bar i.bajo{background:#ff9f43}
+.rub .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--txt2)}
+.ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ev-box{background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:11px 13px;min-width:0}
+.ev-box h4{margin:0 0 6px;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.ev-box ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+.ev-box.bien h4{color:var(--ok)} .ev-box.falta h4{color:#ff9f43} .ev-box.norma h4{color:var(--oro)} .ev-box.mejora h4{color:var(--txt)}
+.ev-contra{margin-top:10px;font-size:13.5px;background:var(--azul);border-left:3px solid #ff9f43;padding:9px 12px;border-radius:0 10px 10px 0}
+.sol-norma{display:grid;gap:6px;margin:6px 0 10px}
+.sol-norma div{font-size:13.5px}
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.prog-n{background:var(--azul);border:1px solid var(--linea);border-radius:12px;padding:10px 12px}
+.prog-n b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.prog-n span{font-size:12px;color:var(--txt2)}
+.prog-areas{display:grid;gap:7px}
+.vacio{color:var(--txt2);font-size:13.5px}
+@media(max-width:620px){.ev-grid,.prog-grid{grid-template-columns:1fr}.rub .r{grid-template-columns:1fr 60px;}.rub .bar{grid-column:1/-1;grid-row:2}}
+nav{overflow-x:auto}
+.h-logo{white-space:nowrap}
+textarea.inp{font-family:inherit;font-size:14.5px;line-height:1.55;resize:vertical}
+@media(max-width:560px){
+  .creditos .cp{display:none}
+  nav button{padding:13px 12px}
+  .opts .chip[data-click="imprimirPDF"],.opts .chip[data-click="exportarExcel"]{display:none}
+}
+nav button{white-space:nowrap}
 .area{font-size:12.5px;padding:8px 12px;border-radius:999px;background:var(--azul);border:1px solid var(--linea);
   color:var(--txt2);cursor:pointer;user-select:none}
 .area.on{background:var(--oro);color:#20170a;border-color:var(--oro);font-weight:700}
@@ -160,6 +235,65 @@ main{flex:1;overflow:auto;position:relative}
 .sw{width:46px;height:26px;border-radius:999px;background:var(--linea);position:relative;flex:none;cursor:pointer}
 .sw::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}
 .sw.on{background:var(--oro)}.sw.on::after{left:23px}
+
+/* ---- Consultar: historial de conversaciones ---- */
+.chat-lay{display:flex;height:100%;position:relative}
+.chat-lay #chat{flex:1;min-width:0}
+.convs{width:250px;flex:none;display:flex;flex-direction:column;min-height:0;background:var(--azul2);
+  border-right:1px solid var(--linea);padding:12px 10px 10px}
+.convs-cab{display:flex;gap:8px;align-items:center}
+.convs-nueva{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:11px;font-weight:800;font-size:13.5px}
+.convs-cerrar{display:none;width:38px;height:38px}
+.convs .lb2{margin:16px 6px 6px}
+.convs-lista{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px;min-height:0;margin:0 -4px;padding:0 4px}
+.conv{display:flex;align-items:center;border-radius:10px;border:1px solid transparent;position:relative}
+.conv:hover{background:var(--azul3)}
+.conv.on{background:var(--azul3);border-color:var(--linea)}
+.conv.on::before{content:'';position:absolute;left:-1px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--oro)}
+.conv-t{flex:1;min-width:0;text-align:left;background:transparent;color:var(--txt);font-size:13px;padding:9px 4px 9px 11px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv.on .conv-t{font-weight:700}
+.conv-x{width:30px;height:30px;margin-right:3px;border-radius:8px;background:transparent;color:var(--txt2);flex:none;
+  display:flex;align-items:center;justify-content:center;opacity:0}
+.conv:hover .conv-x,.conv.on .conv-x,.conv-x:focus-visible{opacity:1}
+.conv-x:hover{color:var(--mal);background:var(--azul)}
+.conv-conf{border:1px solid var(--mal);background:var(--azul);border-radius:10px;padding:9px 10px;font-size:12.5px;margin:2px 0}
+.conv-conf p{margin:0 0 8px;color:var(--txt)}
+.conv-conf div{display:flex;gap:6px}
+.conv-conf button{flex:1;padding:7px 8px;border-radius:8px;font-size:12.5px;font-weight:700}
+.conv-conf .borrar{background:var(--mal);color:#fff}
+.convs-vacio{font-size:13px;color:var(--txt2);padding:8px 6px;line-height:1.5}
+.convs-vacio b{display:block;color:var(--txt);margin-bottom:2px}
+.chip-hist{display:none}
+.convs-velo{display:none}
+@media(max-width:759px){
+  .convs{position:absolute;top:0;left:0;bottom:0;z-index:30;width:min(300px,86vw);transform:translateX(-102%);
+    transition:transform .2s ease;box-shadow:12px 0 40px rgba(0,0,0,.35);visibility:hidden}
+  .chat-lay.hist-abierto .convs{transform:none;visibility:visible}
+  .chat-lay.hist-abierto .convs-velo{display:block;position:absolute;inset:0;background:rgba(4,10,22,.55);z-index:25}
+  .convs-cerrar{display:flex}
+  .conv-x{opacity:1}
+  .chip-hist{display:inline-flex}
+}
+
+/* ---- Document Studio ---- */
+.modal .card.escrito-card{max-width:580px;max-height:calc(100dvh - 40px);overflow:auto;padding:24px 22px}
+.escrito-card h3{margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.escrito-card .intro{font-size:12.5px;color:var(--txt2);margin:0 0 4px;line-height:1.5}
+.es-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.es-grid .ancho{grid-column:1/-1}
+.es-campo label{display:block;font-size:12.5px;color:var(--txt);margin:12px 0 5px;font-weight:600}
+.es-campo label .req{color:var(--oro);margin-left:2px}
+.es-campo label .opc-t{color:var(--txt2);font-weight:400}
+.es-campo .inp{font-size:14.5px;padding:11px 12px}
+.es-campo textarea.inp{min-height:84px}
+.es-campo select.inp{appearance:auto}
+.es-campo .inp.error{border-color:var(--mal)}
+.es-campo .err{color:var(--mal);font-size:12px;margin-top:4px}
+.es-pie{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.es-pie button{flex:1;min-width:150px;margin-top:0}
+.es-nota{font-size:11.5px;color:var(--txt2);margin:12px 0 0;line-height:1.5}
+@media(max-width:560px){.es-grid{grid-template-columns:1fr}.modal .card.escrito-card{padding:20px 16px}.modal:has(.escrito-card){padding:12px}}
 
 .modal{position:fixed;inset:0;background:rgba(4,10,22,.66);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
 .modal .card{max-width:430px}
@@ -175,7 +309,7 @@ main{flex:1;overflow:auto;position:relative}
 
 @media print{
   body{overflow:visible;background:#fff;color:#000}
-  header,nav,.barra,.acc,.sugs,#auth,.creditos,.ic{display:none!important}
+  header,nav,.barra,.acc,.sugs,#auth,.creditos,.ic,.convs,.convs-velo{display:none!important}
   main,.vista,#chat,.hist{height:auto!important;overflow:visible!important}
   .b .bd{border:0;background:#fff;max-width:100%}
   .b.user{display:none}
@@ -201,8 +335,8 @@ main{flex:1;overflow:auto;position:relative}
       <div class="logo-s">ASISTENTE JURÍDICO · DERECHO COLOMBIANO</div>
     </div>
     <div class="tabs">
-      <button id="t-ing" class="on" onclick="modoAuth('ingresar')">Ingresar</button>
-      <button id="t-reg" onclick="modoAuth('registrar')">Crear cuenta</button>
+      <button id="t-ing" class="on" data-click="modoAuth" data-arg-click="ingresar">Ingresar</button>
+      <button id="t-reg" data-click="modoAuth" data-arg-click="registrar">Crear cuenta</button>
     </div>
     <div id="f-reg" class="hidden">
       <label class="lb">Nombre completo</label>
@@ -212,9 +346,9 @@ main{flex:1;overflow:auto;position:relative}
     <input id="a-email" class="inp" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="username">
     <label class="lb">Contraseña</label>
     <input id="a-clave" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="current-password">
-    <button id="a-btn" class="btn" onclick="enviarAuth()">Ingresar</button>
+    <button id="a-btn" class="btn" data-click="enviarAuth">Ingresar</button>
     <div id="a-olvido" style="text-align:center;margin-top:10px;font-size:12.5px">
-      <a href="#" onclick="abrirRecuperar();return false">¿Olvidaste tu contraseña?</a>
+      <a href="#" data-click="abrirRecuperar" data-prevenir-click>¿Olvidaste tu contraseña?</a>
     </div>
     <div id="a-msg" class="msg-e"></div>
     <div class="nota">Al crear tu cuenta recibes <b>10 consultas gratis</b> de prueba.<br>
@@ -232,24 +366,25 @@ main{flex:1;overflow:auto;position:relative}
       </svg></span>
       <span>PUL<b>LEX</b> IA</span>
     </div>
-    <div class="creditos" title="Consultas disponibles"><span id="c-plan">—</span> · <b id="c-rest">—</b> consultas</div>
-    <button class="ic hidden" id="btn-instalar-ic" title="Instalar app" onclick="instalarApp()">
+    <div class="creditos" title="Consultas disponibles"><span class="cp"><span id="c-plan">—</span> ·</span> <b id="c-rest">—</b> consultas</div>
+    <button class="ic hidden" id="btn-instalar-ic" title="Instalar app" data-click="instalarApp">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
     </button>
-    <button class="ic" title="Salir" onclick="salir()">
+    <button class="ic" title="Salir" data-click="salir">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l5-5-5-5M21 12H9M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
     </button>
   </header>
 
   <div id="banner-verif" class="banner-verif hidden">
     <span>Aún no has verificado tu correo. Hazlo para no perder acceso a tu cuenta.</span>
-    <button id="btn-reenviar-verif" onclick="reenviarVerificacion()">Reenviar correo</button>
+    <button id="btn-reenviar-verif" data-click="reenviarVerificacion">Reenviar correo</button>
   </div>
 
   <nav>
-    <button id="n-inicio" class="on" onclick="ver('inicio')">Inicio</button>
-    <button id="n-chat" onclick="ver('chat')">Consultar</button>
-    <button id="n-config" onclick="ver('config')">Configuración</button>
+    <button id="n-inicio" class="on" data-click="ver" data-arg-click="inicio">Inicio</button>
+    <button id="n-modular" data-click="ver" data-arg-click="modular">Modular Lab</button>
+    <button id="n-chat" data-click="ver" data-arg-click="chat">Consultar</button>
+    <button id="n-config" data-click="ver" data-arg-click="config">Ajustes</button>
   </nav>
 
   <main>
@@ -260,16 +395,24 @@ main{flex:1;overflow:auto;position:relative}
           <p class="claim">El criterio jurídico, amplificado.</p>
           <p>Soy PULLEX IA. Te acompaño con temas de derecho colombiano y también con lo que necesites: dudas, estudio o lo que se te ocurra. Escríbeme sin preocuparte por “preguntar bien”.</p>
           <div class="cta">
-            <button class="bpri" onclick="ver('chat')">Nueva consulta</button>
-            <button class="bsec" onclick="cargarBoletin(true)">Actualizar boletín</button>
-            <button class="bsec hidden" id="btn-instalar-hero" onclick="instalarApp()">
+            <button class="bpri" data-click="ver" data-arg-click="chat">Nueva consulta</button>
+            <button class="bsec" data-click="cargarBoletin" data-arg-click="true">Actualizar boletín</button>
+            <button class="bsec hidden" id="btn-instalar-hero" data-click="instalarApp">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Instalar app
             </button>
           </div>
         </div>
 
-        <div class="capgrid" id="capgrid"></div>
+        <div class="hoy">
+          <h3>¿Qué quieres hacer hoy?</h3>
+          <div class="caminos" role="group" aria-label="Cómo vas a usar PULLEX">
+            <button id="cam-aprender" class="on" data-click="elegirCamino" data-arg-click="aprender">Estoy aprendiendo Derecho</button>
+            <button id="cam-trabajar" data-click="elegirCamino" data-arg-click="trabajar">Estoy trabajando en un asunto</button>
+          </div>
+          <div class="progreso hidden" id="progreso-inicio"></div>
+          <div class="capgrid" id="capgrid"></div>
+        </div>
 
         <div class="panel">
           <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Boletín jurídico del día <span id="b-fecha" style="font-size:12px;color:var(--txt2);font-weight:400"></span></h3>
@@ -278,25 +421,98 @@ main{flex:1;overflow:auto;position:relative}
             <div class="skel" style="width:85%"></div><div class="skel" style="width:70%"></div>
           </div>
         </div>
-        <p class="aviso">El boletín se genera con búsqueda web y se actualiza una vez al día. Verifica siempre en la fuente oficial.</p>
+        <p class="aviso">El boletín lo genera la IA automáticamente con búsqueda web, una vez al día, y nadie lo revisa antes de publicarse. Una sentencia o norma citada aquí puede estar mal: verifícala en la fuente oficial antes de usarla.</p>
+      </div>
+    </section>
+
+    <section id="v-modular" class="vista">
+      <div class="wrap">
+        <div class="ml-cab">
+          <p class="claim">PULLEX Academia</p>
+          <h2>Modular Lab</h2>
+          <p>Entrena cómo se resuelve un caso de examen. Primero lo intentas tú; después PULLEX evalúa tu respuesta con una rúbrica y te dice qué omitiste y cómo mejorar.</p>
+        </div>
+
+        <div class="panel" id="ml-config">
+          <h3>Elige el caso</h3>
+          <div class="lb2">Área</div>
+          <div class="opc" id="ml-areas"></div>
+          <div class="lb2">Nivel</div>
+          <div class="opc" id="ml-niveles"></div>
+          <div class="ml-acc"><button class="bpri" id="ml-generar" data-click="mlGenerar">Generar caso</button></div>
+          <p class="ml-costo">Generar un caso y evaluar tu respuesta usan una consulta cada uno. Las pistas y la solución son gratis.</p>
+        </div>
+
+        <div class="panel hidden" id="ml-caso">
+          <div class="ml-meta" id="ml-meta"></div>
+          <div class="ml-cambio hidden" id="ml-cambio"></div>
+          <h3 class="ml-titulo" id="ml-titulo"></h3>
+          <div class="md" id="ml-enunciado"></div>
+          <div class="ml-pregunta" id="ml-pregunta"></div>
+          <details class="metodo">
+            <summary>Método PULLEX: cómo abordar el caso</summary>
+            <ol>
+              <li><span class="letra">P</span><span><b>Problema.</b> ¿Qué pregunta jurídica hay que resolver?</span></li>
+              <li><span class="letra">U</span><span><b>Ubicación normativa.</b> ¿Qué rama, código e institución intervienen?</span></li>
+              <li><span class="letra">L</span><span><b>Lectura de los hechos.</b> ¿Cuáles son jurídicamente relevantes y cuáles distraen?</span></li>
+              <li><span class="letra">L</span><span><b>Legalidad.</b> ¿Qué norma vigente regula el asunto y qué requisitos exige?</span></li>
+              <li><span class="letra">E</span><span><b>Evidencia y precedente.</b> ¿Qué prueba y qué jurisprudencia importan?</span></li>
+              <li><span class="letra">X</span><span><b>Examen crítico.</b> Aplica cada requisito a los hechos, uno por uno.</span></li>
+              <li><span class="letra">I</span><span><b>Interpretación.</b> ¿Qué diría la contraparte? ¿Hay excepción?</span></li>
+              <li><span class="letra">A</span><span><b>Argumentación.</b> Cierra con una conclusión defendible.</span></li>
+            </ol>
+          </details>
+          <div id="ml-pistas"></div>
+          <div class="lb2">Tu respuesta</div>
+          <textarea id="ml-resp" class="inp" rows="9" placeholder="Escribe tu respuesta como en el examen: problema jurídico, normas, aplicación a los hechos y conclusión." data-input="mlContar"></textarea>
+          <div class="ml-cuenta" id="ml-cuenta">0 palabras</div>
+          <div class="ml-acc">
+            <button class="bsec" id="ml-btn-pista" data-click="mlPista">Necesito una pista</button>
+            <button class="bpri" id="ml-btn-eval" data-click="mlEvaluar">Evaluar mi respuesta</button>
+            <button class="bsec" id="ml-btn-sol" data-click="mlSolucion">Ver solución</button>
+          </div>
+        </div>
+
+        <div class="panel hidden" id="ml-eval"></div>
+        <div class="panel hidden" id="ml-sol"></div>
+
+        <div class="panel" id="ml-progreso">
+          <h3>Tu progreso</h3>
+          <div id="ml-prog-cuerpo" class="vacio">Cuando evalúes tu primer caso, aquí verás tu promedio por área y los conceptos que conviene reforzar.</div>
+        </div>
       </div>
     </section>
 
     <section id="v-chat" class="vista">
+     <div class="chat-lay" id="chat-lay">
+      <aside class="convs" id="convs" aria-label="Historial de consultas">
+        <div class="convs-cab">
+          <button class="bpri convs-nueva" id="btn-nueva" data-click="nuevaConsulta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Nueva consulta</button>
+          <button class="ic convs-cerrar" title="Cerrar historial" aria-label="Cerrar historial" data-click="toggleHistorial">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="lb2">Tus consultas</div>
+        <div class="convs-lista" id="convs-lista"></div>
+      </aside>
+      <div class="convs-velo" data-click="toggleHistorial"></div>
       <div id="chat">
         <div class="hist" id="hist">
           <div class="hilo" id="hilo"></div>
           <div class="sugs" id="sugs">
-            <button onclick="sug(this)"><b>Redactar una tutela</b><span>Necesito proteger mi derecho a la salud contra mi EPS.</span></button>
-            <button onclick="sug(this)"><b>Explícame fácil</b><span>No sé nada de derecho, ayúdame a entender un problema.</span></button>
-            <button onclick="sug(this)"><b>Liquidación laboral</b><span>Calcula prestaciones de un contrato a término indefinido.</span></button>
-            <button onclick="sug(this)"><b>Derecho de petición</b><span>Ayúdame a redactar un derecho de petición a una entidad.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Redactar una tutela</b><span>Necesito proteger mi derecho a la salud contra mi EPS.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Explícame fácil</b><span>No sé nada de derecho, ayúdame a entender un problema.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Liquidación laboral</b><span>Calcula prestaciones de un contrato a término indefinido.</span></button>
+            <button data-click="sug" data-pasa-click="this"><b>Derecho de petición</b><span>Ayúdame a redactar un derecho de petición a una entidad.</span></button>
           </div>
         </div>
         <div class="barra">
           <div class="adjfila" id="adjfila"></div>
           <div class="opts">
-            <span class="chip on" id="chip-web" onclick="toggleWeb()">
+            <span class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" role="button" aria-controls="convs"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg> Historial</span>
+            <span class="chip on" id="chip-web" data-click="toggleWeb">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
               Buscar en internet</span>
             <span class="chip"><select id="modo">
@@ -304,23 +520,31 @@ main{flex:1;overflow:auto;position:relative}
               <option value="profesional">Técnico (abogado)</option>
               <option value="ciudadano">Sencillo (ciudadano)</option>
             </select></span>
-            <span class="chip" onclick="abrirTools()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Herramientas</span>
-            <span class="chip" onclick="imprimirPDF()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</span>
-            <span class="chip" onclick="exportarExcel()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Excel</span>
+            <span class="chip"><select id="estilo" aria-label="Forma de respuesta">
+              <option value="directo">Respuesta directa</option>
+              <option value="ensename">Enséñame</option>
+              <option value="conmigo">Resuélvelo conmigo</option>
+              <option value="examiname">Examíname</option>
+              <option value="auditar">Audita mi respuesta</option>
+            </select></span>
+            <span class="chip" data-click="abrirTools"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Herramientas</span>
+            <span class="chip" data-click="imprimirPDF"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</span>
+            <span class="chip" data-click="exportarExcel"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Excel</span>
           </div>
           <div class="entrada">
-            <input type="file" id="file" class="hidden" multiple accept="image/*,application/pdf" onchange="tomarArchivos(event)">
-            <button class="clip" title="Adjuntar PDF, foto o documento" onclick="document.getElementById('file').click()">
+            <input type="file" id="file" class="hidden" multiple accept="image/*,application/pdf" data-change="tomarArchivos" data-pasa-change="event">
+            <button class="clip" title="Adjuntar PDF, foto o documento" data-click="abrirSelectorArchivo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3 3 0 0 1 4.24 4.24l-9.2 9.19a1 1 0 0 1-1.41-1.41l8.49-8.49"/></svg>
             </button>
-            <textarea id="txt" rows="1" placeholder="Escríbeme lo que necesites…" oninput="autoAlto(this)" onkeydown="teclas(event)"></textarea>
-            <button class="env" id="env" onclick="enviar()" title="Enviar">
+            <textarea id="txt" rows="1" placeholder="Escríbeme lo que necesites…" data-input="autoAlto" data-pasa-input="this" data-keydown="teclas" data-pasa-keydown="event"></textarea>
+            <button class="env" id="env" data-click="enviar" title="Enviar">
               <svg viewBox="0 0 24 24" fill="none" stroke="#20170a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
             </button>
           </div>
           <p class="aviso">PULLEX IA puede equivocarse. En temas legales, verifica en la fuente oficial. No sustituye a un abogado.</p>
         </div>
       </div>
+     </div>
     </section>
 
     <section id="v-config" class="vista">
@@ -336,7 +560,7 @@ main{flex:1;overflow:auto;position:relative}
           <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-6 6c0 2.2 1 3.4 2 4.3.7.7 1 1.3 1 2.2h6c0-.9.3-1.5 1-2.2 1-.9 2-2.1 2-4.3a6 6 0 0 0-6-6z"/></svg> Memoria de PULLEX</h3>
           <div class="d" style="font-size:12px;color:var(--txt2);margin-bottom:6px">Escribe lo que quieras que PULLEX recuerde de ti (tu carrera, semestre, cómo prefieres las respuestas, tus casos frecuentes). Lo tendrá en cuenta siempre.</div>
           <textarea id="cf-memoria" class="inp" rows="3" placeholder="Ej.: Soy estudiante de 6º semestre, me gusta que me expliquen con ejemplos y paso a paso."></textarea>
-          <button class="btn sec" style="margin-top:8px" onclick="guardarMemoria()">Guardar memoria</button>
+          <button class="btn sec" style="margin-top:8px" data-click="guardarMemoria">Guardar memoria</button>
         </div>
 
         <div class="panel">
@@ -347,18 +571,19 @@ main{flex:1;overflow:auto;position:relative}
             <div class="areas" id="areas"></div>
           </div>
           <div class="fila" style="margin-top:8px"><div><div class="t">Modo por defecto</div><div class="d">Registro de las respuestas</div></div>
-            <select id="cf-modo" class="inp" style="width:auto" onchange="guardarPrefs()">
+            <select id="cf-modo" class="inp" style="width:auto" data-change="guardarPrefs">
               <option value="auto">Automático</option><option value="profesional">Técnico</option><option value="ciudadano">Sencillo</option>
             </select></div>
           <div class="fila"><div><div class="t">Buscar en internet por defecto</div><div class="d">Verifica con fuentes actuales</div></div>
-            <div class="sw" id="cf-web" onclick="togglePref(this)"></div></div>
+            <div class="sw" id="cf-web" data-click="togglePref" data-pasa-click="this"></div></div>
           <div class="fila"><div><div class="t">Tema claro</div><div class="d">Cambia la apariencia</div></div>
-            <div class="sw" id="cf-tema" onclick="toggleTema(this)"></div></div>
+            <div class="sw" id="cf-tema" data-click="toggleTema" data-pasa-click="this"></div></div>
         </div>
 
         <div class="panel">
           <h3><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Seguridad</h3>
-          <button class="btn sec" onclick="abrirClave()">Cambiar contraseña</button>
+          <button class="btn sec" data-click="abrirClave">Cambiar contraseña</button>
+          <button class="btn sec" style="margin-top:8px" data-click="cerrarSesiones">Cerrar sesión en todos los dispositivos</button>
         </div>
 
         <div class="panel">
@@ -391,8 +616,8 @@ main{flex:1;overflow:auto;position:relative}
     <label class="lb">Nueva contraseña</label>
     <input id="k-new" class="inp" type="password" placeholder="Mínimo 8 caracteres">
     <div id="k-msg" class="msg-e"></div>
-    <button class="btn" onclick="guardarClave()">Guardar</button>
-    <button class="btn sec" onclick="cerrarClave()">Cancelar</button>
+    <button class="btn" data-click="guardarClave">Guardar</button>
+    <button class="btn sec" data-click="cerrarClave">Cancelar</button>
   </div>
 </div>
 
@@ -403,8 +628,8 @@ main{flex:1;overflow:auto;position:relative}
     <label class="lb">Correo</label>
     <input id="rec-email" class="inp" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="username">
     <div id="rec-msg" class="msg-e"></div>
-    <button class="btn" id="rec-btn" onclick="enviarRecuperar()">Enviar enlace</button>
-    <button class="btn sec" onclick="cerrarRecuperar()">Cancelar</button>
+    <button class="btn" id="rec-btn" data-click="enviarRecuperar">Enviar enlace</button>
+    <button class="btn sec" data-click="cerrarRecuperar">Cancelar</button>
   </div>
 </div>
 
@@ -413,327 +638,29 @@ main{flex:1;overflow:auto;position:relative}
     <h3 style="margin-top:0;display:flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Herramientas jurídicas</h3>
     <p style="font-size:12.5px;color:var(--txt2);margin-top:0">Elige una y PULLEX arma la consulta por ti. Solo completa los datos que te pida.</p>
     <div id="tools-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0"></div>
-    <button class="btn sec" onclick="cerrarTools()">Cerrar</button>
+    <button class="btn sec" data-click="cerrarTools">Cerrar</button>
   </div>
 </div>
 
-<script>
-marked.setOptions({breaks:true});
-const $=id=>document.getElementById(id);
-let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
-function auth(){return {'Authorization':'Bearer '+TOKEN}}
-function md(t){return DOMPurify.sanitize(marked.parse(t||''))}
-function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+<div id="m-escrito" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="es-titulo">
+  <div class="card escrito-card">
+    <h3 id="es-titulo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Redactar un escrito</h3>
+    <p class="intro">Completa los datos y PULLEX arma el borrador con la estructura procesal colombiana. Si no tienes un dato, déjalo en blanco: quedará marcado entre corchetes para que lo completes.</p>
+    <div class="lb2">Tipo de escrito</div>
+    <div class="opc" id="es-tipos">
+      <button type="button" id="es-tipo-tutela" class="on" data-click="escritoTipo" data-arg-click="tutela">Acción de tutela</button>
+      <button type="button" id="es-tipo-peticion" data-click="escritoTipo" data-arg-click="peticion">Derecho de petición</button>
+    </div>
+    <div id="es-campos"></div>
+    <div id="es-msg" class="msg-e" style="text-align:left"></div>
+    <div class="es-pie">
+      <button class="btn sec" data-click="cerrarEscrito">Cancelar</button>
+      <button class="btn" id="es-enviar" data-click="enviarEscrito">Redactar borrador</button>
+    </div>
+    <p class="es-nota">Usa una consulta. El resultado es un borrador generado por IA: revísalo, completa lo que esté entre corchetes y verifica la vigencia de las normas antes de presentarlo.</p>
+  </div>
+</div>
 
-let modoActual='ingresar';
-function modoAuth(m){modoActual=m;
-  $('t-ing').classList.toggle('on',m==='ingresar');$('t-reg').classList.toggle('on',m==='registrar');
-  $('f-reg').classList.toggle('hidden',m!=='registrar');
-  $('a-olvido').classList.toggle('hidden',m!=='ingresar');
-  $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
-function abrirRecuperar(){$('m-recuperar').classList.remove('hidden');$('rec-msg').className='msg-e';$('rec-msg').textContent='';
-  $('rec-email').value=$('a-email').value||'';}
-function cerrarRecuperar(){$('m-recuperar').classList.add('hidden')}
-async function enviarRecuperar(){
-  const email=$('rec-email').value.trim();
-  if(!email){$('rec-msg').className='msg-e';$('rec-msg').textContent='Escribe tu correo.';return}
-  $('rec-btn').disabled=true;$('rec-btn').textContent='Enviando…';
-  try{
-    await fetch('/api/recuperar-clave',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email})});
-    $('rec-msg').className='msg-e';$('rec-msg').style.color='var(--ok)';
-    $('rec-msg').textContent='Si ese correo tiene una cuenta, te llegará un enlace en unos minutos. Revisa también spam.';
-  }catch(e){
-    $('rec-msg').className='msg-e';$('rec-msg').style.color='';
-    $('rec-msg').textContent='Error de conexión. Intenta de nuevo.';
-  }
-  $('rec-btn').disabled=false;$('rec-btn').textContent='Enviar enlace';
-}
-async function enviarAuth(){
-  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
-  const url=modoActual==='registrar'?'/api/registro':'/api/login';
-  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
-  try{
-    const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(cuerpo)});
-    const d=await r.json();
-    if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';return}
-    TOKEN=d.token;PERFIL=d.perfil;iniciar();
-  }catch(e){$('a-msg').textContent='Error de conexión'}
-}
-const CAPACIDADES=[
-  {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
-   d:'Identifica normas aplicables y contrasta líneas jurisprudenciales.',
-   p:'Necesito investigar qué normas y jurisprudencia aplican a mi caso. Pregúntame primero de qué se trata.'},
-  {ic:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
-   t:'Redacción de escritos',d:'Tutelas, derechos de petición, contratos y recursos con estructura procesal.',
-   p:'Necesito redactar un escrito jurídico. Pregúntame qué tipo de documento necesito y los datos del caso.'},
-  {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-   t:'Análisis de casos',d:'Hechos, pretensiones, riesgos y estrategia.',
-   p:'Quiero que analices mi caso. Pregúntame los hechos, qué pretendo lograr, y evalúa riesgos y estrategia.'},
-  {ic:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
-   t:'Cálculos jurídicos',d:'Liquidaciones laborales, términos procesales e intereses.',
-   p:'Ayúdame con un cálculo jurídico (liquidación laboral, término procesal o intereses). Pregúntame los datos.'},
-];
-function pintarCapacidades(){
-  const g=$('capgrid');g.innerHTML='';
-  CAPACIDADES.forEach(c=>{
-    const b=document.createElement('button');b.className='captarj';
-    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>
-      <b>${c.t}</b><span>${c.d}</span>`;
-    b.onclick=()=>usarTool(c.p);
-    g.appendChild(b);
-  });
-}
-async function iniciar(){
-  $('auth').classList.add('hidden');$('app').classList.remove('hidden');
-  try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
-  aplicarPerfil();aplicarTema(PERFIL.preferencias.tema);
-  $('modo').value=PERFIL.preferencias.modo||'auto';
-  WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);pintarCapacidades();
-}
-function aplicarPerfil(){
-  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').split(' ')[0];
-  $('c-plan').textContent=PERFIL.plan_nombre;$('c-rest').textContent=PERFIL.restantes;
-  $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
-  $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
-  $('cf-modo').value=PERFIL.preferencias.modo||'auto';
-  $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
-  $('cf-tema').classList.toggle('on',PERFIL.preferencias.tema==='claro');
-  $('cf-memoria').value=PERFIL.preferencias.memoria||'';
-  $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
-  pintarAreas();pintarPlanes();
-}
-function pintarAreas(){
-  const cont=$('areas');cont.innerHTML='';const sel=PERFIL.preferencias.areas||[];
-  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('div');
-    el.className='area'+(sel.includes(a)?' on':'');el.textContent=a;
-    el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
-}
-function pintarPlanes(){
-  const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
-  ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
-    el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
-      <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
-}
-function ver(v){['inicio','chat','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
-  if(v==='chat'&&!CONV)nuevaConv();}
-
-async function cargarBoletin(forzar){
-  if(forzar)$('boletin').innerHTML='<div class="skel" style="width:90%"></div><div class="skel" style="width:75%"></div>';
-  try{
-    const admin=forzar&&PERFIL.es_admin;
-    const d=await(await fetch(admin?'/api/admin/boletin/regenerar':'/api/boletin',
-      {method:admin?'POST':'GET',headers:auth()})).json();
-    $('boletin').innerHTML=md(d.contenido);$('b-fecha').textContent=d.fecha?('· '+d.fecha):'';
-  }catch(e){$('boletin').textContent='No se pudo cargar el boletín.'}
-}
-
-function pintarWeb(){$('chip-web').classList.toggle('on',WEB)}
-function toggleWeb(){WEB=!WEB;pintarWeb()}
-function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
-function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
-function sug(b){const s=b.querySelector('span');$('txt').value=s?s.textContent:b.textContent;autoAlto($('txt'));$('txt').focus()}
-async function nuevaConv(){
-  try{const d=await(await fetch('/api/conversaciones',{method:'POST',headers:auth()})).json();
-    CONV=d.id;$('hilo').innerHTML='';$('sugs').classList.remove('hidden');}catch(e){}
-}
-function tomarArchivos(ev){
-  [...ev.target.files].forEach(f=>{
-    if(f.size>7*1024*1024){toast('“'+f.name+'” supera 7 MB');return}
-    const r=new FileReader();
-    r.onload=()=>{ADJ.push({nombre:f.name,tipo:f.type.startsWith('image/')?'image':'document',
-      media_type:f.type||'application/pdf',datos:r.result.split(',')[1]});pintarAdj();};
-    r.readAsDataURL(f);
-  });ev.target.value='';
-}
-function icoAdj(tipo){return tipo==='image'
-  ?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>'
-  :'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'}
-function pintarAdj(){const c=$('adjfila');c.innerHTML='';
-  ADJ.forEach((a,i)=>{const e=document.createElement('div');e.className='ch';
-    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <b>✕</b>';
-    e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
-function burbuja(rol,texto,adj){
-  const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
-  b.innerHTML=`<div class="av">${rol==='user'?'Tú':'PX'}</div><div class="bd"><div class="md"></div></div>`;
-  b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
-  if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
-    adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
-      s.innerHTML=icoAdj(a.tipo)+esc(a.nombre);d.appendChild(s)});
-    b.querySelector('.bd').appendChild(d);}
-  $('hilo').appendChild(b);scroll();return b;
-}
-function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
-
-async function enviar(){
-  const texto=$('txt').value.trim();
-  if((!texto&&!ADJ.length)||enviando)return;
-  if(PERFIL.restantes<=0){toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
-  if(!CONV)await nuevaConv();
-  $('sugs').classList.add('hidden');
-  const adjEnvio=ADJ.slice();
-  burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
-  enviando=true;$('env').disabled=true;
-  const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  let buffer='',raf=null;
-  const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
-  try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
-      body:JSON.stringify({conversacion:CONV,mensaje:texto,web:WEB,modo:$('modo').value,adjuntos:adjEnvio})});
-    if(!r.ok){const d=await r.json().catch(()=>({}));cont.classList.remove('cursor');
-      cont.innerHTML=md('**Aviso:** '+(d.detail||'No se pudo procesar.'));
-      enviando=false;$('env').disabled=false;if(r.status===402||r.status===403)ver('config');return}
-    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
-    while(true){const {value,done}=await rd.read();if(done)break;
-      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
-      for(const l of lineas){if(!l.startsWith('data: '))continue;
-        const ev=JSON.parse(l.slice(6));
-        if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
-        else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
-        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
-      }
-    }
-  }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
-  if(raf)cancelAnimationFrame(raf);
-  cont.classList.remove('cursor');cont.innerHTML=md(buffer);
-  if(buffer.trim())accionesResp(bIA,buffer);scroll();
-  enviando=false;$('env').disabled=false;
-  PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
-}
-function accionesResp(b,texto){
-  const a=document.createElement('div');a.className='acc';
-  a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
-  const [c,d,p]=a.querySelectorAll('button');
-  c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
-  d.onclick=()=>descargar('pullex-respuesta.txt',texto);
-  p.onclick=imprimirPDF;
-  b.querySelector('.bd').appendChild(a);
-}
-function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
-  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
-function imprimirPDF(){window.print()}
-function exportarExcel(){
-  const tablas=$('hilo').querySelectorAll('.b.ia table');
-  if(!tablas.length){toast('No hay tablas para exportar. Pide una liquidación o un cuadro.');return}
-  const t=tablas[tablas.length-1];let csv=[];
-  t.querySelectorAll('tr').forEach(tr=>{csv.push([...tr.querySelectorAll('th,td')]
-    .map(x=>'"'+x.textContent.replace(/"/g,'""')+'"').join(','))});
-  const bl=new Blob(['﻿'+csv.join('\n')],{type:'text/csv;charset=utf-8'});
-  const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download='pullex-liquidacion.csv';a.click();
-  URL.revokeObjectURL(u);toast('Descargado (ábrelo en Excel)');
-}
-
-async function guardarPrefs(){
-  const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
-  const body={areas,modo:$('cf-modo').value,tema:document.body.classList.contains('claro')?'claro':'oscuro',
-    web:$('cf-web').classList.contains('on')};
-  try{const d=await(await fetch('/api/preferencias',{method:'POST',
-    headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
-    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
-    WEB=d.preferencias.web;pintarWeb();}catch(e){}
-}
-async function guardarMemoria(){
-  try{await fetch('/api/preferencias',{method:'POST',headers:{...auth(),'content-type':'application/json'},
-    body:JSON.stringify({memoria:$('cf-memoria').value})});
-    PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
-}
-function togglePref(el){el.classList.toggle('on');guardarPrefs()}
-function toggleTema(el){el.classList.toggle('on');aplicarTema(el.classList.contains('on')?'claro':'oscuro');guardarPrefs()}
-function aplicarTema(t){document.body.classList.toggle('claro',t==='claro');
-  document.body.classList.toggle('oscuro',t!=='claro');
-  document.querySelector('meta[name=theme-color]').content=t==='claro'?'#eef3fb':'#0A1E3F'}
-
-const ICONOS_TOOL={
-  tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
-  peticion:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/>',
-  liquidacion:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1 1-1.5 3-1.5s3 .8 3 2-1.2 1.7-3 2-3 .8-3 2 1.2 2 3 2 3-.5 3-1.5"/>',
-  sentencia:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
-  termino:'<rect x="3" y="4" width="18" height="18" rx="2.5"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4l3 2"/>',
-  demanda:'<path d="M12 2l8 4v5c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6z"/>',
-  empresa:'<path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5M9 12h.01M15 12h.01M9 8h.01M15 8h.01"/>',
-  marca:'<circle cx="12" cy="12" r="9"/><path d="M9 8v8M9 12h3.5a2 2 0 1 0 0-4H9M9 12h4a2 2 0 1 1 0 4H9"/>',
-  reporte:'<path d="M3 17l6-6 4 4 8-8M21 7v6h-6"/>',
-  alimentos:'<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 21c0-3.9 2.7-6 6-6s6 2.1 6 6M14 21c0-2.8 1.8-5 4-5s4 2.2 4 5"/>',
-};
-function icoTool(nombre,size=18){return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONOS_TOOL[nombre]}</svg>`}
-const HERRAMIENTAS=[
-  {i:'tutela',t:'Redactar tutela',p:'Ayúdame a redactar una acción de tutela. Pregúntame primero, uno por uno, los datos que necesitas (mis datos, la entidad accionada, el derecho fundamental vulnerado y los hechos) y luego arma el escrito completo.'},
-  {i:'peticion',t:'Derecho de petición',p:'Ayúdame a redactar un derecho de petición. Pregúntame a qué entidad va dirigido, qué solicito y los hechos, y luego redacta el escrito formal.'},
-  {i:'liquidacion',t:'Liquidación laboral',p:'Calcula una liquidación laboral (cesantías, intereses, prima, vacaciones e indemnización si aplica). Pregúntame el salario, las fechas de inicio y fin, el tipo de contrato y si hubo auxilio de transporte. Muestra el resultado en una TABLA.'},
-  {i:'sentencia',t:'Entender una sentencia',p:'Te voy a pasar una sentencia (o la adjunto). Explícamela en palabras simples: qué decidió, por qué, y la regla que fija. No uses tecnicismos sin explicarlos.'},
-  {i:'termino',t:'Calcular un término',p:'Ayúdame a calcular un término procesal. Pregúntame de qué actuación se trata, la fecha de inicio y si son días hábiles o calendario, y adviérteme sobre suspensiones o vacancias.'},
-  {i:'demanda',t:'Contestar una demanda',p:'Me demandaron y necesito contestar. Pregúntame los datos del proceso y los hechos, y ayúdame con el pronunciamiento sobre los hechos y las excepciones de mérito.'},
-  {i:'empresa',t:'Crear una empresa (SAS)',p:'Quiero constituir una SAS en Colombia. Explícame el paso a paso y ayúdame con lo que necesito (objeto social, capital, trámite en Cámara de Comercio).'},
-  {i:'marca',t:'Registrar una marca',p:'Quiero registrar una marca ante la SIC. Explícame el proceso, la clasificación de Niza y la búsqueda de antecedentes, y guíame paso a paso.'},
-  {i:'reporte',t:'Reporte en centrales de riesgo',p:'Tengo un problema con un reporte en Datacrédito/centrales de riesgo. Explícame mis derechos (habeas data) y ayúdame a redactar el reclamo.'},
-  {i:'alimentos',t:'Cuota de alimentos',p:'Necesito orientación sobre una cuota de alimentos para un menor. Pregúntame los datos y explícame las opciones y a dónde acudir.'},
-];
-function abrirTools(){
-  const g=$('tools-grid');g.innerHTML='';
-  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');
-    b.className='bsec';b.style.cssText='text-align:left;padding:12px;border-radius:11px;font-size:13px;line-height:1.3';
-    b.innerHTML=`<div style="color:var(--oro)">${icoTool(h.i)}</div><b style="color:var(--oro)">${h.t}</b>`;
-    b.onclick=()=>usarTool(h.p);g.appendChild(b);});
-  $('m-tools').classList.remove('hidden');
-}
-function cerrarTools(){$('m-tools').classList.add('hidden')}
-function usarTool(p){cerrarTools();ver('chat');$('txt').value=p;autoAlto($('txt'));$('txt').focus();
-  toast('Ajusta los datos si quieres y presiona enviar')}
-function abrirClave(){$('m-clave').classList.remove('hidden');$('k-msg').textContent=''}
-function cerrarClave(){$('m-clave').classList.add('hidden');$('k-act').value='';$('k-new').value=''}
-async function guardarClave(){
-  const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
-    body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
-  const d=await r.json();if(!r.ok){$('k-msg').textContent=d.detail||'No se pudo';return}
-  cerrarClave();toast('Contraseña actualizada');
-}
-async function reenviarVerificacion(){
-  const b=$('btn-reenviar-verif');const t0=b.textContent;b.disabled=true;b.textContent='Enviando…';
-  try{
-    const r=await fetch('/api/reenviar-verificacion',{method:'POST',headers:auth()});
-    const d=await r.json().catch(()=>({}));
-    toast(r.ok?(d.mensaje||'Te enviamos un correo de verificación'):(d.detail||'No se pudo enviar. Intenta más tarde.'));
-  }catch(e){toast('Error de conexión')}
-  b.disabled=false;b.textContent=t0;
-}
-function salir(){TOKEN=null;PERFIL=null;CONV=null;location.reload()}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
-
-// -------------------------------------------------------- instalar como app --
-let DEFERRED_INSTALL=null;
-const esStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-function mostrarBotonInstalar(){
-  if(esStandalone())return; // ya está instalada, no mostrar nada
-  $('btn-instalar-ic').classList.remove('hidden');
-  $('btn-instalar-hero').classList.remove('hidden');
-}
-window.addEventListener('beforeinstallprompt',(e)=>{
-  e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar();
-});
-window.addEventListener('appinstalled',()=>{
-  DEFERRED_INSTALL=null;$('btn-instalar-ic').classList.add('hidden');$('btn-instalar-hero').classList.add('hidden');
-  toast('PULLEX IA instalada');
-});
-async function instalarApp(){
-  if(DEFERRED_INSTALL){
-    DEFERRED_INSTALL.prompt();
-    const r=await DEFERRED_INSTALL.userChoice;
-    if(r.outcome==='accepted')toast('Instalando…');
-    DEFERRED_INSTALL=null;
-    return;
-  }
-  if(esIOS()){
-    toast('En Safari: toca Compartir (□↑) y luego "Agregar a pantalla de inicio"');
-    return;
-  }
-  toast('Busca "Instalar app" en el menú de tu navegador');
-}
-// Android/Chrome dispara beforeinstallprompt de forma asíncrona; en iOS nunca llega,
-// así que mostramos el botón igual (con instrucciones manuales) salvo que ya esté instalada.
-if(esIOS()&&!esStandalone())mostrarBotonInstalar();
-</script>
+<script src="/static/app.js"></script>
 </body>
 </html>
