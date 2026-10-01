@@ -3,8 +3,9 @@
 Aplicación web para **vender por suscripción a estudiantes de Derecho**.
 Cada estudiante tiene su cuenta con un **plan y un límite de consultas**; tú, como
 administrador, activas las cuentas cuando te pagan (por Nequi u otro medio).
-Motor **Claude Haiku** (económico) vía la API oficial de Anthropic, con búsqueda
-web, boletín jurídico diario, adjuntar PDF/fotos, memoria y exportar a PDF/Excel.
+Motor **Claude Sonnet 5.5** vía la API oficial de Anthropic (configurable; Haiku para abaratar), con
+**motor de fuentes** (corpus propio citado como [F1]…[F6] y búsqueda web solo en sitios oficiales),
+boletín jurídico diario, adjuntar PDF/fotos, memoria y exportar a PDF/Excel.
 
 ## Requisitos
 
@@ -78,6 +79,15 @@ y regenerar el boletín.
   con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
   un modelo simulado (sin clave de API) en http://localhost:8000.
 
+## Motor de fuentes (respuestas verificables)
+
+- Carga tu corpus (códigos, leyes, sentencias, plantillas, doctrina) con
+  `python scripts/ingesta_corpus.py --carpeta <carpeta> --simular` y luego sin `--simular`.
+  No se indexan carpetas o archivos de clientes ni de personas reales.
+- Cada respuesta muestra "Fuentes consultadas" con el estado de vigencia de cada documento.
+- Benchmark de calidad: `python evaluacion/benchmark.py --simulado` (o con `ANTHROPIC_API_KEY`).
+- Detalle, variables y costos: `docs/11-MOTOR-DE-FUENTES.md`.
+
 ## Funciones
 
 - **Inicio dinámico**: boletín jurídico del día (noticias, jurisprudencia y novedades
@@ -139,12 +149,13 @@ repositorio, y defines en **Environment**:
 
 ```bash
 pip install -r requirements-dev.txt
-pytest tests                  # 68 pruebas: seguridad, regresión, Modular Lab y Academia (no llaman a la API real)
+pytest tests                  # 114 pruebas: seguridad, regresión, Modular Lab, Academia y fuentes (sin API real)
 pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
 ```
 
 Con el servidor corriendo, `tests/e2e_navegador.py` repite las verificaciones en un navegador real
-(requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`).
+(requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`); `tests/e2e_fuentes.py`
+prueba el bloque "Fuentes consultadas" contra `demo/servidor_simulado.py`.
 
 ## Advertencia
 

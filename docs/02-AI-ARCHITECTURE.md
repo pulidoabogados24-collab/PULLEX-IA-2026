@@ -1,8 +1,11 @@
 # 02 — ARQUITECTURA DE IA
 
 ## Modelo
-- **V1:** Claude Haiku 4.5 (1 USD/M entrada, 5 USD/M salida — verificado jul-2026).
-  Razón: mejor relación costo/calidad para consultas de estudiantes; margen del negocio sano.
+- **Desde oct-2026:** Claude Sonnet 5.5 (`claude-sonnet-5-5`, 2 USD/M entrada, 10 USD/M salida, thinking
+  adaptativo, esfuerzo `medium`) para respuestas más precisas y verificables. Detalle, costos y riesgos de
+  margen en `docs/11-MOTOR-DE-FUENTES.md`.
+- **V1 (hasta sep-2026):** Claude Haiku 4.5 (1 USD/M entrada, 5 USD/M salida — verificado jul-2026).
+  Sigue disponible con `PULLEX_MODELO=claude-haiku-4-5`.
 - El modelo es configurable por variable de entorno (`PULLEX_MODELO`): cambiarlo no toca código.
 - Boletín diario puede usar modelo distinto (`PULLEX_MODELO_BOLETIN`), se genera 1 vez/día.
 
@@ -32,7 +35,8 @@ V3: agentes con herramientas propias (citación, jurisprudencia, redacción, cal
 - Métrica objetivo: % de respuestas con fuentes verificables.
 
 ## Costos
-- Consulta típica ≈ 5–12k tokens ≈ 40–50 COP con Haiku.
+- Consulta típica ≈ 5–12k tokens ≈ 40–50 COP con Haiku; ≈ 120 COP con Sonnet 5.5 sin búsqueda web
+  (estimación, ver docs/11).
 - Límite por plan = techo de gasto por usuario. Prompt caching en V2 para bajar aún más.
 
 ## Latencia
