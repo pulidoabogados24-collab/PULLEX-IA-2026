@@ -11,10 +11,30 @@ const AREAS=['Constitucional / Tutela','Penal','Civil','Familia','Laboral','Admi
   'Marcas / Propiedad Intelectual','Consumidor','Tributario'];
 const RUBRICA=[['problema','Identificación del problema',20],['normas','Marco normativo',20],['argumentacion','Argumentación',20],
   ['aplicacion','Aplicación a los hechos',20],['conclusion','Conclusión',10],['claridad','Claridad jurídica',10]];
-const S={perfil:null,convs:[],msgs:{},casos:{},intentos:[],sig:1,conoc:{}};
+const S={perfil:null,convs:[],msgs:{},casos:{},intentos:[],sig:1,conoc:{},imgs:{}};
+// Apariencia: misma lista blanca que app.py (las imágenes quedan solo en la memoria de esta página).
+const AP_OPC={modo:['claro','oscuro','auto'],tema:['pullex','notario','bogota','caribe','toga','jardin'],
+  fuente:['editorial','clasica','moderna'],tamano:['normal','grande'],densidad:['comoda','compacta'],radio:['recto','suave','redondo']};
+const AP_TOPE={fondo:350*1024,avatar:120*1024,logo:120*1024};
+function apBase(){return {modo:'claro',tema:'pullex',acento:null,fuente:'editorial',tamano:'normal',densidad:'comoda',radio:'suave',
+  imagenes:{fondo:0,avatar:0,logo:0}}}
+function apActualizar(actual,b){
+  if(!b||typeof b!=='object'||Array.isArray(b))return 'Apariencia inválida.';
+  const n={...actual,imagenes:{...actual.imagenes}};
+  for(const k in AP_OPC){if(k in b){if(!AP_OPC[k].includes(b[k]))return 'Valor no permitido en apariencia: '+k+'.';n[k]=b[k]}}
+  if('acento' in b){if(b.acento==null||b.acento==='')n.acento=null;
+    else if(typeof b.acento==='string'&&/^#[0-9a-f]{6}$/i.test(b.acento))n.acento=b.acento.toLowerCase();
+    else return 'El color de acento debe tener el formato #rrggbb.'}
+  for(const t in AP_TOPE){if(!(t in b))continue;const v=b[t];
+    if(v==null||v===''){delete S.imgs[t];n.imagenes[t]=0;continue}
+    const m=typeof v==='string'&&v.match(/^data:(image\/jpeg|image\/png);base64,([A-Za-z0-9+/=]+)$/);
+    if(!m)return 'La imagen debe ser JPG o PNG.';
+    if(m[2].length*3/4>AP_TOPE[t])return 'La imagen pesa demasiado (máximo '+(AP_TOPE[t]/1024)+' KB).';
+    S.imgs[t]={mime:m[1],b64:m[2]};n.imagenes[t]=Date.now()}
+  return n}
 function perfilBase(nombre,email){return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:'pro',
   plan_nombre:'Pro',limite:500,usadas:12,restantes:488,activo:true,es_admin:false,email_verificado:true,
-  preferencias:{areas:['Constitucional / Tutela','Penal'],modo:'auto',tema:'oscuro',web:true,memoria:'',camino:'aprender'}}}
+  preferencias:{areas:['Constitucional / Tutela','Penal'],modo:'auto',tema:'claro',web:true,memoria:'',camino:'aprender',apariencia:apBase()}}}
 function json(d,st){return new Response(JSON.stringify(d),{status:st||200,headers:{'content-type':'application/json'}})}
 function error(st,m){return json({detail:m},st)}
 function gastar(){const p=S.perfil;p.usadas++;p.restantes=p.limite-p.usadas;return p.restantes}
@@ -145,7 +165,16 @@ async function manejar(url,o){
   if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false});
   if(ruta==='/api/boletin')return json({fecha:new Date().toISOString().slice(0,10),contenido:
     '## Boletín de demostración\n\nEn la app real, aquí aparece cada día un boletín con noticias jurídicas, jurisprudencia reciente y novedades normativas de Colombia, generado con búsqueda web en fuentes oficiales.\n\n_Esta página es una demostración: no muestra noticias reales._'});
-  if(ruta==='/api/preferencias'){Object.assign(S.perfil.preferencias,b);return json({ok:true,preferencias:S.perfil.preferencias})}
+  if(ruta==='/api/preferencias'){const p=S.perfil.preferencias;
+    if('apariencia' in b){const a=apActualizar(p.apariencia||apBase(),b.apariencia);if(typeof a==='string')return error(400,a);
+      p.apariencia=a;if(a.modo==='claro'||a.modo==='oscuro')p.tema=a.modo}
+    if(b.tema==='claro'||b.tema==='oscuro'){p.tema=b.tema;p.apariencia={...(p.apariencia||apBase()),modo:b.tema}}
+    const resto={...b};delete resto.apariencia;delete resto.tema;Object.assign(p,resto);
+    return json({ok:true,preferencias:p})}
+  const ri=ruta.match(/^\/api\/apariencia\/imagen\/(fondo|avatar|logo)$/);
+  if(ri){const im=S.imgs[ri[1]];if(!im)return error(404,'Imagen no encontrada');
+    const bin=atob(im.b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    return new Response(new Blob([u],{type:im.mime}),{status:200,headers:{'content-type':im.mime}})}
   if(ruta==='/api/conversaciones'&&m==='POST'){const id=S.sig++;S.convs.unshift({id,titulo:'Nueva consulta',t:0});S.msgs[id]=[];return json({id,titulo:'Nueva consulta'})}
   if(ruta==='/api/conversaciones')return json(S.convs.filter(c=>(S.msgs[c.id]||[]).length)
     .sort((x,y)=>y.t-x.t).map(c=>({id:c.id,titulo:c.titulo,actualizada:c.t})));

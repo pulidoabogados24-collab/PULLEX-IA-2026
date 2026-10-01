@@ -11,12 +11,16 @@ Lawyer Experience).
 - ¿El usuario puede equivocarse sin miedo? (nunca se le regaña; la IA interpreta con buena fe)
 
 ## Sistema de diseño vigente
-- **Colores:** azul oscuro corporativo `#0A1E3F` (fondo), amarillo oro `#FFC93C`/`#FDB813`
-  (acción/acento), franja tricolor sutil como guiño colombiano. Tema claro opcional.
-- **Tipografía:** del sistema (Segoe UI/system-ui) — rápida y familiar.
-- **Layout:** 3 vistas (Inicio / Consultar / Configuración); una pregunta por pantalla.
-- **Chat:** burbujas con avatar, streaming fluido (render con requestAnimationFrame),
-  cursor animado, acciones por respuesta (Copiar / Descargar / PDF).
+Detalle completo, paleta, temas y ratios de contraste: `docs/12-DISENO-Y-APARIENCIA.md`.
+- **Dirección:** editorial-jurídica contemporánea, premium y cálida. Papel, tinta y un solo acento
+  (bermellón en el tema por defecto). Nada de estética "IA" (sin neón, brillos, robots ni vidrio).
+- **Tokens semánticos** en `static/tema.css` (`--bg`, `--surface`, `--text`, `--accent`…): toda vista
+  nueva usa SOLO tokens. Los nombres viejos (`--azul`, `--oro`…) quedan como alias.
+- **Tipografía:** Fraunces (títulos) + Inter (texto), autohospedadas; pares alternativos Clásica y Moderna.
+- **Claro por defecto**, oscuro elegante y automático; 6 temas curados; contraste AA verificado.
+- **Layout:** 5 vistas (Inicio / Modular Lab / Mi mapa / Consultar / Ajustes); en móvil, barra inferior.
+- **Cada usuario personaliza** colores, tema, tipografía, tamaño, densidad, esquinas e imágenes
+  (fondo del Inicio, foto, logo) en Ajustes → Apariencia; se guarda en su cuenta.
 
 ## Métricas LX que se optimizan
 Tiempo para: obtener una orientación, redactar un documento, entender una sentencia,

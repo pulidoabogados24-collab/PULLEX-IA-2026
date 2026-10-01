@@ -61,18 +61,23 @@ const CAPACIDADES=[
 async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
   try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
-  aplicarPerfil();aplicarTema(PERFIL.preferencias.tema);
+  apIniciar();aplicarPerfil();
   $('modo').value=PERFIL.preferencias.modo||'auto';
   WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
 }
+function iniciales(n){return (n||'').trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'·'}
+function saludoHora(){const h=new Date().getHours();return h<5?'Buenas noches':h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches'}
 function aplicarPerfil(){
-  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').split(' ')[0];
+  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').trim().split(/\s+/)[0];
+  $('h-saludo').textContent=saludoHora();$('pv-saludo').textContent=saludoHora()+'.';
+  try{const f=new Date().toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});$('h-fecha').textContent=f.charAt(0).toUpperCase()+f.slice(1)}catch(e){}
+  ['h-iniciales','cf-iniciales','pv-iniciales'].forEach(id=>{$(id).textContent=iniciales(PERFIL.nombre)});
   $('c-plan').textContent=PERFIL.plan_nombre;$('c-rest').textContent=PERFIL.restantes;
   $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
   $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   $('cf-modo').value=PERFIL.preferencias.modo||'auto';
   $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
-  $('cf-tema').classList.toggle('on',PERFIL.preferencias.tema==='claro');
+  sincronizarSwTema();
   $('cf-memoria').value=PERFIL.preferencias.memoria||'';
   $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
   pintarAreas();pintarPlanes();
@@ -87,10 +92,12 @@ function pintarPlanes(){
   const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
   ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
-      <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
+      <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
 function ver(v){['inicio','modular','mapa','chat','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
+  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
+  if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+  const m=document.querySelector('main');if(m)m.scrollTop=0;
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
@@ -125,7 +132,9 @@ function esEscritorio(){return window.matchMedia('(min-width:760px)').matches}
 function toggleHistorial(){$('chat-lay').classList.toggle('hist-abierto')}
 function cerrarHistorial(){$('chat-lay').classList.remove('hist-abierto')}
 async function cargarConvs(){
-  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){}
+  const l=$('convs-lista');
+  if(!l.children.length){for(let i=0;i<4;i++){const k=el('div','skel');k.style.cssText='height:12px;margin:12px 10px;width:'+(80-i*12)+'%';l.appendChild(k)}}
+  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){if(l.querySelector('.skel'))l.textContent=''}
 }
 function pintarConvs(){
   const l=$('convs-lista');l.textContent='';
@@ -212,7 +221,7 @@ function pintarAdj(){const c=$('adjfila');c.innerHTML='';
     e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
 function burbuja(rol,texto,adj){
   const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
-  b.innerHTML=`<div class="av">${rol==='user'?'Tú':'PX'}</div><div class="bd"><div class="md"></div></div>`;
+  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd"><div class="md"></div></div>`;
   b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
   if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
     adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
@@ -265,7 +274,7 @@ async function enviar(opc){
 }
 function accionesResp(b,texto,fuentes){
   const a=document.createElement('div');a.className='acc';
-  a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
+  a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button>';
   const [c,d,p]=a.querySelectorAll('button');
   c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
   d.onclick=()=>descargar('pullex-respuesta.txt',texto);
@@ -331,9 +340,9 @@ function exportarExcel(){
 }
 
 async function guardarPrefs(){
+  // El tema ya no viaja aquí: lo maneja la apariencia (apCambiar), que distingue claro/oscuro/automático.
   const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
-  const body={areas,modo:$('cf-modo').value,tema:document.body.classList.contains('claro')?'claro':'oscuro',
-    web:$('cf-web').classList.contains('on')};
+  const body={areas,modo:$('cf-modo').value,web:$('cf-web').classList.contains('on')};
   try{const d=await(await fetch('/api/preferencias',{method:'POST',
     headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
     PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
@@ -345,10 +354,10 @@ async function guardarMemoria(){
     PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
 }
 function togglePref(el){el.classList.toggle('on');guardarPrefs()}
-function toggleTema(el){el.classList.toggle('on');aplicarTema(el.classList.contains('on')?'claro':'oscuro');guardarPrefs()}
-function aplicarTema(t){document.body.classList.toggle('claro',t==='claro');
-  document.body.classList.toggle('oscuro',t!=='claro');
-  document.querySelector('meta[name=theme-color]').content=t==='claro'?'#eef3fb':'#0A1E3F'}
+function toggleTema(el){el.classList.toggle('on');apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
+// Compatibilidad: cambia claro/oscuro sin guardar (lo usan pruebas y código anterior).
+function aplicarTema(t){AP.datos={...(AP.datos||PXA.actual()),modo:t==='claro'?'claro':'oscuro'};PXA.aplicar(AP.datos);apRefrescar()}
+function sincronizarSwTema(){const s=$('cf-tema');if(s)s.classList.toggle('on',document.documentElement.getAttribute('data-esquema')!=='oscuro')}
 
 const ICONOS_TOOL={
   tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
@@ -377,9 +386,9 @@ const HERRAMIENTAS=[
 ];
 function abrirTools(){
   const g=$('tools-grid');g.innerHTML='';
-  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');
-    b.className='bsec';b.style.cssText='text-align:left;padding:12px;border-radius:11px;font-size:13px;line-height:1.3';
-    b.innerHTML=`<div style="color:var(--oro)">${icoTool(h.i)}</div><b style="color:var(--oro)">${h.t}</b>`;
+  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');b.type='button';
+    b.className='tool';
+    b.innerHTML=`<span class="ti">${icoTool(h.i)}</span>`;b.appendChild(document.createTextNode(h.t));
     b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
   $('m-tools').classList.remove('hidden');
 }
@@ -538,7 +547,7 @@ async function reenviarVerificacion(){
   }catch(e){toast('Error de conexión')}
   b.disabled=false;b.textContent=t0;
 }
-function salir(){TOKEN=null;PERFIL=null;CONV=null;location.reload()}
+function salir(){TOKEN=null;PERFIL=null;CONV=null;Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)});location.reload()}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
 
 // -------------------------------------------------------- instalar como app --
@@ -606,9 +615,10 @@ function pintarCapacidades(){
   const g=$('capgrid');g.innerHTML='';
   (CAMINO==='trabajar'?CAPACIDADES:APRENDER).forEach(c=>{
     const b=document.createElement('button');b.className='captarj';
-    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
+    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
     const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
     b.appendChild(t);b.appendChild(d);
+    const ir=el('span','ir','Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
     b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
     g.appendChild(b);
   });
@@ -848,7 +858,11 @@ function boton(txt,cls,fn){const b=el('button',cls,txt);b.type='button';b.addEve
 async function cargarTablero(){
   const t=$('tablero');
   if(CAMINO!=='aprender'){t.classList.add('hidden');return}
-  let r;try{r=await api('/api/academia/resumen')}catch(e){t.classList.add('hidden');return}
+  if(!t.children.length){ // esqueleto mientras llega el tablero (clase distinta de .tcard a propósito)
+    for(let i=0;i<2;i++){const c=el('div','tcard-esq panel');c.style.cssText='margin:0;padding:16px 18px';
+      [40,85,60].forEach(w=>{const k=el('div','skel');k.style.width=w+'%';c.appendChild(k)});t.appendChild(c)}
+    t.classList.remove('hidden')}
+  let r;try{r=await api('/api/academia/resumen')}catch(e){t.textContent='';t.classList.add('hidden');return}
   t.textContent='';
   const card=(k,v,sub,acc,cls)=>{const c=el('div','tcard'+(cls?' '+cls:''));c.appendChild(el('div','k',k));
     c.appendChild(el('div','v',v));if(sub)c.appendChild(el('div','s',sub));if(acc)c.appendChild(acc);t.appendChild(c)};
@@ -953,6 +967,191 @@ function pintarAreaMapa(){
     });
     s.appendChild(g);cont.appendChild(s);
   });
+}
+
+// ------------------------------------------------------------- Apariencia (por usuario) --
+// El motor de color y los atributos de <html> están en static/apariencia.js (PXA), que corre antes de
+// pintar. Aquí: los controles de Ajustes → Apariencia, el guardado en la cuenta (con espera corta para
+// no enviar una petición por cada clic) y las imágenes (fondo del Inicio, foto de perfil, logo).
+const TEMAS_AP=[
+  {id:'pullex',n:'PULLEX',d:'Papel, tinta y bermellón',c:['#f7f5f0','#1b1a17','#b33a16'],o:['#141311','#eeebe4','#ee7a4f']},
+  {id:'notario',n:'Notario',d:'Marfil y tinta',c:['#fbf8f1','#1a1d24','#22385e'],o:['#101218','#ece8df','#a9bee3']},
+  {id:'bogota',n:'Bogotá',d:'Gris piedra y pizarra',c:['#efefec','#1c1f22','#2d5876'],o:['#151718','#e8eaeb','#8db7d6']},
+  {id:'caribe',n:'Caribe',d:'Arena y turquesa',c:['#f8f3e8','#1d2321','#0a7570'],o:['#0f1716','#eaf1ee','#3cc7bd']},
+  {id:'toga',n:'Toga',d:'Negro y vino',c:['#f5f4f2','#121212','#7b1e34'],o:['#0a0a0a','#f0edee','#d96f87']},
+  {id:'jardin',n:'Jardín',d:'Verde salvia',c:['#f2f4ef','#1a1f1b','#43654e'],o:['#121613','#e9eee9','#9bc4a5']}];
+const ACENTOS_AP=[['Bermellón','#b33a16'],['Tinta','#22385e'],['Cobalto','#2f54c9'],['Turquesa','#0a7570'],
+  ['Salvia','#43654e'],['Vino','#7b1e34'],['Ocre','#93600c'],['Grafito','#3d3c39']];
+const FUENTES_AP=[['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
+  ['clasica','Clásica','Source Serif','var(--serif-lectura)'],['moderna','Moderna','Inter','var(--sans)']];
+const IMGS_AP={fondo:['Fondo del Inicio','Una foto tuya, de tu ciudad o de tu oficina. Se ajusta a 1600 px.',350],
+  avatar:['Foto de perfil','Se recorta en cuadrado de 256 px.',120],logo:['Logo propio','Reemplaza el monograma en la cabecera. PNG con fondo transparente queda mejor.',120]};
+const AP={datos:null,pend:{},timer:null,urls:{fondo:null,avatar:null,logo:null},hecho:false};
+
+function apIniciar(){
+  const a=(PERFIL&&PERFIL.preferencias&&PERFIL.preferencias.apariencia)||{};
+  AP.datos=PXA.normalizar(a);PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);
+  construirApariencia();apRefrescar();cargarImagenesAp();
+}
+function apEstado(t,ok){const e=$('ap-estado');if(!e)return;e.textContent=t||'';e.classList.toggle('ok',!!ok)}
+// Aplica en vivo, guarda en este navegador (para pintar rápido la próxima vez) y en la cuenta.
+function apCambiar(c){
+  AP.datos={...(AP.datos||PXA.actual()),...c};PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);apRefrescar();
+  Object.assign(AP.pend,c);clearTimeout(AP.timer);apEstado('Guardando…');AP.timer=setTimeout(apGuardar,450);
+}
+async function apGuardar(){
+  const pend=AP.pend;AP.pend={};if(!Object.keys(pend).length)return;
+  try{const d=await api('/api/preferencias',{body:{apariencia:pend}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};apEstado('Guardado en tu cuenta',true)}
+  catch(e){apEstado('No se pudo guardar');toast(e.message)}
+}
+function boton2(cls,fn){const b=el('button',cls);b.type='button';b.addEventListener('click',()=>fn(b));return b}
+function icoUse(id,cls){return '<svg class="i '+(cls||'s')+'" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+function construirApariencia(){
+  const c=$('ap-controles');if(!c||AP.hecho)return;AP.hecho=true;c.textContent='';
+  const titulo=t=>c.appendChild(el('div','lb2',t));
+  const seg=(clave,ops)=>{const g=el('div','seg');g.setAttribute('role','radiogroup');g.dataset.clave=clave;
+    ops.forEach(([v,t,ic])=>{const b=boton2('',()=>apCambiar({[clave]:v}));b.dataset.v=v;b.setAttribute('role','radio');
+      if(ic)b.innerHTML=icoUse(ic,'xs');b.appendChild(document.createTextNode(t));g.appendChild(b)});return g};
+  titulo('Modo');
+  c.appendChild(seg('modo',[['claro','Claro','sol'],['oscuro','Oscuro','luna'],['auto','Automático','auto']]));
+  titulo('Tema');
+  const tg=el('div','temas');tg.id='ap-temas';
+  TEMAS_AP.forEach(t=>{const b=boton2('tema-op',()=>apCambiar({tema:t.id,acento:null}));b.dataset.v=t.id;
+    const m=el('span','mues');m.innerHTML='<i class="l1"></i><i class="l2"></i><i class="pt"></i>';b.appendChild(m);
+    const n=el('span','nom',t.n);n.appendChild(el('span',null,t.d));b.appendChild(n);tg.appendChild(b)});
+  c.appendChild(tg);
+  titulo('Color de acento');
+  const ac=el('div','acentos');ac.id='ap-acentos';
+  const delTema=boton2('acento-tema',()=>apCambiar({acento:null}));delTema.textContent='El del tema';delTema.dataset.v='';ac.appendChild(delTema);
+  ACENTOS_AP.forEach(([n,h])=>{const b=boton2('acento-op',()=>apCambiar({acento:h}));b.dataset.v=h;b.title=n;
+    b.setAttribute('aria-label','Acento '+n);b.style.background=h;ac.appendChild(b)});
+  const lib=el('label','acento-libre');lib.title='Elige cualquier color: PULLEX ajusta el contraste para que se lea bien';
+  lib.appendChild(document.createTextNode('Otro'));
+  const inp=document.createElement('input');inp.type='color';inp.id='ap-color';inp.value='#b33a16';inp.setAttribute('aria-label','Color de acento libre');
+  inp.addEventListener('input',()=>apCambiar({acento:inp.value.toLowerCase()}));lib.appendChild(inp);ac.appendChild(lib);
+  c.appendChild(ac);
+  titulo('Tipografía');
+  const fg=el('div','fuentes-op');fg.id='ap-fuentes';
+  FUENTES_AP.forEach(([v,n,d,f])=>{const b=boton2('fuente-op',()=>apCambiar({fuente:v}));b.dataset.v=v;
+    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':'560';b.appendChild(aa);
+    b.appendChild(el('span','n',n+' · '+d));fg.appendChild(b)});
+  c.appendChild(fg);
+  const g3=el('div','ap-grid3');
+  [['Tamaño del texto','tamano',[['normal','Normal'],['grande','Grande']]],
+   ['Densidad','densidad',[['comoda','Cómoda'],['compacta','Compacta']]],
+   ['Esquinas','radio',[['recto','Rectas'],['suave','Suaves'],['redondo','Redondas']]]].forEach(([t,k,ops])=>{
+    const w=el('div');w.appendChild(el('div','lb2',t));w.appendChild(seg(k,ops));g3.appendChild(w)});
+  c.appendChild(g3);
+  titulo('Imágenes');
+  Object.entries(IMGS_AP).forEach(([tipo,[n,d]])=>{
+    const f=el('div','img-fila');
+    const mini=el('span','mini'+(tipo==='avatar'?' red':tipo==='logo'?' logo':''));mini.id='ap-mini-'+tipo;
+    mini.innerHTML=icoUse('imagen','s');f.appendChild(mini);
+    const tx=el('div','tx');tx.appendChild(el('b',null,n));tx.appendChild(el('span',null,d));f.appendChild(tx);
+    const bt=el('div','bt');
+    const file=document.createElement('input');file.type='file';file.accept='image/png,image/jpeg,image/webp';file.className='hidden';
+    file.id='ap-file-'+tipo;file.addEventListener('change',()=>apSubir(tipo,file));
+    const sub=boton2('bsec',()=>file.click());sub.id='ap-subir-'+tipo;sub.innerHTML=icoUse('subir','xs');sub.appendChild(document.createTextNode('Subir'));
+    const qui=boton2('bghost',()=>apQuitar(tipo));qui.id='ap-quitar-'+tipo;qui.textContent='Quitar';
+    bt.appendChild(file);bt.appendChild(sub);bt.appendChild(qui);f.appendChild(bt);c.appendChild(f)});
+  const pie=el('div','ap-pie');
+  pie.appendChild(boton2('bsec',apRestablecer)).textContent='Restablecer apariencia';
+  pie.appendChild(el('p',null,'Los colores se ajustan solos para que el texto siempre se lea bien (contraste AA).'));
+  c.appendChild(pie);
+}
+// Marca la opción activa de cada control y pinta las muestras de tema según el modo actual.
+function apRefrescar(){
+  sincronizarSwTema();
+  const a=AP.datos||PXA.actual();const c=$('ap-controles');if(!c||!AP.hecho)return;
+  const oscuro=document.documentElement.getAttribute('data-esquema')==='oscuro';
+  c.querySelectorAll('.seg').forEach(g=>{[...g.children].forEach(b=>{const on=a[g.dataset.clave]===b.dataset.v;
+    b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on))})});
+  $('ap-temas').querySelectorAll('.tema-op').forEach((b,i)=>{const t=TEMAS_AP[i],k=oscuro?t.o:t.c;
+    b.classList.toggle('on',a.tema===t.id);b.setAttribute('aria-pressed',String(a.tema===t.id));
+    const m=b.querySelector('.mues');m.style.background=k[0];
+    m.querySelector('.l1').style.background=k[1];m.querySelector('.l2').style.background=k[1];m.querySelector('.pt').style.background=k[2]});
+  let libre=!!a.acento;
+  $('ap-acentos').querySelectorAll('.acento-op,.acento-tema').forEach(b=>{const on=(b.dataset.v||null)===a.acento;
+    if(on&&a.acento)libre=false;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+  const lib=$('ap-acentos').querySelector('.acento-libre');lib.classList.toggle('on',libre);
+  if(a.acento&&$('ap-color').value!==a.acento)$('ap-color').value=a.acento;
+  $('ap-fuentes').querySelectorAll('.fuente-op').forEach(b=>{const on=b.dataset.v===a.fuente;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+}
+
+// ---- imágenes: se ajustan en el navegador (canvas) y viajan como data URL JPEG/PNG; el servidor
+// vuelve a validar tipo real, peso y dimensiones. Se muestran como blob: (o data:) — CSP img-src lo permite.
+function bytesDataUrl(u){const b=(u.split(',')[1]||'');return Math.floor(b.length*3/4)}
+function cargarImagen(file){return new Promise((ok,mal)=>{const u=URL.createObjectURL(file);const im=new Image();
+  im.onload=()=>{ok(im);URL.revokeObjectURL(u)};
+  im.onerror=()=>{URL.revokeObjectURL(u);mal(new Error('No pudimos leer esa imagen. Prueba con un JPG o PNG.'))};im.src=u})}
+async function procesarImagen(file,tipo){
+  if(!/^image\/(png|jpeg|webp)$/i.test(file.type||''))throw new Error('Usa una imagen JPG, PNG o WebP.');
+  if(file.size>20*1024*1024)throw new Error('La imagen es muy grande (máximo 20 MB).');
+  const im=await cargarImagen(file),W=im.naturalWidth,H=im.naturalHeight;
+  if(!W||!H)throw new Error('No pudimos leer esa imagen.');
+  const tope=IMGS_AP[tipo][2]*1024,c=document.createElement('canvas'),x=c.getContext('2d');
+  const pintar=(w,h,sx,sy,sw,sh,fondo)=>{c.width=w;c.height=h;x.clearRect(0,0,w,h);
+    if(fondo){x.fillStyle=fondo;x.fillRect(0,0,w,h)}x.imageSmoothingQuality='high';x.drawImage(im,sx,sy,sw,sh,0,0,w,h)};
+  const jpeg=calidades=>{for(const q of calidades){const u=c.toDataURL('image/jpeg',q);if(bytesDataUrl(u)<=tope)return u}return null};
+  if(tipo==='avatar'){const l=Math.min(W,H);pintar(256,256,(W-l)/2,(H-l)/2,l,l,'#ffffff');
+    const u=jpeg([.86,.76,.66]);if(u)return u;throw new Error('No pudimos reducir la foto lo suficiente.')}
+  if(tipo==='logo'){const e=Math.min(1,512/W,128/H);const w=Math.max(1,Math.round(W*e)),h=Math.max(1,Math.round(H*e));
+    pintar(w,h,0,0,W,H,null);const u=c.toDataURL('image/png');if(bytesDataUrl(u)<=tope)return u;
+    pintar(w,h,0,0,W,H,'#ffffff');const j=jpeg([.9,.8]);if(j)return j;throw new Error('El logo pesa demasiado. Prueba con uno más sencillo.')}
+  let lado=1600;
+  for(let i=0;i<6;i++){const e=Math.min(1,lado/Math.max(W,H));pintar(Math.round(W*e),Math.round(H*e),0,0,W,H,'#ffffff');
+    const u=jpeg([.8,.72,.64,.56]);if(u)return u;lado=Math.round(lado*.82)}
+  throw new Error('No pudimos reducir la imagen lo suficiente. Prueba con otra.');
+}
+function ponerImagen(tipo,url){const v=AP.urls[tipo];if(v&&v!==url&&v.startsWith('blob:'))URL.revokeObjectURL(v);AP.urls[tipo]=url;pintarImagenes()}
+function pintarImagenes(){
+  const {fondo,avatar,logo}=AP.urls;
+  ['hero','pv-hero'].forEach(id=>{const h=$(id);if(!h)return;h.classList.toggle('con-fondo',!!fondo);
+    if(fondo)h.style.setProperty('--fondo-inicio','url("'+fondo+'")');else h.style.removeProperty('--fondo-inicio')});
+  [['h-avatar-img','h-iniciales'],['cf-avatar-img','cf-iniciales'],['pv-avatar-img','pv-iniciales']].forEach(([i,t])=>{
+    const im=$(i);if(avatar)im.src=avatar;else im.removeAttribute('src');im.classList.toggle('hidden',!avatar);$(t).classList.toggle('hidden',!!avatar)});
+  document.querySelector('.h-logo').classList.toggle('con-logo',!!logo);
+  [['h-logo-img','h-mono'],['pv-logo','pv-mono']].forEach(([i,m])=>{
+    const im=$(i);if(logo)im.src=logo;else im.removeAttribute('src');im.classList.toggle('hidden',!logo);$(m).classList.toggle('hidden',!!logo)});
+  Object.keys(IMGS_AP).forEach(tipo=>{const m=$('ap-mini-'+tipo);if(!m)return;const u=AP.urls[tipo];
+    if(u){m.textContent='';const im=document.createElement('img');im.alt='';im.src=u;m.appendChild(im)}else m.innerHTML=icoUse('imagen','s');
+    $('ap-quitar-'+tipo).classList.toggle('hidden',!u);
+    const s=$('ap-subir-'+tipo);s.lastChild.textContent=u?'Cambiar':'Subir'});
+}
+async function cargarImagenesAp(){
+  const v=(PERFIL.preferencias.apariencia&&PERFIL.preferencias.apariencia.imagenes)||{};
+  pintarImagenes();
+  await Promise.all(Object.keys(IMGS_AP).map(async tipo=>{
+    if(!v[tipo]){ponerImagen(tipo,null);return}
+    try{const r=await fetch('/api/apariencia/imagen/'+tipo,{headers:auth()});
+      if(r.ok)ponerImagen(tipo,URL.createObjectURL(await r.blob()))}catch(e){}
+  }));
+}
+async function apSubir(tipo,input){
+  const f=input.files&&input.files[0];input.value='';if(!f)return;
+  const b=$('ap-subir-'+tipo);b.disabled=true;apEstado('Ajustando la imagen…');
+  try{const url=await procesarImagen(f,tipo);
+    const d=await api('/api/preferencias',{body:{apariencia:{[tipo]:url}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};ponerImagen(tipo,url);
+    apEstado('Imagen guardada en tu cuenta',true);
+    if(tipo==='fondo')toast('Listo: así se verá tu Inicio.');
+  }catch(e){apEstado('');toast(e.message||'No se pudo usar esa imagen.')}
+  b.disabled=false;
+}
+async function apQuitar(tipo){
+  try{const d=await api('/api/preferencias',{body:{apariencia:{[tipo]:null}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};ponerImagen(tipo,null);apEstado('Imagen quitada',true)}
+  catch(e){toast(e.message)}
+}
+async function apRestablecer(){
+  if(!confirm('¿Volver a la apariencia original de PULLEX? También se quitan tu fondo, tu foto y tu logo.'))return;
+  clearTimeout(AP.timer);AP.pend={};
+  AP.datos={...PXA.DEFECTO};PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);apRefrescar();
+  try{const d=await api('/api/preferencias',{body:{apariencia:{...PXA.DEFECTO,fondo:null,avatar:null,logo:null}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};
+    Object.keys(IMGS_AP).forEach(t=>ponerImagen(t,null));apEstado('Apariencia restablecida',true)}
+  catch(e){toast(e.message)}
 }
 
 // ---------------------------------------------------------------------------------------

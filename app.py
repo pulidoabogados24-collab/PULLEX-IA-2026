@@ -122,6 +122,27 @@ AREAS = ["Constitucional / Tutela", "Penal", "Civil", "Familia", "Laboral",
 PREFS_DEFECTO = {"areas": [], "modo": "auto", "tema": "oscuro", "web": True, "memoria": "",
                  "camino": "aprender"}
 
+# Apariencia personalizable por usuario (docs/12-DISENO-Y-APARIENCIA.md). Lista blanca estricta:
+# claves desconocidas se ignoran y un valor fuera de la lista se rechaza con 400. Los colores solo
+# como #rrggbb; las imágenes (fondo del Inicio, avatar y logo) solo como data URL JPEG o PNG, con
+# tope de bytes y de dimensiones, y se guardan aparte (tabla apariencia_imagenes) para no inflar
+# /api/estado: en las preferencias solo queda la versión de cada imagen.
+APARIENCIA_OPCIONES = {
+    "modo": ("claro", "oscuro", "auto"),
+    "tema": ("pullex", "notario", "bogota", "caribe", "toga", "jardin"),
+    "fuente": ("editorial", "clasica", "moderna"),
+    "tamano": ("normal", "grande"),
+    "densidad": ("comoda", "compacta"),
+    "radio": ("recto", "suave", "redondo"),
+}
+APARIENCIA_DEFECTO = {"modo": "claro", "tema": "pullex", "acento": None, "fuente": "editorial",
+                      "tamano": "normal", "densidad": "comoda", "radio": "suave",
+                      "imagenes": {"fondo": 0, "avatar": 0, "logo": 0}}
+# tipo de imagen → (bytes máximos ya decodificados, lado máximo en píxeles)
+APARIENCIA_IMAGENES = {"fondo": (350 * 1024, 1600), "avatar": (120 * 1024, 512),
+                       "logo": (120 * 1024, 512)}
+_RE_COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
+
 SYSTEM_PROMPT = """Eres PULLEX IA, un asistente de inteligencia artificial hecho en Colombia. Ayudas con
 cualquier tema —estudio, escritura, cálculos, tecnología, trabajo, decisiones cotidianas o asuntos
 personales— con la calidad de un buen asistente general. Tu vocación es el derecho colombiano: ahí
@@ -389,6 +410,9 @@ with closing(db()) as con:
     CREATE INDEX IF NOT EXISTS ix_conv_usuario ON conversaciones(usuario);
     CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes(conv);
     CREATE INDEX IF NOT EXISTS ix_tokens_email ON tokens_accion(email, tipo);
+    CREATE TABLE IF NOT EXISTS apariencia_imagenes(
+        usuario TEXT NOT NULL, tipo TEXT NOT NULL, mime TEXT NOT NULL, data BLOB NOT NULL,
+        actualizado REAL NOT NULL, PRIMARY KEY(usuario, tipo));
     """)
     academia.crear_tabla(con)
     con.commit()
@@ -532,7 +556,117 @@ def preferencias_de(u):
         p = json.loads(u.get("preferencias") or "{}")
     except Exception:
         p = {}
-    return {**PREFS_DEFECTO, **p}
+    if not isinstance(p, dict):
+        p = {}
+    prefs = {**PREFS_DEFECTO, **p}
+    prefs["apariencia"] = _apariencia_completa(p.get("apariencia"))
+    return prefs
+
+
+def _apariencia_completa(guardada) -> dict:
+    """Apariencia con todos sus valores; lo guardado que no esté en la lista blanca se descarta."""
+    g = guardada if isinstance(guardada, dict) else {}
+    a = {k: (g[k] if g.get(k) in v else APARIENCIA_DEFECTO[k]) for k, v in APARIENCIA_OPCIONES.items()}
+    acento = g.get("acento")
+    a["acento"] = acento.lower() if isinstance(acento, str) and _RE_COLOR.match(acento) else None
+    imgs = g.get("imagenes") if isinstance(g.get("imagenes"), dict) else {}
+    a["imagenes"] = {t: (int(imgs[t]) if isinstance(imgs.get(t), (int, float)) and imgs[t] > 0 else 0)
+                     for t in APARIENCIA_IMAGENES}
+    return a
+
+
+def _dimensiones_imagen(datos: bytes, mime: str):
+    """(ancho, alto) leídos de la cabecera PNG/JPEG, o None si no es una imagen válida de ese tipo."""
+    if mime == "image/png":
+        if datos[:8] != b"\x89PNG\r\n\x1a\n" or datos[12:16] != b"IHDR" or len(datos) < 24:
+            return None
+        return int.from_bytes(datos[16:20], "big"), int.from_bytes(datos[20:24], "big")
+    if datos[:3] != b"\xff\xd8\xff":
+        return None
+    i = 2
+    while i + 9 < len(datos):
+        if datos[i] != 0xFF:
+            return None
+        marca = datos[i + 1]
+        if marca in (0xD8, 0x01) or 0xD0 <= marca <= 0xD7:  # marcadores sin longitud
+            i += 2
+            continue
+        largo = int.from_bytes(datos[i + 2:i + 4], "big")
+        if 0xC0 <= marca <= 0xCF and marca not in (0xC4, 0xC8, 0xCC):  # SOFn: trae las dimensiones
+            return int.from_bytes(datos[i + 7:i + 9], "big"), int.from_bytes(datos[i + 5:i + 7], "big")
+        if largo < 2:
+            return None
+        i += 2 + largo
+    return None
+
+
+def validar_imagen_apariencia(tipo: str, valor: str):
+    """Data URL → (mime, bytes). Solo JPEG o PNG reales (se revisa la firma del archivo, no solo el
+    prefijo), con tope de tamaño y de dimensiones. SVG y todo lo demás se rechaza: un SVG puede
+    traer scripts y la imagen se sirve desde nuestro propio origen."""
+    tope, lado = APARIENCIA_IMAGENES[tipo]
+    m = re.match(r"^data:(image/jpeg|image/png);base64,([A-Za-z0-9+/=\s]+)$", valor or "")
+    if not m:
+        raise HTTPException(400, "La imagen debe ser JPG o PNG.")
+    if len(m.group(2)) > tope * 4 // 3 + 16:
+        raise HTTPException(400, f"La imagen pesa demasiado (máximo {tope // 1024} KB).")
+    try:
+        datos = base64.b64decode(m.group(2), validate=False)
+    except Exception:
+        raise HTTPException(400, "La imagen no es válida.")
+    if len(datos) > tope:
+        raise HTTPException(400, f"La imagen pesa demasiado (máximo {tope // 1024} KB).")
+    dim = _dimensiones_imagen(datos, m.group(1))
+    if not dim or not all(0 < d <= lado for d in dim):
+        raise HTTPException(400, f"La imagen no es válida o supera {lado} px de lado.")
+    return m.group(1), datos
+
+
+def actualizar_apariencia(email: str, actual: dict, pedida) -> dict:
+    """Mezcla la apariencia pedida con la guardada. Claves desconocidas: se ignoran.
+    Valores inválidos: 400 (nada se guarda a medias, se valida todo antes de escribir)."""
+    if not isinstance(pedida, dict):
+        raise HTTPException(400, "Apariencia inválida.")
+    nueva = dict(actual)
+    for clave, opciones in APARIENCIA_OPCIONES.items():
+        if clave in pedida:
+            if pedida[clave] not in opciones:
+                raise HTTPException(400, f"Valor no permitido en apariencia: {clave}.")
+            nueva[clave] = pedida[clave]
+    if "acento" in pedida:
+        v = pedida["acento"]
+        if v in (None, ""):
+            nueva["acento"] = None
+        elif isinstance(v, str) and _RE_COLOR.match(v):
+            nueva["acento"] = v.lower()
+        else:
+            raise HTTPException(400, "El color de acento debe tener el formato #rrggbb.")
+    cambios = {}
+    for tipo in APARIENCIA_IMAGENES:
+        if tipo not in pedida:
+            continue
+        v = pedida[tipo]
+        if v in (None, ""):
+            cambios[tipo] = None
+        elif isinstance(v, str):
+            cambios[tipo] = validar_imagen_apariencia(tipo, v)
+        else:
+            raise HTTPException(400, "La imagen debe ser JPG o PNG.")
+    imagenes = dict(nueva.get("imagenes") or {})
+    if cambios:
+        ahora = time.time()
+        with closing(db()) as con:
+            for tipo, img in cambios.items():
+                if img is None:
+                    con.execute("DELETE FROM apariencia_imagenes WHERE usuario=? AND tipo=?", (email, tipo))
+                    imagenes[tipo] = 0
+                else:
+                    con.execute("INSERT OR REPLACE INTO apariencia_imagenes(usuario,tipo,mime,data,actualizado)"
+                                " VALUES(?,?,?,?,?)", (email, tipo, img[0], img[1], ahora))
+                    imagenes[tipo] = int(ahora * 1000)
+            con.commit()
+    nueva["imagenes"] = imagenes
+    return nueva
 
 def verificar_clave(email, clave) -> bool:
     u = obtener_usuario(email)
@@ -959,6 +1093,11 @@ async def api_preferencias(request: Request):
         prefs["modo"] = datos["modo"]
     if datos.get("tema") in ("claro", "oscuro"):
         prefs["tema"] = datos["tema"]
+        prefs["apariencia"]["modo"] = datos["tema"]  # el interruptor rápido de tema es el modo
+    if "apariencia" in datos:
+        prefs["apariencia"] = actualizar_apariencia(u["email"], prefs["apariencia"], datos["apariencia"])
+        if prefs["apariencia"]["modo"] in ("claro", "oscuro"):
+            prefs["tema"] = prefs["apariencia"]["modo"]
     if "web" in datos:
         prefs["web"] = bool(datos["web"])
     if "memoria" in datos:
@@ -970,6 +1109,21 @@ async def api_preferencias(request: Request):
                     (json.dumps(prefs), u["email"]))
         con.commit()
     return {"ok": True, "preferencias": prefs}
+
+@app.get("/api/apariencia/imagen/{tipo}")
+def api_apariencia_imagen(tipo: str, request: Request):
+    """Imagen de apariencia del propio usuario (nunca la de otro: la clave es su correo).
+    Se pide con fetch + Authorization y se muestra como blob:, porque <img> no envía el token."""
+    u = usuario_actual(request)
+    if tipo not in APARIENCIA_IMAGENES:
+        raise HTTPException(404, "Imagen no encontrada")
+    with closing(db()) as con:
+        f = con.execute("SELECT mime, data FROM apariencia_imagenes WHERE usuario=? AND tipo=?",
+                        (u["email"], tipo)).fetchone()
+    if not f:
+        raise HTTPException(404, "Imagen no encontrada")
+    return Response(bytes(f["data"]), media_type=f["mime"],
+                    headers={"Content-Disposition": "inline", "Cache-Control": "private, no-store"})
 
 @app.get("/api/estado")
 def estado(request: Request):

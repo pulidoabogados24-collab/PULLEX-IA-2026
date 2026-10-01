@@ -96,8 +96,10 @@ y regenerar el boletín.
 - **Chat fluido** con streaming, trato humano y capaz de responder también temas no jurídicos.
 - **Adjuntar** PDF, fotos o documentos para analizarlos.
 - **Memoria**: cada estudiante escribe lo que quiere que PULLEX recuerde de él.
-- **Personalización**: áreas de interés, modo (Automático/Técnico/Sencillo), tema claro/oscuro,
-  búsqueda web por defecto.
+- **Personalización**: áreas de interés, modo (Automático/Técnico/Sencillo), búsqueda web por defecto y
+  **Apariencia** propia de cada cuenta: claro/oscuro/automático, 6 temas, color de acento (8 o libre, con
+  contraste AA garantizado), tipografía, tamaño, densidad, esquinas, fondo del Inicio, foto y logo.
+  Sistema de diseño y detalles: `docs/12-DISENO-Y-APARIENCIA.md`.
 - **Exportar**: imprimir/guardar en **PDF**, descargar respuesta, y exportar tablas
   (liquidaciones) a **Excel/CSV**.
 - **Cada estudiante tiene su propia cuenta** (correo + contraseña que crea él mismo), con
@@ -149,7 +151,7 @@ repositorio, y defines en **Environment**:
 
 ```bash
 pip install -r requirements-dev.txt
-pytest tests                  # 114 pruebas: seguridad, regresión, Modular Lab, Academia y fuentes (sin API real)
+pytest tests                  # 125 pruebas: seguridad, regresión, Modular Lab, Academia, fuentes y apariencia (sin API real)
 pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
 ```
 

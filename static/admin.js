@@ -31,9 +31,9 @@ async function cargar(){
     const c1=td();
     c1.appendChild(document.createTextNode(u.nombre||''));
     c1.appendChild(document.createElement('br'));
-    const sm=document.createElement('span');sm.style.cssText='color:var(--txt2);font-size:11px';
+    const sm=document.createElement('span');sm.className='correo';
     sm.textContent=u.email;c1.appendChild(sm);
-    if(u.es_admin)c1.appendChild(document.createTextNode(' 👑'));
+    if(u.es_admin){const a=document.createElement('span');a.className='adm';a.textContent='Admin';c1.appendChild(a)}
     const sel=document.createElement('select');sel.className='min';
     Object.keys(PLANES).forEach(k=>{const o=document.createElement('option');o.value=k;
       o.textContent=PLANES[k].nombre;if(u.plan===k)o.selected=true;sel.appendChild(o)});
@@ -42,13 +42,12 @@ async function cargar(){
     const pill=document.createElement('span');pill.className='pill '+(u.activo?'on-p':'off-p');
     pill.textContent=u.activo?'Activo':'Inactivo';td().appendChild(pill);
     const acc=td();
-    const boton=(txt,sec,fn)=>{const b=document.createElement('button');b.className='bx';
-      if(sec)b.style.cssText='background:var(--azul3);color:var(--txt)';b.textContent=txt;
+    const boton=(txt,sec,fn)=>{const b=document.createElement('button');b.className='bx'+(sec?' sec':'');b.textContent=txt;
       b.addEventListener('click',fn);acc.appendChild(b);acc.appendChild(document.createTextNode(' '))};
     boton('Activar',false,()=>guardar(u.email,sel.value,true));
     boton('Desactivar',true,()=>guardar(u.email,sel.value,false));
     boton('Reiniciar uso',true,()=>guardar(u.email,sel.value,null,true));
-    boton('🔑 Clave',true,()=>resetClave(u.email));
+    boton('Clave temporal',true,()=>resetClave(u.email));
     tb.appendChild(tr);
   });
 }
@@ -58,7 +57,7 @@ async function cargarNegocio(){
     const cop=n=>'$'+Number(n||0).toLocaleString('es-CO');
     $('negocio').innerHTML=`
       <div class="stat"><div class="n" style="color:var(--ok)">${cop(m.ingreso_mensual_estimado)}</div><div class="l">Ingreso mensual estimado</div></div>
-      <div class="stat"><div class="n" style="color:#ff9f43">${cop(m.costo_api_estimado)}</div><div class="l">Costo API estimado</div></div>
+      <div class="stat"><div class="n" style="color:var(--warn)">${cop(m.costo_api_estimado)}</div><div class="l">Costo API estimado</div></div>
       <div class="stat"><div class="n">${cop(m.margen_estimado)}</div><div class="l">Margen estimado</div></div>
       <div class="stat"><div class="n">${m.consultas_totales}</div><div class="l">Consultas usadas</div></div>`;
   }catch(e){$('negocio').innerHTML=''}
