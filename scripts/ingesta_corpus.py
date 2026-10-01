@@ -77,17 +77,26 @@ def extraer_pdf(datos: bytes):
         return _pdf_pdftotext(datos)
 
 
+def _docx_xml(datos: bytes):
+    """Texto de un .docx leyendo directamente word/document.xml (sin python-docx)."""
+    import re
+    import zipfile
+    with zipfile.ZipFile(io.BytesIO(datos)) as z:
+        xml = z.read("word/document.xml").decode("utf-8", "ignore")
+    xml = re.sub(r"</w:p>", "\n", xml)
+    return [("", re.sub(r"<[^>]+>", "", xml))]
+
+
 def extraer_docx(datos: bytes):
     try:
         import docx  # python-docx, opcional
     except ImportError:
-        import re
-        import zipfile
-        with zipfile.ZipFile(io.BytesIO(datos)) as z:
-            xml = z.read("word/document.xml").decode("utf-8", "ignore")
-        xml = re.sub(r"</w:p>", "\n", xml)
-        return [("", re.sub(r"<[^>]+>", "", xml))]
-    d = docx.Document(io.BytesIO(datos))
+        return _docx_xml(datos)
+    try:
+        d = docx.Document(io.BytesIO(datos))
+    except Exception:
+        # .docx mínimo o generado por otra herramienta que python-docx no abre: se lee el XML.
+        return _docx_xml(datos)
     partes = [p.text for p in d.paragraphs]
     for tabla in d.tables:
         for fila in tabla.rows:
