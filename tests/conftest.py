@@ -95,11 +95,37 @@ class FakeAnthropic:
             "conceptos_debiles": ["inmediatez"], "comentario": "Buen inicio."}
     llamadas_json = []
 
+    # Taller de escritos (taller.py): escenario, evaluación (con puntajes fuera de escala para probar que el
+    # servidor los acota) y escrito modelo. `fallar_taller` hace fallar cualquier llamada del taller.
+    ESCENARIO_TALLER = {"titulo": "Escenario IA de prueba", "hechos": "Hechos ficticios generados para la prueba.",
+                        "instruccion": "Redacta la tutela de prueba para la persona ficticia.",
+                        "puntos_clave": ["PUNTO-CLAVE-SECRETO"], "conceptos": ["subsidiariedad"]}
+    EVAL_TALLER = {"puntajes": {"estructura": 25, "hechos": 12, "fundamentos": 8, "pretensiones": 14,
+                                "pruebas": -3, "procedencia": 4, "estilo": 9},
+                   "lista": {"juez": True, "hechos": True, "procedencia": False, "parte-inventada": True},
+                   "faltan": ["Juramento de no haber presentado otra tutela"],
+                   "errores_forma": ["Los hechos no están numerados"], "sobra": ["El pleito de linderos"],
+                   "mejoras": [{"original": "la eps me vulnero todo", "mejorada": "PRIMERO. El 20 de agosto de 2026 la EPS negó…",
+                                "por_que": "Un hecho por numeral, con fecha."}, {"original": "x", "mejorada": ""}],
+                   "conceptos_debiles": ["inmediatez"], "comentario": "Buen comienzo."}
+    MODELO_TALLER = "# ACCIÓN DE TUTELA\n\nSeñor juez (reparto).\n\n" + "Texto del modelo de prueba. " * 20
+    llamadas_taller = []
+    fallar_taller = False
+
     def _create(self, **k):
         FakeAnthropic.ultima_create = k
         sistema = k.get("system") or ""
         if isinstance(sistema, list):
             sistema = " ".join(b.get("text", "") for b in sistema)
+        if isinstance(sistema, str) and "TALLER DE ESCRITOS" in sistema:
+            pedido = k["messages"][0]["content"]
+            FakeAnthropic.llamadas_taller.append({"sistema": sistema, "pedido": pedido})
+            if FakeAnthropic.fallar_taller:
+                raise RuntimeError("fallo simulado del proveedor")
+            if "ESCRITO MODELO" in sistema:
+                return types.SimpleNamespace(content=[_Bloque(FakeAnthropic.MODELO_TALLER)])
+            cuerpo = FakeAnthropic.EVAL_TALLER if pedido.startswith("Evalúa") else FakeAnthropic.ESCENARIO_TALLER
+            return types.SimpleNamespace(content=[_Bloque(json.dumps(cuerpo, ensure_ascii=False))])
         if "PLANIFICADOR" in sistema or "PULLEX DOCUMENTOS" in sistema:
             if FakeAnthropic.fallar_create:
                 raise RuntimeError("fallo simulado del proveedor")

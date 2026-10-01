@@ -2426,6 +2426,24 @@ def admin_regenerar_boletin(request: Request):
     admin_actual(request)
     return obtener_boletin(forzar=True)
 
+# ------------------------------------------------------------ TALLER DE ESCRITOS --
+# Academia: escenarios para redactar escritos, evaluación con rúbrica de escritos y escrito modelo.
+# Todo vive en taller.py (rutas /api/taller/*, tablas taller_*); usa la sesión, el cobro y el modelo de aquí.
+import taller  # noqa: E402
+
+
+class _EstaApp:
+    """Vista de este módulo para taller.py: lee cada nombre en el momento (así un doble del modelo o un cambio de
+    configuración en las pruebas también le llega al taller), aunque app.py se cargue sin registrarse en sys.modules."""
+    def __getattr__(self, nombre):
+        try:
+            return globals()[nombre]
+        except KeyError:
+            raise AttributeError(nombre) from None
+
+
+taller.instalar(_EstaApp())
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
