@@ -49,8 +49,8 @@ const CAPACIDADES=[
    d:'Identifica normas aplicables y contrasta líneas jurisprudenciales.',
    p:'Necesito investigar qué normas y jurisprudencia aplican a mi caso. Pregúntame primero de qué se trata.'},
   {ic:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
-   t:'Redacción de escritos',d:'Tutelas y derechos de petición con un formulario guiado y estructura procesal.',
-   abrir:'escrito'},
+   t:'Documentos y flujos',d:'Escritos de todas las áreas, flujos de varios pasos y un asistente que investiga, analiza y redacta.',
+   ir:'documentos'},
   {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
    t:'Análisis de casos',d:'Hechos, pretensiones, riesgos y estrategia.',
    p:'Quiero que analices mi caso. Pregúntame los hechos, qué pretendo lograr, y evalúa riesgos y estrategia.'},
@@ -94,13 +94,14 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','mapa','chat','config'].forEach(x=>{
+function ver(v){['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
   $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
   if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
   const m=document.querySelector('main');if(m)m.scrollTop=0;
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
+  if(v==='documentos'&&typeof docInit==='function')docInit();
   if(v==='inicio')cargarProgresoInicio();}
 
 async function cargarBoletin(forzar){

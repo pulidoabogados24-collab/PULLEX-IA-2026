@@ -63,7 +63,23 @@ class FakeAnthropic:
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
 
+    # Automatizador: una prueba puede hacer fallar la llamada n-ésima a stream (1 = la primera desde que
+    # se reinició el contador) o cualquier create del automatizador.
+    n_stream = 0
+    fallar_stream_en = None
+    fallar_create = False
+    PLAN = {"titulo": "Tarea de prueba", "pasos": [
+        {"titulo": "Investigar", "instruccion": "Identifica normas aplicables."},
+        {"titulo": "Analizar", "instruccion": "Analiza el caso con el resultado anterior."},
+        {"titulo": "Redactar", "instruccion": "Redacta el borrador final."}]}
+    DOCUMENTO = ("# ACCIÓN DE TUTELA\n\nSeñor juez [COMPLETAR: ciudad de reparto].\n\n## Hechos\n\n1. Hecho de prueba.\n\n"
+                 "Firma\n\n" + "<<<VERIFICAR>>>" + "\n- Verificar la vigencia del Decreto 2591 de 1991\n- Número de cédula")
+    llamadas_documento = []
+
     def _stream(self, model, max_tokens, system, messages, tools, **k):
+        FakeAnthropic.n_stream += 1
+        if FakeAnthropic.fallar_stream_en == FakeAnthropic.n_stream:
+            raise RuntimeError("fallo simulado del proveedor")
         return _Stream(messages, system, {"model": model, "max_tokens": max_tokens, "tools": tools, **k})
 
     CASO = {"titulo": "La EPS que no entrega", "enunciado": "Hechos de prueba del caso.",
@@ -82,6 +98,15 @@ class FakeAnthropic:
     def _create(self, **k):
         FakeAnthropic.ultima_create = k
         sistema = k.get("system") or ""
+        if isinstance(sistema, list):
+            sistema = " ".join(b.get("text", "") for b in sistema)
+        if "PLANIFICADOR" in sistema or "PULLEX DOCUMENTOS" in sistema:
+            if FakeAnthropic.fallar_create:
+                raise RuntimeError("fallo simulado del proveedor")
+            if "PLANIFICADOR" in sistema:
+                return types.SimpleNamespace(content=[_Bloque(json.dumps(FakeAnthropic.PLAN, ensure_ascii=False))])
+            FakeAnthropic.llamadas_documento.append(k["messages"][0]["content"])
+            return types.SimpleNamespace(content=[_Bloque(FakeAnthropic.DOCUMENTO)])
         if isinstance(sistema, str) and "banco de casos" in sistema:
             pedido = k["messages"][0]["content"]
             FakeAnthropic.llamadas_json.append(pedido)

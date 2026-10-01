@@ -153,6 +153,87 @@ function sse(textos,fuentes){
     c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fin'})+'\n\n'));c.close();
   }}),{headers:{'content-type':'text/event-stream'}});
 }
+// ------------------------------------- Automatizador: catálogo REAL incrustado (documentos.py) --
+// Generación, flujos y asistente devuelven textos de EJEMPLO (demo/documentos_demo.json), rotulados.
+const AU=D.automatizador||{catalogo:[],flujos:[],areas:[],para:[],demo:{documentos:{},pasos:{},plan:{pasos:[]}}};
+const AU_IDX={};AU.catalogo.forEach(t=>{AU_IDX[t.id]=t});
+const AU_S={docs:[],sig:1,planes:{}};
+const auNorm=s=>sinTildes(s).replace(/[^a-z0-9ñ ]+/g,' ');
+const auResumen=t=>({id:t.id,nombre:t.nombre,area:t.area,subarea:t.subarea,para_quien:t.para_quien,descripcion:t.descripcion,borrador_funcionario:t.borrador_funcionario});
+function auPublico(t){const c=JSON.parse(JSON.stringify(t));delete c.claves;return c}
+function auBuscar(q,area,para){const toks=auNorm(q).split(/\s+/).filter(x=>x.length>1);
+  return AU.catalogo.filter(t=>(!area||t.area===area)&&(!para||t.para_quien.includes(para))&&
+    (!toks.length||toks.every(k=>auNorm([t.nombre,t.descripcion,t.area,t.subarea,t.claves||''].join(' ')).includes(k))))}
+function auValidar(def,v){const e={},l={};v=v&&typeof v==='object'?v:{};
+  def.campos.forEach(c=>{const x=String(v[c.id]==null?'':v[c.id]).trim();
+    if(!x){if(c.requerido)e[c.id]='Este dato es obligatorio.';return}
+    if(x.length>c.max)e[c.id]='Máximo '+c.max+' caracteres.';
+    else if(c.tipo==='select'&&!(c.opciones||[]).includes(x))e[c.id]='Elige una de las opciones.';
+    else if(c.tipo==='fecha'&&!/^\d{4}-\d{2}-\d{2}$/.test(x))e[c.id]='Escribe una fecha válida (AAAA-MM-DD).';
+    else l[c.id]=x});return [l,e]}
+function auSeparar(texto){const i=texto.indexOf('<<<VERIFICAR>>>');const cuerpo=(i<0?texto:texto.slice(0,i)).trim();
+  const items=[];(i<0?'':texto.slice(i+15)).split('\n').forEach(x=>{const s=x.replace(/^\s*(?:[-*•]|\d+[.)])\s*/,'').trim();if(s&&!items.includes(s))items.push(s)});
+  (cuerpo.match(/\[\s*COMPLETAR\s*:\s*[^\]\n]{1,160}\]/gi)||[]).forEach(x=>{const s='Completar: '+x.replace(/^\[\s*COMPLETAR\s*:\s*/i,'').replace(/\]$/,'').trim();if(!items.includes(s))items.push(s)});
+  return [cuerpo,items.slice(0,40)]}
+function auTitulo(t,c){for(const k of ['contraparte','demandado','entidad','autoridad','deudor','empleador','sociedad','arrendatario','comprador','parte2','destinatario','solicitante'])
+  if(c[k])return (t.nombre+' — '+String(c[k]).slice(0,60)).slice(0,120);return t.nombre}
+function auAdvertencias(t){const a=(t.advertencias||[]).slice();if(t.borrador_funcionario)a.unshift(AU.aviso_funcionario);a.push(AU.aviso_general);return a}
+function auTextoDoc(t){const d=AU.demo;if(d.documentos[t.id])return d.documentos[t.id];
+  let x=d.generico.replace('{nombre}',t.nombre).replace('{secciones}',t.estructura.map((s,i)=>(i+1)+'. '+s).join('\n'));
+  if(t.borrador_funcionario)x='**'+AU.borrador+'**\n\n'+x;return x}
+function auGuardar(o){const ahora=Date.now()/1000;const d={id:AU_S.sig++,creado:ahora,actualizado:ahora,fuentes:[],...o};AU_S.docs.unshift(d);return d}
+function auPub(d){const t=AU_IDX[d.tipo];return {...d,tipo_nombre:t?t.nombre:null,borrador_funcionario:!!(t&&t.borrador_funcionario)}}
+function auPasosSSE(nombre,pasos,textoDe,guardar){
+  const enc=new TextEncoder();const ev=o=>enc.encode('data: '+JSON.stringify(o)+'\n\n');
+  return new Response(new ReadableStream({async start(c){
+    c.enqueue(ev({tipo:'inicio',titulo:nombre,total:pasos.length,pasos:pasos.map(p=>p.titulo)}));const hechos=[];
+    for(let n=1;n<=pasos.length;n++){c.enqueue(ev({tipo:'restantes',restantes:gastar()}));
+      c.enqueue(ev({tipo:'paso',n,titulo:pasos[n-1].titulo}));await esperar(350);
+      const txt=textoDe(n,pasos[n-1]);for(const t of trozos(txt,40)){c.enqueue(ev({tipo:'texto',n,texto:t}));await esperar(12)}
+      hechos.push([pasos[n-1].titulo,txt]);c.enqueue(ev({tipo:'paso_fin',n}))}
+    const cuerpo='# '+nombre+'\n\n'+hechos.map(([t,x],i)=>'## Paso '+(i+1)+'. '+t+'\n\n'+x).join('\n\n');
+    const d=guardar(cuerpo);c.enqueue(ev({tipo:'documento',id:d.id,titulo:d.titulo,verificar:d.verificar}));
+    c.enqueue(ev({tipo:'fin',completo:true,pasos_completados:hechos.length}));c.close()}}),{headers:{'content-type':'text/event-stream'}})}
+async function automatizador(ruta,m,b,qs){
+  if(ruta==='/api/documentos/catalogo'){const a=qs.get('area')||'',p=qs.get('para')||'';const ts=auBuscar((qs.get('q')||'').slice(0,120),a,p);
+    return json({total:AU.catalogo.length,n:ts.length,para_quien:AU.para,
+      areas:AU.areas.map(x=>({area:x,n:AU.catalogo.filter(t=>t.area===x).length})),tipos:ts.map(qs.get('detalle')?auPublico:auResumen)})}
+  const rt=ruta.match(/^\/api\/documentos\/catalogo\/([a-z0-9_]+)$/);
+  if(rt){const t=AU_IDX[rt[1]];return t?json(auPublico(t)):error(404,'Tipo de documento no encontrado')}
+  if(ruta==='/api/documentos/generar'){const t=AU_IDX[b.tipo];if(!t)return error(404,'Tipo de documento no encontrado');
+    const [c,e]=auValidar(t,b.campos);if(Object.keys(e).length)return json({detail:'Revisa los datos marcados del formulario.',errores:e},400);
+    await esperar(1100);const [texto,verificar]=auSeparar(auTextoDoc(t));
+    const d=auGuardar({tipo:t.id,titulo:auTitulo(t,c),origen:'documento',campos:c,texto,verificar,advertencias:auAdvertencias(t)});
+    return json({...auPub(d),restantes:gastar()})}
+  if(ruta==='/api/documentos/mis')return json({documentos:AU_S.docs.map(d=>{const p=auPub(d);return {id:p.id,tipo:p.tipo,titulo:p.titulo,origen:p.origen,creado:p.creado,actualizado:p.actualizado,tipo_nombre:p.tipo_nombre}})});
+  const rd=ruta.match(/^\/api\/documentos\/(\d+)(\/docx)?$/);
+  if(rd){const d=AU_S.docs.find(x=>x.id===+rd[1]);if(!d)return error(404,'Documento no encontrado');
+    if(rd[2])return error(501,'La demostración no genera archivos Word.');
+    if(m==='PUT'){const t=String(b.texto||'');if(!t.trim())return error(400,'El documento no puede quedar vacío');
+      d.texto=t;d.actualizado=Date.now()/1000;AU_S.docs=[d,...AU_S.docs.filter(x=>x!==d)];return json(auPub(d))}
+    if(m==='DELETE'){AU_S.docs=AU_S.docs.filter(x=>x!==d);return json({ok:true})}
+    return json(auPub(d))}
+  if(ruta==='/api/flujos')return json({flujos:AU.flujos,max_pasos:AU.max_pasos||6});
+  if(ruta==='/api/flujos/ejecutar'){const f=AU.flujos.find(x=>x.id===b.flujo);if(!f)return error(404,'Flujo no encontrado');
+    const [c,e]=auValidar(f,b.campos);if(Object.keys(e).length)return json({detail:'Revisa los datos marcados del formulario.',errores:e},400);
+    if(S.perfil.restantes<f.n_pasos)return error(402,'Este trabajo usa '+f.n_pasos+' consultas (una por paso).');
+    const textos=AU.demo.pasos[f.id]||[];
+    return auPasosSSE(f.nombre,f.pasos,(n,p)=>textos[n-1]||AU.demo.paso_generico.replace('{titulo}',p.titulo),
+      cuerpo=>{const [,v]=auSeparar(cuerpo);return auGuardar({tipo:'flujo:'+f.id,titulo:f.nombre,origen:'flujo',campos:c,texto:cuerpo,verificar:v,advertencias:[AU.aviso_general]})})}
+  if(ruta==='/api/asistente/tarea'){const t=String(b.tarea||'').trim();
+    if(t.length<15)return error(400,'Describe la tarea con un poco más de detalle (mínimo una frase completa).');
+    await esperar(900);const id=AU_S.sig++;const plan=JSON.parse(JSON.stringify(AU.demo.plan));AU_S.planes[id]={tarea:t,plan,estado:'planificado'};
+    return json({id,...plan,max_pasos:AU.max_pasos||6,restantes:gastar()})}
+  if(ruta==='/api/asistente/ejecutar'){const pl=AU_S.planes[b.id];if(!pl)return error(404,'Tarea no encontrada');
+    if(pl.estado!=='planificado')return error(409,'Este plan ya se ejecutó. Pide un plan nuevo para otra ejecución.');
+    const pasos=Array.isArray(b.pasos)?b.pasos:pl.plan.pasos;
+    if(!pasos.length||pasos.length>(AU.max_pasos||6))return error(400,'El plan debe tener entre 1 y 6 pasos.');
+    if(pasos.some(p=>!String(p.titulo||'').trim()||!String(p.instruccion||'').trim()))return error(400,'Cada paso necesita un título y una instrucción.');
+    pl.estado='ejecutado';
+    return auPasosSSE(pl.plan.titulo,pasos,(n,p)=>AU.demo.paso_generico.replace('{titulo}',p.titulo),
+      cuerpo=>{const [,v]=auSeparar(cuerpo);return auGuardar({tipo:'asistente',titulo:pl.plan.titulo,origen:'asistente',campos:{tarea:pl.tarea},texto:cuerpo,verificar:v,advertencias:[AU.aviso_general]})})}
+  return null;
+}
 async function manejar(url,o){
   const partes=String(url).replace(/^https?:\/\/[^/]+/,'').split('?');const ruta=partes[0];
   const qs=new URLSearchParams(partes[1]||'');const m=(o&&o.method)||'GET';
@@ -230,6 +311,7 @@ async function manejar(url,o){
   if(ruta==='/api/modular/solucion'){const c=S.casos[qs.get('caso_id')];const s=c.d.solucion;
     return json({...s,conceptos:c.d.conceptos||[]})}
   if(ruta==='/api/modular/progreso')return json(progreso());
+  const rau=await automatizador(ruta,m,b,qs);if(rau)return rau;
   if(ruta==='/api/cambiar-clave')return json({ok:true,token:'demo'});
   if(['/api/cerrar-sesiones','/api/reenviar-verificacion','/api/recuperar-clave'].includes(ruta))
     return json({ok:true,mensaje:'En la demostración no se envían correos.'});
