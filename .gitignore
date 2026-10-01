@@ -15,3 +15,7 @@ pullex.db
 *.pem
 .pytest_cache/
 .claude/
+
+# Motor de fuentes: el índice y la lista de exclusión son del operador (no se suben)
+corpus/
+evaluacion/resultados/

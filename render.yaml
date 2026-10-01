@@ -16,8 +16,8 @@ services:
       - key: PULLEX_ADMIN_CLAVE       # OBLIGATORIA: pégala tú en Render, una clave fuerte y
         sync: false                   # aleatoria (gestor de contraseñas). Sin este valor la
                                        # app no arranca (hallazgo S1, cerrado 26-jul-2026).
-      - key: PULLEX_MODELO            # modelo económico para estudiantes
-        value: claude-haiku-4-5
+      - key: PULLEX_MODELO            # Sonnet 5.5 (docs/11). Para abaratar: claude-haiku-4-5
+        value: claude-sonnet-5-5
       - key: PULLEX_SECRET            # Render genera un valor estable automáticamente
         generateValue: true
       - key: RESEND_API_KEY           # opcional: sin ella no se envían correos de

@@ -10,3 +10,10 @@ python-dotenv==1.2.3
 # Opcionales (solo si conectas el corpus vectorial de lexcol-rag):
 # chromadb>=0.5.0
 # voyageai>=0.3.0
+
+# Opcionales para cargar el corpus propio (scripts/ingesta_corpus.py, docs/11-MOTOR-DE-FUENTES.md).
+# El índice FTS5 no necesita nada extra. Sin pypdf se usa pdftotext (poppler) si está instalado.
+# pypdf>=6.0                      # texto de PDF por página (probado con 6.19.0)
+# python-docx>=1.1                # texto de DOCX (probado con 1.2.0; sin él se lee el XML)
+# google-api-python-client>=2.0   # solo para --drive (NOT VERIFIED contra Drive real)
+# google-auth>=2.0

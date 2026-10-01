@@ -29,24 +29,27 @@ class _Bloque:
 class _Evento:
     def __init__(self, texto):
         self.type = "content_block_delta"
-        self.delta = types.SimpleNamespace(text=texto)
+        self.delta = types.SimpleNamespace(type="text_delta", text=texto)
 
 
 class _Stream:
     """Devuelve como respuesta el historial que recibió el modelo. Así una prueba puede
     demostrar si mensajes de OTRO usuario llegaron al modelo (fuga entre usuarios)."""
 
-    def __init__(self, messages, system):
+    def __init__(self, messages, system, extra=None):
         self.messages = messages
         self.system = system
+        self.extra = extra or {}
 
     def __enter__(self):
-        FakeAnthropic.ultima_llamada = {"messages": self.messages, "system": self.system}
+        FakeAnthropic.ultima_llamada = {"messages": self.messages, "system": self.system, **self.extra}
         partes = []
         for m in self.messages:
             c = m["content"]
             partes.append(c if isinstance(c, str) else json.dumps(c)[:200])
-        return iter([_Evento("ECO:" + " || ".join(partes))])
+        # Una prueba puede inyectar eventos crudos del SDK (thinking, búsqueda web, citas).
+        previos = list(FakeAnthropic.eventos_extra)
+        return iter(previos + [_Evento("ECO:" + " || ".join(partes))] + list(FakeAnthropic.eventos_final))
 
     def __exit__(self, *a):
         return False
@@ -54,12 +57,14 @@ class _Stream:
 
 class FakeAnthropic:
     ultima_llamada = None
+    eventos_extra = []   # eventos del SDK antes de la respuesta (p. ej. thinking, búsqueda web)
+    eventos_final = []   # eventos después (p. ej. una cita)
 
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
 
-    def _stream(self, model, max_tokens, system, messages, tools):
-        return _Stream(messages, system)
+    def _stream(self, model, max_tokens, system, messages, tools, **k):
+        return _Stream(messages, system, {"model": model, "max_tokens": max_tokens, "tools": tools, **k})
 
     CASO = {"titulo": "La EPS que no entrega", "enunciado": "Hechos de prueba del caso.",
             "pregunta": "¿Procede la tutela?", "pistas": ["Piensa en la procedencia.", "Revisa la Ley 1751 de 2015."],
@@ -75,6 +80,7 @@ class FakeAnthropic:
     llamadas_json = []
 
     def _create(self, **k):
+        FakeAnthropic.ultima_create = k
         sistema = k.get("system") or ""
         if isinstance(sistema, str) and "banco de casos" in sistema:
             pedido = k["messages"][0]["content"]

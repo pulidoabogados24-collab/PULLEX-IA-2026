@@ -23,6 +23,29 @@ os.environ.setdefault("PULLEX_ADMIN_CLAVE", "demo-admin-clave-larga")
 os.environ.setdefault("PULLEX_SECRET", "solo-para-la-demo-local")
 sys.path.insert(0, str(RAIZ))
 import app as pullex  # noqa: E402
+import fuentes  # noqa: E402
+
+# Corpus de DEMOSTRACIÓN (si no se indicó otro con PULLEX_CORPUS_DB): dos textos de ejemplo,
+# rotulados como tales, para ver el motor de fuentes funcionando. No son texto normativo.
+_CORPUS_DEMO = [
+    ("Ejemplo de demostración - guía sobre la acción de tutela.txt", "05_DOCTRINA",
+     "Texto de ejemplo de la demostración de PULLEX (no es texto normativo). La acción de tutela "
+     "protege derechos fundamentales cuando son vulnerados o amenazados por una autoridad o, en "
+     "ciertos casos, por particulares. Al estudiar su procedencia se revisan la legitimación, la "
+     "subsidiariedad (que no exista otro medio de defensa eficaz) y la inmediatez (que se presente "
+     "en un tiempo razonable). Verifica siempre la norma y la jurisprudencia en la fuente oficial."),
+    ("Ejemplo de demostración - guía sobre el derecho de petición.txt", "05_DOCTRINA",
+     "Texto de ejemplo de la demostración de PULLEX (no es texto normativo). El derecho de petición "
+     "permite presentar solicitudes respetuosas a las autoridades y obtener una respuesta de fondo, "
+     "clara y oportuna. Los plazos de respuesta dependen del tipo de petición; confírmalos en la ley "
+     "vigente antes de calcular un término."),
+]
+if "PULLEX_CORPUS_DB" not in os.environ:
+    os.environ["PULLEX_CORPUS_DB"] = str(RAIZ / "demo" / "corpus_demo.db")
+    with fuentes.abrir(os.environ["PULLEX_CORPUS_DB"]) as _con:
+        for _nombre, _carpeta, _texto in _CORPUS_DEMO:
+            fuentes.indexar(_con, origen="demo:" + _nombre, nombre=_nombre, paginas=[("", _texto)],
+                            carpeta=_carpeta, fecha_archivo="2026-01-15T00:00:00+00:00")
 
 
 class _B:
@@ -33,7 +56,27 @@ class _B:
 class _Ev:
     def __init__(self, t):
         self.type = "content_block_delta"
-        self.delta = types.SimpleNamespace(text=t)
+        self.delta = types.SimpleNamespace(type="text_delta", text=t)
+
+
+# Búsqueda web SIMULADA (solo cuando el usuario tiene la búsqueda activada): un resultado y una cita
+# con forma de evento del SDK, para ver el bloque «Fuentes consultadas». No es una búsqueda real.
+_URL_DEMO = "https://www.corteconstitucional.gov.co/relatoria/"
+_TITULO_DEMO = "Relatoría de la Corte Constitucional (resultado simulado de la demostración)"
+
+
+def _eventos_web():
+    ns = types.SimpleNamespace
+    return [ns(type="content_block_start", content_block=ns(type="server_tool_use")),
+            ns(type="content_block_start", content_block=ns(
+                type="web_search_tool_result",
+                content=[ns(type="web_search_result", url=_URL_DEMO, title=_TITULO_DEMO, page_age=None)]))]
+
+
+def _evento_cita():
+    ns = types.SimpleNamespace
+    return ns(type="content_block_delta", delta=ns(type="citations_delta", citation=ns(
+        type="web_search_result_location", url=_URL_DEMO, title=_TITULO_DEMO, cited_text="")))
 
 
 def _trozos(texto, n=28):
@@ -41,7 +84,8 @@ def _trozos(texto, n=28):
 
 
 class _Stream:
-    def __init__(self, system):
+    def __init__(self, system, web=False):
+        self.web = web
         sis = " ".join(b.get("text", "") for b in system)
         clave = next((k for k, v in {"conmigo": "RESUÉLVELO CONMIGO", "ensename": "ENSÉÑAME",
                                      "examiname": "EXAMÍNAME", "auditar": "AUDITA MI RESPUESTA"}.items()
@@ -49,7 +93,10 @@ class _Stream:
         self.texto = DATOS["chat"][clave]
 
     def __enter__(self):
-        return iter(_Ev(t) for t in _trozos(self.texto))
+        eventos = [_Ev(t) for t in _trozos(self.texto)]
+        if self.web:
+            eventos = _eventos_web() + eventos + [_evento_cita()]
+        return iter(eventos)
 
     def __exit__(self, *a):
         return False
@@ -127,8 +174,8 @@ class _Modelo:
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
 
-    def _stream(self, model, max_tokens, system, messages, tools):
-        s = _Stream(system)
+    def _stream(self, model, max_tokens, system, messages, tools, **k):
+        s = _Stream(system, web=bool(tools))
         ultimo = messages[-1]["content"] if messages else ""
         ultimo = ultimo if isinstance(ultimo, str) else " ".join(b.get("text", "") for b in ultimo)
         if ultimo.startswith("SOLICITUD DE REDACCIÓN"):  # Document Studio
