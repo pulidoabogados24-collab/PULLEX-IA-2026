@@ -362,6 +362,36 @@ nav button{white-space:nowrap}
   .b.user{display:none}
   .md a{color:#000;text-decoration:underline}
 }
+
+/* ---- Fuentes ---- */
+/* Bloque "Fuentes consultadas" bajo cada respuesta. Solo variables semánticas con respaldo en la
+   paleta actual: el rediseño de colores puede definir --surface, --border, etc. sin tocar esto. */
+.fuentes{margin-top:10px;border:1px solid var(--border, var(--linea));border-radius:10px;
+  background:var(--surface, var(--azul2));font-size:12.5px}
+.fuentes>summary{cursor:pointer;padding:7px 11px;font-weight:700;color:var(--text-muted, var(--txt2));
+  list-style:revert;border-radius:10px}
+.fuentes>summary:hover{color:var(--text, var(--txt))}
+.fuentes>summary:focus-visible{outline:2px solid var(--accent, var(--oro));outline-offset:2px}
+.fuentes-lista{list-style:none;margin:0;padding:2px 11px 8px;display:flex;flex-direction:column;gap:8px}
+.fuente{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;line-height:1.45}
+.fuente .ftit{color:var(--text, var(--txt));font-weight:600;overflow-wrap:anywhere}
+.fuente a.ftit{color:var(--link, var(--oro));text-decoration:underline}
+.fuente .fmeta{flex-basis:100%;color:var(--text-muted, var(--txt2));font-size:11.5px}
+.fchip{display:inline-block;flex:none;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;
+  border:1px solid currentColor;white-space:nowrap}
+.fchip.web{color:var(--info, #5aa9ff)}
+.fchip.vigente{color:var(--success, var(--ok))}
+.fchip.verificar{color:var(--warning, var(--oro))}
+.fchip.derogada{color:var(--danger, var(--mal))}
+/* Símbolo decorativo (el texto del chip ya dice el estado): alt vacío para lectores de pantalla. */
+.fchip.verificar::before{content:"! " / ""}
+.fchip.derogada::before{content:"✕ " / ""}
+.fchip.vigente::before{content:"✓ " / ""}
+.fnota{margin:0;padding:0 11px 9px;color:var(--text-muted, var(--txt2));font-size:11.5px;line-height:1.5}
+body.claro .fchip.web{color:var(--info, #1f6fd1)}
+body.claro .fchip.verificar{color:var(--warning, #8a6100)}
+body.claro .fuente a.ftit{color:var(--link, #7a5600)}
+@media print{.fuentes>summary{list-style:none}}
 </style>
 </head>
 <body class="oscuro">

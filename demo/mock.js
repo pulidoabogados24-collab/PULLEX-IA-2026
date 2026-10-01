@@ -117,12 +117,19 @@ function resumen(){const t=ahora(),fin=t+DIA-((t-5*3600)%DIA);const pr=promedios
   [['Constitucional',64],['Penal',52],['Constitucional',78],['Laboral',81],['Penal',61]].forEach(([a,n],i)=>
     S.intentos.push({area:a,total:n,debiles:[],titulo:D.casos[a].caso.titulo,t:t-(5-i)*DIA,caso:-1-i}));
 })();
-function sse(textos){
+// Dos fuentes de EJEMPLO para ver el bloque «Fuentes consultadas» en la demo (no son consultas reales).
+const FUENTES_DEMO=[
+  {origen:'web',titulo:'Relatoría de la Corte Constitucional (ejemplo de la demostración)',
+   url:'https://www.corteconstitucional.gov.co/relatoria/',oficial:true,citado:true},
+  {origen:'corpus',ref:'F1',titulo:'Ejemplo de demostración - guía sobre la acción de tutela',tipo:'doctrina',
+   estado_vigencia:'PENDIENTE_VERIFICAR',ubicacion:'',fecha_archivo:'2026-01-15',url:null,citado:false}];
+function sse(textos,fuentes){
   const enc=new TextEncoder();
   return new Response(new ReadableStream({async start(c){
     c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'restantes',restantes:S.perfil.restantes})+'\n\n'));
     await esperar(500);
     for(const t of textos){c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'texto',texto:t})+'\n\n'));await esperar(18)}
+    c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fuentes',fuentes:fuentes||[]})+'\n\n'));
     c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fin'})+'\n\n'));c.close();
   }}),{headers:{'content-type':'text/event-stream'}});
 }
@@ -156,8 +163,9 @@ async function manejar(url,o){
     const pl=msj.split('\n')[0];
     const txt=pl.startsWith('SOLICITUD DE REDACCIÓN')?(pl.includes('PETICIÓN')?D.chat.escrito_peticion:D.chat.escrito)
       :(D.chat[b.estilo]||D.chat.directo);
-    hist.push({rol:'user',contenido:msj},{rol:'assistant',contenido:txt});conv.t=Date.now();
-    gastar();return sse(trozos(txt,24));}
+    const fu=pl.startsWith('SOLICITUD DE REDACCIÓN')?[]:FUENTES_DEMO;
+    hist.push({rol:'user',contenido:msj},{rol:'assistant',contenido:txt,fuentes:fu});conv.t=Date.now();
+    gastar();return sse(trozos(txt,24),fu);}
   if(ruta==='/api/modular/opciones')return json({areas:['Constitucional','Penal','Civil','Laboral','Administrativo','Comercial','Familia','Procesal','Probatorio'],
     niveles:[{id:'basico',nombre:'Básico'},{id:'intermedio',nombre:'Intermedio'},{id:'avanzado',nombre:'Avanzado'},{id:'experto',nombre:'Experto'}],
     rubrica:RUBRICA.map(([id,n,mx])=>({id,nombre:n,max:mx}))});

@@ -187,7 +187,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido)});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes)});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -234,7 +234,7 @@ async function enviar(opc){
   const adjEnvio=ADJ.slice();
   burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
   const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  let buffer='',raf=null;
+  let buffer='',raf=null,fuentesResp=[];
   const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
@@ -250,19 +250,20 @@ async function enviar(opc){
         if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
         else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+        else if(ev.tipo==='fuentes'){fuentesResp=Array.isArray(ev.fuentes)?ev.fuentes:[]}
       }
     }
   }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
   if(raf)cancelAnimationFrame(raf);
   cont.classList.remove('cursor');cont.innerHTML=md(buffer);
-  if(buffer.trim())accionesResp(bIA,buffer);scroll();
+  if(buffer.trim())accionesResp(bIA,buffer,fuentesResp);scroll();
   enviando=false;$('env').disabled=false;
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
   cargarConvs();
 }
-function accionesResp(b,texto){
+function accionesResp(b,texto,fuentes){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
   const [c,d,p]=a.querySelectorAll('button');
@@ -275,6 +276,45 @@ function accionesResp(b,texto){
   if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
+  pintarFuentes(b,fuentes);
+}
+// ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
+// Todo con textContent (nada de innerHTML con datos del servidor) y el estado escrito en el chip,
+// no solo por color.
+const CHIP_FUENTE={VIGENTE_VERIFICADA:['vigente','Corpus · vigente'],PENDIENTE_VERIFICAR:['verificar','Corpus · verificar vigencia'],
+  DESACTUALIZADA:['verificar','Corpus · desactualizada'],DEROGADA:['derogada','Corpus · derogada']};
+function chipFuente(f){
+  if(f.origen==='web')return f.oficial?['web','Oficial · web']:['verificar','Web · no oficial'];
+  return CHIP_FUENTE[f.estado_vigencia]||CHIP_FUENTE.PENDIENTE_VERIFICAR;
+}
+function urlSegura(u){return typeof u==='string'&&/^https?:\/\//i.test(u)?u:null}
+function pintarFuentes(b,fuentes){
+  if(!Array.isArray(fuentes)||!fuentes.length)return;
+  const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
+  const d=el('details','fuentes');
+  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');d.appendChild(s);
+  const ul=el('ul','fuentes-lista');
+  lista.forEach(f=>{
+    const li=el('li','fuente');const [cls,txt]=chipFuente(f);
+    li.appendChild(el('span','fchip '+cls,txt));
+    const url=urlSegura(f.url);let tit;
+    if(url){tit=el('a','ftit',f.titulo||url);tit.href=url;tit.target='_blank';tit.rel='noopener noreferrer'}
+    else tit=el('span','ftit',f.titulo||'Documento del corpus');
+    li.appendChild(tit);
+    const meta=[];
+    if(f.ref)meta.push('['+f.ref+']');
+    if(f.origen==='corpus'&&f.tipo)meta.push(f.tipo);
+    if(f.ubicacion)meta.push(f.ubicacion);
+    if(f.fecha_archivo)meta.push('archivo del '+f.fecha_archivo);
+    if(f.origen==='web'&&url){try{meta.push(new URL(url).hostname.replace(/^www\./,''))}catch(e){}}
+    meta.push(f.citado?'citada en la respuesta':'consultada, no citada');
+    li.appendChild(el('span','fmeta',meta.join(' · ')));
+    ul.appendChild(li);
+  });
+  d.appendChild(ul);
+  if(lista.some(f=>f.origen==='corpus'&&f.estado_vigencia!=='VIGENTE_VERIFICADA'))
+    d.appendChild(el('p','fnota','«Verificar vigencia»: ese documento del corpus no ha sido confirmado en la fuente oficial en los últimos 12 meses. Confírmalo antes de citarlo.'));
+  b.querySelector('.bd').appendChild(d);
 }
 function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}

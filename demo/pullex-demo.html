@@ -362,6 +362,36 @@ nav button{white-space:nowrap}
   .b.user{display:none}
   .md a{color:#000;text-decoration:underline}
 }
+
+/* ---- Fuentes ---- */
+/* Bloque "Fuentes consultadas" bajo cada respuesta. Solo variables semánticas con respaldo en la
+   paleta actual: el rediseño de colores puede definir --surface, --border, etc. sin tocar esto. */
+.fuentes{margin-top:10px;border:1px solid var(--border, var(--linea));border-radius:10px;
+  background:var(--surface, var(--azul2));font-size:12.5px}
+.fuentes>summary{cursor:pointer;padding:7px 11px;font-weight:700;color:var(--text-muted, var(--txt2));
+  list-style:revert;border-radius:10px}
+.fuentes>summary:hover{color:var(--text, var(--txt))}
+.fuentes>summary:focus-visible{outline:2px solid var(--accent, var(--oro));outline-offset:2px}
+.fuentes-lista{list-style:none;margin:0;padding:2px 11px 8px;display:flex;flex-direction:column;gap:8px}
+.fuente{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;line-height:1.45}
+.fuente .ftit{color:var(--text, var(--txt));font-weight:600;overflow-wrap:anywhere}
+.fuente a.ftit{color:var(--link, var(--oro));text-decoration:underline}
+.fuente .fmeta{flex-basis:100%;color:var(--text-muted, var(--txt2));font-size:11.5px}
+.fchip{display:inline-block;flex:none;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;
+  border:1px solid currentColor;white-space:nowrap}
+.fchip.web{color:var(--info, #5aa9ff)}
+.fchip.vigente{color:var(--success, var(--ok))}
+.fchip.verificar{color:var(--warning, var(--oro))}
+.fchip.derogada{color:var(--danger, var(--mal))}
+/* Símbolo decorativo (el texto del chip ya dice el estado): alt vacío para lectores de pantalla. */
+.fchip.verificar::before{content:"! " / ""}
+.fchip.derogada::before{content:"✕ " / ""}
+.fchip.vigente::before{content:"✓ " / ""}
+.fnota{margin:0;padding:0 11px 9px;color:var(--text-muted, var(--txt2));font-size:11.5px;line-height:1.5}
+body.claro .fchip.web{color:var(--info, #1f6fd1)}
+body.claro .fchip.verificar{color:var(--warning, #8a6100)}
+body.claro .fuente a.ftit{color:var(--link, #7a5600)}
+@media print{.fuentes>summary{list-style:none}}
 </style>
 </head>
 <body class="oscuro">
@@ -868,12 +898,19 @@ function resumen(){const t=ahora(),fin=t+DIA-((t-5*3600)%DIA);const pr=promedios
   [['Constitucional',64],['Penal',52],['Constitucional',78],['Laboral',81],['Penal',61]].forEach(([a,n],i)=>
     S.intentos.push({area:a,total:n,debiles:[],titulo:D.casos[a].caso.titulo,t:t-(5-i)*DIA,caso:-1-i}));
 })();
-function sse(textos){
+// Dos fuentes de EJEMPLO para ver el bloque «Fuentes consultadas» en la demo (no son consultas reales).
+const FUENTES_DEMO=[
+  {origen:'web',titulo:'Relatoría de la Corte Constitucional (ejemplo de la demostración)',
+   url:'https://www.corteconstitucional.gov.co/relatoria/',oficial:true,citado:true},
+  {origen:'corpus',ref:'F1',titulo:'Ejemplo de demostración - guía sobre la acción de tutela',tipo:'doctrina',
+   estado_vigencia:'PENDIENTE_VERIFICAR',ubicacion:'',fecha_archivo:'2026-01-15',url:null,citado:false}];
+function sse(textos,fuentes){
   const enc=new TextEncoder();
   return new Response(new ReadableStream({async start(c){
     c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'restantes',restantes:S.perfil.restantes})+'\n\n'));
     await esperar(500);
     for(const t of textos){c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'texto',texto:t})+'\n\n'));await esperar(18)}
+    c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fuentes',fuentes:fuentes||[]})+'\n\n'));
     c.enqueue(enc.encode('data: '+JSON.stringify({tipo:'fin'})+'\n\n'));c.close();
   }}),{headers:{'content-type':'text/event-stream'}});
 }
@@ -907,8 +944,9 @@ async function manejar(url,o){
     const pl=msj.split('\n')[0];
     const txt=pl.startsWith('SOLICITUD DE REDACCIÓN')?(pl.includes('PETICIÓN')?D.chat.escrito_peticion:D.chat.escrito)
       :(D.chat[b.estilo]||D.chat.directo);
-    hist.push({rol:'user',contenido:msj},{rol:'assistant',contenido:txt});conv.t=Date.now();
-    gastar();return sse(trozos(txt,24));}
+    const fu=pl.startsWith('SOLICITUD DE REDACCIÓN')?[]:FUENTES_DEMO;
+    hist.push({rol:'user',contenido:msj},{rol:'assistant',contenido:txt,fuentes:fu});conv.t=Date.now();
+    gastar();return sse(trozos(txt,24),fu);}
   if(ruta==='/api/modular/opciones')return json({areas:['Constitucional','Penal','Civil','Laboral','Administrativo','Comercial','Familia','Procesal','Probatorio'],
     niveles:[{id:'basico',nombre:'Básico'},{id:'intermedio',nombre:'Intermedio'},{id:'avanzado',nombre:'Avanzado'},{id:'experto',nombre:'Experto'}],
     rubrica:RUBRICA.map(([id,n,mx])=>({id,nombre:n,max:mx}))});
@@ -1144,7 +1182,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido)});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes)});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -1191,7 +1229,7 @@ async function enviar(opc){
   const adjEnvio=ADJ.slice();
   burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
   const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  let buffer='',raf=null;
+  let buffer='',raf=null,fuentesResp=[];
   const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
@@ -1207,19 +1245,20 @@ async function enviar(opc){
         if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
         else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+        else if(ev.tipo==='fuentes'){fuentesResp=Array.isArray(ev.fuentes)?ev.fuentes:[]}
       }
     }
   }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
   if(raf)cancelAnimationFrame(raf);
   cont.classList.remove('cursor');cont.innerHTML=md(buffer);
-  if(buffer.trim())accionesResp(bIA,buffer);scroll();
+  if(buffer.trim())accionesResp(bIA,buffer,fuentesResp);scroll();
   enviando=false;$('env').disabled=false;
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
   cargarConvs();
 }
-function accionesResp(b,texto){
+function accionesResp(b,texto,fuentes){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
   const [c,d,p]=a.querySelectorAll('button');
@@ -1232,6 +1271,45 @@ function accionesResp(b,texto){
   if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
+  pintarFuentes(b,fuentes);
+}
+// ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
+// Todo con textContent (nada de innerHTML con datos del servidor) y el estado escrito en el chip,
+// no solo por color.
+const CHIP_FUENTE={VIGENTE_VERIFICADA:['vigente','Corpus · vigente'],PENDIENTE_VERIFICAR:['verificar','Corpus · verificar vigencia'],
+  DESACTUALIZADA:['verificar','Corpus · desactualizada'],DEROGADA:['derogada','Corpus · derogada']};
+function chipFuente(f){
+  if(f.origen==='web')return f.oficial?['web','Oficial · web']:['verificar','Web · no oficial'];
+  return CHIP_FUENTE[f.estado_vigencia]||CHIP_FUENTE.PENDIENTE_VERIFICAR;
+}
+function urlSegura(u){return typeof u==='string'&&/^https?:\/\//i.test(u)?u:null}
+function pintarFuentes(b,fuentes){
+  if(!Array.isArray(fuentes)||!fuentes.length)return;
+  const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
+  const d=el('details','fuentes');
+  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');d.appendChild(s);
+  const ul=el('ul','fuentes-lista');
+  lista.forEach(f=>{
+    const li=el('li','fuente');const [cls,txt]=chipFuente(f);
+    li.appendChild(el('span','fchip '+cls,txt));
+    const url=urlSegura(f.url);let tit;
+    if(url){tit=el('a','ftit',f.titulo||url);tit.href=url;tit.target='_blank';tit.rel='noopener noreferrer'}
+    else tit=el('span','ftit',f.titulo||'Documento del corpus');
+    li.appendChild(tit);
+    const meta=[];
+    if(f.ref)meta.push('['+f.ref+']');
+    if(f.origen==='corpus'&&f.tipo)meta.push(f.tipo);
+    if(f.ubicacion)meta.push(f.ubicacion);
+    if(f.fecha_archivo)meta.push('archivo del '+f.fecha_archivo);
+    if(f.origen==='web'&&url){try{meta.push(new URL(url).hostname.replace(/^www\./,''))}catch(e){}}
+    meta.push(f.citado?'citada en la respuesta':'consultada, no citada');
+    li.appendChild(el('span','fmeta',meta.join(' · ')));
+    ul.appendChild(li);
+  });
+  d.appendChild(ul);
+  if(lista.some(f=>f.origen==='corpus'&&f.estado_vigencia!=='VIGENTE_VERIFICADA'))
+    d.appendChild(el('p','fnota','«Verificar vigencia»: ese documento del corpus no ha sido confirmado en la fuente oficial en los últimos 12 meses. Confírmalo antes de citarlo.'));
+  b.querySelector('.bd').appendChild(d);
 }
 function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
