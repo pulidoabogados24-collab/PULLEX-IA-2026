@@ -392,6 +392,122 @@ body.claro .fchip.web{color:var(--info, #1f6fd1)}
 body.claro .fchip.verificar{color:var(--warning, #8a6100)}
 body.claro .fuente a.ftit{color:var(--link, #7a5600)}
 @media print{.fuentes>summary{list-style:none}}
+
+/* ---- Documentos ---- */
+/* Automatizador (static/documentos.js). Solo variables semánticas con respaldo en la paleta actual:
+   el rediseño puede definir --surface, --border, --accent… sin tocar este bloque. */
+.doc-wrap{padding-bottom:40px}
+.doc-cab{margin:2px 0 14px}
+.doc-cab h2{margin:0 0 4px;font-size:22px;font-family:var(--font-display, inherit)}
+.doc-claim{color:var(--accent, var(--oro));font-weight:700;font-size:12.5px;letter-spacing:.6px;text-transform:uppercase;margin:0}
+.doc-cab p:last-child{color:var(--text-2, var(--txt2));margin:.35em 0 0;font-size:14px;max-width:66ch;line-height:1.5}
+.doc-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin-bottom:14px;background:var(--surface, var(--azul2));
+  border:1px solid var(--border, var(--linea));border-radius:var(--radius, var(--radio))}
+.doc-tab{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:calc(var(--radius, var(--radio)) - 5px);background:transparent;
+  color:var(--text-2, var(--txt2));font-weight:700;font-size:13.5px}
+.doc-tab.on{background:var(--accent, var(--oro));color:var(--accent-ink, #20170a)}
+.doc-panel:focus{outline:none}
+.doc-wrap button:focus-visible,.doc-wrap a:focus-visible,.doc-wrap summary:focus-visible,.doc-wrap .doc-inp:focus-visible{outline:2px solid var(--accent, var(--oro));outline-offset:2px}
+.doc-filtros{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:6px}
+.doc-filtros label,.doc-campo label,.doc-lb,.doc-plan-paso label{display:block;font-size:12.5px;font-weight:600;color:var(--text, var(--txt));margin:0 0 5px}
+.doc-inp{width:100%;padding:11px 12px;border-radius:calc(var(--radius, var(--radio)) - 4px);background:var(--bg, var(--azul));
+  border:1px solid var(--border, var(--linea));color:var(--text, var(--txt));font:inherit;font-size:14.5px;font-family:var(--font-body, inherit)}
+.doc-inp:focus{border-color:var(--accent, var(--oro))}
+textarea.doc-inp{resize:vertical;line-height:1.5}
+select.doc-inp{appearance:auto}
+.doc-inp.error,.doc-inp[aria-invalid="true"]{border-color:var(--danger, var(--mal))}
+.doc-n{font-size:12.5px;color:var(--text-2, var(--txt2));margin:6px 0 10px}
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.doc-card{display:flex;flex-direction:column;gap:6px;text-align:left;padding:13px 14px;min-width:0;
+  background:var(--surface, var(--azul2));border:1px solid var(--border, var(--linea));border-radius:var(--radius, var(--radio));
+  color:var(--text, var(--txt));box-shadow:var(--shadow, none);transition:border-color .15s}
+.doc-card:hover{border-color:var(--accent, var(--oro))}
+.doc-card b{font-size:14px;line-height:1.3}
+.doc-card-area{font-size:11px;letter-spacing:.4px;text-transform:uppercase;font-weight:700;color:var(--text-2, var(--txt2))}
+.doc-card-d{font-size:12.5px;color:var(--text-2, var(--txt2));line-height:1.4}
+.doc-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
+.doc-chip{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--surface-2, var(--azul3));color:var(--text-2, var(--txt2))}
+.doc-chip.proy{background:var(--accent-soft, rgba(255,201,60,.14));color:var(--accent, var(--oro))}
+.doc-mini-pasos{margin:2px 0 0;padding-left:18px;font-size:12px;color:var(--text-2, var(--txt2));display:grid;gap:2px}
+.doc-vacio,.doc-intro,.doc-desc{color:var(--text-2, var(--txt2));font-size:13.5px;line-height:1.5}
+.doc-bloque{background:var(--surface, var(--azul2));border:1px solid var(--border, var(--linea));border-radius:var(--radius, var(--radio));
+  padding:16px 18px;margin-bottom:12px;min-width:0}
+.doc-h{margin:.1em 0 .4em;font-size:18px;font-family:var(--font-display, inherit)}
+.doc-h:focus{outline:none}
+.doc-volver{margin-bottom:10px}
+.doc-det{border:1px solid var(--border, var(--linea));border-radius:10px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+.doc-det summary{cursor:pointer;font-weight:700;color:var(--accent, var(--oro))}
+.doc-lista{margin:8px 0 2px;padding-left:20px;display:grid;gap:4px;font-size:13.5px;color:var(--text-2, var(--txt2))}
+.doc-campos{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.doc-campo{min-width:0;margin-top:8px}
+.doc-campo.ancho{grid-column:1/-1}
+.doc-req{color:var(--accent, var(--oro))}
+.doc-opc{color:var(--text-2, var(--txt2));font-weight:400}
+.doc-ayuda{font-size:12px;color:var(--text-2, var(--txt2));margin:-2px 0 6px;line-height:1.4}
+.doc-err{color:var(--danger, var(--mal));font-size:12.5px;margin:4px 0 0;font-weight:600}
+.doc-resumen{margin-top:12px;padding:9px 12px;border-radius:10px;border:1px solid var(--danger, var(--mal));color:var(--danger, var(--mal));font-size:13.5px;font-weight:600}
+.doc-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.doc-btn{padding:10px 15px;border-radius:calc(var(--radius, var(--radio)) - 5px);font-weight:800;font-size:13.5px;
+  background:var(--bg, var(--azul));border:1px solid var(--border, var(--linea));color:var(--text, var(--txt))}
+.doc-btn:hover{border-color:var(--accent, var(--oro))}
+.doc-btn.pri{background:var(--accent, var(--oro));border-color:var(--accent, var(--oro));color:var(--accent-ink, #20170a)}
+.doc-btn.peligro{color:var(--danger, var(--mal));border-color:var(--danger, var(--mal))}
+.doc-btn.peligro.pri{background:var(--danger, var(--mal));color:#fff}
+.doc-btn:disabled{opacity:.55;cursor:default}
+.doc-btn.chip{padding:6px 10px;font-size:12px;font-weight:600;border-radius:999px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-costo{font-size:12px;color:var(--text-2, var(--txt2));margin:10px 0 0}
+.doc-aviso{font-size:12.5px;margin:0 0 10px;padding:8px 11px;border-radius:10px;border-left:3px solid var(--warn, #ff9f43);
+  background:var(--accent-soft, rgba(255,201,60,.1));color:var(--text, var(--txt));line-height:1.5}
+.doc-espera{margin:8px 0}
+.doc-espera p{font-size:13px;color:var(--text-2, var(--txt2))}
+.doc-res .doc-acc-res{margin:4px 0 14px}
+.doc-texto{background:var(--bg, var(--azul));border:1px solid var(--border, var(--linea));border-radius:12px;padding:16px 18px;overflow-wrap:anywhere}
+.doc-texto table{display:block;overflow-x:auto}
+.doc-texto blockquote,.doc-salida blockquote{margin:0 0 12px;padding:6px 12px;border-left:3px solid var(--accent, var(--oro));
+  background:var(--accent-soft, rgba(255,201,60,.1));border-radius:0 8px 8px 0}
+.doc-editor{min-height:340px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px}
+.doc-verif,.doc-adv{margin-top:12px;border-radius:12px;padding:11px 14px;border:1px solid var(--border, var(--linea));background:var(--bg, var(--azul))}
+.doc-verif{border-left:3px solid var(--accent, var(--oro))}
+.doc-adv{border-left:3px solid var(--warn, #ff9f43)}
+.doc-verif h4,.doc-adv h4{margin:0 0 6px;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.doc-verif ul,.doc-adv ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:13.5px;line-height:1.45}
+.doc-estado{font-size:13.5px;font-weight:600;margin:0 0 10px}
+.doc-pasos{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.doc-paso{display:flex;gap:10px;align-items:baseline;font-size:13.5px}
+.doc-paso-est{flex:none;min-width:94px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 8px;border-radius:999px;
+  text-align:center;background:var(--surface-2, var(--azul3));color:var(--text-2, var(--txt2))}
+.doc-paso.curso .doc-paso-est{background:var(--accent-soft, rgba(255,201,60,.14));color:var(--accent, var(--oro))}
+.doc-paso.ok .doc-paso-est{color:var(--ok, #39d98a)}
+.doc-paso.mal .doc-paso-est{color:var(--danger, var(--mal))}
+.doc-salida{border-top:1px solid var(--border, var(--linea));padding-top:10px;margin-top:10px}
+.doc-salida h4{margin:0 0 6px;font-size:14px}
+.doc-salida .md{overflow-wrap:anywhere}
+.doc-salida .md table{display:block;overflow-x:auto}
+.doc-error{color:var(--danger, var(--mal));font-weight:600;font-size:13.5px}
+.doc-ejemplos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12px;color:var(--text-2, var(--txt2))}
+.doc-plan-pasos{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.doc-plan-paso{border:1px solid var(--border, var(--linea));border-radius:12px;padding:10px 12px;background:var(--bg, var(--azul));display:grid;gap:4px}
+.doc-plan-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.doc-plan-paso label{margin-top:4px}
+.doc-mis-ul{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:8px}
+.doc-mis-f{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--surface, var(--azul2));
+  border:1px solid var(--border, var(--linea));border-radius:12px;padding:10px 12px}
+.doc-mis-t{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px}
+.doc-mis-t b{font-size:14px;overflow-wrap:anywhere}
+.doc-mis-t span{font-size:12px;color:var(--text-2, var(--txt2))}
+.doc-mis-f .doc-acc{margin-top:0}
+.doc-mis-f .doc-btn{padding:7px 11px;font-size:12.5px}
+.doc-conf{flex-basis:100%;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;padding-top:8px;border-top:1px solid var(--border, var(--linea))}
+.doc-conf span{flex:1;min-width:180px}
+body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
+@media(max-width:620px){
+  .doc-filtros,.doc-campos{grid-template-columns:1fr}
+  .doc-bloque{padding:14px 13px}
+  .doc-texto{padding:12px}
+  .doc-tab{padding:9px 8px;font-size:13px}
+  .doc-acc .doc-btn{flex:1 1 auto}
+}
+@media print{.doc-tabs,.doc-acc,.doc-volver,.doc-filtros,.doc-grid{display:none!important}}
 </style>
 </head>
 <body class="oscuro">
@@ -462,6 +578,7 @@ body.claro .fuente a.ftit{color:var(--link, #7a5600)}
     <button id="n-modular" data-click="ver" data-arg-click="modular">Modular Lab</button>
     <button id="n-mapa" data-click="ver" data-arg-click="mapa">Mi mapa</button>
     <button id="n-chat" data-click="ver" data-arg-click="chat">Consultar</button>
+    <button id="n-documentos" data-click="ver" data-arg-click="documentos">Documentos</button>
     <button id="n-config" data-click="ver" data-arg-click="config">Ajustes</button>
   </nav>
 
@@ -652,6 +769,10 @@ body.claro .fuente a.ftit{color:var(--link, #7a5600)}
      </div>
     </section>
 
+    <section id="v-documentos" class="vista">
+      <div class="wrap doc-wrap" id="doc-raiz"></div>
+    </section>
+
     <section id="v-config" class="vista">
       <div class="wrap">
         <div class="panel">
@@ -767,5 +888,6 @@ body.claro .fuente a.ftit{color:var(--link, #7a5600)}
 </div>
 
 <script src="/static/app.js"></script>
+<script src="/static/documentos.js"></script>
 </body>
 </html>

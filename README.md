@@ -75,6 +75,10 @@ y regenerar el boletín.
   Detalle técnico en `docs/10-ACADEMIA.md`.
 - **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
   socrático), Examíname (simulacro oral) y Audita mi respuesta.
+- **Documentos (automatizador):** 203 tipos de escritos de 15 áreas (tutelas, peticiones, demandas,
+  contestaciones, recursos, contratos, poderes, memoriales y proyectos de autos rotulados como borrador),
+  7 flujos de varios pasos y un asistente que propone un plan editable y lo ejecuta paso a paso. Exporta a
+  Word. Detalle en `docs/13-AUTOMATIZADOR.md`.
 - **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
   con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
   un modelo simulado (sin clave de API) en http://localhost:8000.

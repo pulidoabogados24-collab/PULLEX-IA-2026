@@ -26,7 +26,15 @@ mock = (RAIZ / "demo" / "mock.js").read_text(encoding="utf-8")
 datos = json.loads((RAIZ / "demo" / "datos_demo.json").read_text(encoding="utf-8"))
 sys.path.insert(0, str(RAIZ))
 import academia  # noqa: E402  — el Mapa del Derecho es el mismo de la app real
+import documentos  # noqa: E402  — el catálogo del automatizador también es el real
 datos["mapa"] = academia.MAPA
+datos["automatizador"] = {
+    "catalogo": documentos.CATALOGO, "areas": documentos.AREAS, "para": list(documentos.PARA_QUIEN),
+    "flujos": documentos.flujos_publicos(), "max_pasos": documentos.MAX_PASOS,
+    "aviso_general": documentos.AVISO_GENERAL, "aviso_funcionario": documentos.AVISO_FUNCIONARIO,
+    "borrador": documentos.BORRADOR_FUNCIONARIO,
+    "demo": json.loads((RAIZ / "demo" / "documentos_demo.json").read_text(encoding="utf-8"))}
+docs_js = (ST / "documentos.js").read_text(encoding="utf-8")
 
 html = html.replace("<title>PULLEX IA — Asistente Jurídico Colombiano</title>", "<title>PULLEX IA Demo</title>")
 html = html.replace('<link rel="manifest" href="/manifest.webmanifest">', "")
@@ -61,6 +69,12 @@ bloque = ("<script>window.__DEMO_DATOS__=" + json.dumps(datos, ensure_ascii=Fals
           ";</script>\n<script>" + mock + "</script>\n<script>" + app_js + prellenar + "</script>")
 assert html.count('<script src="/static/app.js"></script>') == 1
 html = html.replace('<script src="/static/app.js"></script>', bloque)
+# Automatizador: mismo documentos.js; la descarga en Word muestra un aviso (la demo no genera archivos).
+aviso_word = ("\ndocDescargarWord=function(){toast('En la app real esto descarga el borrador en Word (.docx); "
+              "la demostración no genera archivos.')};\n")
+assert html.count('<script src="/static/documentos.js"></script>') == 1
+html = html.replace('<script src="/static/documentos.js"></script>',
+                    "<script>" + docs_js.replace("</script", "<\\/script") + aviso_word + "</script>")
 
 salida = RAIZ / "demo" / "pullex-demo.html"
 salida.write_text(html, encoding="utf-8")

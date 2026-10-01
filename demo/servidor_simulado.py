@@ -23,7 +23,11 @@ os.environ.setdefault("PULLEX_ADMIN_CLAVE", "demo-admin-clave-larga")
 os.environ.setdefault("PULLEX_SECRET", "solo-para-la-demo-local")
 sys.path.insert(0, str(RAIZ))
 import app as pullex  # noqa: E402
+import documentos  # noqa: E402
 import fuentes  # noqa: E402
+
+# Textos de ejemplo del automatizador (Documentos, Flujos, Asistente), rotulados como demostración.
+DOCS_DEMO = json.loads((RAIZ / "demo" / "documentos_demo.json").read_text(encoding="utf-8"))
 
 # Corpus de DEMOSTRACIÓN (si no se indicó otro con PULLEX_CORPUS_DB): dos textos de ejemplo,
 # rotulados como tales, para ver el motor de fuentes funcionando. No son texto normativo.
@@ -170,20 +174,64 @@ def _caso_para(pedido: str) -> dict:
     return par["caso"] if par else _SIN_CASO
 
 
+def _documento_ejemplo(pedido: str) -> str:
+    """Automatizador: texto de ejemplo para el tipo pedido (3 ejemplos completos y uno genérico)."""
+    m = re.match(r"Redacta el borrador completo de este documento: (.+?)\.\n", pedido)
+    tipo = next((t for t in documentos.CATALOGO if m and t["nombre"] == m.group(1)), None)
+    if tipo and tipo["id"] in DOCS_DEMO["documentos"]:
+        return DOCS_DEMO["documentos"][tipo["id"]]
+    nombre = tipo["nombre"] if tipo else "el documento"
+    secciones = "\n".join(f"{i}. {s}" for i, s in enumerate(tipo["estructura"] if tipo else [], 1))
+    texto = DOCS_DEMO["generico"].replace("{nombre}", nombre).replace("{secciones}", secciones)
+    return documentos.asegurar_rotulo(tipo, texto) if tipo else texto
+
+
+def _paso_ejemplo(pedido: str) -> str:
+    """Automatizador: resultado de ejemplo del paso n de un flujo (o genérico para el asistente)."""
+    nombre = re.search(r"^FLUJO: (.+)$", pedido, re.M)
+    paso = re.search(r"^PASO (\d+) DE \d+: (.+)$", pedido, re.M)
+    n, titulo = (int(paso.group(1)), paso.group(2)) if paso else (1, "paso")
+    flujo = next((f for f in documentos.FLUJOS if nombre and f["nombre"] == nombre.group(1)), None)
+    textos = DOCS_DEMO["pasos"].get(flujo["id"]) if flujo else None
+    if textos and n <= len(textos):
+        return textos[n - 1]
+    return DOCS_DEMO["paso_generico"].replace("{titulo}", titulo)
+
+
+class _StreamTexto:
+    def __init__(self, texto):
+        self.texto = texto
+
+    def __enter__(self):
+        return iter([_Ev(t) for t in _trozos(self.texto, 40)])
+
+    def __exit__(self, *a):
+        return False
+
+
 class _Modelo:
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
 
     def _stream(self, model, max_tokens, system, messages, tools, **k):
-        s = _Stream(system, web=bool(tools))
         ultimo = messages[-1]["content"] if messages else ""
         ultimo = ultimo if isinstance(ultimo, str) else " ".join(b.get("text", "") for b in ultimo)
+        sis = " ".join(b.get("text", "") for b in system) if isinstance(system, list) else str(system)
+        if "PULLEX DOCUMENTOS" in sis:  # Automatizador: un paso de un flujo o del asistente
+            return _StreamTexto(_paso_ejemplo(ultimo))
+        s = _Stream(system, web=bool(tools))
         if ultimo.startswith("SOLICITUD DE REDACCIÓN"):  # Document Studio
             s.texto = DATOS["chat"]["escrito_peticion" if "PETICIÓN" in ultimo.split("\n")[0] else "escrito"]
         return s
 
     def _create(self, **k):
         pedido = k["messages"][0]["content"]
+        sistema = k.get("system")
+        sis = " ".join(b.get("text", "") for b in sistema) if isinstance(sistema, list) else str(sistema or "")
+        if sistema == documentos.SISTEMA_PLAN:
+            return types.SimpleNamespace(content=[_B(json.dumps(DOCS_DEMO["plan"], ensure_ascii=False))])
+        if "PULLEX DOCUMENTOS" in sis:
+            return types.SimpleNamespace(content=[_B(_documento_ejemplo(pedido))])
         if k.get("system") == pullex.MODULAR_SISTEMA:
             if pedido.startswith("Evalúa"):
                 cuerpo = _evaluar(pedido)
