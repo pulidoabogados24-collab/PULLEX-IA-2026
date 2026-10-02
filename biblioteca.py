@@ -13,8 +13,12 @@ Estados de un documento: ENCONTRADO → LEÍDO → EXTRAÍDO → INDEXADO → VA
 VALIDADO solo lo asigna una persona. Detalle en docs/14-BIBLIOTECA-DRIVE.md.
 """
 import hashlib
+import json
 import re
+import sqlite3
 from collections import Counter
+from contextlib import closing
+from datetime import datetime, timezone
 
 import fuentes
 
@@ -309,4 +313,171 @@ def versiones(textos: dict, umbral: float = 0.5) -> dict:
             if sim >= umbral:
                 salida[i]["version_similar_de"].append({"id": j, "similitud": sim})
                 salida[j]["version_similar_de"].append({"id": i, "similitud": sim})
+    return salida
+
+
+# ------------------------------------------------- catálogo (índice + fichas) --
+ESQUEMA_FICHAS = """
+CREATE TABLE IF NOT EXISTS biblioteca_fichas(
+    origen TEXT PRIMARY KEY,            -- id de Drive; el mismo `origen` de la tabla fuentes
+    id_catalogo TEXT NOT NULL,
+    tipo_documental TEXT, area TEXT, ruta TEXT,
+    propietario TEXT,                   -- propio | tercero
+    visibilidad TEXT NOT NULL,          -- privada (solo la biblioteca del dueño) | general
+    derechos TEXT NOT NULL,
+    estado_validacion TEXT NOT NULL,
+    campos_total INTEGER, campos_json TEXT, versiones_json TEXT,
+    nota_vigencia TEXT, sha256_texto TEXT, actualizado_en TEXT);
+"""
+SIN_VALIDAR = "SIN VALIDAR (ninguna persona lo ha revisado jurídicamente)"
+_RE_CITAS = (
+    re.compile(r"\bLey\s+(?:Estatutaria\s+)?\d{1,4}\s+de\s+\d{4}", re.I),
+    re.compile(r"\bDecreto(?:\s+reglamentario|\s*-?\s*ley)?\s+\d{1,4}\s+de\s+\d{4}", re.I),
+    re.compile(r"\bSentencia\s+(?:SU|[CT])\s?[-–]\s?\d{1,4}(?:/\d{2,4})?", re.I),
+    re.compile(r"\bart[íi]culos?\s+\d+[\d\s,y°º.o]*\s+de\s+la\s+Constituci[oó]n(?:\s+Pol[ií]tica|\s+Nacional)?", re.I),
+)
+
+
+def id_catalogo(drive_id: str) -> str:
+    return "DRV-" + drive_id
+
+
+def paginas_por_parrafos(texto: str, objetivo: int = 900) -> list:
+    """[(ubicación, texto)] agrupando párrafos hasta ~objetivo caracteres, para que cada fragmento
+    del índice pueda volver al original por su número de párrafo ("párr. 4–7")."""
+    parrafos = [p.strip() for p in re.split(r"\n\s*\n", texto or "") if p.strip()]
+    paginas, actual, desde = [], [], 1
+    for n, p in enumerate(parrafos, 1):
+        if actual and sum(len(x) for x in actual) + len(p) > objetivo:
+            paginas.append((f"párr. {desde}–{n - 1}" if n - 1 > desde else f"párr. {desde}", "\n\n".join(actual)))
+            actual, desde = [], n
+        actual.append(p)
+    if actual:
+        fin = len(parrafos)
+        paginas.append((f"párr. {desde}–{fin}" if fin > desde else f"párr. {desde}", "\n\n".join(actual)))
+    return paginas
+
+
+def fuentes_citadas(texto: str) -> list:
+    """Normas y sentencias que el texto menciona. Son citas DEL DOCUMENTO: nadie las ha verificado."""
+    vistas = []
+    for rx in _RE_CITAS:
+        for m in rx.finditer(texto or ""):
+            cita = re.sub(r"\s+", " ", m.group(0)).strip(" .,;")
+            if cita.lower() not in (v.lower() for v in vistas):
+                vistas.append(cita)
+    return vistas[:25]
+
+
+def indexar_modelo(con, *, drive_id: str, titulo: str, texto: str, tipo_fuente: str, url: str, ruta: str = "",
+                   tipo_documental: str = POR_CLASIFICAR, area: str = POR_CLASIFICAR, propietario: str = "tercero",
+                   fecha_archivo: str = None, versiones_relacionadas: list = None) -> dict:
+    """Indexa un documento extraído de Drive en el índice de fuentes.py y guarda su ficha.
+
+    `origen` = id de Drive y `url` = enlace para abrir el original. Entra como PENDIENTE_VERIFICAR.
+    Lo de terceros queda con visibilidad "privada": solo lo ve la biblioteca del dueño, no el chat."""
+    con.executescript(ESQUEMA_FICHAS)
+    paginas = [("título", fuentes._limpiar_titulo(titulo))] + paginas_por_parrafos(texto)
+    r = fuentes.indexar(con, origen=drive_id, nombre=titulo, paginas=paginas, carpeta=ruta, fecha_archivo=fecha_archivo,
+                        url=url, sha256=huella(texto), meta={"tipo": tipo_fuente})
+    # fuentes.indexar deja todo lo nuevo o cambiado en PENDIENTE_VERIFICAR; si el texto no cambió,
+    # se respeta lo que una persona haya verificado o validado antes
+    previa = con.execute("SELECT estado_validacion, sha256_texto FROM biblioteca_fichas WHERE origen=?", (drive_id,)).fetchone()
+    validacion = previa[0] if previa and previa[1] == huella(texto) else SIN_VALIDAR
+    campos = campos_por_completar(texto)
+    nota = None
+    if re.search(r"\bderogad[ao]\b", fuentes.sin_tildes(titulo).lower()):
+        nota = "el título del archivo dice DEROGADA: sin verificar en fuente oficial"
+    con.execute(
+        "INSERT OR REPLACE INTO biblioteca_fichas(origen,id_catalogo,tipo_documental,area,ruta,propietario,visibilidad,"
+        "derechos,estado_validacion,campos_total,campos_json,versiones_json,nota_vigencia,sha256_texto,actualizado_en) "
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        (drive_id, id_catalogo(drive_id), tipo_documental, area, ruta, propietario,
+         "privada" if propietario != "propio" else "general", AVISO_DERECHOS, validacion, campos["total"],
+         json.dumps(campos["por_patron"], ensure_ascii=False, sort_keys=True),
+         json.dumps(versiones_relacionadas or [], ensure_ascii=False), nota, huella(texto),
+         datetime.now(timezone.utc).isoformat(timespec="seconds")))
+    con.commit()
+    n = con.execute("SELECT COUNT(*) FROM fragmentos WHERE fuente_id=?", (r["id"],)).fetchone()[0]
+    return {"fuente_id": r["id"], "accion": r["accion"], "fragmentos": n, "id_catalogo": id_catalogo(drive_id)}
+
+
+def _fila_ficha(con, origen):
+    try:
+        f = con.execute("SELECT s.id AS fuente_id, s.titulo, s.tipo, s.url, s.fecha_archivo, s.estado_vigencia, s.verificado_en, "
+                        "s.indexado_en, b.* FROM fuentes s JOIN biblioteca_fichas b ON b.origen = s.origen WHERE s.origen=?",
+                        (origen,)).fetchone()
+    except sqlite3.Error:
+        return None
+    if f is None:
+        return None
+    d = dict(f)
+    d["campos"] = json.loads(d.pop("campos_json") or "{}")
+    d["versiones_relacionadas"] = json.loads(d.pop("versiones_json") or "[]")
+    return d
+
+
+def ficha(drive_id: str, ruta: str = None, texto: str = None) -> dict:
+    """Ficha de un modelo del catálogo. Lo que nadie ha descrito ni revisado se dice tal cual:
+    "por describir". Con `texto` (el extraído), añade datos requeridos, anexos y fuentes citadas."""
+    con = fuentes._abrir_lectura(ruta or fuentes.ruta_db())
+    if con is None:
+        return None
+    with closing(con):
+        f = _fila_ficha(con, drive_id)
+    if f is None:
+        return None
+    campos = campos_por_completar(texto, con_etiquetas=True) if texto else {"total": f["campos_total"], "por_patron": f["campos"]}
+    anexos = []
+    if texto:
+        m = re.search(r"^[ \t]*(?:ANEXOS?|Anexos?)\b[:.]?[ \t]*$(.*?)(?=^[ \t]*[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ ]{5,}[ \t]*$|\Z)", texto, re.S | re.M)
+        if m:
+            anexos = [l.strip(" –-•\t") for l in m.group(1).splitlines() if l.strip(" –-•\t")][:8]
+    return {
+        "id": f["id_catalogo"], "titulo": f["titulo"], "tipo": f["tipo"], "tipo_documental": f["tipo_documental"],
+        "area": f["area"], "carpeta": f["ruta"],
+        "finalidad": "por describir (nadie ha redactado la finalidad de este modelo)",
+        "supuestos_de_uso": "por describir", "limites": "por describir; no usar sin revisión de un abogado",
+        "datos_requeridos": campos, "anexos": anexos or "no detectados en el texto",
+        "fuentes_citadas": [{"cita": c, "estado": "citada en el documento; NO verificada"} for c in fuentes_citadas(texto or "")],
+        "fecha_de_revision": f["verificado_en"] or "nunca revisado",
+        "enlace_original": f["url"], "versiones_relacionadas": f["versiones_relacionadas"],
+        "estado_validacion": f["estado_validacion"],
+        "estado_vigencia": fuentes.estado_efectivo(f["estado_vigencia"], f["verificado_en"]),
+        "nota_vigencia": f["nota_vigencia"], "derechos": f["derechos"], "visibilidad": f["visibilidad"],
+        "propietario": f["propietario"], "fecha_del_archivo": (f["fecha_archivo"] or "")[:10] or None,
+        "huella_del_texto": f["sha256_texto"], "indexado_en": f["indexado_en"],
+    }
+
+
+def buscar_modelos(pregunta: str, ruta: str = None, limite: int = 5, tipos=("plantilla",), vista_previa: int = 280) -> list:
+    """Modelos del catálogo que responden a una consulta en lenguaje natural, uno por documento, con
+    el enlace para abrir el original en Drive. Es la búsqueda de la biblioteca del dueño: incluye lo
+    privado. El parecido textual no prueba que el modelo sirva para el caso."""
+    ruta = ruta or fuentes.ruta_db()
+    frags = fuentes.buscar(pregunta, limite=60, ruta=ruta, incluir_privadas=True)
+    con = fuentes._abrir_lectura(ruta)
+    if con is None or not frags:
+        return []
+    raices = [fuentes._raiz(t) for t in fuentes.terminos(pregunta)]
+    salida, vistos = [], set()
+    with closing(con):
+        for fr in frags:
+            if fr["origen"] in vistos or (tipos and fr["tipo"] not in tipos):
+                continue
+            f = _fila_ficha(con, fr["origen"])
+            if f is None:
+                continue
+            vistos.add(fr["origen"])
+            tn = fuentes._norm(fr["texto"])
+            salida.append({
+                "id": f["id_catalogo"], "drive_id": fr["origen"], "titulo": fr["titulo"], "tipo": fr["tipo"], "area": f["area"],
+                "tipo_documental": f["tipo_documental"], "enlace_original": f["url"], "ubicacion": fr["ubicacion"],
+                "vista_previa": fr["texto"][:vista_previa] + ("…" if len(fr["texto"]) > vista_previa else ""),
+                "por_que": "coincide en: " + ", ".join(r for r in raices if re.search(r"\b" + re.escape(r), tn)),
+                "campos_por_completar": f["campos_total"], "estado_validacion": f["estado_validacion"],
+                "estado_vigencia": fr["estado_vigencia"], "derechos": f["derechos"], "visibilidad": f["visibilidad"],
+                "puntaje": round(fr["puntaje"], 3)})
+            if len(salida) >= limite:
+                break
     return salida

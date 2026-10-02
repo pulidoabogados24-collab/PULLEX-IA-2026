@@ -132,6 +132,8 @@ def modulo(tmp_path_factory):
         "PULLEX_SECRET": "secreto-de-pruebas-no-usar-en-produccion",
         "RESEND_API_KEY": "",
         "PULLEX_APP_URL": "https://pullex.pruebas",
+        # las pruebas nunca leen el corpus real del operador (corpus/corpus.db en la carpeta del proyecto)
+        "PULLEX_CORPUS_DB": str(trabajo / "corpus" / "corpus.db"),
     })
     sys.path.insert(0, str(RAIZ))
     if "app" in sys.modules:
