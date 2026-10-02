@@ -246,7 +246,7 @@ SUBESPECIALIDADES = [
                "Ley 100 de 1993, sistema general de seguridad social en salud, con sus reformas " + VERIFICAR,
                "Decreto 780 de 2016, reglamentario del sector Salud " + VERIFICAR,
                "resoluciones del Ministerio de Salud sobre servicios financiados y circulares de la "
-               "Superintendencia Nacional de Salud",
+               "Superintendencia de Salud",
                "relatoría de la Corte Constitucional en materia de salud"],
       entregable="ruta de acceso en salud con el servicio u obligación económica exigible, el responsable según "
                  "la norma, la orden médica que lo soporta y el mecanismo de reclamación más rápido",
@@ -312,9 +312,9 @@ SUBESPECIALIDADES = [
       fuentes=["Código Procesal del Trabajo y de la Seguridad Social " + VERIFICAR,
                "Código General del Proceso, Ley 1564 de 2012, en lo que el procesal laboral remite a él "
                + VERIFICAR,
-               "Ley 2213 de 2022, uso de tecnologías en las actuaciones judiciales " + VERIFICAR,
+               "Ley 1149 de 2007, oralidad en el proceso laboral " + VERIFICAR,
                "relatoría de la Sala de Casación Laboral de la Corte Suprema de Justicia",
-               "consulta de procesos y estados electrónicos de la Rama Judicial"],
+               "actas del inspector del trabajo y consulta de procesos de la Rama Judicial"],
       entregable="plan procesal laboral con el juez competente, la clase de proceso por cuantía, los requisitos "
                  "previos, la prescripción de cada pretensión y la lista de pruebas por aportar o pedir",
       riesgos=["Demandar a una entidad pública sin la reclamación administrativa previa.",

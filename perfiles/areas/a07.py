@@ -12,11 +12,11 @@ SUBESPECIALIDADES = [
       entradas=["la norma, el acto o la situación que se considera contraria a la Constitución",
                 "el derecho o principio constitucional comprometido", "quién resulta afectado y desde cuándo"],
       fuentes=["Constitución Política de 1991 y tratados de derechos humanos ratificados",
-               "Decreto 2067 de 1991, procedimiento ante la Corte Constitucional " + VERIFICAR,
+               "Decreto 2067 de 1991, juicios ante la Corte Constitucional " + VERIFICAR,
                "Ley 472 de 1998, acciones populares y de grupo, y Ley 393 de 1997, acción de cumplimiento "
                + VERIFICAR,
                "relatoría de la Corte Constitucional",
-               "SUIN-Juriscol para el texto de la norma examinada y sus decisiones de constitucionalidad"],
+               "SUIN-Juriscol para el texto de la norma examinada y las decisiones sobre ella"],
       entregable="concepto constitucional con la norma o el acto examinado, el parámetro de control, el cargo o "
                  "problema, el precedente aplicable y la acción procedente",
       riesgos=["Atribuir efectos generales a una decisión de revisión de tutela o tratar un comentario incidental "

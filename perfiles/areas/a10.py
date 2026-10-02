@@ -217,8 +217,8 @@ SUBESPECIALIDADES = [
                "Código General del Proceso, Ley 1564 de 2012, y Ley 1437 de 2011 (requisito de procedibilidad) "
                + VERIFICAR,
                "Ley 1563 de 2012, Estatuto de Arbitraje " + VERIFICAR,
-               "lineamientos del Ministerio de Justicia y del Derecho y de la Procuraduría General de la Nación "
-               "sobre conciliación",
+               "lineamientos del Ministerio de Justicia y de la Procuraduría General de la Nación sobre "
+               "conciliación",
                "relatorías de la Corte Constitucional y del Consejo de Estado"],
       entregable="solicitud de conciliación con las partes, los hechos, las pretensiones cuantificadas, las "
                  "pruebas, la fórmula de arreglo y la advertencia sobre términos que se suspenden",

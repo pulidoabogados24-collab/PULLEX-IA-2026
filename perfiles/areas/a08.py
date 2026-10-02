@@ -179,10 +179,9 @@ SUBESPECIALIDADES = [
       fuentes=["Constitución Política y Código de Procedimiento Penal, Ley 906 de 2004 (derechos de las víctimas "
                "e incidente de reparación) " + VERIFICAR,
                "Ley 1257 de 2008, violencias contra las mujeres " + VERIFICAR,
-               "Ley 1719 de 2014, acceso a la justicia de víctimas de violencia sexual " + VERIFICAR,
+               "Ley 1719 de 2014, justicia para víctimas de violencia sexual " + VERIFICAR,
                "relatoría de la Corte Constitucional sobre la participación de la víctima",
-               "relatoría de la Sala de Casación Penal y rutas de atención de la Fiscalía y la Defensoría del "
-               "Pueblo"],
+               "relatoría de la Sala de Casación Penal y rutas de atención de la Fiscalía y de la Defensoría"],
       entregable="plan de intervención de la víctima con sus derechos en la etapa actual, las solicitudes que "
                  "puede hacer, las medidas de protección disponibles y la ruta de reparación con sus soportes",
       riesgos=["Prometer una reparación económica cuando aún no hay condena ni bienes identificados.",
@@ -252,9 +251,9 @@ SUBESPECIALIDADES = [
                "Plantear en casación un alegato de instancia sin ajustarlo a una causal."],
       comprobaciones=["Se indica el recurso procedente, su norma, el término y la fecha desde la que corre.",
                       "Cada cargo identifica el error, la norma infringida y su trascendencia en la decisión."],
-      extraer="tipo y fecha de la decisión, forma de notificación, instancia, fundamentos, agravios y recursos "
-              "ya interpuestos",
-      vigencia="las reglas de recursos y de casación vigentes en la fecha de la decisión impugnada",
+      extraer="sentido del fallo (condena, absolución o auto), despacho que lo dictó, fecha de lectura o de "
+              "traslado, pena impuesta, si es la primera condena y cargos que podrían formularse",
+      vigencia="las reglas de impugnación y de casación penal vigentes en la fecha de la decisión atacada",
       preguntas="¿qué recurso procede y hasta cuándo?; ¿qué error concreto de la decisión puede demostrarse y "
                 "cómo incide en el resultado?",
       opciones="reposición, apelación, impugnación especial de la primera condena, casación o acción de revisión",
