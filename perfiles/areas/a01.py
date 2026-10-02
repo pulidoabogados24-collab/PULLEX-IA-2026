@@ -58,7 +58,7 @@ SUBESPECIALIDADES = [
       opciones="mantener el entorno nativo del proveedor, fijar una imagen de contenedor propia o mover el estado a "
                "un disco persistente",
       claves=["sistema operativo", "linux", "variables de entorno", "variable de entorno", "permisos de archivo",
-              "zona horaria", "disco efimero", "runtime", "version de python", "interprete"]),
+              "zona horaria", "disco efimero", "runtime", "version de python", "interprete de python"]),
     S("S03", "redes",
       tema="la red del servicio (dominio, TLS, cabeceras HTTP y salidas a terceros)",
       objeto="Cubre el dominio y el certificado, el proxy del proveedor, las cabeceras de seguridad, la política de "
@@ -82,7 +82,7 @@ SUBESPECIALIDADES = [
                 "antes de que termine?",
       opciones="respuestas en flujo con latidos, respuestas diferidas con consulta posterior o tiempos de espera "
                "cortos con reintento",
-      claves=["redes", "red$", "dns$", "tls$", "https", "certificado tls", "csp$", "cabecera", "cors$", "proxy",
+      claves=["red del servidor", "configuracion de red", "dns$", "tls$", "https", "certificado tls", "csp$", "cabecera", "cors$", "proxy",
               "hsts$", "cortafuegos", "tiempo de espera", "politica de contenido"]),
     S("S04", "almacenamiento",
       tema="el almacenamiento de datos del servicio (archivos SQLite, disco y tamaño de lo guardado)",
@@ -130,7 +130,7 @@ SUBESPECIALIDADES = [
                 "prueba y de producción?",
       opciones="entorno virtual con versiones fijadas, imagen de contenedor propia o ambiente de vista previa por "
                "rama",
-      claves=["virtualizacion", "entorno virtual", "venv$", "contenedor", "docker", "ambiente de pruebas",
+      claves=["virtualizacion", "entorno virtual", "venv$", "contenedor docker", "docker", "ambiente de pruebas",
               "ambiente de produccion", "staging", "reproducible", "maquina virtual"]),
     S("S06", "identidad",
       tema="la identidad y el acceso (cuentas, contraseñas, sesiones y permisos)",
@@ -154,8 +154,8 @@ SUBESPECIALIDADES = [
                 "comprometida?",
       opciones="token firmado en cabecera como hoy, cookie HttpOnly con protección CSRF o un proveedor de identidad "
                "externo con segundo factor",
-      claves=["identidad", "autenticacion", "autorizacion", "inicio de sesion", "login", "contrasena", "token",
-              "sesion", "permisos de usuario", "roles", "mfa$", "segundo factor", "idor$", "control de acceso"]),
+      claves=["identidad y acceso", "autenticacion", "autorizacion por rol", "inicio de sesion", "login", "contrasena", "token",
+              "sesion de usuario", "permisos de usuario", "roles", "mfa$", "segundo factor", "idor$", "control de acceso"]),
     S("S07", "seguridad defensiva",
       tema="la defensa del servicio frente a ataques (entradas, secretos, abuso y exposición de datos)",
       objeto="Cubre la validación de entradas, la protección contra inyección y XSS, el manejo de secretos, los "
@@ -204,7 +204,7 @@ SUBESPECIALIDADES = [
                 "ejecuta?",
       opciones="copia programada con la API de SQLite hacia almacenamiento externo, réplica continua o migración a "
                "una base gestionada con copias automáticas",
-      claves=["copia de seguridad", "backup", "respaldo", "respaldar", "restaurar", "restauracion",
+      claves=["copia de seguridad", "backup", "respaldo de datos", "respaldo de la base", "respaldar", "restaurar", "restauracion",
               "recuperacion ante desastres", "rpo$", "rto$", "perdida de datos"]),
     S("S09", "rendimiento",
       tema="el rendimiento del servicio (latencia, consumo y cuellos de botella)",
@@ -230,7 +230,7 @@ SUBESPECIALIDADES = [
                 "es evitable?",
       opciones="índices y menos consultas, caché de instrucciones del modelo, respuestas en flujo o un modelo más "
                "liviano para tareas simples",
-      claves=["rendimiento", "latencia", "carga lento", "tarda en cargar", "cuello de botella", "performance",
+      claves=["rendimiento del servidor", "rendimiento de la aplicacion", "latencia", "carga lento", "tarda en cargar", "cuello de botella", "performance",
               "tiempo de respuesta", "costo por consulta", "consumo de tokens", "va lento"]),
     S("S10", "compatibilidad",
       tema="la compatibilidad del servicio con navegadores, dispositivos y versiones",

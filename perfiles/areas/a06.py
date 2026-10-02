@@ -124,7 +124,7 @@ SUBESPECIALIDADES = [
                 "visitas y alimentos?",
       opciones="acuerdo ante notaría o centro de conciliación, proceso ante el juez de familia o medida de "
                "protección ante la comisaría",
-      claves=["divorcio", "alimentos", "cuota alimentaria", "custodia", "visitas", "union marital",
+      claves=["divorcio", "alimentos", "cuota alimentaria", "custodia", "regimen de visitas", "union marital",
               "sociedad conyugal", "patria potestad", "paternidad", "violencia intrafamiliar", "comisaria de familia",
               "mi esposo", "mi esposa", "separacion de bienes", "mi expareja"]),
     S("S05", "sucesiones",
@@ -151,7 +151,7 @@ SUBESPECIALIDADES = [
       opciones="sucesión notarial de común acuerdo, proceso judicial de sucesión o partición adicional de bienes "
                "omitidos",
       claves=["sucesion", "herencia", "heredero", "testamento", "fallecio", "murio", "causante", "particion",
-              "legitima", "albacea", "repudiar la herencia", "bienes del difunto"]),
+              "legitimas$", "legitima rigorosa", "albacea", "repudiar la herencia", "bienes del difunto"]),
     S("S06", "comercial",
       tema="la actividad mercantil (comerciante, registro, títulos valores, garantías e insolvencia)",
       objeto="Cubre la calidad de comerciante y sus deberes, el registro mercantil y el establecimiento de "
@@ -266,7 +266,7 @@ SUBESPECIALIDADES = [
       preguntas="¿el hecho está amparado y no excluido?; ¿la objeción fue oportuna y la acción sigue vigente?",
       opciones="reconsideración ante la aseguradora, queja ante el defensor del consumidor financiero, "
                "conciliación o demanda contra la aseguradora",
-      claves=["seguro", "poliza", "aseguradora", "siniestro", "objecion", "soat$", "seguro de vida", "reticencia",
+      claves=["seguros$", "contrato de seguro", "seguro del carro", "poliza", "aseguradora", "siniestro", "objecion de la aseguradora", "soat$", "seguro de vida", "reticencia",
               "amparo", "deducible", "beneficiario del seguro", "no me pagan el seguro"]),
     S("S10", "propiedad intelectual",
       tema="la propiedad intelectual (marcas, patentes, diseños, derechos de autor y competencia desleal)",
@@ -298,7 +298,7 @@ SUBESPECIALIDADES = [
                 "aprovecha la reputación ajena?",
       opciones="solicitar el registro, presentar oposición, requerir al infractor o demandar por infracción o "
                "competencia desleal",
-      claves=["marca", "patente", "derechos de autor", "derecho de autor", "propiedad intelectual",
-              "propiedad industrial", "logo", "plagio", "competencia desleal", "registro de marca", "oposicion a la "
+      claves=["marca$", "marcas$", "patente", "derechos de autor", "derecho de autor", "propiedad intelectual",
+              "propiedad industrial", "logo$", "logotipo", "plagio", "competencia desleal", "registro de marca", "oposicion a la "
               "marca", "licencia de uso", "diseno industrial", "copiaron mi"]),
 ]

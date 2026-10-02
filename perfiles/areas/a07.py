@@ -261,8 +261,8 @@ SUBESPECIALIDADES = [
       opciones="reclamación ante la entidad o la comisión del servicio civil, acción de tutela si hay perjuicio "
                "irremediable o nulidad y restablecimiento del derecho",
       claves=["empleo publico", "carrera administrativa", "concurso de meritos", "cnsc$", "lista de elegibles",
-              "provisionalidad", "provisional", "insubsistencia", "libre nombramiento", "servidor publico",
-              "funcion publica", "encargo", "manual de funciones", "periodo de prueba en carrera"]),
+              "provisionalidad", "nombramiento provisional", "insubsistencia", "libre nombramiento", "servidor publico",
+              "funcion publica", "nombramiento en encargo", "manual de funciones", "periodo de prueba en carrera"]),
     S("S09", "electoral",
       tema="el derecho electoral (inscripción, inhabilidades, escrutinio, nulidad electoral y pérdida de "
            "investidura)",
@@ -325,6 +325,6 @@ SUBESPECIALIDADES = [
       opciones="solicitar o modificar el instrumento ambiental, presentar descargos con prueba técnica, pedir el "
                "levantamiento de la medida preventiva o acudir a la acción popular",
       claves=["ambiental", "licencia ambiental", "car$", "anla$", "corporacion autonoma", "sancionatorio ambiental",
-              "vertimiento", "tala", "permiso ambiental", "contaminacion", "consulta previa", "medida preventiva "
+              "vertimiento", "tala$", "tala de arboles", "permiso ambiental", "contaminacion", "consulta previa", "medida preventiva "
               "ambiental", "dano ambiental", "mineria"]),
 ]

@@ -51,7 +51,7 @@ SUBESPECIALIDADES = [
       opciones="reutilizar una función auxiliar existente, escribir una nueva con sus pruebas o dividir la ruta en "
                "dos pasos",
       claves=["servicio del servidor", "logica del servidor", "funcion del backend", "implementar la ruta",
-              "fastapi", "manejo de errores", "reintegro", "cupo de consultas"]),
+              "fastapi", "manejo de errores", "reintegro de la consulta", "cupo de consultas"]),
     S("S03", "conectores",
       tema="los conectores de la plataforma hacia fuentes externas de contenido (Drive, sitios oficiales, correo)",
       objeto="Cubre el código que trae contenido de fuera: listado y descarga desde Drive, búsqueda web "
@@ -199,7 +199,7 @@ SUBESPECIALIDADES = [
       opciones="corregir el marcado y las etiquetas, añadir texto junto al color o rediseñar el componente con un "
                "patrón accesible conocido",
       claves=["accesibilidad", "lector de pantalla", "navegar con teclado", "contraste", "wcag", "aria$",
-              "orden de foco", "discapacidad visual", "accesible"]),
+              "orden de foco", "accesible"]),
     S("S09", "diagnóstico de errores",
       tema="el diagnóstico de errores de la aplicación (reproducir, aislar y explicar la causa)",
       objeto="Cubre los errores del navegador y del servidor: cómo reproducirlos, qué registro o código los "

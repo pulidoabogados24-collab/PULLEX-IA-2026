@@ -24,7 +24,7 @@ SUBESPECIALIDADES = [
       preguntas="¿qué necesidad resuelve y para qué usuario?; ¿qué criterio verificable dirá que está terminado?",
       opciones="entregar un recorrido mínimo completo, dividir en incrementos o aplazar con la dependencia "
                "identificada",
-      claves=["requisito", "requerimiento", "criterios de aceptacion", "historia de usuario",
+      claves=["requisitos del sistema", "requisito funcional", "requerimiento funcional", "criterios de aceptacion", "historia de usuario",
               "alcance de la funcion", "especificacion", "que debe hacer", "necesidad del usuario"]),
     S("S02", "procesos",
       tema="los procesos de trabajo del equipo y de la plataforma (del encargo a la entrega)",
@@ -162,7 +162,7 @@ SUBESPECIALIDADES = [
                 "responde?",
       opciones="plan sin suspensión con comprobación de salud, proveedor alterno del modelo o modo degradado sin "
                "funciones de IA",
-      claves=["disponibilidad", "caida del servicio", "se cayo", "fuera de linea", "uptime",
+      claves=["disponibilidad del servicio", "caida del servicio", "se cayo", "fuera de linea", "uptime",
               "punto unico de fallo", "alta disponibilidad", "el servicio no responde"]),
     S("S08", "observabilidad",
       tema="la observabilidad del servicio (registros, métricas y alertas para saber qué pasa)",
@@ -215,7 +215,7 @@ SUBESPECIALIDADES = [
                 "mantenerse para los usuarios de pago?",
       opciones="proveedor alterno preparado, procedimiento manual temporal o suspensión ordenada con aviso y "
                "compensación",
-      claves=["continuidad", "plan de contingencia", "contingencia", "interrupcion grave", "desastre", "bcp$",
+      claves=["continuidad del negocio", "continuidad operativa", "plan de contingencia", "contingencia", "interrupcion grave", "desastre", "bcp$",
               "plan de recuperacion", "que pasa si se cae todo"]),
     S("S10", "gobierno técnico",
       tema="el gobierno técnico del proyecto (decisiones, estándares, revisiones y estados de avance)",

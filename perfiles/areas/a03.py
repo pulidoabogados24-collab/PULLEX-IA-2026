@@ -99,7 +99,7 @@ SUBESPECIALIDADES = [
                 "se interrumpe a la mitad?",
       opciones="sentencia única condicionada, transaccion explícita o tabla aparte con clave del dueño",
       claves=["persistencia", "base de datos", "tabla nueva", "esquema de la base", "consulta sql", "sql$",
-              "indice de la tabla", "transaccion", "fts5"]),
+              "indice de la tabla", "transaccion sql", "transacciones de la base", "fts5"]),
     S("S05", "pruebas",
       tema="las pruebas automatizadas del proyecto (unitarias, de API y de navegador)",
       objeto="Cubre qué se prueba y con qué doble del modelo, las pruebas de seguridad y aislamiento, las de "
@@ -194,7 +194,7 @@ SUBESPECIALIDADES = [
                 "completo?",
       opciones="migración al arrancar, guion único con ventana de mantenimiento o escritura doble temporal con corte "
                "posterior",
-      claves=["migracion", "migrar la base", "migraciones", "alter table", "cambio de esquema", "postgres",
+      claves=["migracion de datos", "migracion de esquema", "migrar la base", "migraciones de la base", "alter table", "cambio de esquema", "postgres",
               "supabase", "pasar de sqlite"]),
     S("S09", "dependencias",
       tema="las dependencias externas del proyecto (librerías, versiones fijadas y licencias)",
@@ -220,7 +220,7 @@ SUBESPECIALIDADES = [
       preguntas="¿qué dependencia está sin soporte o con avisos abiertos?; ¿qué se rompe al actualizarla?",
       opciones="actualizar con pruebas de regresión, fijar la versión actual con aviso documentado o reemplazar la "
                "librería",
-      claves=["dependencia", "libreria", "requirements", "pip$", "actualizar version", "paquete de python",
+      claves=["dependencias del proyecto", "libreria", "requirements", "pip$", "actualizar version", "paquete de python",
               "cdn$", "licencia de software", "vulnerabilidad conocida"]),
     S("S10", "documentación",
       tema="la documentación técnica del proyecto (qué existe, para quién y si dice la verdad)",
