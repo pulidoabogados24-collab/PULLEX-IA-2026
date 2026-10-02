@@ -2337,6 +2337,14 @@ async def asistente_ejecutar(request: Request):
     return StreamingResponse(gen, media_type="text/event-stream")
 
 
+# ------------------------------------------- PROCEDIMIENTOS J01–J09 y REGISTRO DE REGLAS --
+# Cálculos y validaciones deterministas (términos, liquidaciones, clasificación, verificación de escritos):
+# no llaman al modelo ni descuentan consultas. Las rutas viven en procedimientos/rutas.py.
+import procedimientos.rutas as rutas_procedimientos  # noqa: E402
+rutas_procedimientos.registrar(app, usuario_actual=usuario_actual, admin_actual=admin_actual, json_de=json_de,
+                               limitar_cuenta=limitar_cuenta, documento_de=_documento_de)
+
+
 # -------------------------------------------------------------- admin --
 @app.get("/api/admin/usuarios")
 def admin_usuarios(request: Request):
