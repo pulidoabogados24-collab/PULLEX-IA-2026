@@ -1,5 +1,6 @@
 // =========================================================================================
-// PULLEX Documentos — el automatizador: Escritos (catálogo), Flujos, Asistente y Mis documentos.
+// PULLEX Documentos — el automatizador: Escritos (catálogo), Flujos, Asistente, Biblioteca y Mis documentos.
+// La pestaña Biblioteca (modelos del Drive) la pinta static/biblioteca.js, que se carga después de este archivo.
 // Se carga después de app.js y usa sus utilidades globales (auth, md, toast, PERFIL, pintarFuentes).
 // Sin JavaScript en línea: todo con addEventListener. Los datos del servidor se pintan con
 // textContent; solo el borrador en Markdown pasa por md() (marked + DOMPurify).
@@ -7,7 +8,7 @@
 const DOC={listo:false,tab:'escritos',catalogo:null,areas:[],flujos:null,maxPasos:6,tipo:null,flujo:null,
   plan:null,mis:[],ocupado:false,busq:null};
 const DOC_PARA={abogado:'Abogado',ciudadano:'Ciudadano',funcionario:'Funcionario',estudiante:'Estudiante'};
-const DOC_TABS=[['escritos','Escritos'],['flujos','Flujos'],['asistente','Asistente'],['mis','Mis documentos']];
+const DOC_TABS=[['escritos','Escritos'],['flujos','Flujos'],['asistente','Asistente'],['biblioteca','Biblioteca'],['mis','Mis documentos']];
 const DOC_EJEMPLOS=['Prepara una tutela contra mi EPS porque no me entrega un medicamento formulado hace dos meses.',
   'Analiza si puedo cobrar judicialmente un pagaré vencido hace un año y redacta la demanda ejecutiva.',
   'Me despidieron sin justa causa después de tres años: calcula lo que me deben y redacta la reclamación.'];
@@ -57,7 +58,7 @@ function docInit(){
 function docConstruir(raiz){
   raiz.textContent='';
   raiz.appendChild(dE('div',{class:'doc-cab'},dE('p',{class:'doc-claim',text:'PULLEX Documentos'}),dE('h2',{text:'Automatizador'}),
-    dE('p',{text:'Borradores de escritos de todas las áreas del derecho colombiano, flujos de trabajo de varios pasos y un asistente que investiga, analiza y redacta por ti. Todo lo que sale de aquí es un borrador para revisar.'})));
+    dE('p',{text:'Borradores de escritos de todas las áreas del derecho colombiano, flujos de trabajo de varios pasos, un asistente que investiga, analiza y redacta por ti, y la biblioteca de modelos de tu Drive. Todo lo que sale de aquí es un borrador para revisar.'})));
   const tabs=dE('div',{class:'doc-tabs',role:'tablist','aria-label':'Secciones del automatizador'});
   DOC_TABS.forEach(([id,nombre])=>tabs.appendChild(dE('button',{type:'button',role:'tab',id:'doc-tab-'+id,'aria-controls':'doc-panel-'+id,
     'aria-selected':String(id===DOC.tab),tabindex:id===DOC.tab?'0':'-1',class:'doc-tab'+(id===DOC.tab?' on':''),
@@ -77,6 +78,7 @@ function docTab(id){
   DOC_TABS.forEach(([t])=>{const b=document.getElementById('doc-tab-'+t);const on=t===id;b.classList.toggle('on',on);
     b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;document.getElementById('doc-panel-'+t).classList.toggle('hidden',!on)});
   if(id==='mis')docCargarMis();if(id==='flujos')docFlujosVista();
+  if(id==='biblioteca'&&typeof bibInit==='function')bibInit();
 }
 function docPanel(id){return document.getElementById('doc-panel-'+id)}
 function docSubir(){const m=document.querySelector('main');if(m)m.scrollTop=0}
@@ -218,9 +220,10 @@ function docMostrarResultado(cont,doc,opc){
   const acciones=dE('div',{class:'doc-acc doc-acc-res'},
     dBtn('Copiar','sec',()=>docCopiar(estado.editando?area.value:estado.texto)),
     dBtn('Descargar Word','sec',ev=>docDescargarWord(doc.id,ev.currentTarget)),
-    bEditar,dBtn('Editar y regenerar','sec',()=>docRegenerar(doc)),bGuardar);
+    bEditar,dBtn(doc.origen==='biblioteca'?'Ver el modelo en la biblioteca':'Editar y regenerar','sec',()=>docRegenerar(doc)),bGuardar);
   const res=dE('section',{class:'doc-res doc-bloque','aria-label':'Borrador generado'},
-    dE('p',{class:'doc-aviso',text:doc.borrador_funcionario?'Proyecto generado por IA para revisión del funcionario. No es una providencia.':'Borrador generado por IA. Revísalo completo antes de usarlo.'}),
+    dE('p',{class:'doc-aviso',text:doc.origen==='biblioteca'?'Copia de trabajo de un modelo de la biblioteca. No la redactó la IA y el original en Drive no se modifica. Revísala completa antes de usarla.':
+      doc.borrador_funcionario?'Proyecto generado por IA para revisión del funcionario. No es una providencia.':'Borrador generado por IA. Revísalo completo antes de usarlo.'}),
     titulo,acciones,cuerpo,area);
   if(doc.verificar&&doc.verificar.length)res.appendChild(dE('div',{class:'doc-verif'},dE('h4',{text:'Datos que debes completar o verificar ('+doc.verificar.length+')'}),
     dE('ul',null,...doc.verificar.map(v=>dE('li',{text:v})))));
@@ -234,6 +237,7 @@ function docMostrarResultado(cont,doc,opc){
 function docRegenerar(doc){
   if(doc.origen==='documento'&&doc.tipo){docAbrirTipo(doc.tipo,doc.campos||{});return}
   if(doc.origen==='flujo'&&doc.tipo&&doc.tipo.startsWith('flujo:')){docTab('flujos');docAbrirFlujo(doc.tipo.slice(6),doc.campos||{});return}
+  if(doc.origen==='biblioteca'&&doc.campos&&doc.campos.biblioteca_id&&typeof bibAbrirFicha==='function'){docTab('biblioteca');bibAbrirFicha(doc.campos.biblioteca_id);return}
   if(doc.origen==='asistente'){docTab('asistente');const t=document.getElementById('doc-tarea');if(t){t.value=(doc.campos&&doc.campos.tarea)||'';t.focus()}return}
   toast('Este documento no se puede regenerar automáticamente.');
 }
@@ -371,7 +375,7 @@ async function docEjecutarPlan(lista,boton){
 }
 
 // ------------------------------------------------------------------- Mis documentos --
-const DOC_ORIGEN={documento:'Escrito',flujo:'Flujo',asistente:'Asistente'};
+const DOC_ORIGEN={documento:'Escrito',flujo:'Flujo',asistente:'Asistente',biblioteca:'Copia de la biblioteca'};
 async function docCargarMis(){
   const p=docPanel('mis');
   if(!p.querySelector('#doc-mis-lista')){p.textContent='';p.appendChild(dE('div',{id:'doc-mis-lista',class:'doc-mis'}));p.appendChild(dE('div',{id:'doc-mis-abierto'}))}

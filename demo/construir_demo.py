@@ -6,6 +6,7 @@ navegador o publicarla como página.
 """
 import base64
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -42,6 +43,50 @@ datos["automatizador"] = {
     "borrador": documentos.BORRADOR_FUNCIONARIO,
     "demo": json.loads((RAIZ / "demo" / "documentos_demo.json").read_text(encoding="utf-8"))}
 docs_js = (ST / "documentos.js").read_text(encoding="utf-8")
+bib_js = (ST / "biblioteca.js").read_text(encoding="utf-8")
+
+
+def biblioteca_de_ejemplo() -> dict:
+    """Catálogo FICTICIO de la Biblioteca (demo/biblioteca_demo.json) pasado por el backend real: lo que vería
+    un usuario que no es administrador. demo/mock.js solo busca, filtra y compara sobre estas fichas."""
+    from contextlib import closing
+
+    import biblioteca
+    import fuentes
+    sys.path.insert(0, str(RAIZ / "demo"))
+    import biblioteca_demo
+    previas = {k: v for k, v in os.environ.items() if k.startswith("PULLEX_BIBLIOTECA_")}
+    biblioteca_demo.montar()
+    try:
+        with closing(biblioteca.conexion()) as con:
+            filas = con.execute(f"SELECT m.* FROM biblioteca_modelos m WHERE {biblioteca.predicado(False)} ORDER BY m.catalogo_id").fetchall()
+            fichas, busq, estructura, copias = {}, {}, {}, {}
+            for f in filas:
+                cid = f["catalogo_id"]
+                fichas[cid] = biblioteca.ficha(con, f)
+                texto = biblioteca._texto_de(con, f["id"])
+                visible = texto if (texto and biblioteca.puede_ver_texto(f)) else None
+                busq[cid] = {"t": f["busq_titulo"], "m": f["busq_meta"], "sin_texto": texto is None,
+                             "x": fuentes.sin_tildes(visible).lower() if visible else "", "o": visible or ""}
+                if visible:
+                    estructura[cid] = {"titulos": biblioteca.estructura_de(visible), "longitud": len(visible)}
+                if biblioteca.copiable(f):
+                    copias[cid] = biblioteca.copia_de_trabajo(con, f)
+            resumen = biblioteca.facetas(con)
+        generador = {t: {"tipo": g["id"], "nombre": g["nombre"], "area": g["area"]}
+                     for t in biblioteca.GENERADOR_POR_TIPO for g in [biblioteca._generador(t)] if g}
+        return {"resumen": resumen, "fichas": fichas, "orden": list(fichas), "busq": busq, "estructura": estructura, "copias": copias,
+                "sinonimos": [list(g) for g in biblioteca.SINONIMOS],
+                "tramites": [{"nombre": t["nombre"], "tipos": t["tipos"], "senales": t["senales"]} for t in biblioteca.TRAMITES],
+                "campos_comparar": [list(c) for c in biblioteca.CAMPOS_COMPARAR], "generador": generador,
+                "vacias": sorted(fuentes._VACIAS)}
+    finally:
+        for k in [k for k in os.environ if k.startswith("PULLEX_BIBLIOTECA_")]:
+            del os.environ[k]
+        os.environ.update(previas)
+
+
+datos["biblioteca"] = biblioteca_de_ejemplo()
 
 html = html.replace("<title>PULLEX IA — Asistente Jurídico Colombiano</title>", "<title>PULLEX IA Demo</title>")
 html = html.replace('<link rel="manifest" href="/manifest.webmanifest">', "")
@@ -87,6 +132,9 @@ aviso_word = ("\ndocDescargarWord=function(){toast('En la app real esto descarga
 assert html.count('<script src="/static/documentos.js"></script>') == 1
 html = html.replace('<script src="/static/documentos.js"></script>',
                     "<script>" + docs_js.replace("</script", "<\\/script") + aviso_word + "</script>")
+# Biblioteca: mismo biblioteca.js; sus datos son el catálogo ficticio que sirve demo/mock.js.
+assert html.count('<script src="/static/biblioteca.js"></script>') == 1
+html = html.replace('<script src="/static/biblioteca.js"></script>', "<script>" + bib_js.replace("</script", "<\\/script") + "</script>")
 
 salida = RAIZ / "demo" / "pullex-demo.html"
 salida.write_text(html, encoding="utf-8")

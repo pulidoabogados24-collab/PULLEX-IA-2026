@@ -234,6 +234,112 @@ async function automatizador(ruta,m,b,qs){
       cuerpo=>{const [,v]=auSeparar(cuerpo);return auGuardar({tipo:'asistente',titulo:pl.plan.titulo,origen:'asistente',campos:{tarea:pl.tarea},texto:cuerpo,verificar:v,advertencias:[AU.aviso_general]})})}
   return null;
 }
+// ------------------------------- Biblioteca: catálogo de EJEMPLO ficticio (demo/biblioteca_demo.json) --
+// Las fichas, la copia de trabajo y la estructura de cada modelo las calculó el backend real (biblioteca.py) al
+// construir la demo; aquí solo se filtra, se busca y se compara en el navegador. Ningún documento existe en Drive.
+const BI=D.biblioteca||{resumen:{total:0,modelos:0,por_clase:[],facetas:{},etiquetas:{},cobertura:{notas:[]}},fichas:{},orden:[],busq:{},
+  estructura:{},copias:{},sinonimos:[],tramites:[],campos_comparar:[],vacias:[]};
+const biNorm=s=>sinTildes(s).replace(/[^a-z0-9]+/g,' ').trim();
+function biRaiz(t){if(/^\d+$/.test(t)||t.length<=4)return t;if(t.endsWith('ones')&&t.length>6)return t.slice(0,-2);
+  if(t.endsWith('es')&&t.length>5&&'lrnzd'.includes(t[t.length-3]))return t.slice(0,-2);if(t.endsWith('s'))return t.slice(0,-1);return t}
+const biFrase=s=>' '+biNorm(s).split(' ').filter(Boolean).map(biRaiz).join(' ')+' ';
+function biTerminos(q){const v=new Set();return biNorm(q).split(' ').filter(t=>t&&!BI.vacias.includes(t)&&(/^\d+$/.test(t)?t.length>=2:t.length>=3)&&!v.has(t)&&v.add(t)).slice(0,24)}
+function biCoincide(r,frase){if(frase.includes(' '+r+' '))return true;if(r.length<5)return false;
+  return frase.split(' ').some(t=>t&&(t.startsWith(r)||(t.length>=5&&r.startsWith(t))))}
+const BI_GENERICAS=['modelo','minuta','formato','plantilla','documento','escrito','derecho','accion','juridic'];
+function biAnalizar(q){const terminos=biTerminos(q),fq=biFrase(q);const exp=[];
+  BI.sinonimos.forEach(g=>{const fs=g.map(biFrase);const pres=fs.map((f,i)=>fq.includes(f)?i:-1).filter(i=>i>=0);if(!pres.length)return;
+    g.forEach((t,i)=>{if(!pres.includes(i))exp.push([g[pres[0]],t,fs[i]])})});
+  const tramites=BI.tramites.filter(t=>t.senales.some(x=>fq.includes(biFrase(x))));
+  return {terminos,raices:terminos.map(biRaiz),exp,tramites}}
+function biPuntuar(f,an){const b=BI.busq[f.id]||{t:' ',m:' ',x:''};let p=0,lit=0,fuerte=false;const rz=[];
+  an.terminos.forEach((t,i)=>{const r=an.raices[i],gen=BI_GENERICAS.includes(r);
+    if(biCoincide(r,b.t)){p+=gen?2:10;lit++;fuerte=fuerte||!gen;rz.push({tipo:'literal_titulo',texto:'El título contiene «'+t+'».'})}
+    else if(biCoincide(r,b.m)){p+=gen?1:4;rz.push({tipo:'metadato',texto:'«'+t+'» aparece en su clasificación o carpeta.'})}});
+  if(an.raices.length&&lit===an.raices.length)p+=5;
+  const vistos=new Set();
+  an.exp.forEach(([origen,eq,fe])=>{if(vistos.has(eq))return;
+    if(b.t.includes(fe)){vistos.add(eq);p+=6;fuerte=true;rz.push({tipo:'sinonimo',texto:'Buscaste «'+origen+'» y el título dice «'+eq+'» (término relacionado).'})}
+    else if(b.m.includes(fe)){vistos.add(eq);p+=3;rz.push({tipo:'sinonimo',texto:'Buscaste «'+origen+'» y su clasificación menciona «'+eq+'».'})}});
+  an.tramites.forEach(tr=>{const pt=f.tramite===tr.nombre,pp=tr.tipos.includes(f.tipo_escrito);
+    if(pt||pp){p+=pt&&pp?5:3;rz.push({tipo:'tramite',texto:'Tu descripción sugiere el trámite «'+tr.nombre+'» y este modelo es un «'+f.tipo_escrito+'».'})}});
+  if(b.x){const hall=an.terminos.filter((t,i)=>new RegExp('\\b'+an.raices[i]).test(b.x));
+    if(hall.length){p+=Math.min(9,3*hall.length);fuerte=fuerte||hall.length>=2;const pos=Math.max(0,b.x.indexOf(biRaiz(hall[0]))-50);
+      rz.push({tipo:'literal_texto',texto:'El texto del modelo menciona: '+hall.map(x=>'«'+x+'»').join(', ')+'.',
+        extracto:(pos?'…':'')+(b.o||b.x).slice(pos,pos+170).trim()+'…'})}}
+  return {p,rz,fuerte}}
+const BI_RES=['id','titulo','clase','clase_texto','area','tipo_escrito','tramite','autoridad','autoridad_rol','anio','anio_origen','anio_declarado','anio_modificacion',
+  'ruta','extension','modificado','estado_procesamiento','estado_texto','validacion_juridica','validacion_texto','historico','incompleto','derechos','derechos_texto','acceso','enlace'];
+const biResumen=f=>{const o={};BI_RES.forEach(k=>o[k]=f[k]);return o};
+function biFiltra(f,qs,conClase){
+  const pares=[['area','area'],['tipo','tipo_escrito'],['tramite','tramite'],['autoridad','autoridad'],['estado','estado_procesamiento'],['validacion','validacion_juridica']];
+  if(pares.some(([k,c])=>qs.get(k)&&f[c]!==qs.get(k)))return false;
+  if(qs.get('anio')&&String(f.anio)!==qs.get('anio'))return false;
+  const carp=(qs.get('carpeta')||'').replace(/^\/+|\/+$/g,'');if(carp&&f.ruta!==carp&&!f.ruta.startsWith(carp+'/'))return false;
+  const cl=qs.get('clase')||'modelo';return !conClase||cl==='todas'||f.clase===cl}
+function biBuscar(qs){
+  const q=(qs.get('q')||'').trim().slice(0,600),clase=qs.get('clase')||'modelo';const pp=Math.max(1,Math.min(50,+qs.get('por_pagina')||20)),pag=Math.max(1,+qs.get('pagina')||1);
+  const todos=BI.orden.map(i=>BI.fichas[i]).filter(f=>biFiltra(f,qs,false));const an=q?biAnalizar(q):null;const porClase={};let lista=[];
+  if(an&&(an.terminos.length||an.tramites.length)){
+    todos.forEach(f=>{const r=biPuntuar(f,an);if(r.p<=0)return;porClase[f.clase]=(porClase[f.clase]||0)+1;if(clase==='todas'||f.clase===clase)lista.push([r.p,f,r.rz])});
+    lista.sort((a,b)=>b[0]-a[0]||biNorm(a[1].titulo).localeCompare(biNorm(b[1].titulo)))}
+  else if(!q){todos.forEach(f=>{porClase[f.clase]=(porClase[f.clase]||0)+1});
+    lista=todos.filter(f=>clase==='todas'||f.clase===clase).sort((a,b)=>biNorm(a.titulo).localeCompare(biNorm(b.titulo))).map(f=>[0,f,[]])}
+  const otras=Object.entries(porClase).filter(([c])=>clase!=='todas'&&c!==clase);const et=(BI.resumen.etiquetas||{}).clase||{};
+  return {q,total:lista.length,pagina:pag,por_pagina:pp,paginas:Math.max(1,Math.ceil(lista.length/pp)),clase,
+    resultados:lista.slice((pag-1)*pp,pag*pp).map(([p,f,rz])=>({...biResumen(f),puntaje:p,coincidencias:rz.slice(0,6)})),
+    otras_clases:otras.reduce((a,[,n])=>a+n,0),otras_clases_detalle:otras.map(([c,n])=>({clase:c,texto:et[c]||c,n})),
+    orden:an&&an.terminos.length?'relevancia':'título',
+    interpretacion:an?{terminos:an.terminos,sinonimos:[...new Set(an.exp.map(e=>e[1]))].sort().slice(0,20),tramites:an.tramites.map(t=>t.nombre)}:null,
+    metodo:'léxica ampliada (coincidencia literal + sinónimos jurídicos + diccionario de trámites); sin embeddings'}}
+function biComparar(a,b){const ra=biResumen(a),rb=biResumen(b);
+  const metadatos=BI.campos_comparar.map(([k,e])=>({campo:e,a:ra[k],b:rb[k],igual:ra[k]===rb[k]}));
+  const da={},db={};a.datos_requeridos.forEach(x=>da[biNorm(x.etiqueta)]=x.etiqueta);b.datos_requeridos.forEach(x=>db[biNorm(x.etiqueta)]=x.etiqueta);
+  const tres=(x,y)=>({comunes:Object.keys(x).filter(k=>k in y).map(k=>x[k]),solo_a:Object.keys(x).filter(k=>!(k in y)).map(k=>x[k]),solo_b:Object.keys(y).filter(k=>!(k in x)).map(k=>y[k])});
+  const ea=BI.estructura[a.id],eb=BI.estructura[b.id];let estructura;
+  if(!ea||!eb)estructura={disponible:false,motivo:(BI.busq[a.id]||{}).sin_texto||(BI.busq[b.id]||{}).sin_texto?'Sin texto extraído en uno o en ambos modelos: solo se comparan metadatos y campos.'
+    :'La estructura no se muestra: material de terceros con redistribución por confirmar.'};
+  else{const na={},nb={};ea.titulos.forEach(x=>na[biNorm(x)]=x);eb.titulos.forEach(x=>nb[biNorm(x)]=x);const t=tres(na,nb);
+    const union=new Set([...Object.keys(na),...Object.keys(nb)]).size;
+    estructura={disponible:true,motivo:null,...t,similitud:union?Math.round(100*t.comunes.length/union):null,longitud:{a:ea.longitud,b:eb.longitud}}}
+  return {a:ra,b:rb,metadatos,campos_requeridos:tres(da,db),estructura,nota:'La comparación describe diferencias de forma; no indica cuál modelo es jurídicamente mejor.'}}
+function biRecomendar(caso){const an=biAnalizar(caso);const c=[];
+  BI.orden.map(i=>BI.fichas[i]).filter(f=>f.clase==='modelo').forEach(f=>{const r=biPuntuar(f,an);if(r.p>=12&&r.fuerte)c.push([r.p,f,r.rz])});
+  c.sort((a,b)=>b[0]-a[0]);const cn=biFrase(caso);
+  const candidatos=c.slice(0,5).map(([p,f,rz])=>({...biResumen(f),origen:'plantilla_recuperada',puntaje:p,por_que:rz.map(x=>x.texto).slice(0,5),
+    requisitos_faltantes:f.datos_requeridos.map(d=>d.etiqueta).filter(e=>!biNorm(e).split(' ').some(w=>w.length>=5&&cn.includes(' '+biRaiz(w)))).slice(0,8),
+    adaptacion:['Destinatario: dirígelo a la autoridad o entidad de tu caso.','Hechos y solicitud: sustitúyelos por los de tu caso; no conserves datos, nombres ni fechas del modelo.',
+      'Normas citadas: el modelo '+(f.validacion_juridica==='validado'?'fue revisado el '+f.fecha_revision:'no está validado')+'; confirma la vigencia de cada norma en la fuente oficial antes de usarla.']}));
+  const tipos=[];an.tramites.forEach(t=>t.tipos.forEach(x=>{const g=(BI.generador||{})[x];if(g&&!tipos.some(y=>y.tipo===g.tipo))tipos.push(g)}));
+  const hay=candidatos.length>0;
+  return {hay_modelo_adecuado:hay,candidatos,mensaje:hay?'Estos modelos de la biblioteca podrían servir. Son plantillas recuperadas del Drive, sin validar salvo que su ficha diga otra cosa: que el título se parezca a tu caso no prueba que el modelo proceda.'
+      :'No encontré en la biblioteca un modelo adecuado para este caso. No te propongo uno parecido para no forzarlo: puedes redactar un borrador nuevo con el generador.',
+    borrador_nuevo:{tipos:tipos.slice(0,3),nota:'Un borrador NUEVO lo redacta el generador de Escritos a partir de un formulario; no sale de un modelo de la biblioteca. Una PLANTILLA RECUPERADA es un archivo existente del Drive que debes adaptar.'},
+    tramites_detectados:an.tramites.map(t=>t.nombre),metodo:'determinista: búsqueda léxica ampliada sobre títulos, clasificación y texto extraído',
+    explicacion:null,explicacion_estado:'no_solicitada'}}
+function bibliotecaDemo(ruta,m,b,qs){
+  if(!ruta.startsWith('/api/biblioteca/'))return null;
+  if(ruta==='/api/biblioteca/resumen')return json(BI.resumen);
+  if(ruta==='/api/biblioteca/buscar')return json(biBuscar(qs));
+  if(ruta==='/api/biblioteca/comparar'){const a=BI.fichas[qs.get('a')],c=BI.fichas[qs.get('b')];
+    if(qs.get('a')===qs.get('b'))return error(400,'Elige dos modelos distintos para comparar');
+    return a&&c?json(biComparar(a,c)):error(404,'Modelo no encontrado')}
+  if(ruta==='/api/biblioteca/recomendar'){const caso=String(b.caso||'').trim();
+    if(caso.length<15)return error(400,'Describe el caso con un poco más de detalle (mínimo una frase completa).');
+    const r=biRecomendar(caso);
+    if(b.explicar&&r.candidatos.length){r.explicacion_estado='generada';r.restantes=gastar();
+      r.explicacion={sin_modelo_adecuado:false,candidatos:r.candidatos.slice(0,3).map(c=>({id:c.id,por_que:'Ejemplo de la demostración: explicación simulada a partir de la ficha del modelo.',requisitos_faltantes:[],adaptacion:[]})),
+        nota:'Texto de ejemplo: con el modelo real, aquí va una explicación redactada para tu caso.',aviso:'Explicación generada por IA solo a partir de las fichas (no del texto de los modelos). Verifícala.'}}
+    else if(b.explicar)r.explicacion_estado='sin_candidatos';
+    return json(r)}
+  const rm=ruta.match(/^\/api\/biblioteca\/modelo\/(MOD-\d{6})(\/copia)?$/);
+  if(rm){const f=BI.fichas[rm[1]];if(!f)return error(404,'Modelo no encontrado');
+    if(!rm[2])return json(f);
+    const c=BI.copias[f.id];if(!c)return error(400,'Solo los modelos y escritos se copian como documento de trabajo. Una norma, una providencia o un libro se consultan en su original (ábrelo en Drive).');
+    const d=auGuardar({tipo:'biblioteca:'+f.id,titulo:c.titulo,origen:'biblioteca',campos:c.campos,texto:c.texto,verificar:c.verificar,advertencias:c.advertencias});
+    return json({id:d.id,titulo:c.titulo,con_texto:c.con_texto,mensaje:c.mensaje,biblioteca_id:f.id,enlace_original:c.campos.enlace_original})}
+  return error(404,'Esta función de la biblioteca no está disponible en la demostración.');
+}
 async function manejar(url,o){
   const partes=String(url).replace(/^https?:\/\/[^/]+/,'').split('?');const ruta=partes[0];
   const qs=new URLSearchParams(partes[1]||'');const m=(o&&o.method)||'GET';
@@ -311,6 +417,7 @@ async function manejar(url,o){
   if(ruta==='/api/modular/solucion'){const c=S.casos[qs.get('caso_id')];const s=c.d.solucion;
     return json({...s,conceptos:c.d.conceptos||[]})}
   if(ruta==='/api/modular/progreso')return json(progreso());
+  const rbi=bibliotecaDemo(ruta,m,b,qs);if(rbi)return rbi;
   const rau=await automatizador(ruta,m,b,qs);if(rau)return rau;
   if(ruta==='/api/cambiar-clave')return json({ok:true,token:'demo'});
   if(['/api/cerrar-sesiones','/api/reenviar-verificacion','/api/recuperar-clave'].includes(ruta))

@@ -449,8 +449,9 @@ def clasificar(titulo: str, ruta: str = "", carpeta: dict = None) -> dict:
 
     # --- tipo de escrito
     for pat, tipo in TIPOS_POR_TITULO:
-        if re.search(pat, t):
-            r["tipo_escrito"] = _campo(tipo, "alta", "título: " + pat)
+        m = re.search(pat, t)
+        if m:
+            r["tipo_escrito"] = _campo(tipo, "alta", f"el título dice «{m.group(0)}»")
             break
     else:
         for clave, tipo in TIPOS_POR_RUTA:
@@ -503,8 +504,9 @@ def clasificar(titulo: str, ruta: str = "", carpeta: dict = None) -> dict:
                 break
         else:
             for pat, area in AREA_POR_TITULO:
-                if re.search(pat, t):
-                    r["area"] = _campo(area, "media", "título: " + pat)
+                m = re.search(pat, t)
+                if m:
+                    r["area"] = _campo(area, "media", f"el título dice «{m.group(0)}»")
                     break
 
     if clase in CLASES_SIN_ESCRITO:
@@ -527,8 +529,9 @@ def clasificar(titulo: str, ruta: str = "", carpeta: dict = None) -> dict:
 
     # --- trámite
     for pat, tramite in TRAMITE_POR_TITULO:
-        if re.search(pat, t):
-            r["tramite"] = _campo(tramite, "media", "título: " + pat)
+        m = re.search(pat, t)
+        if m:
+            r["tramite"] = _campo(tramite, "media", f"el título dice «{m.group(0)}»")
             break
     if tipo in TRAMITE_POR_TIPO and (r["tramite"]["valor"] == POR_CLASIFICAR or tipo in AUTORIDAD_JUDICIAL
                                      or tipo == "Derecho de petición"):
@@ -539,8 +542,9 @@ def clasificar(titulo: str, ruta: str = "", carpeta: dict = None) -> dict:
         r["autoridad"] = _campo(AUTORIDAD_JUDICIAL[tipo], "media", "tipo de escrito: " + tipo)
     else:
         for pat, autoridad in AUTORIDAD_POR_TITULO:
-            if re.search(pat, t):
-                r["autoridad"] = _campo(autoridad, "media", "título: " + pat)
+            m = re.search(pat, t)
+            if m:
+                r["autoridad"] = _campo(autoridad, "media", f"el título dice «{m.group(0)}»")
                 break
         else:
             if tipo in AUTORIDAD_POR_TIPO:
@@ -693,11 +697,13 @@ def datos_personales_en(texto: str) -> list:
 
 
 def vista_previa(texto: str, maximo: int = MAX_VISTA_PREVIA) -> str:
-    t = re.sub(r"\s+", " ", texto or "").strip()
+    """Comienzo del texto, con sus saltos de línea, cortado en un espacio. No es el documento."""
+    lineas = [re.sub(r"[ \t]+", " ", linea).strip() for linea in (texto or "").splitlines()]
+    t = re.sub(r"\n{3,}", "\n\n", "\n".join(lineas)).strip()
     if len(t) <= maximo:
         return t
-    corte = t.rfind(" ", int(maximo * 0.7), maximo)
-    return t[:corte if corte > 0 else maximo].rstrip(" ,;:") + "…"
+    corte = max(t.rfind(" ", int(maximo * 0.7), maximo), t.rfind("\n", int(maximo * 0.7), maximo))
+    return t[:corte if corte > 0 else maximo].rstrip(" ,;:\n") + "…"
 
 
 # ====================================================================== FICHA POR REGLAS
@@ -1629,9 +1635,9 @@ def cobertura(con, admin: bool = False) -> dict:
         notas.append("El inventario de Drive es provisional: aún no se ha podido listar todo, así que estas cantidades "
                      "son un mínimo, no el total de la biblioteca.")
     if meta.get("terceros_sin_enumerar") == "1":
-        notas.append("Las colecciones compartidas por terceros (donde están la mayoría de minutas y modelos) todavía no se "
-                     "han podido enumerar: el conector de Drive solo entrega lo que su dueño ya abrió. Sus modelos no "
-                     "están en este catálogo.")
+        notas.append("Las colecciones compartidas por terceros (entre ellas, las carpetas de modelos y minutas) todavía no "
+                     "se han podido enumerar: el conector de Drive solo entrega lo que su dueño ya abrió. Lo que "
+                     "contienen no está en este catálogo y no se sabe cuántos documentos son.")
     if meta.get("terceros_abiertos") != "1":
         notas.append("El material de terceros permanece restringido al administrador mientras no se confirmen sus derechos "
                      "de redistribución.")

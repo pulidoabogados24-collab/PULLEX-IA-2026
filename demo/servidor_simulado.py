@@ -3,7 +3,8 @@
     cd pullex-ia && python demo/servidor_simulado.py      → http://localhost:8000
 
 Usa el backend real (registro, cupos, base de datos, Modular Lab) pero reemplaza las llamadas
-a Claude por respuestas de ejemplo tomadas de demo/datos_demo.json. Útil para mostrar la app o
+a Claude por respuestas de ejemplo tomadas de demo/datos_demo.json. La Biblioteca usa un catálogo
+ficticio (demo/biblioteca_demo.json), no el inventario real del Drive. Útil para mostrar la app o
 probar la interfaz; NO sirve para evaluar la calidad jurídica del modelo.
 """
 import json
@@ -22,6 +23,13 @@ os.environ.setdefault("PULLEX_ADMIN_EMAIL", "admin@demo.local")
 os.environ.setdefault("PULLEX_ADMIN_CLAVE", "demo-admin-clave-larga")
 os.environ.setdefault("PULLEX_SECRET", "solo-para-la-demo-local")
 sys.path.insert(0, str(RAIZ))
+# Biblioteca de DEMOSTRACIÓN (demo/biblioteca_demo.json): catálogo ficticio servido por las rutas reales
+# /api/biblioteca/*. Se monta ANTES de importar la aplicación para que su arranque no cargue el inventario real.
+# Con PULLEX_BIBLIOTECA_INVENTARIO definido se respeta ese inventario (p. ej. biblioteca/inventario.json).
+if "PULLEX_BIBLIOTECA_INVENTARIO" not in os.environ:
+    sys.path.insert(0, str(RAIZ / "demo"))
+    import biblioteca_demo  # noqa: E402
+    biblioteca_demo.montar()
 import app as pullex  # noqa: E402
 import documentos  # noqa: E402
 import fuentes  # noqa: E402
@@ -232,6 +240,13 @@ class _Modelo:
             return types.SimpleNamespace(content=[_B(json.dumps(DOCS_DEMO["plan"], ensure_ascii=False))])
         if "PULLEX DOCUMENTOS" in sis:
             return types.SimpleNamespace(content=[_B(_documento_ejemplo(pedido))])
+        if "BIBLIOTECARIO" in sis:   # Biblioteca: explicación opcional de una recomendación (solo usa las fichas)
+            ids = re.findall(r'"id": "(MOD-\d{6})"', pedido)
+            return types.SimpleNamespace(content=[_B(json.dumps({"sin_modelo_adecuado": not ids, "candidatos": [
+                {"id": i, "por_que": "Ejemplo de la demostración: explicación simulada a partir de la ficha del modelo.",
+                 "requisitos_faltantes": ["Los datos que la ficha marca como faltantes."],
+                 "adaptacion": ["Los hechos y el destinatario de tu caso."]} for i in ids[:3]],
+                "nota": "Texto de ejemplo: con el modelo real, aquí va una explicación redactada para tu caso."}, ensure_ascii=False))])
         if k.get("system") == pullex.MODULAR_SISTEMA:
             if pedido.startswith("Evalúa"):
                 cuerpo = _evaluar(pedido)
