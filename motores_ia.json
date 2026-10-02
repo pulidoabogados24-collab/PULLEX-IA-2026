@@ -1,0 +1,271 @@
+{
+ "version": "2026-10-02",
+ "que_es": "Registro B de la especificación LEXCOL (sección 4): motores de IA, búsqueda, clasificación y extracción REALMENTE presentes en el código de PULLEX IA. No es el catálogo de modelos jurídicos (minutas y escritos), que está en la Biblioteca (biblioteca.py).",
+ "como_se_levanto": "Lectura del código (app.py, fuentes.py, biblioteca.py, scripts/ingesta_corpus.py), de render.yaml, requirements.txt y .env.example en la rama pul/010-biblioteca. No se agregó ningún proveedor que no esté en el código.",
+ "advertencia_pruebas": "Hasta el 2026-10-02 ninguna llamada se ha hecho contra un proveedor real desde el entorno de desarrollo: todas las pruebas usan un doble del modelo (FakeAnthropic en tests/conftest.py) o el servidor simulado (demo/servidor_simulado.py). Calidad jurídica, latencia y costo por consulta reales: sin medir.",
+ "verificaciones": {
+  "anthropic_precios": {
+   "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+   "fecha": "2026-10-02",
+   "metodo": "WebFetch (la herramienta resume la página con un modelo auxiliar; conviene releerla antes de fijar precios al público)"
+  },
+  "anthropic_modelos": {
+   "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+   "fecha": "2026-10-02",
+   "metodo": "WebFetch"
+  },
+  "anthropic_entrenamiento": {
+   "url": "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training",
+   "fecha": "2026-10-02",
+   "metodo": "WebFetch"
+  },
+  "voyage_precios": {
+   "url": "https://docs.voyageai.com/docs/pricing",
+   "fecha": "2026-10-02",
+   "metodo": "WebFetch"
+  }
+ },
+ "motores": [
+  {
+   "id": "lenguaje_principal",
+   "nombre": "Modelo de lenguaje principal",
+   "tipo": "lenguaje",
+   "proveedor": "Anthropic (API de Claude, SDK anthropic 1.9.0)",
+   "version": "claude-sonnet-5-5",
+   "version_variable": "PULLEX_MODELO",
+   "comprobacion": "anthropic",
+   "funcion": "Redacta todas las respuestas generadas de la aplicación.",
+   "usos": [
+    "Chat jurídico con streaming (POST /api/chat) y sus cinco formas de respuesta",
+    "Modular Lab: generación de casos y evaluación con rúbrica (/api/modular/*)",
+    "Documentos: borradores, flujos por pasos y asistente (/api/documentos/generar, /api/flujos/ejecutar, /api/asistente/*)",
+    "Biblioteca: solo la explicación opcional de una recomendación (/api/biblioteca/recomendar con explicar=true); la búsqueda no lo usa"
+   ],
+   "limites": [
+    "Ventana de contexto de 1 millón de tokens y hasta 128.000 tokens de salida, según la página de modelos del proveedor (verificación anthropic_modelos).",
+    "Topes propios de la app: 8.000 tokens de salida en el chat (PULLEX_MAX_TOKENS), 7.000 por documento y 4.000 por paso, más 4.000 de margen para el razonamiento (PULLEX_MARGEN_THINKING).",
+    "Esfuerzo «medium» (PULLEX_ESFUERZO); el razonamiento adaptativo se deja en el valor por defecto de la API.",
+    "Cupo mensual de consultas por plan (PLANES en app.py): cada llamada cuesta 1 consulta y se reintegra si el proveedor falla.",
+    "Límites de velocidad de la cuenta del proveedor: desconocidos (dependen del nivel de la cuenta; sin verificar)."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": [
+     "El mensaje del usuario y el historial de esa conversación",
+     "Archivos adjuntos del mensaje (PDF e imágenes, en base64)",
+     "Nombre del usuario, áreas de interés y el texto que escribió en «memoria»",
+     "Fragmentos del corpus propio recuperados para la pregunta",
+     "Los datos del formulario de un documento o flujo y los resultados de los pasos anteriores",
+     "En la Biblioteca: la descripción del caso y la ficha (metadatos) de los modelos candidatos, nunca su texto"
+    ],
+    "no_se_envia": ["Correo electrónico", "Contraseñas o tokens de sesión", "Datos de otros usuarios"],
+    "uso_para_entrenamiento": "Según la página de privacidad del proveedor consultada el 2026-10-02 (verificación anthropic_entrenamiento), por defecto no usa entradas ni salidas de la API para entrenar modelos.",
+    "retencion": "Plazos de retención del proveedor: sin verificar."
+   },
+   "costo": {
+    "estado": "comprobado",
+    "detalle": "Claude Sonnet 5.5: 2 USD por millón de tokens de entrada y 10 USD por millón de tokens de salida. Caché de prompts: escritura de 5 minutos 2,50 USD por millón; lectura 0,20 USD por millón.",
+    "verificacion": "anthropic_precios",
+    "costo_por_consulta": "desconocido: no se ha medido con tráfico real. El valor PULLEX_COSTO_CONSULTA_COP (150 COP por defecto) del panel de administración es una estimación."
+   },
+   "pruebas": {
+    "estado": "solo simuladas",
+    "detalle": "Pytest con un doble del modelo y pruebas de navegador con el servidor simulado. Ninguna llamada real."
+   },
+   "alternativa_si_falla": "En el chat: mensaje de modo degradado con enlaces a fuentes oficiales y reintegro de la consulta. En Modular Lab, Documentos y Biblioteca: error 503 con código de seguimiento y reintegro; la recomendación determinista de la Biblioteca se entrega igual. Cambio manual de modelo con PULLEX_MODELO (el código prevé claude-haiku-4-5, que no admite el parámetro de esfuerzo). No hay proveedor alterno automático en esta rama (existe uno sin fusionar en pul/planes-y-proveedores)."
+  },
+  {
+   "id": "lenguaje_boletin",
+   "nombre": "Modelo del boletín diario",
+   "tipo": "lenguaje",
+   "proveedor": "Anthropic (API de Claude)",
+   "version": "el mismo modelo principal, salvo que se defina PULLEX_MODELO_BOLETIN",
+   "version_variable": "PULLEX_MODELO_BOLETIN",
+   "comprobacion": "anthropic_boletin",
+   "funcion": "Genera una vez al día el boletín jurídico del Inicio, con búsqueda web sin restricción de dominios (máximo 5 búsquedas).",
+   "usos": ["GET /api/boletin (se sirve desde caché) y POST /api/admin/boletin/regenerar"],
+   "limites": [
+    "1.800 tokens de salida.",
+    "Una generación por día: el resultado se guarda en la tabla boletin y no gasta consultas de los usuarios.",
+    "La búsqueda web del boletín NO está limitada a dominios oficiales."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Solo la instrucción fija del boletín (BOLETIN_PROMPT). No lleva datos de usuarios."],
+    "no_se_envia": ["Datos de usuarios"],
+    "uso_para_entrenamiento": "Igual que el modelo principal (verificación anthropic_entrenamiento).",
+    "retencion": "Sin verificar."
+   },
+   "costo": {
+    "estado": "comprobado",
+    "detalle": "Precio por tokens del modelo que se use (Claude Sonnet 5.5: 2 y 10 USD por millón; Claude Haiku 4.5: 1 y 5 USD por millón) más la búsqueda web (10 USD por 1.000 búsquedas).",
+    "verificacion": "anthropic_precios",
+    "costo_por_consulta": "desconocido: el costo diario real del boletín no se ha medido."
+   },
+   "pruebas": {"estado": "solo simuladas", "detalle": "El doble del modelo devuelve un texto fijo; la búsqueda web real nunca se ejecutó."},
+   "alternativa_si_falla": "Se muestra «No fue posible generar el boletín hoy» con un código de seguimiento; el resto de la aplicación no depende del boletín."
+  },
+  {
+   "id": "busqueda_web",
+   "nombre": "Búsqueda web del proveedor",
+   "tipo": "búsqueda",
+   "proveedor": "Anthropic (herramienta de servidor)",
+   "version": "web_search_20250305",
+   "version_variable": null,
+   "comprobacion": "anthropic",
+   "funcion": "Permite al modelo consultar páginas web durante una respuesta del chat. En el chat está restringida a dominios oficiales colombianos.",
+   "usos": ["Chat (si el usuario deja activada la búsqueda web)", "Boletín diario (sin restricción de dominios)"],
+   "limites": [
+    "Máximo 5 búsquedas por respuesta (PULLEX_WEB_MAX_USOS).",
+    "Lista de dominios permitidos en fuentes.py (DOMINIOS_OFICIALES, 24 dominios) o PULLEX_WEB_DOMINIOS.",
+    "El filtro allowed_domains no se ha probado contra la API real."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Las consultas de búsqueda que redacta el modelo a partir de la pregunta del usuario"],
+    "no_se_envia": ["Correo, contraseñas, datos de otros usuarios"],
+    "uso_para_entrenamiento": "Igual que el modelo principal (verificación anthropic_entrenamiento).",
+    "retencion": "Sin verificar."
+   },
+   "costo": {
+    "estado": "comprobado",
+    "detalle": "10 USD por 1.000 búsquedas, más los tokens del contenido que la búsqueda agrega a la respuesta.",
+    "verificacion": "anthropic_precios",
+    "costo_por_consulta": "desconocido: depende de cuántas búsquedas haga el modelo en cada respuesta; sin medir."
+   },
+   "pruebas": {"estado": "solo simuladas", "detalle": "Eventos del SDK simulados en pytest y en el servidor de demostración."},
+   "alternativa_si_falla": "El usuario puede desactivar la búsqueda web; la respuesta se apoya entonces en el corpus propio y en el modelo, y lo no verificado se marca «(pendiente de verificación)»."
+  },
+  {
+   "id": "indice_corpus",
+   "nombre": "Índice de texto completo del corpus (chat)",
+   "tipo": "búsqueda",
+   "proveedor": "Local: SQLite FTS5 con ranking BM25 (fuentes.py)",
+   "version": "tokenizador unicode61 remove_diacritics 2; versión de SQLite: la del servidor",
+   "version_variable": "PULLEX_CORPUS_DB",
+   "comprobacion": "corpus",
+   "funcion": "Recupera hasta 6 fragmentos del corpus propio (códigos, leyes, sentencias, doctrina) para cada pregunta del chat y para los documentos.",
+   "usos": ["Chat", "Documentos y flujos", "Bloque «Fuentes consultadas»"],
+   "limites": [
+    "Búsqueda por palabras (no por significado): no encuentra sinónimos.",
+    "Fragmentos de unos 1.200 caracteres; máximo 6 por respuesta y 3 por documento.",
+    "El corpus real está vacío: solo se ha probado con documentos de prueba."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Nada: corre dentro del servidor de la aplicación."],
+    "no_se_envia": ["Todo"],
+    "uso_para_entrenamiento": "No aplica.",
+    "retencion": "El índice vive en el disco del servidor (efímero en el plan gratuito de Render)."
+   },
+   "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor: es una biblioteca incluida en Python. Solo usa el disco y la CPU del servidor.", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
+   "pruebas": {"estado": "solo simuladas", "detalle": "tests/test_fuentes.py y tests/e2e_fuentes.py con documentos de prueba; sin corpus real."},
+   "alternativa_si_falla": "Si no hay índice o la consulta falla, el chat responde sin fragmentos (y, si estuviera configurado, usa el corpus vectorial anterior)."
+  },
+  {
+   "id": "indice_biblioteca",
+   "nombre": "Búsqueda de la Biblioteca (léxica ampliada)",
+   "tipo": "búsqueda",
+   "proveedor": "Local: SQLite FTS5 + sinónimos jurídicos + diccionario de trámites (biblioteca.py)",
+   "version": "reglas 2026-10-02.1",
+   "version_variable": "PULLEX_BIBLIOTECA_DB",
+   "comprobacion": "biblioteca",
+   "funcion": "Encuentra modelos jurídicos por título, clasificación y texto extraído, ampliando la consulta con sinónimos y con el trámite que sugiere la descripción del problema. Aplica los permisos antes de recuperar.",
+   "usos": ["GET /api/biblioteca/buscar", "POST /api/biblioteca/recomendar (parte determinista)"],
+   "limites": [
+    "No usa embeddings: «semántica» aquí significa ampliación por diccionarios revisables, no similitud de significado.",
+    "La búsqueda en el contenido solo cubre modelos con texto extraído; hoy el inventario real solo tiene metadatos.",
+    "Punto de extensión para embeddings: biblioteca.PUNTUADORES_EXTRA (vacío)."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Nada: corre dentro del servidor de la aplicación."],
+    "no_se_envia": ["Todo"],
+    "uso_para_entrenamiento": "No aplica.",
+    "retencion": "biblioteca/biblioteca.db en el disco del servidor; se reconstruye desde biblioteca/inventario.json."
+   },
+   "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor (local).", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
+   "pruebas": {"estado": "solo simuladas", "detalle": "tests/test_biblioteca.py con un inventario de prueba y tests/e2e_biblioteca.py con un catálogo de ejemplo. Sin medición de calidad sobre el Drive real."},
+   "alternativa_si_falla": "Si la consulta al texto falla se usa solo la coincidencia en títulos y clasificación."
+  },
+  {
+   "id": "clasificador_reglas",
+   "nombre": "Clasificación y sensibilidad por reglas",
+   "tipo": "clasificación",
+   "proveedor": "Local: expresiones regulares (biblioteca.clasificar, fuentes.clasificar_nombre, fuentes.es_excluido, scripts/cosechar_inventario_drive.py)",
+   "version": "reglas 2026-10-02.1",
+   "version_variable": null,
+   "comprobacion": "siempre",
+   "funcion": "Clasifica cada archivo por título y ruta (clase, área, tipo de escrito, trámite, autoridad), con nivel de confianza, y marca posibles datos personales. No es un modelo de IA: son reglas escritas a mano.",
+   "usos": ["scripts/sincronizar_biblioteca.py", "scripts/ingesta_corpus.py", "scripts/cosechar_inventario_drive.py"],
+   "limites": [
+    "Solo ve el nombre y la carpeta (y, si existe, el texto extraído): lo que no coincide con una regla queda «por clasificar».",
+    "La detección de datos personales es por patrones: puede marcar de más o dejar pasar un caso; por eso lo dudoso queda fuera del índice hasta que lo decida una persona."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Nada."],
+    "no_se_envia": ["Todo"],
+    "uso_para_entrenamiento": "No aplica.",
+    "retencion": "No aplica."
+   },
+   "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor (local).", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
+   "pruebas": {"estado": "solo simuladas", "detalle": "Pytest con nombres de prueba; la precisión sobre el Drive real no se ha medido."},
+   "alternativa_si_falla": "Una persona fija la clasificación en biblioteca/fichas.json; ese valor manda sobre la regla."
+  },
+  {
+   "id": "extraccion_texto",
+   "nombre": "Extracción de texto de documentos",
+   "tipo": "extracción",
+   "proveedor": "Local: pypdf o pdftotext para PDF; python-docx (o lectura del XML) para DOCX (scripts/ingesta_corpus.py)",
+   "version": "python-docx 1.2.0 (fijado en requirements.txt); pypdf y pdftotext son opcionales",
+   "version_variable": null,
+   "comprobacion": "extraccion",
+   "funcion": "Convierte PDF con texto, DOCX, TXT y MD en texto para indexar.",
+   "usos": ["scripts/ingesta_corpus.py", "scripts/sincronizar_biblioteca.py --textos"],
+   "limites": [
+    "Sin OCR: un PDF escaneado no produce texto y queda marcado como LEÍDO con su motivo.",
+    "No lee .doc (Word antiguo), hojas de cálculo ni presentaciones.",
+    "No ejecuta macros ni código incrustado: solo lee texto."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["Nada: corre en el equipo donde se ejecuta el script."],
+    "no_se_envia": ["Todo"],
+    "uso_para_entrenamiento": "No aplica.",
+    "retencion": "No aplica."
+   },
+   "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor (bibliotecas de código abierto).", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
+   "pruebas": {"estado": "solo simuladas", "detalle": "Pytest con archivos de prueba pequeños; nunca se ha corrido contra el Drive real."},
+   "alternativa_si_falla": "Un archivo que no se puede leer no detiene la carga: queda en el reporte con su motivo y sigue visible en el inventario."
+  },
+  {
+   "id": "embeddings_anterior",
+   "nombre": "Corpus vectorial anterior (opcional)",
+   "tipo": "representación semántica",
+   "proveedor": "Voyage AI (embeddings) + ChromaDB local en bd_vectorial/ (función buscar_corpus de app.py)",
+   "version": "voyage-law-2; colección «derecho_colombiano»",
+   "version_variable": "VOYAGE_API_KEY",
+   "comprobacion": "voyage",
+   "funcion": "Respaldo del chat cuando el índice FTS5 no trae fragmentos: busca por similitud en un índice vectorial construido fuera de este repositorio.",
+   "usos": ["Chat, solo si existe bd_vectorial/ y VOYAGE_API_KEY"],
+   "limites": [
+    "chromadb y voyageai no están en requirements.txt (aparecen comentados): en un despliegue estándar no se instala.",
+    "El índice bd_vectorial/ no está en el repositorio."
+   ],
+   "tratamiento_datos": {
+    "se_envia_al_proveedor": ["El texto de la pregunta del usuario, para convertirlo en vector"],
+    "no_se_envia": ["Historial, adjuntos, datos de la cuenta"],
+    "uso_para_entrenamiento": "Sin verificar para Voyage AI.",
+    "retencion": "Sin verificar."
+   },
+   "costo": {
+    "estado": "comprobado",
+    "detalle": "voyage-law-2: 0,12 USD por millón de tokens; los primeros 50 millones de tokens son gratuitos, según la página de precios del proveedor.",
+    "verificacion": "voyage_precios",
+    "costo_por_consulta": "desconocido: nunca se ha usado en este proyecto."
+   },
+   "pruebas": {"estado": "sin pruebas", "detalle": "Ninguna prueba automática lo cubre y no se ha ejecutado en este entorno."},
+   "alternativa_si_falla": "Cualquier error se registra y el chat sigue sin fragmentos; el índice FTS5 es el camino principal."
+  }
+ ],
+ "no_configurados": [
+  {"capacidad": "OCR para documentos escaneados", "estado": "PROPUESTO", "nota": "No hay ningún motor de OCR en el código."},
+  {"capacidad": "Embeddings para la Biblioteca", "estado": "PROPUESTO", "nota": "Solo existe el punto de extensión (biblioteca.PUNTUADORES_EXTRA)."},
+  {"capacidad": "Proveedor de lenguaje alterno", "estado": "IMPLEMENTADO en otra rama, sin fusionar", "nota": "pul/planes-y-proveedores; no está en esta rama y no se registra como motor configurado."},
+  {"capacidad": "Conector de Google Drive dentro de la aplicación", "estado": "PROPUESTO", "nota": "El inventario se cosecha desde el asistente; scripts/ingesta_corpus.py --drive con cuenta de servicio nunca se ha ejecutado."}
+ ]
+}

@@ -43,8 +43,10 @@ from fastapi.staticfiles import StaticFiles
 import anthropic
 
 import academia
+import biblioteca
 import documentos
 import fuentes
+import motores
 
 load_dotenv()
 
@@ -2337,7 +2339,37 @@ async def asistente_ejecutar(request: Request):
     return StreamingResponse(gen, media_type="text/event-stream")
 
 
+# ------------------------------------------------------------ BIBLIOTECA --
+# Catálogo navegable de modelos jurídicos del Drive (biblioteca.py, docs/15-BIBLIOTECA.md). El módulo
+# no importa app.py: recibe aquí la autenticación, el cupo de consultas y la llamada al modelo.
+# Al arrancar se sincroniza con biblioteca/inventario.json solo si el inventario, las reglas o las
+# fichas cambiaron; un fallo de la biblioteca nunca impide que la aplicación arranque.
+try:
+    _rep_bib = biblioteca.sincronizar_archivos(solo_si_cambio=True)
+    if _rep_bib:
+        log.info("biblioteca sincronizada: nuevos=%s actualizados=%s retirados=%s activos=%s errores=%s",
+                 _rep_bib["nuevos"], _rep_bib["actualizados"], _rep_bib["retirados"], _rep_bib.get("total_activos"),
+                 len(_rep_bib["errores"]))
+except Exception:
+    log.exception("no se pudo sincronizar la biblioteca al arrancar (la app sigue sin ella)")
+
+app.include_router(biblioteca.crear_router(
+    usuario_actual=usuario_actual, admin_actual=admin_actual, json_de=json_de,
+    consumir_consulta=consumir_consulta, reintegrar_consulta=reintegrar_consulta,
+    llamar_json=lambda *a, **k: llamar_json(*a, **k),          # se resuelve al llamar (las pruebas lo sustituyen)
+    guardar_documento=_guardar_documento, envolver_como_datos=envolver_como_datos,
+    ia_configurada=lambda: bool(ANTHROPIC_API_KEY), nuevo_error_id=_nuevo_error_id, log=log))
+
+
 # -------------------------------------------------------------- admin --
+@app.get("/api/admin/motores")
+def admin_motores(request: Request):
+    """Registro de motores de IA realmente configurados (motores_ia.json) con su disponibilidad en
+    este entorno. Solo administrador. No devuelve claves: solo si existen."""
+    admin_actual(request)
+    return motores.registro({"api": bool(ANTHROPIC_API_KEY), "modelo": MODELO, "modelo_boletin": MODELO_BOLETIN})
+
+
 @app.get("/api/admin/usuarios")
 def admin_usuarios(request: Request):
     admin_actual(request)
