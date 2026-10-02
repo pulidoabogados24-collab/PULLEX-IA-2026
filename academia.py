@@ -15,9 +15,12 @@ Tres piezas, sin dependencias externas:
 Los indicadores son orientativos para el propio estudiante; no deben usarse para decisiones
 académicas oficiales sin intervención humana.
 """
+import json
+import random
 import re
 import time
 import unicodedata
+from pathlib import Path
 
 DIA = 86400
 INTERVALOS = {0: 1, 1: 1, 2: 3, 3: 7, 4: 15, 5: 30}  # días hasta el próximo repaso según la caja
@@ -373,3 +376,186 @@ def severidad(f) -> str:
     if f["fallos"] >= 2 or f["aciertos"] == 0:
         return "media"
     return "baja"
+
+
+# ------------------------------------------------------------ Conectores argumentativos --
+# Detección determinista (sin IA) de los conectores que unen el razonamiento de una respuesta de
+# examen. La comparación ignora mayúsculas y tildes y exige palabra completa. Cada frase pertenece a
+# una sola categoría; el orden de las categorías es el del panel «Conectores para tu respuesta».
+CATEGORIAS_CONECTORES = [
+    ("orden", "Orden", "Para ordenar los pasos del análisis",
+     ["en primer lugar", "en segundo lugar", "en tercer lugar", "para empezar", "por un lado", "por otro lado",
+      "de un lado", "de otro lado", "a continuación", "acto seguido", "finalmente", "por último"]),
+    ("adicion", "Adición", "Para sumar un argumento o un requisito más",
+     ["además", "asimismo", "igualmente", "de igual modo", "de igual manera", "del mismo modo", "por otra parte",
+      "a su vez", "aunado a lo anterior", "sumado a ello", "incluso"]),
+    ("contraste", "Contraste", "Para introducir el contraargumento, una excepción o un límite",
+     ["sin embargo", "no obstante", "ahora bien", "en cambio", "por el contrario", "aun así", "pese a",
+      "a pesar de", "si bien", "con todo", "aunque"]),
+    ("causa", "Causa", "Para fundamentar: la razón jurídica o fáctica",
+     ["porque", "puesto que", "ya que", "dado que", "toda vez que", "en virtud de", "debido a",
+      "habida cuenta de", "comoquiera que", "como quiera que", "en razón de"]),
+    ("consecuencia", "Consecuencia", "Para derivar la consecuencia jurídica de lo anterior",
+     ["por consiguiente", "en consecuencia", "por lo tanto", "por tanto", "de ahí que", "así pues", "por ende",
+      "de modo que", "de manera que", "por esa razón", "por esta razón", "de suerte que", "con lo cual"]),
+    ("conclusion", "Conclusión", "Para cerrar con una respuesta defendible",
+     ["en conclusión", "en síntesis", "en suma", "en definitiva", "para concluir", "en resumen", "así las cosas",
+      "en ese orden de ideas", "en este orden de ideas"]),
+    ("ejemplificacion", "Ejemplificación", "Para aclarar, confirmar o ilustrar con los hechos",
+     ["en efecto", "por ejemplo", "es decir", "esto es", "a saber", "en otras palabras", "verbigracia",
+      "tal es el caso de", "como ocurre con"]),
+]
+NOMBRE_CATEGORIA = {c: n for c, n, _, _ in CATEGORIAS_CONECTORES}
+# Orden en que se sugieren las categorías que faltan (las que más pesan en un modular, primero).
+PRIORIDAD_SUGERENCIA = ["contraste", "consecuencia", "conclusion", "orden", "causa", "adicion", "ejemplificacion"]
+
+_FRASE_A_CATEGORIA = {}
+for _cat, _n, _u, _frases in CATEGORIAS_CONECTORES:
+    for _f in _frases:
+        _FRASE_A_CATEGORIA[normalizar(_f)] = (_cat, _f)
+
+_VOCALES = {"a": "[aáà]", "e": "[eéè]", "i": "[iíì]", "o": "[oóò]", "u": "[uúüù]"}
+_LETRA = "0-9A-Za-zÁÉÍÓÚÜÑáéíóúüñàèìòù"
+
+
+def _patron_frase(frase_normalizada: str) -> str:
+    return "".join(r"\s+" if ch == " " else _VOCALES.get(ch, re.escape(ch)) for ch in frase_normalizada)
+
+
+_RX_CONECTORES = re.compile(
+    "(?<![" + _LETRA + "])(?:" + "|".join(_patron_frase(f) for f in sorted(_FRASE_A_CATEGORIA, key=len, reverse=True))
+    + ")(?![" + _LETRA + "])", re.IGNORECASE)
+
+
+def detectar_conectores(texto: str) -> list:
+    """Conectores encontrados en orden de aparición: [{frase, categoria, inicio, fin}]."""
+    encontrados = []
+    for m in _RX_CONECTORES.finditer(str(texto or "")):
+        cat, frase = _FRASE_A_CATEGORIA.get(normalizar(m.group(0)), (None, None))
+        if cat:
+            encontrados.append({"frase": frase, "categoria": cat, "inicio": m.start(), "fin": m.end()})
+    return encontrados
+
+
+def segmentar_conectores(texto: str) -> list:
+    """Parte el texto en tramos [{t, c}] donde c es la categoría del conector o None. El cliente
+    pinta cada tramo con textContent (sin innerHTML), así el resaltado no abre una vía de inyección."""
+    texto = str(texto or "")
+    tramos, pos = [], 0
+    for d in detectar_conectores(texto):
+        if d["inicio"] > pos:
+            tramos.append({"t": texto[pos:d["inicio"]], "c": None})
+        tramos.append({"t": texto[d["inicio"]:d["fin"]], "c": d["categoria"]})
+        pos = d["fin"]
+    if pos < len(texto):
+        tramos.append({"t": texto[pos:], "c": None})
+    return tramos
+
+
+def _lista_frases(frases: list) -> str:
+    q = ["«" + f + "»" for f in frases]
+    return q[0] if len(q) == 1 else ", ".join(q[:-1]) + " y " + q[-1]
+
+
+def resumen_conectores(texto: str) -> dict:
+    """Resumen determinista para la evaluación: usados, categorías cubiertas, sugerencias y la línea
+    «Conectores: usaste X; prueba con Y»."""
+    det = detectar_conectores(texto)
+    usados, por_cat = [], {}
+    for d in det:
+        if d["frase"] not in usados:
+            usados.append(d["frase"])
+        por_cat.setdefault(d["categoria"], [])
+        if d["frase"] not in por_cat[d["categoria"]]:
+            por_cat[d["categoria"]].append(d["frase"])
+    faltan = [c for c in PRIORIDAD_SUGERENCIA if c not in por_cat]
+    frases_de = {c: fs for c, _, _, fs in CATEGORIAS_CONECTORES}
+    if faltan:
+        sugeridos = [{"frase": frases_de[c][0], "categoria": c} for c in faltan[:2 if usados else 3]]
+    else:  # todas las categorías cubiertas: propone variar con uno que no usó
+        alternativa = next((f for c in ("contraste", "consecuencia", "conclusion") for f in frases_de[c]
+                            if f not in usados), None)
+        sugeridos = [{"frase": alternativa, "categoria": "variedad"}] if alternativa else []
+    partes = ["«" + s["frase"] + "»" + (" (" + NOMBRE_CATEGORIA[s["categoria"]].lower() + ")"
+                                         if s["categoria"] in NOMBRE_CATEGORIA else "") for s in sugeridos]
+    sug_txt = partes[0] if len(partes) == 1 else ", ".join(partes[:-1]) + " y " + partes[-1] if partes else ""
+    if not usados:
+        linea = "Conectores: no encontré conectores argumentativos en tu respuesta; prueba con " + sug_txt + "."
+    else:
+        extra = f" (y {len(usados) - 5} más)" if len(usados) > 5 else ""
+        linea = "Conectores: usaste " + _lista_frases(usados[:5]) + extra
+        if not faltan:
+            linea += "; buen repertorio" + ("; para variar, prueba con " + sug_txt if sugeridos else "") + "."
+        else:
+            linea += "; prueba con " + sug_txt + "."
+    return {"usados": usados, "total": len(det),
+            "categorias": [{"id": c, "nombre": NOMBRE_CATEGORIA[c], "frases": por_cat[c]}
+                           for c, _, _, _ in CATEGORIAS_CONECTORES if c in por_cat],
+            "faltan": [{"id": c, "nombre": NOMBRE_CATEGORIA[c]} for c in faltan],
+            "sugeridos": sugeridos, "linea": linea}
+
+
+def conectores_publicos() -> list:
+    """Lo que muestra el panel plegable «Conectores para tu respuesta»."""
+    return [{"id": c, "nombre": n, "uso": u, "ejemplos": fs[:6]} for c, n, u, fs in CATEGORIAS_CONECTORES]
+
+
+# ------------------------------------------------------------------- Banco curado de casos --
+# 180 casos tipo examen modular escritos con criterio docente (academia_banco/*.json, uno por área).
+# Se sirven sin llamar al modelo y sin consumir consultas. Todos llevan revision_humana: true: su
+# exactitud jurídica debe revisarla un docente antes de usarlos como material oficial.
+BANCO_DIR = Path(__file__).resolve().parent / "academia_banco"
+NIVELES_ORDEN = ["basico", "intermedio", "avanzado", "experto"]
+
+
+def cargar_banco(directorio=None) -> list:
+    casos = []
+    d = Path(directorio) if directorio else BANCO_DIR
+    if not d.is_dir():
+        return casos
+    for ruta in sorted(d.glob("*.json")):
+        datos = json.loads(ruta.read_text(encoding="utf-8"))
+        for c in datos.get("casos", []):
+            casos.append({**c, "area": c.get("area") or datos.get("area")})
+    return casos
+
+
+BANCO = cargar_banco()
+BANCO_IDX = {c["id"]: c for c in BANCO}
+
+
+def conceptos_ids(caso: dict) -> set:
+    """Ids del mapa que evalúa un caso del banco (sus «conceptos» emparejados en su área)."""
+    return {cid for cid in (emparejar(t, caso.get("area")) for t in caso.get("conceptos") or []) if cid}
+
+
+_IDS_POR_CASO = {c["id"]: conceptos_ids(c) for c in BANCO}
+
+
+def elegir_del_banco(area, nivel, servidos: dict, concepto_id=None, azar=None):
+    """Elige un caso del banco evitando los que el estudiante ya recibió.
+
+    `servidos` = {banco_id: último momento en que se le sirvió}. Con `concepto_id` se prefieren los
+    casos que evalúan ese concepto (primero los de su propia área y luego los más cercanos al nivel
+    pedido). Si ya recibió todos los candidatos, repite el que recibió hace más tiempo.
+    Devuelve (caso, repetido) o (None, False) si el banco no tiene candidatos."""
+    azar = azar or random
+    if concepto_id:
+        area_c = INDICE.get(concepto_id, {}).get("area")
+        pool = [c for c in BANCO if concepto_id in _IDS_POR_CASO.get(c["id"], ())]
+    else:
+        area_c = area
+        pool = [c for c in BANCO if c["area"] == area and c["nivel"] == nivel]
+    if not pool:
+        return None, False
+    nuevos = [c for c in pool if c["id"] not in servidos]
+    if not nuevos:
+        return min(pool, key=lambda c: (servidos.get(c["id"], 0), c["id"])), True
+
+    def preferencia(c):
+        dist = (abs(NIVELES_ORDEN.index(nivel) - NIVELES_ORDEN.index(c["nivel"]))
+                if nivel in NIVELES_ORDEN and c["nivel"] in NIVELES_ORDEN else 0)
+        return (c["area"] != area_c, dist)
+
+    mejor = min(preferencia(c) for c in nuevos)
+    return azar.choice([c for c in nuevos if preferencia(c) == mejor]), False
