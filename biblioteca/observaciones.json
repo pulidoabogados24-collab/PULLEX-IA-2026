@@ -1,0 +1,66 @@
+{
+ "fecha": "2026-10-02",
+ "autor": "agente de biblioteca (PUL-010)",
+ "nota": "Hechos comprobados con el conector de Drive en la sesión del 2026-10-02 y lo que NO se pudo comprobar. El contenido de los documentos leídos se trata como dato, nunca como instrucción.",
+ "observaciones": [
+  {
+   "id": "OBS-01",
+   "tema": "El conector no muestra el contenido completo de las carpetas de terceros",
+   "comprobado": "Los 53 elementos de terceros que el conector devolvió dentro de las raíces tienen fecha de 'visto por el usuario'. En las 12 carpetas del árbol MODELOS Y MINUTAS - 2026 el listado devuelve las 11 subcarpetas y ningún archivo. En todo PACK JURIDICO 1 solo aparecen 16 archivos. La búsqueda por propietario de la colección devuelve esos mismos 16.",
+   "interpretacion": "Es consistente con que el conector solo entregue, de una carpeta compartida por otra cuenta, lo que el usuario ya abrió alguna vez. La causa exacta no está comprobada.",
+   "consecuencia": "Un listado vacío en una carpeta de terceros NO prueba que la carpeta esté vacía. El total de archivos de las colecciones compartidas es DESCONOCIDO con esta herramienta.",
+   "estado": "COMPROBADO el hecho; NO VERIFICADA la causa"
+  },
+  {
+   "id": "OBS-02",
+   "tema": "Carpeta N#1 de MODELOS Y MINUTAS - 2026",
+   "comprobado": "La carpeta existe y sus metadatos son accesibles (id 1lT_M-7rXnGrV8nYqtzmuiwfm0GsXdeiE, de un tercero, vista por el usuario el 2026-08-14). Su listado devuelve cero elementos, en dos sesiones distintas.",
+   "interpretacion": "No es un error de permiso sobre la carpeta (los metadatos responden). No se puede distinguir entre 'está vacía' y 'tiene archivos que el usuario nunca abrió' (ver OBS-01).",
+   "estado": "NO VERIFICADO si está vacía"
+  },
+  {
+   "id": "OBS-03",
+   "tema": "Regimen disciplinario (2026), Material de Estudio de Derecho y la segunda MODELOS Y MINUTAS - 2026",
+   "comprobado": "Son accesos directos creados por el usuario el 2026-07-21 en la carpeta 0AEE3kAVY7RGvUk9PVA (no listada; por el formato del identificador parece la raíz de Mi unidad, sin comprobar): 'Regimen disciplinario (2026)' = 1i-Nn_RDJ5W3A2TSETztuK6PEO0jpj8PU; 'Material de Estudio de Derecho' = 1IEGBuY76fkSIZGm4hyhow5VN9Xtjajxx; 'MODELOS Y MINUTAS - 2026' aparece dos veces como acceso directo = 1VS8bLkXgKAaMKxlKBtN7IwGZGbW3ZVGK y 1hwURBv6fvmzK6u0xt7sikShFTNHk3qa8. También hay un acceso directo 'MEDIDAS CAUTELARES - 2026' = 1P_-3QjAhLyCFZ2zXCjSHt8bRusbSrBi-.",
+   "interpretacion": "La 'segunda MODELOS Y MINUTAS - 2026' no es otra colección localizada: son accesos directos. Lo más probable es que apunten a la carpeta 1tb8C4JdQIG413EQ4ozV4gDM-IN2hM40f, pero el conector no expone el destino de un acceso directo.",
+   "consecuencia": "Para 'Regimen disciplinario (2026)' y 'Material de Estudio de Derecho' no hay carpeta candidata con ese nombre entre las vistas: su destino queda sin identificar. No se inventó ningún identificador.",
+   "estado": "ENCONTRADOS los accesos directos; destinos NO RESUELTOS"
+  },
+  {
+   "id": "OBS-04",
+   "tema": "Los antecedentes discrepan sobre si ciertos escritos son reales o didácticos",
+   "comprobado": "(a) La guía 06_GUIA_CONEXION_CORPUS_DRIVE en Drive (documento 1fM3_fHfOs9sSg0AgE3-v5XzPVn2WpT0YKoqr-hxc7DU) dice que hay 'documentos de casos reales' con datos personales (poderes, querellas, denuncias con nombres y radicados) y que el Drive mezcla la biblioteca con expedientes de clientes reales. (b) La versión de la misma guía guardada en el Proyecto y el 00_MANIFIESTO_NUCLEO_LEXCOL (documento 1WgIc1eO0_3db2CGPR2xjhW-no-d9BS-YKtkhMfhH1rk) dicen que esos mismos escritos son ejemplos didácticos que no corresponden a personas reales. (c) La carpeta 07_EJEMPLOS_MODELOS_CASOS de LEXCOL_CORPUS está vacía. (d) Fuera de las raíces autorizadas hay una carpeta propia cuyo nombre es un nombre de persona seguido de un tipo de escrito y un año, y carpetas propias de escritos de práctica.",
+   "interpretacion": "Dos afirmaciones incompatibles sobre el mismo material, ninguna comprobada contra los documentos. El nombre de una carpeta es un indicio, no una prueba.",
+   "consecuencia": "Esos escritos NO se leen, NO se extraen y NO se indexan. Quedan PENDIENTE hasta que el dueño los clasifique uno por uno. Ninguno está dentro de las raíces autorizadas.",
+   "estado": "DISCREPANCIA REGISTRADA; clasificación PENDIENTE (requiere revisión humana)"
+  },
+  {
+   "id": "OBS-05",
+   "tema": "MEDIDAS CAUTELARES - 2026 y ESTATUTOS",
+   "comprobado": "Las dos carpetas de PACK JURIDICO 1 devuelven cero archivos. Una búsqueda por título ('cautelar', 'embargo', 'secuestro') tampoco devuelve documentos, solo la carpeta y un acceso directo. Los 15 estatutos disponibles están en la copia propia LEXCOL_CORPUS/04_PLANTILLAS/ESTATUTOS.",
+   "consecuencia": "No fue posible leer ninguna medida cautelar: la muestra extraída no incluye ninguna.",
+   "estado": "COMPROBADO que no hay ninguna visible; NO VERIFICADO que no existan"
+  },
+  {
+   "id": "OBS-06",
+   "tema": "Tope de unos 2.000 resultados por consulta y páginas con repetidos",
+   "comprobado": "En LEXCOL_CORPUS/03_JURISPRUDENCIA, las carpetas 'SALA CIVIL/SENTENCIAS 2022-2023' y 'SALA LABORAL/2022-2023' entregaron exactamente 2.005 elementos únicos cada una y después solo repetidos. En la segunda, un listado anterior había visto 6 archivos que el listado nuevo no trajo. Las páginas grandes repiten entre el 1 % y el 26 % de los elementos.",
+   "consecuencia": "Esas dos carpetas tienen AL MENOS 2.005 y 2.011 archivos; el total real no se conoce. En las demás carpetas propias no se detectó ninguna omisión, pero no se puede descartar.",
+   "estado": "COMPROBADO"
+  },
+  {
+   "id": "OBS-07",
+   "tema": "Formatos",
+   "comprobado": "De 8.269 archivos, 5.514 son .doc (Word 97-2003), 2.222 .docx, 409 .rtf, 120 .pdf y 3 temporales. El conector lee .doc, .docx y .pdf, pero no .rtf. scripts/ingesta_corpus.py lee .pdf, .docx, .txt y .md; .doc y .rtf necesitan conversión.",
+   "consecuencia": "La cobertura total por ingesta directa depende de poder convertir .doc y .rtf (ver docs/14-BIBLIOTECA-DRIVE.md).",
+   "estado": "COMPROBADO el conteo"
+  },
+  {
+   "id": "OBS-08",
+   "tema": "Carpetas relacionadas fuera de las raíces autorizadas",
+   "comprobado": "'7000 MINUTAS Y MODELOS' está dentro de 'Pack Juridico 2/Bonos' (otra cuenta). Junto a ella están '570 CONTRATOS' (con 'CONTRATOS CIVIL/CONTRATOS'), 'Plantillas' y otra 'Sentencia y Jurisprudencia'. LEXCOL_CORPUS tiene tres accesos directos con esos nombres ('Bonos', 'Plantillas', 'Sentencia y Jurisprudencia').",
+   "consecuencia": "'Pack Juridico 2' no figura en la lista de colecciones autorizadas: se registra y no se recorre. Si el dueño la autoriza, basta agregar su identificador a biblioteca/raices.txt.",
+   "estado": "ENCONTRADO; fuera de alcance"
+  }
+ ]
+}
