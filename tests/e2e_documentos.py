@@ -183,6 +183,11 @@ def asistente(pg, nombre):
 def mis_documentos(pg, nombre):
     pg.click("#doc-tab-mis")
     pg.wait_for_selector("#doc-mis-lista .doc-mis-f")
+    # La lista puede estar pintada desde antes (dos documentos): se espera a que llegue la actualizada.
+    try:
+        pg.wait_for_function("() => document.querySelectorAll('#doc-mis-lista .doc-mis-f').length === 3", timeout=5000)
+    except Exception:
+        pass
     filas = pg.locator("#doc-mis-lista .doc-mis-f").count()
     ok(filas == 3, f"{nombre}: Mis documentos lista escrito, flujo y asistente ({filas})")
     pg.locator("#doc-mis-lista .doc-mis-f").last.locator("text=Borrar").click()

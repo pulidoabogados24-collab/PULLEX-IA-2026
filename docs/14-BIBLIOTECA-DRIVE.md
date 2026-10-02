@@ -5,8 +5,11 @@ Fecha: 2026-10-02 · Tarea: PUL-010 · Rama: `pul/010-inventario-drive`
 Estado: el inventario, el mapa, la extracción de una muestra, el índice y el recorrido completo están
 **implementados y probados** (252 pruebas automáticas). El recorrido se comprobó con documentos reales del
 Drive, pero el borrador lo genera un **doble de prueba (SIMULADO)**, no un modelo de IA. Nada de lo indexado
-está **validado jurídicamente**. La biblioteca todavía **no tiene pantalla ni ruta en la aplicación**: hoy se
-usa desde los guiones de `scripts/`.
+está **validado jurídicamente**.
+
+Actualización (PUL-011): la biblioteca ya tiene pantalla y rutas en la aplicación, descritas en
+`docs/15-BIBLIOTECA.md`. El módulo de este documento se llama ahora `biblioteca_recorrido.py`; `biblioteca.py`
+es el catálogo de la aplicación. Las cifras y los guiones de este documento no cambian.
 
 ## 1. Los seis estados de un documento
 
@@ -251,8 +254,8 @@ Identificadores: LEXCOL_CORPUS `133-bR6cH8z1WmGPtyawr8fAYVdJoGADy`; PACK JURIDIC
 3. Autorizar o no "Pack Juridico 2" (ahí están 570 CONTRATOS y 7000 MINUTAS Y MODELOS).
 4. Clasificar los escritos de los que hablan los antecedentes: reales o didácticos.
 5. Completar las dos carpetas de jurisprudencia truncadas (con el camino B salen completas).
-6. Ruta y pantalla de biblioteca en la aplicación (buscar, filtrar, ver ficha, abrir el original, crear copia
-   de trabajo), restringida al dueño mientras los derechos estén sin confirmar.
+6. ~~Ruta y pantalla de biblioteca en la aplicación~~ Hecho en PUL-011 (`docs/15-BIBLIOTECA.md`): el material
+   de terceros queda restringido al administrador mientras los derechos estén sin confirmar.
 7. Borrador con un modelo de IA real y revisión humana del resultado.
 8. Revisión jurídica de los modelos más usados para poder marcarlos VALIDADO.
 9. El inventario se reconstruye desde las transcripciones de las sesiones. Si se borran, hay que volver a

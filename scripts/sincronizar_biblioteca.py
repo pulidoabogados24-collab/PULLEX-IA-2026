@@ -11,7 +11,7 @@ Uso (desde la carpeta del proyecto):
     python scripts/sincronizar_biblioteca.py --simular
 
     # 2) Cargar el TEXTO ya extraído de los modelos. Carpeta con archivos llamados
-    #    <drive_id>.<pdf|docx|txt|md> (o <ID de catálogo>.<ext>, p. ej. MOD-000012.docx):
+    #    <drive_id>.<pdf|docx|doc|rtf|txt|md> (o <ID de catálogo>.<ext>, p. ej. MOD-000012.docx):
     python scripts/sincronizar_biblioteca.py --textos descargas/modelos
 
     # 3) Traer el texto de lo que ya está en el corpus del chat (el que cargó scripts/indexar_biblioteca.py
@@ -43,7 +43,8 @@ import biblioteca  # noqa: E402
 
 def cargar_textos(con, carpeta: Path) -> dict:
     """Lee archivos <referencia>.<ext> y registra su texto. Usa los extractores de la ingesta del
-    corpus (pypdf o pdftotext para PDF, python-docx para DOCX). Sin OCR: un PDF escaneado queda
+    corpus (pypdf o pdftotext para PDF, python-docx para DOCX, lector propio para RTF y un conversor
+    instalado para DOC). Sin OCR: un PDF escaneado queda
     LEÍDO con su motivo. No se ejecutan macros ni código de los documentos: solo se lee texto."""
     sys.path.insert(0, str(RAIZ / "scripts"))
     import ingesta_corpus  # noqa: E402
@@ -53,7 +54,7 @@ def cargar_textos(con, carpeta: Path) -> dict:
             continue
         ref = p.stem
         if p.suffix.lower() not in ingesta_corpus.EXTENSIONES:
-            rep["errores"].append({"archivo": p.name, "error": "extensión no admitida (usa pdf, docx, txt o md)"})
+            rep["errores"].append({"archivo": p.name, "error": "extensión no admitida (usa pdf, docx, doc, rtf, txt o md)"})
             continue
         try:
             datos = p.read_bytes()
@@ -128,7 +129,7 @@ def main(argv=None):
     ap.add_argument("--simular", action="store_true", help="mostrar los cambios sin escribir nada")
     ap.add_argument("--permitir-retiro-masivo", action="store_true",
                     help="retirar aunque desaparezca más de la mitad del catálogo (por defecto se evita: inventario truncado)")
-    ap.add_argument("--textos", metavar="CARPETA", help="carpeta con <drive_id o ID>.<pdf|docx|txt|md> ya descargados")
+    ap.add_argument("--textos", metavar="CARPETA", help="carpeta con <drive_id o ID>.<pdf|docx|doc|rtf|txt|md> ya descargados")
     ap.add_argument("--desde-corpus", action="store_true", help="traer el texto de lo ya indexado en el corpus del chat")
     ap.add_argument("--validar-procesamiento", metavar="ID", help="marcar VALIDADO el procesamiento de un modelo indexado")
     ap.add_argument("--resumen", action="store_true", help="cantidades por estado y por carpeta")

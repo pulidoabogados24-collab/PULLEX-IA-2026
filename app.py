@@ -2358,7 +2358,8 @@ app.include_router(biblioteca.crear_router(
     consumir_consulta=consumir_consulta, reintegrar_consulta=reintegrar_consulta,
     llamar_json=lambda *a, **k: llamar_json(*a, **k),          # se resuelve al llamar (las pruebas lo sustituyen)
     guardar_documento=_guardar_documento, envolver_como_datos=envolver_como_datos,
-    ia_configurada=lambda: bool(ANTHROPIC_API_KEY), nuevo_error_id=_nuevo_error_id, log=log))
+    ia_configurada=lambda: bool(ANTHROPIC_API_KEY), nuevo_error_id=_nuevo_error_id, log=log,
+    limitar_cuenta=limitar_cuenta))
 
 
 # -------------------------------------------------------------- admin --

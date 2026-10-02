@@ -718,6 +718,16 @@ def test_BIB_071_copia_sin_texto_cuando_no_se_ha_extraido_o_es_de_un_tercero(bib
         assert r.status_code == 400 and "se consultan en su original" in r.json()["detail"]
 
 
+def test_BIB_072_las_copias_tienen_un_tope_por_hora(bib, cliente, usuario, monkeypatch):
+    monkeypatch.setattr(biblioteca, "COPIAS_POR_HORA", 3)
+    cid = bib.ids["PRUEBA-D1"]
+    codigos = [cliente.post(f"/api/biblioteca/modelo/{cid}/copia", headers=usuario).status_code for _ in range(5)]
+    assert codigos == [200, 200, 200, 429, 429]
+    assert len(cliente.get("/api/documentos/mis", headers=usuario).json()["documentos"]) == 3
+    # el tope es por cuenta: otro usuario no queda bloqueado
+    assert cliente.post(f"/api/biblioteca/modelo/{cid}/copia", headers=auth(nuevo_usuario(cliente)[2])).status_code == 200
+
+
 # ================================================================================= RECOMENDAR
 def test_BIB_080_recomienda_con_razones_requisitos_y_adaptacion(bib, modulo, cliente, usuario):
     email = cliente.get("/api/estado", headers=usuario).json()["perfil"]["email"]

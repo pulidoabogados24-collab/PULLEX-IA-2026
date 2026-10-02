@@ -79,6 +79,10 @@ y regenerar el boletín.
   contestaciones, recursos, contratos, poderes, memoriales y proyectos de autos rotulados como borrador),
   7 flujos de varios pasos y un asistente que propone un plan editable y lo ejecuta paso a paso. Exporta a
   Word. Detalle en `docs/13-AUTOMATIZADOR.md`.
+- **Biblioteca (pestaña de Documentos):** catálogo de los documentos del Drive con buscador, filtros, ficha,
+  enlace al original, comparación y copia de trabajo. Hoy el inventario real tiene 8.269 archivos, casi todos
+  normas y jurisprudencia; solo 6 son modelos y están restringidos al administrador por ser de un tercero.
+  Las colecciones de minutas aún no se han podido enumerar. Detalle en `docs/15-BIBLIOTECA.md`.
 - **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
   con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
   un modelo simulado (sin clave de API) en http://localhost:8000.

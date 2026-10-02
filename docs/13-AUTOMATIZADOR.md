@@ -12,7 +12,7 @@ no radica, no paga ni contacta a nadie.
 ## Para quien lo usa (sin tecnicismos)
 
 Entra a **Documentos** en la barra superior (o, en el Inicio, "Estoy trabajando en un asunto" → **Documentos y
-flujos**). Hay cuatro pestañas:
+flujos**). Hay cinco pestañas; la quinta, **Biblioteca**, está descrita en `docs/15-BIBLIOTECA.md`:
 
 ### 1. Escritos
 1. Busca el documento ("tutela", "pagaré", "despido", "mandamiento de pago"…). Puedes filtrar por **área** y por
@@ -55,7 +55,7 @@ produjo queda guardado.
 4. **Confirmar y ejecutar**: cada paso usa 1 consulta. Un plan se ejecuta una sola vez (para repetir, pide otro plan).
 
 ### 4. Mis documentos
-Todo lo generado (escritos, flujos y tareas del asistente) queda aquí: abrir, descargar en Word, editar, guardar
+Todo lo generado (escritos, flujos, tareas del asistente y copias de trabajo de la Biblioteca) queda aquí: abrir, descargar en Word, editar, guardar
 o borrar (con confirmación). Nadie más puede ver tus documentos.
 
 ---

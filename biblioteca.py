@@ -2105,8 +2105,11 @@ def auditoria(con, pagina: int = 1, por_pagina: int = 50) -> dict:
 
 
 # ==================================================================================== RUTAS
+COPIAS_POR_HORA = 40      # crear copias no cuesta consultas: este tope evita llenar la base de documentos
+
+
 def crear_router(*, usuario_actual, admin_actual, json_de, consumir_consulta, reintegrar_consulta, llamar_json,
-                 guardar_documento, envolver_como_datos, ia_configurada, nuevo_error_id, log):
+                 guardar_documento, envolver_como_datos, ia_configurada, nuevo_error_id, log, limitar_cuenta=None):
     """Rutas /api/biblioteca/* (todas autenticadas). app.py pasa sus dependencias para no crear un
     import circular: este módulo no conoce la base de usuarios ni al proveedor de IA."""
     from fastapi import APIRouter, HTTPException, Request
@@ -2173,6 +2176,8 @@ def crear_router(*, usuario_actual, admin_actual, json_de, consumir_consulta, re
                 raise HTTPException(400, "Solo los modelos y escritos se copian como documento de trabajo. Una norma, "
                                          "una providencia o un libro se consultan en su original (ábrelo en Drive).")
             c = copia_de_trabajo(con, f, admin=_admin(u))
+        if limitar_cuenta:
+            limitar_cuenta("biblioteca-copia:" + u["email"], COPIAS_POR_HORA, 3600)
         did = guardar_documento(u["email"], "biblioteca:" + cid, c["titulo"], "biblioteca", c["campos"], c["texto"],
                                 c["verificar"], c["advertencias"], [])
         return {"id": did, "titulo": c["titulo"], "con_texto": c["con_texto"], "mensaje": c["mensaje"],
