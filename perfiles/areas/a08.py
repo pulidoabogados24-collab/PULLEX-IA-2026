@@ -258,7 +258,7 @@ SUBESPECIALIDADES = [
                 "cómo incide en el resultado?",
       opciones="reposición, apelación, impugnación especial de la primera condena, casación o acción de revisión",
       claves=["apelacion penal", "apelar la condena", "casacion penal", "recurso contra la sentencia penal",
-              "doble conformidad", "impugnacion especial", "accion de revision", "apelar la sentencia",
+              "doble conformidad", "impugnacion especial", "accion de revision", "apelar la sentencia penal",
               "segunda instancia penal", "me condenaron", "sustentar el recurso"]),
     S("S09", "ejecución de penas",
       tema="la ejecución de la pena (subrogados, prisión domiciliaria, redención, libertad condicional y "

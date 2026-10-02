@@ -2426,6 +2426,25 @@ def admin_regenerar_boletin(request: Request):
     admin_actual(request)
     return obtener_boletin(forzar=True)
 
+# ---- Perfiles y coordinador (PUL-013) ----
+# Registro de 1.000 perfiles y coordinador que elige y ejecuta unos pocos por tarea. Las rutas viven en
+# perfiles/rutas.py y la lógica en coordinador.py; aquí solo se montan. Ver docs/16-PERFILES-Y-COORDINADOR.md.
+import perfiles.rutas           # noqa: E402
+
+
+class _Nucleo:
+    """Vista en vivo de este módulo para las rutas de perfiles (sesión, cupo, base de datos, cliente del modelo)."""
+
+    def __getattr__(self, nombre):
+        try:
+            return globals()[nombre]
+        except KeyError:
+            raise AttributeError(nombre)
+
+
+perfiles.rutas.montar(app, _Nucleo())
+# ---- fin Perfiles y coordinador ----
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":

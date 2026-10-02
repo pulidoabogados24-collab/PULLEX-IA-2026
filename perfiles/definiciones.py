@@ -322,7 +322,7 @@ INTENCIONES = (
                 "ordena las", "cronologia", "tabula", "saca los datos", "inventario de")},
     {"id": "producir", "nombre": "redactar o producir el entregable", "cadena": ("F07", "F09"),
      "claves": ("redacta", "redactar", "elabora", "escribe", "escribir", "proyecta el", "proyecta la",
-                "proyecta un", "proyecta una", "genera$", "generar", "generame", "hazme", "borrador", "minuta",
+                "proyecta un", "proyecta una", "generame", "hazme", "borrador", "minuta",
                 "prepara el", "prepara la", "prepara un", "prepara una", "documentar", "documenta$")},
     {"id": "disenar", "nombre": "diseñar la solución o la estrategia", "cadena": ("F06", "F08", "F09"),
      "claves": ("estrategia", "que me conviene", "que hago", "como procedo", "que opciones", "opciones tengo",

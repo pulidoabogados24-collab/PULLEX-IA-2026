@@ -167,7 +167,7 @@ SUBESPECIALIDADES = [
                 "derecho?",
       opciones="acción de tutela con medida provisional, impugnación del fallo, solicitud de cumplimiento, "
                "incidente de desacato o el medio ordinario si la tutela no procede",
-      claves=["tutela", "accion de tutela", "derecho fundamental vulnerado", "desacato", "impugnar la tutela",
+      claves=["tutela", "accion de tutela", "una tutela", "tutela contra", "derecho fundamental vulnerado", "desacato", "impugnar la tutela",
               "impugnacion de tutela", "subsidiariedad", "inmediatez", "perjuicio irremediable", "minimo vital",
               "fallo de tutela", "no cumplen la tutela", "tutela contra providencia"]),
     S("S06", "petición",
