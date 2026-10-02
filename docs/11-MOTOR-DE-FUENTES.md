@@ -88,6 +88,8 @@ fecha que se muestra.
 
 ### Formatos y extracción
 
+Actualización del 2026-10-02 (PUL-010): la ingesta también lee `.doc` (con LibreOffice, antiword o catdoc instalados) y `.rtf`, reporta lo que no puede leer en vez de saltarlo, y admite `--privada` para colecciones de terceros. La biblioteca de modelos, su inventario y sus límites están en `docs/14-BIBLIOTECA-DRIVE.md`.
+
 PDF con `pypdf` si está instalado; si no, con `pdftotext` (poppler). DOCX con `python-docx` si está; si no, lee el
 XML del archivo directamente. Fragmentos de ~1.200 caracteres con 200 de solape; en PDF la ubicación es la página
 (`pág. 12`). **Un PDF escaneado (imagen) no tiene texto**: el reporte lo marca "sin texto extraíble"; necesita OCR

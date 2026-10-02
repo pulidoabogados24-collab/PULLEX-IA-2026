@@ -219,6 +219,14 @@ _GENERICAS = {
     "SUCESIONES", "INSOLVENCIA", "AMBIENTAL", "AGRARIO", "INTERNACIONAL", "PUBLICO", "PRIVADO",
     "NOTARIAL", "DISCIPLINARIO", "POLICIA", "TRANSITO", "ARRENDAMIENTO", "COMPRAVENTA", "SOCIEDADES",
     "OTROS", "VARIOS", "ARCHIVO", "ARCHIVOS", "DOCUMENTOS", "CONTRATACION", "ESTATAL", "PROCESO",
+    # nombres de colecciones de la biblioteca de Drive (docs/14-BIBLIOTECA-DRIVE.md): sustantivos comunes
+    "EXAMENES", "EXAMEN", "PREPARATORIOS", "PREPARATORIO", "FUNCION", "PUBLICA", "MATERIAL", "ESTUDIO",
+    "CONCURSO", "CONCURSOS", "DIAN", "CURSO", "CURSOS", "LIBRO", "LIBROS", "JURIDICO", "JURIDICOS",
+    "JURIDICA", "JURIDICAS", "MEMORANDO", "MEMORANDOS", "TALLER", "TALLERES", "ESTATUTO", "ESTATUTOS",
+    "MEDIDA", "MEDIDAS", "CAUTELAR", "CAUTELARES", "TABLA", "TABLAS", "LIQUIDADORAS", "ACCIONES",
+    "MINUTAS", "RAMA", "JUDICIAL", "MAGISTRADOS", "JUECES", "INFORMATICO", "ACTUALIZADO", "ACTUALIZADOS",
+    "PRACTICA", "LITIGANTES", "FUNCIONARIOS", "INFANCIA", "SALA", "CUADROS", "INDICE", "FUENTES",
+    "BONOS", "PACK", "CONTRATOS", "BIBLIOTECA", "CARPETA",
 }
 _CONECTORES = {"DE", "DEL", "LA", "LAS", "LOS", "Y"}
 _PALABRA_MAY = r"[A-ZÁÉÍÓÚÑÜ][A-ZÁÉÍÓÚÑÜ]+"
@@ -468,8 +476,20 @@ def _consulta_fts(terms) -> str:
     return " OR ".join(partes)
 
 
-def buscar(pregunta: str, limite: int = MAX_FRAGMENTOS, ruta: str = None) -> list:
+def _origenes_privados(con) -> set:
+    """Documentos de la biblioteca marcados como privados (de terceros, derechos por confirmar).
+    La tabla la crea biblioteca_recorrido.py; si no existe, no hay nada privado."""
+    try:
+        return {f[0] for f in con.execute("SELECT origen FROM biblioteca_fichas WHERE visibilidad='privada'")}
+    except sqlite3.Error:
+        return set()
+
+
+def buscar(pregunta: str, limite: int = MAX_FRAGMENTOS, ruta: str = None, incluir_privadas: bool = False) -> list:
     """Busca en el corpus propio (BM25). Devuelve fragmentos con los metadatos de su fuente.
+
+    Los documentos privados de la biblioteca no salen salvo que se pida con `incluir_privadas`
+    (solo la biblioteca del dueño lo pide; el chat general nunca).
 
     Para no traer ruido en preguntas que no son del corpus, un fragmento solo se acepta si
     contiene al menos 2 términos distintos de la pregunta (o el único término, si solo hay uno).
@@ -487,8 +507,9 @@ def buscar(pregunta: str, limite: int = MAX_FRAGMENTOS, ruta: str = None) -> lis
             filas = con.execute(
                 "SELECT f.rowid AS frag_id, f.texto, f.ubicacion, bm25(fragmentos) AS puntaje, s.* "
                 "FROM fragmentos f JOIN fuentes s ON s.id = f.fuente_id "
-                "WHERE fragmentos MATCH ? ORDER BY puntaje LIMIT 40",
+                "WHERE fragmentos MATCH ? ORDER BY puntaje LIMIT 80",
                 (_consulta_fts(terms),)).fetchall()
+            privados = set() if incluir_privadas else _origenes_privados(con)
     except sqlite3.Error:
         return []
     ahora = datetime.now(timezone.utc)
@@ -496,13 +517,13 @@ def buscar(pregunta: str, limite: int = MAX_FRAGMENTOS, ruta: str = None) -> lis
     for f in filas:
         tn = _norm(f["texto"])
         cubiertos = sum(1 for r in raices if re.search(r"\b" + re.escape(r), tn))
-        if cubiertos < minimo:
+        if cubiertos < minimo or f["origen"] in privados:
             continue
         if por_fuente.get(f["id"], 0) >= MAX_POR_FUENTE:
             continue
         por_fuente[f["id"]] = por_fuente.get(f["id"], 0) + 1
         salida.append({
-            "fuente_id": f["id"], "fragmento_id": f["frag_id"], "titulo": f["titulo"], "tipo": f["tipo"],
+            "fuente_id": f["id"], "fragmento_id": f["frag_id"], "origen": f["origen"], "titulo": f["titulo"], "tipo": f["tipo"],
             "autoridad": f["autoridad"], "numero": f["numero"], "anio": f["anio"],
             "fecha_archivo": f["fecha_archivo"], "url": f["url"], "ubicacion": f["ubicacion"] or "",
             "estado_vigencia": estado_efectivo(f["estado_vigencia"], f["verificado_en"], ahora),
