@@ -249,22 +249,28 @@ Registradas a mano en `biblioteca/observaciones.json`.
 
 - Estado: **COMPROBADO que no hay ninguna visible; NO VERIFICADO que no existan**
 - Comprobado: Las dos carpetas de PACK JURIDICO 1 devuelven cero archivos. Una búsqueda por título ('cautelar', 'embargo', 'secuestro') tampoco devuelve documentos, solo la carpeta y un acceso directo. Los 15 estatutos disponibles están en la copia propia LEXCOL_CORPUS/04_PLANTILLAS/ESTATUTOS.
-- Consecuencia: No fue posible leer ninguna medida cautelar: la muestra extraída no incluye ninguna.
+- Consecuencia: No fue posible leer ninguna medida cautelar: la muestra extraída (33 documentos) no incluye ninguna.
 
 ### OBS-06 — Tope de unos 2.000 resultados por consulta y páginas con repetidos
 
 - Estado: **COMPROBADO**
-- Comprobado: En LEXCOL_CORPUS/03_JURISPRUDENCIA, las carpetas 'SALA CIVIL/SENTENCIAS 2022-2023' y 'SALA LABORAL/2022-2023' entregaron exactamente 2.005 elementos únicos cada una y después solo repetidos. En la segunda, un listado anterior había visto 6 archivos que el listado nuevo no trajo. Las páginas grandes repiten entre el 1 % y el 26 % de los elementos.
+- Comprobado: En LEXCOL_CORPUS/03_JURISPRUDENCIA, las carpetas 'SALA CIVIL/SENTENCIAS 2022-2023' y 'SALA LABORAL/2022-2023' entregaron exactamente 2.005 elementos únicos cada una y después solo repetidos. En la segunda, un listado anterior había visto 6 archivos que el listado nuevo no trajo. Las páginas grandes repiten entre el 1 % y el 25 % de los elementos.
 - Consecuencia: Esas dos carpetas tienen AL MENOS 2.005 y 2.011 archivos; el total real no se conoce. En las demás carpetas propias no se detectó ninguna omisión, pero no se puede descartar.
 
 ### OBS-07 — Formatos
 
 - Estado: **COMPROBADO el conteo**
-- Comprobado: De 8.269 archivos, 5.514 son .doc (Word 97-2003), 2.222 .docx, 409 .rtf, 120 .pdf y 3 temporales. El conector lee .doc, .docx y .pdf, pero no .rtf. scripts/ingesta_corpus.py lee .pdf, .docx, .txt y .md; .doc y .rtf necesitan conversión.
-- Consecuencia: La cobertura total por ingesta directa depende de poder convertir .doc y .rtf (ver docs/14-BIBLIOTECA-DRIVE.md).
+- Comprobado: De 8.269 archivos, 5.514 son .doc (Word 97-2003), 2.222 .docx, 409 .rtf, 120 .pdf, 3 temporales y 1 documento de Google. El conector lee .doc, .docx y .pdf, pero no .rtf. Desde esta tarea scripts/ingesta_corpus.py lee también .rtf (lector propio) y .doc (con LibreOffice, antiword o catdoc instalados).
+- Consecuencia: La cobertura total por ingesta directa depende de tener un conversor de .doc en el equipo; sin él, cada .doc queda como error visible en el reporte (ver docs/14-BIBLIOTECA-DRIVE.md).
 
 ### OBS-08 — Carpetas relacionadas fuera de las raíces autorizadas
 
 - Estado: **ENCONTRADO; fuera de alcance**
 - Comprobado: '7000 MINUTAS Y MODELOS' está dentro de 'Pack Juridico 2/Bonos' (otra cuenta). Junto a ella están '570 CONTRATOS' (con 'CONTRATOS CIVIL/CONTRATOS'), 'Plantillas' y otra 'Sentencia y Jurisprudencia'. LEXCOL_CORPUS tiene tres accesos directos con esos nombres ('Bonos', 'Plantillas', 'Sentencia y Jurisprudencia').
 - Consecuencia: 'Pack Juridico 2' no figura en la lista de colecciones autorizadas: se registra y no se recorre. Si el dueño la autoriza, basta agregar su identificador a biblioteca/raices.txt.
+
+### OBS-09 — Qué contiene la muestra leída
+
+- Estado: **COMPROBADO**
+- Comprobado: Se leyeron 33 documentos: 27 quedaron indexados (7 de las carpetas de modelos, 1 índice de tablas liquidadoras, 16 leyes, 1 estatuto, 2 índices de leyes), 4 extraídos sin indexar (1 auto con nombre de persona y radicado, 2 archivos de una línea, 1 nota interna), 1 leído sin texto (0 bytes) y 1 .rtf que el conector no lee. Las dos tutelas son versiones casi iguales del mismo modelo. Los únicos modelos visibles en las colecciones de terceros eran esos 7.
+- Consecuencia: La muestra no es representativa de MODELOS Y MINUTAS - 2026: de esa colección no se pudo leer ningún archivo.

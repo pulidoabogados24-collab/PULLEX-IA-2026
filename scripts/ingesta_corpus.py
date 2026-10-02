@@ -6,6 +6,9 @@ Uso (desde la carpeta del proyecto):
     # 1) Desde una carpeta de tu computador (PDF, DOCX, DOC, RTF, TXT, MD), con subcarpetas:
     python scripts/ingesta_corpus.py --carpeta "C:/Users/tu/Descargas/LEXCOL_CORPUS"
 
+    # Si la carpeta es una colección de un tercero (derechos por confirmar), agrega --privada:
+    # lo indexado solo lo encuentra la biblioteca del dueño, no el chat general.
+
     # 2) Desde Google Drive con una cuenta de servicio (dependencias opcionales):
     #    pip install google-api-python-client google-auth
     #    GOOGLE_SERVICE_ACCOUNT_JSON=ruta/al/archivo.json  DRIVE_FOLDER_ID=<id de LEXCOL_CORPUS>
@@ -261,7 +264,7 @@ def recorrer_drive(servicio, carpeta_id: str, ruta: str = "", patrones=None, rep
 
 
 # ------------------------------------------------------------------- ingesta --
-def ingerir(origenes, db_ruta: str, simular: bool = False, patrones=None, reporte=None) -> dict:
+def ingerir(origenes, db_ruta: str, simular: bool = False, patrones=None, reporte=None, privada: bool = False) -> dict:
     reporte = reporte if reporte is not None else {"excluidos": []}
     reporte.update(indexados=[], sin_cambios=0, errores=[])
     con = None if simular else fuentes.abrir(db_ruta)
@@ -288,6 +291,10 @@ def ingerir(origenes, db_ruta: str, simular: bool = False, patrones=None, report
             except Exception as e:  # un archivo dañado no detiene la carga
                 reporte["errores"].append({"ruta": rel, "error": f"{type(e).__name__}: {str(e)[:160]}"})
                 continue
+            if privada:      # colección de un tercero: no entra al chat general (derechos por confirmar)
+                import biblioteca
+                mapa = biblioteca.clasificar_carpeta(Path(carpeta).name if carpeta else "", list(reversed(Path(carpeta).parts[:-1])))
+                biblioteca.marcar_privada(con, origen, carpeta, mapa["tipo_documental"], mapa["area"])
             if r["accion"] == "sin_cambios":
                 reporte["sin_cambios"] += 1
             else:
@@ -326,6 +333,8 @@ def main(argv=None):
     ap.add_argument("--drive", action="store_true", help="leer desde Google Drive (DRIVE_FOLDER_ID)")
     ap.add_argument("--db", default=None, help="ruta del índice (por defecto PULLEX_CORPUS_DB o corpus/corpus.db)")
     ap.add_argument("--simular", action="store_true", help="solo mostrar qué se indexaría y qué se excluiría")
+    ap.add_argument("--privada", action="store_true",
+                    help="colección de un tercero: lo indexado solo lo ve la biblioteca del dueño, no el chat general")
     ap.add_argument("--excluir", action="append", default=[], help="patrón adicional de exclusión (repetible)")
     ap.add_argument("--listar", action="store_true", help="listar las fuentes indexadas")
     ap.add_argument("--verificar", type=int, metavar="ID", help="marcar VIGENTE_VERIFICADA con fecha de hoy")
@@ -363,7 +372,7 @@ def main(argv=None):
     else:
         ap.print_help()
         return 2
-    rep = ingerir(origenes, db_ruta, simular=a.simular, patrones=patrones, reporte=reporte)
+    rep = ingerir(origenes, db_ruta, simular=a.simular, patrones=patrones, reporte=reporte, privada=a.privada)
     if a.json:
         print(json.dumps(rep, ensure_ascii=False, indent=1))
     else:

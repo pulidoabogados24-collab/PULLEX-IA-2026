@@ -402,6 +402,22 @@ def indexar_modelo(con, *, drive_id: str, titulo: str, texto: str, tipo_fuente: 
     return {"fuente_id": r["id"], "accion": r["accion"], "fragmentos": n, "id_catalogo": id_catalogo(drive_id)}
 
 
+def marcar_privada(con, origen: str, ruta: str = "", tipo_documental: str = POR_CLASIFICAR, area: str = POR_CLASIFICAR) -> bool:
+    """Deja una ficha mínima con visibilidad "privada" para una fuente ya indexada por la ingesta
+    general (colecciones de terceros): la encuentra la biblioteca del dueño, no el chat general.
+    No toca una ficha que ya exista. Devuelve True si la creó."""
+    con.executescript(ESQUEMA_FICHAS)
+    if con.execute("SELECT 1 FROM biblioteca_fichas WHERE origen=?", (origen,)).fetchone():
+        return False
+    con.execute(
+        "INSERT INTO biblioteca_fichas(origen,id_catalogo,tipo_documental,area,ruta,propietario,visibilidad,derechos,"
+        "estado_validacion,campos_json,versiones_json,actualizado_en) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        (origen, id_catalogo(origen.split(":", 1)[-1]), tipo_documental, area, ruta, "tercero", "privada", AVISO_DERECHOS,
+         SIN_VALIDAR, "{}", "[]", datetime.now(timezone.utc).isoformat(timespec="seconds")))
+    con.commit()
+    return True
+
+
 def _fila_ficha(con, origen):
     try:
         f = con.execute("SELECT s.id AS fuente_id, s.titulo, s.tipo, s.url, s.fecha_archivo, s.estado_vigencia, s.verificado_en, "

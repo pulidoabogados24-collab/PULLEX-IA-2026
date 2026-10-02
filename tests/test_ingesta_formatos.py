@@ -109,3 +109,24 @@ def test_la_ingesta_no_duplica_lo_que_ya_indexo_la_biblioteca(tmp_path):
     assert sorted(o[0] for o in con.execute("SELECT origen FROM fuentes")) == ["drive:r2", "r1"]
     assert con.execute("SELECT url FROM fuentes WHERE origen='drive:r2'").fetchone()[0] == "https://drive.google.com/file/d/r2/view"
     con.close()
+
+
+def test_ingesta_privada_de_una_coleccion_de_terceros_no_llega_al_chat(tmp_path):
+    base = tmp_path / "PACK"
+    (base / "MODELOS Y MINUTAS" / "CIVIL").mkdir(parents=True)
+    (base / "MODELOS Y MINUTAS" / "CIVIL" / "Minuta de arrendamiento.rtf").write_bytes(
+        rb"{\rtf1\ansi Minuta de contrato de arrendamiento de vivienda urbana entre arrendador y arrendatario.\par}")
+    db = str(tmp_path / "c.db")
+    assert ing.main(["--carpeta", str(base), "--db", db, "--privada"]) == 0
+    pregunta = "contrato de arrendamiento de vivienda"
+    assert fuentes.buscar(pregunta, ruta=db) == []                                # el chat general no lo ve
+    r = biblioteca.buscar_modelos(pregunta, ruta=db, tipos=None)
+    assert len(r) == 1 and r[0]["visibilidad"] == "privada" and r[0]["derechos"] == biblioteca.AVISO_DERECHOS
+    assert r[0]["area"] == "civil" and r[0]["tipo_documental"] == "plantilla/minuta"
+    assert ing.main(["--carpeta", str(base), "--db", db, "--privada"]) == 0       # repetir no falla ni duplica
+    con = fuentes.abrir(db)
+    assert con.execute("SELECT COUNT(*) FROM biblioteca_fichas").fetchone()[0] == 1
+    con.close()
+    db2 = str(tmp_path / "general.db")
+    ing.main(["--carpeta", str(base), "--db", db2])                               # sin --privada sí es general
+    assert len(fuentes.buscar(pregunta, ruta=db2)) == 1
