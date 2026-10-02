@@ -3,7 +3,7 @@ SQLite FTS5 que usa el chat (fuentes.py). No necesita claves de IA.
 
 Uso (desde la carpeta del proyecto):
 
-    # 1) Desde una carpeta de tu computador (PDF, DOCX, TXT, MD), con subcarpetas:
+    # 1) Desde una carpeta de tu computador (PDF, DOCX, DOC, RTF, TXT, MD), con subcarpetas:
     python scripts/ingesta_corpus.py --carpeta "C:/Users/tu/Descargas/LEXCOL_CORPUS"
 
     # 2) Desde Google Drive con una cuenta de servicio (dependencias opcionales):
@@ -41,10 +41,13 @@ RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 import fuentes  # noqa: E402
 
-EXTENSIONES = {".pdf", ".docx", ".txt", ".md"}
+EXTENSIONES = {".pdf", ".docx", ".doc", ".rtf", ".txt", ".md"}
 MIME_DRIVE = {
     "application/pdf": ".pdf",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+    "application/msword": ".doc",          # Word 97-2003: necesita un conversor (ver extraer_doc)
+    "application/rtf": ".rtf",
+    "text/rtf": ".rtf",
     "text/plain": ".txt",
     "text/markdown": ".md",
     "application/vnd.google-apps.document": ".gdoc",   # se exporta como texto plano
@@ -104,12 +107,89 @@ def extraer_docx(datos: bytes):
     return [("", "\n".join(partes))]
 
 
+_RTF_DESTINOS = {"fonttbl", "colortbl", "stylesheet", "info", "pict", "header", "footer", "generator", "themedata",
+                 "datastore", "latentstyles", "listtable", "listoverridetable", "rsidtbl", "xmlnstbl", "object", "fldinst"}
+_RTF_SALTOS = {"par": "\n", "line": "\n", "sect": "\n\n", "page": "\n\n", "tab": "\t", "cell": " | ", "row": "\n",
+               "emdash": "—", "endash": "–", "lquote": "‘", "rquote": "’", "ldblquote": "“", "rdblquote": "”", "bullet": "•"}
+
+
+def rtf_a_texto(datos: bytes) -> str:
+    """Texto de un .rtf sin dependencias: quita las palabras de control y las tablas de fuentes o
+    estilos, y traduce \\'hh (página de códigos 1252) y \\uN. No interpreta campos ni imágenes."""
+    import re
+    rtf = datos.decode("latin-1", "ignore")
+    token = re.compile(r"\\([a-z]{1,32})(-?\d{1,10})?[ ]?|\\'([0-9a-fA-F]{2})|\\([^a-z])|([{}])|[\r\n]+|(.)", re.I | re.S)
+    pila, ignorar, saltar, salida = [], False, 0, []
+    for m in token.finditer(rtf):
+        palabra, arg, hexa, simbolo, llave, car = m.groups()
+        if llave == "{":
+            pila.append(ignorar)
+        elif llave == "}":
+            ignorar = pila.pop() if pila else False
+        elif simbolo is not None:
+            if simbolo == "*":
+                ignorar = True                       # destino opcional: se ignora entero
+            elif not ignorar and simbolo in "\\{}":
+                salida.append(simbolo)
+            elif not ignorar and simbolo == "~":
+                salida.append(" ")
+        elif palabra is not None:
+            if palabra in _RTF_DESTINOS:
+                ignorar = True
+            elif ignorar:
+                continue
+            elif palabra in _RTF_SALTOS:
+                salida.append(_RTF_SALTOS[palabra])
+            elif palabra == "u" and arg:
+                n = int(arg)
+                salida.append(chr(n + 65536 if n < 0 else n))
+                saltar = 1                           # tras \\uN viene un carácter de reemplazo que no se usa
+        elif hexa is not None:
+            if saltar:
+                saltar -= 1
+            elif not ignorar:
+                salida.append(bytes([int(hexa, 16)]).decode("cp1252", "ignore"))
+        elif car is not None and not ignorar:
+            if saltar:
+                saltar -= 1
+            else:
+                salida.append(car)
+    return re.sub(r"[ \t]+\n", "\n", "".join(salida)).strip()
+
+
+def extraer_doc(datos: bytes):
+    """Texto de un .doc (Word 97-2003). No hay lector puro en Python: usa el conversor que esté
+    instalado (antiword, catdoc o LibreOffice). Sin ninguno, falla con un mensaje que lo dice."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        entrada = Path(tmp) / "entrada.doc"
+        entrada.write_bytes(datos)
+        for orden in (["antiword", "-m", "UTF-8.txt", "-w", "0", str(entrada)], ["catdoc", "-d", "utf-8", "-w", str(entrada)]):
+            if shutil.which(orden[0]):
+                r = subprocess.run(orden, capture_output=True, timeout=120)
+                if r.returncode == 0 and r.stdout.strip():
+                    return [("", r.stdout.decode("utf-8", "ignore"))]
+        oficina = shutil.which("soffice") or shutil.which("libreoffice")
+        if oficina:
+            r = subprocess.run([oficina, "--headless", "--convert-to", "txt:Text (encoded):UTF8", "--outdir", tmp, str(entrada)],
+                               capture_output=True, timeout=300)
+            salida = Path(tmp) / "entrada.txt"
+            if salida.is_file():
+                return [("", salida.read_text(encoding="utf-8-sig", errors="ignore"))]
+            raise RuntimeError("LibreOffice no pudo convertir el .doc: " + r.stderr.decode("utf-8", "ignore")[:160])
+    raise RuntimeError("para leer archivos .doc instala un conversor: antiword, catdoc o LibreOffice (soffice)")
+
+
 def extraer(nombre: str, datos: bytes):
     ext = Path(nombre).suffix.lower()
     if ext == ".pdf":
         return extraer_pdf(datos)
     if ext == ".docx":
         return extraer_docx(datos)
+    if ext == ".doc":
+        return extraer_doc(datos)
+    if ext == ".rtf":
+        return [("", rtf_a_texto(datos))]
     if ext in (".txt", ".md", ".gdoc"):
         return [("", datos.decode("utf-8", "ignore"))]
     raise ValueError(f"extensión no admitida: {ext}")
@@ -160,6 +240,11 @@ def recorrer_drive(servicio, carpeta_id: str, ruta: str = "", patrones=None, rep
                 continue
             ext = MIME_DRIVE.get(f["mimeType"])
             if not ext:
+                # nada se salta en silencio: lo que no se puede leer queda en el reporte con su motivo
+                if reporte is not None:
+                    motivo = ("acceso directo: no se sigue; comparte la carpeta de destino" if f["mimeType"].endswith(".shortcut")
+                              else "formato no admitido (" + f["mimeType"].split("/")[-1].split(".")[-1] + ")")
+                    reporte.setdefault("omitidos", []).append({"ruta": rel, "motivo": motivo})
                 continue
             nombre = f["name"] if ext == ".gdoc" or f["name"].lower().endswith(ext) else f["name"] + ext
 
@@ -169,7 +254,7 @@ def recorrer_drive(servicio, carpeta_id: str, ruta: str = "", patrones=None, rep
                 return servicio.files().get_media(fileId=fid, supportsAllDrives=True).execute()
 
             yield (f"{ruta}/{nombre}" if ruta else nombre, ruta, leer, f.get("modifiedTime"),
-                   "drive:" + f["id"], None)
+                   "drive:" + f["id"], f"https://drive.google.com/file/d/{f['id']}/view")
         token = r.get("nextPageToken")
         if not token:
             break
@@ -185,6 +270,11 @@ def ingerir(origenes, db_ruta: str, simular: bool = False, patrones=None, report
             motivo = fuentes.es_excluido(rel, patrones)
             if motivo:
                 reporte["excluidos"].append({"ruta": rel, "motivo": motivo})
+                continue
+            if con is not None and origen.startswith("drive:") and con.execute(
+                    "SELECT 1 FROM fuentes WHERE origen=?", (origen[6:],)).fetchone():
+                # ya lo indexó la biblioteca (scripts/indexar_biblioteca.py) con el id de Drive como origen
+                reporte["ya_en_biblioteca"] = reporte.get("ya_en_biblioteca", 0) + 1
                 continue
             if simular:
                 c = fuentes.clasificar_nombre(rel, carpeta)
@@ -220,6 +310,14 @@ def imprimir_reporte(rep: dict):
         print(f"  - EXCLUIDO  {x['ruta']}  → {x['motivo']}")
     for x in rep["errores"]:
         print(f"  ! ERROR     {x['ruta']}  → {x['error']}")
+    if rep.get("ya_en_biblioteca"):
+        print(f"  = {rep['ya_en_biblioteca']} ya estaban indexados por la biblioteca (no se duplican)")
+    omitidos = rep.get("omitidos", [])
+    if omitidos:
+        from collections import Counter
+        print(f"\nOmitidos (no se pueden leer): {len(omitidos)}")
+        for motivo, n in Counter(x["motivo"] for x in omitidos).most_common():
+            print(f"  · {n:>5}  {motivo}")
 
 
 def main(argv=None):
