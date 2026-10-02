@@ -170,3 +170,143 @@ def clasificar_carpeta(titulo, ancestros=(), titulos_archivos=()):
             "confianza_tipo": conf_tipo, "confianza_area": conf_area, "confianza": confianza,
             "evidencia": {"archivos_visibles": n, "por_nombre": dict(por_nombre), "salas": dict(salas)},
             "notas": notas}
+
+
+# ------------------------------------------------------- texto extraído --
+_RE_ENLACE_MD = re.compile(r"\[([^\]\n]*)\]\((?:\\.|[^()\\\n])*\)")
+_RE_ESCAPE_MD = re.compile(r"\\([\\_\[\]().\-*#<>=~`|!+{}])")
+
+
+def desescapar(texto: str) -> str:
+    """Texto limpio a partir de lo que devuelve el conector de Drive (Markdown con escapes):
+    quita los enlaces (deja solo su texto visible) y las barras de escape ("\\_" → "_")."""
+    t = _RE_ENLACE_MD.sub(r"\1", texto or "")
+    t = _RE_ESCAPE_MD.sub(r"\1", t)
+    t = re.sub(r"[ \t]+\n", "\n", t)
+    return re.sub(r"\n{3,}", "\n\n", t).strip()
+
+
+def huella(texto: str) -> str:
+    return hashlib.sha256((texto or "").encode("utf-8")).hexdigest()
+
+
+def calidad_texto(texto: str, tamano: int = None, extension: str = None) -> dict:
+    """Medidas simples de lo extraído. `parece_escaneado`: un PDF o una imagen con muy poco texto
+    para su tamaño casi siempre es una imagen sin OCR."""
+    t = texto or ""
+    car = len(t)
+    letras = sum(1 for c in t if c.isalpha())
+    ext = (extension or "").lower()
+    por_kb = round(car / (tamano / 1024), 1) if tamano else None
+    escaneado = ext in ("pdf", "png", "jpg", "jpeg") and (car < 200 or (por_kb is not None and por_kb < 20))
+    return {"caracteres": car, "palabras": len(t.split()),
+            "proporcion_letras": round(letras / car, 2) if car else 0.0,
+            "caracteres_por_kb": por_kb, "caracteres_danados": t.count("\ufffd"),
+            "vacio": car == 0, "parece_escaneado": bool(escaneado)}
+
+
+PATRONES_CAMPO = (
+    ("subrayas", re.compile(r"_{3,}")),
+    ("puntos", re.compile(r"\.{4,}(?:[ .]{0,3}\.+)*")),
+    ("equis", re.compile(r"(?<![A-Za-z])[Xx]{3,}(?![A-Za-z])")),
+    ("corchetes", re.compile(r"\[[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ /]{2,40}\]")),
+    ("parentesis", re.compile(r"\((?:nombre|ciudad|fecha|d[ií]a|mes|año|entidad|escriba|indi(?:car|que)|narraci[oó]n|"
+                              r"raz[oó]n social|lo que solicita|resumen)[^)\n]{0,90}\)", re.I)),
+    ("llaves", re.compile(r"\{\{[^}\n]{1,40}\}\}|<<[^>\n]{1,40}>>")),
+)
+
+
+def campos_por_completar(texto: str, con_etiquetas: bool = False) -> dict:
+    """Espacios que hay que llenar en un modelo: "____", "......", "XXXX", "[NOMBRE]", "(ciudad, fecha)".
+    Devuelve cuántos por patrón; con `con_etiquetas`, también las etiquetas legibles (no se guardan en git)."""
+    por_patron, etiquetas = {}, []
+    for nombre, rx in PATRONES_CAMPO:
+        hallados = rx.findall(texto or "")
+        if hallados:
+            por_patron[nombre] = len(hallados)
+            if nombre in ("corchetes", "parentesis", "llaves"):
+                etiquetas += [h.strip("[](){}<>").strip() for h in hallados]
+    r = {"total": sum(por_patron.values()), "por_patron": por_patron}
+    if con_etiquetas:
+        r["etiquetas"] = list(dict.fromkeys(etiquetas))[:20]
+    return r
+
+
+_PAL = r"(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñü]+|[A-ZÁÉÍÓÚÑ]{2,})"
+_RE_NOMBRE_SENAL = re.compile(
+    r"(?i:\b(?:yo|se[ñn]ora?|doctora?|el suscrito|la suscrita|accionante|accionado|demandante|demandado|procesad[oa]|"
+    r"poderdante|apoderad[oa]|formulad[oa] por|invocad[oa] por|promovid[oa] por|presentad[oa] por|instaurad[oa] por|"
+    r"en contra de|contra))[,:]?\s+(" + _PAL + r"(?:\s+(?:de|del|la|los|las)\s+" + _PAL + r"|\s+" + _PAL + r"){1,4})")
+_NO_NOMBRE = fuentes._GENERICAS | {
+    "JUEZ", "JUEZA", "MAGISTRADO", "MAGISTRADA", "SEÑOR", "SEÑORA", "SEÑORES", "EMPRESA", "BANCO", "ENTIDAD", "SECRETARIA",
+    "SECRETARIO", "DIRECTOR", "DIRECTORA", "GERENTE", "ALCALDE", "ALCALDIA", "MINISTERIO", "MINISTRO", "NACION", "REPUBLICA",
+    "SALA", "CORTE", "HONORABLE", "DESPACHO", "REPARTO", "USTED", "CIUDAD", "MUNICIPIO", "DEPARTAMENTO", "OFICINA", "UNIDAD",
+    "SUPERINTENDENCIA", "FISCAL", "PROCURADURIA", "DEFENSORIA", "CONGRESO", "GOBIERNO", "NACIONAL", "ESTADOS", "PARTES",
+    "JEFE", "JEFA", "ENCARGADO", "ENCARGADA", "PRESIDENTE", "PRESIDENTA", "VICEMINISTRO", "SUBDIRECTOR", "REPRESENTANTE",
+    "LEGAL", "PERSONERO", "NOTARIO", "REGISTRADOR", "CONTRALOR", "PROCURADOR", "DEFENSOR", "COMANDANTE", "INSPECTOR",
+    "COMISARIO", "FUNCIONARIO", "PETICIONARIO", "TITULAR", "USUARIO", "SUSCRITO", "SUSCRITA", "ABOGADO", "ABOGADA",
+    "LAS", "LOS", "EL", "LA", "DE", "DEL", "SU", "SUS", "ESTA", "ESTE", "ESE", "ESA", "TODA", "TODO", "QUIEN", "CUALQUIER"}
+_RE_CEDULA = re.compile(r"(?i:\bc\.?\s?c\.?|c[eé]dula(?: de ciudadan[ií]a)?|identificad[oa] con[^.\n]{0,30}?)"
+                        r"[\s:]*(?i:(?:n[uú]mero|nro|no|n)[.°º]*)?[\s:]*(\d{1,3}(?:[.\s]\d{3}){1,3}|\d{6,10})\b")
+_RE_NIT = re.compile(r"\bNIT\b[^\d\n]{0,12}\d{6,}", re.I)
+_RE_CELULAR = re.compile(r"(?<!\d)3\d{2}[\s-]?\d{3}[\s-]?\d{4}(?!\d)")
+_RE_CORREO = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+_RE_RADICADO = re.compile(r"(?<!\d)(?:\d{5}[-\s]?\d{2}[-\s]?\d{2}[-\s]?\d{3}[-\s]?\d{4}[-\s]?\d{5}[-\s]?\d{2}|\d{23})(?!\d)")
+
+
+def nombres_con_senal(texto: str) -> list:
+    """Nombres propios que siguen a una señal ("Yo,", "señor", "contra", "formulada por"…)."""
+    salida = []
+    for m in _RE_NOMBRE_SENAL.finditer(texto or ""):
+        palabras = [p for p in m.group(1).split() if p.lower() not in ("de", "del", "la", "los", "las")]
+        utiles = [p for p in palabras if fuentes.sin_tildes(p).upper() not in _NO_NOMBRE]
+        if len(palabras) >= 2 and len(utiles) == len(palabras):
+            salida.append(" ".join(m.group(1).split()))
+    return salida
+
+
+def datos_personales(texto: str) -> dict:
+    """Datos personales APARENTES en un texto. Solo cuenta: nunca devuelve ni guarda los valores.
+    Es una heurística; un resultado limpio no garantiza que no haya datos de personas."""
+    t = texto or ""
+    r = {"cedulas": len(_RE_CEDULA.findall(t)), "nit": len(_RE_NIT.findall(t)),
+         "celulares": len(_RE_CELULAR.findall(t)), "correos": len(_RE_CORREO.findall(t)),
+         "radicados": len(_RE_RADICADO.findall(t)), "nombres_con_senal": len(nombres_con_senal(t))}
+    motivos = [k for k in ("cedulas", "celulares", "correos", "radicados", "nombres_con_senal") if r[k]]
+    r["aparentes"] = bool(motivos)
+    r["motivo"] = ("aparenta tener: " + ", ".join(m.replace("_", " ") for m in motivos)) if motivos else None
+    return r
+
+
+def _tejas(texto: str, n: int = 4) -> set:
+    pal = re.findall(r"\w+", fuentes.sin_tildes(texto or "").lower())
+    return {" ".join(pal[i:i + n]) for i in range(max(0, len(pal) - n + 1))}
+
+
+def similitud(a: str, b: str) -> float:
+    """Parecido entre dos textos (0 a 1): proporción de secuencias de 4 palabras que comparten."""
+    ta, tb = _tejas(a), _tejas(b)
+    return round(len(ta & tb) / len(ta | tb), 2) if ta and tb else 0.0
+
+
+def versiones(textos: dict, umbral: float = 0.5) -> dict:
+    """{id: {"duplicado_exacto_de": id | None, "version_similar_de": [{"id", "similitud"}]}}.
+    Duplicado exacto = misma huella del texto. Versión similar = parecido ≥ umbral. No borra nada."""
+    ids = sorted(textos)
+    huellas, salida = {}, {i: {"duplicado_exacto_de": None, "version_similar_de": []} for i in ids}
+    for i in ids:
+        h = huella(textos[i])
+        if h in huellas:
+            salida[i]["duplicado_exacto_de"] = huellas[h]
+        else:
+            huellas[h] = i
+    tejas = {i: _tejas(textos[i]) for i in ids}
+    for k, i in enumerate(ids):
+        for j in ids[k + 1:]:
+            if not tejas[i] or not tejas[j] or salida[j]["duplicado_exacto_de"] == i:
+                continue
+            sim = round(len(tejas[i] & tejas[j]) / len(tejas[i] | tejas[j]), 2)
+            if sim >= umbral:
+                salida[i]["version_similar_de"].append({"id": j, "similitud": sim})
+                salida[j]["version_similar_de"].append({"id": i, "similitud": sim})
+    return salida

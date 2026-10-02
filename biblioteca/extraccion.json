@@ -1,0 +1,1292 @@
+{
+ "documentos": {
+  "10ThPmF4JCxuwkR_BifQ8LnUlf-Ta4Sf8": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 21120,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 454.2,
+    "palabras": 3244,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.81,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/10ThPmF4JCxuwkR_BifQ8LnUlf-Ta4Sf8/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:00.606Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2015",
+   "sha256_texto": "35e1ea8cadd046ab5121d750e7cac643b45d8aa1d661d21e4ba805f11798792c",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 1755 DE 2015.doc",
+   "version_similar_de": []
+  },
+  "11vkln1XxFe6pNAcHgV27fK_eOj49hUr0": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 908,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 33.6,
+    "palabras": 125,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.75,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/11vkln1XxFe6pNAcHgV27fK_eOj49hUr0/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:34.768Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/fuentes",
+   "sha256_texto": "064cb7cc6442dc0cde6a6e7a21a31eae02676454b65dc316fbea4000b2974c6f",
+   "tipo_documental": "otro",
+   "tipo_fuente": "otro",
+   "titulo": "FUENTES DE LAS LEYES.doc",
+   "version_similar_de": []
+  },
+  "12CSvNCvFNVbReqYlYG80Gwl9s12EXujL": {
+   "apto_indice": true,
+   "area": "constitucional (tutela)",
+   "calidad": {
+    "caracteres": 8299,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 782.7,
+    "palabras": 1250,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.77,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "parentesis": 1,
+     "puntos": 24
+    },
+    "total": 25
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/12CSvNCvFNVbReqYlYG80Gwl9s12EXujL/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:46:59.158Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/ACCIONES DE TUTELA",
+   "sha256_texto": "6ebd0e8f5cd360c8b7437f657aef88f7062322ebe7b027156a51d9fdcca19d21",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "TUTELA HABEAS DATA (1).docx",
+   "version_similar_de": [
+    {
+     "id": "1oFYK8CyvsPK4-wyd1si_qQLVogKLQ6a8",
+     "similitud": 0.87
+    }
+   ]
+  },
+  "16JQy4C2yQ24oVeLfCbTRsdM3v14HiswK": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 2787,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 118.6,
+    "palabras": 440,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.79,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/16JQy4C2yQ24oVeLfCbTRsdM3v14HiswK/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:30.350Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "b525c9ad696c61c5dee9c98eb349ad8fcfa86653f31aaee10a011eece89df9d5",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 337 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1B-AALSD2xApprnwpJnThFOoeNoqWzC0O": {
+   "apto_indice": true,
+   "area": "derecho de petición",
+   "calidad": {
+    "caracteres": 1467,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 202.5,
+    "palabras": 166,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.53,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "subrayas": 8
+    },
+    "total": 8
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1B-AALSD2xApprnwpJnThFOoeNoqWzC0O/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:03.751Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026",
+   "sha256_texto": "d4b354e9ef93a9b7a15711f6de28e9796fb38becf7546cd9dd17b078e8e02252",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "MODELO DE DERECHO DE PETICIÓN  ante empresas de servicios PÚBLICOS (1).docx",
+   "version_similar_de": []
+  },
+  "1CQlsaABXaBOrIeidvF_rRzNRwzBcHFOI": {
+   "apto_indice": false,
+   "area": "civil",
+   "calidad": {
+    "caracteres": 133,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 11.6,
+    "palabras": 23,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.64,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1CQlsaABXaBOrIeidvF_rRzNRwzBcHFOI/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:43.933Z",
+   "motivo_no_apto": "texto demasiado corto (133 caracteres): no es un documento útil",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA CIVIL/SENTENCIAS 2022-2023",
+   "sha256_texto": "d43f862c0d939e33b7f4994635720c3d46c5c32fffa1f1802255ff49bfc189e3",
+   "tipo_documental": "jurisprudencia",
+   "tipo_fuente": "sentencia",
+   "titulo": "AC2889-2022 [2013-00169-01].docx",
+   "version_similar_de": []
+  },
+  "1EFKLoEVcAkrTtXwrg57AP7-53NGu1VVK": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 3396,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 141.5,
+    "palabras": 532,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.79,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1EFKLoEVcAkrTtXwrg57AP7-53NGu1VVK/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:32.619Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "1f0078d2bf83c6ac7862817d7236e72e85e881d62e4bc53d7722b5e436002a98",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 329 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1KMU_wql6YVQqFSQTcRPpOpLs7VHUW8fd": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 1466,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 66.6,
+    "palabras": 257,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.69,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1KMU_wql6YVQqFSQTcRPpOpLs7VHUW8fd/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:06.949Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "7085ddc17e58793bf6fb85ea225b9d648f73a08d16a82ed5b0d03f053e38f617",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 287 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1NJlNEGv_AazjtHYywj0bO3ZY6KsCfc02": {
+   "apto_indice": true,
+   "area": "derecho de petición",
+   "calidad": {
+    "caracteres": 1593,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 221.8,
+    "palabras": 249,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.79,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1NJlNEGv_AazjtHYywj0bO3ZY6KsCfc02/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:01.127Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026",
+   "sha256_texto": "9afc8b12e52418af88b28ac56c5d56600449246ba930a580d657796242b17204",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "CARACTERÍSTICAS DEL DERECHO PETICIÓN (1).docx",
+   "version_similar_de": []
+  },
+  "1O-z7l8t_2CldzxIy6CjMKYj22uyqOrgw": {
+   "apto_indice": false,
+   "area": "penal",
+   "calidad": {
+    "caracteres": 0,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": null,
+    "palabras": 0,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.0,
+    "vacio": true
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "enlace": "https://drive.google.com/file/d/1O-z7l8t_2CldzxIy6CjMKYj22uyqOrgw/view",
+   "error": "el conector devolvió texto vacío",
+   "estado": "LEÍDO",
+   "leido_en": "2026-10-02T15:27:46.927Z",
+   "motivo_no_apto": "sin texto",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA PENAL/2022-2023",
+   "tipo_documental": "jurisprudencia",
+   "titulo": "SP3574-2022(54189) PUBLICACIÓN.docx"
+  },
+  "1OujGvZiRKK4MxLTEqvFINNabEh_e8TGK": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 2859,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 121.7,
+    "palabras": 450,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.78,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1OujGvZiRKK4MxLTEqvFINNabEh_e8TGK/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:31.707Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "45d540222ab4adc366f8d835bcb510bbdd0b0c9f0e84c8883cf88593ce418365",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 321 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1QmtZAuATt5FDOCTWxggTjhOy_jWhrg0l": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 1417,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 44.1,
+    "palabras": 223,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.75,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1QmtZAuATt5FDOCTWxggTjhOy_jWhrg0l/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:49.768Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/04_PLANTILLAS/ESTATUTOS",
+   "sha256_texto": "222e155fc42cc05b3f363ec442973f90dc39e781dd37caeb082fd911eded30e6",
+   "tipo_documental": "norma",
+   "tipo_fuente": "otro",
+   "titulo": "Estatuto de Ciencia y Tecnología.docx",
+   "version_similar_de": []
+  },
+  "1SwVktbx3waK6KwWuk0kWHleef1IxfBHs": {
+   "apto_indice": false,
+   "area": "civil",
+   "calidad": {
+    "caracteres": 41,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 3.5,
+    "palabras": 6,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.85,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1SwVktbx3waK6KwWuk0kWHleef1IxfBHs/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:45.014Z",
+   "motivo_no_apto": "texto demasiado corto (41 caracteres): no es un documento útil",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA CIVIL/SENTENCIAS 2022-2023",
+   "sha256_texto": "5735d5a2ce36177e6bdbc0369cbbe9f328de68cd49c56c56173e10b126c3ec29",
+   "tipo_documental": "jurisprudencia",
+   "tipo_fuente": "sentencia",
+   "titulo": "ALGUNOS-ESTUDIOS-CONTEMPORÁNEOS-EL-CONTRATO-DE-COMPRAVENTA-P.docx",
+   "version_similar_de": []
+  },
+  "1V1ylIxvo44JOq8Yd5IvZ6WhcEe5qq1Z-": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 3044,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 114.9,
+    "palabras": 554,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.71,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1V1ylIxvo44JOq8Yd5IvZ6WhcEe5qq1Z-/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:43.119Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/INDICE LEYES",
+   "sha256_texto": "03a0238c3328b420915af70ae5ebe2063e63f4a578276f7f91d14c6ca9cbc284",
+   "tipo_documental": "otro",
+   "tipo_fuente": "otro",
+   "titulo": "2016.doc",
+   "version_similar_de": []
+  },
+  "1WgIc1eO0_3db2CGPR2xjhW-no-d9BS-YKtkhMfhH1rk": {
+   "apto_indice": false,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 3032,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 1560.2,
+    "palabras": 413,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.66,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "corchetes": 1
+    },
+    "total": 1
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://docs.google.com/document/d/1WgIc1eO0_3db2CGPR2xjhW-no-d9BS-YKtkhMfhH1rk/edit",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:36:40.175Z",
+   "motivo_no_apto": "nota interna del proyecto, no es una fuente jurídica",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS",
+   "sha256_texto": "c28210a3cd3477947bf5243ed45dbeaf6a24a682b0a733dfd56a331c9f873065",
+   "tipo_documental": "otro",
+   "tipo_fuente": "otro",
+   "titulo": "00_MANIFIESTO_NUCLEO_LEXCOL",
+   "version_similar_de": []
+  },
+  "1YZJAjukuv2vBp19Vsg1LEweCuXDQmXyF": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 2334,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 101.5,
+    "palabras": 351,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.74,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1YZJAjukuv2vBp19Vsg1LEweCuXDQmXyF/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:03.933Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "590535e7ad4db3bd05ac049574457915a960007a6a2b43101fda9db4391dfbf6",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 342 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1Z96Emjm3bsthXPpLVKvkXB5P04xmYfqw": {
+   "apto_indice": false,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 11283,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 89.5,
+    "palabras": 1716,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.76,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": true,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": "aparenta tener: radicados, nombres con senal",
+    "nit": 0,
+    "nombres_con_senal": 3,
+    "radicados": 7
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1Z96Emjm3bsthXPpLVKvkXB5P04xmYfqw/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:49.099Z",
+   "motivo_no_apto": "datos personales aparentes: aparenta tener: radicados, nombres con senal (requiere revisión humana)",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/2024",
+   "sha256_texto": "dd94b27a874dd2a273c6eb2d9d51fc3566059ad333f7e70d12da0eba7e3de22b",
+   "tipo_documental": "jurisprudencia",
+   "tipo_fuente": "sentencia",
+   "titulo": "ATC705-2024.pdf",
+   "version_similar_de": []
+  },
+  "1ZWfRUEqQe9eBTKsrvthugJdZ3gU3pl5E": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 1172,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 53.3,
+    "palabras": 192,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.73,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1ZWfRUEqQe9eBTKsrvthugJdZ3gU3pl5E/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:33.576Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "23cbe2fbc04f0319a034d7bd6a1e39996b8a6a93627941f387f3a9da40a86af8",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 290 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1ZaPeWeIPARVE8QUFprX_nyCEilV1UEh8": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 6242,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 227.0,
+    "palabras": 976,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.8,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1ZaPeWeIPARVE8QUFprX_nyCEilV1UEh8/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:47.777Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "dd3b1b4e6d05c08b90ae606d1809711bb2dc60ed86b7c47be5617f41bb4e1e13",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 345 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1Zd6hJhldqcA25grVzDoTDaO369dIisD7": {
+   "apto_indice": true,
+   "area": "derecho de petición",
+   "calidad": {
+    "caracteres": 3208,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 422.6,
+    "palabras": 165,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.26,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "parentesis": 4,
+     "subrayas": 19
+    },
+    "total": 23
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1Zd6hJhldqcA25grVzDoTDaO369dIisD7/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:02.415Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026",
+   "sha256_texto": "7737d17f9edc6676f7f4ff12bd443119379a120e09687145c3aa78f8232554b1",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "FORMATO DERECHO DE PETICIÓN (1).docx",
+   "version_similar_de": []
+  },
+  "1bQ264RfIFPwveOVWRaZQUK5u0GLV7tuF": {
+   "apto_indice": false,
+   "area": "general (varias áreas)",
+   "enlace": "https://drive.google.com/file/d/1bQ264RfIFPwveOVWRaZQUK5u0GLV7tuF/view",
+   "error": "el conector no pudo leerlo: File content cannot be retrieved for item 1bQ264RfIFPwveOVWRaZQUK5u0GLV7tuF due to unsupported mime type. Try using `download_file_content` to see if the file contents can be downloaded and decoded.",
+   "estado": "ENCONTRADO",
+   "leido_en": "2026-10-02T15:27:45.502Z",
+   "motivo_no_apto": "no se pudo leer",
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2022",
+   "tipo_documental": "norma",
+   "titulo": "LEY 2240 DE 2022.rtf"
+  },
+  "1bglpq_wMAm1AOwnNAbEB4Oo-zu12pKR2": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 4348,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 173.9,
+    "palabras": 665,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.8,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1bglpq_wMAm1AOwnNAbEB4Oo-zu12pKR2/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:29.075Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "cab8230f3f84574fa8f15b088b257e01ac8a28ad0317630d78da8651512d8bf6",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 343 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1buIznAUY4CC8_uFs88clnSyJxQbyTCT7": {
+   "apto_indice": true,
+   "area": "derecho de petición",
+   "calidad": {
+    "caracteres": 2402,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 305.0,
+    "palabras": 386,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.73,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "parentesis": 2,
+     "subrayas": 10
+    },
+    "total": 12
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1buIznAUY4CC8_uFs88clnSyJxQbyTCT7/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:05.106Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026",
+   "sha256_texto": "3632de754c0f7a1952de87fdd4c0c893f5869ffde08537b886a2751f0af7a17b",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "MODELO DERECHO DE PETICION PARA FOTOMULTAS (1).docx",
+   "version_similar_de": []
+  },
+  "1dofbSRuIIz7ed1oLiqfF944ub7hnUVvA": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 3330,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 138.8,
+    "palabras": 506,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.8,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1dofbSRuIIz7ed1oLiqfF944ub7hnUVvA/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:05.895Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "07c1b6734ccb679bfad05fe58f426f4da9bc82e8ecea6d4d5d0d7000e0097ee8",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 339 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1fN3EHBoa3QPJUeNw7B0B2KPF6ZnBgSgR": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 7670,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 251.5,
+    "palabras": 1220,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.8,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1fN3EHBoa3QPJUeNw7B0B2KPF6ZnBgSgR/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:01.987Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2006",
+   "sha256_texto": "a25cf8aab9a53518de5368b37ccf185c8cdb783f88c9c8a3dd8141ac24fbbe0a",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 1095 DE 2006.doc",
+   "version_similar_de": []
+  },
+  "1k2Ti1MO8WQ0ePy7PPe_pj8pE0cBQFWHX": {
+   "apto_indice": true,
+   "area": "por clasificar",
+   "calidad": {
+    "caracteres": 4782,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 45.8,
+    "palabras": 823,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.71,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1k2Ti1MO8WQ0ePy7PPe_pj8pE0cBQFWHX/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:05.631Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/TABLAS LIQUIDADORAS - 2026",
+   "sha256_texto": "a4f7dba2bd269373950d2d1ef91aa07e872f8200909f82236c397afd2e57c848",
+   "tipo_documental": "tabla de liquidación",
+   "tipo_fuente": "otro",
+   "titulo": "0.ACONTENIDOLIQUIDACIONES.doc",
+   "version_similar_de": []
+  },
+  "1lUnJ1qkfMDNfJQXsPA1Ec8FGLuP7nBju": {
+   "apto_indice": true,
+   "area": "derecho de petición",
+   "calidad": {
+    "caracteres": 1079,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 5.6,
+    "palabras": 142,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.63,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "parentesis": 4,
+     "subrayas": 12
+    },
+    "total": 16
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1lUnJ1qkfMDNfJQXsPA1Ec8FGLuP7nBju/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:47:01.781Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026",
+   "sha256_texto": "9437afd98d23af2f8e98b1a043ad8cd88c543c7e0895d09156d879df86fd029e",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "Derecho de peticion para cancelar servicio de internet (1).docx",
+   "version_similar_de": []
+  },
+  "1oFYK8CyvsPK4-wyd1si_qQLVogKLQ6a8": {
+   "apto_indice": true,
+   "area": "constitucional (tutela)",
+   "calidad": {
+    "caracteres": 8087,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 764.7,
+    "palabras": 1219,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.78,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {
+     "parentesis": 1,
+     "puntos": 24
+    },
+    "total": 25
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1oFYK8CyvsPK4-wyd1si_qQLVogKLQ6a8/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T04:46:59.714Z",
+   "motivo_no_apto": null,
+   "propietario": "tercero",
+   "ruta": "PACK JURIDICO 1/ACCIONES DE TUTELA",
+   "sha256_texto": "147aebcbcd181e339c40683c7a8b8075d31bec17bc1ed0183a1342721e1a0e5d",
+   "tipo_documental": "plantilla/minuta",
+   "tipo_fuente": "plantilla",
+   "titulo": "TUTELA PARA PROTEGER DERECHO AL BUEN NOMBRE (1).docx",
+   "version_similar_de": [
+    {
+     "id": "12CSvNCvFNVbReqYlYG80Gwl9s12EXujL",
+     "similitud": 0.87
+    }
+   ]
+  },
+  "1p7_i8PKvv1d4dEM9RQ_br_z-BKZSQJcy": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 5615,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 170.2,
+    "palabras": 908,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.78,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1p7_i8PKvv1d4dEM9RQ_br_z-BKZSQJcy/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:08.082Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1999",
+   "sha256_texto": "9df1029a7f726c7727ae99cc8f79b729faf2f162b3502520b9566cc96f48f2fe",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 548 DE 1999.doc",
+   "version_similar_de": []
+  },
+  "1pvnFd8zguaJL4rWQFgNpL1dQgQwb3hE2": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 11152,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 297.4,
+    "palabras": 1782,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.78,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1pvnFd8zguaJL4rWQFgNpL1dQgQwb3hE2/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:05.186Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "831555ec5500ab237ffeeba80f3c9ec804b535b0389d276d69d8ca8933ecc61d",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 263 DE 1996- DEROGADA.doc",
+   "version_similar_de": []
+  },
+  "1t5pmAw9LYU6n1UHJvXSihY1ail-KgRDi": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 3277,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 136.5,
+    "palabras": 512,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.76,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1t5pmAw9LYU6n1UHJvXSihY1ail-KgRDi/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:27.898Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "a7f770e909e9f44d986790fe34afcecda9fc0d2a89850d58526c651ca18182b7",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 338 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1tx_freHMhdbJZebL78bbhsfVhEJMi7bW": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 10856,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 293.4,
+    "palabras": 1648,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.81,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1tx_freHMhdbJZebL78bbhsfVhEJMi7bW/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:02.686Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "7673c7b0adea4f75f618fab8cce63f4f56d601594a73d93e900fcb7172745b70",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 327 DE 1996.doc",
+   "version_similar_de": []
+  },
+  "1yk8907-5ut4e-TOnbnf_VlW_KdqDVjrC": {
+   "apto_indice": true,
+   "area": "general (varias áreas)",
+   "calidad": {
+    "caracteres": 1811,
+    "caracteres_danados": 0,
+    "caracteres_por_kb": 82.3,
+    "palabras": 278,
+    "parece_escaneado": false,
+    "proporcion_letras": 0.78,
+    "vacio": false
+   },
+   "campos_por_completar": {
+    "por_patron": {},
+    "total": 0
+   },
+   "datos_personales": {
+    "aparentes": false,
+    "cedulas": 0,
+    "celulares": 0,
+    "correos": 0,
+    "motivo": null,
+    "nit": 0,
+    "nombres_con_senal": 0,
+    "radicados": 0
+   },
+   "duplicado_exacto_de": null,
+   "enlace": "https://drive.google.com/file/d/1yk8907-5ut4e-TOnbnf_VlW_KdqDVjrC/view",
+   "estado": "EXTRAÍDO",
+   "leido_en": "2026-10-02T15:27:32.941Z",
+   "motivo_no_apto": null,
+   "propietario": "propio",
+   "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996",
+   "sha256_texto": "56b5ffd72f80f294259eae0d0c2f342af9b09cc2e53bca92b16e32bff9ccd449",
+   "tipo_documental": "norma",
+   "tipo_fuente": "ley",
+   "titulo": "LEY 326 DE 1996.doc",
+   "version_similar_de": []
+  }
+ },
+ "nota": "Registro de extracción de la muestra. No contiene texto de los documentos: el texto está en corpus/extraidos/ (fuera de git). Los datos personales se cuentan, nunca se copian."
+}
