@@ -51,6 +51,9 @@ def _disponibilidad(comprobacion: str, entorno: dict) -> dict:
         return {"configurado": ok, "detalle": ("Índice con fragmentos en " + fuentes.ruta_db()) if ok else
                 "No configurado: no existe el índice o está vacío (" + fuentes.ruta_db() + "). SQLite " + sqlite3.sqlite_version + "."}
     if comprobacion == "biblioteca":
+        if not os.path.isfile(biblioteca.ruta_db()):      # consultar el registro no crea la base
+            return {"configurado": False, "detalle": "Catálogo sin crear: falta sincronizar el inventario "
+                                                     "(scripts/sincronizar_biblioteca.py)."}
         try:
             con = biblioteca.conexion()
             try:
@@ -64,11 +67,12 @@ def _disponibilidad(comprobacion: str, entorno: dict) -> dict:
                 if n else "Catálogo vacío: falta sincronizar el inventario (scripts/sincronizar_biblioteca.py)."}
     if comprobacion == "extraccion":
         partes = {"python-docx": _hay_modulo("docx"), "pypdf": _hay_modulo("pypdf"),
-                  "pdftotext": shutil.which("pdftotext") is not None}
+                  "pdftotext": shutil.which("pdftotext") is not None,
+                  "conversor de .doc": any(shutil.which(x) for x in ("antiword", "catdoc", "soffice", "libreoffice"))}
         pdf = partes["pypdf"] or partes["pdftotext"]
         return {"configurado": partes["python-docx"] or pdf,
                 "detalle": ", ".join(f"{k}: {'sí' if v else 'no'}" for k, v in partes.items()) +
-                ("" if pdf else ". Sin extractor de PDF en este servidor.") + " OCR: no."}
+                ("" if pdf else ". Sin extractor de PDF en este servidor.") + ". RTF: sí (lector propio). OCR: no."}
     if comprobacion == "voyage":
         carpeta, llave = os.path.isdir("bd_vectorial"), bool(os.getenv("VOYAGE_API_KEY"))
         paquetes = _hay_modulo("chromadb") and _hay_modulo("voyageai")

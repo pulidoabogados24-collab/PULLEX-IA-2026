@@ -1,13 +1,13 @@
 {
  "version": "2026-10-02",
  "que_es": "Registro B de la especificación LEXCOL (sección 4): motores de IA, búsqueda, clasificación y extracción REALMENTE presentes en el código de PULLEX IA. No es el catálogo de modelos jurídicos (minutas y escritos), que está en la Biblioteca (biblioteca.py).",
- "como_se_levanto": "Lectura del código (app.py, fuentes.py, biblioteca.py, scripts/ingesta_corpus.py), de render.yaml, requirements.txt y .env.example en la rama pul/010-biblioteca. No se agregó ningún proveedor que no esté en el código.",
+ "como_se_levanto": "Lectura del código (app.py, fuentes.py, biblioteca.py, biblioteca_recorrido.py, scripts/ingesta_corpus.py), de render.yaml, requirements.txt y .env.example en la rama pul/011-biblioteca-app. No se agregó ningún proveedor que no esté en el código. Las cuatro páginas oficiales de «verificaciones» se volvieron a leer el 2026-10-02 al cerrar la tarea y coinciden con lo registrado.",
  "advertencia_pruebas": "Hasta el 2026-10-02 ninguna llamada se ha hecho contra un proveedor real desde el entorno de desarrollo: todas las pruebas usan un doble del modelo (FakeAnthropic en tests/conftest.py) o el servidor simulado (demo/servidor_simulado.py). Calidad jurídica, latencia y costo por consulta reales: sin medir.",
  "verificaciones": {
   "anthropic_precios": {
    "url": "https://platform.claude.com/docs/en/about-claude/pricing",
    "fecha": "2026-10-02",
-   "metodo": "WebFetch (la herramienta resume la página con un modelo auxiliar; conviene releerla antes de fijar precios al público)"
+   "metodo": "WebFetch, dos lecturas el mismo día con el mismo resultado (la herramienta resume la página con un modelo auxiliar; conviene releerla antes de fijar precios al público)"
   },
   "anthropic_modelos": {
    "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
@@ -146,7 +146,7 @@
    "limites": [
     "Búsqueda por palabras (no por significado): no encuentra sinónimos.",
     "Fragmentos de unos 1.200 caracteres; máximo 6 por respuesta y 3 por documento.",
-    "El corpus real está vacío: solo se ha probado con documentos de prueba."
+    "El corpus real solo existe en el equipo del operador (27 documentos de muestra, docs/14-BIBLIOTECA-DRIVE.md); el servidor desplegado no tiene corpus."
    ],
    "tratamiento_datos": {
     "se_envia_al_proveedor": ["Nada: corre dentro del servidor de la aplicación."],
@@ -163,14 +163,14 @@
    "nombre": "Búsqueda de la Biblioteca (léxica ampliada)",
    "tipo": "búsqueda",
    "proveedor": "Local: SQLite FTS5 + sinónimos jurídicos + diccionario de trámites (biblioteca.py)",
-   "version": "reglas 2026-10-02.1",
+   "version": "reglas 2026-10-02.2",
    "version_variable": "PULLEX_BIBLIOTECA_DB",
    "comprobacion": "biblioteca",
    "funcion": "Encuentra modelos jurídicos por título, clasificación y texto extraído, ampliando la consulta con sinónimos y con el trámite que sugiere la descripción del problema. Aplica los permisos antes de recuperar.",
    "usos": ["GET /api/biblioteca/buscar", "POST /api/biblioteca/recomendar (parte determinista)"],
    "limites": [
     "No usa embeddings: «semántica» aquí significa ampliación por diccionarios revisables, no similitud de significado.",
-    "La búsqueda en el contenido solo cubre modelos con texto extraído; hoy el inventario real solo tiene metadatos.",
+    "La búsqueda en el contenido solo cubre documentos con texto cargado en el catálogo (--textos o --desde-corpus). El inventario real en git solo trae metadatos: el texto de los 27 documentos de muestra está en el equipo del operador, fuera del repositorio.",
     "Punto de extensión para embeddings: biblioteca.PUNTUADORES_EXTRA (vacío)."
    ],
    "tratamiento_datos": {
@@ -180,19 +180,19 @@
     "retencion": "biblioteca/biblioteca.db en el disco del servidor; se reconstruye desde biblioteca/inventario.json."
    },
    "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor (local).", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
-   "pruebas": {"estado": "solo simuladas", "detalle": "tests/test_biblioteca.py con un inventario de prueba y tests/e2e_biblioteca.py con un catálogo de ejemplo. Sin medición de calidad sobre el Drive real."},
+   "pruebas": {"estado": "solo simuladas", "detalle": "tests/test_biblioteca.py con un inventario de prueba y tests/e2e_biblioteca.py con un catálogo de ejemplo. Sobre el inventario real (8.269 archivos) solo se midió el tiempo de respuesta, no la calidad de los resultados."},
    "alternativa_si_falla": "Si la consulta al texto falla se usa solo la coincidencia en títulos y clasificación."
   },
   {
    "id": "clasificador_reglas",
    "nombre": "Clasificación y sensibilidad por reglas",
    "tipo": "clasificación",
-   "proveedor": "Local: expresiones regulares (biblioteca.clasificar, fuentes.clasificar_nombre, fuentes.es_excluido, scripts/cosechar_inventario_drive.py)",
-   "version": "reglas 2026-10-02.1",
+   "proveedor": "Local: expresiones regulares (biblioteca.clasificar, biblioteca_recorrido.clasificar_carpeta, fuentes.clasificar_nombre, fuentes.es_excluido, scripts/cosechar_inventario_drive.py)",
+   "version": "reglas 2026-10-02.2",
    "version_variable": null,
    "comprobacion": "siempre",
    "funcion": "Clasifica cada archivo por título y ruta (clase, área, tipo de escrito, trámite, autoridad), con nivel de confianza, y marca posibles datos personales. No es un modelo de IA: son reglas escritas a mano.",
-   "usos": ["scripts/sincronizar_biblioteca.py", "scripts/ingesta_corpus.py", "scripts/cosechar_inventario_drive.py"],
+   "usos": ["scripts/sincronizar_biblioteca.py", "scripts/mapa_biblioteca.py", "scripts/ingesta_corpus.py", "scripts/cosechar_inventario_drive.py"],
    "limites": [
     "Solo ve el nombre y la carpeta (y, si existe, el texto extraído): lo que no coincide con una regla queda «por clasificar».",
     "La detección de datos personales es por patrones: puede marcar de más o dejar pasar un caso; por eso lo dudoso queda fuera del índice hasta que lo decida una persona."
@@ -211,15 +211,15 @@
    "id": "extraccion_texto",
    "nombre": "Extracción de texto de documentos",
    "tipo": "extracción",
-   "proveedor": "Local: pypdf o pdftotext para PDF; python-docx (o lectura del XML) para DOCX (scripts/ingesta_corpus.py)",
-   "version": "python-docx 1.2.0 (fijado en requirements.txt); pypdf y pdftotext son opcionales",
+   "proveedor": "Local: pypdf o pdftotext para PDF; python-docx (o lectura del XML) para DOCX; lector propio para RTF; antiword, catdoc o LibreOffice para DOC (scripts/ingesta_corpus.py)",
+   "version": "python-docx 1.2.0 (fijado en requirements.txt); pypdf, pdftotext y los conversores de .doc son opcionales y dependen del equipo",
    "version_variable": null,
    "comprobacion": "extraccion",
-   "funcion": "Convierte PDF con texto, DOCX, TXT y MD en texto para indexar.",
+   "funcion": "Convierte PDF con texto, DOCX, DOC, RTF, TXT y MD en texto para indexar.",
    "usos": ["scripts/ingesta_corpus.py", "scripts/sincronizar_biblioteca.py --textos"],
    "limites": [
     "Sin OCR: un PDF escaneado no produce texto y queda marcado como LEÍDO con su motivo.",
-    "No lee .doc (Word antiguo), hojas de cálculo ni presentaciones.",
+    "Los .doc (Word antiguo) solo se leen si el equipo tiene antiword, catdoc o LibreOffice. No lee hojas de cálculo ni presentaciones.",
     "No ejecuta macros ni código incrustado: solo lee texto."
    ],
    "tratamiento_datos": {
@@ -229,7 +229,7 @@
     "retencion": "No aplica."
    },
    "costo": {"estado": "no_aplica", "detalle": "Sin cargo de proveedor (bibliotecas de código abierto).", "verificacion": null, "costo_por_consulta": "0 USD de proveedor"},
-   "pruebas": {"estado": "solo simuladas", "detalle": "Pytest con archivos de prueba pequeños; nunca se ha corrido contra el Drive real."},
+   "pruebas": {"estado": "solo simuladas", "detalle": "Pytest con archivos de prueba pequeños. La muestra real de 33 documentos (docs/14) la leyó el conector de Drive del asistente, no este extractor."},
    "alternativa_si_falla": "Un archivo que no se puede leer no detiene la carga: queda en el reporte con su motivo y sigue visible en el inventario."
   },
   {

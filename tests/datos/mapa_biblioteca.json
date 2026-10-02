@@ -1,0 +1,9 @@
+{
+ "nota": "Mapa de carpetas FICTICIO para las pruebas de la biblioteca (mismo formato de biblioteca/mapa_carpetas.json).",
+ "carpetas": [
+  {"drive_id": "PRUEBA-CARP-JUR", "ruta": "JURISPRUDENCIA DE PRUEBA/SALA LABORAL", "tipo_documental": "jurisprudencia", "confianza_tipo": "alta",
+   "regla_tipo": "T09", "area": "laboral y seguridad social", "confianza_area": "alta", "regla_area": "A05"},
+  {"drive_id": "PRUEBA-CARP-EST", "ruta": "PLANTILLAS DE PRUEBA/ESTATUTOS", "tipo_documental": "norma", "confianza_tipo": "media",
+   "regla_tipo": "T08", "area": "general (varias áreas)", "confianza_area": "alta", "regla_area": "A15"}
+ ]
+}

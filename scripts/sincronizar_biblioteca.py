@@ -14,8 +14,9 @@ Uso (desde la carpeta del proyecto):
     #    <drive_id>.<pdf|docx|txt|md> (o <ID de catálogo>.<ext>, p. ej. MOD-000012.docx):
     python scripts/sincronizar_biblioteca.py --textos descargas/modelos
 
-    # 3) Traer el texto de lo que ya está en el corpus del chat (origen "drive:<id>"):
-    python scripts/sincronizar_biblioteca.py --desde-corpus
+    # 3) Traer el texto de lo que ya está en el corpus del chat (el que cargó scripts/indexar_biblioteca.py
+    #    o scripts/ingesta_corpus.py --drive):
+    python scripts/sincronizar_biblioteca.py --desde-corpus [--corpus corpus/corpus.db]
 
     # 4) Una persona confirma que el texto y la clasificación de un modelo corresponden al original
     #    (INDEXADO → VALIDADO; NO es la validación jurídica, que va en biblioteca/fichas.json):
@@ -99,7 +100,8 @@ def imprimir_resumen(con):
           ("  ← aún faltan carpetas por listar: los totales son provisionales" if not a["denominador"].startswith("COMPLETO") else ""))
     for titulo, clave in (("Por estado de procesamiento", "por_estado"), ("Por validación jurídica", "por_validacion"),
                           ("Por clase de documento", "por_clase"), ("Por acceso", "por_acceso"),
-                          ("Por sensibilidad", "por_sensibilidad")):
+                          ("Por sensibilidad", "por_sensibilidad"), ("Por derechos", "por_derechos"),
+                          ("Según el inventario de Drive (procesado fuera de este catálogo)", "por_estado_inventario")):
         print(titulo + ": " + ", ".join(f"{k}={v}" for k, v in a[clave].items()))
     print("Por carpeta de primer nivel (estado: cantidad):")
     for carpeta, estados in sorted(a["por_carpeta"].items()):
@@ -121,6 +123,8 @@ def main(argv=None):
     ap.add_argument("--db", default=None, help="por defecto PULLEX_BIBLIOTECA_DB o biblioteca/biblioteca.db")
     ap.add_argument("--ids", default=None, help="registro de IDs de catálogo (por defecto biblioteca/ids_catalogo.json)")
     ap.add_argument("--fichas", default=None, help="fichas revisadas por personas (por defecto biblioteca/fichas.json)")
+    ap.add_argument("--mapa", default=None, help="mapa de carpetas (por defecto biblioteca/mapa_carpetas.json)")
+    ap.add_argument("--corpus", default=None, help="índice del corpus para --desde-corpus (por defecto PULLEX_CORPUS_DB o corpus/corpus.db)")
     ap.add_argument("--simular", action="store_true", help="mostrar los cambios sin escribir nada")
     ap.add_argument("--permitir-retiro-masivo", action="store_true",
                     help="retirar aunque desaparezca más de la mitad del catálogo (por defecto se evita: inventario truncado)")
@@ -132,6 +136,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     ruta_bd = _ruta(a.db, biblioteca.ruta_db())
     ruta_ids, ruta_fichas = _ruta(a.ids, biblioteca.ruta_ids()), _ruta(a.fichas, biblioteca.ruta_fichas())
+    ruta_mapa = _ruta(a.mapa, biblioteca.ruta_mapa())
     salida = {}
 
     if a.resumen:
@@ -154,7 +159,7 @@ def main(argv=None):
                     sys.exit(f"No existe la carpeta: {carpeta}")
                 salida["textos"] = cargar_textos(con, carpeta)
             if a.desde_corpus:
-                salida["desde_corpus"] = biblioteca.importar_del_corpus(con, _ruta(None, biblioteca.fuentes.ruta_db()))
+                salida["desde_corpus"] = biblioteca.importar_del_corpus(con, _ruta(a.corpus, biblioteca.fuentes.ruta_db()))
         print(json.dumps(salida, ensure_ascii=False, indent=1))
         return 0
 
@@ -174,11 +179,12 @@ def main(argv=None):
                 origen.backup(memoria)
         memoria.executescript(biblioteca.ESQUEMA)
         rep = biblioteca.sincronizar(memoria, inventario, ids if isinstance(ids, dict) else {}, fichas,
-                                     permitir_retiro_masivo=a.permitir_retiro_masivo)
+                                     permitir_retiro_masivo=a.permitir_retiro_masivo,
+                                     mapa=biblioteca._leer_json(ruta_mapa, {}))
         memoria.close()
     else:
         rep = biblioteca.sincronizar_archivos(ruta_inv, ruta_bd, ruta_ids, ruta_fichas,
-                                              permitir_retiro_masivo=a.permitir_retiro_masivo)
+                                              permitir_retiro_masivo=a.permitir_retiro_masivo, ruta_map=ruta_mapa)
     if a.json:
         print(json.dumps(rep, ensure_ascii=False, indent=1))
     else:

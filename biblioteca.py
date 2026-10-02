@@ -24,8 +24,15 @@ Estados (no se mezclan):
 - Validación jurídica: por defecto "sin_validar". Estar en Drive o llevar "2026" en el nombre no
   hace correcto un modelo; solo una persona cambia este estado (biblioteca/fichas.json).
 
+Clases documentales: el Drive real trae sobre todo normas y jurisprudencia propias y muy pocos
+MODELOS (plantillas y minutas). El catálogo las distingue con el campo `clase`, y por defecto solo
+busca modelos. Los niveles de acceso son `general` (todo usuario), `restringido` (solo el
+administrador) y `excluido` (nadie; solo la vista de auditoría). El material de TERCEROS entra como
+`restringido` mientras sus derechos de redistribución no se confirmen (docs/14, sección 5).
+
 Este módulo no importa app.py: las rutas se crean con `crear_router(...)` y app.py le pasa sus
-dependencias (autenticación, cupo de consultas, llamada al modelo).
+dependencias (autenticación, cupo de consultas, llamada al modelo). El recorrido trazable por
+guiones (mapa de carpetas, extracción, borrador) vive en biblioteca_recorrido.py.
 """
 import hashlib
 import json
@@ -35,14 +42,16 @@ import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone, timedelta
 
+import biblioteca_recorrido
 import documentos
 import fuentes
 
-REGLAS_VERSION = "2026-10-02.1"
+REGLAS_VERSION = "2026-10-02.2"
 
 CARPETA_MIME = "application/vnd.google-apps.folder"
 ATAJO_MIME = "application/vnd.google-apps.shortcut"
 POR_CLASIFICAR = "por clasificar"
+NO_APLICA = "no aplica"
 
 ESTADOS = ("ENCONTRADO", "LEÍDO", "EXTRAÍDO", "INDEXADO", "VALIDADO", "PENDIENTE")
 ESTADO_TEXTO = {
@@ -64,12 +73,22 @@ DERECHOS_TEXTO = {
     "no_redistribuible": "De un tercero: no redistribuible",
 }
 CLASES = ("modelo", "norma", "jurisprudencia", "doctrina", "material de estudio",
-          "tabla o liquidación", POR_CLASIFICAR)
+          "tabla o liquidación", "otro", POR_CLASIFICAR)
+CLASE_TEXTO = {
+    "modelo": "Modelos jurídicos (plantillas y minutas)", "norma": "Normas", "jurisprudencia": "Jurisprudencia",
+    "doctrina": "Doctrina", "material de estudio": "Material de estudio", "tabla o liquidación": "Tablas y liquidaciones",
+    "otro": "Otros documentos", POR_CLASIFICAR: "Por clasificar",
+}
+# Clases en las que "tipo de escrito" y "trámite" no tienen sentido (no son escritos reutilizables).
+CLASES_SIN_ESCRITO = ("norma", "jurisprudencia", "doctrina", "otro")
+# Tipo documental del mapa de carpetas (biblioteca/mapa_carpetas.json) → clase de este catálogo.
+CLASE_POR_MAPA = {"plantilla/minuta": "modelo", "norma": "norma", "jurisprudencia": "jurisprudencia", "doctrina": "doctrina",
+                  "material de estudio": "material de estudio", "tabla de liquidación": "tabla o liquidación", "otro": "otro"}
 SIN_INDICIOS = "SIN_INDICIOS"
 DIAS_HISTORICO = 730            # más de 24 meses sin modificarse → se avisa como histórico
 MAX_VISTA_PREVIA = 600
 MAX_POR_PAGINA = 50
-EXTRAIBLES = {"pdf", "docx", "txt", "md", "gdoc"}
+EXTRAIBLES = {"pdf", "docx", "doc", "rtf", "txt", "md", "gdoc"}
 
 ESQUEMA = f"""
 CREATE TABLE IF NOT EXISTS biblioteca_modelos(
@@ -107,6 +126,10 @@ CREATE TABLE IF NOT EXISTS biblioteca_modelos(
     indicios_contenido TEXT,
     huella TEXT NOT NULL,
     curados TEXT NOT NULL DEFAULT '[]',
+    busq_titulo TEXT NOT NULL DEFAULT '',
+    busq_meta TEXT NOT NULL DEFAULT '',
+    estado_inventario TEXT,
+    extraccion TEXT NOT NULL DEFAULT '{{}}',
     primera_vez TEXT, ultima_comprobacion TEXT, actualizado TEXT,
     retirado INTEGER NOT NULL DEFAULT 0, retirado_en TEXT, retiro_motivo TEXT);
 CREATE INDEX IF NOT EXISTS ix_bib_base ON biblioteca_modelos(titulo_base);
@@ -139,6 +162,18 @@ def ruta_fichas() -> str:
     return os.getenv("PULLEX_BIBLIOTECA_FICHAS", os.path.join("biblioteca", "fichas.json"))
 
 
+def ruta_mapa() -> str:
+    return os.getenv("PULLEX_BIBLIOTECA_MAPA", os.path.join("biblioteca", "mapa_carpetas.json"))
+
+
+def terceros_abiertos() -> bool:
+    """El material de TERCEROS entra como `restringido` (solo lo ve el administrador) mientras sus
+    derechos de redistribución no se confirmen (docs/14, sección 5: revisión humana obligatoria).
+    PULLEX_BIBLIOTECA_TERCEROS=general abre sus FICHAS a todos los usuarios; es una decisión del
+    dueño, no un valor por defecto. El TEXTO sigue otra regla: `texto_terceros_abierto()`."""
+    return os.getenv("PULLEX_BIBLIOTECA_TERCEROS", "").strip().lower() == "general"
+
+
 def texto_terceros_abierto() -> bool:
     """Por defecto el TEXTO de modelos de terceros con derechos sin confirmar solo lo ve el
     administrador (PUL-001, pendiente 8). PULLEX_BIBLIOTECA_TEXTO_TERCEROS=1 lo abre a todos."""
@@ -151,7 +186,24 @@ def conexion(ruta: str = None) -> sqlite3.Connection:
     con = sqlite3.connect(ruta)
     con.row_factory = sqlite3.Row
     con.executescript(ESQUEMA)
+    _migrar(con)
     return con
+
+
+# Columnas añadidas después de la primera versión del esquema: una base anterior las recibe aquí.
+_COLUMNAS_NUEVAS = (("busq_titulo", "TEXT NOT NULL DEFAULT ''"), ("busq_meta", "TEXT NOT NULL DEFAULT ''"),
+                    ("estado_inventario", "TEXT"), ("extraccion", "TEXT NOT NULL DEFAULT '{}'"))
+
+
+def _migrar(con) -> None:
+    presentes = {f[1] for f in con.execute("PRAGMA table_info(biblioteca_modelos)")}
+    faltan = [(c, d) for c, d in _COLUMNAS_NUEVAS if c not in presentes]
+    for columna, definicion in faltan:
+        con.execute(f"ALTER TABLE biblioteca_modelos ADD COLUMN {columna} {definicion}")
+    if faltan:
+        # La huella vacía obliga a recalcular esas filas en la siguiente sincronización.
+        con.execute("UPDATE biblioteca_modelos SET huella=''")
+        con.commit()
 
 
 def _ahora() -> datetime:
@@ -311,7 +363,6 @@ CLASE_POR_RUTA = [
     (("tablas liquidadoras",), "tabla o liquidación"),
 ]
 RUTAS_DE_MODELOS = ("modelos", "minutas", "derechos de peticion", "acciones de tutela", "medidas cautelares")
-_RE_ANIO = re.compile(r"(?<!\d)(19[5-9]\d|20[0-4]\d)(?!\d)")
 
 FINALIDAD_POR_TIPO = {
     "Derecho de petición": "Presentar una petición respetuosa a una autoridad o a un particular y obtener respuesta de fondo.",
@@ -356,21 +407,45 @@ def _aceptar(c: dict) -> dict:
     return c
 
 
-def clasificar(titulo: str, ruta: str = "") -> dict:
-    """Clasifica un archivo SOLO por su título y su ruta. Devuelve, por cada campo,
+# Área del mapa de carpetas → área de este catálogo (documentos.AREAS). Las que no están aquí
+# ("general (varias áreas)", "procesal informático"…) no deciden el área: se sigue con las demás reglas.
+AREA_POR_MAPA = {
+    "civil": A_CIV, "familia": A_CIV, "comercial": A_COM, "penal": A_PEN, "laboral y seguridad social": A_LAB,
+    "constitucional (tutela)": A_CON, "derecho de petición": A_CON, "disciplinario": A_DIS,
+    "tributario y aduanero": A_TRI, "notarial y registro": A_NOT,
+}
+_RE_TEMPORAL = re.compile(r"^(~\$|~WRL\d+)|\.tmp$", re.I)
+
+
+def es_temporal(titulo: str, extension: str = "") -> bool:
+    """Archivos temporales de Word ("~$Y 4 DE 1992.doc", "~WRL0003.tmp"): no son documentos."""
+    return bool(_RE_TEMPORAL.search(str(titulo or "").strip())) or str(extension or "").lower() == "tmp"
+
+
+def clasificar(titulo: str, ruta: str = "", carpeta: dict = None) -> dict:
+    """Clasifica un archivo SOLO por su título, su ruta y, si se entrega, la fila de su carpeta en el
+    mapa de carpetas (`carpeta`, de biblioteca/mapa_carpetas.json). Devuelve, por cada campo,
     {valor, confianza (alta|media|baja), regla}. Sin coincidencias → "por clasificar".
 
     >>> clasificar("MODELO DERECHO DE PETICION PARA FOTOMULTAS (1).docx")["tipo_escrito"]["valor"]
     'Derecho de petición'
+    >>> clasificar("LEY 767 DE 2002.doc", "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2002")["clase"]["valor"]
+    'norma'
     """
     sin = _campo(POR_CLASIFICAR, "baja", "sin coincidencias")
     r = {"clase": dict(sin), "area": dict(sin), "tipo_escrito": dict(sin), "tramite": dict(sin), "autoridad": dict(sin)}
     if "título reservado" in str(titulo):
         r["clase"]["regla"] = "título reservado: no se clasifica hasta resolver la sensibilidad"
         return r
+    if es_temporal(titulo):
+        r["clase"] = _campo("otro", "alta", "archivo temporal de Word: no es un documento")
+        for k in ("tipo_escrito", "tramite", "autoridad"):
+            r[k] = _campo(NO_APLICA, "alta", "archivo temporal")
+        return r
     t = titulo_base(titulo)
     partes = [norm(p) for p in re.split(r"[\\/]+", ruta or "") if p.strip()]
     rn = " / ".join(partes)
+    carpeta = carpeta if isinstance(carpeta, dict) else {}
 
     # --- tipo de escrito
     for pat, tipo in TIPOS_POR_TITULO:
@@ -384,8 +459,10 @@ def clasificar(titulo: str, ruta: str = "") -> dict:
                 break
     tipo = r["tipo_escrito"]["valor"]
 
-    # --- clase documental
-    tipo_fuente = fuentes.clasificar_nombre(titulo, "")["tipo"]
+    # --- clase documental: lo que dice el título manda; después el mapa de carpetas; después la ruta
+    nombre = fuentes.clasificar_nombre(titulo, "")
+    tipo_fuente = nombre["tipo"]
+    clase_mapa = CLASE_POR_MAPA.get(carpeta.get("tipo_documental") or "")
     if _RE_MODELO.search(t):
         r["clase"] = _campo("modelo", "alta", "título: modelo/minuta/formato/plantilla")
     elif _RE_ESTUDIO.search(t):
@@ -394,6 +471,9 @@ def clasificar(titulo: str, ruta: str = "") -> dict:
         r["clase"] = _campo("norma", "alta", "título: " + tipo_fuente)
     elif tipo_fuente == "sentencia":
         r["clase"] = _campo("jurisprudencia", "alta", "título: sentencia")
+    elif clase_mapa and carpeta.get("confianza_tipo") in ("alta", "media"):
+        r["clase"] = _campo(clase_mapa, carpeta["confianza_tipo"],
+                            "mapa de carpetas: regla " + str(carpeta.get("regla_tipo") or "s/d"))
     else:
         for claves, clase in CLASE_POR_RUTA:
             if any(k in rn for k in claves):
@@ -404,12 +484,17 @@ def clasificar(titulo: str, ruta: str = "") -> dict:
                 r["clase"] = _campo("modelo", "media", "el título nombra un tipo de escrito")
             elif any(k in rn for k in RUTAS_DE_MODELOS):
                 r["clase"] = _campo("modelo", "media", "carpeta de modelos o minutas")
+    clase = r["clase"]["valor"]
 
     # --- área
     por_carpeta = next((AREA_POR_CARPETA[p] for p in reversed(partes) if p in AREA_POR_CARPETA), None)
+    area_mapa = AREA_POR_MAPA.get(carpeta.get("area") or "")
     if por_carpeta:
         r["area"] = _campo(por_carpeta, "alta", "carpeta con nombre de área")
-    elif tipo in AREA_POR_TIPO and r["tipo_escrito"]["confianza"] == "alta":
+    elif area_mapa and carpeta.get("confianza_area") in ("alta", "media"):
+        r["area"] = _campo(area_mapa, carpeta["confianza_area"],
+                           "mapa de carpetas: regla " + str(carpeta.get("regla_area") or "s/d"))
+    elif clase not in CLASES_SIN_ESCRITO and tipo in AREA_POR_TIPO and r["tipo_escrito"]["confianza"] == "alta":
         r["area"] = _campo(AREA_POR_TIPO[tipo], "alta", "tipo de escrito: " + tipo)
     else:
         for clave, area in AREA_POR_RUTA:
@@ -421,6 +506,24 @@ def clasificar(titulo: str, ruta: str = "") -> dict:
                 if re.search(pat, t):
                     r["area"] = _campo(area, "media", "título: " + pat)
                     break
+
+    if clase in CLASES_SIN_ESCRITO:
+        # Una norma, una providencia o un libro no son escritos reutilizables: no tienen "tipo de escrito"
+        # ni "trámite". La autoridad es la que EXPIDIÓ el documento, si el nombre la identifica.
+        for k in ("tipo_escrito", "tramite"):
+            r[k] = _campo(NO_APLICA, "alta", "no aplica a la clase «" + clase + "»")
+        prefijo = biblioteca_recorrido._RE_PREFIJO.match(str(titulo).strip().upper())
+        if nombre.get("autoridad") and clase in ("norma", "jurisprudencia"):
+            r["autoridad"] = _campo(nombre["autoridad"], "media", "el nombre identifica a la autoridad que lo expidió")
+        elif clase == "jurisprudencia" and prefijo and prefijo.group(1) in biblioteca_recorrido.PREFIJOS_SALA:
+            r["autoridad"] = _campo("Corte Suprema de Justicia", "media",
+                                    "prefijo de providencia de la Corte Suprema: " + prefijo.group(1))
+        elif clase == "norma" and _RE_LEY.match(t):
+            r["autoridad"] = _campo("Congreso de la República", "media", "el nombre dice «ley número de año»")
+        else:
+            r["autoridad"] = _campo(NO_APLICA if clase in ("doctrina", "otro") else POR_CLASIFICAR, "baja",
+                                    "el nombre no identifica a la autoridad que lo expidió")
+        return {k: _aceptar(v) if v["valor"] != NO_APLICA else v for k, v in r.items()}
 
     # --- trámite
     for pat, tramite in TRAMITE_POR_TITULO:
@@ -445,13 +548,37 @@ def clasificar(titulo: str, ruta: str = "") -> dict:
     return {k: _aceptar(v) for k, v in r.items()}
 
 
-def anio_declarado(titulo: str, ruta: str = ""):
-    """Año escrito en el nombre o, si no, en la carpeta más cercana. Es una ETIQUETA del nombre:
-    no prueba que el contenido esté vigente ni que sea de ese año."""
-    for texto in [titulo] + list(reversed([p for p in re.split(r"[\\/]+", ruta or "") if p])):
-        hallados = _RE_ANIO.findall(str(texto))
-        if hallados:
-            return max(int(a) for a in hallados)
+_RE_ANIO = re.compile(r"(?<!\d)(1[89]\d\d|20\d\d)(?!\d)")
+_RE_ANIO_CIERRE = re.compile(r"(?:\bde\s*|-)(1[89]\d\d|20\d\d)(?!\d)", re.I)      # "… de 2020", "…DE1993", "…-2022"
+_RE_LEY = re.compile(r"^(l|ley)\s+\d{1,4}\s+de")
+
+
+def anio_declarado(titulo: str, ruta: str = "", ahora: datetime = None):
+    """Año escrito en el nombre o, si no, en la carpeta más cercana que nombre UN solo año. Es una
+    ETIQUETA del nombre: no prueba que el contenido esté vigente ni que sea de ese año.
+
+    Para normas y providencias ("LEY 767 DE 2002", "L. 2027 de 2020", "SL1817-2022") es el año que
+    cierra el identificador, no su número. Un año imposible ("DE 5012") se descarta. Una carpeta que
+    nombra un rango ("1992 A 2025") no dice el año de un archivo y se salta."""
+    tope = (ahora or _ahora()).year + 1
+
+    def valido(a) -> bool:
+        return 1800 <= int(a) <= tope
+
+    propio = fuentes.clasificar_nombre(str(titulo or ""), "").get("anio")
+    if propio and valido(propio):
+        return int(propio)
+    base = _RE_EXT.sub("", str(titulo or ""))
+    cierre = [int(a) for a in _RE_ANIO_CIERRE.findall(base) if valido(a)]
+    if cierre:
+        return cierre[-1]
+    hallados = [int(a) for a in _RE_ANIO.findall(base) if valido(a)]
+    if hallados:
+        return max(hallados)
+    for texto in reversed([p for p in re.split(r"[\\/]+", ruta or "") if p]):
+        distintos = {a for a in _RE_ANIO.findall(str(texto)) if valido(a)}
+        if len(distintos) == 1:
+            return int(distintos.pop())
     return None
 
 
@@ -583,21 +710,35 @@ def es_historico(modificado: str, ahora: datetime = None) -> bool:
     return bool(d and (ahora or _ahora()) - d > timedelta(days=DIAS_HISTORICO))
 
 
-def _derivar(e: dict, texto: str = None) -> dict:
+LIMITE_POR_CLASE = {
+    "norma": ("Sin validación: nadie ha comprobado que este archivo corresponda al texto oficial vigente. Confirma en "
+              "SUIN-Juriscol o en la Secretaría del Senado si la norma fue modificada, derogada o declarada inexequible."),
+    "jurisprudencia": ("Sin validación: nadie ha comprobado que la providencia siga en firme ni que la línea jurisprudencial "
+                       "se mantenga. Confírmalo en la relatoría de la corporación que la expidió."),
+    "doctrina": "Sin validación: la doctrina orienta, pero no prueba la vigencia de las normas que cita.",
+    "material de estudio": "Sin validación: es material de estudio, no un escrito para presentar ni una fuente oficial.",
+}
+LIMITE_GENERAL = "Sin validación jurídica: nadie ha revisado que este modelo cumpla la normativa vigente."
+
+
+def _derivar(e: dict, texto: str = None, carpeta: dict = None) -> dict:
     """Campos de la ficha calculados por reglas a partir de los metadatos (y del texto, si existe)."""
     titulo, ruta = e.get("titulo") or "", e.get("ruta") or ""
-    clas = clasificar(titulo, ruta)
-    tipo = clas["tipo_escrito"]["valor"]
+    ext = (e.get("extension") or "").lower()
+    clas = clasificar(titulo, ruta, carpeta)
+    clase, tipo = clas["clase"]["valor"], clas["tipo_escrito"]["valor"]
     propietario = e.get("propietario") or "tercero"
     modificado = e.get("modificado") or ""
-    ext = (e.get("extension") or "").lower()
-    limites = ["Sin validación jurídica: nadie ha revisado que este modelo cumpla la normativa vigente."]
-    if modificado:
-        limites.append(f"La última modificación del archivo es del {modificado[:10]}: las normas que cite pueden haber cambiado.")
+    limites = [LIMITE_POR_CLASE.get(clase, LIMITE_GENERAL)]
     declarado = anio_declarado(titulo, ruta)
-    if declarado and modificado and str(declarado) != modificado[:4]:
-        limites.append(f"El nombre o la carpeta dicen «{declarado}», pero el archivo no se modifica desde {modificado[:4]}: "
-                       "el año del nombre es una etiqueta, no una prueba de vigencia.")
+    if clase not in ("norma", "jurisprudencia"):
+        if modificado:
+            limites.append(f"La última modificación del archivo es del {modificado[:10]}: las normas que cite pueden haber cambiado.")
+        if declarado and modificado[:4].isdigit() and declarado > int(modificado[:4]):
+            limites.append(f"El nombre o la carpeta dicen «{declarado}», pero el archivo no se modifica desde {modificado[:4]}: "
+                           "el año del nombre es una etiqueta, no una prueba de vigencia.")
+    elif declarado:
+        limites.append(f"El año {declarado} sale del nombre del archivo (el de su identificador); no indica si sigue vigente.")
     if propietario != "propio":
         limites.append("Elaborado por un tercero: la redistribución está por confirmar.")
     if ext and ext not in EXTRAIBLES:
@@ -609,12 +750,12 @@ def _derivar(e: dict, texto: str = None) -> dict:
         citas = fuentes_en_texto(texto)
     else:
         datos, anexos, citas = [], [], []
-    if not datos and gen:
+    if not datos and gen and clase == "modelo":
         datos = [{"etiqueta": c["etiqueta"], "origen": "tipico_del_tipo", "requerido": bool(c["requerido"])}
                  for c in gen["campos"]]
-    finalidad = FINALIDAD_POR_TIPO.get(tipo)
+    finalidad = FINALIDAD_POR_TIPO.get(tipo) if clase not in CLASES_SIN_ESCRITO else None
     return {
-        "clasificacion": clas, "clase": clas["clase"]["valor"], "area": clas["area"]["valor"],
+        "clasificacion": clas, "clase": clase, "area": clas["area"]["valor"],
         "tipo_escrito": tipo, "tramite": clas["tramite"]["valor"], "autoridad": clas["autoridad"]["valor"],
         "anio": int(modificado[:4]) if re.match(r"^\d{4}", modificado) else None, "anio_declarado": declarado,
         "finalidad": finalidad,
@@ -656,12 +797,37 @@ def _aplicar_curaduria(campos: dict, ficha: dict, errores: list, ref: str) -> li
 
 # ============================================================================ SINCRONIZACIÓN
 _CAMPOS_META = ("drive_id", "titulo", "mime", "carpeta_id", "tamano", "modificado", "creado", "propietario",
-                "enlace", "extension", "estado", "ruta", "sensibilidad", "motivo")
+                "enlace", "extension", "estado", "ruta", "sensibilidad", "motivo",
+                # lo que la extracción hecha fuera de la aplicación dejó anotado en el inventario
+                "datos_personales", "apto_indice", "motivo_no_apto", "no_procesable", "error", "calidad",
+                "campos_por_completar", "leido_en", "sha256_texto")
+_CAMPOS_MAPA = ("tipo_documental", "confianza_tipo", "regla_tipo", "area", "confianza_area", "regla_area")
 
 
-def _huella(e: dict, ficha: dict) -> str:
-    base = [e.get(k) for k in _CAMPOS_META] + [REGLAS_VERSION, json.dumps(ficha or {}, sort_keys=True, ensure_ascii=False)]
+def _huella(e: dict, ficha: dict, carpeta: dict = None) -> str:
+    base = [e.get(k) for k in _CAMPOS_META] + [
+        REGLAS_VERSION, json.dumps(ficha or {}, sort_keys=True, ensure_ascii=False),
+        [(carpeta or {}).get(k) for k in _CAMPOS_MAPA], terceros_abiertos()]
     return hashlib.sha256(json.dumps(base, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def _extraccion_inventario(e: dict) -> dict:
+    """Lo que el inventario registra de una extracción hecha FUERA de esta instalación (por el
+    asistente o por los guiones de scripts/). Son cifras, nunca texto ni datos personales."""
+    if not any(k in e for k in ("leido_en", "calidad", "apto_indice", "no_procesable", "error")):
+        return {}
+    cal, campos = e.get("calidad") or {}, e.get("campos_por_completar") or {}
+    return {k: v for k, v in {
+        "estado": e.get("estado"), "leido_en": e.get("leido_en"), "apto_indice": e.get("apto_indice"),
+        "motivo_no_apto": e.get("motivo_no_apto"), "no_procesable": e.get("no_procesable"),
+        "error": str(e.get("error"))[:200] if e.get("error") else None,
+        "caracteres": cal.get("caracteres"), "parece_escaneado": cal.get("parece_escaneado"),
+        "campos_por_completar": campos.get("total"), "campos_por_patron": campos.get("por_patron") or None,
+    }.items() if v is not None}
+
+
+# Motivos del inventario que restringen el acceso: (texto que debe aparecer en el motivo, explicación).
+RESTRINGIR_POR_MOTIVO = (("nota interna", "Nota interna del proyecto: no es una fuente jurídica; solo la ve el administrador."),)
 
 
 def _siguiente_id(ids: dict) -> str:
@@ -683,21 +849,40 @@ def _texto_de(con, modelo_id: int):
     return f["texto"] if f else None
 
 
-def _columnas_ficha(e: dict, ficha: dict, texto, errores: list, ref: str, indicios: list = None) -> dict:
+def _columnas_ficha(e: dict, ficha: dict, texto, errores: list, ref: str, indicios: list = None,
+                    carpeta: dict = None) -> dict:
     """Ficha completa de un elemento del inventario: reglas + lo que una persona fijó en fichas.json.
-    `indicios`: datos personales detectados antes en el CONTENIDO (el inventario solo mira el título)."""
-    d = _derivar(e, texto)
+    `indicios`: datos personales detectados antes en el CONTENIDO (el inventario solo mira el título).
+    `carpeta`: fila de su carpeta en el mapa de carpetas, si existe."""
+    d = _derivar(e, texto, carpeta)
+    titulo = str(e.get("titulo") or "")[:300] or "(sin título)"
+    ext = (e.get("extension") or "").lower() or None
+    propietario = e.get("propietario") or "tercero"
     sens = e.get("sensibilidad") or SIN_INDICIOS
     motivo = e.get("motivo")
+    dp = e.get("datos_personales") if isinstance(e.get("datos_personales"), dict) else {}
+    if sens == SIN_INDICIOS and dp.get("aparentes"):
+        sens = "POSIBLE_DATO_PERSONAL"
+        motivo = ("La extracción registrada en el inventario encontró datos personales aparentes" +
+                  (f" ({dp['motivo']})" if dp.get("motivo") else "") + ": requiere clasificación humana antes de indexarlo.")
     if sens == SIN_INDICIOS and indicios:
         sens = "POSIBLE_DATO_PERSONAL"
         motivo = ("El texto parece contener datos personales (" + ", ".join(indicios) +
                   "): requiere clasificación humana antes de indexarlo.")
-    estado = "PENDIENTE" if (e.get("estado") == "PENDIENTE" or sens != SIN_INDICIOS) else "ENCONTRADO"
+    temporal = es_temporal(titulo, ext)
+    estado = "PENDIENTE" if (e.get("estado") == "PENDIENTE" or sens != SIN_INDICIOS or temporal) else "ENCONTRADO"
+    if not motivo:
+        motivo = e.get("no_procesable") or e.get("motivo_no_apto") or (str(e["error"])[:200] if e.get("error") else None)
+    if temporal and not motivo:
+        motivo = "Archivo temporal de Word, no es un documento: se puede borrar del Drive (decisión del dueño)."
+    acceso = "general" if (propietario == "propio" or terceros_abiertos()) else "restringido"
+    for clave, explicacion in RESTRINGIR_POR_MOTIVO:
+        if clave in str(e.get("motivo_no_apto") or "").lower():
+            acceso, motivo = "restringido", explicacion
     campos = {
-        "titulo": str(e.get("titulo") or "")[:300] or "(sin título)",
-        "mime": e.get("mime"), "extension": (e.get("extension") or "").lower() or None, "tamano": e.get("tamano"),
-        "modificado": e.get("modificado"), "creado_drive": e.get("creado"), "propietario": e.get("propietario") or "tercero",
+        "titulo": titulo,
+        "mime": e.get("mime"), "extension": ext, "tamano": e.get("tamano"),
+        "modificado": e.get("modificado"), "creado_drive": e.get("creado"), "propietario": propietario,
         "enlace": enlace_seguro(e.get("enlace")), "carpeta_id": e.get("carpeta_id"), "ruta": e.get("ruta") or "",
         "clase": d["clase"], "area": d["area"], "tipo_escrito": d["tipo_escrito"], "tramite": d["tramite"],
         "autoridad": d["autoridad"], "anio": d["anio"], "anio_declarado": d["anio_declarado"],
@@ -705,13 +890,14 @@ def _columnas_ficha(e: dict, ficha: dict, texto, errores: list, ref: str, indici
         "datos_requeridos": d["datos_requeridos"], "anexos": d["anexos"], "fuentes_citadas": d["fuentes_citadas"],
         "fecha_revision": None, "revisor": None, "validacion_juridica": "sin_validar", "validacion_nota": None,
         "estado_procesamiento": estado, "motivo": motivo, "sensibilidad": sens,
-        "derechos": d["derechos"], "acceso": "general",
+        "derechos": d["derechos"], "acceso": acceso,
+        "estado_inventario": e.get("estado"), "extraccion": _extraccion_inventario(e),
     }
     curados = _aplicar_curaduria(campos, ficha, errores, ref)
     if "sensibilidad" in curados:
         # Una persona resolvió la sensibilidad: manda sobre el indicio automático (en ambos sentidos).
         if campos["sensibilidad"] == SIN_INDICIOS:
-            campos["estado_procesamiento"], campos["motivo"] = "ENCONTRADO", None
+            campos["estado_procesamiento"], campos["motivo"] = ("PENDIENTE" if temporal else "ENCONTRADO"), None
         else:
             campos["estado_procesamiento"] = "PENDIENTE"
             campos["motivo"] = campos["motivo"] or "Clasificado como dato personal por una persona: no se indexa."
@@ -724,13 +910,19 @@ def _columnas_ficha(e: dict, ficha: dict, texto, errores: list, ref: str, indici
     return campos
 
 
-_COLUMNAS_JSON = ("supuestos_uso", "limites", "datos_requeridos", "anexos", "fuentes_citadas", "clasificacion", "curados")
+_COLUMNAS_JSON = ("supuestos_uso", "limites", "datos_requeridos", "anexos", "fuentes_citadas", "clasificacion", "curados",
+                  "extraccion")
+_COLUMNAS_BUSQ_META = ("area", "tipo_escrito", "tramite", "autoridad", "ruta", "finalidad")
 
 
 def _guardar(con, campos: dict, modelo_id=None, **extra) -> int:
     c = {**campos, **extra}
     c["titulo_norm"] = norm(c["titulo"])
     c["titulo_base"] = titulo_base(c["titulo"])
+    # Raíces del título y de la clasificación, ya calculadas: la búsqueda no las recalcula por fila.
+    c["busq_titulo"] = _frase(c["titulo_base"])
+    c["busq_meta"] = _frase(" ".join(str(c.get(k) or "") for k in _COLUMNAS_BUSQ_META
+                                     if c.get(k) not in (POR_CLASIFICAR, NO_APLICA)))
     for k in _COLUMNAS_JSON:
         if k in c:
             c[k] = json.dumps(c[k], ensure_ascii=False)
@@ -744,10 +936,17 @@ def _guardar(con, campos: dict, modelo_id=None, **extra) -> int:
     return modelo_id
 
 
+def carpetas_del_mapa(mapa) -> dict:
+    """{drive_id de la carpeta: fila del mapa} a partir de biblioteca/mapa_carpetas.json."""
+    filas = (mapa or {}).get("carpetas") if isinstance(mapa, dict) else None
+    return {str(c["drive_id"]): c for c in (filas or []) if isinstance(c, dict) and c.get("drive_id")}
+
+
 def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
-                permitir_retiro_masivo: bool = False, ahora: datetime = None) -> dict:
+                permitir_retiro_masivo: bool = False, ahora: datetime = None, mapa: dict = None) -> dict:
     """Carga o actualiza la tabla desde el inventario de Drive. Incremental: un elemento cuya
-    huella (metadatos + versión de reglas + ficha curada) no cambió no se vuelve a procesar.
+    huella (metadatos + versión de reglas + ficha curada + fila del mapa de carpetas + política de
+    terceros) no cambió no se vuelve a procesar. `mapa`: contenido de biblioteca/mapa_carpetas.json.
 
     - Elemento nuevo → ficha por reglas + ID de catálogo estable (`ids`, que el llamador persiste).
     - Metadatos distintos → se actualiza. Si cambió el archivo (fecha o tamaño), se retira su texto
@@ -760,6 +959,7 @@ def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
     ids = ids if ids is not None else {}
     ids.setdefault("ids", {})
     fichas = fichas or {}
+    carpetas = carpetas_del_mapa(mapa)
     momento = _iso(ahora)
     rep = {"nuevos": 0, "actualizados": 0, "sin_cambios": 0, "retirados": 0, "reactivados": 0,
            "retirados_del_indice": 0, "omitidos": {"carpetas": 0, "atajos": 0}, "errores": [], "retiro_masivo_evitado": False,
@@ -781,7 +981,8 @@ def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
         previa = previas.get(did)
         cid = previa["catalogo_id"] if previa else ids["ids"].get(did)
         ficha = fichas.get(did) or (fichas.get(cid) if cid else None) or {}
-        huella = _huella(e, ficha)
+        carpeta = carpetas.get(str(e.get("carpeta_id") or ""))
+        huella = _huella(e, ficha, carpeta)
         if previa and previa["huella"] == huella and not previa["retirado"]:
             rep["sin_cambios"] += 1
             continue
@@ -789,7 +990,7 @@ def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
             if not cid:
                 cid = _siguiente_id(ids)
             ids["ids"][did] = cid
-            campos = _columnas_ficha(e, ficha, None, rep["errores"], cid)
+            campos = _columnas_ficha(e, ficha, None, rep["errores"], cid, carpeta=carpeta)
             _guardar(con, campos, catalogo_id=cid, drive_id=did, huella=huella, primera_vez=momento,
                      ultima_comprobacion=momento, actualizado=momento)
             rep["nuevos"] += 1
@@ -801,13 +1002,13 @@ def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
         # Si el archivo cambió en Drive, lo leído antes ya no vale: ni el texto ni los indicios.
         indicios = [] if cambio_archivo else _lista(previa["indicios_contenido"])
         texto = None if cambio_archivo else _texto_de(con, mid)
-        campos = _columnas_ficha(e, ficha, texto, rep["errores"], cid, indicios)
+        campos = _columnas_ficha(e, ficha, texto, rep["errores"], cid, indicios, carpeta)
         notas = []
         if campos["sensibilidad"] != SIN_INDICIOS or campos["acceso"] == "excluido":
             if _quitar_del_indice(con, mid):
                 rep["retirados_del_indice"] += 1
                 notas.append("retirado del índice por sensibilidad o exclusión")
-                campos = _columnas_ficha(e, ficha, None, [], cid, indicios)   # sin datos derivados del texto
+                campos = _columnas_ficha(e, ficha, None, [], cid, indicios, carpeta)   # sin datos derivados del texto
             campos["sha_contenido"] = None
         elif cambio_archivo:
             if _quitar_del_indice(con, mid):
@@ -852,8 +1053,13 @@ def sincronizar(con, inventario: dict, ids: dict = None, fichas: dict = None,
     con.execute("UPDATE biblioteca_modelos SET ultima_comprobacion=? WHERE retirado=0", (momento,))
     resumen_inv = inventario.get("resumen") or {}
     sha = hashlib.sha256(json.dumps(inventario, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+    detalle = resumen_inv.get("denominador_detalle") if isinstance(resumen_inv.get("denominador_detalle"), dict) else {}
     meta = {"ultima_sincronizacion": momento, "inventario_sha": sha, "reglas_version": REGLAS_VERSION,
             "denominador": str(resumen_inv.get("denominador") or "PROVISIONAL"),
+            # "1" si el inventario declara que las colecciones de terceros no se pudieron enumerar
+            "terceros_sin_enumerar": "1" if str(detalle.get("carpetas_de_terceros") or "").upper().startswith("DESCONOCIDO") else "0",
+            "carpetas_truncadas": str(int(resumen_inv.get("carpetas_truncadas_por_el_conector") or 0)),
+            "terceros_abiertos": "1" if terceros_abiertos() else "0",
             "resumen_inventario": json.dumps(resumen_inv, ensure_ascii=False)}
     for k, v in meta.items():
         con.execute("INSERT OR REPLACE INTO biblioteca_meta(clave, valor) VALUES(?,?)", (k, v))
@@ -873,7 +1079,7 @@ def _leer_json(ruta: str, defecto):
 
 
 def sincronizar_archivos(ruta_inv: str = None, ruta_bd: str = None, ruta_reg: str = None, ruta_fic: str = None,
-                         permitir_retiro_masivo: bool = False, solo_si_cambio: bool = False):
+                         permitir_retiro_masivo: bool = False, solo_si_cambio: bool = False, ruta_map: str = None):
     """Sincroniza desde los archivos del proyecto y persiste el registro de IDs. Devuelve el
     reporte, o None si no hay inventario (o si `solo_si_cambio` y nada cambió)."""
     ruta_inv = ruta_inv or ruta_inventario()
@@ -887,16 +1093,18 @@ def sincronizar_archivos(ruta_inv: str = None, ruta_bd: str = None, ruta_reg: st
     if not isinstance(ids, dict):
         ids = {}
     fichas = _leer_json(ruta_fic or ruta_fichas(), {})
+    mapa = _leer_json(ruta_map or ruta_mapa(), {})
     antes = json.dumps(ids, sort_keys=True)
     with closing(conexion(ruta_bd)) as con:
         if solo_si_cambio:
-            sha = hashlib.sha256(json.dumps(inventario, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
-            marca = sha + "|" + REGLAS_VERSION + "|" + hashlib.sha256(json.dumps(fichas, sort_keys=True).encode()).hexdigest()
+            def _sha(x):
+                return hashlib.sha256(json.dumps(x, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+            marca = "|".join([_sha(inventario), REGLAS_VERSION, _sha(fichas), _sha(mapa), str(terceros_abiertos())])
             previa = con.execute("SELECT valor FROM biblioteca_meta WHERE clave='marca_arranque'").fetchone()
             if previa and previa["valor"] == marca:
                 return None
         rep = sincronizar(con, inventario, ids, fichas if isinstance(fichas, dict) else {},
-                          permitir_retiro_masivo=permitir_retiro_masivo)
+                          permitir_retiro_masivo=permitir_retiro_masivo, mapa=mapa if isinstance(mapa, dict) else {})
         if solo_si_cambio:
             con.execute("INSERT OR REPLACE INTO biblioteca_meta(clave, valor) VALUES('marca_arranque', ?)", (marca,))
             con.commit()
@@ -904,7 +1112,7 @@ def sincronizar_archivos(ruta_inv: str = None, ruta_bd: str = None, ruta_reg: st
         try:
             with open(ruta_reg, "w", encoding="utf-8") as f:
                 json.dump({"siguiente": ids.get("siguiente", 1), "ids": dict(sorted(ids["ids"].items()))}, f,
-                          ensure_ascii=False, indent=1)
+                          ensure_ascii=False, indent=0)
                 f.write("\n")
         except OSError:
             rep["errores"].append({"elemento": ruta_reg, "error": "no se pudo guardar el registro de IDs"})
@@ -994,29 +1202,56 @@ def validar_procesamiento(con, referencia: str) -> dict:
     return {"accion": "validado", "id": f["catalogo_id"]}
 
 
+def unir_fragmentos(fragmentos: list) -> str:
+    """Une fragmentos consecutivos del índice del corpus quitando el solape entre uno y el siguiente
+    (fuentes.trocear repite ~200 caracteres). Si no encuentra el solape, los separa con un salto."""
+    texto = ""
+    for frag in fragmentos:
+        frag = (frag or "").strip()
+        if not frag:
+            continue
+        if not texto:
+            texto = frag
+            continue
+        tope = min(len(texto), len(frag), 400)
+        k = next((n for n in range(tope, 19, -1) if texto.endswith(frag[:n])), 0)
+        texto += frag[k:] if k else "\n\n" + frag
+    return texto
+
+
 def importar_del_corpus(con, ruta_corpus: str = None) -> dict:
     """Trae a la biblioteca el texto de los documentos que YA están en el corpus del chat
-    (fuentes.py) con origen "drive:<id>". El texto se reconstruye uniendo fragmentos, que se
-    solapan ~200 caracteres: sirve para buscar y para la vista previa, no como copia fiel."""
+    (fuentes.py). El origen puede ser el id de Drive tal cual (scripts/indexar_biblioteca.py) o
+    "drive:<id>" (scripts/ingesta_corpus.py --drive). El texto se reconstruye uniendo fragmentos y
+    quitando su solape: sirve para buscar y para la vista previa; si necesitas la copia fiel, carga
+    el archivo extraído con --textos."""
     ruta_corpus = ruta_corpus or fuentes.ruta_db()
-    rep = {"importados": 0, "sin_cambios": 0, "rechazados": 0, "no_estan_en_el_corpus": 0}
+    rep = {"importados": 0, "sin_cambios": 0, "rechazados": 0, "no_estan_en_el_corpus": 0, "detalle_rechazos": []}
     cor = fuentes._abrir_lectura(ruta_corpus)
     if cor is None:
         return {**rep, "error": "no existe el índice del corpus: " + ruta_corpus}
     with closing(cor):
+        en_corpus = {}
+        for f in cor.execute("SELECT id, origen FROM fuentes"):
+            origen = str(f["origen"] or "")
+            en_corpus[origen[6:] if origen.startswith("drive:") else origen] = f["id"]
         for f in con.execute("SELECT drive_id FROM biblioteca_modelos WHERE retirado=0").fetchall():
-            s = cor.execute("SELECT id, sha256 FROM fuentes WHERE origen=?", ("drive:" + f["drive_id"],)).fetchone()
-            if not s:
+            fid = en_corpus.get(f["drive_id"])
+            if fid is None:
                 rep["no_estan_en_el_corpus"] += 1
                 continue
-            frags = cor.execute("SELECT texto, ubicacion FROM fragmentos WHERE fuente_id=? ORDER BY rowid", (s["id"],)).fetchall()
-            r = registrar_texto(con, f["drive_id"], [(x["ubicacion"], x["texto"]) for x in frags], origen="corpus")
+            frags = cor.execute("SELECT texto, ubicacion FROM fragmentos WHERE fuente_id=? ORDER BY rowid", (fid,)).fetchall()
+            # El primer fragmento de lo que indexó la biblioteca es el título (ubicación "título"): no es contenido.
+            cuerpo = [x["texto"] for x in frags if (x["ubicacion"] or "") != "título"]
+            r = registrar_texto(con, f["drive_id"], [("", unir_fragmentos(cuerpo))], origen="corpus")
             if r["accion"] in ("indexado", "actualizado"):
                 rep["importados"] += 1
             elif r["accion"] == "sin_cambios":
                 rep["sin_cambios"] += 1
             else:
                 rep["rechazados"] += 1
+                rep["detalle_rechazos"].append({"id": r.get("id"), "accion": r["accion"],
+                                                "motivo": r.get("motivo") or ", ".join(r.get("indicios") or [])})
     return rep
 
 
@@ -1148,10 +1383,9 @@ def _coincide_raiz(r: str, tokens: set) -> bool:
 
 def _puntuar(fila, an: dict, frag=None):
     """Puntaje de relevancia y las razones de la coincidencia (lo que se le muestra al usuario)."""
-    t_tokens = set(raices(fila["titulo_base"]))
-    t_frase = " " + " ".join(raices(fila["titulo_base"])) + " "
-    meta = " ".join(str(fila[k] or "") for k in ("area", "tipo_escrito", "tramite", "autoridad", "ruta", "finalidad"))
-    m_tokens, m_frase = set(raices(meta)), _frase(meta)
+    # busq_titulo y busq_meta son las raíces ya calculadas al sincronizar (" raiz raiz … ").
+    t_frase, m_frase = fila["busq_titulo"], fila["busq_meta"]
+    t_tokens, m_tokens = set(t_frase.split()), set(m_frase.split())
     puntos, razones, literales, fuerte = 0.0, [], 0, False
     for termino, r in zip(an["terminos"], an["raices"]):
         generica = r in GENERICAS
@@ -1238,6 +1472,9 @@ def _buscar_en_texto(con, an: dict, where: str, params: list, admin: bool) -> di
     return mejores
 
 
+# Año por el que se filtra: el del nombre o la carpeta (para una ley, el de su número); si el archivo
+# no lo trae, el de su última modificación. La ficha muestra los dos por separado.
+ANIO_SQL = "COALESCE(m.anio_declarado, m.anio)"
 FILTROS = {"area": "area", "tipo": "tipo_escrito", "tramite": "tramite", "autoridad": "autoridad",
            "estado": "estado_procesamiento", "validacion": "validacion_juridica", "clase": "clase"}
 
@@ -1252,7 +1489,7 @@ def _where(filtros: dict, admin: bool, auditoria: bool):
             params.append(v)
     anio = str(f.get("anio") or "").strip()
     if anio:
-        partes.append("m.anio=?")
+        partes.append(f"{ANIO_SQL}=?")
         params.append(int(anio) if anio.isdigit() else -1)
     carpeta = str(f.get("carpeta") or "").strip().strip("/")
     if carpeta:
@@ -1266,9 +1503,12 @@ def resumen_publico(f, admin: bool = False) -> dict:
     con_texto = f["estado_procesamiento"] in ("EXTRAÍDO", "INDEXADO", "VALIDADO")
     sin_clasificar = [k for k in ("area", "tipo_escrito") if f[k] == POR_CLASIFICAR]
     return {
-        "id": f["catalogo_id"], "titulo": f["titulo"], "clase": f["clase"], "area": f["area"],
+        "id": f["catalogo_id"], "titulo": f["titulo"], "clase": f["clase"], "clase_texto": CLASE_TEXTO.get(f["clase"], f["clase"]),
+        "area": f["area"],
         "tipo_escrito": f["tipo_escrito"], "tramite": f["tramite"], "autoridad": f["autoridad"],
-        "anio": f["anio"], "anio_declarado": f["anio_declarado"], "ruta": f["ruta"] or "(raíz)",
+        "autoridad_rol": "expidió" if f["clase"] in ("norma", "jurisprudencia") else "destinataria",
+        "anio": f["anio_declarado"] or f["anio"], "anio_origen": "nombre o carpeta" if f["anio_declarado"] else "última modificación",
+        "anio_declarado": f["anio_declarado"], "anio_modificacion": f["anio"], "ruta": f["ruta"] or "(raíz)",
         "extension": f["extension"], "modificado": (f["modificado"] or "")[:10] or None,
         "estado_procesamiento": f["estado_procesamiento"], "estado_texto": ESTADO_TEXTO[f["estado_procesamiento"]],
         "validacion_juridica": f["validacion_juridica"], "validacion_texto": VALIDACION_TEXTO[f["validacion_juridica"]],
@@ -1278,47 +1518,94 @@ def resumen_publico(f, admin: bool = False) -> dict:
     }
 
 
+_COLUMNAS_PUNTAJE = ("m.id, m.catalogo_id, m.clase, m.titulo_norm, m.busq_titulo, m.busq_meta, m.tipo_escrito, m.tramite")
+
+
+def _prefiltro(an: dict, ids_texto) -> tuple:
+    """Condición SQL que descarta lo que no puede puntuar (el puntaje exacto lo da `_puntuar`).
+    Es un SUPERCONJUNTO de las coincidencias: una raíz de 5 o más letras se busca por sus 5 primeras."""
+    cond, params = [], []
+    vistas = set()
+
+    def raiz(r):
+        if r in vistas:
+            return
+        vistas.add(r)
+        patron = ("% " + r[:5] + "%") if len(r) >= 5 else ("% " + r + " %")
+        cond.append("m.busq_titulo LIKE ? OR m.busq_meta LIKE ?")
+        params.extend([patron, patron])
+
+    for r in an["raices"]:
+        raiz(r)
+    for _origen, _equivalente, frase_eq in an["expansiones"]:
+        cond.append("m.busq_titulo LIKE ? OR m.busq_meta LIKE ?")
+        params.extend(["%" + frase_eq + "%", "%" + frase_eq + "%"])
+    for tr in an["tramites"]:
+        cond.append("m.tramite=? OR m.tipo_escrito IN (" + ",".join("?" * len(tr["tipos"])) + ")")
+        params.extend([tr["nombre"], *tr["tipos"]])
+    ids_texto = [int(i) for i in ids_texto][:900]
+    if ids_texto:
+        cond.append("m.id IN (" + ",".join("?" * len(ids_texto)) + ")")
+        params.extend(ids_texto)
+    if PUNTUADORES_EXTRA or not cond:
+        return "1=1", []        # un puntuador externo puede dar puntos a cualquier fila: no se prefiltra
+    return "(" + " OR ".join(cond) + ")", params
+
+
 def buscar(con, q: str = "", filtros: dict = None, admin: bool = False, auditoria: bool = False,
            pagina: int = 1, por_pagina: int = 20) -> dict:
     """Búsqueda con filtros combinables, ordenada por relevancia, con la razón de cada resultado.
     El permiso va en el WHERE de todas las consultas: lo que no se puede ver no se recupera, no
-    se cuenta y no aparece en `otras_clases`."""
+    se cuenta y no aparece en `otras_clases`.
+
+    Devuelve los resultados de la clase pedida (por defecto, modelos) y, en `otras_clases`, cuántos
+    documentos de las DEMÁS clases coinciden con la misma consulta y los mismos filtros."""
     filtros = dict(filtros or {})
     filtros.setdefault("clase", "modelo")
+    clase = filtros.get("clase") or "todas"
     q = str(q or "").strip()[:600]
     por_pagina = max(1, min(MAX_POR_PAGINA, int(por_pagina or 20)))
     pagina = max(1, int(pagina or 1))
-    where, params = _where(filtros, admin, auditoria)
-    filas = con.execute(f"SELECT m.* FROM biblioteca_modelos m WHERE {where}", params).fetchall()
+    where, params = _where({**filtros, "clase": "todas"}, admin, auditoria)      # todas las clases, una sola pasada
     an = analizar_consulta(q) if q else None
-    if an and (an["terminos"] or an["tramites"]):
+    con_terminos = bool(an and (an["terminos"] or an["tramites"]))
+    por_clase, puntuados = {}, []
+    if con_terminos:
         en_texto = _buscar_en_texto(con, an, where, params, admin)
-        puntuados = []
-        for f in filas:
+        pre, pre_params = _prefiltro(an, en_texto)
+        for f in con.execute(f"SELECT {_COLUMNAS_PUNTAJE} FROM biblioteca_modelos m WHERE {where} AND {pre}", params + pre_params):
             puntos, razones, _ = _puntuar(f, an, en_texto.get(f["id"]))
-            if puntos > 0:
-                puntuados.append((puntos, f, razones))
-        puntuados.sort(key=lambda x: (-x[0], x[1]["titulo_norm"], x[1]["catalogo_id"]))
-    elif q:
-        puntuados = []      # la consulta solo trae palabras vacías
-    else:
-        puntuados = [(0, f, []) for f in sorted(filas, key=lambda f: (f["titulo_norm"], f["catalogo_id"]))]
+            if puntos <= 0:
+                continue
+            por_clase[f["clase"]] = por_clase.get(f["clase"], 0) + 1
+            if clase == "todas" or f["clase"] == clase:
+                puntuados.append((puntos, f["titulo_norm"], f["catalogo_id"], f["id"], razones))
+        puntuados.sort(key=lambda x: (-x[0], x[1], x[2]))
+    elif not q:
+        for f in con.execute(f"SELECT m.clase, COUNT(*) FROM biblioteca_modelos m WHERE {where} GROUP BY m.clase", params):
+            por_clase[f[0]] = f[1]
+        w1, p1 = _where(filtros, admin, auditoria)
+        puntuados = [(0, f["titulo_norm"], f["catalogo_id"], f["id"], []) for f in con.execute(
+            f"SELECT m.id, m.catalogo_id, m.titulo_norm FROM biblioteca_modelos m WHERE {w1} ORDER BY m.titulo_norm, m.catalogo_id", p1)]
+    # (si la consulta solo trae palabras vacías no hay resultados)
     total = len(puntuados)
     ini = (pagina - 1) * por_pagina
-    resultados = [{**resumen_publico(f, admin), "puntaje": round(p, 1), "coincidencias": razones[:6]}
-                  for p, f, razones in puntuados[ini:ini + por_pagina]]
-    otras = 0
-    if filtros.get("clase") not in ("", "todas", None):
-        w2, p2 = _where({**filtros, "clase": "todas"}, admin, auditoria)
-        if an and (an["terminos"] or an["tramites"]):
-            todas = con.execute(f"SELECT m.* FROM biblioteca_modelos m WHERE {w2}", p2).fetchall()
-            otras = sum(1 for f in todas if f["clase"] != filtros["clase"] and _puntuar(f, an)[0] > 0)
-        elif not q:
-            otras = con.execute(f"SELECT COUNT(*) FROM biblioteca_modelos m WHERE {w2} AND m.clase<>?",
-                                p2 + [filtros["clase"]]).fetchone()[0]
+    pagina_actual = puntuados[ini:ini + por_pagina]
+    filas = {}
+    if pagina_actual:
+        marcas = ",".join("?" * len(pagina_actual))
+        # El permiso se repite aquí: ninguna consulta lee la tabla sin él.
+        filas = {f["id"]: f for f in con.execute(
+            f"SELECT m.* FROM biblioteca_modelos m WHERE m.id IN ({marcas}) AND {predicado(admin, auditoria)}",
+            [x[3] for x in pagina_actual])}
+    resultados = [{**resumen_publico(filas[i], admin), "puntaje": round(p, 1), "coincidencias": razones[:6]}
+                  for p, _t, _c, i, razones in pagina_actual if i in filas]
+    otras = {c: n for c, n in por_clase.items() if clase != "todas" and c != clase}
     return {
         "q": q, "total": total, "pagina": pagina, "por_pagina": por_pagina,
-        "paginas": max(1, -(-total // por_pagina)), "resultados": resultados, "otras_clases": otras,
+        "paginas": max(1, -(-total // por_pagina)), "resultados": resultados,
+        "clase": clase, "otras_clases": sum(otras.values()),
+        "otras_clases_detalle": [{"clase": c, "texto": CLASE_TEXTO.get(c, c), "n": otras[c]} for c in CLASES if c in otras],
         "orden": "relevancia" if (an and an["terminos"]) else "título",
         "interpretacion": None if not an else {
             "terminos": an["terminos"],
@@ -1328,33 +1615,69 @@ def buscar(con, q: str = "", filtros: dict = None, admin: bool = False, auditori
     }
 
 
+def _meta(con) -> dict:
+    return {f["clave"]: f["valor"] for f in con.execute("SELECT clave, valor FROM biblioteca_meta")}
+
+
+def cobertura(con, admin: bool = False) -> dict:
+    """Qué tan completo está el catálogo, dicho sin cifras de lo que el usuario no puede ver.
+    El texto general es el mismo para todos; el detalle del inventario solo lo recibe el administrador."""
+    meta = _meta(con)
+    provisional = not str(meta.get("denominador", "PROVISIONAL")).startswith("COMPLETO")
+    notas = []
+    if provisional:
+        notas.append("El inventario de Drive es provisional: aún no se ha podido listar todo, así que estas cantidades "
+                     "son un mínimo, no el total de la biblioteca.")
+    if meta.get("terceros_sin_enumerar") == "1":
+        notas.append("Las colecciones compartidas por terceros (donde están la mayoría de minutas y modelos) todavía no se "
+                     "han podido enumerar: el conector de Drive solo entrega lo que su dueño ya abrió. Sus modelos no "
+                     "están en este catálogo.")
+    if meta.get("terceros_abiertos") != "1":
+        notas.append("El material de terceros permanece restringido al administrador mientras no se confirmen sus derechos "
+                     "de redistribución.")
+    salida = {"provisional": provisional, "terceros_sin_enumerar": meta.get("terceros_sin_enumerar") == "1", "notas": notas}
+    if admin:
+        res = _objeto(meta.get("resumen_inventario"))
+        salida["inventario"] = {k: res.get(k) for k in (
+            "archivos", "carpetas", "carpetas_truncadas_por_el_conector", "carpetas_sin_explorar_subcarpetas",
+            "por_estado", "por_propietario", "denominador", "denominador_detalle") if k in res}
+    return salida
+
+
 def facetas(con, admin: bool = False) -> dict:
     """Valores disponibles para los filtros, contados SOLO sobre lo que el usuario puede ver."""
     pred = predicado(admin)
+    ultimos = f"(m.{{c}}='{POR_CLASIFICAR}') + 2*(m.{{c}}='{NO_APLICA}')"      # "por clasificar" y "no aplica", al final
     salida = {}
     for clave, columna in FILTROS.items():
         salida[clave] = [{"valor": f[0], "n": f[1]} for f in con.execute(
             f"SELECT m.{columna}, COUNT(*) FROM biblioteca_modelos m WHERE {pred} GROUP BY m.{columna} "
-            f"ORDER BY (m.{columna}='{POR_CLASIFICAR}'), m.{columna}")]
+            f"ORDER BY {ultimos.format(c=columna)}, m.{columna}")]
     salida["anio"] = [{"valor": f[0], "n": f[1]} for f in con.execute(
-        f"SELECT m.anio, COUNT(*) FROM biblioteca_modelos m WHERE {pred} AND m.anio IS NOT NULL GROUP BY m.anio ORDER BY m.anio DESC")]
+        f"SELECT {ANIO_SQL} a, COUNT(*) FROM biblioteca_modelos m WHERE {pred} AND {ANIO_SQL} IS NOT NULL GROUP BY a ORDER BY a DESC")]
     carpetas = {}
-    for f in con.execute(f"SELECT m.ruta FROM biblioteca_modelos m WHERE {pred}"):
+    for f in con.execute(f"SELECT m.ruta, COUNT(*) n FROM biblioteca_modelos m WHERE {pred} GROUP BY m.ruta"):
         partes = [p for p in (f["ruta"] or "").split("/") if p][:3]
         for i in range(1, len(partes) + 1):
             k = "/".join(partes[:i])
-            carpetas[k] = carpetas.get(k, 0) + 1
+            carpetas[k] = carpetas.get(k, 0) + f["n"]
     salida["carpeta"] = [{"valor": k, "n": n} for k, n in sorted(carpetas.items())]
-    total = con.execute(f"SELECT COUNT(*) FROM biblioteca_modelos m WHERE {pred}").fetchone()[0]
-    meta = {f["clave"]: f["valor"] for f in con.execute("SELECT clave, valor FROM biblioteca_meta")}
+    por_clase = {f["valor"]: f["n"] for f in salida["clase"]}
+    total = sum(por_clase.values())
+    meta = _meta(con)
     return {
-        "total": total, "facetas": salida,
-        "etiquetas": {"estado": ESTADO_TEXTO, "validacion": VALIDACION_TEXTO},
+        "total": total, "modelos": por_clase.get("modelo", 0),
+        "por_clase": [{"clase": c, "texto": CLASE_TEXTO[c], "n": por_clase[c]} for c in CLASES if por_clase.get(c)],
+        "facetas": salida,
+        "etiquetas": {"estado": ESTADO_TEXTO, "validacion": VALIDACION_TEXTO, "clase": CLASE_TEXTO},
+        "cobertura": cobertura(con, admin),
         "denominador_provisional": not str(meta.get("denominador", "PROVISIONAL")).startswith("COMPLETO"),
         "ultima_sincronizacion": meta.get("ultima_sincronizacion"),
         "busqueda": {"metodo": "léxica ampliada", "embeddings": False,
                      "nota": "Encuentra por palabras, sinónimos jurídicos y trámites. No es búsqueda por significado con embeddings."},
+        "anio_nota": "El año es el que trae el nombre del archivo o su carpeta; si no lo trae, el de la última modificación.",
         "texto_de_terceros": "visible" if (admin or texto_terceros_abierto()) else "solo administrador",
+        "es_admin": bool(admin),
     }
 
 
@@ -1372,7 +1695,7 @@ def relacionados(con, f, admin: bool = False) -> list:
                        "relacion": relacion, "detalle": detalle})
 
     for o in con.execute(f"SELECT m.* FROM biblioteca_modelos m WHERE {pred} AND m.id<>? AND "
-                         "(m.titulo_base=? OR (m.sha_contenido IS NOT NULL AND m.sha_contenido=?)) ORDER BY m.catalogo_id",
+                         "(m.titulo_base=? OR (m.sha_contenido IS NOT NULL AND m.sha_contenido=?)) ORDER BY m.catalogo_id LIMIT 40",
                          (f["id"], f["titulo_base"], f["sha_contenido"])):
         if f["sha_contenido"] and o["sha_contenido"] == f["sha_contenido"]:
             sumar(o, "duplicado_exacto", "Mismo contenido (huella idéntica del texto).")
@@ -1380,22 +1703,43 @@ def relacionados(con, f, admin: bool = False) -> list:
             sumar(o, "posible_duplicado", "Mismo nombre y mismo tamaño; el contenido no se ha comparado.")
         else:
             sumar(o, "homonimo", "Mismo nombre; es otro archivo (otra carpeta, fecha o tamaño).")
-    if f["tipo_escrito"] != POR_CLASIFICAR:
-        mios = set(raices(f["titulo_base"])) - GENERICAS
+    if f["tipo_escrito"] not in (POR_CLASIFICAR, NO_APLICA):
+        # Mismo tipo de escrito y (a) texto parecido, si quien pregunta puede ver el texto de los dos, o
+        # (b) título parecido. El parecido no dice cuál es mejor ni cuál está vigente.
+        def claves(fila_):
+            return {fuentes._raiz(t) for t in fuentes.terminos(fila_["titulo_base"], maximo=40)} - GENERICAS
+
+        mios = claves(f)
+        mi_texto = _texto_de(con, f["id"]) if puede_ver_texto(f, admin) else None
         for o in con.execute(f"SELECT m.* FROM biblioteca_modelos m WHERE {pred} AND m.id<>? AND m.tipo_escrito=? "
-                             "ORDER BY m.catalogo_id LIMIT 500", (f["id"], f["tipo_escrito"])):
-            suyos = set(raices(o["titulo_base"])) - GENERICAS
-            if mios and suyos and len(mios & suyos) / len(mios | suyos) >= 0.5:
-                sumar(o, "version_similar", "Título parecido y mismo tipo de escrito.")
+                             "ORDER BY m.catalogo_id LIMIT 200", (f["id"], f["tipo_escrito"])):
+            su_texto = _texto_de(con, o["id"]) if (mi_texto and puede_ver_texto(o, admin)) else None
+            if su_texto:
+                parecido = biblioteca_recorrido.similitud(mi_texto, su_texto)
+                if parecido >= 0.5:
+                    sumar(o, "version_similar", f"Texto parecido en un {round(parecido * 100)} % y mismo tipo de escrito.")
+                    continue
+            suyos = claves(o)
+            if mios and suyos and len(mios & suyos) / len(mios | suyos) > 0.5:
+                sumar(o, "titulo_parecido", "Título parecido y mismo tipo de escrito; el contenido no se ha comparado.")
     return salida
+
+
+AVISO_SIN_VALIDAR = {
+    "modelo": "Modelo sin validar jurídicamente: estar en la biblioteca no significa que sea correcto ni que esté vigente. "
+              "Revísalo antes de usarlo.",
+    "norma": "Norma sin validar: nadie ha comprobado que este archivo sea el texto oficial vigente. Verifícalo en la fuente oficial.",
+    "jurisprudencia": "Providencia sin validar: nadie ha comprobado su vigencia ni su alcance. Verifícala en la relatoría oficial.",
+}
 
 
 def avisos_de(f) -> list:
     r = resumen_publico(f)
     avisos = []
     if f["validacion_juridica"] != "validado":
-        avisos.append({"codigo": "sin_validar", "texto": "Modelo sin validar jurídicamente: estar en la biblioteca "
-                       "no significa que sea correcto ni que esté vigente. Revísalo antes de usarlo."
+        avisos.append({"codigo": "sin_validar", "texto":
+                       AVISO_SIN_VALIDAR.get(f["clase"], "Documento sin validar jurídicamente: estar en la biblioteca no significa "
+                                                         "que sea correcto ni que esté vigente. Revísalo antes de usarlo.")
                        if f["validacion_juridica"] == "sin_validar" else
                        VALIDACION_TEXTO[f["validacion_juridica"]] + (": " + f["validacion_nota"] if f["validacion_nota"] else ".")})
     if r["historico"]:
@@ -1404,14 +1748,20 @@ def avisos_de(f) -> list:
     if r["incompleto"]:
         falta = []
         if f["estado_procesamiento"] not in ("EXTRAÍDO", "INDEXADO", "VALIDADO"):
-            falta.append("su contenido aún no se ha leído")
+            falta.append("su contenido aún no se ha leído en este catálogo")
         if POR_CLASIFICAR in (f["area"], f["tipo_escrito"]):
             falta.append("su clasificación está por confirmar")
         avisos.append({"codigo": "incompleto", "texto": "Ficha incompleta: " + " y ".join(falta) + "."})
     if f["derechos"] in ("redistribucion_por_confirmar", "no_redistribuible"):
         avisos.append({"codigo": "derechos", "texto": DERECHOS_TEXTO[f["derechos"]] +
                        ". Úsalo como referencia de trabajo; no lo distribuyas a terceros."})
+    if f["acceso"] == "restringido":
+        avisos.append({"codigo": "restringido", "texto": "Acceso restringido: esta ficha solo la ve el administrador."})
     return avisos
+
+
+NOTA_EXTRACCION = {"doc": "Los .doc (Word antiguo) necesitan un conversor instalado donde se haga la carga: antiword, catdoc o LibreOffice.",
+                   "pdf": "Si el PDF es un escaneo no tendrá texto: no hay OCR."}
 
 
 def ficha(con, f, admin: bool = False) -> dict:
@@ -1424,8 +1774,26 @@ def ficha(con, f, admin: bool = False) -> dict:
                   "Sin vista previa: es material de un tercero y la redistribución está por confirmar. Ábrelo en Drive."}
     else:
         previa = {"disponible": True, "texto": vista_previa(texto), "motivo": None}
-    gen = _generador(f["tipo_escrito"])
+    gen = _generador(f["tipo_escrito"]) if f["clase"] not in CLASES_SIN_ESCRITO else None
     ext = (f["extension"] or "").lower()
+    extraccion = _objeto(f["extraccion"])
+    registro = None
+    if extraccion:
+        # Lo que el inventario anotó de una extracción hecha FUERA de este catálogo (cifras, nunca texto).
+        partes = []
+        if extraccion.get("estado") and extraccion["estado"] != "ENCONTRADO":
+            partes.append("el inventario de Drive lo registra como " + ESTADO_TEXTO.get(extraccion["estado"], extraccion["estado"]).lower()
+                          + " en el corpus del operador")
+        if extraccion.get("caracteres") is not None:
+            partes.append(f"{extraccion['caracteres']} caracteres leídos")
+        if extraccion.get("campos_por_completar"):
+            partes.append(f"{extraccion['campos_por_completar']} espacios por completar detectados")
+        if extraccion.get("parece_escaneado"):
+            partes.append("parece un escaneo sin texto")
+        registro = {"texto": ("Fuera de este catálogo: " + "; ".join(partes) + ".") if partes else None,
+                    "estado": extraccion.get("estado"), "leido_en": extraccion.get("leido_en"),
+                    "caracteres": extraccion.get("caracteres"), "campos_por_completar": extraccion.get("campos_por_completar"),
+                    "motivo": extraccion.get("motivo_no_apto") or extraccion.get("no_procesable") or extraccion.get("error")}
     return {
         **resumen_publico(f, admin),
         "drive_id": f["drive_id"], "finalidad": f["finalidad"],
@@ -1439,15 +1807,16 @@ def ficha(con, f, admin: bool = False) -> dict:
         "clasificacion": _objeto(f["clasificacion"]), "curados": _lista(f["curados"]), "motivo": f["motivo"],
         "primera_vez": f["primera_vez"], "ultima_comprobacion": f["ultima_comprobacion"],
         "vista_previa": previa, "avisos": avisos_de(f), "alertas": _lista(f["alertas"]) if admin else [],
-        "extraccion": {"posible": ext in EXTRAIBLES, "nota": None if ext in EXTRAIBLES else
+        "extraccion": {"posible": ext in EXTRAIBLES, "nota": NOTA_EXTRACCION.get(ext) if ext in EXTRAIBLES else
                        f"El formato .{ext or '?'} no tiene extracción automática."},
+        "registro_inventario": registro,
         "generador": {"tipo": gen["id"], "nombre": gen["nombre"]} if gen else None,
         "copia": {"con_texto": texto is not None and puede_ver_texto(f, admin)},
     }
 
 
 # ============================================================================== COMPARAR
-CAMPOS_COMPARAR = [("titulo", "Título"), ("clase", "Clase de documento"), ("area", "Área"), ("tipo_escrito", "Tipo de escrito"),
+CAMPOS_COMPARAR = [("titulo", "Título"), ("clase_texto", "Tipo documental"), ("area", "Área"), ("tipo_escrito", "Tipo de escrito"),
                    ("tramite", "Trámite"), ("autoridad", "Autoridad"), ("ruta", "Carpeta"), ("extension", "Formato"),
                    ("modificado", "Última modificación"), ("anio_declarado", "Año en el nombre o carpeta"),
                    ("estado_texto", "Procesamiento"), ("validacion_texto", "Validación jurídica"),
@@ -1485,17 +1854,28 @@ ESTRUCTURA_GENERICA = ["Lugar y fecha", "Destinatario", "Referencia o asunto", "
                        "Hechos", "Solicitud o pretensiones", "Fundamentos", "Anexos", "Notificaciones", "Firma"]
 
 
+def copiable(f) -> bool:
+    """Solo se copia como documento de trabajo lo que es un escrito reutilizable. Una norma, una
+    providencia o un libro se consultan en su original; copiarlos no produce un borrador."""
+    return f["clase"] not in CLASES_SIN_ESCRITO
+
+
 def copia_de_trabajo(con, f, admin: bool = False) -> dict:
     """Contenido de la copia de trabajo (no escribe nada en la biblioteca: el original no cambia)."""
     cid, titulo = f["catalogo_id"], _RE_EXT.sub("", f["titulo"]).strip()
     enlace = enlace_seguro(f["enlace"])
-    texto = _texto_de(con, f["id"])
+    fila_texto = con.execute("SELECT texto, origen FROM biblioteca_textos WHERE modelo_id=?", (f["id"],)).fetchone()
+    texto = fila_texto["texto"] if fila_texto else None
     con_texto = texto is not None and puede_ver_texto(f, admin)
     datos = _lista(f["datos_requeridos"])
     origen_linea = f"modelo {cid} «{titulo}»" + (f" · original en Drive: {enlace}" if enlace else "")
+    tipo = f["tipo_escrito"] if f["tipo_escrito"] not in (POR_CLASIFICAR, NO_APLICA) else "un escrito"
     if con_texto:
+        reconstruido = (" El texto se reconstruyó desde el índice de búsqueda: compáralo con el original antes de usarlo."
+                        if (fila_texto["origen"] or "") == "corpus" else "")
         cuerpo = (f"> **COPIA DE TRABAJO** del {origen_linea}. El original no se modifica. "
-                  f"{VALIDACION_TEXTO[f['validacion_juridica']]}: revisa el texto completo antes de usarlo.\n\n" + texto.strip())
+                  f"{VALIDACION_TEXTO[f['validacion_juridica']]}: revisa el texto completo antes de usarlo.{reconstruido}\n\n"
+                  + texto.strip())
         mensaje = "Copia creada con el texto del modelo."
     else:
         gen = _generador(f["tipo_escrito"])
@@ -1504,7 +1884,7 @@ def copia_de_trabajo(con, f, admin: bool = False) -> dict:
                   "el texto es de un tercero y su redistribución está por confirmar")
         cuerpo = (f"> **COPIA DE TRABAJO** del {origen_linea}. El original no se modifica.\n>\n"
                   f"> Este borrador NO trae el texto del modelo porque {motivo}: solo tiene la estructura típica de "
-                  f"«{f['tipo_escrito'] if f['tipo_escrito'] != POR_CLASIFICAR else 'un escrito'}» y los campos por completar. "
+                  f"«{tipo}» y los campos por completar. "
                   "Abre el original en Drive para ver su contenido.\n\n"
                   f"# {titulo}\n\n## Estructura sugerida\n\n" + "\n".join(f"{i}. {s}" for i, s in enumerate(estructura, 1)) +
                   "\n\n## Datos por completar\n\n" +
@@ -1513,7 +1893,7 @@ def copia_de_trabajo(con, f, admin: bool = False) -> dict:
                    + motivo + ".")
     verificar = ["Completar: " + str(d.get("etiqueta")) for d in datos][:30]
     verificar += ["Verificar vigencia: " + str(c.get("cita")) for c in _lista(f["fuentes_citadas"])][:10]
-    advertencias = [a["texto"] for a in avisos_de(f)]
+    advertencias = [a["texto"] for a in avisos_de(f) if a["codigo"] != "restringido"]
     advertencias.insert(0, f"Copia de trabajo del modelo {cid} de la biblioteca. El original en Drive no se modifica.")
     return {"titulo": ("Copia de trabajo — " + titulo)[:120], "texto": cuerpo[:60000], "verificar": verificar,
             "advertencias": advertencias, "con_texto": con_texto, "mensaje": mensaje,
@@ -1578,7 +1958,7 @@ def requisitos_faltantes(datos: list, caso: str) -> list:
 
 def adaptaciones(f, caso: str) -> list:
     partes = []
-    if f["autoridad"] not in (POR_CLASIFICAR, "No aplica (documento entre particulares)"):
+    if f["autoridad"] not in (POR_CLASIFICAR, NO_APLICA, "No aplica (documento entre particulares)"):
         partes.append(f"Destinatario: el modelo está pensado para «{f['autoridad']}»; dirígelo a la autoridad o entidad de tu caso.")
     else:
         partes.append("Destinatario: identifica la autoridad, entidad o persona a la que va dirigido.")
@@ -1596,16 +1976,17 @@ def _generador_para(caso: str, an: dict) -> list:
     """Tipos del generador (documentos.py) que podrían servir para redactar un BORRADOR NUEVO."""
     puntajes = {}
     for tr in an["tramites"]:
-        for tipo in tr["tipos"]:
+        for n, tipo in enumerate(tr["tipos"]):
             g = _generador(tipo)
-            if g:
-                puntajes[g["id"]] = puntajes.get(g["id"], 0) + 3
+            if g:       # el primer tipo de cada trámite es el escrito principal
+                puntajes[g["id"]] = puntajes.get(g["id"], 0) + (4 if n == 0 else 3)
     for termino in an["terminos"]:
         if fuentes._raiz(termino) in GENERICAS:
             continue
         for t in documentos.buscar(termino):
             puntajes[t["id"]] = puntajes.get(t["id"], 0) + 1
-    mejores = sorted(puntajes.items(), key=lambda x: (-x[1], x[0]))[:3]
+    # Una sola palabra en común no basta para proponer un tipo del generador.
+    mejores = sorted(((i, p) for i, p in puntajes.items() if p >= 2), key=lambda x: (-x[1], x[0]))[:3]
     return [{"tipo": i, "nombre": documentos.INDICE[i]["nombre"], "area": documentos.INDICE[i]["area"]} for i, _ in mejores]
 
 
@@ -1699,13 +2080,18 @@ def auditoria(con, pagina: int = 1, por_pagina: int = 50) -> dict:
         "paginas": max(1, -(-total // por_pagina)),
         "por_estado": conteo("estado_procesamiento"), "por_validacion": conteo("validacion_juridica"),
         "por_acceso": conteo("acceso"), "por_sensibilidad": conteo("sensibilidad"), "por_clase": conteo("clase"),
+        "por_derechos": conteo("derechos"), "por_propietario": conteo("propietario"),
+        # Lo que el inventario de Drive registra del procesamiento hecho FUERA de este catálogo.
+        "por_estado_inventario": conteo("estado_inventario"),
         "retirados": con.execute("SELECT COUNT(*) FROM biblioteca_modelos WHERE retirado=1").fetchone()[0],
         "por_carpeta": por_carpeta, "denominador": meta.get("denominador", "PROVISIONAL"),
         "resumen_inventario": _objeto(meta.get("resumen_inventario")),
         "ultima_sincronizacion": meta.get("ultima_sincronizacion"), "reglas_version": meta.get("reglas_version"),
         "sincronizaciones": [{"fecha": s["fecha"], **_objeto(s["resumen"])} for s in con.execute(
             "SELECT fecha, resumen FROM biblioteca_sincronizaciones ORDER BY id DESC LIMIT 5")],
+        "cobertura": cobertura(con, True),
         "elementos": [{**resumen_publico(f, True), "sensibilidad": f["sensibilidad"], "motivo": f["motivo"],
+                       "estado_inventario": f["estado_inventario"],
                        "retirado": bool(f["retirado"]), "retiro_motivo": f["retiro_motivo"],
                        "visible_para_usuarios": (not f["retirado"]) and f["sensibilidad"] == SIN_INDICIOS and f["acceso"] == "general"}
                       for f in filas],
@@ -1776,7 +2162,11 @@ def crear_router(*, usuario_actual, admin_actual, json_de, consumir_consulta, re
         """Crea la copia de trabajo en «Mis documentos». No usa el modelo de IA ni cuesta consultas."""
         u = usuario_actual(request)
         with closing(conexion()) as con:
-            c = copia_de_trabajo(con, _fila(con, cid, u), admin=_admin(u))
+            f = _fila(con, cid, u)
+            if not copiable(f):
+                raise HTTPException(400, "Solo los modelos y escritos se copian como documento de trabajo. Una norma, "
+                                         "una providencia o un libro se consultan en su original (ábrelo en Drive).")
+            c = copia_de_trabajo(con, f, admin=_admin(u))
         did = guardar_documento(u["email"], "biblioteca:" + cid, c["titulo"], "biblioteca", c["campos"], c["texto"],
                                 c["verificar"], c["advertencias"], [])
         return {"id": did, "titulo": c["titulo"], "con_texto": c["con_texto"], "mensaje": c["mensaje"],
