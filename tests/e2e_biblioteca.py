@@ -465,7 +465,7 @@ with sync_playwright() as p:
         ok("no se han podido enumerar" in cob and "provisional" in cob and "restringido al administrador" in cob, "real: explica que las colecciones de terceros no se han podido enumerar")
         ok(not re.search(r"FOTOMULTA|HABEAS DATA|MANIFIESTO", pg.inner_text("#v-documentos"), re.I), "real: ningún título de terceros ni nota interna en pantalla")
         pg.select_option("#bib-f-clase", "todas")
-        pg.wait_for_function("() => /resultados/.test(document.getElementById('bib-n').textContent)")
+        pg.wait_for_function("() => /^[\\d.]+ resultados en documentos/.test(document.getElementById('bib-n').textContent)")
         total = int(re.sub(r"\D", "", pg.inner_text("#bib-n").split(" resultados")[0]))
         ok(total > 8000, f"real: «Todo el catálogo» lista {total} documentos paginados")
         t0 = time.time()
@@ -478,6 +478,12 @@ with sync_playwright() as p:
         pg.select_option("#bib-f-area", "Laboral y Seguridad Social")
         pg.wait_for_function("() => /resultados en jurisprudencia/.test(document.getElementById('bib-n').textContent)")
         ok(pg.locator("#bib-paginas .doc-btn").count() == 2, "real: resultados paginados (Anterior / Siguiente)")
+        ok(pg.evaluate("getComputedStyle(document.getElementById('bib-paginas')).position") == "static"
+           and pg.evaluate("document.querySelectorAll('nav').length") == 1, "real: la paginación va en el flujo de la página (no tapa la barra de secciones)")
+        antes_pag = titulos(pg)[0]
+        pg.locator("#bib-paginas .doc-btn", has_text="Siguiente").click()
+        pg.wait_for_function("() => /página 2 de/.test(document.getElementById('bib-n').textContent)")
+        ok(titulos(pg)[0] != antes_pag and pg.is_enabled("#bib-paginas .doc-btn >> nth=0"), "real: «Siguiente» trae la página 2")
         sin_desborde(pg, "real", "catálogo real")
         pg.screenshot(path=f"{OUT}/real-catalogo.png")
         ok(pg.evaluate("window.__csp") == [], "real: cero violaciones de CSP")

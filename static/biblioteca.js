@@ -94,7 +94,8 @@ function bibConstruirBuscador(cont){
   cont.appendChild(dE('p',{id:'bib-n',class:'doc-n',role:'status','aria-live':'polite'}));
   cont.appendChild(dE('div',{id:'bib-otras'}));
   cont.appendChild(dE('ul',{id:'bib-resultados',class:'bib-resultados'}));
-  cont.appendChild(dE('nav',{id:'bib-paginas',class:'bib-paginas','aria-label':'Páginas de resultados'}));
+  // role=navigation en un <div>: la etiqueta <nav> ya tiene estilos globales (la barra de secciones de la app).
+  cont.appendChild(dE('div',{id:'bib-paginas',class:'bib-paginas',role:'navigation','aria-label':'Páginas de resultados'}));
 }
 function bibLlenarFiltros(r){
   const f=r.facetas||{},et=r.etiquetas||{};
