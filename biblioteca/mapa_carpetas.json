@@ -1,0 +1,382 @@
+{
+ "nota": "Clasificación por nombre de carpeta y de archivos; no se leyó el contenido. La regla del propio nombre manda; si no hay, se hereda la de la carpeta que la contiene (confianza menor). «por clasificar» = requiere decisión humana.",
+ "resumen": {
+  "carpetas": 101,
+  "por_tipo_documental": {
+   "norma": 47,
+   "plantilla/minuta": 18,
+   "jurisprudencia": 10,
+   "material de estudio": 8,
+   "otro": 6,
+   "por clasificar": 6,
+   "doctrina": 5,
+   "tabla de liquidación": 1
+  },
+  "por_area": {
+   "general (varias áreas)": 71,
+   "penal": 6,
+   "familia": 4,
+   "civil": 3,
+   "laboral y seguridad social": 3,
+   "tributario y aduanero": 3,
+   "procesal informático": 2,
+   "comercial": 2,
+   "constitucional (tutela)": 1,
+   "gestión profesional (honorarios)": 1,
+   "notarial y registro": 1,
+   "derecho de petición": 1,
+   "empleo público": 1,
+   "procesal (medidas cautelares)": 1,
+   "por clasificar": 1
+  },
+  "por_confianza": {
+   "alta": 60,
+   "media": 34,
+   "baja": 7
+  },
+  "por_clasificar": 7
+ },
+ "reglas": [
+  {
+   "id": "T00",
+   "patron": "ejemplos?.*casos",
+   "tipo_documental": "por clasificar",
+   "confianza": "baja",
+   "motivo": "ejemplos de casos: hay que decidir antes si son didácticos o reales (OBS-04)"
+  },
+  {
+   "id": "T01",
+   "patron": "\\b(modelos?|minutas?|plantillas?|formatos?)\\b",
+   "tipo_documental": "plantilla/minuta",
+   "confianza": "alta",
+   "motivo": "el nombre dice modelos, minutas, plantillas o formatos"
+  },
+  {
+   "id": "T02",
+   "patron": "\\bderechos? de peticion\\b",
+   "tipo_documental": "plantilla/minuta",
+   "confianza": "media",
+   "motivo": "el nombre es un tipo de escrito"
+  },
+  {
+   "id": "T03",
+   "patron": "\\bacciones? de tutela\\b",
+   "tipo_documental": "plantilla/minuta",
+   "confianza": "media",
+   "motivo": "el nombre es un tipo de escrito"
+  },
+  {
+   "id": "T04",
+   "patron": "\\bmedidas? cautelares?\\b",
+   "tipo_documental": "plantilla/minuta",
+   "confianza": "media",
+   "motivo": "el nombre es un tipo de escrito"
+  },
+  {
+   "id": "T05",
+   "patron": "\\bcontratos?\\b",
+   "tipo_documental": "plantilla/minuta",
+   "confianza": "media",
+   "motivo": "el nombre es un tipo de escrito"
+  },
+  {
+   "id": "T18",
+   "patron": "^lexcol corpus$|^pack juridico\\b",
+   "tipo_documental": "otro",
+   "confianza": "alta",
+   "motivo": "carpeta contenedora: agrupa colecciones de varios tipos"
+  },
+  {
+   "id": "T16",
+   "patron": "\\bindice\\b|\\bcuadros\\b|^fuentes$",
+   "tipo_documental": "otro",
+   "confianza": "media",
+   "motivo": "índices y cuadros de apoyo"
+  },
+  {
+   "id": "T06",
+   "patron": "\\bcodigos?\\b",
+   "tipo_documental": "norma",
+   "confianza": "alta",
+   "motivo": "el nombre dice códigos"
+  },
+  {
+   "id": "T07",
+   "patron": "\\bleyes\\b|^ley\\b|\\bdecretos?\\b",
+   "tipo_documental": "norma",
+   "confianza": "alta",
+   "motivo": "el nombre dice leyes o decretos"
+  },
+  {
+   "id": "T08",
+   "patron": "\\bestatutos?\\b",
+   "tipo_documental": "por clasificar",
+   "confianza": "baja",
+   "motivo": "«estatutos» puede ser una norma (Estatuto Tributario) o una minuta (estatutos de una sociedad)"
+  },
+  {
+   "id": "T09",
+   "patron": "\\bjurisprudencia\\b|\\bsentencias?\\b|\\bsala (civil|laboral|penal)\\b|\\bcorte\\b",
+   "tipo_documental": "jurisprudencia",
+   "confianza": "alta",
+   "motivo": "el nombre dice jurisprudencia, sentencias, sala o corte"
+  },
+  {
+   "id": "T10",
+   "patron": "\\blibros?\\b|\\bdoctrina\\b",
+   "tipo_documental": "doctrina",
+   "confianza": "alta",
+   "motivo": "el nombre dice libros o doctrina"
+  },
+  {
+   "id": "T11",
+   "patron": "\\bmaterial de estudio\\b|\\bconcursos?\\b|\\bexamenes\\b|\\bpreparatorios\\b|\\bcursos?\\b|\\btaller(es)?\\b|\\bmemorando\\b",
+   "tipo_documental": "material de estudio",
+   "confianza": "alta",
+   "motivo": "el nombre dice material de estudio, concurso, exámenes, cursos o taller"
+  },
+  {
+   "id": "T12",
+   "patron": "\\btablas? liquidadoras?\\b|\\bliquidacion(es)?\\b",
+   "tipo_documental": "tabla de liquidación",
+   "confianza": "alta",
+   "motivo": "el nombre dice tablas liquidadoras"
+  },
+  {
+   "id": "T13",
+   "patron": "\\bregimen(es)?\\b",
+   "tipo_documental": "norma",
+   "confianza": "media",
+   "motivo": "«regímenes» suele ser una compilación de normas por materia"
+  },
+  {
+   "id": "T14",
+   "patron": "\\bfuncion publica\\b",
+   "tipo_documental": "por clasificar",
+   "confianza": "baja",
+   "motivo": "puede ser norma, concepto o material de estudio"
+  },
+  {
+   "id": "T15",
+   "patron": "\\bconalbos\\b",
+   "tipo_documental": "otro",
+   "confianza": "media",
+   "motivo": "tarifas de honorarios de un gremio: ni norma ni minuta"
+  },
+  {
+   "id": "T17",
+   "patron": "^sic$|\\bprocesal informatico\\b",
+   "tipo_documental": "por clasificar",
+   "confianza": "baja",
+   "motivo": "el nombre no dice qué clase de documento contiene"
+  },
+  {
+   "id": "A01",
+   "patron": "\\bfamilia\\b|\\binfancia\\b",
+   "area": "familia",
+   "area_perfiles": "A06",
+   "confianza": "alta"
+  },
+  {
+   "id": "A02",
+   "patron": "\\bcomercial\\b",
+   "area": "comercial",
+   "area_perfiles": "A06",
+   "confianza": "alta"
+  },
+  {
+   "id": "A03",
+   "patron": "\\bcivil\\b",
+   "area": "civil",
+   "area_perfiles": "A06",
+   "confianza": "alta"
+  },
+  {
+   "id": "A04",
+   "patron": "\\bpenal\\b|\\bfiscalia\\b",
+   "area": "penal",
+   "area_perfiles": "A08",
+   "confianza": "alta"
+  },
+  {
+   "id": "A05",
+   "patron": "\\blaboral\\b",
+   "area": "laboral y seguridad social",
+   "area_perfiles": "A09",
+   "confianza": "alta"
+  },
+  {
+   "id": "A06",
+   "patron": "\\btutela\\b",
+   "area": "constitucional (tutela)",
+   "area_perfiles": "A10",
+   "confianza": "alta"
+  },
+  {
+   "id": "A07",
+   "patron": "\\bpeticion\\b",
+   "area": "derecho de petición",
+   "area_perfiles": "A10",
+   "confianza": "alta"
+  },
+  {
+   "id": "A08",
+   "patron": "\\bcautelares?\\b",
+   "area": "procesal (medidas cautelares)",
+   "area_perfiles": "A10",
+   "confianza": "alta"
+  },
+  {
+   "id": "A09",
+   "patron": "\\bdisciplinario\\b",
+   "area": "disciplinario",
+   "area_perfiles": "A07",
+   "confianza": "alta"
+  },
+  {
+   "id": "A10",
+   "patron": "\\bfuncion publica\\b",
+   "area": "empleo público",
+   "area_perfiles": "A07",
+   "confianza": "media"
+  },
+  {
+   "id": "A11",
+   "patron": "\\bdian\\b",
+   "area": "tributario y aduanero",
+   "area_perfiles": "A07",
+   "confianza": "media"
+  },
+  {
+   "id": "A12",
+   "patron": "\\bnotarial\\b",
+   "area": "notarial y registro",
+   "area_perfiles": "por clasificar",
+   "confianza": "media"
+  },
+  {
+   "id": "A13",
+   "patron": "\\bprocesal informatico\\b",
+   "area": "procesal informático",
+   "area_perfiles": "A10",
+   "confianza": "alta"
+  },
+  {
+   "id": "A14",
+   "patron": "\\bconalbos\\b",
+   "area": "gestión profesional (honorarios)",
+   "area_perfiles": "A10",
+   "confianza": "media"
+  },
+  {
+   "id": "A15",
+   "patron": "\\bcodigos?\\b|\\bleyes\\b|\\blibros?\\b|\\bjurisprudencia\\b|\\bdoctrina\\b|\\bregimen(es)?\\b|\\bestatutos?\\b|\\bplantillas?\\b|\\bmodelos?\\b|\\bminutas?\\b|\\brama judicial\\b|\\bexamenes\\b|\\bpreparatorios\\b|^lexcol corpus$|^pack juridico\\b",
+   "area": "general (varias áreas)",
+   "area_perfiles": "A06–A10",
+   "confianza": "alta"
+  }
+ ],
+ "carpetas": [
+  {"drive_id": "133-bR6cH8z1WmGPtyawr8fAYVdJoGADy", "ruta": "LEXCOL_CORPUS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "otro", "regla_tipo": "T18", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 1, "por_nombre": {"otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1q-a6NbC356HbsbF5tPlqz3gy5Omo10_K", "ruta": "LEXCOL_CORPUS/01_CODIGOS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T06", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 21, "por_nombre": {"codigo": 15, "otro": 5, "ley": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1B9zsLELijnzCbh4gbTUb_ikb4s73jYDc", "ruta": "LEXCOL_CORPUS/02_LEYES", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 1, "por_nombre": {"sentencia": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1seiOR5ROrFqbs7fkQNpYjVo-1dB03Zoc", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1BcfJkOvmENJ3UTekW29M3k0xUlOZDWvx", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1992", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 34, "por_nombre": {"ley": 34}, "salas": {}}, "notas": []},
+  {"drive_id": "1Rmlp0WEXfsAQ-Bt4TBAExKg6ZX0i2TIP", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1993", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 90, "por_nombre": {"ley": 88, "otro": 2}, "salas": {}}, "notas": []},
+  {"drive_id": "1n0YpPC0lXr5TzUHSBBW8h4fP7gl2hEpX", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1994", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 73, "por_nombre": {"ley": 73}, "salas": {}}, "notas": []},
+  {"drive_id": "1wVWrSUCoWzfbIg8ZPuJjWq9GOkIRF-R1", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1995", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 73, "por_nombre": {"ley": 73}, "salas": {}}, "notas": []},
+  {"drive_id": "1xVoWHY98ArBdMG8jw4OlQLqtn7rroDD7", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1996", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 93, "por_nombre": {"ley": 93}, "salas": {}}, "notas": []},
+  {"drive_id": "1663SaYh4cooheRqM7ZSPcvSp-mIRcZ_t", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1997", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 91, "por_nombre": {"ley": 90, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1WwuccKX2YdPMfCL6P37cNFM6zq2DJ0aV", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1998", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 73, "por_nombre": {"ley": 73}, "salas": {}}, "notas": []},
+  {"drive_id": "1YaWW3cWj0K30bNAr0b19YoHyMaDtZOL_", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1998/LEY 443 DE 1998", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 2, "por_nombre": {"ley": 1, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1T0oYLUG13PXy0AlU1dcQjIb7SN4T2LVU", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/1999", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 76, "por_nombre": {"ley": 76}, "salas": {}}, "notas": []},
+  {"drive_id": "1FFc9yQ8pyBMlHP3Q8A2QpgB2zHBeOubu", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2000", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 83, "por_nombre": {"ley": 83}, "salas": {}}, "notas": []},
+  {"drive_id": "1SIploODh2OTVeJO6JqeI-qZX6DAEiie9", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2001", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 95, "por_nombre": {"ley": 95}, "salas": {}}, "notas": []},
+  {"drive_id": "1ibx1bQ2hUoQKmVtbUYbj7qUT5xJbwoh2", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2002", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 62, "por_nombre": {"ley": 62}, "salas": {}}, "notas": []},
+  {"drive_id": "1m2OsuaRMhko_em8VE7sCBFzliP7qDyEM", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2002/LEY 734 DE 2002", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 3, "por_nombre": {"decreto": 1, "ley": 1, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1sbydJde_6_ikiDBXUay3Qvdpg6LsK7iB", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2003", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 79, "por_nombre": {"ley": 79}, "salas": {}}, "notas": []},
+  {"drive_id": "1BEvrEaT7KY5qTtxeHIEvkobtoaPd2fkX", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2004", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 67, "por_nombre": {"ley": 66, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1bJTicqBSvxjjy1ps7zncG13QDUu7gtN9", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2005", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 66, "por_nombre": {"ley": 66}, "salas": {}}, "notas": []},
+  {"drive_id": "1R31lUWSPZIvu9ACzIur989hpkJj2A5U5", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2006", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 118, "por_nombre": {"ley": 118}, "salas": {}}, "notas": []},
+  {"drive_id": "1g0GF3Scapn0MXUp5UMRVD1CQKRnW_GdJ", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2007", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 60, "por_nombre": {"ley": 60}, "salas": {}}, "notas": []},
+  {"drive_id": "1QFulVT-au8DuHBtDpyB2VsxQmNjJfFiz", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2008", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 88, "por_nombre": {"ley": 88}, "salas": {}}, "notas": []},
+  {"drive_id": "1AXJ4t-UeScn4R1vg46MMQEe-YGsq2-1Q", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2009", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 102, "por_nombre": {"ley": 102}, "salas": {}}, "notas": []},
+  {"drive_id": "1K61JxT7C00fbqldqYUcbxb6pfxfyxF9k", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2010", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 59, "por_nombre": {"ley": 59}, "salas": {}}, "notas": []},
+  {"drive_id": "1ccyukvkDM1e9pun3wJrzWmGx4JaYkU6W", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2011", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 74, "por_nombre": {"ley": 74}, "salas": {}}, "notas": []},
+  {"drive_id": "1VmG1QnHQuzdRMjwXtAgeYioE9Y5J3tzd", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2012", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 102, "por_nombre": {"ley": 101, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1e3xqGLhD60wnT-Y8leaWfQT0lV3XcJ3R", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2013", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 96, "por_nombre": {"ley": 95, "otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "10rJgQ5rKElH7bQ8TwMz31dul3GpU5QVl", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2014", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 47, "por_nombre": {"ley": 47}, "salas": {}}, "notas": []},
+  {"drive_id": "1jDAiVL96akpDns13gI5r58BuL_kW0aO2", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2015", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 23, "por_nombre": {"ley": 23}, "salas": {}}, "notas": []},
+  {"drive_id": "1Z5IHPjL2KmRgQWPvQ5xhN1gdgSS5fpIW", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2015/LEY ESTATUTARIA DE SALUD", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 2, "por_nombre": {"sentencia": 1, "ley": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1fpp5Ogjf40-22DyS8LsPqoHqZwQuQI8g", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2016", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 50, "por_nombre": {"ley": 50}, "salas": {}}, "notas": []},
+  {"drive_id": "1_PdfE-0Rr_mow6B6zvaJE5xNqojuMvHi", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2017", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 69, "por_nombre": {"ley": 69}, "salas": {}}, "notas": []},
+  {"drive_id": "1FhbJyYxe_vvjtCAPkidSu3uOofDe5OYe", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2018", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 71, "por_nombre": {"otro": 2, "ley": 69}, "salas": {}}, "notas": []},
+  {"drive_id": "1ahhSXamthfZqFayia1QTo6I73ZqMRg8H", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2019", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 69, "por_nombre": {"otro": 68, "codigo": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1B0n6-B6i82nWRn7VAkIMC8GE6RoayD8F", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2020", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 60, "por_nombre": {"otro": 60}, "salas": {}}, "notas": []},
+  {"drive_id": "1K9M0In3k9V_bfaxbRWgc8uWoGTYeYwEj", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2021", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 107, "por_nombre": {"otro": 107}, "salas": {}}, "notas": []},
+  {"drive_id": "1buCqAz8LLsSFiRBl5nmPqijQBThhBKeZ", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2022", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 94, "por_nombre": {"ley": 87, "otro": 7}, "salas": {}}, "notas": []},
+  {"drive_id": "1Augs5oCMbpwurArUeED-4EZUaBajpoD7", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2023", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 1, "por_nombre": {"ley": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1mEm1Gz4WYvAORLBi-NHVdwbaLwJyUOAy", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/2024", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 21, "por_nombre": {"otro": 21}, "salas": {}}, "notas": []},
+  {"drive_id": "1G1MtKoT-_d5Rldas_6sAGwn3hC7QcA5t", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/CUADROS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "otro", "regla_tipo": "T16", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 2, "por_nombre": {"ley": 2}, "salas": {}}, "notas": []},
+  {"drive_id": "1U9DZKOb4QLn2uxCL1-6RrBvQZ7ST9kMQ", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/INDICE LEYES", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "otro", "regla_tipo": "T16", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 24, "por_nombre": {"otro": 24}, "salas": {}}, "notas": []},
+  {"drive_id": "1Lkgk6TBNhG4725kasdCMUEclhrfv__mk", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/LEY 57 DE 1887", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 1, "por_nombre": {"ley": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1utzq8rrHnzz6t_JLf1Ww8MLYGemAPUvE", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/LEY 76 DE 1920", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 1, "por_nombre": {"ley": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1IPZTFqN0K0LtCpsqdSAnQfen_K6A6iTm", "ruta": "LEXCOL_CORPUS/02_LEYES/1992 A 2025/fuentes", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "otro", "regla_tipo": "T16", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 1, "por_nombre": {"otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1Q4kLODFKEgvDG8m5Ae2iQoHd0eXmk7lU", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1vWda7wzuctVKfO7Vmup6ifCUGM2ctyxr", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/2024", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "jurisprudencia", "regla_tipo": "T09 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 29, "por_nombre": {"otro": 20, "sentencia": 9}, "salas": {"civil": 3, "laboral y seguridad social": 2, "penal": 6}}, "notas": []},
+  {"drive_id": "1VKlRL-czcEhR2JkCzGYr79ZCqiCKSlLe", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA CIVIL", "propietario": "propio", "listado": "COMPLETO", "area": "civil", "area_perfiles": "A06", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A03", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "18dAhBnPgqaJvOalBt-PeYhfM80cWoDqZ", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA CIVIL/SENTENCIAS 2022-2023", "propietario": "propio", "listado": "TRUNCADO_POR_EL_CONECTOR", "area": "civil", "area_perfiles": "A06", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A03 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 2005, "por_nombre": {"otro": 98, "sentencia": 1907}, "salas": {"civil": 1702, "penal": 293}}, "notas": ["293 de 1995 providencias tienen prefijo de otra sala: {'civil': 1702, 'penal': 293}"]},
+  {"drive_id": "1ynJ_gvCZV_tf45HQFii9pSeReGa7RwNo", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA LABORAL", "propietario": "propio", "listado": "COMPLETO", "area": "laboral y seguridad social", "area_perfiles": "A09", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A05", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1nh3Tm616xkrbaDMi7Us2vyx0fMROPw4A", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA LABORAL/2022-2023", "propietario": "propio", "listado": "TRUNCADO_POR_EL_CONECTOR", "area": "laboral y seguridad social", "area_perfiles": "A09", "tipo_documental": "jurisprudencia", "regla_tipo": "T09 (heredada)", "regla_area": "A05 (heredada)", "confianza_tipo": "media", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 2011, "por_nombre": {"sentencia": 2010, "otro": 1}, "salas": {"laboral y seguridad social": 2010}}, "notas": []},
+  {"drive_id": "1bkWo4q-F1TsGgeQ5gnyV5e8QEEL6dLrJ", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA LABORAL/2023-2024", "propietario": "propio", "listado": "COMPLETO", "area": "laboral y seguridad social", "area_perfiles": "A09", "tipo_documental": "jurisprudencia", "regla_tipo": "T09 (heredada)", "regla_area": "A05 (heredada)", "confianza_tipo": "media", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 20, "por_nombre": {"otro": 20}, "salas": {}}, "notas": []},
+  {"drive_id": "1yPXCdWM3K8JbtMdwvLivh9ykobW1UTFF", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA PENAL", "propietario": "propio", "listado": "COMPLETO", "area": "penal", "area_perfiles": "A08", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A04", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 2, "por_nombre": {"otro": 1, "sentencia": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1eDt1VlIR1WsCgJOJ0bKe0uFOLKTJ53__", "ruta": "LEXCOL_CORPUS/03_JURISPRUDENCIA/SALA PENAL/2022-2023", "propietario": "propio", "listado": "COMPLETO", "area": "penal", "area_perfiles": "A08", "tipo_documental": "jurisprudencia", "regla_tipo": "T09 (heredada)", "regla_area": "A04 (heredada)", "confianza_tipo": "media", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 1727, "por_nombre": {"otro": 268, "sentencia": 1459}, "salas": {"penal": 1721}}, "notas": []},
+  {"drive_id": "1U4QkmimwPj-AltrNkTzTR43o8hVMaG-S", "ruta": "LEXCOL_CORPUS/04_PLANTILLAS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1NlvnDCUOZVPpCLcXOxSchbWkj3uv4NU8", "ruta": "LEXCOL_CORPUS/04_PLANTILLAS/ESTATUTOS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T08", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 15, "por_nombre": {"otro": 15}, "salas": {}}, "notas": ["los archivos se llaman «Estatuto de…» (normas), no son minutas de estatutos sociales"]},
+  {"drive_id": "1y8AgxFBRt-J5oCLQVeuvwNVP_b_V-3Vk", "ruta": "LEXCOL_CORPUS/05_DOCTRINA", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "doctrina", "regla_tipo": "T10", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "18HXzMbuhYma_dSs2gGZmPmBdON_cUhx6", "ruta": "LEXCOL_CORPUS/06_REGIMENES", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T13", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "17Xm4exzdsJY_XqZ0PcOOGxuXv_TY1lPz", "ruta": "LEXCOL_CORPUS/07_EJEMPLOS_MODELOS_CASOS", "propietario": "propio", "listado": "COMPLETO", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "por clasificar", "regla_tipo": "T00", "regla_area": "A15", "confianza_tipo": "baja", "confianza_area": "alta", "confianza": "baja", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1dKRq7RXwKQjdbc4LnR8rA-4JbBe2R-Gg", "ruta": "PACK JURIDICO 1", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "otro", "regla_tipo": "T18", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1nlndriocrmhZ8MASxNp85Bpt6zAFQ1lD", "ruta": "PACK JURIDICO 1/ACCIONES DE TUTELA", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "constitucional (tutela)", "area_perfiles": "A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T03", "regla_area": "A06", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 2, "por_nombre": {"otro": 2}, "salas": {}}, "notas": []},
+  {"drive_id": "1HGtlFjO5kCR0PKp0KgSf0uVixJduxMJp", "ruta": "PACK JURIDICO 1/CODIGOS COLOMBIANOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T06", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 4, "por_nombre": {"codigo": 4}, "salas": {}}, "notas": []},
+  {"drive_id": "1FIq9LHs1cfHKrUVQpq0Sum917eayuTRw", "ruta": "PACK JURIDICO 1/CONALBOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "gestión profesional (honorarios)", "area_perfiles": "A10", "tipo_documental": "otro", "regla_tipo": "T15", "regla_area": "A14", "confianza_tipo": "media", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 1, "por_nombre": {"otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1v5KM_lWaBYDnIXMreQODf0pWHfHbl6iU", "ruta": "PACK JURIDICO 1/CONCURSO FISCALIA", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "penal", "area_perfiles": "A08", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A04", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 2, "por_nombre": {"otro": 2}, "salas": {}}, "notas": []},
+  {"drive_id": "1DuiQQ1zzFz5qWh7pCeEjpiKlpm0uipyU", "ruta": "PACK JURIDICO 1/CONCURSO FISCALIA/Taller Penal y Procesal", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "penal", "area_perfiles": "A08", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A04", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1Hg3aGYqe7K-dM3l5WWOq0JFWQcWJY5ZS", "ruta": "PACK JURIDICO 1/CONCURSO NOTARIAL", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "notarial y registro", "area_perfiles": "por clasificar", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A12", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1LwIaiBSWL7WesFzsFi07sFO3a-BkyINR", "ruta": "PACK JURIDICO 1/CONCURSO RAMA JUDICIAL MAGISTRADOS Y JUECES", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1g_MiDUFmeKXaIV0c5oZXPkoarbDaVPDw", "ruta": "PACK JURIDICO 1/DERECHO PROCESAL INFORMATICO", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "procesal informático", "area_perfiles": "A10", "tipo_documental": "por clasificar", "regla_tipo": "T17", "regla_area": "A13", "confianza_tipo": "baja", "confianza_area": "alta", "confianza": "baja", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1cggMizW5CBriKRFK7YB9Zw7Rz0jmgFi0", "ruta": "PACK JURIDICO 1/DERECHO PROCESAL INFORMATICO/SIC", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "procesal informático", "area_perfiles": "A10", "tipo_documental": "por clasificar", "regla_tipo": "T17", "regla_area": "A13 (heredada)", "confianza_tipo": "baja", "confianza_area": "media", "confianza": "baja", "evidencia": {"archivos_visibles": 1, "por_nombre": {"otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1FrPH9XTqA1EFjqlG2u4mIL1nAN25TQam", "ruta": "PACK JURIDICO 1/DERECHOS DE PETICION - 2026", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "derecho de petición", "area_perfiles": "A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T02", "regla_area": "A07", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 5, "por_nombre": {"otro": 2, "plantilla": 3}, "salas": {}}, "notas": []},
+  {"drive_id": "1hkHsj9rGZeJgzVo6g6LvtH9wg9Yc7ZSe", "ruta": "PACK JURIDICO 1/ESTATUTOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "por clasificar", "regla_tipo": "T08", "regla_area": "A15", "confianza_tipo": "baja", "confianza_area": "alta", "confianza": "baja", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "19fx_BRFexLm_MezXXReCQqf7bMLtNOLi", "ruta": "PACK JURIDICO 1/EXAMENES PREPARATORIOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1GrHmvkFqq0pq2xYIZm12qO2OGaeS97vG", "ruta": "PACK JURIDICO 1/FUNCION PUBLICA", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "empleo público", "area_perfiles": "A07", "tipo_documental": "por clasificar", "regla_tipo": "T14", "regla_area": "A10", "confianza_tipo": "baja", "confianza_area": "media", "confianza": "baja", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1B045dqZx_qopK9Hieo3e25hJKQtrgjP4", "ruta": "PACK JURIDICO 1/LEYES 1.992 -2.025", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "13tTzPLiSAtTXs8oMJTQpXp_sAwsJeVvV", "ruta": "PACK JURIDICO 1/LIBROS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "doctrina", "regla_tipo": "T10", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "13L7D0bZ6W8vRzjJD2v47BWJDlXqgh2pP", "ruta": "PACK JURIDICO 1/LIBROS/LIBROS - 2025", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "doctrina", "regla_tipo": "T10", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1P4h5wi80posa-uakl-A41HjHOFtzE5YX", "ruta": "PACK JURIDICO 1/LIBROS/LIBROS - 2025/Libros de Derecho", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "doctrina", "regla_tipo": "T10", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1DZNNFJKjad0p7-Rza1YJN6YeHqGR5Qcs", "ruta": "PACK JURIDICO 1/Libros Juridicos", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "doctrina", "regla_tipo": "T10", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1j0Y_0ZcEEPXxlFa7lg-t6sNCIOH1MfkR", "ruta": "PACK JURIDICO 1/MATERIAL DE ESTUDIO CONCURSO DIAN", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "tributario y aduanero", "area_perfiles": "A07", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A11", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1oe1mqEqab3leBZ64tfVIj8cq_b2wAVj6", "ruta": "PACK JURIDICO 1/MATERIAL DE ESTUDIO CONCURSO DIAN/CURSOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "tributario y aduanero", "area_perfiles": "A07", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A11 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1M9xg_9UCdw15T82a7L126uiJaOdFPP5d", "ruta": "PACK JURIDICO 1/MATERIAL DE ESTUDIO CONCURSO DIAN/MEMORANDO", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "tributario y aduanero", "area_perfiles": "A07", "tipo_documental": "material de estudio", "regla_tipo": "T11", "regla_area": "A11 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1EQZzckg48cU9QC7LqTUnASIGkDpWqBgN", "ruta": "PACK JURIDICO 1/MEDIDAS CAUTELARES - 2026", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "procesal (medidas cautelares)", "area_perfiles": "A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T04", "regla_area": "A08", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1tb8C4JdQIG413EQ4ozV4gDM-IN2hM40f", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1prkEzuM0SubpZkMjJG6xAQwFHHmTr26N", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "128DLJ6j2tzHOvha-eTtvt4OkoDZti37r", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/CIVIL", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "civil", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A03", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "12TLoWvOwEIh61HbXp9_mAHWz-01ufhBu", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/COMERCIAL", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "comercial", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A02", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1vriyeKuMxk5BjYZvabdmcquQCFbxRa3L", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/COMERCIAL/PRACTICA  COMERCIAL  PARA LITIGANTES", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "comercial", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A02", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1JBEVBCOAZmlZt8KcCga1JOhY9HAxjwhJ", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/FAMILIA", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "familia", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A01", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1BmpvDseHZ7Lz1C8cOqumux1zHY0EvUKL", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/FAMILIA/MINUTAS Y MODELOS PARA FUNCIONARIOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "familia", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A01 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1qcBvNT3KKwdRe2HR_fo9XAg2LkUCt33k", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/FAMILIA/MINUTAS Y MODELOS PARA LITIGANTES", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "familia", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A01 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1xFfTpuo5zDnGLx6NZVHE6YEtIPbqO-6n", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/FAMILIA/MINUTAS Y MODELOS PARA LITIGANTES/MODELOS INFANCIA", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "familia", "area_perfiles": "A06", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A01", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1V0EDAt364rBi5Lk-EmVU0USKwCp1roDH", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/PENAL", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "penal", "area_perfiles": "A08", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A04", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1ALbmS5bAdxUON_ZV4R8s__6RWvk7J1ak", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta #2/PENAL/MINUTAS Y MODELOS PARA FUNCIONARIOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "penal", "area_perfiles": "A08", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A04 (heredada)", "confianza_tipo": "alta", "confianza_area": "media", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1lT_M-7rXnGrV8nYqtzmuiwfm0GsXdeiE", "ruta": "PACK JURIDICO 1/MODELOS Y MINUTAS - 2026/Carpeta N#1", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01 (heredada)", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1mbfsDlwjHNPcIFIKGfq2Ppm2BA29xDdH", "ruta": "PACK JURIDICO 1/REGIMENES", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T13", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1-27LJh7YgEO-UhEMWm13AzANnAeiYpNB", "ruta": "PACK JURIDICO 1/REGIMENES (ACTUALIZADOS)", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "norma", "regla_tipo": "T13", "regla_area": "A15", "confianza_tipo": "media", "confianza_area": "alta", "confianza": "media", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1_rw3Ri7-H9Dn3wGO_yFJf5cl80QWQxUz", "ruta": "PACK JURIDICO 1/Sentencia y Jurisprudencia", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "jurisprudencia", "regla_tipo": "T09", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1EYb5JZoG3zAc5qNGA71Fgv9MscgqA1zE", "ruta": "PACK JURIDICO 1/Sentencia y Jurisprudencia/ley", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "por clasificar", "regla_tipo": "T07", "regla_area": "A15", "confianza_tipo": "baja", "confianza_area": "alta", "confianza": "baja", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": ["el nombre sugiere «norma» pero está dentro de una carpeta de «jurisprudencia» (regla T09)"]},
+  {"drive_id": "1RYrBzszU3roCi-br_Po3k-c9oFHsrXo0", "ruta": "PACK JURIDICO 1/TABLAS LIQUIDADORAS - 2026", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "por clasificar", "area_perfiles": "por clasificar", "tipo_documental": "tabla de liquidación", "regla_tipo": "T12", "regla_area": null, "confianza_tipo": "alta", "confianza_area": "baja", "confianza": "baja", "evidencia": {"archivos_visibles": 1, "por_nombre": {"otro": 1}, "salas": {}}, "notas": []},
+  {"drive_id": "1FqEoVcfa8Vu05gBaTQJcfJWz1x7ySjyz", "ruta": "Pack Juridico 2/Bonos/7000 MINUTAS Y MODELOS", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []},
+  {"drive_id": "1qa7Ps2nvgiijqHiKBLE4YXO099DwWcZx", "ruta": "Pack Juridico 2/Bonos/7000 MINUTAS Y MODELOS/MODELOS O MINUTAS 2025 - 2024 - 2023 - 2022", "propietario": "tercero", "listado": "SEGUN_CONECTOR", "area": "general (varias áreas)", "area_perfiles": "A06–A10", "tipo_documental": "plantilla/minuta", "regla_tipo": "T01", "regla_area": "A15", "confianza_tipo": "alta", "confianza_area": "alta", "confianza": "alta", "evidencia": {"archivos_visibles": 0, "por_nombre": {}, "salas": {}}, "notas": []}
+ ]
+}
