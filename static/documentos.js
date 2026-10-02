@@ -218,7 +218,8 @@ function docMostrarResultado(cont,doc,opc){
   const acciones=dE('div',{class:'doc-acc doc-acc-res'},
     dBtn('Copiar','sec',()=>docCopiar(estado.editando?area.value:estado.texto)),
     dBtn('Descargar Word','sec',ev=>docDescargarWord(doc.id,ev.currentTarget)),
-    bEditar,dBtn('Editar y regenerar','sec',()=>docRegenerar(doc)),bGuardar);
+    bEditar,dBtn('Editar y regenerar','sec',()=>docRegenerar(doc)),
+    dBtn('Revisar estilo','sec',ev=>{if(typeof revisarEstilo==='function')revisarEstilo(estado.editando?area.value:estado.texto,res,ev.currentTarget)}),bGuardar);
   const res=dE('section',{class:'doc-res doc-bloque','aria-label':'Borrador generado'},
     dE('p',{class:'doc-aviso',text:doc.borrador_funcionario?'Proyecto generado por IA para revisión del funcionario. No es una providencia.':'Borrador generado por IA. Revísalo completo antes de usarlo.'}),
     titulo,acciones,cuerpo,area);

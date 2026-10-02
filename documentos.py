@@ -19,6 +19,8 @@ import re
 import unicodedata
 from datetime import datetime, timedelta, timezone
 
+import estilo_redaccion
+
 # ------------------------------------------------------------------ constantes --
 AREAS = [
     "Constitucional", "Civil y Familia", "Comercial y Societario", "Laboral y Seguridad Social",
@@ -1845,7 +1847,11 @@ REGLAS DE RIGOR (obligatorias)
 
 ESTILO
 - Español de Colombia, ortografía de la RAE, registro formal propio de los escritos jurídicos colombianos.
-- Formato Markdown: títulos con ##, numerales y listas cuando ordenen el escrito. Sin relleno ni muletillas."""
+- Formato Markdown: títulos con ## para las secciones del escrito; numerales donde el género los pide (hechos,
+  pretensiones, excepciones, pruebas). Los fundamentos y el análisis van en prosa, no en viñetas.
+""" + estilo_redaccion.RASGOS_A_EVITAR_ESCRITOS + """
+
+""" + estilo_redaccion.VOZ_ABOGADO
 
 SISTEMA_DOCUMENTO = SISTEMA_BASE + """
 
@@ -1957,6 +1963,33 @@ def separar_respuesta(texto: str) -> tuple:
         if s not in items:
             items.append(s[:300])
     return cuerpo.strip(), items[:40]
+
+
+AREA_PRACTICA = "Consultorio jurídico"
+
+
+def es_practica_estudiante(definicion: dict, escritura: str = "auto", camino: str = "trabajar") -> bool:
+    """¿Escrito de práctica de un estudiante? Sí cuando el tipo es del consultorio jurídico y la persona eligió
+    «Escribe como: Estudiante» (o lo dejó en automático y está en el camino «Estoy aprendiendo Derecho»)."""
+    estudiante = escritura == "estudiante" or (escritura == "auto" and camino == "aprender")
+    return estudiante and definicion.get("area") == AREA_PRACTICA
+
+
+def voz_documento(definicion: dict, escritura: str = "auto", camino: str = "trabajar") -> str:
+    """Bloque dinámico del sistema con la voz del escrito. La voz de abogado ya está en SISTEMA_BASE; a un
+    estudiante que redacta un escrito de práctica se le suma la voz de estudiante para el análisis."""
+    if not es_practica_estudiante(definicion, escritura, camino):
+        return ""
+    return ("ESCRITO DE PRÁCTICA DE UN ESTUDIANTE DE DERECHO (consultorio jurídico). La estructura obligatoria "
+            "manda sobre la forma y las partes formales (datos, autorizaciones, firmas) siguen siendo formales; "
+            "en las partes de análisis y argumentación aplica además esta voz:\n\n" + estilo_redaccion.VOZ_ESTUDIANTE)
+
+
+def procesar_salida(salida: str) -> tuple:
+    """Separa el escrito de la lista a verificar y pule su estilo (estilo_redaccion.pulir: quita emojis,
+    rellenos, negritas sueltas y rayas usadas como pausa sin tocar citas, [F#] ni [COMPLETAR: …])."""
+    texto, verificar = separar_respuesta(salida)
+    return estilo_redaccion.pulir(texto), verificar
 
 
 def asegurar_rotulo(definicion: dict, texto: str) -> str:
