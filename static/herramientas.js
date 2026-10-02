@@ -101,7 +101,7 @@ function herrFila(cont,prefijo,conTasa){
     hE('div',null,hE('label',{for:id+'-h',text:'Hasta'}),hInput(id+'-h','date',{'data-k':'hasta'})),
     conTasa?hE('div',null,hE('label',{for:id+'-t',text:'Tasa anual (%)'}),hInput(id+'-t','text',{'data-k':'tasa_pct',inputmode:'decimal',placeholder:'Ej.: 25,5'})):
       hE('div',null,hE('label',{for:id+'-m',text:'Motivo'}),hInput(id+'-m','text',{'data-k':'motivo',maxlength:'160'})),
-    hBtn('Quitar','chip',()=>fila.remove(),{'aria-label':'Quitar '+(conTasa?'período ':'suspensión ')+n}));
+    hBtn('Quitar','herr-mini',()=>fila.remove(),{'aria-label':'Quitar '+(conTasa?'período ':'suspensión ')+n}));
   cont.appendChild(fila);return fila}
 function herrFilas(cont){return [...cont.querySelectorAll('.herr-fila')].map(f=>{const o={};
   f.querySelectorAll('[data-k]').forEach(i=>{if(i.value.trim())o[i.dataset.k]=i.value.trim()});return o}).filter(o=>Object.keys(o).length)}
@@ -205,7 +205,7 @@ function herrPintarTermino(r){
   if(r.cronologia&&r.cronologia.length){
     const tabla=hE('table',{class:'herr-tabla'},hE('caption',{text:'Cronología día por día'}),
       hE('thead',null,hE('tr',null,hE('th',{scope:'col',text:'Fecha'}),hE('th',{scope:'col',text:'Día'}),hE('th',{scope:'col',text:'Cuenta'}),hE('th',{scope:'col',text:'Observación'}))),
-      hE('tbody',null,r.cronologia.map(c=>hE('tr',{class:c.cuenta!=null?'cuenta':'no'},hE('td',{text:c.fecha}),hE('td',{text:c.dia}),
+      hE('tbody',null,r.cronologia.map(c=>hE('tr',{class:c.cuenta!=null?'herr-si':'herr-no'},hE('td',{text:c.fecha}),hE('td',{text:c.dia}),
         hE('td',{text:c.cuenta!=null?String(c.cuenta):'—'}),hE('td',{text:c.motivo||''})))));
     caja.appendChild(hE('details',{class:'herr-det',open:r.cronologia.length<=45},hE('summary',{text:'Cronología ('+r.cronologia.length+' días)'}),
       hE('div',{class:'herr-scroll',tabindex:'0',role:'region','aria-label':'Cronología día por día'},tabla)))}
