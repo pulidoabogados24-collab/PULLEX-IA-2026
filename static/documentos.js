@@ -25,11 +25,12 @@ function dRestantes(n){if(typeof n!=='number'||!PERFIL)return;PERFIL.restantes=n
 async function docApi(url,opc){const o=opc||{};const h={...auth()};if(o.body!==undefined)h['content-type']='application/json';
   const r=await fetch(url,{method:o.method||(o.body!==undefined?'POST':'GET'),headers:h,body:o.body!==undefined?JSON.stringify(o.body):undefined});
   const d=await r.json().catch(()=>({}));
-  if(!r.ok){const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo completar la solicitud.');e.errores=d.errores;e.status=r.status;throw e}
+  if(!r.ok){if(r.status===403&&typeof planInsuficiente==='function')planInsuficiente(d); // acceso por plan (planes.js)
+    const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo completar la solicitud.');e.errores=d.errores;e.status=r.status;throw e}
   if(typeof d.restantes==='number')dRestantes(d.restantes);return d}
 async function docSSE(url,body,alEvento){
   const r=await fetch(url,{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)});
-  if(!r.ok){const d=await r.json().catch(()=>({}));const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo iniciar.');e.errores=d.errores;e.status=r.status;throw e}
+  if(!r.ok){const d=await r.json().catch(()=>({}));if(r.status===403&&typeof planInsuficiente==='function')planInsuficiente(d);const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo iniciar.');e.errores=d.errores;e.status=r.status;throw e}
   const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
   while(true){const {value,done}=await rd.read();if(done)break;resto+=dec.decode(value,{stream:true});
     const partes=resto.split('\n\n');resto=partes.pop();

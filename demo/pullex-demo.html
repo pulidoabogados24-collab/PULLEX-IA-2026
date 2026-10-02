@@ -196,6 +196,98 @@ label.lb{display:block;font-size:.8125rem;color:var(--text);margin:14px 0 6px;fo
 }
 
 </style>
+<style>
+/* Acceso por plan (docs/15-PLANES-Y-PROVEEDORES.md): candado en la navegación, pantalla de mejora
+   y tabla comparativa de Ajustes. Solo tokens de static/tema.css. */
+
+/* ---- candado sutil en la navegación ---- */
+nav button .i.nav-candado{width:12px;height:12px;color:var(--text-2);opacity:.8;margin-left:-3px;flex:none}
+nav button.bloq{color:var(--text-2)}
+@media(max-width:759px){
+  nav button .i.nav-candado{position:absolute;top:2px;right:calc(50% - 26px);margin:0;width:11px;height:11px;padding:2px;
+    box-sizing:content-box;border-radius:999px;background:var(--surface);border:1px solid var(--border)}
+  nav button.on .i.nav-candado{background:var(--surface)}
+}
+
+/* ---- tarjetas del Inicio que llevan a una función de otro plan ---- */
+.captarj .plan-tag{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:.68rem;font-weight:650;
+  letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--surface-2);
+  color:var(--text-2);border:1px solid var(--border)}
+.captarj .plan-tag .i{width:11px;height:11px}
+@media(max-width:560px){.captarj .plan-tag{grid-column:2;justify-self:start}}
+.tcard.mejora-tc{grid-column:1/-1}
+.tcard.mejora-tc .v{font-family:var(--font-display);font-size:1.12rem}
+.tcard.mejora-tc .k .i{width:12px;height:12px;vertical-align:-1px}
+
+/* ---- pantalla de mejora de plan ---- */
+.mejora{max-width:880px;margin:0 auto}
+.mejora-cab{display:grid;gap:10px;margin:4px 0 22px}
+.mejora-cab .eyebrow{display:inline-flex;align-items:center;gap:6px;margin:0;color:var(--text-2);font-size:.78rem;
+  font-weight:650;letter-spacing:.06em;text-transform:uppercase}
+.mejora-cab .eyebrow .i{width:14px;height:14px}
+.mejora-cab h2{margin:0;font-size:clamp(1.6rem,3.4vw,2.2rem);line-height:1.12}
+.mejora-cab p{margin:0;color:var(--text-2);font-size:1rem;line-height:1.6;max-width:62ch}
+.mejora-ben{list-style:none;margin:0 0 22px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.mejora-ben li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;line-height:1.5;color:var(--text)}
+.mejora-ben li .mb-ok{flex:none;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);
+  display:grid;place-items:center;margin-top:1px}
+.mejora-ben li .mb-ok .i{width:12px;height:12px;stroke-width:2.4}
+.planes-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:18px}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;
+  display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);position:relative}
+.plan-card.rec{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.plan-card .pc-sello{position:absolute;top:-10px;left:18px;font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.plan-card .pc-nombre{font-weight:650;font-size:1rem;color:var(--text)}
+.plan-card .pc-precio{font-family:var(--font-display);font-size:1.9rem;line-height:1;color:var(--text);
+  font-variant-numeric:tabular-nums}
+.plan-card .pc-precio small{font-family:var(--font-body);font-size:.82rem;color:var(--text-2);margin-left:4px}
+.plan-card .pc-sub{font-size:.84rem;color:var(--text-2)}
+.plan-card ul{list-style:none;margin:2px 0 6px;padding:0;display:grid;gap:7px}
+.plan-card li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;line-height:1.45;color:var(--text)}
+.plan-card li .i{flex:none;width:15px;height:15px;color:var(--accent);margin-top:2px;stroke-width:2.2}
+.plan-card li.no{color:var(--text-2)}
+.plan-card li.no .i{color:var(--text-2)}
+.plan-card .pc-cta{margin-top:auto;text-decoration:none;width:100%}
+.mejora-pasos{display:grid;gap:8px;margin:0;padding:0;list-style:none;counter-reset:paso}
+.mejora-pasos li{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;line-height:1.5;color:var(--text-2)}
+.mejora-pasos li::before{counter-increment:paso;content:counter(paso);flex:none;width:22px;height:22px;border-radius:50%;
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.75rem;font-weight:650;
+  display:grid;place-items:center}
+.mejora-pie{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px}
+.mejora-pie .actual{font-size:.85rem;color:var(--text-2)}
+.mejora-pie .actual b{color:var(--text)}
+@media(max-width:620px){.mejora-ben{grid-template-columns:1fr}.plan-card{padding:18px 16px}}
+
+/* ---- tabla comparativa de planes (Ajustes) ---- */
+.planes-tabla{width:100%;border-collapse:collapse;font-size:.86rem;table-layout:fixed}
+.planes-tabla th,.planes-tabla td{padding:10px 6px;border-bottom:1px solid var(--border);text-align:center;vertical-align:middle}
+.planes-tabla th:first-child,.planes-tabla td:first-child{text-align:left;padding-left:0;width:38%}
+.planes-tabla thead th{vertical-align:bottom}
+.planes-tabla .pt-nombre{display:block;font-weight:650;color:var(--text)}
+.planes-tabla .pt-precio{display:block;font-weight:500;color:var(--text-2);font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.planes-tabla .pt-tu{display:inline-block;margin-bottom:4px;font-size:.62rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:2px 6px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.planes-tabla .actual{background:var(--accent-soft)}
+.planes-tabla .pt-f{display:block;font-weight:600;color:var(--text)}
+.planes-tabla .pt-d{display:block;font-size:.76rem;color:var(--text-2);line-height:1.4;margin-top:2px}
+.planes-tabla .si .i{width:17px;height:17px;color:var(--ok);stroke-width:2.3}
+.planes-tabla .no{color:var(--text-2)}
+.planes-tabla tfoot td{border-bottom:none;padding-top:12px}
+.planes-tabla .pt-cta{padding:7px 8px;font-size:.76rem;text-decoration:none;width:100%}
+.planes-tabla caption,.planes-tabla .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.planes-nota{font-size:.82rem;color:var(--text-2);margin:12px 0 0;line-height:1.5}
+@media(max-width:560px){
+  .planes-tabla{font-size:.8rem}
+  .planes-tabla th,.planes-tabla td{padding:9px 3px}
+  .planes-tabla .pt-d,.planes-tabla .pt-mes{display:none}
+  .planes-tabla th:first-child,.planes-tabla td:first-child{width:31%}
+  .planes-tabla .pt-precio{font-size:.72rem}
+  .planes-tabla .pt-nombre{font-size:.8rem}
+  .planes-tabla .pt-cta{padding:6px 4px;font-size:.72rem}
+}
+
+</style>
 <script>
 // =========================================================================================
 // PULLEX IA — motor de apariencia. Se carga en <head>, ANTES de pintar, para que la página
@@ -1065,6 +1157,7 @@ body{display:flex;flex-direction:column}
   <symbol id="i-memoria" viewBox="0 0 24 24"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21l-6.5-4-6.5 4V4.5a1 1 0 0 1 1-1z"/></symbol>
   <symbol id="i-paleta" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.3 0 1.9-.8 1.9-1.7 0-1.2-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6h2.1a3.7 3.7 0 0 0 3.7-3.7C20.5 6.8 16.7 3.5 12 3.5z"/><circle cx="7.7" cy="11.5" r="1.1"/><circle cx="10" cy="7.7" r="1.1"/><circle cx="14.6" cy="7.7" r="1.1"/></symbol>
   <symbol id="i-preferencias" viewBox="0 0 24 24"><path d="M5 20.5v-6M5 10.5v-7M12 20.5v-9M12 7.5v-4M19 20.5v-4M19 12.5v-9M3 14.5h4M10 7.5h4M17 16.5h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-candado" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 14.5h4"/></symbol>
   <symbol id="i-correo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5 12 13l8.5-6.5"/></symbol>
@@ -1341,6 +1434,11 @@ body{display:flex;flex-direction:column}
       <div class="wrap doc-wrap" id="doc-raiz"></div>
     </section>
 
+    <!-- Pantalla de mejora de plan (static/planes.js): se muestra al entrar a una función que el plan no incluye. -->
+    <section id="v-mejora" class="vista" aria-live="polite">
+      <div class="wrap"><div class="mejora" id="mejora-raiz"></div></div>
+    </section>
+
     <section id="v-config" class="vista">
       <div class="wrap">
         <div class="cab-vista">
@@ -1414,7 +1512,7 @@ body{display:flex;flex-direction:column}
         <div class="panel">
           <h3><svg class="i" aria-hidden="true"><use href="#i-plan"/></svg> Planes</h3>
           <div id="planes"></div>
-          <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta.</p>
+          <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta. El botón «Mejorar» te abre ese correo ya escrito.</p>
         </div>
 
         <div class="panel">
@@ -1493,6 +1591,16 @@ const D=window.__DEMO_DATOS__;
 const esperar=ms=>new Promise(r=>setTimeout(r,ms));
 const PLANES={prueba:{nombre:'Prueba gratis',limite:10,precio:0},basico:{nombre:'Básico',limite:200,precio:30000},
   pro:{nombre:'Pro',limite:500,precio:45000},premium:{nombre:'Premium',limite:1000,precio:60000}};
+// Acceso por plan: misma tabla que app.py (PLAN_FUNCIONES). El perfil de la demo es Premium; el selector
+// oculto ?plan=basico|pro|premium (o prueba) en la URL de la demo muestra los bloqueos de cada plan.
+const FUNCIONES=['chat','academia','automatizador'];
+const PLAN_FUNCIONES={prueba:FUNCIONES,basico:['chat'],pro:['chat','academia'],premium:FUNCIONES};
+const PLAN_REQUERIDO={academia:'pro',automatizador:'premium'};
+const PREFIJOS_FUNCION=[['/api/modular','academia'],['/api/academia','academia'],['/api/taller','academia'],
+  ['/api/documentos','automatizador'],['/api/flujos','automatizador'],['/api/asistente','automatizador']];
+const NOMBRE_FUNCION={academia:'Modular Lab y Mi mapa',automatizador:'Documentos, Flujos y Asistente'};
+const PLAN_DEMO=(()=>{try{const p=new URLSearchParams(location.search).get('plan');return PLANES[p]?p:'premium'}catch(e){return 'premium'}})();
+function funcionDeRuta(r){const f=PREFIJOS_FUNCION.find(([p])=>r===p||r.startsWith(p+'/'));return f?f[1]:null}
 const AREAS=['Constitucional / Tutela','Penal','Civil','Familia','Laboral','Administrativo','Comercial / Societario',
   'Marcas / Propiedad Intelectual','Consumidor','Tributario'];
 const RUBRICA=[['problema','Identificación del problema',20],['normas','Marco normativo',20],['argumentacion','Argumentación',20],
@@ -1518,8 +1626,10 @@ function apActualizar(actual,b){
     if(m[2].length*3/4>AP_TOPE[t])return 'La imagen pesa demasiado (máximo '+(AP_TOPE[t]/1024)+' KB).';
     S.imgs[t]={mime:m[1],b64:m[2]};n.imagenes[t]=Date.now()}
   return n}
-function perfilBase(nombre,email){return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:'pro',
-  plan_nombre:'Pro',limite:500,usadas:12,restantes:488,activo:true,es_admin:false,email_verificado:true,
+function perfilBase(nombre,email){const pl=PLANES[PLAN_DEMO];const usadas=PLAN_DEMO==='prueba'?2:12;
+  return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:PLAN_DEMO,
+  plan_nombre:pl.nombre,limite:pl.limite,usadas,restantes:pl.limite-usadas,activo:true,es_admin:false,email_verificado:true,
+  funciones:PLAN_FUNCIONES[PLAN_DEMO].slice(),
   preferencias:{areas:['Constitucional / Tutela','Penal'],modo:'auto',tema:'claro',web:true,memoria:'',camino:'aprender',apariencia:apBase()}}}
 function json(d,st){return new Response(JSON.stringify(d),{status:st||200,headers:{'content-type':'application/json'}})}
 function error(st,m){return json({detail:m},st)}
@@ -1729,7 +1839,13 @@ async function manejar(url,o){
     S.perfil=perfilBase(b.nombre&&b.nombre.trim()||'Valentina Ríos',b.email||'demo@pullex.co');
     return json({token:'demo',perfil:S.perfil});}
   if(!S.perfil)return error(401,'No autenticado');
-  if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false});
+  const fn=funcionDeRuta(ruta);
+  if(fn&&!S.perfil.funciones.includes(fn)){const req=PLAN_REQUERIDO[fn];
+    return json({detail:NOMBRE_FUNCION[fn]+' está disponible desde el plan '+PLANES[req].nombre+'. Mejora tu plan para usarlo.',
+      codigo:'plan_insuficiente',funcion:fn,plan_requerido:req},403)}
+  if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false,
+    funciones:S.perfil.funciones,plan_funciones:PLAN_FUNCIONES,plan_requerido:PLAN_REQUERIDO,
+    contacto_planes:{correo:'Pulidoabogados24@gmail.com',medio_pago:'Nequi'}});
   if(ruta==='/api/boletin')return json({fecha:new Date().toISOString().slice(0,10),contenido:
     '## Boletín de demostración\n\nEn la app real, aquí aparece cada día un boletín con noticias jurídicas, jurisprudencia reciente y novedades normativas de Colombia, generado con búsqueda web en fuentes oficiales.\n\n_Esta página es una demostración: no muestra noticias reales._'});
   if(ruta==='/api/preferencias'){const p=S.perfil.preferencias;
@@ -1900,15 +2016,22 @@ function pintarAreas(){
     el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
 }
 function pintarPlanes(){
+  // Acceso por plan (static/planes.js): candados en la navegación y tabla comparativa.
+  if(typeof pintarTablaPlanes==='function'){pintarCandados();pintarTablaPlanes();return}
   const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
   ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
+function ver(v){
+  // Función que el plan no incluye: se marca su pestaña y se muestra la pantalla de mejora (planes.js).
+  const bloq=typeof vistaBloqueada==='function'&&vistaBloqueada(v);
+  ['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v&&!bloq);$('n-'+x).classList.toggle('on',x===v);
   if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+  if($('v-mejora'))$('v-mejora').classList.toggle('on',!!bloq);
   const m=document.querySelector('main');if(m)m.scrollTop=0;
+  if(bloq){cerrarHistorial();pintarMejora(VISTA_FUNCION[v]);return}
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
@@ -2430,7 +2553,11 @@ function pintarCapacidades(){
     b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
     const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
     b.appendChild(t);b.appendChild(d);
-    const ir=el('span','ir','Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
+    const bloq=c.ir&&typeof vistaBloqueada==='function'&&vistaBloqueada(c.ir);
+    if(bloq){const tg=el('span','plan-tag');tg.appendChild(plIcono('candado'));
+      tg.appendChild(document.createTextNode('Plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir]))));b.appendChild(tg);
+      b.setAttribute('aria-label',c.t+'. Incluido en el plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir])))}
+    const ir=el('span','ir',bloq?'Ver el plan':'Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
     b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
     g.appendChild(b);
   });
@@ -2438,7 +2565,7 @@ function pintarCapacidades(){
 async function cargarProgresoInicio(){
   const el=$('progreso-inicio');
   cargarTablero();
-  if(CAMINO!=='aprender'){el.classList.add('hidden');return}
+  if(CAMINO!=='aprender'||(typeof tieneFuncion==='function'&&!tieneFuncion('academia'))){el.classList.add('hidden');return}
   try{
     const p=await api('/api/modular/progreso');
     if(!p.resueltos){el.classList.add('hidden');return}
@@ -2456,6 +2583,7 @@ async function api(url,opts){
   const o=opts||{};const h={...auth()};if(o.body)h['content-type']='application/json';
   const r=await fetch(url,{method:o.body?'POST':'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
   const d=await r.json().catch(()=>({}));
+  if(r.status===403&&typeof planInsuficiente==='function'&&planInsuficiente(d))throw new Error(d.detail);
   if(!r.ok)throw new Error(d.detail||'No se pudo completar la solicitud.');
   if(typeof d.restantes==='number'&&PERFIL){PERFIL.restantes=d.restantes;$('c-rest').textContent=d.restantes;
     PERFIL.usadas=PERFIL.limite-d.restantes;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite}
@@ -2670,6 +2798,13 @@ function boton(txt,cls,fn){const b=el('button',cls,txt);b.type='button';b.addEve
 async function cargarTablero(){
   const t=$('tablero');
   if(CAMINO!=='aprender'){t.classList.add('hidden');return}
+  if(typeof tieneFuncion==='function'&&!tieneFuncion('academia')){ // sin Academia: una invitación, sin llamar a la API
+    t.textContent='';const c=el('div','tcard mejora-tc');const k=el('div','k');k.appendChild(plIcono('candado'));
+    k.appendChild(document.createTextNode(' Modular Lab · plan '+plNombre(plRequerido('academia'))));c.appendChild(k);
+    c.appendChild(el('div','v','Practica casos tipo examen y deja que PULLEX te evalúe'));
+    c.appendChild(el('div','s','Rúbrica, mapa de lo que dominas y repasos espaciados. Mientras tanto, «Enséñame», «Resuélvelo conmigo» y «Examíname» funcionan en Consultar.'));
+    c.appendChild(boton('Conocer el plan '+plNombre(plRequerido('academia')),'bsec',()=>ver('modular')));
+    t.appendChild(c);t.classList.remove('hidden');return}
   if(!t.children.length){ // esqueleto mientras llega el tablero (clase distinta de .tcard a propósito)
     for(let i=0;i<2;i++){const c=el('div','tcard-esq panel');c.style.cssText='margin:0;padding:16px 18px';
       [40,85,60].forEach(w=>{const k=el('div','skel');k.style.width=w+'%';c.appendChild(k)});t.appendChild(c)}
@@ -2994,6 +3129,178 @@ document.addEventListener('DOMContentLoaded',()=>{});
   ACCIONES.imprimirPDF=aviso;ACCIONES.exportarExcel=aviso;})();
 </script>
 <script>// =========================================================================================
+// PULLEX — acceso por plan (docs/15-PLANES-Y-PROVEEDORES.md). Se carga después de app.js y usa sus
+// utilidades globales (ESTADO, PERFIL, $, el, ver, toast). Sin JavaScript en línea: los botones usan
+// addEventListener y los datos del servidor se pintan con textContent.
+//   Básico  = Consultar.
+//   Pro     = Consultar + Academia (Modular Lab, Mi mapa y el Taller de escritos).
+//   Premium = todo: + Automatizador (Documentos, Flujos y Asistente).
+//   Prueba  = todo, limitado por sus consultas gratis. Administrador = todo.
+// El servidor es quien decide (403 «plan_insuficiente»); esto solo evita que el usuario choque con él.
+// =========================================================================================
+const VISTA_FUNCION={modular:'academia',mapa:'academia',taller:'academia',documentos:'automatizador'};
+const FUNCIONES_TODAS=['chat','academia','automatizador'];
+const FUNCION_INFO={
+  chat:{corto:'Consultar',d:'Chat jurídico con fuentes, adjuntos y búsqueda en sitios oficiales.'},
+  academia:{corto:'Modular Lab y Mi mapa',d:'Casos tipo examen con rúbrica, mapa del Derecho, banco de errores y repasos.',
+    eyebrow:'PULLEX Academia',titulo:'Entrena como en el examen, con un tutor que recuerda tus errores',
+    lead:'Modular Lab y Mi mapa del Derecho están en el plan Pro. Resuelves casos tipo examen, PULLEX te evalúa con rúbrica y tu mapa personal te dice qué repasar y cuándo.',
+    beneficios:['Casos tipo modular en 9 áreas, con pistas y solución de referencia',
+      'Evaluación con rúbrica: lo que identificaste, lo que omitiste y cómo mejorar',
+      'Mi mapa del Derecho: 61 conceptos con tu estado en cada uno',
+      'Banco de errores y repasos espaciados a 1, 3, 7, 15 y 30 días']},
+  automatizador:{corto:'Documentos y flujos',d:'Escritos de 15 áreas, flujos de varios pasos y asistente; exporta a Word.',
+    eyebrow:'Automatizador',titulo:'Del caso al borrador, sin empezar desde la hoja en blanco',
+    lead:'Documentos, Flujos y Asistente están en el plan Premium. Completas un formulario y PULLEX arma el borrador con la estructura procesal colombiana, listo para que lo revises.',
+    beneficios:['203 tipos de escritos: tutelas, peticiones, demandas, recursos, contratos y más',
+      '7 flujos de varios pasos: investigar, analizar y redactar en orden',
+      'Un asistente que propone un plan editable y lo ejecuta paso a paso',
+      'Exporta a Word y guarda todo en «Mis documentos»']},
+};
+const PLANES_PAGOS=['basico','pro','premium'];
+
+function plFunciones(){
+  if(typeof ESTADO!=='undefined'&&ESTADO&&Array.isArray(ESTADO.funciones))return ESTADO.funciones;
+  if(typeof PERFIL!=='undefined'&&PERFIL&&Array.isArray(PERFIL.funciones))return PERFIL.funciones;
+  return FUNCIONES_TODAS; // sin datos no se bloquea nada: el servidor decide igual
+}
+function tieneFuncion(f){return !f||plFunciones().includes(f)}
+function vistaBloqueada(v){return !tieneFuncion(VISTA_FUNCION[v])}
+function plPlanes(){return (ESTADO&&ESTADO.planes)||{}}
+function plIncluye(plan){const m=ESTADO&&ESTADO.plan_funciones;return (m&&m[plan])||(plan==='premium'?FUNCIONES_TODAS:plan==='pro'?['chat','academia']:['chat'])}
+function plRequerido(f){return (ESTADO&&ESTADO.plan_requerido&&ESTADO.plan_requerido[f])||(f==='automatizador'?'premium':'pro')}
+function plNombre(plan){const p=plPlanes()[plan];return p?p.nombre:plan}
+function plPrecio(plan){const p=plPlanes()[plan];return p?'$'+Number(p.precio||0).toLocaleString('es-CO'):''}
+function plIcono(id,cls){const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','i '+(cls||'xs'));
+  s.setAttribute('aria-hidden','true');const u=document.createElementNS('http://www.w3.org/2000/svg','use');u.setAttribute('href','#i-'+id);
+  s.appendChild(u);return s}
+
+// Flujo de pago que ya existe: pagar por Nequi y escribirle al administrador, que activa el plan en /admin.
+// El botón abre ese correo ya escrito (asunto y cuerpo con el plan y el correo de la cuenta).
+function plEnlacePago(plan){
+  const c=(ESTADO&&ESTADO.contacto_planes)||{};const correo=c.correo||'';
+  const p=plPlanes()[plan]||{};
+  const asunto='Quiero mejorar mi plan de PULLEX a '+(p.nombre||plan);
+  const cuerpo='Hola. Quiero pasar al plan '+(p.nombre||plan)+' ('+plPrecio(plan)+' al mes).\n\n'+
+    'Correo de mi cuenta: '+((PERFIL&&PERFIL.email)||'')+'\n'+
+    'Pago por '+(c.medio_pago||'Nequi')+': adjunto el comprobante (o te escribo cuando lo haga).\n\nGracias.';
+  return 'mailto:'+correo+'?subject='+encodeURIComponent(asunto)+'&body='+encodeURIComponent(cuerpo);
+}
+function plBotonPago(plan,cls,texto){
+  const a=el('a',cls,texto||('Mejorar a '+plNombre(plan)));a.href=plEnlacePago(plan);a.dataset.plan=plan;
+  a.addEventListener('click',()=>setTimeout(()=>toast('Te abrimos el correo para activar '+plNombre(plan)+'. Si no se abre, escríbenos a '+
+    (((ESTADO&&ESTADO.contacto_planes)||{}).correo||'soporte')+'.'),300));
+  return a}
+
+// ---- navegación: candado sutil en lo que el plan no incluye ----
+function pintarCandados(){
+  Object.keys(VISTA_FUNCION).forEach(v=>{const b=$('n-'+v);if(!b)return;
+    const bloq=vistaBloqueada(v);b.classList.toggle('bloq',bloq);
+    let c=b.querySelector('.nav-candado');
+    if(bloq&&!c){c=plIcono('candado','nav-candado');b.appendChild(c)}
+    if(!bloq&&c)c.remove();
+    const txt=(b.querySelector('.l-largo')||b).textContent.trim();
+    if(bloq){b.title=txt+' · incluido en el plan '+plNombre(plRequerido(VISTA_FUNCION[v]));
+      b.setAttribute('aria-label',b.title)}
+    else{b.removeAttribute('title');b.removeAttribute('aria-label')}
+  });
+}
+
+// ---- pantalla de mejora de plan ----
+function pintarMejora(f){
+  const info=FUNCION_INFO[f]||FUNCION_INFO.academia;const req=plRequerido(f);
+  const raiz=$('mejora-raiz');raiz.textContent='';
+  const cab=el('div','mejora-cab');
+  const eb=el('p','eyebrow');eb.appendChild(plIcono('candado'));eb.appendChild(document.createTextNode(info.eyebrow+' · plan '+plNombre(req)));
+  cab.appendChild(eb);cab.appendChild(el('h2','display',info.titulo));cab.appendChild(el('p',null,info.lead));
+  raiz.appendChild(cab);
+  const ben=el('ul','mejora-ben');
+  info.beneficios.forEach(t=>{const li=el('li');const ok=el('span','mb-ok');ok.appendChild(plIcono('check'));li.appendChild(ok);
+    li.appendChild(el('span',null,t));ben.appendChild(li)});
+  raiz.appendChild(ben);
+  // Planes que incluyen la función, del más económico al más completo.
+  const cards=el('div','planes-cards');
+  const pagos=PLANES_PAGOS.filter(p=>plPlanes()[p]&&plIncluye(p).includes(f))
+    .sort((a,b)=>plPlanes()[a].precio-plPlanes()[b].precio);
+  pagos.forEach(p=>{
+    const c=el('div','plan-card'+(p===req?' rec':''));c.dataset.plan=p;
+    if(p===req)c.appendChild(el('span','pc-sello','Recomendado'));
+    c.appendChild(el('div','pc-nombre',plNombre(p)));
+    const pr=el('div','pc-precio',plPrecio(p));pr.appendChild(el('small',null,'COP / mes'));c.appendChild(pr);
+    c.appendChild(el('div','pc-sub',Number(plPlanes()[p].limite).toLocaleString('es-CO')+' consultas al mes'));
+    const ul=el('ul');
+    FUNCIONES_TODAS.forEach(x=>{const si=plIncluye(p).includes(x);const li=el('li',si?null:'no');
+      li.appendChild(plIcono(si?'check':'x'));li.appendChild(el('span',null,(si?'':'Sin ')+FUNCION_INFO[x].corto));ul.appendChild(li)});
+    c.appendChild(ul);
+    c.appendChild(plBotonPago(p,(p===req?'bpri':'bsec')+' pc-cta'));
+    cards.appendChild(c)});
+  raiz.appendChild(cards);
+  const como=el('div','panel');
+  como.appendChild(el('h3',null,'Cómo mejorar tu plan'));
+  const pasos=el('ol','mejora-pasos');
+  ['Paga el valor del plan por '+((((ESTADO&&ESTADO.contacto_planes)||{}).medio_pago)||'Nequi')+'.',
+   'Pulsa «Mejorar»: se abre un correo ya escrito con tu plan y el correo de tu cuenta. Adjunta el comprobante.',
+   'El administrador activa tu plan. Al volver a entrar verás todo desbloqueado; tus consultas y tu historial se conservan.']
+    .forEach(t=>pasos.appendChild(el('li',null,t)));
+  como.appendChild(pasos);
+  const pie=el('div','mejora-pie');
+  const act=el('div','actual');act.appendChild(document.createTextNode('Tu plan actual: '));
+  act.appendChild(el('b',null,(PERFIL&&PERFIL.plan_nombre)||''));
+  if(PERFIL)act.appendChild(document.createTextNode(' · te quedan '+PERFIL.restantes+' consultas'));
+  pie.appendChild(act);
+  const seguir=el('button','bsec','Seguir en Consultar');seguir.type='button';seguir.addEventListener('click',()=>ver('chat'));
+  pie.appendChild(seguir);como.appendChild(pie);
+  raiz.appendChild(como);
+}
+
+// ---- tabla comparativa de planes (Ajustes) ----
+function pintarTablaPlanes(){
+  const c=$('planes');if(!c)return;c.textContent='';
+  const pl=plPlanes();const cols=PLANES_PAGOS.filter(k=>pl[k]);if(!cols.length)return;
+  const actual=PERFIL&&PERFIL.plan;
+  const t=el('table','planes-tabla');
+  t.appendChild(el('caption',null,'Comparación de planes'));
+  const th=el('thead');const trh=el('tr');trh.appendChild(el('th',null,''));
+  cols.forEach(k=>{const h=el('th',k===actual?'actual':null);h.scope='col';
+    if(k===actual)h.appendChild(el('span','pt-tu','Tu plan'));
+    h.appendChild(el('span','pt-nombre',pl[k].nombre));const pr=el('span','pt-precio',plPrecio(k));
+    pr.appendChild(el('span','pt-mes','/mes'));h.appendChild(pr);trh.appendChild(h)});
+  th.appendChild(trh);t.appendChild(th);
+  const tb=el('tbody');
+  const fila=(titulo,desc,celda)=>{const tr=el('tr');const h=el('th');h.scope='row';h.appendChild(el('span','pt-f',titulo));
+    if(desc)h.appendChild(el('span','pt-d',desc));tr.appendChild(h);
+    cols.forEach(k=>{const td=el('td',k===actual?'actual':null);celda(k,td);tr.appendChild(td)});tb.appendChild(tr)};
+  fila('Consultas al mes',null,(k,td)=>{td.textContent=Number(pl[k].limite).toLocaleString('es-CO')});
+  FUNCIONES_TODAS.forEach(f=>fila(FUNCION_INFO[f].corto,FUNCION_INFO[f].d,(k,td)=>{
+    const si=plIncluye(k).includes(f);td.className=(td.className?td.className+' ':'')+(si?'si':'no');
+    if(si)td.appendChild(plIcono('check','s'));else td.appendChild(document.createTextNode('—'));
+    td.appendChild(el('span','sr',si?'Incluido':'No incluido'))}));
+  t.appendChild(tb);
+  // Botones de mejora solo hacia planes superiores al actual (por precio).
+  const precioActual=(pl[actual]||{}).precio||0;const esPrueba=actual==='prueba';
+  if(!(PERFIL&&PERFIL.es_admin)){
+    const tf=el('tfoot');const tr=el('tr');tr.appendChild(el('td'));
+    cols.forEach(k=>{const td=el('td',k===actual?'actual':null);
+      if(k!==actual&&(esPrueba||pl[k].precio>precioActual))td.appendChild(plBotonPago(k,(k==='premium'?'bpri':'bsec')+' pt-cta','Mejorar'));
+      tr.appendChild(td)});
+    tf.appendChild(tr);t.appendChild(tf)}
+  c.appendChild(t);
+  if(esPrueba)c.appendChild(el('p','planes-nota','Estás en la prueba gratis: tienes acceso a todo hasta agotar tus '+
+    ((pl.prueba||{}).limite||10)+' consultas. Después eliges el plan que mejor te sirva.'));
+}
+
+// ---- el servidor dijo «plan insuficiente» (p. ej. el administrador cambió el plan con la app abierta) ----
+function planInsuficiente(d){
+  if(!d||d.codigo!=='plan_insuficiente')return false;
+  if(ESTADO&&Array.isArray(ESTADO.funciones))ESTADO.funciones=ESTADO.funciones.filter(x=>x!==d.funcion);
+  if(PERFIL&&Array.isArray(PERFIL.funciones))PERFIL.funciones=PERFIL.funciones.filter(x=>x!==d.funcion);
+  pintarCandados();
+  const v=Object.keys(VISTA_FUNCION).find(x=>VISTA_FUNCION[x]===d.funcion);
+  if(v)ver(v);
+  return true;
+}
+</script>
+<script>// =========================================================================================
 // PULLEX Documentos — el automatizador: Escritos (catálogo), Flujos, Asistente y Mis documentos.
 // Se carga después de app.js y usa sus utilidades globales (auth, md, toast, PERFIL, pintarFuentes).
 // Sin JavaScript en línea: todo con addEventListener. Los datos del servidor se pintan con
@@ -3020,11 +3327,12 @@ function dRestantes(n){if(typeof n!=='number'||!PERFIL)return;PERFIL.restantes=n
 async function docApi(url,opc){const o=opc||{};const h={...auth()};if(o.body!==undefined)h['content-type']='application/json';
   const r=await fetch(url,{method:o.method||(o.body!==undefined?'POST':'GET'),headers:h,body:o.body!==undefined?JSON.stringify(o.body):undefined});
   const d=await r.json().catch(()=>({}));
-  if(!r.ok){const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo completar la solicitud.');e.errores=d.errores;e.status=r.status;throw e}
+  if(!r.ok){if(r.status===403&&typeof planInsuficiente==='function')planInsuficiente(d); // acceso por plan (planes.js)
+    const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo completar la solicitud.');e.errores=d.errores;e.status=r.status;throw e}
   if(typeof d.restantes==='number')dRestantes(d.restantes);return d}
 async function docSSE(url,body,alEvento){
   const r=await fetch(url,{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)});
-  if(!r.ok){const d=await r.json().catch(()=>({}));const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo iniciar.');e.errores=d.errores;e.status=r.status;throw e}
+  if(!r.ok){const d=await r.json().catch(()=>({}));if(r.status===403&&typeof planInsuficiente==='function')planInsuficiente(d);const e=new Error(typeof d.detail==='string'?d.detail:'No se pudo iniciar.');e.errores=d.errores;e.status=r.status;throw e}
   const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
   while(true){const {value,done}=await rd.read();if(done)break;resto+=dec.decode(value,{stream:true});
     const partes=resto.split('\n\n');resto=partes.pop();

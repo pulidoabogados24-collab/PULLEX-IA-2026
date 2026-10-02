@@ -5,6 +5,9 @@
 fastapi==0.142.1
 uvicorn==0.54.0
 anthropic==1.9.0
+# Proveedor alterno (PULLEX_PROVEEDOR=openai o PULLEX_RESPALDO=openai). Responses API; ver proveedores.py.
+# Solo depende de paquetes que ya estaban en el árbol (httpx2, pydantic, jiter, anyio, sniffio).
+openai==3.22.1
 python-dotenv==1.2.3
 # Exportación a Word del automatizador (GET /api/documentos/{id}/docx). Arrastra lxml.
 python-docx==1.2.0

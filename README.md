@@ -36,12 +36,23 @@ python app.py
 
 ### Planes (editables en `app.py` → `PLANES`)
 
-| Plan     | Precio/mes | Consultas/mes |
-|----------|-----------:|--------------:|
-| Prueba   |         $0 |            10 |
-| Básico   |    $30.000 |           200 |
-| Pro      |    $45.000 |           500 |
-| Premium  |    $60.000 |         1.000 |
+| Plan     | Precio/mes | Consultas/mes | Incluye |
+|----------|-----------:|--------------:|---------|
+| Prueba   |         $0 |            10 | Todo, para conocer el producto (lo limita el cupo) |
+| Básico   |    $30.000 |           200 | Consultar (chat) |
+| Pro      |    $45.000 |           500 | Consultar + Academia (Modular Lab, Mi mapa, Taller de escritos) |
+| Premium  |    $60.000 |         1.000 | Todo: Consultar + Academia + Automatizador (Documentos, Flujos, Asistente) |
+
+El acceso por plan se aplica en el servidor (403 `plan_insuficiente`) y en la interfaz (candados, pantalla de
+mejora y tabla comparativa en Ajustes). Tabla `PLAN_FUNCIONES` en `app.py`; detalle en
+`docs/15-PLANES-Y-PROVEEDORES.md`.
+
+### Motor de IA: Claude por defecto, ChatGPT como alterno o respaldo
+
+`PULLEX_PROVEEDOR=anthropic|openai` elige el proveedor y `PULLEX_RESPALDO=openai` activa el respaldo
+automático cuando el principal está saturado o caído (necesita `OPENAI_API_KEY`). El panel `/admin` muestra
+el proveedor y el modelo activos. La integración con OpenAI está probada solo con un doble (sin clave real):
+ver `docs/15-PLANES-Y-PROVEEDORES.md`.
 
 ## Administrador
 
@@ -155,13 +166,14 @@ repositorio, y defines en **Environment**:
 
 ```bash
 pip install -r requirements-dev.txt
-pytest tests                  # 125 pruebas: seguridad, regresión, Modular Lab, Academia, fuentes y apariencia (sin API real)
+pytest tests                  # 174 pruebas: seguridad, regresión, Modular Lab, Academia, fuentes, apariencia, documentos, planes y proveedores (sin API real)
 pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
 ```
 
 Con el servidor corriendo, `tests/e2e_navegador.py` repite las verificaciones en un navegador real
 (requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`); `tests/e2e_fuentes.py`
-prueba el bloque "Fuentes consultadas" contra `demo/servidor_simulado.py`.
+prueba el bloque "Fuentes consultadas" contra `demo/servidor_simulado.py`. `tests/e2e_planes.py` prueba los
+bloqueos por plan y la pantalla de mejora contra el mismo servidor simulado.
 
 ## Advertencia
 

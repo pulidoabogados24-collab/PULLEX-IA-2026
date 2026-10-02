@@ -181,3 +181,37 @@ def chat(cliente, token, cid, mensaje="hola"):
     r = cliente.post("/api/chat", headers=auth(token),
                      json={"conversacion": cid, "mensaje": mensaje, "web": False})
     return r
+
+
+class FakeOpenAI:
+    """Doble del cliente oficial de OpenAI (Responses API). Ninguna prueba llama a la API real.
+    Con stream=True devuelve eventos con la forma de la documentación (response.output_text.delta…);
+    sin stream, un objeto con output_text. `error` hace fallar la llamada; `eventos_extra` agrega eventos
+    (búsqueda web, citas) antes del texto."""
+    ultima_llamada = None
+    llamadas = 0
+    texto = "RESPUESTA-DESDE-OPENAI"
+    error = None
+    eventos_extra = []
+
+    def __init__(self, *a, **k):
+        FakeOpenAI.api_key = k.get("api_key")
+        self.responses = types.SimpleNamespace(create=self._create)
+
+    @classmethod
+    def reiniciar(cls):
+        cls.ultima_llamada, cls.llamadas, cls.error = None, 0, None
+        cls.texto, cls.eventos_extra = "RESPUESTA-DESDE-OPENAI", []
+
+    def _create(self, **k):
+        FakeOpenAI.ultima_llamada = k
+        FakeOpenAI.llamadas += 1
+        if FakeOpenAI.error is not None:
+            raise FakeOpenAI.error
+        ns = types.SimpleNamespace
+        if k.get("stream"):
+            t = FakeOpenAI.texto
+            trozos = [ns(type="response.output_text.delta", delta=t[i:i + 7]) for i in range(0, len(t), 7)]
+            return iter([ns(type="response.created")] + list(FakeOpenAI.eventos_extra) + trozos
+                        + [ns(type="response.completed")])
+        return ns(output_text=FakeOpenAI.texto)

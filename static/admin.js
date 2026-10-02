@@ -60,7 +60,19 @@ async function cargarNegocio(){
       <div class="stat"><div class="n" style="color:var(--warn)">${cop(m.costo_api_estimado)}</div><div class="l">Costo API estimado</div></div>
       <div class="stat"><div class="n">${cop(m.margen_estimado)}</div><div class="l">Margen estimado</div></div>
       <div class="stat"><div class="n">${m.consultas_totales}</div><div class="l">Consultas usadas</div></div>`;
+    pintarIA(m.ia);
   }catch(e){$('negocio').innerHTML=''}
+}
+// Motor de IA activo (proveedor y modelo). Con textContent: los nombres vienen de variables de entorno.
+function pintarIA(ia){
+  if(!ia||!ia.principal)return;
+  const caja=document.createElement('div');caja.className='stat';caja.id='ia-activa';
+  const n=document.createElement('div');n.className='n';n.style.fontSize='1rem';
+  n.textContent=ia.principal.nombre+' · '+ia.principal.modelo+(ia.principal.configurado?'':' (sin clave)');
+  const l=document.createElement('div');l.className='l';
+  l.textContent='Motor de IA activo · respaldo: '+(ia.respaldo?ia.respaldo.nombre+' · '+ia.respaldo.modelo+
+    (ia.respaldo.configurado?'':' (sin clave: no se usará)'):'ninguno');
+  caja.appendChild(n);caja.appendChild(l);$('negocio').appendChild(caja);
 }
 async function resetClave(email){
   if(!confirm('¿Generar una contraseña temporal para '+email+'?'))return;

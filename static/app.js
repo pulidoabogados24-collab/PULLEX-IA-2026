@@ -89,15 +89,22 @@ function pintarAreas(){
     el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
 }
 function pintarPlanes(){
+  // Acceso por plan (static/planes.js): candados en la navegación y tabla comparativa.
+  if(typeof pintarTablaPlanes==='function'){pintarCandados();pintarTablaPlanes();return}
   const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
   ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
+function ver(v){
+  // Función que el plan no incluye: se marca su pestaña y se muestra la pantalla de mejora (planes.js).
+  const bloq=typeof vistaBloqueada==='function'&&vistaBloqueada(v);
+  ['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v&&!bloq);$('n-'+x).classList.toggle('on',x===v);
   if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+  if($('v-mejora'))$('v-mejora').classList.toggle('on',!!bloq);
   const m=document.querySelector('main');if(m)m.scrollTop=0;
+  if(bloq){cerrarHistorial();pintarMejora(VISTA_FUNCION[v]);return}
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
@@ -619,7 +626,11 @@ function pintarCapacidades(){
     b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
     const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
     b.appendChild(t);b.appendChild(d);
-    const ir=el('span','ir','Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
+    const bloq=c.ir&&typeof vistaBloqueada==='function'&&vistaBloqueada(c.ir);
+    if(bloq){const tg=el('span','plan-tag');tg.appendChild(plIcono('candado'));
+      tg.appendChild(document.createTextNode('Plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir]))));b.appendChild(tg);
+      b.setAttribute('aria-label',c.t+'. Incluido en el plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir])))}
+    const ir=el('span','ir',bloq?'Ver el plan':'Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
     b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
     g.appendChild(b);
   });
@@ -627,7 +638,7 @@ function pintarCapacidades(){
 async function cargarProgresoInicio(){
   const el=$('progreso-inicio');
   cargarTablero();
-  if(CAMINO!=='aprender'){el.classList.add('hidden');return}
+  if(CAMINO!=='aprender'||(typeof tieneFuncion==='function'&&!tieneFuncion('academia'))){el.classList.add('hidden');return}
   try{
     const p=await api('/api/modular/progreso');
     if(!p.resueltos){el.classList.add('hidden');return}
@@ -645,6 +656,7 @@ async function api(url,opts){
   const o=opts||{};const h={...auth()};if(o.body)h['content-type']='application/json';
   const r=await fetch(url,{method:o.body?'POST':'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
   const d=await r.json().catch(()=>({}));
+  if(r.status===403&&typeof planInsuficiente==='function'&&planInsuficiente(d))throw new Error(d.detail);
   if(!r.ok)throw new Error(d.detail||'No se pudo completar la solicitud.');
   if(typeof d.restantes==='number'&&PERFIL){PERFIL.restantes=d.restantes;$('c-rest').textContent=d.restantes;
     PERFIL.usadas=PERFIL.limite-d.restantes;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite}
@@ -859,6 +871,13 @@ function boton(txt,cls,fn){const b=el('button',cls,txt);b.type='button';b.addEve
 async function cargarTablero(){
   const t=$('tablero');
   if(CAMINO!=='aprender'){t.classList.add('hidden');return}
+  if(typeof tieneFuncion==='function'&&!tieneFuncion('academia')){ // sin Academia: una invitación, sin llamar a la API
+    t.textContent='';const c=el('div','tcard mejora-tc');const k=el('div','k');k.appendChild(plIcono('candado'));
+    k.appendChild(document.createTextNode(' Modular Lab · plan '+plNombre(plRequerido('academia'))));c.appendChild(k);
+    c.appendChild(el('div','v','Practica casos tipo examen y deja que PULLEX te evalúe'));
+    c.appendChild(el('div','s','Rúbrica, mapa de lo que dominas y repasos espaciados. Mientras tanto, «Enséñame», «Resuélvelo conmigo» y «Examíname» funcionan en Consultar.'));
+    c.appendChild(boton('Conocer el plan '+plNombre(plRequerido('academia')),'bsec',()=>ver('modular')));
+    t.appendChild(c);t.classList.remove('hidden');return}
   if(!t.children.length){ // esqueleto mientras llega el tablero (clase distinta de .tcard a propósito)
     for(let i=0;i<2;i++){const c=el('div','tcard-esq panel');c.style.cssText='margin:0;padding:16px 18px';
       [40,85,60].forEach(w=>{const k=el('div','skel');k.style.width=w+'%';c.appendChild(k)});t.appendChild(c)}
