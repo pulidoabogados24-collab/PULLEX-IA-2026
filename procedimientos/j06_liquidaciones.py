@@ -366,7 +366,7 @@ def _intereses(e: dict) -> dict:
         tasa = None
         if clase in ("comercial_moratorio", "tasa_indicada"):
             tasa = _dec(p.get("tasa_pct"), f"periodos[{i}].tasa_pct", contra, falt, minimo=Decimal(0), maximo=Decimal(1000))
-        elif p.get("tasa_pct") not in (None, ""):
+        elif clase == "legal_civil" and p.get("tasa_pct") not in (None, ""):
             contra.append(f"Período {i}: el interés legal civil no admite otra tasa; use la clase «tasa_indicada».")
         if d and h:
             if h < d:

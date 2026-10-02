@@ -1,7 +1,7 @@
 // =========================================================================================
 // PULLEX Herramientas — Calculadora de términos (J05) y Liquidación (J06).
 // Se carga después de app.js y usa sus utilidades globales (auth, toast). Sin JavaScript en línea:
-// todo con addEventListener. Los datos del servidor se pintan con textContent (nunca innerHTML).
+// todo con addEventListener. Los datos del servidor se pintan con textContent (nunca como HTML).
 // El cálculo lo hace el servidor (procedimientos/): aquí solo hay formulario y presentación.
 // =========================================================================================
 const HERR={listo:false,cargando:false,tab:'terminos',opc:null,ultimo:{terminos:null,liquidacion:null}};
