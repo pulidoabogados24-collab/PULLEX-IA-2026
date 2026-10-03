@@ -748,6 +748,135 @@ body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
   .doc-acc .doc-btn{flex:1 1 auto}
 }
 @media print{.doc-tabs,.doc-acc,.doc-volver,.doc-filtros,.doc-grid{display:none!important}}
+/* ---- Perfiles ---- */
+/* Registro de perfiles y coordinador (static/perfiles.js). Solo tokens semánticos de tema.css. El estado real
+   de cada perfil siempre va con texto: el color acompaña, no reemplaza. */
+#v-perfiles .wrap{max-width:980px}
+.per-wrap{padding-bottom:40px}
+.per-cab{margin:2px 0 14px}
+.per-cab h2{margin:8px 0 4px;font-size:1.4rem;font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking)}
+.per-claim{color:var(--accent-text);font-weight:700;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin:12px 0 0}
+.per-cab p:last-child{color:var(--text-2);margin:.35em 0 0;font-size:.9rem;max-width:72ch;line-height:1.55}
+.per-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.per-tab{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:calc(var(--radius) - 5px);background:transparent;color:var(--text-2);font-weight:650;font-size:.86rem}
+.per-tab.on{background:var(--accent);color:var(--accent-ink)}
+.per-panel:focus,#per-ficha:focus,#per-ficha-t:focus{outline:none}
+.per-wrap button:focus-visible,.per-wrap summary:focus-visible,.per-wrap .per-inp:focus-visible,.per-wrap input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.per-bloque{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;min-width:0;box-shadow:var(--shadow)}
+.per-h{margin:0 0 10px;font-size:1.05rem;font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking)}
+.per-nota,.per-vacio{color:var(--text-2);font-size:.84rem;line-height:1.55;margin:8px 0 0}
+.per-n{font-size:.82rem;color:var(--text-2);margin:4px 2px 10px}
+.per-aviso{font-size:.84rem;margin:10px 0 0;padding:8px 11px;border-radius:var(--radius-sm);border-left:3px solid var(--warn);background:var(--surface-2);color:var(--text);line-height:1.5}
+.per-error{color:var(--danger);font-weight:600;font-size:.86rem;margin:8px 0 0}
+.per-oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.per-estados{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.per-estado-t{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;padding:10px 12px;min-width:0;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg);color:var(--text);transition:border-color var(--t-rapida)}
+.per-estado-t:hover{border-color:var(--border-strong)}
+.per-estado-t.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.per-estado-t b{font-size:1.25rem;font-variant-numeric:tabular-nums;font-weight:650;line-height:1.1}
+.per-estado-t span{font-size:.74rem;color:var(--text-2);line-height:1.3;overflow-wrap:anywhere}
+.per-est{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border-radius:999px;
+  background:var(--surface-2);color:var(--text-2);border:1px solid var(--border);white-space:nowrap}
+.per-est.e-conectado_a_herramientas{background:var(--accent-soft);color:var(--accent-text);border-color:transparent}
+.per-est.e-ejecutado,.per-est.e-evaluado,.per-est.e-aprobado{background:transparent;color:var(--ok);border-color:var(--ok)}
+.per-matriz-caja{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.per-matriz{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed;font-size:.76rem}
+.per-matriz caption{caption-side:bottom;text-align:left;color:var(--text-2);font-size:.78rem;padding-top:8px;line-height:1.45}
+.per-matriz th{font-weight:650;color:var(--text-2);padding:2px;text-align:center;vertical-align:middle}
+.per-matriz th abbr{text-decoration:none;font-variant-numeric:tabular-nums}
+.per-matriz tbody th{text-align:left;width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.per-matriz .per-m-esq{width:190px}
+.per-m-area{margin-left:6px;font-weight:450;color:var(--text-2)}
+.per-matriz td{padding:0}
+.per-celda{display:block;width:100%;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text-2);
+  font-size:.76rem;font-weight:650;font-variant-numeric:tabular-nums;transition:border-color var(--t-rapida),transform var(--t-rapida) var(--curva)}
+.per-celda:hover{border-color:var(--accent);transform:scale(1.06)}
+.per-celda.n1{background:var(--surface-2);color:var(--text)}
+.per-celda.n2{background:var(--accent-soft);color:var(--accent-text);border-color:transparent}
+.per-leyenda{margin-top:10px;font-size:.84rem}
+.per-leyenda summary,.per-det summary{cursor:pointer;font-weight:650;color:var(--accent-text)}
+.per-leyenda-cols{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;margin-top:8px}
+.per-leyenda h4,.per-sec h4,.per-discrepancia h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2)}
+.per-filtros{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.per-filtros .per-campo:first-child{grid-column:1/-1}
+.per-campo{min-width:0;margin-top:8px}
+.per-campo label{display:block;font-size:.8rem;font-weight:600;margin:0 0 5px;color:var(--text)}
+.per-inp{width:100%;padding:10px 12px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);color:var(--text);font:inherit;font-size:.92rem}
+.per-inp:focus{border-color:var(--accent)}
+textarea.per-inp{resize:vertical;line-height:1.5}
+select.per-inp{appearance:auto}
+.per-check{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:.86rem;line-height:1.45;cursor:pointer}
+.per-check input{margin-top:3px;flex:none;accent-color:var(--accent)}
+.per-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.per-btn{padding:9px 14px;border-radius:var(--radius-sm);font-weight:650;font-size:.86rem;background:var(--bg);border:1px solid var(--border);color:var(--text)}
+.per-btn:hover{border-color:var(--accent)}
+.per-btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.per-btn:disabled{opacity:.55;cursor:default}
+.per-btn.chip{padding:5px 10px;font-size:.76rem;border-radius:999px;align-self:flex-start;margin-top:4px}
+.per-items{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.per-item{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;padding:12px 14px;min-width:0;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);color:var(--text);box-shadow:var(--shadow);transition:border-color var(--t-rapida)}
+.per-item:hover{border-color:var(--accent)}
+.per-item b{font-size:.92rem;line-height:1.35;overflow-wrap:anywhere}
+.per-item-cab{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.per-item-cab code,.per-id{font-family:ui-monospace,Consolas,monospace;font-size:.78rem;font-weight:650;color:var(--accent-text);background:var(--surface-2);padding:2px 7px;border-radius:5px}
+.per-item-p{font-size:.82rem;color:var(--text-2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.per-pag{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px;font-size:.84rem;color:var(--text-2)}
+.per-ficha-cab h3{margin:8px 0 4px;font-size:1.2rem;line-height:1.3;font-family:var(--font-display);font-weight:var(--display-peso);overflow-wrap:anywhere}
+.per-migas{font-size:.8rem;color:var(--text-2);margin:0 0 12px;line-height:1.5}
+.per-volver{margin-bottom:10px}
+.per-estado-caja{border:1px solid var(--border);border-left:4px solid var(--border-strong);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px;background:var(--surface)}
+.per-estado-caja.e-conectado_a_herramientas{border-left-color:var(--accent)}
+.per-estado-caja.e-ejecutado,.per-estado-caja.e-evaluado,.per-estado-caja.e-aprobado{border-left-color:var(--ok)}
+.per-estado-caja p{margin:0 0 6px;font-size:.88rem;line-height:1.5}
+.per-estado-linea{font-weight:650}
+.per-sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;min-width:0}
+.per-sec p{margin:0 0 6px;font-size:.88rem;line-height:1.55;overflow-wrap:anywhere}
+.per-lista{margin:0;padding-left:20px;display:grid;gap:5px;font-size:.86rem;line-height:1.5;overflow-wrap:anywhere}
+.per-tag{display:inline-block;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--surface-2);color:var(--text-2);margin-left:4px;white-space:nowrap}
+.per-tag.ok{color:var(--ok)}
+.per-tag.prop{color:var(--warn)}
+.per-dl{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:5px 14px;margin:0;font-size:.86rem;line-height:1.5}
+.per-dl dt{color:var(--text-2)}
+.per-dl dd{margin:0;overflow-wrap:anywhere}
+.per-pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,Consolas,monospace;font-size:.78rem;line-height:1.55;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.per-det{border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;margin-top:10px;font-size:.86rem;min-width:0}
+.per-det[open]>summary{margin-bottom:8px}
+.per-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.per-chip{font-size:.78rem;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--text);text-align:left;max-width:100%;overflow-wrap:anywhere}
+.per-chip:hover{border-color:var(--accent)}
+.per-plan-pasos{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:paso}
+.per-plan-paso{display:flex;flex-direction:column;gap:5px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg);min-width:0}
+.per-plan-paso.no{border-style:dashed}
+.per-plan-paso b{font-size:.9rem;overflow-wrap:anywhere}
+.per-plan-paso .per-item-p{-webkit-line-clamp:unset;display:block}
+.per-discrepancia{border:1px solid var(--warn);border-radius:var(--radius-sm);padding:10px 12px;margin-top:10px;background:var(--surface-2)}
+.per-discrepancia p{margin:0 0 6px;font-size:.86rem;line-height:1.5}
+.per-salida{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;overflow-wrap:anywhere;margin:6px 0 8px}
+.per-salida table{display:block;overflow-x:auto}
+.per-comp li.pasa b{color:var(--ok)}
+.per-comp li.falla b{color:var(--danger)}
+.per-resumen .per-dl{margin-top:8px}
+@media(max-width:759px){
+  .per-estados{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .per-filtros{grid-template-columns:1fr}
+  .per-bloque{padding:14px 13px}
+  .per-matriz{border-spacing:2px;font-size:.7rem}
+  .per-matriz tbody th,.per-matriz .per-m-esq{width:30px}
+  .per-m-area{display:none}
+  .per-celda{height:28px;font-size:.7rem;border-radius:5px}
+  .per-leyenda-cols{grid-template-columns:1fr}
+  .per-dl{grid-template-columns:1fr;gap:1px 0}
+  .per-dl dd{margin-bottom:7px}
+  .per-acc .per-btn{flex:1 1 auto}
+  .per-tab{padding:9px 6px;font-size:.8rem}
+  /* La barra inferior es fija: el final de la vista y el elemento con foco deben quedar por encima de ella. */
+  .per-wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+  main:has(#v-perfiles.on){scroll-padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+}
+@media print{.per-tabs,.per-acc,.per-volver,.per-filtros,.per-estados{display:none!important}}
 </style>
 </head>
 <body>
@@ -788,6 +917,7 @@ body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
   <symbol id="i-balanza" viewBox="0 0 24 24"><path d="M12 3.5v17M7.5 20.5h9M5 7h14M12 4.8 5 7M12 4.8 19 7"/><path d="M5 7l-2.5 6a2.7 2.7 0 0 0 5 0zM19 7l-2.5 6a2.7 2.7 0 0 0 5 0z"/></symbol>
   <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
   <symbol id="i-subir" viewBox="0 0 24 24"><path d="M12 15.5V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V15"/></symbol>
+  <symbol id="i-perfiles" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.2"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1.2"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1.2"/><rect x="14" y="14" width="6.5" height="6.5" rx="1.2"/></symbol>
   <symbol id="i-objetivo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol>
 </svg>
 
@@ -1051,6 +1181,10 @@ body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
       <div class="wrap doc-wrap" id="doc-raiz"></div>
     </section>
 
+    <section id="v-perfiles" class="vista">
+      <div class="wrap per-wrap" id="per-raiz"></div>
+    </section>
+
     <section id="v-config" class="vista">
       <div class="wrap">
         <div class="cab-vista">
@@ -1127,6 +1261,14 @@ body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
           <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta.</p>
         </div>
 
+        <!-- perfiles:inicio (la demostración sin servidor retira este bloque) -->
+        <div class="panel" id="panel-perfiles">
+          <h3><svg class="i" aria-hidden="true"><use href="#i-perfiles"/></svg> Perfiles y coordinador</h3>
+          <div class="vacio" style="font-size:.84rem;margin-bottom:12px">El registro de los 1.000 perfiles especializados (10 áreas × 10 subespecialidades × 10 funciones), con el estado real de cada uno, y el coordinador que elige unos pocos para una tarea. Un perfil es una ficha; no es un agente trabajando.</div>
+          <button class="btn sec" id="abrir-perfiles" data-click="ver" data-arg-click="perfiles">Abrir el registro de perfiles</button>
+        </div>
+        <!-- perfiles:fin -->
+
         <div class="panel">
           <h3><svg class="i" aria-hidden="true"><use href="#i-correo"/></svg> Contacto y soporte</h3>
           <div class="vacio" style="font-size:.84rem;margin-bottom:12px">
@@ -1195,5 +1337,6 @@ body.claro .doc-paso.ok .doc-paso-est{color:var(--ok, #15803d)}
 
 <script src="/static/app.js"></script>
 <script src="/static/documentos.js"></script>
+<script src="/static/perfiles.js"></script>
 </body>
 </html>
