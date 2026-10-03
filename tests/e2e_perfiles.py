@@ -56,7 +56,8 @@ def entrar(pg, nombre):
 
 
 def registro(pg, nombre):
-    ok(pg.locator("nav button").count() == 6, f"{nombre}: la barra de navegación sigue con 6 botones")
+    # 7 = los seis de siempre + Herramientas (PUL-012); Perfiles no agrega botón: se abre desde Ajustes.
+    ok(pg.locator("nav button").count() == 7, f"{nombre}: Perfiles no agrega botones a la barra (siguen 7)")
     pg.click("#n-config")
     pg.wait_for_selector("#panel-perfiles")
     pg.click("#abrir-perfiles")

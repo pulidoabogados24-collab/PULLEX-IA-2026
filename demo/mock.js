@@ -7,6 +7,16 @@ const D=window.__DEMO_DATOS__;
 const esperar=ms=>new Promise(r=>setTimeout(r,ms));
 const PLANES={prueba:{nombre:'Prueba gratis',limite:10,precio:0},basico:{nombre:'Básico',limite:200,precio:30000},
   pro:{nombre:'Pro',limite:500,precio:45000},premium:{nombre:'Premium',limite:1000,precio:60000}};
+// Acceso por plan: misma tabla que app.py (PLAN_FUNCIONES). El perfil de la demo es Premium; el selector
+// oculto ?plan=basico|pro|premium (o prueba) en la URL de la demo muestra los bloqueos de cada plan.
+const FUNCIONES=['chat','academia','automatizador'];
+const PLAN_FUNCIONES={prueba:FUNCIONES,basico:['chat'],pro:['chat','academia'],premium:FUNCIONES};
+const PLAN_REQUERIDO={academia:'pro',automatizador:'premium'};
+const PREFIJOS_FUNCION=[['/api/modular','academia'],['/api/academia','academia'],['/api/taller','academia'],
+  ['/api/documentos','automatizador'],['/api/flujos','automatizador'],['/api/asistente','automatizador']];
+const NOMBRE_FUNCION={academia:'Modular Lab y Mi mapa',automatizador:'Documentos, Flujos y Asistente'};
+const PLAN_DEMO=(()=>{try{const p=new URLSearchParams(location.search).get('plan');return PLANES[p]?p:'premium'}catch(e){return 'premium'}})();
+function funcionDeRuta(r){const f=PREFIJOS_FUNCION.find(([p])=>r===p||r.startsWith(p+'/'));return f?f[1]:null}
 const AREAS=['Constitucional / Tutela','Penal','Civil','Familia','Laboral','Administrativo','Comercial / Societario',
   'Marcas / Propiedad Intelectual','Consumidor','Tributario'];
 const RUBRICA=[['problema','Identificación del problema',20],['normas','Marco normativo',20],['argumentacion','Argumentación',20],
@@ -32,8 +42,10 @@ function apActualizar(actual,b){
     if(m[2].length*3/4>AP_TOPE[t])return 'La imagen pesa demasiado (máximo '+(AP_TOPE[t]/1024)+' KB).';
     S.imgs[t]={mime:m[1],b64:m[2]};n.imagenes[t]=Date.now()}
   return n}
-function perfilBase(nombre,email){return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:'pro',
-  plan_nombre:'Pro',limite:500,usadas:12,restantes:488,activo:true,es_admin:false,email_verificado:true,
+function perfilBase(nombre,email){const pl=PLANES[PLAN_DEMO];const usadas=PLAN_DEMO==='prueba'?2:12;
+  return {email:email||'demo@pullex.co',nombre:nombre||'Valentina Ríos',plan:PLAN_DEMO,
+  plan_nombre:pl.nombre,limite:pl.limite,usadas,restantes:pl.limite-usadas,activo:true,es_admin:false,email_verificado:true,
+  funciones:PLAN_FUNCIONES[PLAN_DEMO].slice(),
   preferencias:{areas:['Constitucional / Tutela','Penal'],modo:'auto',tema:'claro',web:true,memoria:'',camino:'aprender',apariencia:apBase()}}}
 function json(d,st){return new Response(JSON.stringify(d),{status:st||200,headers:{'content-type':'application/json'}})}
 function error(st,m){return json({detail:m},st)}
@@ -349,7 +361,13 @@ async function manejar(url,o){
     S.perfil=perfilBase(b.nombre&&b.nombre.trim()||'Valentina Ríos',b.email||'demo@pullex.co');
     return json({token:'demo',perfil:S.perfil});}
   if(!S.perfil)return error(401,'No autenticado');
-  if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false});
+  const fn=funcionDeRuta(ruta);
+  if(fn&&!S.perfil.funciones.includes(fn)){const req=PLAN_REQUERIDO[fn];
+    return json({detail:NOMBRE_FUNCION[fn]+' está disponible desde el plan '+PLANES[req].nombre+'. Mejora tu plan para usarlo.',
+      codigo:'plan_insuficiente',funcion:fn,plan_requerido:req},403)}
+  if(ruta==='/api/estado')return json({perfil:S.perfil,api:true,planes:PLANES,areas:AREAS,corpus:false,
+    funciones:S.perfil.funciones,plan_funciones:PLAN_FUNCIONES,plan_requerido:PLAN_REQUERIDO,
+    contacto_planes:{correo:'Pulidoabogados24@gmail.com',medio_pago:'Nequi'}});
   if(ruta==='/api/boletin')return json({fecha:new Date().toISOString().slice(0,10),contenido:
     '## Boletín de demostración\n\nEn la app real, aquí aparece cada día un boletín con noticias jurídicas, jurisprudencia reciente y novedades normativas de Colombia, generado con búsqueda web en fuentes oficiales.\n\n_Esta página es una demostración: no muestra noticias reales._'});
   if(ruta==='/api/preferencias'){const p=S.perfil.preferencias;

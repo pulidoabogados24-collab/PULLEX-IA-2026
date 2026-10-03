@@ -28,6 +28,8 @@ tema_css = re.sub(r'url\("fonts/([a-z0-9-]+\.woff2)"\)',
                   lambda m: 'url("' + data_uri(ST / "fonts" / m.group(1), "font/woff2") + '")', tema_css)
 assert "fonts/" not in tema_css
 apariencia_js = (ST / "apariencia.js").read_text(encoding="utf-8")
+planes_css = (ST / "planes.css").read_text(encoding="utf-8")
+planes_js = (ST / "planes.js").read_text(encoding="utf-8")
 # La demo es un solo archivo: no registra el service worker (no existe /sw.js fuera del servidor).
 app_js = app_js.replace("'serviceWorker' in navigator", "false&&'serviceWorker' in navigator")
 mock = (RAIZ / "demo" / "mock.js").read_text(encoding="utf-8")
@@ -95,6 +97,8 @@ html = html.replace('href="/static/favicon.png"', f'href="{data_uri(ST / "favico
 html = re.sub(r'<link rel="preload" href="/static/fonts/[^>]+>\n', "", html)
 assert html.count('<link rel="stylesheet" href="/static/tema.css">') == 1
 html = html.replace('<link rel="stylesheet" href="/static/tema.css">', "<style>\n" + tema_css + "\n</style>")
+assert html.count('<link rel="stylesheet" href="/static/planes.css">') == 1
+html = html.replace('<link rel="stylesheet" href="/static/planes.css">', "<style>\n" + planes_css + "\n</style>")
 assert html.count('<script src="/static/apariencia.js"></script>') == 1
 html = html.replace('<script src="/static/apariencia.js"></script>', "<script>\n" + apariencia_js + "\n</script>")
 
@@ -126,6 +130,9 @@ bloque = ("<script>window.__DEMO_DATOS__=" + json.dumps(datos, ensure_ascii=Fals
           ";</script>\n<script>" + mock + "</script>\n<script>" + app_js + prellenar + "</script>")
 assert html.count('<script src="/static/app.js"></script>') == 1
 html = html.replace('<script src="/static/app.js"></script>', bloque)
+# Acceso por plan: mismo planes.js (la demo es Premium; ?plan=basico|pro|premium muestra los bloqueos).
+assert html.count('<script src="/static/planes.js"></script>') == 1
+html = html.replace('<script src="/static/planes.js"></script>', "<script>" + planes_js.replace("</script", "<\\/script") + "</script>")
 # Automatizador: mismo documentos.js; la descarga en Word muestra un aviso (la demo no genera archivos).
 aviso_word = ("\ndocDescargarWord=function(){toast('En la app real esto descarga el borrador en Word (.docx); "
               "la demostración no genera archivos.')};\n")

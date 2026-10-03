@@ -47,6 +47,7 @@ import biblioteca
 import documentos
 import fuentes
 import motores
+import proveedores
 
 load_dotenv()
 
@@ -93,6 +94,38 @@ def opciones_modelo(modelo: str = None) -> dict:
     if ESFUERZO and "haiku" not in modelo:
         return {"output_config": {"effort": ESFUERZO}}
     return {}
+
+
+# Proveedor de IA (proveedores.py, docs/15-PLANES-Y-PROVEEDORES.md): PULLEX_PROVEEDOR=anthropic|openai
+# elige el principal y PULLEX_RESPALDO=openai|anthropic el de respaldo ante saturación o error de
+# servidor. Se leen en cada llamada: cambiar la variable y reiniciar basta.
+def _proveedor(nombre: str, aj: dict):
+    if nombre == "openai":
+        return proveedores.OpenAIProveedor(aj["openai_key"], aj["openai_modelo"], aj["openai_esfuerzo"])
+    return proveedores.AnthropicProveedor(ANTHROPIC_API_KEY, MODELO, opciones_modelo())
+
+
+def cadena_ia() -> list:
+    """[principal] o [principal, respaldo] según la configuración vigente."""
+    aj = proveedores.ajustes()
+    cadena = [_proveedor(aj["proveedor"], aj)]
+    if aj["respaldo"]:
+        cadena.append(_proveedor(aj["respaldo"], aj))
+    return cadena
+
+
+def ia_configurada() -> bool:
+    """El proveedor principal tiene su clave (si no, las rutas que usan IA responden 503)."""
+    return cadena_ia()[0].configurado
+
+
+def ia_activa() -> dict:
+    """Proveedor y modelo activos, sin claves (para /salud y el panel de administración)."""
+    salida = []
+    for p in cadena_ia():
+        salida.append({"proveedor": p.nombre, "nombre": proveedores.ETIQUETAS[p.nombre],
+                       "modelo": p.modelo, "configurado": p.configurado})
+    return {"principal": salida[0], "respaldo": salida[1] if len(salida) > 1 else None}
 APP_SECRET_FILE = "app_secret.key"
 DB = "pullex.db"
 
@@ -117,6 +150,44 @@ PLANES = {
     "pro":     {"nombre": "Pro",           "limite": 500,  "precio": 45000},
     "premium": {"nombre": "Premium",       "limite": 1000, "precio": 60000},
 }
+
+# Acceso por plan (decisión del dueño, docs/15-PLANES-Y-PROVEEDORES.md):
+#   chat          = Consultar (todas las cuentas).
+#   academia      = Modular Lab, Mi mapa, banco de errores, repasos y el Taller de escritos.
+#   automatizador = Documentos, Flujos y Asistente.
+FUNCIONES = ("chat", "academia", "automatizador")
+# Plan de prueba (gratis, 10 consultas): acceso a TODO para conocer el producto; lo limita su cupo de
+# consultas. Para restringirlo basta cambiar esta constante, p. ej. ("chat",).
+FUNCIONES_PLAN_PRUEBA = FUNCIONES
+PLAN_FUNCIONES = {
+    "prueba":  FUNCIONES_PLAN_PRUEBA,
+    "basico":  ("chat",),
+    "pro":     ("chat", "academia"),
+    "premium": FUNCIONES,
+}
+# Rutas protegidas por prefijo (las cubre el middleware control_plan, incluidas las que se agreguen
+# después bajo el mismo prefijo, como /api/taller/*). Un prefijo cubre la ruta exacta y sus subrutas.
+PREFIJOS_FUNCION = (
+    ("/api/modular", "academia"),
+    ("/api/academia", "academia"),
+    ("/api/taller", "academia"),
+    ("/api/documentos", "automatizador"),
+    ("/api/flujos", "automatizador"),
+    ("/api/asistente", "automatizador"),
+    # Integración PUL-010..013: la biblioteca de modelos vive dentro de Documentos y el coordinador de
+    # perfiles produce borradores, así que siguen la regla del automatizador (plan Premium).
+    ("/api/biblioteca", "automatizador"),
+    ("/api/perfiles", "automatizador"),
+    ("/api/coordinador", "automatizador"),
+    # /api/procedimientos (Herramientas: términos, liquidación, verificación) NO se restringe por plan:
+    # son cálculos deterministas sin costo de modelo. Decisión pendiente del dueño (TABLERO, PUL-014).
+)
+# Cómo se mejora de plan hoy (README, «Cómo funciona el negocio»): el estudiante paga por Nequi y le
+# escribe al administrador, que asigna el plan en /admin. La pantalla de mejora reutiliza ese flujo.
+CONTACTO_PLANES = {"correo": os.getenv("PULLEX_CONTACTO_PLANES", "Pulidoabogados24@gmail.com").strip(),
+                   "medio_pago": "Nequi"}
+NOMBRE_FUNCION = {"chat": "Consultar", "academia": "Modular Lab y Mi mapa",
+                  "automatizador": "Documentos, Flujos y Asistente"}
 
 AREAS = ["Constitucional / Tutela", "Penal", "Civil", "Familia", "Laboral",
          "Administrativo", "Comercial / Societario", "Marcas / Propiedad Intelectual",
@@ -301,6 +372,71 @@ CSP = "; ".join([
     "frame-ancestors 'none'",
 ])
 _HTTPS = os.getenv("PULLEX_APP_URL", "").startswith("https://")
+
+
+# ------------------------------------------------------------ acceso por plan --
+def funciones_de(u: dict) -> list:
+    """Funciones a las que da acceso la cuenta. El administrador siempre tiene todas."""
+    if u.get("es_admin"):
+        return list(FUNCIONES)
+    return list(PLAN_FUNCIONES.get(u.get("plan"), ("chat",)))
+
+
+def plan_requerido(funcion: str) -> str:
+    """El plan pago más económico que incluye la función (para el botón «Mejorar a …»)."""
+    pagos = sorted((k for k, v in PLANES.items() if v["precio"] > 0 and funcion in PLAN_FUNCIONES.get(k, ())),
+                   key=lambda k: PLANES[k]["precio"])
+    return pagos[0] if pagos else "premium"
+
+
+class PlanInsuficiente(Exception):
+    def __init__(self, funcion: str):
+        super().__init__(funcion)
+        self.funcion = funcion
+
+
+def respuesta_plan_insuficiente(funcion: str) -> JSONResponse:
+    req = plan_requerido(funcion)
+    return JSONResponse(status_code=403, content={
+        "detail": f"{NOMBRE_FUNCION.get(funcion, funcion)} está disponible desde el plan "
+                  f"{PLANES[req]['nombre']}. Mejora tu plan para usarlo.",
+        "codigo": "plan_insuficiente", "funcion": funcion, "plan_requerido": req})
+
+
+def exigir_funcion(u: dict, funcion: str):
+    """Dependencia de acceso por plan: lanza PlanInsuficiente (403 JSON) si el plan no la incluye."""
+    if funcion not in funciones_de(u):
+        raise PlanInsuficiente(funcion)
+
+
+@app.exception_handler(PlanInsuficiente)
+async def _manejar_plan_insuficiente(request: Request, exc: PlanInsuficiente):
+    return respuesta_plan_insuficiente(exc.funcion)
+
+
+def funcion_de_ruta(ruta: str):
+    for prefijo, funcion in PREFIJOS_FUNCION:
+        if ruta == prefijo or ruta.startswith(prefijo + "/"):
+            return funcion
+    return None
+
+
+# Se registra ANTES que seguridad_http para quedar por dentro de ella: así el 403 también lleva la CSP
+# y las demás cabeceras de seguridad. Aplica exigir_funcion a TODAS las rutas de PREFIJOS_FUNCION.
+@app.middleware("http")
+async def control_plan(request: Request, call_next):
+    funcion = funcion_de_ruta(request.url.path)
+    if funcion:
+        try:
+            u = usuario_actual(request)
+        except HTTPException:
+            u = None  # sin sesión válida: la propia ruta responde 401 como siempre
+        if u is not None:
+            try:
+                exigir_funcion(u, funcion)
+            except PlanInsuficiente as e:
+                return respuesta_plan_insuficiente(e.funcion)
+    return await call_next(request)
 
 
 @app.middleware("http")
@@ -810,7 +946,7 @@ def perfil_publico(u):
             "restantes": max(0, u["limite"] - u["usadas"]), "activo": bool(u["activo"]),
             "es_admin": bool(u["es_admin"]),
             "email_verificado": bool(u["email_verificado"]) if "email_verificado" in u.keys() else False,
-            "preferencias": preferencias_de(u)}
+            "funciones": funciones_de(u), "preferencias": preferencias_de(u)}
 
 # ----------------------------------------------------------- corpus opcional --
 def buscar_corpus(pregunta: str) -> str:
@@ -932,8 +1068,8 @@ def salud():
     except Exception:
         ok_db = False
     return {"servicio": "pullex-ia", "estado": "ok" if ok_db else "degradado",
-            "db": ok_db, "ia_configurada": bool(ANTHROPIC_API_KEY),
-            "modelo": MODELO, "hora": datetime.now(timezone.utc).isoformat()}
+            "db": ok_db, "ia_configurada": ia_configurada(),
+            "modelo": cadena_ia()[0].modelo, "proveedor": cadena_ia()[0].nombre, "hora": datetime.now(timezone.utc).isoformat()}
 
 @app.get("/sw.js")
 def service_worker():
@@ -1152,8 +1288,11 @@ def api_apariencia_imagen(tipo: str, request: Request):
 def estado(request: Request):
     u = usuario_actual(request)
     u = reiniciar_periodo_si_aplica(u)
-    return {"perfil": perfil_publico(u), "api": bool(ANTHROPIC_API_KEY),
-            "planes": PLANES, "areas": AREAS,
+    return {"perfil": perfil_publico(u), "api": ia_configurada(),
+            "planes": PLANES, "areas": AREAS, "funciones": funciones_de(u),
+            "plan_funciones": {k: list(v) for k, v in PLAN_FUNCIONES.items()},
+            "plan_requerido": {f: plan_requerido(f) for f in FUNCIONES if f != "chat"},
+            "contacto_planes": CONTACTO_PLANES,
             "corpus": fuentes.disponible() or (os.path.isdir("bd_vectorial") and bool(os.getenv("VOYAGE_API_KEY")))}
 
 @app.get("/api/boletin")
@@ -1294,39 +1433,8 @@ def bloque_corpus(texto: str):
     return (envolver_como_datos(contexto) if contexto else ""), []
 
 
-def procesar_evento(evento, web: dict):
-    """Traduce un evento del stream del SDK a un evento SSE para el cliente (o None).
-
-    - Solo se reenvían deltas de TEXTO: los bloques de thinking (thinking_delta, signature_delta)
-      nunca llegan al cliente ni se guardan.
-    - Resultados de búsqueda (web_search_tool_result) y citas (citations_delta con
-      web_search_result_location) se acumulan en `web` para el evento final "fuentes"."""
-    tipo = getattr(evento, "type", "")
-    if tipo == "content_block_start":
-        bloque = getattr(evento, "content_block", None)
-        btipo = getattr(bloque, "type", "")
-        if btipo == "server_tool_use":
-            return {"tipo": "busqueda"}
-        if btipo == "web_search_tool_result":
-            contenido = getattr(bloque, "content", None)
-            if isinstance(contenido, list):
-                for r in contenido:
-                    url = getattr(r, "url", None)
-                    if url and url not in web["resultados"]:
-                        web["resultados"][url] = {"titulo": getattr(r, "title", "") or url,
-                                                  "fecha": getattr(r, "page_age", None)}
-        return None
-    if tipo == "content_block_delta":
-        delta = getattr(evento, "delta", None)
-        dtipo = getattr(delta, "type", "text_delta")
-        if dtipo == "text_delta" and isinstance(getattr(delta, "text", None), str):
-            return {"tipo": "texto", "texto": delta.text}
-        if dtipo == "citations_delta":
-            c = getattr(delta, "citation", None)
-            if getattr(c, "type", "") == "web_search_result_location" and getattr(c, "url", None):
-                web["citas"].setdefault(c.url, getattr(c, "title", None) or c.url)
-        return None
-    return None
+# Traducción de eventos del SDK de Anthropic (texto, búsqueda y citas): vive en proveedores.py.
+procesar_evento = proveedores.evento_anthropic
 
 
 def fuentes_de_respuesta(frags: list, web: dict, respuesta: str) -> list:
@@ -1379,7 +1487,7 @@ async def chat(request: Request):
     if not texto and not adjuntos:
         raise HTTPException(400, "Escribe tu consulta")
 
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
 
     nota_adj = ""
@@ -1443,7 +1551,7 @@ async def chat(request: Request):
     if din.strip():
         system.append({"type": "text", "text": din})
 
-    cliente = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    cadena = cadena_ia()
     herramientas = [herramienta_web()] if usar_web else []
 
     def flujo():
@@ -1452,18 +1560,12 @@ async def chat(request: Request):
         web = {"resultados": {}, "citas": {}}
         fallo = False
         try:
-            with cliente.messages.stream(
-                model=MODELO, max_tokens=MAX_TOKENS_CHAT, system=system,
-                messages=mensajes_api, tools=herramientas, **opciones_modelo(),
-            ) as stream:
-                for evento in stream:
-                    salida = procesar_evento(evento, web)
-                    if salida is None:
-                        continue
-                    if salida["tipo"] == "texto":
-                        completo.append(salida["texto"])
-                    yield "data: " + json.dumps(salida) + "\n\n"
-        except anthropic.APIError:
+            for salida in proveedores.stream_texto(cadena, system, mensajes_api, MAX_TOKENS_CHAT,
+                                                   herramientas, web):
+                if salida["tipo"] == "texto":
+                    completo.append(salida["texto"])
+                yield "data: " + json.dumps(salida) + "\n\n"
+        except (anthropic.APIError, proveedores.ErrorProveedor):
             # FAIL-SAFE: nunca dejar al usuario sin respuesta — modo degradado con
             # orientación básica y fuentes oficiales para consultar manualmente. El detalle
             # técnico va al log con un código; al usuario no se le muestran internos.
@@ -1565,14 +1667,12 @@ MARGEN_THINKING = int(os.getenv("PULLEX_MARGEN_THINKING", "4000"))
 def llamar_json(usuario: str, max_tokens: int = 2500, sistema: str = None) -> dict:
     """Pide al modelo un JSON; reintenta una vez si viene mal formado. Solo lee bloques de texto
     (los de thinking se ignoran). `sistema` reemplaza el mensaje de sistema del Modular Lab."""
-    cliente = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    cadena = cadena_ia()
     if "haiku" not in MODELO:
         max_tokens += MARGEN_THINKING
     ultimo = None
     for _ in range(2):
-        r = cliente.messages.create(model=MODELO, max_tokens=max_tokens, system=sistema or MODULAR_SISTEMA,
-                                    messages=[{"role": "user", "content": usuario}], **opciones_modelo())
-        texto = "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+        texto = proveedores.crear_texto(cadena, sistema or MODULAR_SISTEMA, usuario, max_tokens)
         try:
             return _extraer_json(texto)
         except (ValueError, json.JSONDecodeError) as e:
@@ -1633,7 +1733,7 @@ async def modular_caso(request: Request):
         nivel = datos.get("nivel", "basico")
         if area not in MODULAR_AREAS or nivel not in MODULAR_NIVELES:
             raise HTTPException(400, "Elige un área y un nivel válidos")
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     restantes = consumir_consulta(u)
     if padre is not None:
@@ -1697,7 +1797,7 @@ async def modular_evaluar(request: Request):
     respuesta = str(datos.get("respuesta") or "").strip()[:12000]
     if len(respuesta) < 40:
         raise HTTPException(400, "Escribe una respuesta más completa antes de evaluarla (mínimo unas líneas).")
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     restantes = consumir_consulta(u)
     pedido = ("Evalúa la respuesta de un estudiante a este caso con la rúbrica indicada. Sé justo: "
@@ -2051,7 +2151,7 @@ async def documentos_generar(request: Request):
     limpios, errores = documentos.validar_campos(t, datos.get("campos"))
     if errores:
         return _errores_formulario(errores)
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     restantes = consumir_consulta(u)
     frags = fuentes.buscar(documentos.consulta_corpus(t, limpios))
@@ -2060,11 +2160,8 @@ async def documentos_generar(request: Request):
     if frags:
         pedido += envolver_como_datos(fuentes.formatear_para_modelo(frags)) + fuentes.INSTRUCCION_CITAS
     try:
-        cliente = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-        r = cliente.messages.create(model=MODELO, max_tokens=_max_tokens(MAX_TOKENS_DOCUMENTO),
-                                    system=_sistema(documentos.SISTEMA_DOCUMENTO),
-                                    messages=[{"role": "user", "content": pedido}], **opciones_modelo())
-        salida = "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+        salida = proveedores.crear_texto(cadena_ia(), _sistema(documentos.SISTEMA_DOCUMENTO), pedido,
+                                         _max_tokens(MAX_TOKENS_DOCUMENTO))
         texto, verificar = documentos.separar_respuesta(salida)
         if len(texto) < 20:
             raise ValueError("respuesta vacía")
@@ -2167,7 +2264,7 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
     if frags:
         din += envolver_como_datos(fuentes.formatear_para_modelo(frags)) + fuentes.INSTRUCCION_CITAS
     sistema = _sistema(documentos.SISTEMA_FLUJO, din)
-    cliente = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    cadena = cadena_ia()
     total = len(pasos)
 
     def flujo():
@@ -2191,14 +2288,11 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
                     pedido += envolver_como_datos(previos, encabezado=ENCABEZADO_PREVIOS)
                 partes = []
                 try:
-                    with cliente.messages.stream(model=MODELO, max_tokens=_max_tokens(MAX_TOKENS_PASO), system=sistema,
-                                                 messages=[{"role": "user", "content": pedido}], tools=[],
-                                                 **opciones_modelo()) as stream:
-                        for evento in stream:
-                            salida = procesar_evento(evento, {"resultados": {}, "citas": {}})
-                            if salida and salida["tipo"] == "texto":
-                                partes.append(salida["texto"])
-                                yield _sse({"tipo": "texto", "n": n, "texto": salida["texto"]})
+                    for salida in proveedores.stream_texto(cadena, sistema, [{"role": "user", "content": pedido}],
+                                                           _max_tokens(MAX_TOKENS_PASO), []):
+                        if salida["tipo"] == "texto":
+                            partes.append(salida["texto"])
+                            yield _sse({"tipo": "texto", "n": n, "texto": salida["texto"]})
                     texto = "".join(partes).strip()
                     if not texto:
                         raise ValueError("paso vacío")
@@ -2256,7 +2350,7 @@ async def flujos_ejecutar(request: Request):
     limpios, errores = documentos.validar_campos(f, datos.get("campos"))
     if errores:
         return _errores_formulario(errores)
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     _verificar_cupo(u, len(f["pasos"]))
     gen = _ejecutar_pasos(u["email"], f["nombre"], f["pasos"], documentos.texto_campos(f, limpios),
@@ -2276,7 +2370,7 @@ async def asistente_tarea(request: Request):
     tarea = tarea.strip()
     if len(tarea) > 4000:
         raise HTTPException(400, "La tarea supera 4000 caracteres. Resúmela o usa un flujo.")
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     restantes = consumir_consulta(u)
     pedido = ("Propón el plan para esta tarea.\n<tarea_usuario>\n" + tarea.replace("</tarea_usuario>", "") +
@@ -2318,7 +2412,7 @@ async def asistente_ejecutar(request: Request):
         plan = documentos.normalizar_plan({"titulo": plan.get("titulo"), "pasos": pasos}, minimo=1)
     except ValueError:
         raise HTTPException(400, "Cada paso necesita un título y una instrucción.")
-    if not ANTHROPIC_API_KEY:
+    if not ia_configurada():
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     _verificar_cupo(u, len(plan["pasos"]))
     with closing(db()) as con:
@@ -2442,6 +2536,7 @@ def admin_metricas(request: Request):
         "costo_api_estimado": costo_api,
         "margen_estimado": ingreso - costo_api,
         "planes": PLANES,
+        "ia": ia_activa(),
     }
 
 @app.post("/api/admin/reset-clave")

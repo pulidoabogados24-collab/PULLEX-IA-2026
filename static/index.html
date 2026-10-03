@@ -16,6 +16,7 @@
 <!-- Tokens, temas y fuentes: static/tema.css. apariencia.js va aquí (antes de pintar) para aplicar
      el tema guardado sin parpadeo. Ninguno tiene JavaScript en línea (CSP). -->
 <link rel="stylesheet" href="/static/tema.css">
+<link rel="stylesheet" href="/static/planes.css">
 <script src="/static/apariencia.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js" integrity="sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -1058,6 +1059,7 @@ select.per-inp{appearance:auto}
   <symbol id="i-memoria" viewBox="0 0 24 24"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21l-6.5-4-6.5 4V4.5a1 1 0 0 1 1-1z"/></symbol>
   <symbol id="i-paleta" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.3 0 1.9-.8 1.9-1.7 0-1.2-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6h2.1a3.7 3.7 0 0 0 3.7-3.7C20.5 6.8 16.7 3.5 12 3.5z"/><circle cx="7.7" cy="11.5" r="1.1"/><circle cx="10" cy="7.7" r="1.1"/><circle cx="14.6" cy="7.7" r="1.1"/></symbol>
   <symbol id="i-preferencias" viewBox="0 0 24 24"><path d="M5 20.5v-6M5 10.5v-7M12 20.5v-9M12 7.5v-4M19 20.5v-4M19 12.5v-9M3 14.5h4M10 7.5h4M17 16.5h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-candado" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 14.5h4"/></symbol>
   <symbol id="i-correo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5 12 13l8.5-6.5"/></symbol>
@@ -1344,6 +1346,11 @@ select.per-inp{appearance:auto}
       <div class="wrap per-wrap" id="per-raiz"></div>
     </section>
 
+    <!-- Pantalla de mejora de plan (static/planes.js): se muestra al entrar a una función que el plan no incluye. -->
+    <section id="v-mejora" class="vista" aria-live="polite">
+      <div class="wrap"><div class="mejora" id="mejora-raiz"></div></div>
+    </section>
+
     <section id="v-config" class="vista">
       <div class="wrap">
         <div class="cab-vista">
@@ -1417,7 +1424,7 @@ select.per-inp{appearance:auto}
         <div class="panel">
           <h3><svg class="i" aria-hidden="true"><use href="#i-plan"/></svg> Planes</h3>
           <div id="planes"></div>
-          <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta.</p>
+          <p class="aviso" style="text-align:left">Para cambiar de plan, paga por Nequi y escríbele al administrador para que active tu cuenta. El botón «Mejorar» te abre ese correo ya escrito.</p>
         </div>
 
         <!-- perfiles:inicio (la demostración sin servidor retira este bloque) -->
@@ -1495,6 +1502,7 @@ select.per-inp{appearance:auto}
 </div>
 
 <script src="/static/app.js"></script>
+<script src="/static/planes.js"></script>
 <script src="/static/documentos.js"></script>
 <script src="/static/biblioteca.js"></script>
 <script src="/static/herramientas.js"></script>
