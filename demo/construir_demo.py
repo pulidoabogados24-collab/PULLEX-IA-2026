@@ -136,6 +136,13 @@ html = html.replace('<script src="/static/documentos.js"></script>',
 assert html.count('<script src="/static/biblioteca.js"></script>') == 1
 html = html.replace('<script src="/static/biblioteca.js"></script>', "<script>" + bib_js.replace("</script", "<\\/script") + "</script>")
 
+# Herramientas (términos y liquidación): los cálculos corren en el servidor (procedimientos/), así que en la
+# demostración la vista carga y avisa que no está disponible (mock.js responde 404 a /api/procedimientos).
+herr_js = (ST / "herramientas.js").read_text(encoding="utf-8")
+assert html.count('<script src="/static/herramientas.js"></script>') == 1
+html = html.replace('<script src="/static/herramientas.js"></script>',
+                    "<script>" + herr_js.replace("</script", "<\\/script") + "</script>")
+
 salida = RAIZ / "demo" / "pullex-demo.html"
 salida.write_text(html, encoding="utf-8")
 print(f"{salida} ({len(html.encode('utf-8')) // 1024} KB)")

@@ -2360,6 +2360,12 @@ app.include_router(biblioteca.crear_router(
     guardar_documento=_guardar_documento, envolver_como_datos=envolver_como_datos,
     ia_configurada=lambda: bool(ANTHROPIC_API_KEY), nuevo_error_id=_nuevo_error_id, log=log,
     limitar_cuenta=limitar_cuenta))
+# ------------------------------------------- PROCEDIMIENTOS J01–J09 y REGISTRO DE REGLAS --
+# Cálculos y validaciones deterministas (términos, liquidaciones, clasificación, verificación de escritos):
+# no llaman al modelo ni descuentan consultas. Las rutas viven en procedimientos/rutas.py.
+import procedimientos.rutas as rutas_procedimientos  # noqa: E402
+rutas_procedimientos.registrar(app, usuario_actual=usuario_actual, admin_actual=admin_actual, json_de=json_de,
+                               limitar_cuenta=limitar_cuenta, documento_de=_documento_de)
 
 
 # -------------------------------------------------------------- admin --

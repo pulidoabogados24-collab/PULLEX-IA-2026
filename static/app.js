@@ -94,7 +94,7 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','mapa','chat','documentos','config'].forEach(x=>{
+function ver(v){['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
   $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
   if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
   const m=document.querySelector('main');if(m)m.scrollTop=0;
@@ -102,6 +102,7 @@ function ver(v){['inicio','modular','mapa','chat','documentos','config'].forEach
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
   if(v==='documentos'&&typeof docInit==='function')docInit();
+  if(v==='herramientas'&&typeof herrInit==='function')herrInit();
   if(v==='inicio')cargarProgresoInicio();}
 
 async function cargarBoletin(forzar){

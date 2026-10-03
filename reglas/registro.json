@@ -1,0 +1,2486 @@
+{
+ "esquema": "pullex-reglas/1",
+ "version_registro": "1.0.0",
+ "actualizado": "2026-10-02",
+ "estados": [
+  "VERIFICADA_EN_FUENTE_OFICIAL",
+  "NO_VERIFICADO",
+  "REVISIÓN_HUMANA_PENDIENTE"
+ ],
+ "nota": "Cada regla se comprobó en la fuente indicada el día de «consultado». Una regla sin «desde» comprobado solo está verificada a la fecha de consulta. Nada de este registro sustituye la revisión de un profesional del derecho.",
+ "reglas": [
+  {
+   "id": "R-TERM-0001",
+   "version": 1,
+   "titulo": "Inicio del término: día siguiente a la notificación",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "El término concedido fuera de audiencia corre a partir del día siguiente al de la notificación de la providencia que lo concedió; si es común a varias partes, desde el día siguiente a la notificación a todas.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "118, incisos 1 a 3"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "El término que se conceda fuera de audiencia correrá a partir del día siguiente al de la notificación de la providencia que lo concedió.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "requiere_juicio_profesional": "El término concedido EN audiencia «correrá a partir de su otorgamiento» (inciso 1): el procedimiento no lo calcula y lo deja a juicio profesional.",
+   "notas": "Inicio de vigencia del CGP no comprobado en este registro (entró a regir de forma gradual)."
+  },
+  {
+   "id": "R-TERM-0002",
+   "version": 1,
+   "titulo": "Términos de meses y años",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "Cuando el término es de meses o de años vence el mismo día en que empezó a correr del mes o año correspondiente; si ese mes no tiene ese día, vence el último día del mes; si el vencimiento cae en día inhábil, se extiende hasta el primer día hábil siguiente.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "118, inciso 7"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Cuando el término sea de meses o de años, su vencimiento tendrá lugar el mismo día que empezó a correr del correspondiente mes o año. Si este no tiene ese día, el término vencerá el último día del respectivo mes o año. Si su vencimiento ocurre en día inhábil se extenderá hasta el primer día hábil siguiente.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 4 de 1913 (Código de Régimen Político y Municipal)",
+     "articulo": "62",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0004_1913_pr001.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "requiere_juicio_profesional": "Fuera de los procesos regidos por el CGP, aplicar esta regla por analogía es una decisión profesional; para plazos legales rige el art. 62 de la Ley 4 de 1913 (R-TERM-0004)."
+  },
+  {
+   "id": "R-TERM-0003",
+   "version": 1,
+   "titulo": "Días que no se cuentan en términos judiciales de días",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "En los términos de días no se cuentan los de vacancia judicial ni aquellos en que por cualquier circunstancia permanezca cerrado el juzgado.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "118, inciso final"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "En los términos de días no se tomarán en cuenta los de vacancia judicial ni aquellos en que por cualquier circunstancia permanezca cerrado el juzgado.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ]
+  },
+  {
+   "id": "R-TERM-0004",
+   "version": 1,
+   "titulo": "Plazos de días, meses y años en leyes y actos oficiales",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas (plazos legales y de actos oficiales)"
+   },
+   "enunciado": "En los plazos de días señalados en leyes y actos oficiales se entienden suprimidos los feriados y de vacantes, salvo que se exprese lo contrario. Los de meses y años se computan según el calendario; si el último día es feriado o de vacante, el plazo se extiende hasta el primer día hábil.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 4 de 1913 (Código de Régimen Político y Municipal)",
+    "articulo": "62"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0004_1913_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "En los plazos de días que se señalen en las leyes y actos oficiales, se entienden suprimidos los feriados y de vacantes, a menos de expresarse lo contrario. Los de meses y años se computan según el calendario; pero si el último día fuere feriado o de vacante, se extenderá el plazo hasta el primer día hábil.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05",
+    "J03"
+   ]
+  },
+  {
+   "id": "R-TERM-0005",
+   "version": 1,
+   "titulo": "Los plazos terminan a la medianoche del último día",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "Todo plazo de días, meses o años termina a la medianoche del último día del plazo.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 4 de 1913 (Código de Régimen Político y Municipal)",
+    "articulo": "59 y 60"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0004_1913_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Todos los plazos de días, meses o años, del que se haga mención legal, se entenderá que terminan a la medianoche del último día del plazo.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "requiere_juicio_profesional": "El horario de recepción del despacho o de la entidad y los canales digitales pueden limitar la hora útil del último día: debe confirmarse en cada caso."
+  },
+  {
+   "id": "R-TERM-0006",
+   "version": 1,
+   "titulo": "Notificación personal por mensaje de datos",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "judicial (Ley 2213 de 2022)"
+   },
+   "enunciado": "La notificación personal por mensaje de datos se entiende realizada una vez transcurridos dos días hábiles siguientes al envío del mensaje, y los términos empiezan a contarse cuando el iniciador recibe acuse de recibo o se constata por otro medio el acceso del destinatario al mensaje.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 2213 de 2022",
+    "articulo": "8, inciso 3"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2213_2022.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "La notificación personal se entenderá realizada una vez transcurridos dos días hábiles siguientes al envío del mensaje y los términos empezarán a contarse cuándo el iniciador recepcione acuse de recibo o se pueda por otro medio constatar el acceso del destinatario al mensaje.",
+   "vigencia": {
+    "desde": "2022-06-13",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "dias_habiles_tras_envio": 2
+   },
+   "requiere_juicio_profesional": "Constatar el acuse de recibo o el acceso al mensaje es una cuestión probatoria: el procedimiento exige que el usuario la confirme y, si no, se abstiene.",
+   "notas": "Ley 2213 de 2022 (junio 13), Diario Oficial 52.064 de 13 de junio de 2022; rige desde su promulgación (art. 15). El régimen anterior (Decreto Legislativo 806 de 2020) no está registrado."
+  },
+  {
+   "id": "R-TERM-0007",
+   "version": 1,
+   "titulo": "Sábado como día no hábil",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "Supuesto de cálculo: el sábado no se cuenta como día hábil, salvo que el usuario indique que el despacho o la entidad atiende ese día.",
+   "soporte": {
+    "autoridad": "—",
+    "identificador": "Sin norma verificada en esta consulta",
+    "articulo": "—"
+   },
+   "enlace": null,
+   "consultado": null,
+   "metodo_verificacion": null,
+   "cita": "",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "sabado_habil_por_defecto": false
+   },
+   "notas": "No se localizó en fuente oficial una norma general que lo establezca. El cálculo que depende de este supuesto lo advierte siempre y permite cambiarlo. Qué verificar: horario oficial del despacho (Consejo Superior de la Judicatura) o de la entidad."
+  },
+  {
+   "id": "R-TERM-0008",
+   "version": 1,
+   "titulo": "Ejecutoria de providencias proferidas fuera de audiencia",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "Las providencias proferidas fuera de audiencia quedan ejecutoriadas tres días después de notificadas cuando carecen de recursos o vencieron los términos sin interponerlos.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "302, inciso 3"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr010.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las que sean proferidas por fuera de audiencia quedan ejecutoriadas tres (3) días después de notificadas, cuando carecen de recursos o han vencido los términos sin haberse interpuesto los recursos que fueren procedentes, o cuando queda ejecutoriada la providencia que resuelva los interpuestos.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ]
+  },
+  {
+   "id": "R-TERM-0009",
+   "version": 1,
+   "titulo": "Remisión del contencioso administrativo al procedimiento civil",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "contencioso administrativa"
+   },
+   "enunciado": "En los aspectos no contemplados en el CPACA se sigue el estatuto procesal civil en lo compatible con la naturaleza de los procesos de la jurisdicción contencioso administrativa.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA)",
+    "articulo": "306"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011_pr007.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "En los aspectos no contemplados en este Código se seguirá el Código de Procedimiento Civil en lo que sea compatible con la naturaleza de los procesos y actuaciones que correspondan a la Jurisdicción de lo Contencioso Administrativo.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05",
+    "J03"
+   ],
+   "requiere_juicio_profesional": "El texto remite al «Código de Procedimiento Civil»; entender esa remisión hecha hoy al Código General del Proceso (y con ella al art. 118) es una conclusión interpretativa que debe confirmar el profesional."
+  },
+  {
+   "id": "R-VAC-0001",
+   "version": 1,
+   "titulo": "Vacancia judicial colectiva de fin de año",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "judicial"
+   },
+   "enunciado": "Son días de vacancia judicial los comprendidos entre el 20 de diciembre de cada año y el 10 de enero siguiente, inclusive, para los despachos con vacaciones colectivas.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 31 de 1971 (modifica el art. 2 del Decreto 546 de 1971)",
+    "articulo": "1, literal b"
+   },
+   "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=27745",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "Los días comprendidos entre el 20 de diciembre de cada año y el 10 de enero siguiente, inclusive, lapso en el cual los funcionarios y empleados […] disfrutarán colectivamente de la prestación social de vacaciones anuales.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Consejo de Estado, Sección Segunda",
+     "identificador": "Sentencia de 28 de abril de 2010, rad. 25000-23-25-000-2002-05995-01(0594-05)",
+     "articulo": "cita el art. 107 del Decreto 1660 de 1978",
+     "enlace": "https://sidn.ramajudicial.gov.co/SIDN/DOCTRINA/TEXTOS_COMPLETOS/Guia_Pedagogica_2024/guia_10_carrera_judicial/sentencia/CE/25000_23_25_000_2002_05995_010594_05.pdf",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+     "nota": "El Decreto 1660 de 1978 se conoce solo por la cita de esta sentencia; su texto no se consultó."
+    },
+    {
+     "autoridad": "Consejo Superior de la Judicatura",
+     "identificador": "Comunicado de 16 de diciembre de 2025",
+     "articulo": "vacancia del 20 de diciembre de 2025 al 10 de enero de 2026",
+     "enlace": "https://www.ramajudicial.gov.co/web/consejo-superior-de-la-judicatura/-/consejo-superior-de-la-judicatura-anuncia-vacancia-judicial-del-20-de-diciembre-de-2025-al-10-de-enero-de-2026",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Consejo Superior de la Judicatura",
+     "identificador": "Comunicado de 19 de diciembre de 2024",
+     "articulo": "vacancia del 20 de diciembre de 2024 al 10 de enero de 2025",
+     "enlace": "https://www.ramajudicial.gov.co/web/consejo-superior-de-la-judicatura/-/conozca-las-fechas-de-la-vacancia-judicial-en-la-rama-judicial",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ],
+   "parametros": {
+    "inicio": {
+     "mes": 12,
+     "dia": 20
+    },
+    "fin": {
+     "mes": 1,
+     "dia": 10
+    }
+   },
+   "requiere_juicio_profesional": "Si un despacho concreto tuvo vacancia colectiva depende de su especialidad (R-VAC-0003): el usuario debe indicarlo; si el dato falta y cambia el resultado, el procedimiento se abstiene.",
+   "notas": "Fechas confirmadas además por los comunicados del Consejo Superior de la Judicatura de 2024 y 2025."
+  },
+  {
+   "id": "R-VAC-0002",
+   "version": 1,
+   "titulo": "Semana Santa como vacancia judicial",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "judicial"
+   },
+   "enunciado": "Para todos los efectos legales son días de vacancia judicial los domingos y festivos, cívicos o religiosos, y los de la Semana Santa.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 31 de 1971 (modifica el art. 2 del Decreto 546 de 1971)",
+    "articulo": "1, literal a"
+   },
+   "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=27745",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "a) Los días domingos y festivos, cívicos o religiosos, que determina la ley y los de la Semana Santa.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "dias_respecto_de_pascua": [
+     -6,
+     -5,
+     -4
+    ]
+   },
+   "requiere_juicio_profesional": "El procedimiento trata como vacancia el lunes, martes y miércoles santos (jueves y viernes ya son festivos). Confirme con el despacho si atendió esos días.",
+   "notas": "La aplicación anual por el Consejo Superior de la Judicatura no se consultó en fuente oficial."
+  },
+  {
+   "id": "R-VAC-0003",
+   "version": 1,
+   "titulo": "Despachos exceptuados de las vacaciones colectivas",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "judicial"
+   },
+   "enunciado": "Las vacaciones de la Rama Judicial son colectivas, salvo para el Consejo Superior y los consejos seccionales de la judicatura, la Dirección Ejecutiva de Administración Judicial y sus seccionales, los juzgados penales municipales, los juzgados de ejecución de penas y medidas de seguridad, la Fiscalía y el Instituto Nacional de Medicina Legal y Ciencias Forenses.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 270 de 1996 (modificado por el art. 74 de la Ley 2430 de 2024)",
+    "articulo": "146"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0270_1996_pr005.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las vacaciones de los funcionarios y empleados de la Rama Judicial serán colectivas, de conformidad con lo establecido en la ley. Salvo para los que laboren en el Consejo Superior de la Judicatura y consejos seccionales de la judicatura, la Dirección Ejecutiva de Administración Judicial y sus direcciones seccionales, los juzgados penales municipales y los juzgados de ejecución de penas y medidas de seguridad, de la Fiscalía y el Instituto Nacional de Medicina Legal y Ciencias Forenses.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "notas": "Texto vigente tras la Ley 2430 de 2024; la fecha de entrada en vigor de esa modificación no se comprobó."
+  },
+  {
+   "id": "R-FEST-0001",
+   "version": 1,
+   "titulo": "Días festivos nacionales",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "Son días de descanso remunerado (festivos): 1 de enero, 6 de enero, 19 de marzo, 1 de mayo, 29 de junio, 20 de julio, 7 de agosto, 15 de agosto, 12 de octubre, 1 de noviembre, 11 de noviembre, 8 de diciembre y 25 de diciembre, además del Jueves y Viernes Santos, la Ascensión del Señor, Corpus Christi y el Sagrado Corazón de Jesús.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 51 de 1983",
+    "articulo": "1"
+   },
+   "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=4954",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "Todos los trabajadores, tanto del sector público como del sector privado, tienen derecho al descanso remunerado en los siguientes días de fiesta de carácter civil o religioso: primero de enero, seis de enero, diecinueve de marzo, primero de mayo, veintinueve de junio, veinte de julio, siete de agosto, quince de agosto, doce de octubre, primero de noviembre, once de noviembre, ocho de diciembre y veinticinco de diciembre, además de los días Jueves y Viernes Santos, Ascensión del Señor, Corpus Christi y Sagrado Corazón de Jesús.",
+   "vigencia": {
+    "desde": "1983-12-06",
+    "hasta": "2026-06-01",
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Código Sustantivo del Trabajo, art. 177 (texto de la Ley 51 de 1983)",
+     "articulo": "177",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr006.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "En esta compilación el numeral 2 no menciona el «once de noviembre» entre los festivos trasladables; el texto del Gestor Normativo de Función Pública sí lo incluye. El Banco de la República publica la Independencia de Cartagena de 2025 el lunes 17 de noviembre, lo que confirma el traslado."
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriados bancarios (páginas por festivo)",
+     "articulo": "fechas publicadas",
+     "enlace": "https://www.banrep.gov.co/es/feriado-bancario/independencia-cartagena-2025",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ],
+   "parametros": {
+    "fijos": [
+     {
+      "nombre": "Año Nuevo",
+      "mes": 1,
+      "dia": 1,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Reyes Magos",
+      "mes": 1,
+      "dia": 6,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "San José",
+      "mes": 3,
+      "dia": 19,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Día del Trabajo",
+      "mes": 5,
+      "dia": 1,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "San Pedro y San Pablo",
+      "mes": 6,
+      "dia": 29,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Independencia de Colombia",
+      "mes": 7,
+      "dia": 20,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Batalla de Boyacá",
+      "mes": 8,
+      "dia": 7,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Asunción de la Virgen",
+      "mes": 8,
+      "dia": 15,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Día de la Raza",
+      "mes": 10,
+      "dia": 12,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Todos los Santos",
+      "mes": 11,
+      "dia": 1,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Independencia de Cartagena",
+      "mes": 11,
+      "dia": 11,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Inmaculada Concepción",
+      "mes": 12,
+      "dia": 8,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Navidad",
+      "mes": 12,
+      "dia": 25,
+      "traslado_al_lunes": false
+     }
+    ],
+    "respecto_de_pascua": [
+     {
+      "nombre": "Jueves Santo",
+      "dias": -3,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Viernes Santo",
+      "dias": -2,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Ascensión del Señor",
+      "dias": 39,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Corpus Christi",
+      "dias": 60,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Sagrado Corazón de Jesús",
+      "dias": 68,
+      "traslado_al_lunes": true
+     }
+    ]
+   },
+   "notas": "La Ley 51 de 1983 rige desde su sanción (6 de diciembre de 1983). Esta versión deja de aplicarse el 2 de junio de 2026, cuando la Ley 2578 de 2026 agrega un festivo (versión 2)."
+  },
+  {
+   "id": "R-FEST-0001",
+   "version": 2,
+   "titulo": "Días festivos nacionales",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "A los festivos de la Ley 51 de 1983 se suma el Día de Nuestra Señora del Rosario de Chiquinquirá (9 de julio de cada año), festivo nacional al que se aplican las reglas de la Ley 51 de 1983 para determinar el día de descanso.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 2578 de 2026",
+    "articulo": "6"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2578_2026.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Declárase el Día de Nuestra Señora del Rosario de Chiquinquirá, que se conmemora el 9 de julio de cada año, como día festivo de carácter nacional, de obligatorio cumplimiento en todo el territorio de la República de Colombia. […] Se aplicarán las disposiciones de la ley 51 de 1983 para efectos de determinar el día en el cual se disfrute del descanso remunerado en el calendario.",
+   "vigencia": {
+    "desde": "2026-06-02",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05",
+    "J09"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 51 de 1983",
+     "articulo": "1",
+     "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=4954",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Código Sustantivo del Trabajo, art. 177 (texto de la Ley 51 de 1983)",
+     "articulo": "177",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr006.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "En esta compilación el numeral 2 no menciona el «once de noviembre» entre los festivos trasladables; el texto del Gestor Normativo de Función Pública sí lo incluye. El Banco de la República publica la Independencia de Cartagena de 2025 el lunes 17 de noviembre, lo que confirma el traslado."
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriados bancarios (páginas por festivo)",
+     "articulo": "fechas publicadas",
+     "enlace": "https://www.banrep.gov.co/es/feriado-bancario/independencia-cartagena-2025",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Carta Circular Externa GE-0203 de 9 de junio de 2026",
+     "articulo": "el festivo se traslada al lunes 13 de julio de 2026",
+     "enlace": "https://www.banrep.gov.co/sites/default/files/reglamentacion/archivos/0203-2026-GE.pdf",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Consejo Superior de la Judicatura",
+     "identificador": "Circular PCSJC26-26 de 2 de julio de 2026",
+     "articulo": "el 13 de julio de 2026 es festivo para la Rama Judicial",
+     "enlace": "https://actosadministrativos.ramajudicial.gov.co/Home/GetFile?nombreArchivo=C+I+R+C+U+L+A+R+PCSJC26-26+para+firma.pdf",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ],
+   "parametros": {
+    "fijos": [
+     {
+      "nombre": "Año Nuevo",
+      "mes": 1,
+      "dia": 1,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Reyes Magos",
+      "mes": 1,
+      "dia": 6,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "San José",
+      "mes": 3,
+      "dia": 19,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Día del Trabajo",
+      "mes": 5,
+      "dia": 1,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "San Pedro y San Pablo",
+      "mes": 6,
+      "dia": 29,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Independencia de Colombia",
+      "mes": 7,
+      "dia": 20,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Batalla de Boyacá",
+      "mes": 8,
+      "dia": 7,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Asunción de la Virgen",
+      "mes": 8,
+      "dia": 15,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Día de la Raza",
+      "mes": 10,
+      "dia": 12,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Todos los Santos",
+      "mes": 11,
+      "dia": 1,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Independencia de Cartagena",
+      "mes": 11,
+      "dia": 11,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Inmaculada Concepción",
+      "mes": 12,
+      "dia": 8,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Navidad",
+      "mes": 12,
+      "dia": 25,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Nuestra Señora del Rosario de Chiquinquirá",
+      "mes": 7,
+      "dia": 9,
+      "traslado_al_lunes": true
+     }
+    ],
+    "respecto_de_pascua": [
+     {
+      "nombre": "Jueves Santo",
+      "dias": -3,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Viernes Santo",
+      "dias": -2,
+      "traslado_al_lunes": false
+     },
+     {
+      "nombre": "Ascensión del Señor",
+      "dias": 39,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Corpus Christi",
+      "dias": 60,
+      "traslado_al_lunes": true
+     },
+     {
+      "nombre": "Sagrado Corazón de Jesús",
+      "dias": 68,
+      "traslado_al_lunes": true
+     }
+    ]
+   },
+   "notas": "Ley 2578 de 2026 (junio 1), Diario Oficial 53.510 de 2 de junio de 2026; rige desde su promulgación (art. 7). Prensa no oficial informó de una demanda de inconstitucionalidad: verificar su estado en corteconstitucional.gov.co antes de proyectar festivos de años futuros."
+  },
+  {
+   "id": "R-FEST-0002",
+   "version": 1,
+   "titulo": "Traslado de festivos al lunes",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "El descanso del 6 de enero, 19 de marzo, 29 de junio, 15 de agosto, 12 de octubre, 1 de noviembre, 11 de noviembre, Ascensión del Señor, Corpus Christi y Sagrado Corazón de Jesús se traslada al lunes siguiente cuando no cae en lunes; si cae en domingo, también se traslada al lunes.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 51 de 1983",
+    "articulo": "1, numeral 2"
+   },
+   "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=4954",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "Pero el descanso remunerado del seis de enero, diecinueve de marzo, veintinueve de junio, quince de agosto, doce de octubre, primero de noviembre, once de noviembre, Ascensión del Señor, Corpus Christi y Sagrado Corazón de Jesús cuando no caigan en día lunes se trasladarán al lunes siguiente a dicho día. Cuando las mencionadas festividades caigan en domingo el descanso remunerado igualmente se trasladará al lunes.",
+   "vigencia": {
+    "desde": "1983-12-06",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Código Sustantivo del Trabajo, art. 177 (texto de la Ley 51 de 1983)",
+     "articulo": "177",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr006.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "En esta compilación el numeral 2 no menciona el «once de noviembre» entre los festivos trasladables; el texto del Gestor Normativo de Función Pública sí lo incluye. El Banco de la República publica la Independencia de Cartagena de 2025 el lunes 17 de noviembre, lo que confirma el traslado."
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriados bancarios (páginas por festivo)",
+     "articulo": "fechas publicadas",
+     "enlace": "https://www.banrep.gov.co/es/feriado-bancario/independencia-cartagena-2025",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ]
+  },
+  {
+   "id": "R-FEST-0003",
+   "version": 1,
+   "titulo": "Festivos que dependen de la Pascua",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "Regla técnica de calendario: el Domingo de Pascua se obtiene con el cómputo gregoriano; Jueves y Viernes Santos son 3 y 2 días antes; Ascensión, Corpus Christi y Sagrado Corazón caen 39, 60 y 68 días después y, trasladados al lunes, quedan a 43, 64 y 71 días de la Pascua.",
+   "soporte": {
+    "autoridad": "Banco de la República",
+    "identificador": "Feriados bancarios publicados (fechas de 2026)",
+    "articulo": "—"
+   },
+   "enlace": "https://www.banrep.gov.co/es/feriado-bancario/corpus-christi-2025",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "Fechas publicadas: Jueves Santo 2 de abril de 2026; Viernes Santo 3 de abril de 2026; Ascensión 18 de mayo de 2026; Corpus Christi 8 de junio de 2026; «el día festivo del Sagrado Corazón se celebra el siguiente lunes después del festivo de Corpus Christi».",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriado bancario - Jueves Santo",
+     "articulo": "2 de abril de 2026",
+     "enlace": "https://www.banrep.gov.co/es/feriado-bancario/jueves-santo-2025",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriado bancario - Ascensión de Jesús",
+     "articulo": "18 de mayo de 2026",
+     "enlace": "https://www.banrep.gov.co/es/feriado-bancario/ascension-jesus-2025",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    },
+    {
+     "autoridad": "Banco de la República",
+     "identificador": "Feriado bancario - Sagrado Corazón de Jesús",
+     "articulo": "lunes siguiente al festivo de Corpus Christi",
+     "enlace": "https://www.banrep.gov.co/es/node/63419/printable/print",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ],
+   "parametros": {
+    "algoritmo": "computo_gregoriano_anonimo"
+   },
+   "notas": "No es una norma jurídica sino el algoritmo con que se materializa R-FEST-0001; se contrastó con las fechas publicadas por el Banco de la República."
+  },
+  {
+   "id": "R-PLAZO-0001",
+   "version": 1,
+   "titulo": "Respuesta a toda petición (regla general)",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver toda petición (regla general) dentro de los 15 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Salvo norma legal especial y so pena de sanción disciplinaria, toda petición deberá resolverse dentro de los quince (15) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2015-06-30",
+    "hasta": "2020-03-27",
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 15,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: toda petición (regla general)"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Ley 1755 de 2015 (junio 30), Diario Oficial 49.559 de 30 de junio de 2015; rige desde su promulgación. Entre el 28 de marzo de 2020 y el 17 de mayo de 2022 rigió una ampliación temporal (versión 2)."
+  },
+  {
+   "id": "R-PLAZO-0001",
+   "version": 2,
+   "titulo": "Respuesta a toda petición (regla general) (ampliación temporal de la emergencia sanitaria)",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "Durante la emergencia sanitaria el art. 5 del Decreto Legislativo 491 de 2020 amplió los términos para atender peticiones. Los plazos ampliados NO están verificados en este registro.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto Legislativo 491 de 2020",
+    "articulo": "5 (derogado)"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_0491_2020.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "ARTÍCULO 5. AMPLIACIÓN DE TÉRMINOS PARA ATENDER LAS PETICIONES. <Artículo derogado por el artículo 2 de la Ley 2207 de 2022>",
+   "vigencia": {
+    "desde": "2020-03-28",
+    "hasta": "2022-05-17",
+    "desde_comprobado": true
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J05",
+    "J03"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": null,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "etiqueta": "Respuesta a derecho de petición: toda petición (regla general)"
+   },
+   "notas": "Comprobado: el decreto rige desde su publicación (Diario Oficial 51.270 de 28 de marzo de 2020) y su art. 5 fue derogado por la Ley 2207 de 2022 (Diario Oficial 52.037 de 17 de mayo de 2022), que rige desde el día siguiente a su promulgación. NO comprobado: el número de días ampliados (la fuente consultada ya no muestra el texto derogado) ni a qué peticiones radicadas antes del 18 de mayo de 2022 siguió aplicando. Qué verificar: texto original del Decreto 491 de 2020 en SUIN-Juriscol o en el Diario Oficial."
+  },
+  {
+   "id": "R-PLAZO-0001",
+   "version": 3,
+   "titulo": "Respuesta a toda petición (regla general)",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver toda petición (regla general) dentro de los 15 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Salvo norma legal especial y so pena de sanción disciplinaria, toda petición deberá resolverse dentro de los quince (15) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2022-05-18",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    },
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 15,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: toda petición (regla general)"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Desde el 18 de mayo de 2022 (día siguiente a la promulgación de la Ley 2207 de 2022) vuelve a regir el plazo ordinario. Las peticiones radicadas durante la ampliación requieren análisis de transición."
+  },
+  {
+   "id": "R-PLAZO-0002",
+   "version": 1,
+   "titulo": "Respuesta a peticiones de documentos y de información",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver peticiones de documentos y de información dentro de los 10 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las peticiones de documentos y de información deberán resolverse dentro de los diez (10) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2015-06-30",
+    "hasta": "2020-03-27",
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: peticiones de documentos y de información"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Ley 1755 de 2015 (junio 30), Diario Oficial 49.559 de 30 de junio de 2015; rige desde su promulgación. Entre el 28 de marzo de 2020 y el 17 de mayo de 2022 rigió una ampliación temporal (versión 2)."
+  },
+  {
+   "id": "R-PLAZO-0002",
+   "version": 2,
+   "titulo": "Respuesta a peticiones de documentos y de información (ampliación temporal de la emergencia sanitaria)",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "Durante la emergencia sanitaria el art. 5 del Decreto Legislativo 491 de 2020 amplió los términos para atender peticiones. Los plazos ampliados NO están verificados en este registro.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto Legislativo 491 de 2020",
+    "articulo": "5 (derogado)"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_0491_2020.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "ARTÍCULO 5. AMPLIACIÓN DE TÉRMINOS PARA ATENDER LAS PETICIONES. <Artículo derogado por el artículo 2 de la Ley 2207 de 2022>",
+   "vigencia": {
+    "desde": "2020-03-28",
+    "hasta": "2022-05-17",
+    "desde_comprobado": true
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J05",
+    "J03"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": null,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "etiqueta": "Respuesta a derecho de petición: peticiones de documentos y de información"
+   },
+   "notas": "Comprobado: el decreto rige desde su publicación (Diario Oficial 51.270 de 28 de marzo de 2020) y su art. 5 fue derogado por la Ley 2207 de 2022 (Diario Oficial 52.037 de 17 de mayo de 2022), que rige desde el día siguiente a su promulgación. NO comprobado: el número de días ampliados (la fuente consultada ya no muestra el texto derogado) ni a qué peticiones radicadas antes del 18 de mayo de 2022 siguió aplicando. Qué verificar: texto original del Decreto 491 de 2020 en SUIN-Juriscol o en el Diario Oficial."
+  },
+  {
+   "id": "R-PLAZO-0002",
+   "version": 3,
+   "titulo": "Respuesta a peticiones de documentos y de información",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver peticiones de documentos y de información dentro de los 10 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las peticiones de documentos y de información deberán resolverse dentro de los diez (10) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2022-05-18",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    },
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: peticiones de documentos y de información"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Desde el 18 de mayo de 2022 (día siguiente a la promulgación de la Ley 2207 de 2022) vuelve a regir el plazo ordinario. Las peticiones radicadas durante la ampliación requieren análisis de transición."
+  },
+  {
+   "id": "R-PLAZO-0003",
+   "version": 1,
+   "titulo": "Respuesta a consultas a las autoridades sobre las materias a su cargo",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver consultas a las autoridades sobre las materias a su cargo dentro de los 30 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las peticiones mediante las cuales se eleva una consulta a las autoridades en relación con las materias a su cargo deberán resolverse dentro de los treinta (30) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2015-06-30",
+    "hasta": "2020-03-27",
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 30,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: consultas a las autoridades sobre las materias a su cargo"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Ley 1755 de 2015 (junio 30), Diario Oficial 49.559 de 30 de junio de 2015; rige desde su promulgación. Entre el 28 de marzo de 2020 y el 17 de mayo de 2022 rigió una ampliación temporal (versión 2)."
+  },
+  {
+   "id": "R-PLAZO-0003",
+   "version": 2,
+   "titulo": "Respuesta a consultas a las autoridades sobre las materias a su cargo (ampliación temporal de la emergencia sanitaria)",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "Durante la emergencia sanitaria el art. 5 del Decreto Legislativo 491 de 2020 amplió los términos para atender peticiones. Los plazos ampliados NO están verificados en este registro.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto Legislativo 491 de 2020",
+    "articulo": "5 (derogado)"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_0491_2020.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "ARTÍCULO 5. AMPLIACIÓN DE TÉRMINOS PARA ATENDER LAS PETICIONES. <Artículo derogado por el artículo 2 de la Ley 2207 de 2022>",
+   "vigencia": {
+    "desde": "2020-03-28",
+    "hasta": "2022-05-17",
+    "desde_comprobado": true
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J05",
+    "J03"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": null,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "etiqueta": "Respuesta a derecho de petición: consultas a las autoridades sobre las materias a su cargo"
+   },
+   "notas": "Comprobado: el decreto rige desde su publicación (Diario Oficial 51.270 de 28 de marzo de 2020) y su art. 5 fue derogado por la Ley 2207 de 2022 (Diario Oficial 52.037 de 17 de mayo de 2022), que rige desde el día siguiente a su promulgación. NO comprobado: el número de días ampliados (la fuente consultada ya no muestra el texto derogado) ni a qué peticiones radicadas antes del 18 de mayo de 2022 siguió aplicando. Qué verificar: texto original del Decreto 491 de 2020 en SUIN-Juriscol o en el Diario Oficial."
+  },
+  {
+   "id": "R-PLAZO-0003",
+   "version": 3,
+   "titulo": "Respuesta a consultas a las autoridades sobre las materias a su cargo",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "La autoridad debe resolver consultas a las autoridades sobre las materias a su cargo dentro de los 30 días siguientes a su recepción.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 14, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "14"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las peticiones mediante las cuales se eleva una consulta a las autoridades en relación con las materias a su cargo deberán resolverse dentro de los treinta (30) días siguientes a su recepción.",
+   "vigencia": {
+    "desde": "2022-05-18",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 1755 de 2015",
+     "articulo": "1 (sustituye los arts. 13 a 33 del CPACA)",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    },
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 2207 de 2022",
+     "articulo": "2 y 4",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_2207_2022.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 30,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "recepción de la petición por la autoridad competente",
+    "etiqueta": "Respuesta a derecho de petición: consultas a las autoridades sobre las materias a su cargo"
+   },
+   "requiere_juicio_profesional": "El plazo es «salvo norma legal especial» y admite la prórroga del parágrafo (hasta el doble) si la autoridad la informa antes del vencimiento: ambas cosas las valora el profesional.",
+   "notas": "Desde el 18 de mayo de 2022 (día siguiente a la promulgación de la Ley 2207 de 2022) vuelve a regir el plazo ordinario. Las peticiones radicadas durante la ampliación requieren análisis de transición."
+  },
+  {
+   "id": "R-PLAZO-0004",
+   "version": 1,
+   "titulo": "Impugnación del fallo de tutela",
+   "ambito": {
+    "materia": "tutela",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "El fallo de tutela puede impugnarse dentro de los tres días siguientes a su notificación.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto 2591 de 1991",
+    "articulo": "31"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_2591_1991.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Dentro de los tres días siguientes a su notificación el fallo podrá ser impugnado por el Defensor del Pueblo, el solicitante, la autoridad pública o el representante del órgano correspondiente, sin perjuicio de su cumplimiento inmediato.",
+   "vigencia": {
+    "desde": "1991-11-19",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 3,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "tutela",
+    "evento_inicial": "notificación del fallo",
+    "etiqueta": "Impugnación del fallo de tutela"
+   },
+   "requiere_juicio_profesional": "La norma no dice si los días son hábiles: se cuentan como hábiles por la regla general del art. 62 de la Ley 4 de 1913 (R-TERM-0004). El fallo se notifica «por el medio que el juez considere más expedito» (art. 16): la fecha en que se surtió la notificación la determina el profesional.",
+   "notas": "Decreto 2591 de 1991 (noviembre 19), Diario Oficial 40.165 de 19 de noviembre de 1991."
+  },
+  {
+   "id": "R-PLAZO-0005",
+   "version": 1,
+   "titulo": "Recurso de reposición contra autos",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "Cuando el auto se pronuncia fuera de audiencia, la reposición se interpone por escrito dentro de los tres días siguientes al de la notificación del auto.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "318, inciso 3"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Cuando el auto se pronuncie fuera de audiencia el recurso deberá interponerse por escrito dentro de los tres (3) días siguientes al de la notificación del auto.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 3,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "cgp",
+    "evento_inicial": "notificación del auto",
+    "etiqueta": "Reposición contra auto (fuera de audiencia)"
+   }
+  },
+  {
+   "id": "R-PLAZO-0006",
+   "version": 1,
+   "titulo": "Recurso de apelación contra providencia dictada fuera de audiencia",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "La apelación contra la providencia dictada fuera de audiencia se interpone en el acto de su notificación personal o por escrito dentro de los tres días siguientes a su notificación por estado.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "322, numeral 1, inciso 2"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr011.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "La apelación contra la providencia que se dicte fuera de audiencia deberá interponerse ante el juez que la dictó, en el acto de su notificación personal o por escrito dentro de los tres (3) días siguientes a su notificación por estado.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 3,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "cgp",
+    "evento_inicial": "notificación por estado",
+    "etiqueta": "Apelación (providencia fuera de audiencia)"
+   },
+   "requiere_juicio_profesional": "La procedencia de la apelación y la carga de sustentarla (art. 322, numeral 3) no las decide el procedimiento."
+  },
+  {
+   "id": "R-PLAZO-0007",
+   "version": 1,
+   "titulo": "Traslado de la demanda en el proceso verbal",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "Admitida la demanda en el proceso verbal, se corre traslado al demandado por veinte días.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "369"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr012.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Admitida la demanda se correrá traslado al demandado por el término de veinte (20) días.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 20,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "cgp",
+    "evento_inicial": "notificación del auto admisorio al demandado",
+    "etiqueta": "Contestación de la demanda (proceso verbal)"
+   }
+  },
+  {
+   "id": "R-PLAZO-0008",
+   "version": 1,
+   "titulo": "Contestación de la demanda en el proceso verbal sumario",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "En el proceso verbal sumario el término para contestar la demanda es de diez días.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "391, inciso 5"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr013.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "El término para contestar la demanda será de diez (10) días.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "cgp",
+    "evento_inicial": "notificación del auto admisorio al demandado",
+    "etiqueta": "Contestación de la demanda (verbal sumario)"
+   }
+  },
+  {
+   "id": "R-PLAZO-0009",
+   "version": 1,
+   "titulo": "Excepciones de mérito en el proceso ejecutivo",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "ordinaria (CGP)"
+   },
+   "enunciado": "El demandado puede proponer excepciones de mérito dentro de los diez días siguientes a la notificación del mandamiento ejecutivo.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1564 de 2012 (Código General del Proceso)",
+    "articulo": "442, numeral 1"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1564_2012_pr015.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Dentro de los diez (10) días siguientes a la notificación del mandamiento ejecutivo el demandado podrá proponer excepciones de mérito.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "cgp",
+    "evento_inicial": "notificación del mandamiento ejecutivo",
+    "etiqueta": "Excepciones de mérito (proceso ejecutivo)"
+   }
+  },
+  {
+   "id": "R-PLAZO-0010",
+   "version": 1,
+   "titulo": "Recursos de reposición y apelación en la actuación administrativa",
+   "ambito": {
+    "materia": "administrativo",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "Los recursos de reposición y apelación se interponen por escrito en la diligencia de notificación personal o dentro de los diez días siguientes a ella, a la notificación por aviso o al vencimiento del término de publicación.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA)",
+    "articulo": "76"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Los recursos de reposición y apelación deberán interponerse por escrito en la diligencia de notificación personal, o dentro de los diez (10) días siguientes a ella, o a la notificación por aviso, o al vencimiento del término de publicación, según el caso.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "administrativo",
+    "evento_inicial": "notificación personal, notificación por aviso o fin de la publicación",
+    "etiqueta": "Recursos contra acto administrativo (reposición y apelación)"
+   },
+   "requiere_juicio_profesional": "La fecha en que se entiende surtida la notificación por aviso la fija el profesional con el expediente."
+  },
+  {
+   "id": "R-PLAZO-0011",
+   "version": 1,
+   "titulo": "Traslado de la demanda en lo contencioso administrativo",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "contencioso administrativa"
+   },
+   "enunciado": "De la demanda se corre traslado por treinta días, plazo que comienza a correr según los arts. 199 y 200 del CPACA.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA)",
+    "articulo": "172"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "De la demanda se correrá traslado al demandado, al Ministerio Público y a los sujetos que […] tengan interés directo en el resultado del proceso, por el término de treinta (30) días, plazo que comenzará a correr de conformidad con lo previsto en los artículos 199 y 200 de este Código",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 30,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "contencioso",
+    "evento_inicial": "fecha desde la cual corre el traslado según los arts. 199 y 200 del CPACA",
+    "inicio_especial": true,
+    "etiqueta": "Contestación de la demanda (contencioso administrativo)"
+   },
+   "requiere_juicio_profesional": "El punto de partida depende de los arts. 199 y 200 del CPACA, que este registro no ha verificado: el usuario debe indicar como fecha de notificación el día anterior a aquel en que empieza a correr el traslado, y el resultado se advierte como condicionado."
+  },
+  {
+   "id": "R-PLAZO-0012",
+   "version": 1,
+   "titulo": "Caducidad de la nulidad y restablecimiento del derecho",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "contencioso administrativa"
+   },
+   "enunciado": "La demanda de nulidad y restablecimiento del derecho debe presentarse dentro de los cuatro meses contados a partir del día siguiente al de la comunicación, notificación, ejecución o publicación del acto.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA)",
+    "articulo": "164, numeral 2, literal d"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Cuando se pretenda la nulidad y restablecimiento del derecho, la demanda deberá presentarse dentro del término de cuatro (4) meses contados a partir del día siguiente al de la comunicación, notificación, ejecución o publicación del acto administrativo, según el caso, salvo las excepciones establecidas en otras disposiciones legales;",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 4,
+    "unidad": "meses",
+    "regimen": "contencioso",
+    "evento_inicial": "comunicación, notificación, ejecución o publicación del acto",
+    "etiqueta": "Caducidad: nulidad y restablecimiento del derecho"
+   },
+   "requiere_juicio_profesional": "La suspensión del término por la conciliación extrajudicial, las excepciones legales y los actos que pueden demandarse en cualquier tiempo requieren análisis profesional; infórmelas como suspensiones."
+  },
+  {
+   "id": "R-PLAZO-0013",
+   "version": 1,
+   "titulo": "Caducidad de la reparación directa",
+   "ambito": {
+    "materia": "procesal",
+    "jurisdiccion": "contencioso administrativa"
+   },
+   "enunciado": "La demanda de reparación directa debe presentarse dentro de los dos años contados a partir del día siguiente al de la ocurrencia de la acción u omisión causante del daño, o de cuando el demandante tuvo o debió tener conocimiento del mismo.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA)",
+    "articulo": "164, numeral 2, literal i"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1437_2011_pr004.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Cuando se pretenda la reparación directa, la demanda deberá presentarse dentro del término de dos (2) años, contados a partir del día siguiente al de la ocurrencia de la acción u omisión causante del daño, o de cuando el demandante tuvo o debió tener conocimiento del mismo si fue en fecha posterior y siempre que pruebe la imposibilidad de haberlo conocido en la fecha de su ocurrencia.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 2,
+    "unidad": "anios",
+    "regimen": "contencioso",
+    "evento_inicial": "ocurrencia del hecho dañoso o conocimiento del daño",
+    "etiqueta": "Caducidad: reparación directa"
+   },
+   "requiere_juicio_profesional": "La fecha de conocimiento del daño, las reglas especiales (p. ej. desaparición forzada), la jurisprudencia de unificación que la fuente anuncia en notas y la suspensión por conciliación requieren análisis profesional.",
+   "notas": "La fuente marca el literal con «Ver Notas del Editor» y «Jurisprudencia Unificación», no consultadas."
+  },
+  {
+   "id": "R-PLAZO-0014",
+   "version": 1,
+   "titulo": "Plazo del juez para fallar la tutela",
+   "ambito": {
+    "materia": "tutela",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Entre la solicitud de tutela y su resolución no pueden transcurrir más de diez días; el juez dicta fallo dentro de los diez días siguientes a la presentación de la solicitud.",
+   "soporte": {
+    "autoridad": "Asamblea Nacional Constituyente",
+    "identificador": "Constitución Política de 1991",
+    "articulo": "86, inciso 4"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/constitucion_politica_1991_pr002.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "En ningún caso podrán transcurrir más de diez días entre la solicitud de tutela y su resolución.",
+   "vigencia": {
+    "desde": "1991-11-19",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05",
+    "J01"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Presidente de la República",
+     "identificador": "Decreto 2591 de 1991",
+     "articulo": "29",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_2591_1991.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente"
+    }
+   ],
+   "parametros": {
+    "cantidad": 10,
+    "unidad": "dias",
+    "tipo_dias": null,
+    "regimen": "tutela",
+    "solo_informativo": true,
+    "evento_inicial": "presentación de la solicitud",
+    "etiqueta": "Fallo de tutela de primera instancia"
+   },
+   "requiere_juicio_profesional": "Las fuentes consultadas no dicen si los diez días son hábiles o calendario: el procedimiento no lo decide y exige que el usuario indique el tipo de día.",
+   "notas": "Fecha «desde» tomada del Decreto 2591 de 1991; la del art. 86 de la Constitución es anterior."
+  },
+  {
+   "id": "R-PLAZO-0015",
+   "version": 1,
+   "titulo": "Plazo para fallar la impugnación de la tutela",
+   "ambito": {
+    "materia": "tutela",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "El juez que conoce la impugnación profiere el fallo dentro de los 20 días siguientes a la recepción del expediente.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto 2591 de 1991",
+    "articulo": "32"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_2591_1991.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "proferirá el fallo dentro de los 20 días siguientes a la recepción del expediente.",
+   "vigencia": {
+    "desde": "1991-11-19",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J05"
+   ],
+   "parametros": {
+    "cantidad": 20,
+    "unidad": "dias",
+    "tipo_dias": "habiles",
+    "regimen": "tutela",
+    "evento_inicial": "recepción del expediente por el juez de segunda instancia",
+    "etiqueta": "Fallo de la impugnación de tutela"
+   },
+   "requiere_juicio_profesional": "La norma no dice si los días son hábiles: se cuentan como hábiles por la regla general del art. 62 de la Ley 4 de 1913."
+  },
+  {
+   "id": "R-LIQ-0001",
+   "version": 1,
+   "titulo": "Auxilio de cesantía",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "El empleador paga como auxilio de cesantía un mes de salario por cada año de servicios y proporcionalmente por fracción de año.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Sustantivo del Trabajo",
+    "articulo": "249"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr008.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "como auxilio de cesantía, un mes de salario por cada año de servicios y proporcionalmente por fracción de año.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "formula": "cesantias = base_mensual × dias / base_dias_anio",
+    "version_formula": "1.0"
+   },
+   "notas": "La fuente marca el artículo con «Ver Notas del Editor», no consultadas. Inicio de vigencia no comprobado."
+  },
+  {
+   "id": "R-LIQ-0002",
+   "version": 1,
+   "titulo": "Salario base de la cesantía",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "La cesantía se liquida con el último salario mensual devengado si no varió en los tres últimos meses; si varió o el salario es variable, con el promedio de lo devengado en el último año de servicios o en todo el tiempo servido si es menor.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Sustantivo del Trabajo (modificado por el art. 17 del Decreto 2351 de 1965)",
+    "articulo": "253, numeral 1"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr008.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Para liquidar el auxilio de Cesantía se toma como base el último salario mensual devengado por el trabajador, siempre que no haya tenido variación en los tres (3) últimos meses. En el caso contrario y en el de los salarios variables, se tomará como base el promedio de lo devengado en el último año de servicios o en todo el tiempo servido si fuere menor de un año.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "requiere_juicio_profesional": "Qué pagos constituyen salario y cuál es el promedio aplicable los determina el profesional; el procedimiento recibe la base ya definida por el usuario."
+  },
+  {
+   "id": "R-LIQ-0003",
+   "version": 1,
+   "titulo": "Intereses sobre las cesantías",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "El empleador paga intereses del 12 % anual sobre el saldo de cesantía a 31 de diciembre, o en la fecha de retiro o de liquidación parcial, en proporción al tiempo transcurrido del año.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto 116 de 1976 (reglamenta la Ley 52 de 1975)",
+    "articulo": "1 y 2"
+   },
+   "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=3285",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "todo patrono obligado a pagar cesantía a sus trabajadores, les reconocerá y pagará intereses del 12% anual sobre los saldos que en 31 de diciembre de cada año […] en cuantía proporcional al lapso transcurrido del año.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 50 de 1990",
+     "articulo": "99, numeral 2",
+     "enlace": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma_pdf.php?i=281",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+     "nota": "«intereses legales del 12% anual o proporcionales por fracción»"
+    }
+   ],
+   "parametros": {
+    "tasa_anual": "0.12",
+    "formula": "intereses = cesantias × tasa_anual × dias / base_dias_anio",
+    "version_formula": "1.0"
+   },
+   "notas": "El texto de la Ley 52 de 1975 no pudo abrirse (SUIN-Juriscol no fue accesible desde este entorno); la regla se apoya en su decreto reglamentario y en la Ley 50 de 1990."
+  },
+  {
+   "id": "R-LIQ-0004",
+   "version": 1,
+   "titulo": "Prima de servicios",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "La prima de servicios equivale a 30 días de salario por año, en dos pagos: la mitad a más tardar el 30 de junio y la otra mitad a más tardar en los primeros veinte días de diciembre; se reconoce por todo el semestre trabajado o proporcionalmente al tiempo trabajado.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Sustantivo del Trabajo (modificado por el art. 1 de la Ley 1788 de 2016)",
+    "articulo": "306"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr010.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "la prestación social denominada prima de servicios que corresponderá a 30 días de salario por año, el cual se reconocerá en dos pagos, así: la mitad máximo el 30 de junio y la otra mitad a más tardar los primeros veinte días de diciembre. Su reconocimiento se hará por todo el semestre trabajado o proporcionalmente al tiempo trabajado.",
+   "vigencia": {
+    "desde": "2016-07-07",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "formula": "prima = base_mensual × dias_del_semestre / base_dias_anio",
+    "version_formula": "1.0"
+   },
+   "notas": "Ley 1788 de 2016 (julio 7), Diario Oficial 49.927 de 7 de julio de 2016. El texto anterior no está registrado."
+  },
+  {
+   "id": "R-LIQ-0005",
+   "version": 1,
+   "titulo": "Vacaciones y su compensación en dinero",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "Quien presta servicios durante un año tiene derecho a quince días hábiles consecutivos de vacaciones remuneradas; si el contrato termina sin haberlas causado por año cumplido, se compensan en dinero proporcionalmente al tiempo trabajado, con base en el último salario devengado.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Sustantivo del Trabajo",
+    "articulo": "186, numeral 1, y 189, numeral 3"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr006.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Los trabajadores que hubieren prestado sus servicios durante un año tienen derecho a quince (15) días hábiles consecutivos de vacaciones remuneradas.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Ley 995 de 2005",
+     "articulo": "1",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0995_2005.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "«tendrán derecho a que estas se les reconozcan y compensen en dinero proporcionalmente por el tiempo efectivamente trabajado» (Diario Oficial 46.089 de 11 de noviembre de 2005)"
+    },
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Código Sustantivo del Trabajo",
+     "articulo": "192",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr006.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "«el trabajador recibirá el salario ordinario que esté devengando […] sólo se excluirán para la liquidación de vacaciones el valor del trabajo en días de descanso obligatorio y el valor del trabajo suplementario en horas extras»"
+    }
+   ],
+   "parametros": {
+    "dias_por_anio": 15,
+    "formula": "vacaciones = salario_mensual × dias / (base_dias_anio × 2)",
+    "version_formula": "1.0"
+   },
+   "requiere_juicio_profesional": "Liquidar quince días de salario por año como salario × días / 720 supone meses de 30 días (R-LIQ-0007). Incluir o no el auxilio de transporte en esta base no está verificado (R-LIQ-0006)."
+  },
+  {
+   "id": "R-LIQ-0006",
+   "version": 1,
+   "titulo": "Auxilio de transporte en la base de las prestaciones",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "Supuesto de cálculo: el auxilio de transporte se suma a la base de cesantías y prima de servicios y no a la de vacaciones. No verificado: el usuario debe indicarlo expresamente.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1 de 1963",
+    "articulo": "7"
+   },
+   "enlace": null,
+   "consultado": null,
+   "metodo_verificacion": null,
+   "cita": "",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J06"
+   ],
+   "notas": "No fue posible abrir el texto oficial (SUIN-Juriscol y mintrabajo.gov.co no fueron accesibles desde este entorno y el Gestor Normativo de Función Pública no lo ofrece en la consulta hecha). Qué verificar: art. 7 de la Ley 1 de 1963 en https://www.suin-juriscol.gov.co/viewDocument.asp?ruta=Leyes/1556008. Mientras tanto, el procedimiento exige que el usuario decida si el auxilio entra en cada base y lo deja escrito en los supuestos."
+  },
+  {
+   "id": "R-LIQ-0007",
+   "version": 1,
+   "titulo": "Año de 360 días y meses de 30 días",
+   "ambito": {
+    "materia": "laboral",
+    "jurisdiccion": "ordinaria laboral"
+   },
+   "enunciado": "Supuesto de cálculo: las prestaciones proporcionales se liquidan sobre un año de 360 días con meses de 30 días.",
+   "soporte": {
+    "autoridad": "—",
+    "identificador": "Sin norma verificada en esta consulta",
+    "articulo": "—"
+   },
+   "enlace": null,
+   "consultado": null,
+   "metodo_verificacion": null,
+   "cita": "",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "base_dias_anio": 360,
+    "dias_por_mes": 30
+   },
+   "notas": "Es la convención de uso general, pero no se verificó en fuente oficial (mintrabajo.gov.co no fue accesible). El procedimiento la aplica como parámetro visible y modificable y lo advierte en cada resultado. Qué verificar: guía o calculadora oficial del Ministerio del Trabajo."
+  },
+  {
+   "id": "R-INT-0001",
+   "version": 1,
+   "titulo": "Interés legal civil",
+   "ambito": {
+    "materia": "civil",
+    "jurisdiccion": "ordinaria civil"
+   },
+   "enunciado": "En las obligaciones de dinero, si no se pactó un interés superior al legal, la mora causa intereses legales; el interés legal es del seis por ciento anual.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Civil",
+    "articulo": "1617, regla 1.ª"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_civil_pr049.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "El interés legal se fija en seis por ciento anual.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "tasa_anual": "0.06"
+   }
+  },
+  {
+   "id": "R-INT-0002",
+   "version": 1,
+   "titulo": "Interés moratorio comercial",
+   "ambito": {
+    "materia": "comercial",
+    "jurisdiccion": "ordinaria civil"
+   },
+   "enunciado": "En los negocios mercantiles, si no se estipuló el interés moratorio, este equivale a una y media veces el interés bancario corriente, que se prueba con certificado de la Superintendencia.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código de Comercio (modificado por el art. 111 de la Ley 510 de 1999)",
+    "articulo": "884"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_comercio_pr027.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "si las partes no han estipulado el interés moratorio, será equivalente a una y media veces del bancario corriente y en cuanto sobrepase cualquiera de estos montos el acreedor perderá todos los intereses, sin perjuicio de lo dispuesto en el artículo 72 de la Ley 45 de 1990.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "factor_sobre_bancario_corriente": "1.5"
+   },
+   "requiere_juicio_profesional": "La tasa de interés bancario corriente de cada período es una ENTRADA: debe tomarse de la certificación de la Superintendencia Financiera, con su número y fecha. El procedimiento no trae tasas."
+  },
+  {
+   "id": "R-INT-0003",
+   "version": 1,
+   "titulo": "Los intereses atrasados no producen interés",
+   "ambito": {
+    "materia": "civil y comercial",
+    "jurisdiccion": "ordinaria civil"
+   },
+   "enunciado": "Los intereses atrasados no producen interés; en materia mercantil solo desde la demanda judicial o por acuerdo posterior al vencimiento y respecto de intereses debidos con un año de anterioridad.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Código Civil",
+    "articulo": "1617, regla 3.ª"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_civil_pr049.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Los intereses atrasados no producen interés.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Congreso de la República",
+     "identificador": "Código de Comercio",
+     "articulo": "886",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_comercio_pr027.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "«Los intereses pendientes no producirán intereses sino desde la fecha de la demanda judicial del acreedor, o por acuerdo posterior al vencimiento, siempre que en uno y otro caso se trate de intereses debidos con un año de anterioridad, por lo menos.»"
+    }
+   ],
+   "parametros": {
+    "capitaliza": false
+   }
+  },
+  {
+   "id": "R-INT-0004",
+   "version": 1,
+   "titulo": "Método para pasar una tasa efectiva anual a días",
+   "ambito": {
+    "materia": "financiera",
+    "jurisdiccion": "ordinaria civil"
+   },
+   "enunciado": "Método declarado: tasa diaria equivalente = (1 + tasa efectiva anual)^(1/365) − 1; interés del período = capital × tasa diaria × días, sin capitalizar.",
+   "soporte": {
+    "autoridad": "—",
+    "identificador": "Método financiero (sin norma verificada en esta consulta)",
+    "articulo": "—"
+   },
+   "enlace": null,
+   "consultado": null,
+   "metodo_verificacion": null,
+   "cita": "",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "REVISIÓN_HUMANA_PENDIENTE",
+   "procedimientos": [
+    "J06"
+   ],
+   "parametros": {
+    "version_formula": "1.0",
+    "dias_anio_equivalencia": 365
+   },
+   "notas": "No se verificó en fuente oficial un método obligatorio. El usuario elige el método y la base de días; el resultado lo declara. Requiere revisión de un profesional antes de usarse en una liquidación de crédito."
+  },
+  {
+   "id": "R-IDX-0001",
+   "version": 1,
+   "titulo": "Indexación con el índice de precios al consumidor",
+   "ambito": {
+    "materia": "general",
+    "jurisdiccion": "todas"
+   },
+   "enunciado": "El valor histórico se actualiza multiplicándolo por el cociente entre el índice final y el índice inicial: R = Rh × índice final / índice inicial.",
+   "soporte": {
+    "autoridad": "Corte Constitucional",
+    "identificador": "Sentencia SU-637 de 2016",
+    "articulo": "consideración 31"
+   },
+   "enlace": "https://www.corteconstitucional.gov.co/relatoria/2016/SU637-16.htm",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)",
+   "cita": "R = Rh × índice final / índice inicial",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J06"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Corte Constitucional",
+     "identificador": "Sentencia T-1055 de 2007",
+     "articulo": "apartado 5",
+     "enlace": "https://www.corteconstitucional.gov.co/relatoria/2007/t-1055-07.htm",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "lectura de la fuente con WebFetch (cita literal solicitada)"
+    }
+   ],
+   "parametros": {
+    "formula": "valor_actualizado = valor_historico × ipc_final / ipc_inicial",
+    "version_formula": "1.0"
+   },
+   "requiere_juicio_profesional": "Qué índices tomar (mes inicial y final, serie y base del DANE) y si la obligación admite indexación son decisiones profesionales. Los valores del IPC son ENTRADAS con fuente y fecha.",
+   "notas": "Las sentencias aplican la fórmula a la indexación de mesadas pensionales; su uso en otras obligaciones debe justificarlo el profesional."
+  },
+  {
+   "id": "R-JUR-0001",
+   "version": 1,
+   "titulo": "Cosa juzgada constitucional",
+   "ambito": {
+    "materia": "constitucional",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Los fallos que la Corte Constitucional dicta en ejercicio del control jurisdiccional hacen tránsito a cosa juzgada constitucional.",
+   "soporte": {
+    "autoridad": "Asamblea Nacional Constituyente",
+    "identificador": "Constitución Política de 1991",
+    "articulo": "243"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/constitucion_politica_1991_pr008.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Los fallos que la Corte dicte en ejercicio del control jurisdiccional hacen tránsito a cosa juzgada constitucional.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J04"
+   ],
+   "parametros": {
+    "tipos": [
+     "C"
+    ]
+   }
+  },
+  {
+   "id": "R-JUR-0002",
+   "version": 1,
+   "titulo": "Alcance de las sentencias de control de constitucionalidad",
+   "ambito": {
+    "materia": "constitucional",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Las sentencias de la Corte Constitucional sobre normas legales solo son de obligatorio cumplimiento y con efecto erga omnes en su parte resolutiva; la parte motiva es criterio auxiliar.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 270 de 1996 (Estatutaria de la Administración de Justicia)",
+    "articulo": "48, numeral 1"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0270_1996_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "sólo serán de obligatorio cumplimiento y con efecto erga omnes en su parte resolutiva. La parte motiva constituirá criterio auxiliar para la actividad judicial y para la aplicación de las normas de derecho en general.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J04"
+   ],
+   "parametros": {
+    "tipos": [
+     "C"
+    ],
+    "efecto": "erga omnes en la parte resolutiva"
+   },
+   "requiere_juicio_profesional": "El artículo es CONDICIONALMENTE exequible; el condicionamiento y el alcance de la ratio decidendi como precedente no están verificados aquí y requieren análisis profesional."
+  },
+  {
+   "id": "R-JUR-0003",
+   "version": 1,
+   "titulo": "Alcance de las decisiones de tutela",
+   "ambito": {
+    "materia": "constitucional",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Las decisiones adoptadas en ejercicio de la acción de tutela son obligatorias únicamente para las partes y su motivación es criterio auxiliar; las sentencias de revisión surten efectos en el caso concreto.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 270 de 1996 (Estatutaria de la Administración de Justicia)",
+    "articulo": "48, numeral 2"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0270_1996_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Las decisiones judiciales adoptadas en ejercicio de la acción de tutela tienen carácter obligatorio únicamente para las partes. Su motivación sólo constituye criterio auxiliar para la actividad de los jueces.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J04"
+   ],
+   "soportes_adicionales": [
+    {
+     "autoridad": "Presidente de la República",
+     "identificador": "Decreto 2591 de 1991",
+     "articulo": "36",
+     "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_2591_1991.html",
+     "consultado": "2026-10-02",
+     "metodo_verificacion": "texto literal descargado de la fuente",
+     "nota": "«Las sentencias en que se revise una decisión de tutela solo surtirán efectos en el caso concreto»"
+    }
+   ],
+   "parametros": {
+    "tipos": [
+     "T"
+    ],
+    "efecto": "inter partes"
+   },
+   "requiere_juicio_profesional": "El artículo es CONDICIONALMENTE exequible. El valor de precedente de la ratio decidendi y los efectos inter comunis o inter pares que la Corte fije en una sentencia concreta deben comprobarse en su texto."
+  },
+  {
+   "id": "R-JUR-0004",
+   "version": 1,
+   "titulo": "Alcance de las sentencias de unificación (SU)",
+   "ambito": {
+    "materia": "constitucional",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Sin regla verificada: el efecto vinculante de las sentencias de unificación no se ha comprobado en una fuente oficial dentro de este registro.",
+   "soporte": {
+    "autoridad": "—",
+    "identificador": "Sin norma verificada en esta consulta",
+    "articulo": "—"
+   },
+   "enlace": null,
+   "consultado": null,
+   "metodo_verificacion": null,
+   "cita": "",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "NO_VERIFICADO",
+   "procedimientos": [
+    "J04"
+   ],
+   "parametros": {
+    "tipos": [
+     "SU"
+    ]
+   },
+   "notas": "Qué verificar: la norma o la sentencia de la Corte Constitucional que fija el alcance del precedente de unificación, en corteconstitucional.gov.co/relatoria. Hasta entonces la ficha no afirma ningún efecto para decisiones SU."
+  },
+  {
+   "id": "R-JUR-0005",
+   "version": 1,
+   "titulo": "Efectos en el tiempo de las sentencias de constitucionalidad",
+   "ambito": {
+    "materia": "constitucional",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Las sentencias de la Corte Constitucional sobre los actos sujetos a su control tienen efectos hacia el futuro, salvo que la Corte resuelva lo contrario.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 270 de 1996 (Estatutaria de la Administración de Justicia)",
+    "articulo": "45"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_0270_1996_pr001.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "tienen efectos hacia el futuro a menos que la Corte resuelva lo contrario.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J04",
+    "J03"
+   ],
+   "parametros": {
+    "tipos": [
+     "C"
+    ]
+   }
+  },
+  {
+   "id": "R-CONST-0001",
+   "version": 1,
+   "titulo": "Acción de tutela: objeto y subsidiariedad",
+   "ambito": {
+    "materia": "tutela",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Toda persona puede reclamar ante los jueces la protección inmediata de sus derechos fundamentales; la acción solo procede cuando el afectado no disponga de otro medio de defensa judicial, salvo como mecanismo transitorio para evitar un perjuicio irremediable.",
+   "soporte": {
+    "autoridad": "Asamblea Nacional Constituyente",
+    "identificador": "Constitución Política de 1991",
+    "articulo": "86"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/constitucion_politica_1991_pr002.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Esta acción solo procederá cuando el afectado no disponga de otro medio de defensa judicial, salvo que aquella se utilice como mecanismo transitorio para evitar un perjuicio irremediable.",
+   "vigencia": {
+    "desde": null,
+    "hasta": null,
+    "desde_comprobado": false
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J01"
+   ]
+  },
+  {
+   "id": "R-CONST-0002",
+   "version": 1,
+   "titulo": "Tutela: todos los días y horas son hábiles para interponerla",
+   "ambito": {
+    "materia": "tutela",
+    "jurisdiccion": "constitucional"
+   },
+   "enunciado": "Todos los días y horas son hábiles para interponer la acción de tutela.",
+   "soporte": {
+    "autoridad": "Presidente de la República",
+    "identificador": "Decreto 2591 de 1991",
+    "articulo": "1"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/decreto_2591_1991.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Todos los días y horas son hábiles para interponer la acción de tutela.",
+   "vigencia": {
+    "desde": "1991-11-19",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J01",
+    "J05"
+   ]
+  },
+  {
+   "id": "R-PET-0001",
+   "version": 1,
+   "titulo": "Derecho de petición: quién puede ejercerlo",
+   "ambito": {
+    "materia": "derecho de petición",
+    "jurisdiccion": "administrativa"
+   },
+   "enunciado": "Toda persona puede presentar peticiones respetuosas a las autoridades y obtener pronta resolución completa y de fondo; el ejercicio es gratuito y no requiere abogado.",
+   "soporte": {
+    "autoridad": "Congreso de la República",
+    "identificador": "Ley 1437 de 2011 (CPACA), art. 13, sustituido por el art. 1 de la Ley 1755 de 2015",
+    "articulo": "13"
+   },
+   "enlace": "http://www.secretariasenado.gov.co/senado/basedoc/ley_1755_2015.html",
+   "consultado": "2026-10-02",
+   "metodo_verificacion": "texto literal descargado de la fuente",
+   "cita": "Toda persona tiene derecho a presentar peticiones respetuosas a las autoridades, en los términos señalados en este código, por motivos de interés general o particular, y a obtener pronta resolución completa y de fondo sobre la misma.",
+   "vigencia": {
+    "desde": "2015-06-30",
+    "hasta": null,
+    "desde_comprobado": true
+   },
+   "estado": "VERIFICADA_EN_FUENTE_OFICIAL",
+   "procedimientos": [
+    "J01"
+   ]
+  }
+ ]
+}
