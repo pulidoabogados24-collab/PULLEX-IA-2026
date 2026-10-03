@@ -1200,6 +1200,17 @@ select.per-inp{appearance:auto}
     </section>
 
     <section id="v-modular" class="vista">
+      <!-- Academia de escritos (static/taller.js): pestañas Casos (el Modular Lab de siempre, el .wrap de abajo),
+           Taller de escritos y Cómo contestar. -->
+      <div class="tl-tabs-cont">
+        <div class="tl-tabs" role="tablist" aria-label="Academia: casos y escritos">
+          <button type="button" role="tab" id="tl-tab-casos" aria-controls="tl-panel-casos" aria-selected="true" class="on">Casos</button>
+          <button type="button" role="tab" id="tl-tab-taller" aria-controls="tl-taller" aria-selected="false" tabindex="-1">Taller de escritos</button>
+          <button type="button" role="tab" id="tl-tab-como" aria-controls="tl-como" aria-selected="false" tabindex="-1">Cómo contestar</button>
+        </div>
+      </div>
+      <div class="wrap tl-panel hidden" id="tl-taller" role="tabpanel" aria-labelledby="tl-tab-taller"></div>
+      <div class="wrap tl-panel hidden" id="tl-como" role="tabpanel" aria-labelledby="tl-tab-como"></div>
       <div class="wrap">
         <div class="cab-vista ml-cab">
           <p class="eyebrow claim">PULLEX Academia</p>
@@ -1521,5 +1532,6 @@ select.per-inp{appearance:auto}
 <script src="/static/biblioteca.js"></script>
 <script src="/static/herramientas.js"></script>
 <script src="/static/perfiles.js"></script>
+<script src="/static/taller.js"></script>
 </body>
 </html>

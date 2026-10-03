@@ -2625,6 +2625,15 @@ class _Nucleo:
 perfiles.rutas.montar(app, _Nucleo())
 # ---- fin Perfiles y coordinador ----
 
+# ------------------------------------------------------------ TALLER DE ESCRITOS --
+# Academia: escenarios para redactar escritos, evaluación con rúbrica de escritos y escrito modelo.
+# Todo vive en taller.py (rutas /api/taller/*, tablas taller_*); usa la sesión, el cobro y el modelo de aquí.
+# Recibe la misma vista en vivo del módulo que perfiles (lee cada nombre en el momento de usarlo: así un doble
+# del modelo o un cambio de configuración en las pruebas también le llega al taller).
+import taller  # noqa: E402
+
+taller.instalar(_Nucleo())
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
