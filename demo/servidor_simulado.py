@@ -33,6 +33,7 @@ if "PULLEX_BIBLIOTECA_INVENTARIO" not in os.environ:
 import app as pullex  # noqa: E402
 import documentos  # noqa: E402
 import fuentes  # noqa: E402
+from perfiles.muestra_simulada import texto_simulado  # noqa: E402  — texto de ejemplo para los perfiles
 
 # Textos de ejemplo del automatizador (Documentos, Flujos, Asistente), rotulados como demostración.
 DOCS_DEMO = json.loads((RAIZ / "demo" / "documentos_demo.json").read_text(encoding="utf-8"))
@@ -236,6 +237,8 @@ class _Modelo:
         pedido = k["messages"][0]["content"]
         sistema = k.get("system")
         sis = " ".join(b.get("text", "") for b in sistema) if isinstance(sistema, list) else str(sistema or "")
+        if sis.startswith("PERFIL PULLEX "):   # coordinador de perfiles: salida con la forma del contrato
+            return types.SimpleNamespace(content=[_B(texto_simulado(sis))])
         if sistema == documentos.SISTEMA_PLAN:
             return types.SimpleNamespace(content=[_B(json.dumps(DOCS_DEMO["plan"], ensure_ascii=False))])
         if "PULLEX DOCUMENTOS" in sis:

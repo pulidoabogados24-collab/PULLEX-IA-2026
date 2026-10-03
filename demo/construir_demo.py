@@ -143,6 +143,13 @@ assert html.count('<script src="/static/herramientas.js"></script>') == 1
 html = html.replace('<script src="/static/herramientas.js"></script>',
                     "<script>" + herr_js.replace("</script", "<\\/script") + "</script>")
 
+# Perfiles y coordinador: la demostración sin servidor no trae el registro (1.000 fichas). Se retiran la entrada
+# de Ajustes y el script; la vista vacía queda oculta porque nadie la abre.
+assert html.count('<script src="/static/perfiles.js"></script>') == 1
+html = html.replace('<script src="/static/perfiles.js"></script>\n', "")
+html, n = re.subn(r"\s*<!-- perfiles:inicio.*?<!-- perfiles:fin -->", "", html, flags=re.S)
+assert n == 1
+
 salida = RAIZ / "demo" / "pullex-demo.html"
 salida.write_text(html, encoding="utf-8")
 print(f"{salida} ({len(html.encode('utf-8')) // 1024} KB)")

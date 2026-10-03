@@ -55,6 +55,25 @@ class _Stream:
         return False
 
 
+def _respuesta_perfil(sistema: str, k: dict):
+    """Respuesta simulada de un perfil: un encabezado «## » por cada sección que piden sus instrucciones."""
+    pid = sistema.split()[2]
+    FakeAnthropic.llamadas_perfil.append({"perfil": pid, "system": sistema, "mensaje": k["messages"][0]["content"],
+                                          "max_tokens": k.get("max_tokens"), "tools": k.get("tools"),
+                                          "timeout": k.get("timeout")})
+    if pid in FakeAnthropic.fallar_perfil:
+        raise RuntimeError("fallo simulado del proveedor")
+    if pid in FakeAnthropic.respuestas_perfil:
+        texto = FakeAnthropic.respuestas_perfil[pid]
+    else:
+        titulos = sistema.split("en este orden): ", 1)[1].split(".", 1)[0].split("; ")
+        texto = "\n\n".join(f"## {t}\nContenido de prueba de {pid}." for t in titulos)
+        if "Sentido:" in sistema:
+            texto += "\n\nSentido: condicionado"
+    return types.SimpleNamespace(content=list(FakeAnthropic.bloques_extra_perfil) + [_Bloque(texto)],
+                                 usage=types.SimpleNamespace(input_tokens=100, output_tokens=50))
+
+
 class FakeAnthropic:
     ultima_llamada = None
     eventos_extra = []   # eventos del SDK antes de la respuesta (p. ej. thinking, búsqueda web)
@@ -94,12 +113,20 @@ class FakeAnthropic:
             "contraargumento": "Superintendencia de Salud", "como_mejorar": ["aplica cada requisito"],
             "conceptos_debiles": ["inmediatez"], "comentario": "Buen inicio."}
     llamadas_json = []
+    # Perfiles (coordinador): por defecto responde con las secciones que pide el perfil. Una prueba puede fijar
+    # el texto de un perfil (respuestas_perfil[id]) o hacerlo fallar (fallar_perfil).
+    llamadas_perfil = []
+    respuestas_perfil = {}
+    fallar_perfil = set()
+    bloques_extra_perfil = []   # bloques que no son texto (p. ej. thinking) antes de la respuesta
 
     def _create(self, **k):
         FakeAnthropic.ultima_create = k
         sistema = k.get("system") or ""
         if isinstance(sistema, list):
             sistema = " ".join(b.get("text", "") for b in sistema)
+        if sistema.startswith("PERFIL PULLEX "):
+            return _respuesta_perfil(sistema, k)
         if "PLANIFICADOR" in sistema or "PULLEX DOCUMENTOS" in sistema:
             if FakeAnthropic.fallar_create:
                 raise RuntimeError("fallo simulado del proveedor")

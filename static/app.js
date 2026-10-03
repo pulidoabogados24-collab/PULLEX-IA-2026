@@ -94,15 +94,18 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v);
-  if(x===v)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde Ajustes y no tiene botón propio en la barra
+  ['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===nav);
+  if(x===nav)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+  const vp=$('v-perfiles');if(vp)vp.classList.toggle('on',v==='perfiles');
   const m=document.querySelector('main');if(m)m.scrollTop=0;
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
   if(v==='mapa')mapaInit();
   if(v==='documentos'&&typeof docInit==='function')docInit();
   if(v==='herramientas'&&typeof herrInit==='function')herrInit();
+  if(v==='perfiles'&&typeof perInit==='function')perInit();
   if(v==='inicio')cargarProgresoInicio();}
 
 async function cargarBoletin(forzar){
