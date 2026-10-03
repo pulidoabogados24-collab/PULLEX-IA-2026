@@ -76,6 +76,7 @@ function aplicarPerfil(){
   $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
   $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   $('cf-modo').value=PERFIL.preferencias.modo||'auto';
+  if($('cf-escritura'))$('cf-escritura').value=PERFIL.preferencias.escritura||'auto';
   $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
   sincronizarSwTema();
   $('cf-memoria').value=PERFIL.preferencias.memoria||'';
@@ -271,6 +272,7 @@ async function enviar(opc){
         else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
         else if(ev.tipo==='fuentes'){fuentesResp=Array.isArray(ev.fuentes)?ev.fuentes:[]}
+        else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
       }
     }
   }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
@@ -285,8 +287,9 @@ async function enviar(opc){
 }
 function accionesResp(b,texto,fuentes){
   const a=document.createElement('div');a.className='acc';
-  a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button>';
-  const [c,d,p]=a.querySelectorAll('button');
+  a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
+  const [c,d,p,r]=a.querySelectorAll('button');
+  r.onclick=()=>revisarEstilo(texto,b.querySelector('.bd'),r);
   c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
   d.onclick=()=>descargar('pullex-respuesta.txt',texto);
   p.onclick=imprimirPDF;
@@ -297,6 +300,30 @@ function accionesResp(b,texto,fuentes){
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
   pintarFuentes(b,fuentes);
+}
+// ---- Revisar estilo: rasgos típicos del texto generado por IA (POST /api/estilo/revisar, no gasta consultas).
+// Lo usan el chat y la vista de documentos (documentos.js). Todo se pinta con textContent.
+async function revisarEstilo(texto,destino,boton){
+  if(!destino||!(texto||'').trim())return;
+  if(boton)boton.disabled=true;
+  try{
+    const r=await fetch('/api/estilo/revisar',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify({texto})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(typeof d.detail==='string'?d.detail:'No se pudo revisar el estilo.');
+    const previo=destino.querySelector(':scope > .estilo-rev');if(previo)previo.remove();
+    const box=el('section','estilo-rev');box.setAttribute('aria-label','Revisión de estilo');box.setAttribute('tabindex','-1');
+    box.appendChild(el('h4',null,'Revisión de estilo'));box.appendChild(el('p',null,d.valoracion||''));
+    const rasgos=Array.isArray(d.rasgos)?d.rasgos:[];
+    if(rasgos.length){const ul=el('ul');
+      rasgos.forEach(x=>{const li=el('li');li.appendChild(el('b',null,(x.nombre||x.id)+(x.veces>1?' ('+x.veces+')':'')));
+        li.appendChild(document.createTextNode('. '+(x.explicacion||'')+' '+(x.sugerencia||'')));
+        if(Array.isArray(x.ejemplos)&&x.ejemplos.length)li.appendChild(el('span','er-ej','Ejemplo: «'+x.ejemplos[0]+'»'));
+        ul.appendChild(li)});
+      box.appendChild(ul)}
+    box.appendChild(el('p','er-nota','Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
+    destino.appendChild(box);box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){toast(e.message||'No se pudo revisar el estilo.')}
+  if(boton)boton.disabled=false;
 }
 // ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
 // Todo con textContent (nada de innerHTML con datos del servidor) y el estado escrito en el chip,
@@ -354,6 +381,7 @@ async function guardarPrefs(){
   // El tema ya no viaja aquí: lo maneja la apariencia (apCambiar), que distingue claro/oscuro/automático.
   const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
   const body={areas,modo:$('cf-modo').value,web:$('cf-web').classList.contains('on')};
+  if($('cf-escritura'))body.escritura=$('cf-escritura').value;
   try{const d=await(await fetch('/api/preferencias',{method:'POST',
     headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
     PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;

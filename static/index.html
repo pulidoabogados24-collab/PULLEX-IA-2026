@@ -505,6 +505,16 @@ details.metodo summary{cursor:pointer;font-weight:600;color:var(--accent-text)}
 .fchip.vigente::before{content:"✓ " / ""}
 .fnota{margin:0;padding:0 12px 10px;color:var(--text-2);font-size:.74rem;line-height:1.5}
 
+/* ------------------------------------------------------------------ Revisar estilo -- */
+.estilo-rev{margin-top:10px;padding:10px 14px;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);
+  background:var(--surface-2);font-size:.84rem;color:var(--text)}
+.estilo-rev h4{margin:0 0 4px;font-family:var(--font-ui);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--text-2)}
+.estilo-rev p{margin:0 0 6px}
+.estilo-rev ul{margin:0;padding-left:18px}
+.estilo-rev li{margin:6px 0;line-height:1.45}
+.estilo-rev .er-ej{display:block;color:var(--text-2);font-size:.78rem}
+.estilo-rev .er-nota{margin:8px 0 0;color:var(--text-2);font-size:.74rem}
+
 /* ---------------------------------------------------------------------------- Ajustes -- */
 #v-config .wrap{max-width:980px}
 .cuenta{display:flex;align-items:center;gap:16px;padding-bottom:6px}
@@ -1399,6 +1409,10 @@ select.per-inp{appearance:auto}
           <div class="fila" style="margin-top:8px"><div><div class="t">Modo por defecto</div><div class="d">Registro de las respuestas</div></div>
             <select id="cf-modo" class="inp" data-change="guardarPrefs">
               <option value="auto">Automático</option><option value="profesional">Técnico</option><option value="ciudadano">Sencillo</option>
+            </select></div>
+          <div class="fila"><div><div class="t">Escribe como</div><div class="d">La voz de las respuestas y de los escritos</div></div>
+            <select id="cf-escritura" class="inp" data-change="guardarPrefs" aria-label="Escribe como">
+              <option value="auto">Automático</option><option value="estudiante">Estudiante</option><option value="abogado">Abogado</option><option value="sencillo">Lenguaje sencillo</option>
             </select></div>
           <div class="fila"><div><div class="t">Buscar en internet por defecto</div><div class="d">Verifica con fuentes actuales</div></div>
             <div class="sw" id="cf-web" role="switch" data-click="togglePref" data-pasa-click="this"></div></div>

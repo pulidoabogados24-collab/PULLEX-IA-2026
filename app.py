@@ -45,6 +45,7 @@ import anthropic
 import academia
 import biblioteca
 import documentos
+import estilo_redaccion as redaccion
 import fuentes
 import motores
 import proveedores
@@ -194,7 +195,7 @@ AREAS = ["Constitucional / Tutela", "Penal", "Civil", "Familia", "Laboral",
          "Consumidor", "Tributario"]
 
 PREFS_DEFECTO = {"areas": [], "modo": "auto", "tema": "oscuro", "web": True, "memoria": "",
-                 "camino": "aprender"}
+                 "camino": "aprender", "escritura": "auto"}
 
 # Apariencia personalizable por usuario (docs/12-DISENO-Y-APARIENCIA.md). Lista blanca estricta:
 # claves desconocidas se ignoran y un valor fuera de la lista se rechaza con 400. Los colores solo
@@ -225,17 +226,22 @@ eres especialmente riguroso.
 CÓMO RESPONDES
 - Lo primero es la respuesta. La conclusión o el dato pedido va en la primera o segunda frase;
   después, el porqué y solo los matices que de verdad cambian algo.
-- Escribe en prosa natural, clara y cálida, en español de Colombia con la ortografía de la RAE.
-  Usa encabezados, listas o tablas solo cuando ordenan algo que en prosa se leería peor (pasos,
-  requisitos, comparaciones, liquidaciones). Una pregunta corta merece una respuesta corta.
-- Sin relleno: no repitas la pregunta, no anuncies lo que vas a hacer, no cierres con un resumen
-  de lo ya dicho ni con ofrecimientos genéricos. Evita muletillas como "En ese orden de ideas",
-  "Es importante destacar", "Cabe resaltar", "Cabe mencionar", "Vale la pena señalar", "En
-  conclusión", "Espero que esta información te sea útil" o "¡Excelente pregunta!".
+""" + redaccion.GUIA_ESCRITURA + """
 - Si algo no está claro, interpreta con buena fe y responde lo más útil posible. Pregunta solo si
   falta un dato que cambia la respuesta, y entonces haz UNA pregunta concreta.
 - Trata a la persona con respeto y cercanía. Si está preocupada o con afán, reconócelo en una frase
   y ayúdala. Nunca la hagas sentir mal por no saber. Si no sabes algo o te equivocaste, dilo simple.
+
+CÓMO SUENAS
+Elige la voz según quién escribe y qué pide: un caso o una pregunta de estudio, la del estudiante; un
+escrito, un concepto o una consulta técnica, la del abogado; una persona con un problema propio, la
+clara. Si el usuario eligió una voz en "Escribe como", esa manda. En temas no jurídicos, escribe natural.
+
+""" + redaccion.VOZ_ESTUDIANTE + """
+
+""" + redaccion.VOZ_ABOGADO + """
+
+""" + redaccion.VOZ_CIUDADANO + """
 
 CUANDO EL TEMA ES JURÍDICO
 - Registro: con quien escribe en lenguaje técnico (cita normas o radicados, pide piezas procesales)
@@ -712,6 +718,8 @@ def preferencias_de(u):
     if not isinstance(p, dict):
         p = {}
     prefs = {**PREFS_DEFECTO, **p}
+    if prefs.get("escritura") not in redaccion.OPCIONES_ESCRITURA:   # "Escribe como": lista blanca
+        prefs["escritura"] = "auto"
     prefs["apariencia"] = _apariencia_completa(p.get("apariencia"))
     return prefs
 
@@ -1263,6 +1271,10 @@ async def api_preferencias(request: Request):
         prefs["memoria"] = str(datos["memoria"])[:1500]
     if datos.get("camino") in ("aprender", "trabajar"):
         prefs["camino"] = datos["camino"]
+    if "escritura" in datos:
+        if datos["escritura"] not in redaccion.OPCIONES_ESCRITURA:
+            raise HTTPException(400, "Opción de «Escribe como» no válida")
+        prefs["escritura"] = datos["escritura"]
     with closing(db()) as con:
         con.execute("UPDATE usuarios SET preferencias=? WHERE email=?",
                     (json.dumps(prefs), u["email"]))
@@ -1536,6 +1548,9 @@ async def chat(request: Request):
         din += "\n\n" + ESTILOS[estilo]
     if modo != "auto":
         din += f"\n\nEl usuario seleccionó explícitamente el modo {modo.upper()}: responde en ese registro."
+    voz = redaccion.instruccion_voz(prefs.get("escritura", "auto"))
+    if voz:
+        din += "\n\n" + voz
     din += (f"\n\nLa persona se llama {u['nombre']}. Puedes usar su nombre con naturalidad, "
             "sin repetirlo en cada respuesta.")
     if prefs.get("areas"):
@@ -1593,6 +1608,15 @@ async def chat(request: Request):
                 pass
             yield "data: " + json.dumps({"tipo": "texto", "texto": msg}) + "\n\n"
         respuesta = "".join(completo)
+        # Estilo (estilo_redaccion.pulir): no se aplica a los trozos del streaming, porque sus reglas
+        # dependen del texto completo (el cierre, cuántas negritas hay, si una raya tiene pareja) y lo ya
+        # enviado no se puede retirar. Se aplica una vez, al terminar: se guarda el texto pulido y el
+        # cliente recibe el evento "pulido" para reemplazar lo que mostró. El mensaje de fallo no se toca.
+        if not fallo:
+            pulida = redaccion.pulir(respuesta)
+            if pulida != respuesta and pulida.strip():
+                respuesta = pulida
+                yield "data: " + json.dumps({"tipo": "pulido", "texto": respuesta}, ensure_ascii=False) + "\n\n"
         lista = [] if fallo else fuentes_de_respuesta(frags, web, respuesta)
         with closing(db()) as con:
             con.execute("INSERT INTO mensajes(conv,rol,contenido,creada,fuentes) VALUES(?,?,?,?,?)",
@@ -1603,6 +1627,25 @@ async def chat(request: Request):
         yield "data: " + json.dumps({"tipo": "fin"}) + "\n\n"
 
     return StreamingResponse(flujo(), media_type="text/event-stream")
+
+# ------------------------------------------------------- revisar estilo --
+# Herramienta interna "Revisar estilo": detecta en un texto (una respuesta de PULLEX, un borrador o el
+# escrito del propio estudiante) los rasgos típicos del texto generado por IA y explica cómo corregirlos.
+# Es determinista (estilo_redaccion.rasgos_ia): no llama al modelo y no cuesta consultas.
+MAX_TEXTO_ESTILO = int(os.getenv("PULLEX_MAX_TEXTO_ESTILO", "20000"))
+
+
+@app.post("/api/estilo/revisar")
+async def estilo_revisar(request: Request):
+    u = usuario_actual(request)
+    limitar_cuenta("estilo:" + u["email"], 60, 300)
+    datos = await json_de(request)
+    texto = datos.get("texto")
+    if not isinstance(texto, str) or not texto.strip():
+        raise HTTPException(400, "Pega o escribe el texto que quieres revisar.")
+    if len(texto) > MAX_TEXTO_ESTILO:
+        raise HTTPException(413, f"El texto supera {MAX_TEXTO_ESTILO} caracteres. Revísalo por partes.")
+    return redaccion.revisar(texto)
 
 # --------------------------------------------------------- MODULAR LAB --
 # Entrena la resolución de casos tipo examen modular: el estudiante ve el caso SIN la solución,
@@ -2159,10 +2202,12 @@ async def documentos_generar(request: Request):
         documentos.texto_campos(t, limpios), encabezado=ENCABEZADO_FORMULARIO)
     if frags:
         pedido += envolver_como_datos(fuentes.formatear_para_modelo(frags)) + fuentes.INSTRUCCION_CITAS
+    prefs = preferencias_de(u)
+    voz = documentos.voz_documento(t, prefs.get("escritura", "auto"), prefs.get("camino", "trabajar"))
     try:
-        salida = proveedores.crear_texto(cadena_ia(), _sistema(documentos.SISTEMA_DOCUMENTO), pedido,
+        salida = proveedores.crear_texto(cadena_ia(), _sistema(documentos.SISTEMA_DOCUMENTO, voz), pedido,
                                          _max_tokens(MAX_TOKENS_DOCUMENTO))
-        texto, verificar = documentos.separar_respuesta(salida)
+        texto, verificar = documentos.procesar_salida(salida)
         if len(texto) < 20:
             raise ValueError("respuesta vacía")
     except Exception:
@@ -2293,7 +2338,8 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
                         if salida["tipo"] == "texto":
                             partes.append(salida["texto"])
                             yield _sse({"tipo": "texto", "n": n, "texto": salida["texto"]})
-                    texto = "".join(partes).strip()
+                    # Lo transmitido ya se mostró tal cual; lo que se guarda y pasa al paso siguiente va pulido.
+                    texto = redaccion.pulir("".join(partes).strip())
                     if not texto:
                         raise ValueError("paso vacío")
                 except Exception:
