@@ -96,6 +96,18 @@ RASGOS_A_EVITAR_ESCRITOS = (
     "ámbito de», «Juega un papel fundamental»). Sin introducción que anuncie el escrito ni cierre de cortesía "
     "(«Espero que…», «Quedo atento…»): el escrito empieza por su encabezado y termina en la firma.")
 
+# Para quien EVALÚA (Modular Lab y Taller de escritos): cómo redactar la retroalimentación y qué mirar en el
+# criterio de redacción. El estilo nunca mueve el puntaje de los criterios jurídicos.
+ESTILO_EVALUACION = """CÓMO ESCRIBES LA RETROALIMENTACIÓN
+- Como un docente que corrige a mano: directa y concreta, con las palabras del caso. Di qué falta o qué sobra
+  y cómo arreglarlo. Sin muletillas («Es importante destacar», «Cabe resaltar»), sin elogios de relleno, sin
+  emojis ni signos de exclamación.
+- En el criterio de redacción (claridad o estilo) valora la prosa en párrafos unidos por conectores con función
+  lógica, una idea por oración, las citas a la manera colombiana y el tono sobrio; resta por muletillas,
+  relleno, adjetivos de énfasis y normas transcritas sin aplicarlas a los hechos.
+- La redacción se califica solo en su criterio: no subas ni bajes un criterio jurídico por el estilo. Conserva
+  toda advertencia de verificar la vigencia de una norma o un número del que no estés seguro."""
+
 INSTRUCCION_VOZ = {
     "estudiante": ("ESCRIBE COMO: el usuario eligió la voz de ESTUDIANTE DE DERECHO. Cuando la consulta sea un caso, "
                    "una pregunta de examen o una explicación de estudio, aplica la VOZ DE ESTUDIANTE DE DERECHO del "
@@ -542,6 +554,30 @@ def revisar(texto: str) -> dict:
         valoracion = "No encontré rasgos típicos de texto generado por IA."
     return {"rasgos": rasgos, "puntaje": puntaje, "umbral": UMBRAL_IA, "parece_ia": puntaje >= UMBRAL_IA,
             "valoracion": valoracion, "palabras": _palabras(texto or "")}
+
+
+def resumen_estilo(texto: str, maximo: int = 5) -> dict:
+    """Revisión de estilo compacta para acompañar una evaluación (Modular Lab y Taller de escritos): los rasgos
+    más pesados con su sugerencia y un ejemplo tomado del propio texto. Es determinista y no altera el puntaje."""
+    r = revisar(texto)
+    return {"valoracion": r["valoracion"], "puntaje": r["puntaje"], "parece_ia": r["parece_ia"],
+            "rasgos": [{"id": x["id"], "nombre": x["nombre"], "veces": x["veces"], "explicacion": x["explicacion"],
+                        "sugerencia": x["sugerencia"], "ejemplos": x["ejemplos"][:1]} for x in r["rasgos"][:maximo]],
+            "nota": "Ayuda de estilo calculada sin IA. No cambia tu puntaje ni prueba quién escribió el texto."}
+
+
+def pulir_campos(datos: dict, campos) -> dict:
+    """Aplica pulir() a los campos de texto indicados de un dict (cadenas o listas de cadenas), en el sitio.
+    Lo usan las evaluaciones y soluciones que el modelo devuelve como JSON."""
+    if not isinstance(datos, dict):
+        return datos
+    for c in campos:
+        v = datos.get(c)
+        if isinstance(v, str):
+            datos[c] = pulir(v)
+        elif isinstance(v, list):
+            datos[c] = [pulir(x) if isinstance(x, str) else x for x in v]
+    return datos
 
 
 def parece_ia(texto: str) -> bool:

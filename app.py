@@ -1670,7 +1670,13 @@ Colombia. Escribes casos hipotéticos tipo examen modular, realistas y con nombr
 Reglas: derecho colombiano vigente; no inventes números de sentencias ni artículos — si no
 estás seguro de un número exacto, nombra la norma o la institución sin número y marca
 "verificar"; la solución debe ser defendible y señalar la vigencia a confirmar. Responde SOLO
-con un objeto JSON válido, sin texto antes ni después, sin bloques de código."""
+con un objeto JSON válido, sin texto antes ni después, sin bloques de código.
+
+""" + redaccion.ESTILO_EVALUACION + """
+
+El «analisis» de la solución de referencia es la respuesta que daría un buen estudiante: redáctalo con esta voz
+(el contenido jurídico y las advertencias de verificación no cambian).
+""" + redaccion.VOZ_ESTUDIANTE
 
 MODULAR_FORMATO_CASO = """Formato exacto del JSON:
 {"titulo": "título corto del caso",
@@ -1801,6 +1807,9 @@ async def modular_caso(request: Request):
             raise ValueError("caso incompleto")
         if foco is not None:
             caso["foco"], caso["foco_nombre"] = foco["id"], foco["nombre"]
+        # Estilo: la solución de referencia se guarda pulida (sin emojis, muletillas ni rayas de pausa);
+        # pulir() no toca citas, normas ni marcas de verificación.
+        redaccion.pulir_campos(caso.get("solucion"), ("analisis", "contraargumento", "conclusion", "errores_comunes"))
     except Exception:
         reintegrar_consulta(u["email"])
         eid = _nuevo_error_id()
@@ -1875,6 +1884,10 @@ async def modular_evaluar(request: Request):
                   "como_mejorar": lista("como_mejorar"),
                   "conceptos_debiles": lista("conceptos_debiles"),
                   "comentario": str(ev.get("comentario") or "")[:400]}
+    # Estilo humano: se pule la redacción de la retroalimentación (nunca los puntajes ni los conceptos) y se
+    # agrega una revisión determinista del estilo de la respuesta del estudiante, que no altera el puntaje.
+    redaccion.pulir_campos(evaluacion, ("identificaste", "omitiste", "contraargumento", "como_mejorar", "comentario"))
+    evaluacion["estilo"] = redaccion.resumen_estilo(respuesta)
     with closing(db()) as con:
         con.execute("INSERT INTO modular_intentos(caso_id,usuario,respuesta,evaluacion,puntaje,creado) "
                     "VALUES(?,?,?,?,?,?)", (fila["id"], u["email"], respuesta,
