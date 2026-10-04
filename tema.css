@@ -1,0 +1,180 @@
+/* =========================================================================================
+   PULLEX IA — sistema de diseño compartido (index.html, admin.html, restablecer.html).
+   Detalle y ratios de contraste: docs/12-DISENO-Y-APARIENCIA.md · verificación: scripts/contraste_temas.py
+
+   TOKENS SEMÁNTICOS (usar SOLO estos en vistas nuevas):
+     --bg --surface --surface-2 --border --border-strong --text --text-2
+     --accent --accent-ink (texto sobre acento) --accent-soft (fondo suave) --accent-text (acento como texto)
+     --ok --warn --danger --radius --radius-sm --font-body --font-display --font-ui --shadow --shadow-lg
+   El tema y el modo se eligen con atributos en <html>: data-tema, data-esquema (claro|oscuro),
+   data-fuente, data-tamano, data-densidad, data-radio (los pone static/apariencia.js).
+   ========================================================================================= */
+
+@font-face{font-family:"Inter PX";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("fonts/inter-var.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Fraunces PX";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("fonts/fraunces-var.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Source Serif PX";font-style:normal;font-weight:200 900;font-display:swap;
+  src:url("fonts/source-serif-4-var.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ---------------------------------------------------------------- base (no dependen del tema) -- */
+:root{
+  --sans:"Inter PX",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --serif-editorial:"Fraunces PX",Georgia,"Times New Roman",serif;
+  --serif-lectura:"Source Serif PX",Georgia,"Times New Roman",serif;
+  --font-ui:var(--sans);
+  --font-body:var(--sans);
+  --font-display:var(--serif-editorial);
+  --display-peso:560;
+  --display-tracking:-.015em;
+  --radius:12px; --radius-sm:8px; --radius-lg:18px;
+  --esp:1;                          /* densidad: multiplica los espacios de los componentes */
+  --t-rapida:.16s; --t-media:.28s; --curva:cubic-bezier(.2,.7,.2,1);
+}
+:root[data-fuente="clasica"]{--font-display:var(--serif-lectura);--font-body:var(--serif-lectura);--display-peso:620;--display-tracking:-.01em}
+:root[data-fuente="moderna"]{--font-display:var(--sans);--display-peso:680;--display-tracking:-.025em}
+:root[data-radio="recto"]{--radius:4px;--radius-sm:3px;--radius-lg:6px}
+:root[data-radio="redondo"]{--radius:20px;--radius-sm:13px;--radius-lg:28px}
+:root[data-densidad="compacta"]{--esp:.72}
+:root[data-tamano="grande"]{font-size:112.5%}
+
+/* --------------------------------------------- Tema PULLEX (por defecto): papel, tinta y bermellón -- */
+:root{
+  color-scheme:light;
+  --bg:#f7f5f0; --surface:#ffffff; --surface-2:#f0ede6; --border:#e4dfd5; --border-strong:#8a8377;
+  --text:#1b1a17; --text-2:#5c574e;
+  --accent:#b33a16; --accent-ink:#ffffff; --accent-soft:#f7e5dd; --accent-text:#a8360f;
+  --ok:#1d7347; --warn:#965400; --danger:#b42318; --info:#1f5fb4;
+  --shadow:0 1px 2px rgba(27,26,23,.05),0 6px 20px -12px rgba(27,26,23,.22);
+  --shadow-lg:0 2px 6px rgba(27,26,23,.06),0 24px 60px -24px rgba(27,26,23,.35);
+  --scrim:rgba(20,18,14,.45);
+}
+:root[data-esquema="oscuro"]{
+  color-scheme:dark;
+  --bg:#141311; --surface:#1c1b18; --surface-2:#252320; --border:#35322d; --border-strong:#79736a;
+  --text:#eeebe4; --text-2:#aaa49a;
+  --accent:#ee7a4f; --accent-ink:#1d0d06; --accent-soft:#3a241b; --accent-text:#f48f69;
+  --ok:#55c793; --warn:#e9a640; --danger:#f2766b; --info:#7fb0f2;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px -14px rgba(0,0,0,.7);
+  --shadow-lg:0 30px 70px -30px rgba(0,0,0,.85);
+  --scrim:rgba(0,0,0,.6);
+}
+
+/* --------------------------------------------------------- Notario: marfil y tinta azul-negra -- */
+:root[data-tema="notario"]{
+  --bg:#fbf8f1; --surface:#fffefa; --surface-2:#f3eee2; --border:#e6dfcf; --border-strong:#8b8576;
+  --text:#1a1d24; --text-2:#575b65;
+  --accent:#22385e; --accent-ink:#ffffff; --accent-soft:#e5eaf2; --accent-text:#22385e;
+}
+:root[data-tema="notario"][data-esquema="oscuro"]{
+  --bg:#101218; --surface:#171a21; --surface-2:#1f232c; --border:#2e333e; --border-strong:#737986;
+  --text:#ece8df; --text-2:#a5a8b0;
+  --accent:#a9bee3; --accent-ink:#0f1626; --accent-soft:#1f2a3e; --accent-text:#b4c7e8;
+}
+/* ------------------------------------------------------------- Bogotá: gris piedra y pizarra -- */
+:root[data-tema="bogota"]{
+  --bg:#efefec; --surface:#fafaf8; --surface-2:#e6e6e2; --border:#d7d7d1; --border-strong:#83847f;
+  --text:#1c1f22; --text-2:#53585d;
+  --accent:#2d5876; --accent-ink:#ffffff; --accent-soft:#dfe8ef; --accent-text:#2a5370;
+}
+:root[data-tema="bogota"][data-esquema="oscuro"]{
+  --bg:#151718; --surface:#1d2022; --surface-2:#26292c; --border:#363a3e; --border-strong:#767b80;
+  --text:#e8eaeb; --text-2:#a2a7ac;
+  --accent:#8db7d6; --accent-ink:#0c1924; --accent-soft:#1f2e3a; --accent-text:#98c0dc;
+}
+/* ---------------------------------------------------------------- Caribe: arena y turquesa -- */
+:root[data-tema="caribe"]{
+  --bg:#f8f3e8; --surface:#fffdf8; --surface-2:#f1e9d8; --border:#e6dbc4; --border-strong:#8a8270;
+  --text:#1d2321; --text-2:#585d57;
+  --accent:#0a7570; --accent-ink:#ffffff; --accent-soft:#dbefec; --accent-text:#086d68;
+}
+:root[data-tema="caribe"][data-esquema="oscuro"]{
+  --bg:#0f1716; --surface:#152120; --surface-2:#1c2b29; --border:#2a3c3a; --border-strong:#6b807c;
+  --text:#eaf1ee; --text-2:#9fb2ad;
+  --accent:#3cc7bd; --accent-ink:#03201e; --accent-soft:#143533; --accent-text:#4fd0c6;
+}
+/* -------------------------------------------------------------------- Toga: negro y vino -- */
+:root[data-tema="toga"]{
+  --bg:#f5f4f2; --surface:#ffffff; --surface-2:#edebe8; --border:#dedad5; --border-strong:#86817c;
+  --text:#121212; --text-2:#55514d;
+  --accent:#7b1e34; --accent-ink:#ffffff; --accent-soft:#f4e3e7; --accent-text:#7b1e34;
+}
+:root[data-tema="toga"][data-esquema="oscuro"]{
+  --bg:#0a0a0a; --surface:#141314; --surface-2:#1d1b1c; --border:#2f2b2d; --border-strong:#777173;
+  --text:#f0edee; --text-2:#aaa4a6;
+  --accent:#d96f87; --accent-ink:#2a0711; --accent-soft:#3a1620; --accent-text:#e2879b;
+}
+/* -------------------------------------------------------------------- Jardín: verde salvia -- */
+:root[data-tema="jardin"]{
+  --bg:#f2f4ef; --surface:#fcfdfb; --surface-2:#e8ece4; --border:#d7ded1; --border-strong:#7f877e;
+  --text:#1a1f1b; --text-2:#525b54;
+  --accent:#43654e; --accent-ink:#ffffff; --accent-soft:#e0eae2; --accent-text:#3d5e47;
+}
+:root[data-tema="jardin"][data-esquema="oscuro"]{
+  --bg:#121613; --surface:#1a1f1b; --surface-2:#232924; --border:#333b34; --border-strong:#737d74;
+  --text:#e9eee9; --text-2:#a2aca4;
+  --accent:#9bc4a5; --accent-ink:#0f2015; --accent-soft:#22332a; --accent-text:#a6ccb0;
+}
+
+/* --------------------------------------------- alias: nombres viejos → tokens nuevos (no borrar) -- */
+:root{
+  --azul:var(--bg); --azul2:var(--surface); --azul3:var(--surface-2); --linea:var(--border);
+  --oro:var(--accent-text); --oro2:var(--accent); --oro-d:var(--accent);
+  --txt:var(--text); --txt2:var(--text-2); --mal:var(--danger); --radio:var(--radius);
+  --text-muted:var(--text-2); --link:var(--accent-text); --success:var(--ok); --warning:var(--warn);
+}
+
+/* ------------------------------------------------------------------------ primitivas comunes -- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:.9375rem;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-feature-settings:"cv11","ss01";
+  transition:background-color var(--t-media) ease,color var(--t-media) ease}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--accent-text);text-underline-offset:.18em;text-decoration-thickness:1px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::selection{background:var(--accent-soft);color:var(--text)}
+.display{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);
+  font-optical-sizing:auto}
+.eyebrow{font-size:.72rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+
+/* Marca: monograma + palabra. El monograma usa el acento del tema (o el logo propio del usuario). */
+.mono{display:inline-flex;align-items:center;justify-content:center;flex:none;width:32px;height:32px;
+  border-radius:calc(var(--radius-sm) + 1px);background:var(--accent);color:var(--accent-ink);
+  font-family:var(--serif-editorial);font-weight:640;font-size:19px;line-height:1;position:relative;
+  letter-spacing:0;padding-bottom:3px}
+.mono::after{content:"";position:absolute;left:28%;right:28%;bottom:22%;height:1.5px;border-radius:2px;
+  background:currentColor;opacity:.75}
+.mono.g{width:52px;height:52px;font-size:31px;border-radius:calc(var(--radius) + 2px);padding-bottom:5px}
+.mono.g::after{height:2px}
+.marca{font-family:var(--serif-editorial);font-weight:620;letter-spacing:.06em;font-size:1.05rem;color:var(--text)}
+
+.btn,.bpri,.bsec,.bghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-ui);font-weight:600;font-size:.875rem;line-height:1.2;border-radius:var(--radius-sm);
+  padding:calc(10px * var(--esp) + 1px) calc(16px * var(--esp) + 2px);border:1px solid transparent;
+  transition:transform var(--t-rapida) var(--curva),background-color var(--t-rapida) ease,border-color var(--t-rapida) ease,
+    box-shadow var(--t-rapida) ease,color var(--t-rapida) ease;-webkit-user-select:none;user-select:none;text-decoration:none}
+.bpri,.btn{background:var(--accent);color:var(--accent-ink);box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 1px 2px rgba(0,0,0,.12)}
+.bpri:hover,.btn:hover{background:color-mix(in oklab,var(--accent) 88%,var(--text))}
+.bsec,.btn.sec{background:var(--surface);color:var(--text);border-color:var(--border);box-shadow:none}
+.bsec:hover,.btn.sec:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.bghost{background:transparent;color:var(--text-2)}
+.bghost:hover{background:var(--surface-2);color:var(--text)}
+.btn:active,.bpri:active,.bsec:active,.bghost:active{transform:translateY(1px) scale(.985)}
+.btn:disabled,.bpri:disabled,.bsec:disabled{opacity:.55;cursor:default;transform:none}
+
+.inp{width:100%;padding:calc(11px * var(--esp) + 1px) 13px;border-radius:var(--radius-sm);background:var(--surface);
+  border:1px solid var(--border-strong);color:var(--text);font-size:.9375rem;outline:none;
+  transition:border-color var(--t-rapida) ease,box-shadow var(--t-rapida) ease}
+.inp::placeholder{color:var(--text-2);opacity:.85}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+label.lb{display:block;font-size:.8125rem;color:var(--text);margin:14px 0 6px;font-weight:550}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+}

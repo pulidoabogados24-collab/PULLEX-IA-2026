@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es-CO" data-tema="pullex" data-esquema="claro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restablecer contraseña — PULLEX IA</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f7f5f0">
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/tema.css">
+<script src="/static/apariencia.js"></script>
+<style>
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;position:relative;overflow-x:hidden}
+body::before{content:"§";position:fixed;right:-.08em;bottom:-.32em;font-family:var(--serif-editorial);font-weight:300;
+  font-size:min(70vw,640px);line-height:1;color:var(--border);opacity:.5;pointer-events:none}
+.card{position:relative;width:100%;max-width:410px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:30px 28px;box-shadow:var(--shadow-lg);animation:entra .45s var(--curva) both}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.brand .marca{font-size:1.1rem}
+h2{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);font-size:1.55rem;line-height:1.15;margin:0 0 8px}
+p.d{color:var(--text-2);font-size:.875rem;margin:0 0 8px;line-height:1.55}
+.btn{width:100%;padding:13px;margin-top:20px;font-size:.95rem}
+.msg{font-size:.84rem;margin-top:12px;min-height:18px;text-align:center}
+.msg.err{color:var(--danger)}
+.msg.ok{color:var(--ok)}
+.volver{display:block;text-align:center;margin-top:18px;font-size:.84rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <span class="mono" aria-hidden="true">P</span>
+    <span class="marca">PULLEX</span>
+  </div>
+  <h2 id="titulo">Elige tu nueva contraseña</h2>
+  <p class="d" id="desc">Este enlace es de un solo uso y vence 1 hora después de solicitarlo.</p>
+
+  <div id="formulario">
+    <label class="lb" for="clave1">Nueva contraseña</label>
+    <input id="clave1" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+    <label class="lb" for="clave2">Confirma la contraseña</label>
+    <input id="clave2" class="inp" type="password" placeholder="Repítela" autocomplete="new-password">
+    <button id="btn" class="btn" data-click="enviar">Guardar nueva contraseña</button>
+    <div id="msg" class="msg" role="alert"></div>
+  </div>
+
+  <a class="volver" href="/">Volver a PULLEX IA</a>
+</div>
+<script src="/static/restablecer.js"></script>
+</body>
+</html>

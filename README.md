@@ -1,141 +1,85 @@
-# PULLEX IA — Asistente Jurídico Colombiano (multiusuario)
+# Procedimientos jurídicos J01–J09 y registro de reglas
 
-Aplicación web para **vender por suscripción a estudiantes de Derecho**.
-Cada estudiante tiene su cuenta con un **plan y un límite de consultas**; tú, como
-administrador, activas las cuentas cuando te pagan (por Nequi u otro medio).
-Motor **Claude Haiku** (económico) vía la API oficial de Anthropic, con búsqueda
-web, boletín jurídico diario, adjuntar PDF/fotos, memoria y exportar a PDF/Excel.
+Sección 9 de `docs/coordinacion/ESPECIFICACION-LEXCOL.md`. Código en `procedimientos/` y `reglas.py`; datos en
+`reglas/`. Fecha de esta versión: 2026-10-02.
 
-## Requisitos
+## Qué hay
 
-- **Python 3.10 o superior**.
-- Una **clave de la API de Claude**: console.anthropic.com → *API Keys* (se paga por uso).
+| Id | Procedimiento | Módulo | Ruta HTTP | Estado real |
+|---|---|---|---|---|
+| J01 | [Clasificación y orientación](J01-clasificacion-y-orientacion.md) | `j01_clasificacion.py` | `POST /api/procedimientos/clasificar` | PROBADO |
+| J02 | [Recuperación de modelos](J02-recuperacion-de-modelos.md) | `j02_modelos.py` | `POST /api/procedimientos/modelos` | PROBADO (solo catálogo interno) |
+| J03 | [Verificación normativa temporal](J03-verificacion-normativa-temporal.md) | `j03_vigencia.py` | `POST /api/procedimientos/vigencia` | PROBADO |
+| J04 | [Análisis jurisprudencial](J04-analisis-jurisprudencial.md) | `j04_jurisprudencia.py` | `POST /api/procedimientos/jurisprudencia` | PROBADO (ficha y validación; sin base de sentencias) |
+| J05 | [Cómputo de términos](J05-computo-de-terminos.md) | `j05_terminos.py`, `calendario.py` | `POST /api/procedimientos/terminos` | PROBADO |
+| J06 | [Liquidaciones](J06-liquidaciones.md) | `j06_liquidaciones.py` | `POST /api/procedimientos/liquidacion` | PROBADO |
+| J07 | [Matriz probatoria](J07-matriz-probatoria.md) | `j07_matriz_probatoria.py` | `POST /api/procedimientos/matriz-probatoria` | PROBADO |
+| J08 | [Generación y revisión de escritos](J08-generacion-y-revision-de-escritos.md) | `j08_escritos.py` | `POST /api/procedimientos/verificar-escrito` | PROBADO (verificador); generación sin integrar al flujo |
+| J09 | [Actualización e impacto](J09-actualizacion-e-impacto.md) | `j09_impacto.py` | `POST /api/procedimientos/impacto` (administración) | PROBADO |
 
-## Instalación local (5 minutos)
+«PROBADO» = pruebas automáticas propias y, en J05 y J06, evaluación con casos calculados a mano. Ninguno está
+OPERATIVO: falta la revisión de un profesional del derecho y uso con casos reales. Además: `GET /api/procedimientos`
+(catálogo y opciones de la interfaz) y `GET /api/reglas` ([registro de reglas](REGISTRO-DE-REGLAS.md)).
 
-```bash
-cd pullex-ia
-python -m venv venv
-source venv/bin/activate            # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env                # Windows: copy .env.example .env
-#   Abre .env y pega tu ANTHROPIC_API_KEY y define el correo/clave del admin
-python app.py
-```
+Todas las rutas exigen sesión, no llaman al modelo de IA y no descuentan consultas. Límite: 90 llamadas por minuto
+por cuenta.
 
-- App para estudiantes: **http://localhost:8000**
-- Panel de administrador: **http://localhost:8000/admin**
+## Lo determinista y lo que queda a juicio profesional
 
-## Cómo funciona el negocio
+Cada salida separa cuatro listas:
 
-1. El estudiante entra a la app y **crea su cuenta** → recibe **10 consultas gratis** (plan Prueba).
-2. Cuando quiere más, **paga por Nequi** y te avisa.
-3. Tú entras a **/admin**, buscas su correo, le asignas el plan (Básico/Pro/Premium) y **activas** la cuenta.
-4. El límite de consultas por plan **protege tu costo de API**: nunca gastas más de lo que cobras.
+- `normas`: reglas del registro usadas, con identificador, versión, estado y enlace de la fuente.
+- `supuestos`: lo que el cálculo dio por cierto (por ejemplo, «el sábado no se contó como día hábil»).
+- `advertencias`: reglas no verificadas usadas y reglas cuya vigencia a la fecha del cálculo no está comprobada.
+- `juicio_profesional`: lo que el procedimiento no decide.
 
-### Planes (editables en `app.py` → `PLANES`)
+Estados comunes: `CALCULADO` (o el propio de cada procedimiento), `ABSTENCION` (falta un dato esencial: no hay
+resultado) y `CONTRADICCION` (los datos son imposibles o incoherentes: tampoco hay resultado).
 
-| Plan     | Precio/mes | Consultas/mes |
-|----------|-----------:|--------------:|
-| Prueba   |         $0 |            10 |
-| Básico   |    $30.000 |           200 |
-| Pro      |    $45.000 |           500 |
-| Premium  |    $60.000 |         1.000 |
+## Disciplina de fuentes (sección 10)
 
-## Administrador
+Cada regla jurídica material se comprobó el 2026-10-02 en una fuente oficial y quedó en `reglas/registro.json` con
+enlace, fecha de consulta y cita. Cómo se consultó:
 
-Se crea solo al arrancar, con las variables `PULLEX_ADMIN_EMAIL` y `PULLEX_ADMIN_CLAVE`.
-**Cambia esa clave por una segura.** Con esa cuenta entras a `/admin` para gestionar estudiantes
-y regenerar el boletín.
+- Secretaría del Senado (`secretariasenado.gov.co`): texto descargado y leído literalmente.
+- Gestor Normativo de Función Pública, Banco de la República, Rama Judicial y Corte Constitucional: lectura con
+  la herramienta de consulta web, pidiendo cita literal. El registro lo indica en `metodo_verificacion`.
+- **No accesibles desde el entorno de trabajo**: `suin-juriscol.gov.co` y `mintrabajo.gov.co`. Lo que dependía de
+  ellas quedó `NO_VERIFICADO` (ver «Lo que falta verificar» en el registro).
 
-## Novedades (PULLEX Academia)
+Hallazgos de la verificación que cambiaron el código respecto de lo que se habría escrito de memoria:
 
-- **Inicio con dos caminos:** "Estoy aprendiendo Derecho" y "Estoy trabajando en un asunto". Cada uno
-  muestra sus propias herramientas; la elección se recuerda en la cuenta.
-- **Modular Lab:** eliges área y nivel, PULLEX genera un caso tipo examen **sin mostrar la solución**,
-  respondes, pides hasta 2 pistas, y recibes una evaluación con rúbrica (problema 20, normas 20,
-  argumentación 20, aplicación 20, conclusión 10, claridad 10) con lo que identificaste, lo que omitiste,
-  la norma que faltó, el argumento contrario y cómo mejorar. Luego puedes ver la solución de referencia
-  o pedir una variación "¿Qué cambia si…?". Generar un caso y evaluar cuestan 1 consulta cada uno;
-  pistas y solución son gratis.
-- **Progreso:** casos evaluados, promedio por área y conceptos a reforzar (con acceso directo a
-  "Enséñame" sobre ese concepto).
-- **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
-  socrático), Examíname (simulacro oral) y Audita mi respuesta.
-- **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
-  con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
-  un modelo simulado (sin clave de API) en http://localhost:8000.
+1. **Ley 2578 de 2026** (1 de junio): el 9 de julio es festivo nacional y se traslada al lunes. Confirmado en la
+   Secretaría del Senado, en la Carta Circular GE-0203 de 2026 del Banco de la República y en la Circular
+   PCSJC26-26 del Consejo Superior de la Judicatura. Por eso la regla de festivos tiene dos versiones.
+2. El art. 177 del Código Sustantivo del Trabajo publicado por la Secretaría del Senado omite el «once de
+   noviembre» entre los festivos trasladables; el texto de Función Pública lo incluye y el Banco de la República
+   publica ese festivo en lunes. Queda anotada la discrepancia.
+3. El art. 14 del CPACA tuvo una ampliación temporal (Decreto Legislativo 491 de 2020, art. 5, derogado por la
+   Ley 2207 de 2022). El número de días ampliados no se pudo leer en la fuente: esa versión está `NO_VERIFICADO`
+   y la calculadora se abstiene para peticiones de ese período.
 
-## Funciones
+## Evaluación (sección 12)
 
-- **Inicio dinámico**: boletín jurídico del día (noticias, jurisprudencia y novedades
-  normativas) generado con búsqueda web y **cacheado 1 vez al día** (no gasta las consultas
-  del estudiante).
-- **Chat fluido** con streaming, trato humano y capaz de responder también temas no jurídicos.
-- **Adjuntar** PDF, fotos o documentos para analizarlos.
-- **Memoria**: cada estudiante escribe lo que quiere que PULLEX recuerde de él.
-- **Personalización**: áreas de interés, modo (Automático/Técnico/Sencillo), tema claro/oscuro,
-  búsqueda web por defecto.
-- **Exportar**: imprimir/guardar en **PDF**, descargar respuesta, y exportar tablas
-  (liquidaciones) a **Excel/CSV**.
-- **Cada estudiante tiene su propia cuenta** (correo + contraseña que crea él mismo), con
-  **verificación de correo** y **recuperación de contraseña** por correo (ver abajo).
+`evaluacion/procedimientos.jsonl` y `evaluacion/evaluar_procedimientos.py`. 45 casos de J05 y J06 con resultado
+esperado calculado a mano y explicado, en dos conjuntos: desarrollo (18) y medición (27). Umbral fijado antes de
+medir: 100 %. Resultado de la primera ejecución (2026-10-02): 45/45; medición 27/27.
 
-## Verificación de correo y recuperación de contraseña
-
-Cada estudiante se registra con su propio correo y contraseña. Al crear la cuenta, PULLEX IA
-le envía un correo de confirmación (enlace de un solo uso, vence en 24 horas); mientras no lo
-confirme, ve un aviso en la app con un botón para reenviarlo. Si olvida su contraseña, desde
-"¿Olvidaste tu contraseña?" en la pantalla de ingreso recibe un enlace (vence en 1 hora) para
-elegir una nueva — por seguridad, la respuesta es idéntica exista o no esa cuenta, para que
-nadie pueda usar ese formulario y averiguar qué correos están registrados.
-
-**Para que estos correos salgan de verdad**, consigue una clave gratis en
-[resend.com](https://resend.com) (capa gratuita: 3.000 correos/mes) y ponla en la variable
-`RESEND_API_KEY` (en tu `.env` local o en Render). Sin esa clave, la app funciona igual —
-solo que esos correos no se envían y queda un aviso en el log del servidor. También define
-`PULLEX_APP_URL` con la URL pública real de tu app (en Render, la que te asigna tu servicio),
-para que los enlaces de los correos apunten al lugar correcto.
-
-## Desplegar en internet (Render.com, gratis)
-
-El archivo `render.yaml` ya deja todo listo. En Render creas un *Blueprint* apuntando a tu
-repositorio, y defines en **Environment**:
-
-- `ANTHROPIC_API_KEY` → tu clave real.
-- `PULLEX_ADMIN_EMAIL` y `PULLEX_ADMIN_CLAVE` → tu correo y una clave segura de admin.
-- `RESEND_API_KEY` (opcional) → para que salgan los correos de verificación/recuperación.
-- `PULLEX_APP_URL` → tu URL real de Render, tras el primer despliegue.
-
-## Seguridad
-
-- Contraseñas cifradas (PBKDF2-SHA256, 200.000 iteraciones, sal por usuario).
-- Sesiones con tokens firmados (HMAC), 14 días, **revocables**: cambiar o restablecer la contraseña
-  cierra las demás sesiones, y hay "Cerrar sesión en todos los dispositivos" en Configuración.
-- Cada conversación solo la puede ver, escribir o borrar su dueño (autorización por recurso).
-- Límite de intentos por IP **y por cuenta** en ingreso, recuperación y cambio de contraseña.
-- Cabeceras de seguridad y Content-Security-Policy estricta: ningún JavaScript en línea (los botones usan
-  `data-click` y un despachador con lista blanca en `static/app.js`); scripts de CDN con SRI.
-  **Regla para quien edite el frontend:** no agregar `onclick="..."` ni `<script>` en línea; la CSP los
-  bloquea y `tests/test_seguridad.py::test_WEB_006` falla si aparecen.
-- Enlaces de verificación/recuperación de un solo uso y con vencimiento (24h / 1h).
-- Historial en SQLite (`pullex.db`). **Ojo:** en el plan gratuito de Render el disco es efímero;
-  descarga la base antes de cada despliegue hasta migrar a una base gestionada.
-- Estado verificado, hallazgos abiertos y plan: `docs/audit/` (empieza por `09-risks-current.md`).
-
-## Pruebas
+Límite de esta evaluación: los resultados esperados los calculó la misma sesión que escribió el código, con las
+mismas reglas. Mide que el programa hace lo que la regla registrada dice, no que la regla esté bien interpretada.
+Falta un conjunto calculado por un abogado o contador independiente.
 
 ```bash
-pip install -r requirements-dev.txt
-pytest tests                  # 49 pruebas: seguridad + regresión (no llaman a la API real)
-pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
+python evaluacion/evaluar_procedimientos.py            # tabla y código de salida
+python -m pytest -q tests/test_reglas.py tests/test_procedimientos_*.py
+python scripts/tabla_reglas.py                         # regenera REGISTRO-DE-REGLAS.md
 ```
 
-Con el servidor corriendo, `tests/e2e_navegador.py` repite las verificaciones en un navegador real
-(requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`).
+## Mantenimiento del registro
 
-## Advertencia
-
-PULLEX IA es una herramienta de **apoyo y estudio**. Ninguna norma o sentencia debe usarse en un
-escrito judicial sin confirmarla en la fuente oficial. No sustituye a un abogado ni garantiza
-resultados. Trata los datos personales conforme a la Ley 1581 de 2012.
+1. Verificar la norma en la fuente oficial y anotar enlace, fecha y cita.
+2. Si cambia una regla existente: cerrar la versión actual (`vigencia.hasta` = día anterior al cambio) y agregar
+   la versión siguiente con su `vigencia.desde`. No se edita una versión ya publicada. `J09` propone este cambio.
+3. Correr `python -m pytest -q tests/test_reglas.py` (valida esquema, enlaces oficiales y que las versiones no se
+   solapen) y `python scripts/tabla_reglas.py`.
+4. Revertir es quitar la versión nueva y reabrir la anterior: el historial de git conserva ambas.
