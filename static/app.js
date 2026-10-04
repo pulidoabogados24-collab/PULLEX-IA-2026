@@ -208,7 +208,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes)});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id})});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -243,6 +243,56 @@ function burbuja(rol,texto,adj){
 }
 function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
 
+// Lee el stream SSE del chat y lo pinta en la burbuja ``bIA``. Lo usan «enviar» (respuesta nueva) y «continuarResp»
+// (completar una respuesta que quedó incompleta; ``base`` es el texto que ya estaba escrito).
+// Devuelve {buffer,fuentes,id,completo,incompleta,motivo,fin}. ``fin`` es false si el stream se cortó sin que el servidor
+// avisara que terminó: en ese caso NUNCA se da por completa la respuesta.
+async function transmitir(cuerpo,bIA,base){
+  const cont=bIA.querySelector('.md');cont.classList.add('cursor');
+  const res={buffer:base||'',fuentes:[],id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
+  let raf=null;
+  const render=()=>{cont.innerHTML=md(res.buffer);cont.classList.add('cursor');scroll();raf=null};
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(cuerpo)});
+    if(!r.ok){const d=await r.json().catch(()=>({}));res.estado=r.status;res.error=(typeof d.detail==='string'&&d.detail)||'No se pudo procesar.';
+      cont.classList.remove('cursor');return res}
+    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
+    while(true){const {value,done}=await rd.read();if(done)break;
+      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
+      for(const l of lineas){if(!l.startsWith('data: '))continue; // los comentarios «: latido» se ignoran
+        let ev;try{ev=JSON.parse(l.slice(6))}catch(e){continue}
+        if(ev.tipo==='texto'){res.buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='busqueda'){cont.innerHTML=md(res.buffer+'\n\n_Buscando en fuentes…_')}
+        else if(ev.tipo==='continuando'){bIA.classList.add('continuando')}
+        else if(ev.tipo==='reparando'){bIA.classList.add('reparando')}
+        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+        else if(ev.tipo==='fuentes'){res.fuentes=Array.isArray(ev.fuentes)?ev.fuentes:[]}
+        else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){res.buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='incompleta'){res.incompleta=true;res.motivo=ev.motivo||'';if(ev.mensaje_id)res.id=ev.mensaje_id}
+        else if(ev.tipo==='fin'){res.fin=true;res.completo=!!ev.completo;if(ev.mensaje_id)res.id=ev.mensaje_id;if(!ev.completo)res.incompleta=true}
+      }
+    }
+  }catch(e){res.error='conexion'}
+  if(raf)cancelAnimationFrame(raf);
+  bIA.classList.remove('continuando','reparando');
+  cont.classList.remove('cursor');cont.innerHTML=md(res.buffer);
+  return res;
+}
+// Si el stream se cortó sin «fin», el servidor guarda lo generado como incompleto: se busca ese mensaje para poder continuarlo.
+async function recuperarIncompleta(cid){
+  try{await new Promise(r=>setTimeout(r,1200));
+    const msgs=await api('/api/conversaciones/'+cid+'/mensajes');const u=msgs[msgs.length-1];
+    if(u&&u.rol!=='user'&&u.incompleta)return {id:u.id,texto:u.contenido||''};
+  }catch(e){}
+  return null;
+}
+// Remata una burbuja de respuesta: acciones, aviso «Continuar» si quedó cortada y valoración.
+function cerrarResp(bIA,res,cid){
+  const tieneTexto=(res.buffer||'').trim().length>0;
+  if(!res.fin&&tieneTexto){res.incompleta=true;if(!res.motivo)res.motivo='interrumpida'}
+  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid});
+  scroll();
+}
 // opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
 async function enviar(opc){
   const texto=$('txt').value.trim();
@@ -254,38 +304,44 @@ async function enviar(opc){
   $('sugs').classList.add('hidden');
   const adjEnvio=ADJ.slice();
   burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
-  const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  let buffer='',raf=null,fuentesResp=[];
-  const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
-  try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
-      body:JSON.stringify({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio})});
-    if(!r.ok){const d=await r.json().catch(()=>({}));cont.classList.remove('cursor');
-      cont.innerHTML=md('**Aviso:** '+(d.detail||'No se pudo procesar.'));
-      enviando=false;$('env').disabled=false;if(r.status===402||r.status===403)ver('config');return}
-    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
-    while(true){const {value,done}=await rd.read();if(done)break;
-      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
-      for(const l of lineas){if(!l.startsWith('data: '))continue;
-        const ev=JSON.parse(l.slice(6));
-        if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
-        else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
-        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
-        else if(ev.tipo==='fuentes'){fuentesResp=Array.isArray(ev.fuentes)?ev.fuentes:[]}
-        else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
-      }
-    }
-  }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
-  if(raf)cancelAnimationFrame(raf);
-  cont.classList.remove('cursor');cont.innerHTML=md(buffer);
-  if(buffer.trim())accionesResp(bIA,buffer,fuentesResp);scroll();
+  const bIA=burbuja('ia','');
+  const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
+  if(res.estado!==200){
+    bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
+    enviando=false;$('env').disabled=false;if(res.estado===402||res.estado===403)ver('config');return}
+  if(res.error==='conexion'&&!res.fin){
+    const rec=await recuperarIncompleta(cid);
+    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
+    else if(!res.buffer.trim())res.buffer='**Aviso:** se interrumpió la conexión. Intenta de nuevo.';
+  }
+  cerrarResp(bIA,res,cid);
   enviando=false;$('env').disabled=false;
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
   cargarConvs();
 }
-function accionesResp(b,texto,fuentes){
+// «Continuar»: el servidor retoma la respuesta guardada y la completa; no gasta una consulta.
+async function continuarResp(bIA,meta,textoActual){
+  if(enviando)return;
+  enviando=true;$('env').disabled=true;
+  quitarAcciones(bIA);
+  const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
+  if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
+    enviando=false;$('env').disabled=false;toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
+    const c=meta.cid;CONV=null;await abrirConv(c);return}
+  if(res.estado!==200){
+    toast(res.error);enviando=false;$('env').disabled=false;
+    accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
+  if(res.error==='conexion'&&!res.fin){
+    const rec=await recuperarIncompleta(meta.cid);
+    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}}
+  if(!res.id)res.id=meta.id;
+  cerrarResp(bIA,res,meta.cid);
+  enviando=false;$('env').disabled=false;
+}
+function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes').forEach(n=>n.remove())}
+function accionesResp(b,texto,fuentes,meta){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
   const [c,d,p,r]=a.querySelectorAll('button');
@@ -300,6 +356,45 @@ function accionesResp(b,texto,fuentes){
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
   pintarFuentes(b,fuentes);
+  if(meta&&meta.incompleta)avisoIncompleta(b,texto,meta);
+  if(meta&&meta.id)panelValorar(b,meta);
+}
+// Respuesta cortada: se dice con claridad y se ofrece «Continuar». Nunca se presenta como terminada.
+const MOTIVO_INC={limite:'La respuesta llegó al límite de longitud.',interrumpida:'La conexión se interrumpió mientras se escribía.',
+  pausa:'La respuesta se pausó antes de terminar.',contexto:'La conversación es demasiado larga para seguir.',rechazo:'La IA no pudo completar esta respuesta.'};
+function avisoIncompleta(b,texto,meta){
+  const d=el('div','aviso-inc');d.setAttribute('role','status');
+  d.appendChild(el('p',null,'Esta respuesta quedó incompleta. '+(MOTIVO_INC[meta.motivo]||'No llegó a terminar.')+' Puedes pedir que la complete desde donde se cortó.'));
+  const bt=el('button','btn-continuar','Continuar');bt.type='button';
+  bt.addEventListener('click',()=>continuarResp(b,meta,texto));
+  d.appendChild(bt);
+  b.querySelector('.bd').appendChild(d);
+}
+// 👍 / 👎 con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
+const MOTIVOS_FB=[['incompleta','Quedó incompleta'],['no_respondio','No respondió lo que pedí'],['error_juridico','Tiene un error jurídico'],['muy_larga','Es demasiado larga'],['otro','Otro motivo']];
+function panelValorar(b,meta){
+  const w=el('div','valorar');w.setAttribute('role','group');w.setAttribute('aria-label','¿Te sirvió esta respuesta?');
+  const bu=el('button','vl-btn','👍');bu.type='button';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
+  const bd=el('button','vl-btn','👎');bd.type='button';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
+  const estado=el('span','vl-estado');estado.setAttribute('aria-live','polite');
+  const caja=el('div','vl-motivos hidden');
+  const sel=new Set();
+  const chips=MOTIVOS_FB.map(([k,t])=>{const c=el('button','vl-chip',t);c.type='button';c.setAttribute('aria-pressed','false');
+    c.addEventListener('click',()=>{if(sel.has(k)){sel.delete(k);c.setAttribute('aria-pressed','false')}else{sel.add(k);c.setAttribute('aria-pressed','true')}});
+    caja.appendChild(c);return c});
+  const enviarFb=el('button','vl-enviar','Enviar');enviarFb.type='button';caja.appendChild(enviarFb);
+  async function mandar(valor){
+    try{await api('/api/feedback',{body:{mensaje:meta.id,valor,motivos:valor==='abajo'?[...sel]:[]}});
+      bu.setAttribute('aria-pressed',valor==='arriba'?'true':'false');bd.setAttribute('aria-pressed',valor==='abajo'?'true':'false');
+      estado.textContent='Gracias por tu opinión.';caja.classList.add('hidden');
+    }catch(e){estado.textContent=e.message||'No se pudo enviar tu opinión.'}
+  }
+  bu.addEventListener('click',()=>mandar('arriba'));
+  bd.addEventListener('click',()=>{caja.classList.toggle('hidden');estado.textContent='';
+    if(!caja.classList.contains('hidden'))chips[0].focus()});
+  enviarFb.addEventListener('click',()=>mandar('abajo'));
+  w.append(bu,bd,estado,caja);
+  b.querySelector('.bd').appendChild(w);
 }
 // ---- Revisar estilo: rasgos típicos del texto generado por IA (POST /api/estilo/revisar, no gasta consultas).
 // Lo usan el chat y la vista de documentos (documentos.js). Todo se pinta con textContent.
