@@ -212,5 +212,5 @@ su autorización.
   cierres; con las guías nuevas debería ser raro.
 - Un abogado o docente debe revisar las voces: las fórmulas forenses y el método de examen se apoyan en fuentes
   generales y en la rúbrica propia, no en rúbricas de facultades.
-- La demo de un solo archivo (`demo/pullex-demo.html`) no implementa `/api/estilo/revisar`: el botón muestra
-  "Esta función no está disponible en la demostración". No se regeneró en este cambio.
+- La demo de un solo archivo (`demo/pullex-demo.html`) no calcula la revisión de estilo (corre en el servidor): el
+  botón avisa que no está disponible. La caja «Revisión de estilo» tiene estilos desde PUL-014 (`static/escritura.css`).

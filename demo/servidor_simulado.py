@@ -33,6 +33,7 @@ if "PULLEX_BIBLIOTECA_INVENTARIO" not in os.environ:
 import app as pullex  # noqa: E402
 import documentos  # noqa: E402
 import fuentes  # noqa: E402
+import taller  # noqa: E402  — tipos y claves para la evaluación simulada del Taller
 from perfiles.muestra_simulada import texto_simulado  # noqa: E402  — texto de ejemplo para los perfiles
 
 # Textos de ejemplo del automatizador (Documentos, Flujos, Asistente), rotulados como demostración.
@@ -207,6 +208,67 @@ def _paso_ejemplo(pedido: str) -> str:
     return DOCS_DEMO["paso_generico"].replace("{titulo}", titulo)
 
 
+# ---- Taller de escritos (SIMULADO): escenario, evaluación y escrito modelo de ejemplo ----
+# La evaluación simulada marca cada parte de la lista de comprobación por palabras clave (las `claves` de
+# taller.py) y reparte el puntaje según las partes halladas. No evalúa el contenido jurídico: eso lo hace el
+# modelo real. La misma lógica está en demo/mock.js.
+_ESCENARIO_IA_TALLER = {
+    "titulo": "Escenario de ejemplo de la demostración",
+    "hechos": ("Camila Torres Vega (ficticia) vive en Medellín. El 3 de agosto de 2026 pidió por escrito a la Secretaría "
+               "de Movilidad (ficticia) copia del expediente de un comparendo que, según ella, nunca le notificaron.\n\n"
+               "Han pasado treinta días hábiles y la entidad no ha respondido. Camila conserva la copia sellada de su "
+               "solicitud."),
+    "instruccion": "Redacta el escrito que Camila debe presentar, con todas sus partes obligatorias.",
+    "puntos_clave": ["Identificar a la entidad y la solicitud inicial", "Hechos numerados con fechas",
+                     "Petición concreta y plazo de respuesta (verificar el término en la ley vigente)"],
+    "conceptos": ["Derecho de petición"]}
+
+
+def _texto_estudiante(pedido: str) -> str:
+    cola = pedido.split("ESCRITO DEL ESTUDIANTE que debes evaluar.", 1)[-1]
+    m = re.search(r"<([A-Za-z_]+)>\n(.*)\n</\1>", cola, re.S)
+    return m.group(2) if m else cola
+
+
+def _taller_evaluar(pedido: str) -> dict:
+    m = re.search(r"TIPO DE ESCRITO: (.+?)\. Estructura esperada", pedido)
+    tipo = next((t for t in taller.TIPOS if m and t["nombre"] == m.group(1)), taller.TIPOS[0])
+    texto = _texto_estudiante(pedido)
+    t = _sin_tildes(texto)
+    presente = {p["id"]: any(c in t for c in p["claves"]) for p in tipo["lista"]}
+    puntajes = {}
+    for clave, _nombre, maximo in taller.RUBRICA:
+        partes = [p for p in tipo["lista"] if p["criterio"] == clave]
+        if clave == "estilo":
+            puntajes[clave] = 8 if len(texto) > 900 else 6
+        elif partes:
+            puntajes[clave] = int(maximo * (0.35 + 0.55 * sum(presente[p["id"]] for p in partes) / len(partes)) + 0.5)
+        else:
+            puntajes[clave] = int(maximo * 0.6 + 0.5)
+    primera = next((ln.strip() for ln in texto.splitlines() if len(ln.strip()) > 40), "")
+    return {"puntajes": puntajes, "lista": presente,
+            "faltan": [p["parte"] for p in tipo["lista"] if not presente[p["id"]]],
+            "errores_forma": [] if re.search(r"(?m)^\s*(1\.|primero)", t) else ["Los hechos no están numerados."],
+            "sobra": [],
+            "mejoras": ([{"original": primera[:300],
+                          "mejorada": "Ejemplo de la demostración: con el modelo real, aquí aparece tu fragmento reescrito "
+                                      "con un hecho por numeral, su fecha y sin adjetivos.",
+                          "por_que": "Texto de ejemplo; la demostración no reescribe tu escrito."}] if primera else []),
+            "conceptos_debiles": [],
+            "comentario": "Evaluación SIMULADA de la demostración: marca las partes por palabras clave y no revisa el "
+                          "contenido jurídico. Con el modelo real se evalúa lo que escribiste."}
+
+
+def _taller_modelo(pedido: str) -> str:
+    m = re.match(r"Redacta el escrito modelo completo: (.+?)\.\n", pedido)
+    tipo = next((t for t in taller.TIPOS if m and t["nombre"] == m.group(1)), taller.TIPOS[0])
+    partes = "\n\n".join(f"**{i}. {p['parte']}**\n\n[COMPLETAR: {p['ayuda']}]" for i, p in enumerate(tipo["lista"], 1))
+    return (f"# {tipo['nombre'].upper()} (ejemplo de la demostración)\n\n"
+            "Este texto es un esqueleto de ejemplo del servidor simulado: muestra las partes obligatorias en orden. "
+            "Con el modelo real, aquí aparece el escrito completo redactado para el escenario.\n\n" + partes +
+            "\n\n*Modelo de estudio de la demostración. No es un formato oficial; verifica la vigencia de cada norma.*")
+
+
 class _StreamTexto:
     def __init__(self, texto):
         self.texto = texto
@@ -239,6 +301,11 @@ class _Modelo:
         sis = " ".join(b.get("text", "") for b in sistema) if isinstance(sistema, list) else str(sistema or "")
         if sis.startswith("PERFIL PULLEX "):   # coordinador de perfiles: salida con la forma del contrato
             return types.SimpleNamespace(content=[_B(texto_simulado(sis))])
+        if "TALLER DE ESCRITOS" in sis:   # Academia de escritos: escenario, evaluación o escrito modelo simulados
+            if "ESCRITO MODELO" in sis:
+                return types.SimpleNamespace(content=[_B(_taller_modelo(pedido))])
+            cuerpo = _taller_evaluar(pedido) if pedido.startswith("Evalúa") else _ESCENARIO_IA_TALLER
+            return types.SimpleNamespace(content=[_B(json.dumps(cuerpo, ensure_ascii=False))])
         if sistema == documentos.SISTEMA_PLAN:
             return types.SimpleNamespace(content=[_B(json.dumps(DOCS_DEMO["plan"], ensure_ascii=False))])
         if "PULLEX DOCUMENTOS" in sis:

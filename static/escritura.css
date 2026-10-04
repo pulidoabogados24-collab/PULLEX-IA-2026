@@ -1,0 +1,165 @@
+/* =========================================================================================
+   PULLEX Academia — Academia de escritos (static/taller.js) y revisión de estilo (app.js).
+   Solo tokens semánticos de tema.css, para que respete los seis temas, el modo oscuro y la
+   personalización de cada usuario. Se enlaza DESPUÉS del <style> de index.html.
+   ========================================================================================= */
+
+/* ---- pestañas del Modular Lab: Casos · Taller de escritos · Cómo contestar ---- */
+.tl-tabs-cont{max-width:880px;margin:0 auto;padding:calc(20px * var(--esp)) 20px 0}
+.tl-tabs{display:flex;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.tl-tabs button{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:calc(var(--radius) - 5px);background:transparent;
+  color:var(--text-2);font-size:.86rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:background var(--t-rapida) var(--curva),color var(--t-rapida) var(--curva)}
+.tl-tabs button:hover{color:var(--text)}
+.tl-tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.tl-tabs-cont ~ .wrap{padding-top:calc(18px * var(--esp))}
+@media(max-width:560px){.tl-tabs button{padding:9px 6px;font-size:.8rem}}
+
+/* ---- Taller: elegir el escrito ---- */
+.tl-tipos{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.tl-fuentes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tl-tipo,.tl-fuente{display:grid;gap:2px;align-content:start;text-align:left;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--surface);color:var(--text);transition:border-color var(--t-rapida) var(--curva),background var(--t-rapida) var(--curva)}
+.tl-tipo b,.tl-fuente b{font-size:.9rem;font-weight:620}
+.tl-tipo span,.tl-fuente span{font-size:.76rem;color:var(--text-2)}
+.tl-tipo:hover,.tl-fuente:hover{border-color:var(--border-strong)}
+.tl-tipo[aria-pressed="true"],.tl-fuente[aria-pressed="true"]{background:var(--accent-soft);
+  border-color:color-mix(in oklab,var(--accent) 45%,var(--border))}
+.tl-tipo[aria-pressed="true"] b,.tl-fuente[aria-pressed="true"] b{color:var(--accent-text)}
+@media(max-width:560px){.tl-tipos{grid-template-columns:1fr 1fr}.tl-fuentes{grid-template-columns:1fr}}
+
+/* ---- Taller: escenario y editor ---- */
+.tl-hechos p{margin:0 0 .7em;line-height:1.62}
+.tl-instr{background:var(--accent-soft);border-radius:var(--radius-sm);padding:12px 14px;margin:14px 0}
+.tl-instr .eyebrow{color:var(--accent-text)}
+.tl-instr p{margin:4px 0 0;line-height:1.55;font-weight:550}
+.tl-nota{font-size:.82rem;color:var(--text-2);margin:8px 0;line-height:1.5}
+.tl-det .tl-lista{list-style:none;margin:10px 0 2px;padding:0;display:grid;gap:9px}
+.tl-det .tl-lista li{display:grid;grid-template-columns:20px 1fr;gap:2px 10px;align-items:start;color:var(--text)}
+.tl-lista input{width:17px;height:17px;margin:3px 0 0;accent-color:var(--accent)}
+.tl-lista label{display:grid;gap:1px;cursor:pointer}
+.tl-lista label b{font-weight:600;font-size:.88rem}
+.tl-lista label span{font-size:.78rem;color:var(--text-2);line-height:1.45}
+.tl-res{grid-column:2;font-style:normal;font-size:.76rem;font-weight:650}
+.tl-res:empty{display:none}
+.tl-lista li.ok .tl-res{color:var(--ok)}
+.tl-lista li.falta .tl-res{color:var(--warn)}
+.tl-det .tl-rub-lista{list-style:none;margin:10px 0 4px;padding:0;display:grid;gap:6px}
+.tl-det .tl-rub-lista li{display:flex;justify-content:space-between;gap:12px;font-size:.86rem;color:var(--text-2)}
+.tl-rub-lista b{color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-lb{display:block}
+textarea.tl-editor{width:100%;min-height:340px;font-family:var(--font-body);font-size:.95rem;line-height:1.65}
+.tl-pie-editor{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap}
+.tl-guardado{font-size:.78rem;color:var(--text-2);margin-top:6px}
+
+/* ---- Taller: evaluación y escrito modelo ---- */
+.tl-mejora{display:grid;gap:10px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin:8px 0}
+.tl-antes,.tl-despues{padding-left:11px;border-left:3px solid var(--border-strong)}
+.tl-despues{border-left-color:var(--ok)}
+.tl-antes p,.tl-despues p{margin:3px 0 0;font-size:.9rem;line-height:1.55}
+.tl-antes p{color:var(--text-2)}
+.tl-porque{margin:0;font-size:.84rem;color:var(--text-2)}
+.tl-modelo-texto{font-family:var(--font-body);font-size:.95rem;line-height:1.68}
+.tl-modelo-texto h1,.tl-modelo-texto h2,.tl-modelo-texto h3{font-size:1.02rem;margin:1.1em 0 .4em}
+
+/* ---- Cómo contestar: lecciones ---- */
+.tl-como-lay{display:grid;grid-template-columns:232px minmax(0,1fr);gap:16px;align-items:start}
+.tl-lecciones{display:grid;gap:6px}
+.tl-lec{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;padding:10px 12px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text)}
+.tl-lec:hover{border-color:var(--border-strong)}
+.tl-lec.on{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent) 45%,var(--border))}
+.tl-lec-n{width:28px;height:28px;border-radius:8px;background:var(--surface-2);color:var(--text-2);display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:650;font-size:.95rem}
+.tl-lec.on .tl-lec-n{background:var(--accent);color:var(--accent-ink)}
+.tl-lec-t{display:grid;gap:1px;min-width:0}
+.tl-lec-t b{font-size:.87rem;font-weight:620;line-height:1.3}
+.tl-lec-t span{font-size:.74rem;color:var(--text-2);line-height:1.4}
+.tl-leccion{min-width:0}
+.panel h3.tl-lec-h{font-size:1.3rem;margin:.15em 0 .5em}
+.tl-intro{color:var(--text-2);line-height:1.6;margin:0 0 14px;font-size:.93rem}
+.tl-caso{background:var(--surface-2);border-radius:var(--radius-sm);padding:12px 14px;margin:0 0 14px}
+.tl-caso p{margin:4px 0 0;line-height:1.6;font-size:.92rem}
+.tl-pasos-nav{display:flex;gap:6px;margin:0 0 12px}
+.tl-punto{flex:1 1 30px;max-width:46px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-2);font-family:var(--font-display);font-weight:650;font-size:1rem}
+.tl-punto:hover{border-color:var(--border-strong);color:var(--text)}
+.tl-punto.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tl-paso{border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px}
+.tl-paso-cab{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.tl-paso-cab h4{margin:2px 0 0;font-size:1.05rem}
+.tl-letra{flex:none;width:42px;height:42px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);
+  display:grid;place-items:center;font-family:var(--font-display);font-size:1.35rem;font-weight:650}
+.tl-q{font-weight:600;margin:6px 0 10px;line-height:1.5}
+.tl-en-caso{background:var(--surface-2);border-radius:var(--radius-sm);padding:10px 12px;font-size:.9rem;line-height:1.58;margin-bottom:10px}
+.tl-error{font-size:.86rem;color:var(--text-2);line-height:1.5;padding-left:11px;border-left:3px solid var(--warn)}
+.tl-paso-acc{margin-bottom:6px}
+.tl-viñetas{margin:6px 0 0;padding-left:18px;display:grid;gap:5px;font-size:.9rem;color:var(--text-2);line-height:1.5}
+.tl-practicar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;padding:12px 14px;
+  border-radius:var(--radius-sm);background:var(--accent-soft)}
+.tl-practicar > div{flex:1 1 220px;display:grid;gap:2px}
+.tl-practicar b{font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
+.tl-practicar span{font-size:.88rem;line-height:1.45}
+
+/* ejercicio: hechos relevantes y distractores; pregunta de control */
+.tl-hechos-lista{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tl-hecho{border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.tl-hecho.bien{border-color:var(--ok)}
+.tl-hecho.mal{border-color:var(--danger)}
+.tl-hecho-t{margin:0 0 8px;line-height:1.5;font-size:.92rem}
+.tl-elige{display:flex;gap:6px;flex-wrap:wrap}
+.tl-op{padding:6px 13px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-size:.82rem}
+.tl-op:hover{border-color:var(--border-strong);color:var(--text)}
+.tl-op[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-text);font-weight:600;
+  border-color:color-mix(in oklab,var(--accent) 45%,var(--border))}
+.tl-op.bien{border-color:var(--ok);color:var(--ok);background:var(--surface)}
+.tl-op.mal{border-color:var(--danger);color:var(--danger);background:var(--surface)}
+.tl-quiz{display:grid;gap:6px}
+.tl-op-larga{display:block;width:100%;text-align:left;border-radius:var(--radius-sm);padding:10px 12px;line-height:1.45;white-space:normal;
+  color:var(--text)}
+.tl-fb{font-size:.84rem;color:var(--text-2);margin:8px 0 0;line-height:1.5}
+.tl-fb:empty{display:none}
+.tl-marcador{font-weight:600;font-size:.88rem;margin:12px 0 0}
+
+/* ejercicio: conectores */
+.tl-familias{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin:0 0 6px}
+.tl-familias > div{display:grid;gap:1px;background:var(--surface-2);border-radius:var(--radius-sm);padding:8px 11px}
+.tl-familias b{font-size:.8rem}
+.tl-familias span{font-size:.8rem;color:var(--text-2)}
+.tl-parrafo{line-height:2.35;font-size:.95rem;margin:0 0 8px}
+select.inp.tl-hueco{display:inline-block;width:auto;max-width:100%;padding:4px 8px;margin:0 3px;font-size:.86rem;vertical-align:baseline}
+select.tl-hueco.bien{border-color:var(--ok)}
+select.tl-hueco.mal{border-color:var(--danger)}
+.tl-fb-lista{list-style:none;margin:8px 0;padding:0;display:grid;gap:4px;font-size:.84rem;line-height:1.45}
+.tl-fb-lista li.bien{color:var(--ok)}
+.tl-fb-lista li.mal{color:var(--danger)}
+
+/* esqueletos de escritos y errores frecuentes */
+.tl-det .tl-esqueleto{margin:10px 0 6px;padding-left:22px;display:grid;gap:6px;list-style:decimal}
+.tl-det .tl-esqueleto li{display:list-item;color:var(--text-2);font-size:.86rem;line-height:1.45}
+.tl-esqueleto li b{color:var(--text);font-weight:600}
+.tl-esqueleto li span::before{content:" — "}
+.tl-errores{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:0 0 6px}
+.tl-err{display:grid;gap:4px;align-content:start;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.tl-err .tag{justify-self:start}
+.tl-err b{font-size:.88rem;line-height:1.35}
+.tl-err span:last-child{font-size:.82rem;color:var(--text-2);line-height:1.45}
+
+@media(max-width:759px){
+  .tl-como-lay{grid-template-columns:1fr}
+  .tl-lec-t span{display:none}
+  .tl-lecciones{grid-template-columns:1fr 1fr}
+  .tl-lecciones .tl-lec:last-child{grid-column:1/-1}
+}
+
+/* ---- Revisión de estilo (chat, documentos y evaluación del Taller) ---- */
+.estilo-rev{margin:14px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2);
+  font-size:.88rem;line-height:1.5}
+.estilo-rev:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.estilo-rev h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
+.estilo-rev p{margin:0 0 8px}
+.estilo-rev ul{margin:0 0 8px;padding-left:18px;display:grid;gap:7px}
+.estilo-rev .er-ej{display:block;font-size:.8rem;color:var(--text-2);font-style:italic}
+.estilo-rev .er-nota{margin:0;font-size:.78rem;color:var(--text-2)}
+
+@media print{.tl-tabs-cont,.tl-practicar,.tl-pasos-nav{display:none!important}}

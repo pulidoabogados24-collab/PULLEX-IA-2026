@@ -44,6 +44,19 @@ datos["automatizador"] = {
     "aviso_general": documentos.AVISO_GENERAL, "aviso_funcionario": documentos.AVISO_FUNCIONARIO,
     "borrador": documentos.BORRADOR_FUNCIONARIO,
     "demo": json.loads((RAIZ / "demo" / "documentos_demo.json").read_text(encoding="utf-8"))}
+# Taller de escritos: tipos (con las `claves` que usa la evaluación simulada), rúbrica y el banco curado.
+import taller  # noqa: E402
+datos["taller"] = {
+    "opciones": {"tipos": taller.tipos_publicos(),
+                 "niveles": [{"id": k, "nombre": v[0], "descripcion": v[1]} for k, v in taller.NIVELES.items()],
+                 "rubrica": taller._rubrica_publica(), "min_caracteres": taller.MIN_ESCRITO,
+                 "max_caracteres": taller.MAX_ESCRITO},
+    "tipos": {t["id"]: {"nombre": t["nombre"], "area": t["area"], "lista": t["lista"], "conceptos": t["conceptos"],
+                        "rubrica_nota": t["rubrica_nota"]} for t in taller.TIPOS},
+    "escenarios": [{k: e.get(k) for k in ("id", "tipo", "nivel", "titulo", "hechos", "instruccion", "area")}
+                   for e in taller.CURADOS]}
+taller_js = (ST / "taller.js").read_text(encoding="utf-8")
+escritura_css = (ST / "escritura.css").read_text(encoding="utf-8")
 docs_js = (ST / "documentos.js").read_text(encoding="utf-8")
 bib_js = (ST / "biblioteca.js").read_text(encoding="utf-8")
 
@@ -99,6 +112,8 @@ assert html.count('<link rel="stylesheet" href="/static/tema.css">') == 1
 html = html.replace('<link rel="stylesheet" href="/static/tema.css">', "<style>\n" + tema_css + "\n</style>")
 assert html.count('<link rel="stylesheet" href="/static/planes.css">') == 1
 html = html.replace('<link rel="stylesheet" href="/static/planes.css">', "<style>\n" + planes_css + "\n</style>")
+assert html.count('<link rel="stylesheet" href="/static/escritura.css">') == 1
+html = html.replace('<link rel="stylesheet" href="/static/escritura.css">', "<style>\n" + escritura_css + "\n</style>")
 assert html.count('<script src="/static/apariencia.js"></script>') == 1
 html = html.replace('<script src="/static/apariencia.js"></script>', "<script>\n" + apariencia_js + "\n</script>")
 
@@ -142,6 +157,10 @@ html = html.replace('<script src="/static/documentos.js"></script>',
 # Biblioteca: mismo biblioteca.js; sus datos son el catálogo ficticio que sirve demo/mock.js.
 assert html.count('<script src="/static/biblioteca.js"></script>') == 1
 html = html.replace('<script src="/static/biblioteca.js"></script>', "<script>" + bib_js.replace("</script", "<\\/script") + "</script>")
+
+# Academia de escritos: mismo taller.js; el escenario, la evaluación y el modelo los simula demo/mock.js.
+assert html.count('<script src="/static/taller.js"></script>') == 1
+html = html.replace('<script src="/static/taller.js"></script>', "<script>" + taller_js.replace("</script", "<\\/script") + "</script>")
 
 # Herramientas (términos y liquidación): los cálculos corren en el servidor (procedimientos/), así que en la
 # demostración la vista carga y avisa que no está disponible (mock.js responde 404 a /api/procedimientos).

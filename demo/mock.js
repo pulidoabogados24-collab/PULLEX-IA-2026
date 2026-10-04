@@ -352,6 +352,72 @@ function bibliotecaDemo(ruta,m,b,qs){
     return json({id:d.id,titulo:c.titulo,con_texto:c.con_texto,mensaje:c.mensaje,biblioteca_id:f.id,enlace_original:c.campos.enlace_original})}
   return error(404,'Esta función de la biblioteca no está disponible en la demostración.');
 }
+// ---- Taller de escritos (Academia): banco curado real, evaluación SIMULADA por palabras clave (misma lógica que
+// demo/servidor_simulado.py: marca las partes halladas; no evalúa el contenido jurídico) y modelo de ejemplo.
+const TA=D.taller||{opciones:{tipos:[],niveles:[],rubrica:[]},tipos:{},escenarios:[]};
+const TA_S={esc:{},sig:1};
+const TA_NIVEL={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'};
+function taPublico(e){const t=TA.tipos[e.tipo];const n=e.intentos.length;
+  return {id:e.id,tipo:e.tipo,tipo_nombre:t.nombre,area:e.d.area||t.area,nivel:e.nivel,nivel_nombre:TA_NIVEL[e.nivel]||e.nivel,
+    titulo:e.d.titulo,hechos:e.d.hechos,instruccion:e.d.instruccion,
+    lista:t.lista.map(p=>({id:p.id,parte:p.parte,ayuda:p.ayuda,criterio:p.criterio})),rubrica:TA.opciones.rubrica,
+    rubrica_nota:t.rubrica_nota,curado:!!e.curado,revision_humana:true,intentos:n,
+    mejor:n?Math.max(...e.intentos.map(i=>i.total)):null,ultima_evaluacion:n?e.intentos[n-1]:null,
+    modelo_disponible:n>0,tiene_modelo:false,creado:e.t}}
+function taEvaluar(e,texto){const t=TA.tipos[e.tipo];const s=sinTildes(texto);
+  const pres={};t.lista.forEach(p=>{pres[p.id]=p.claves.some(c=>s.includes(c))});
+  const puntajes={};let total=0;
+  TA.opciones.rubrica.forEach(r=>{const partes=t.lista.filter(p=>p.criterio===r.id);let v;
+    if(r.id==='estilo')v=texto.length>900?8:6;
+    else if(partes.length)v=Math.floor(r.max*(0.35+0.55*partes.filter(p=>pres[p.id]).length/partes.length)+0.5);
+    else v=Math.floor(r.max*0.6+0.5);
+    puntajes[r.id]=v;total+=v});
+  const primera=(texto.split('\n').map(l=>l.trim()).find(l=>l.length>40)||'').slice(0,300);
+  return {total,puntajes,rubrica:TA.opciones.rubrica.map(r=>({...r,puntaje:puntajes[r.id]})),
+    lista:t.lista.map(p=>({id:p.id,parte:p.parte,presente:pres[p.id]})),
+    faltan:t.lista.filter(p=>!pres[p.id]).map(p=>p.parte),
+    errores_forma:/(^|\n)\s*(1\.|primero)/.test(s)?[]:['Los hechos no están numerados.'],sobra:[],
+    mejoras:primera?[{original:primera,mejorada:'Ejemplo de la demostración: con el modelo real, aquí aparece tu fragmento reescrito con un hecho por numeral, su fecha y sin adjetivos.',
+      por_que:'Texto de ejemplo; la demostración no reescribe tu escrito.'}]:[],
+    conceptos_debiles:[],revision_humana:true,
+    comentario:'Evaluación SIMULADA de la demostración: marca las partes por palabras clave y no revisa el contenido jurídico. Con el modelo real se evalúa lo que escribiste.'}}
+function tallerDemo(ruta,m,b){
+  if(ruta==='/api/estilo/revisar')return error(404,'La revisión de estilo se calcula en el servidor; no está disponible en la demostración.');
+  if(!ruta.startsWith('/api/taller/'))return null;
+  if(ruta==='/api/taller/opciones')return json(TA.opciones);
+  if(ruta==='/api/taller/mis')return json({escenarios:Object.values(TA_S.esc).sort((x,y)=>y.id-x.id).map(e=>{const p=taPublico(e);
+    return {id:p.id,tipo:p.tipo,tipo_nombre:p.tipo_nombre,nivel:p.nivel,nivel_nombre:p.nivel_nombre,titulo:p.titulo,curado:p.curado,
+      intentos:p.intentos,mejor:p.mejor,creado:p.creado}})});
+  if(ruta==='/api/taller/recomendacion'){const todos=Object.values(TA_S.esc);const ult=todos.flatMap(e=>e.intentos.map(i=>({e,i}))).pop();
+    if(!ult){const t=TA.tipos.peticion;return json({recomendacion:t?{tipo:'peticion',tipo_nombre:t.nombre,nivel:'basico',
+      motivo:'Aún no has redactado ningún escrito. Empieza por uno corto.'}:null})}
+    if(ult.i.total<60)return json({recomendacion:{tipo:ult.e.tipo,tipo_nombre:TA.tipos[ult.e.tipo].nombre,nivel:ult.e.nivel,
+      motivo:'Tu último intento sacó '+ult.i.total+'/100: vuelve a intentarlo.'}});
+    return json({recomendacion:null})}
+  if(ruta==='/api/taller/escenario'&&m==='POST'){const t=TA.tipos[b.tipo];const nivel=b.nivel||'basico';
+    if(!t||!TA_NIVEL[nivel])return error(400,'Elige un tipo de escrito, un nivel y una fuente válidos');
+    if(b.fuente==='ia'){const e={id:TA_S.sig++,tipo:b.tipo,nivel,curado:null,intentos:[],t:ahora(),d:{titulo:'Escenario de ejemplo de la demostración',
+        hechos:'Camila Torres Vega (ficticia) vive en Medellín. El 3 de agosto de 2026 pidió por escrito a la Secretaría de Movilidad (ficticia) copia del expediente de un comparendo que, según ella, nunca le notificaron.\n\nHan pasado treinta días hábiles y la entidad no ha respondido. Camila conserva la copia sellada de su solicitud.',
+        instruccion:'Redacta el escrito que Camila debe presentar, con todas sus partes obligatorias. (En la app real, la IA crea un escenario distinto para el tipo y el nivel elegidos.)'}};
+      TA_S.esc[e.id]=e;return json({...taPublico(e),restantes:gastar()})}
+    const cand=TA.escenarios.filter(x=>x.tipo===b.tipo&&x.nivel===nivel);const c=cand[0]||TA.escenarios.find(x=>x.tipo===b.tipo);
+    if(!c)return error(404,'No hay escenarios curados para este escrito. Pide uno nuevo con IA.');
+    const ya=Object.values(TA_S.esc).find(e=>e.curado===c.id);if(ya)return json({...taPublico(ya),reabierto:true});
+    const e={id:TA_S.sig++,tipo:c.tipo,nivel:c.nivel,curado:c.id,intentos:[],t:ahora(),d:c};TA_S.esc[e.id]=e;return json(taPublico(e))}
+  const mm=ruta.match(/^\/api\/taller\/escenario\/(\d+)$/);
+  if(mm){const e=TA_S.esc[mm[1]];return e?json(taPublico(e)):error(404,'Escenario no encontrado')}
+  if(ruta==='/api/taller/evaluar'){const e=TA_S.esc[b.escenario_id];if(!e)return error(404,'Escenario no encontrado');
+    const texto=String(b.texto||'').trim();const min=TA.opciones.min_caracteres||250;
+    if(texto.length<min)return error(400,'Redacta al menos las partes principales antes de evaluar (mínimo '+min+' caracteres).');
+    const ev=taEvaluar(e,texto);e.intentos.push(ev);return json({...ev,conocimiento:[],modelo_disponible:true,restantes:gastar()})}
+  if(ruta==='/api/taller/modelo'){const e=TA_S.esc[b.escenario_id];if(!e)return error(404,'Escenario no encontrado');
+    if(!e.intentos.length)return error(409,'Primero redacta tu versión y evalúala: el escrito modelo se abre después de intentarlo.');
+    const t=TA.tipos[e.tipo];
+    return json({nuevo:false,revision_humana:true,texto:'# '+t.nombre.toUpperCase()+' (ejemplo de la demostración)\n\nEste texto es un esqueleto de ejemplo: muestra las partes obligatorias en orden. Con el modelo real, aquí aparece el escrito completo redactado para el escenario.\n\n'+
+      t.lista.map((p,i)=>'**'+(i+1)+'. '+p.parte+'**\n\n[COMPLETAR: '+p.ayuda+']').join('\n\n')+
+      '\n\n*Modelo de estudio de la demostración. No es un formato oficial; verifica la vigencia de cada norma.*'})}
+  return error(404,'Esta función del taller no está disponible en la demostración.');
+}
 async function manejar(url,o){
   const partes=String(url).replace(/^https?:\/\/[^/]+/,'').split('?');const ruta=partes[0];
   const qs=new URLSearchParams(partes[1]||'');const m=(o&&o.method)||'GET';
@@ -435,6 +501,7 @@ async function manejar(url,o){
   if(ruta==='/api/modular/solucion'){const c=S.casos[qs.get('caso_id')];const s=c.d.solucion;
     return json({...s,conceptos:c.d.conceptos||[]})}
   if(ruta==='/api/modular/progreso')return json(progreso());
+  const rta=tallerDemo(ruta,m,b);if(rta)return rta;
   const rbi=bibliotecaDemo(ruta,m,b,qs);if(rbi)return rbi;
   const rau=await automatizador(ruta,m,b,qs);if(rau)return rau;
   if(ruta==='/api/cambiar-clave')return json({ok:true,token:'demo'});

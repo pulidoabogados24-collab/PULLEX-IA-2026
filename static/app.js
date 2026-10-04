@@ -310,20 +310,26 @@ async function revisarEstilo(texto,destino,boton){
     const r=await fetch('/api/estilo/revisar',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify({texto})});
     const d=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(typeof d.detail==='string'?d.detail:'No se pudo revisar el estilo.');
-    const previo=destino.querySelector(':scope > .estilo-rev');if(previo)previo.remove();
-    const box=el('section','estilo-rev');box.setAttribute('aria-label','Revisión de estilo');box.setAttribute('tabindex','-1');
-    box.appendChild(el('h4',null,'Revisión de estilo'));box.appendChild(el('p',null,d.valoracion||''));
-    const rasgos=Array.isArray(d.rasgos)?d.rasgos:[];
-    if(rasgos.length){const ul=el('ul');
-      rasgos.forEach(x=>{const li=el('li');li.appendChild(el('b',null,(x.nombre||x.id)+(x.veces>1?' ('+x.veces+')':'')));
-        li.appendChild(document.createTextNode('. '+(x.explicacion||'')+' '+(x.sugerencia||'')));
-        if(Array.isArray(x.ejemplos)&&x.ejemplos.length)li.appendChild(el('span','er-ej','Ejemplo: «'+x.ejemplos[0]+'»'));
-        ul.appendChild(li)});
-      box.appendChild(ul)}
-    box.appendChild(el('p','er-nota','Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
-    destino.appendChild(box);box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'});
+    pintarEstilo(destino,d);
   }catch(e){toast(e.message||'No se pudo revisar el estilo.')}
   if(boton)boton.disabled=false;
+}
+// Pinta una revisión de estilo ya calculada (la de /api/estilo/revisar o la que acompaña una evaluación del Taller).
+function pintarEstilo(destino,d,opc){
+  const previo=destino.querySelector(':scope > .estilo-rev');if(previo)previo.remove();
+  const box=el('section','estilo-rev');box.setAttribute('aria-label','Revisión de estilo');box.setAttribute('tabindex','-1');
+  box.appendChild(el('h4',null,'Revisión de estilo'));box.appendChild(el('p',null,d.valoracion||''));
+  const rasgos=Array.isArray(d.rasgos)?d.rasgos:[];
+  if(rasgos.length){const ul=el('ul');
+    rasgos.forEach(x=>{const li=el('li');li.appendChild(el('b',null,(x.nombre||x.id)+(x.veces>1?' ('+x.veces+')':'')));
+      li.appendChild(document.createTextNode('. '+(x.explicacion||'')+' '+(x.sugerencia||'')));
+      if(Array.isArray(x.ejemplos)&&x.ejemplos.length)li.appendChild(el('span','er-ej','Ejemplo: «'+x.ejemplos[0]+'»'));
+      ul.appendChild(li)});
+    box.appendChild(ul)}
+  box.appendChild(el('p','er-nota',d.nota||'Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
+  destino.appendChild(box);
+  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  return box;
 }
 // ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
 // Todo con textContent (nada de innerHTML con datos del servidor) y el estado escrito en el chip,

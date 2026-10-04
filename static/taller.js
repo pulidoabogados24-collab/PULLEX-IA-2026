@@ -213,6 +213,8 @@ function tlMostrarEval(ev,previa){
       tE('div',{class:'tl-despues'},tE('span',{class:'eyebrow',text:'Versión mejorada'}),tE('p',null,m.mejorada)),
       m.por_que?tE('p',{class:'tl-porque'},tE('b',null,'Por qué: '),m.por_que):null)));
   }
+  // Revisión de estilo del escrito (determinista, no cambia el puntaje): viene con la evaluación.
+  if(ev.estilo&&typeof pintarEstilo==='function')pintarEstilo(p,ev.estilo,{sinFoco:true});
   // La lista de comprobación del escenario se marca con lo que encontró la evaluación.
   (ev.lista||[]).forEach(it=>{const li=document.querySelector('#tl-lista li[data-parte="'+it.id+'"]');if(!li)return;
     li.classList.toggle('ok',it.presente);li.classList.toggle('falta',!it.presente);
@@ -257,6 +259,7 @@ async function tlCargarMis(){
 // ---------------------------------------------------------------- Inicio: «Practica un escrito» --
 async function tlTarjetaInicio(){
   const t=document.getElementById('tablero');if(!t||typeof CAMINO==='undefined'||CAMINO!=='aprender')return;
+  if(typeof tieneFuncion==='function'&&!tieneFuncion('academia'))return;   // plan sin Academia: no se pide nada de /api/taller
   let r;try{r=await api('/api/taller/recomendacion')}catch(e){return}
   const vieja=t.querySelector('.tcard[data-taller]');if(vieja)vieja.remove();
   const rec=r&&r.recomendacion;if(!rec||CAMINO!=='aprender')return;
