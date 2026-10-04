@@ -1,0 +1,1369 @@
+{
+ "area": "Civil",
+ "descripcion": "Banco curado de casos tipo examen de Derecho Civil para el Laboratorio de casos (PULLEX Academia).",
+ "aviso": "Exactitud jurídica: NOT VERIFIED. Casos escritos para practicar; requieren revisión humana (docente o abogado) antes de usarse con estudiantes. Verifica la vigencia y el número de cada norma en la fuente oficial.",
+ "casos": [
+  {
+   "id": "civ-01",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "El préstamo del compadre",
+   "enunciado": "El 10 de febrero de 2020, Rubén Darío Pineda le prestó $18 millones a su compadre Fabio Cárdenas para ampliar una panadería en Sogamoso. Firmaron un documento privado en el que Fabio se obligó a devolver la suma el 10 de febrero de 2021. Llegada la fecha, Fabio no pagó y Rubén, por no dañar la amistad, se limitó a recordarle la deuda de palabra en algunas reuniones familiares; nunca le envió un requerimiento escrito ni recibió abonos. El 20 de mayo de 2026, cansado de esperar, Rubén presentó demanda ejecutiva con el documento como título. Fabio recibió la notificación del mandamiento de pago y consultó a un vecino, quien le dijo que no hiciera nada, porque el juez «tiene que darse cuenta» de que la deuda está vencida hace más de cinco años y debe archivar el proceso por su cuenta. Fabio no sabe si debe contestar la demanda.",
+   "pregunta": "¿Está prescrita la acción ejecutiva de Rubén y puede el juez declararlo de oficio, o qué debe hacer Fabio?",
+   "pistas": [
+    "Cuenta el tiempo desde que la obligación se hizo exigible, no desde la firma del documento, y compáralo con el término de la acción ejecutiva.",
+    "Revisa en el Código Civil y en el Código General del Proceso quién debe alegar la prescripción y en qué momento del proceso ejecutivo se propone."
+   ],
+   "conceptos": [
+    "prescripción extintiva",
+    "prescripción y caducidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Prescribió la acción ejecutiva derivada del documento firmado por Fabio y, de ser así, puede el juez reconocer la prescripción sin que el demandado la proponga?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 2535",
+      "para_que": "La prescripción extintiva exige solo el paso del tiempo sin ejercer la acción, contado desde que la obligación se hizo exigible."
+     },
+     {
+      "norma": "Código Civil, art. 2536 (modificado por la Ley 791 de 2002)",
+      "para_que": "La acción ejecutiva prescribe en cinco años y la ordinaria en diez; la ejecutiva se convierte en ordinaria por otros cinco años."
+     },
+     {
+      "norma": "Código Civil, art. 2513",
+      "para_que": "Quien quiera aprovecharse de la prescripción debe alegarla; el juez no puede declararla de oficio."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 282 y 442",
+      "para_que": "La prescripción debe alegarse como excepción; en el proceso ejecutivo las excepciones de mérito se proponen dentro de los diez días siguientes a la notificación del mandamiento de pago."
+     }
+    ],
+    "analisis": "La obligación se hizo exigible el 10 de febrero de 2021 y la demanda se presentó el 20 de mayo de 2026, es decir, cinco años y tres meses después. En ese lapso no hubo requerimiento escrito, abono ni reconocimiento de la deuda que interrumpiera el término; los recordatorios verbales no producen ese efecto. La acción ejecutiva, por tanto, está prescrita.\n\nSin embargo, la prescripción es una defensa del deudor y no un requisito del título: el juez libró bien el mandamiento de pago, porque el documento contiene una obligación clara, expresa y exigible. Si Fabio guarda silencio, el proceso seguirá adelante. A diferencia de la caducidad, la prescripción no se declara de oficio.",
+    "contraargumento": "El vecino sostiene que el juez debe advertir por sí mismo que el término venció. No prospera: los arts. 2513 del Código Civil y 282 del Código General del Proceso exigen que el deudor la alegue; solo la caducidad se declara de oficio.",
+    "conclusion": "La acción ejecutiva está prescrita, pero Fabio debe proponer la excepción de prescripción dentro del término de traslado. Si prospera, a Rubén le queda la acción ordinaria por los cinco años restantes, en un proceso declarativo.",
+    "errores_comunes": [
+     "Contar los cinco años desde la firma del documento y no desde la exigibilidad de la obligación.",
+     "Creer que el juez declara la prescripción de oficio, confundiéndola con la caducidad.",
+     "Afirmar que la deuda se extinguió por completo, sin advertir que la acción ordinaria subsiste."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer si la acción ejecutiva que Rubén ejerció el 20 de mayo de 2026 está prescrita y si el juez puede reconocerlo por iniciativa propia, como le aseguró el vecino a Fabio.\n\nEl artículo 2535 del Código Civil dispone que la prescripción extintiva solo exige el paso del tiempo sin que el acreedor ejerza su acción, contado desde que la obligación se hizo exigible. A su vez, el artículo 2536 fija en cinco años el término de la acción ejecutiva. En efecto, la deuda era exigible desde el 10 de febrero de 2021 y Rubén demandó cinco años y tres meses después, sin que mediara un requerimiento escrito ni un abono que interrumpiera el término, puesto que los recordatorios verbales no tienen ese efecto. Por consiguiente, la acción ejecutiva está prescrita.\n\nAhora bien, de ello no se sigue que Fabio pueda quedarse quieto. El artículo 2513 del Código Civil exige que quien quiera aprovecharse de la prescripción la alegue, y el artículo 282 del Código General del Proceso la excluye de las excepciones que el juez reconoce de oficio. En esto se diferencia de la caducidad, que sí se declara sin petición de parte. De ahí que el consejo del vecino sea equivocado: si Fabio guarda silencio, el juez ordenará seguir adelante con la ejecución.\n\nPodría pensarse que, vencido el término, el juez debió negar el mandamiento de pago. Sin embargo, el título contiene una obligación clara, expresa y exigible, y la prescripción es una defensa del deudor, no un requisito del título.\n\nEn conclusión, Fabio debe proponer la excepción de prescripción dentro de los diez días siguientes a la notificación del mandamiento, según el artículo 442 del Código General del Proceso. Además, conviene advertirle que la obligación no desaparece del todo, porque la acción ordinaria subsiste por otros cinco años y Rubén podría acudir a un proceso declarativo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "puesto que",
+    "por consiguiente",
+    "ahora bien",
+    "de ahí que",
+    "sin embargo",
+    "en conclusión",
+    "además",
+    "porque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si en agosto de 2024 Fabio le hubiera consignado a Rubén $500.000 con la nota «abono a la deuda»?",
+    "respuesta": "El abono es un reconocimiento de la obligación e interrumpe naturalmente la prescripción (art. 2539 del Código Civil). El término de cinco años volvería a contarse desde agosto de 2024, de modo que en mayo de 2026 la acción ejecutiva no estaría prescrita."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-02",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "Doce años pagando arriendo",
+   "enunciado": "Desde el 1 de marzo de 2014, Gloria Estela Marín ocupa una casa del barrio La Esperanza, en Palmira, en virtud de un contrato de arrendamiento escrito que firmó con el propietario, Octavio Lemos, quien vive en España. Durante doce años Gloria consignó el canon cada mes en la cuenta de Octavio; en 2019 le pidió autorización por correo electrónico para cambiar el techo y le remitió las facturas para que las descontara del arriendo. En enero de 2026 dejó de pagar. Un tramitador le aseguró que, como lleva más de diez años viviendo en el inmueble, cuidándolo y pagando los servicios públicos, ya es dueña por prescripción y solo falta que un juez lo declare. El 15 de abril de 2026 Gloria presentó demanda de pertenencia contra Octavio, a la que anexó los recibos de servicios y las declaraciones de tres vecinos que la reconocen como «la señora de la casa».",
+   "pregunta": "¿Puede Gloria adquirir la casa por prescripción adquisitiva con base en los doce años que lleva ocupándola?",
+   "pistas": [
+    "Pregúntate en qué calidad ha ocupado Gloria la casa: ¿como dueña o reconociendo que el dueño es otro?",
+    "Busca en el Código Civil la diferencia entre posesión y mera tenencia y qué efecto tiene el simple paso del tiempo sobre la segunda."
+   ],
+   "conceptos": [
+    "posesión",
+    "mera tenencia",
+    "prescripción adquisitiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Constituye posesión apta para usucapir la ocupación de un inmueble durante doce años a título de arrendataria?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 762",
+      "para_que": "Define la posesión como la tenencia de una cosa determinada con ánimo de señor o dueño."
+     },
+     {
+      "norma": "Código Civil, art. 775",
+      "para_que": "Define la mera tenencia como la que se ejerce en lugar o a nombre del dueño; menciona, entre otros, a quien tiene la cosa por un contrato que reconoce dominio ajeno."
+     },
+     {
+      "norma": "Código Civil, art. 777",
+      "para_que": "El simple lapso de tiempo no muda la mera tenencia en posesión."
+     },
+     {
+      "norma": "Código Civil, arts. 2518, 2531 y 2532",
+      "para_que": "La prescripción adquisitiva extraordinaria exige posesión por diez años."
+     },
+     {
+      "norma": "Código General del Proceso, art. 375",
+      "para_que": "Regula el proceso de declaración de pertenencia."
+     }
+    ],
+    "analisis": "La prescripción adquisitiva exige posesión, esto es, tenencia con ánimo de dueño. Gloria entró a la casa como arrendataria y durante doce años actuó como tal: pagó el canon, pidió permiso para una obra y cobró al propietario su costo. Cada uno de esos actos reconoce el dominio de Octavio; es mera tenencia.\n\nEl tiempo no transforma por sí solo esa calidad. Dejar de pagar en enero de 2026 es un incumplimiento del contrato, no un acto de señorío; y aun si desde entonces se rebelara de manera inequívoca contra el dueño, el término de diez años apenas empezaría a correr.",
+    "contraargumento": "Gloria invoca los testimonios de los vecinos y el pago de servicios. No bastan: la apariencia ante terceros no borra el contrato ni los actos con que reconoció dominio ajeno, y pagar servicios es una obligación propia de quien usa el inmueble.",
+    "conclusion": "La demanda de pertenencia no puede prosperar: Gloria es mera tenedora, no poseedora. Octavio conserva el dominio y puede pedir la restitución del inmueble por la mora en el pago.",
+    "errores_comunes": [
+     "Confundir ocupar o cuidar un inmueble con poseerlo con ánimo de dueño.",
+     "Creer que el paso de diez años convierte al arrendatario en poseedor.",
+     "Tratar la mora en el canon como si fuera un acto de rebeldía contra el dueño."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico es si los doce años que Gloria lleva en la casa le permiten adquirirla por prescripción, a pesar de haber entrado a ella como arrendataria.\n\nPara empezar, la prescripción adquisitiva extraordinaria exige diez años de posesión, según los artículos 2531 y 2532 del Código Civil, y el artículo 762 define la posesión como la tenencia de una cosa con ánimo de señor o dueño. En cambio, el artículo 775 llama mera tenencia a la que se ejerce en lugar o a nombre del dueño, como ocurre con quien ocupa un bien por un contrato que reconoce dominio ajeno. Además, el artículo 777 advierte que el simple lapso de tiempo no muda la mera tenencia en posesión.\n\nEn efecto, Gloria ocupó la casa desde 2014 por un contrato de arrendamiento, pagó el canon cada mes, pidió permiso a Octavio para cambiar el techo y le cobró el valor de la obra. Todos esos actos reconocen que el dueño es otro; por lo tanto, durante esos doce años fue arrendataria y no poseedora.\n\nAhora bien, Gloria alega que los vecinos la tienen por dueña y que paga los servicios. Ese argumento no prospera, porque la opinión de terceros no borra el contrato ni sus propios actos, y pagar servicios es una carga de quien usa el inmueble. Tampoco le ayuda haber dejado de pagar en enero de 2026, ya que la mora es un incumplimiento y no un acto de señorío; incluso si desde ese momento desconociera abiertamente a Octavio, el término apenas empezaría a correr.\n\nEn conclusión, la demanda de pertenencia debe negarse, pues falta el presupuesto esencial de la usucapión, que es la posesión. Por último, Octavio puede pedir la restitución del inmueble arrendado con fundamento en la mora.",
+   "conectores_usados": [
+    "a pesar de",
+    "para empezar",
+    "en cambio",
+    "como ocurre con",
+    "además",
+    "en efecto",
+    "por lo tanto",
+    "ahora bien",
+    "porque",
+    "ya que",
+    "incluso",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Gloria hubiera entrado a la casa en 2014 sin contrato alguno, creyéndola abandonada, y nunca hubiera reconocido a Octavio como dueño?",
+    "respuesta": "Habría posesión irregular desde 2014. Con más de diez años de posesión pública, pacífica e ininterrumpida, la prescripción extraordinaria podría prosperar si Gloria prueba esos actos de señorío."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-03",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "La cocina que nunca llegó",
+   "enunciado": "El 5 de febrero de 2026, Sandra Milena Rojas contrató con Édgar Buitrago, carpintero independiente de Bucaramanga, la fabricación e instalación de una cocina integral para su apartamento nuevo. Pactaron por escrito un precio de $12 millones: la mitad como anticipo, que Sandra transfirió ese mismo día, y el saldo contra entrega; la instalación debía quedar terminada el 5 de abril de 2026. Vencido el plazo, Édgar no había llevado un solo mueble. Sandra le escribió varias veces y él respondió que tenía «mucho trabajo atrasado» y que no podía dar fecha. Como el apartamento seguía sin cocina, Sandra tuvo que prorrogar por dos meses el arriendo del lugar donde vivía, a razón de $1.500.000 mensuales. El 10 de junio de 2026 un amigo le dijo que lo único que puede hacer es esperar a que Édgar termine, porque «el contrato es ley para las partes» y ella ya entregó el anticipo.",
+   "pregunta": "¿Qué acciones tiene Sandra frente al incumplimiento de Édgar y qué puede reclamar?",
+   "pistas": [
+    "El contrato es bilateral: revisa qué opciones da el Código Civil al contratante cumplido cuando el otro no cumple.",
+    "Establece desde cuándo está en mora Édgar y qué perjuicios son consecuencia directa de su retardo."
+   ],
+   "conceptos": [
+    "responsabilidad contractual",
+    "incumplimiento",
+    "condición resolutoria"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede Sandra, contratante cumplida, pedir la resolución o el cumplimiento del contrato de obra y la indemnización de los perjuicios causados por la mora de Édgar?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 1602",
+      "para_que": "El contrato válidamente celebrado es ley para las partes: obliga a ambas, no solo a quien ya pagó."
+     },
+     {
+      "norma": "Código Civil, art. 1546",
+      "para_que": "Condición resolutoria tácita: ante el incumplimiento, el contratante cumplido puede pedir la resolución o el cumplimiento, en ambos casos con indemnización de perjuicios."
+     },
+     {
+      "norma": "Código Civil, art. 1608",
+      "para_que": "El deudor está en mora cuando no cumple dentro del término estipulado."
+     },
+     {
+      "norma": "Código Civil, arts. 1613 a 1615",
+      "para_que": "La indemnización comprende daño emergente y lucro cesante y se debe desde que el deudor se constituyó en mora."
+     }
+    ],
+    "analisis": "El contrato fijó un plazo: 5 de abril de 2026. Vencido sin entrega, Édgar quedó en mora sin necesidad de requerimiento. Sandra, por su parte, cumplió lo que le correspondía: pagó el anticipo, y el saldo solo era exigible contra la entrega.\n\nComo contratante cumplida puede elegir entre exigir el cumplimiento o pedir la resolución, que conlleva la devolución del anticipo. En cualquiera de los dos caminos tiene derecho a los perjuicios que pruebe y que sean consecuencia directa del retardo: los dos meses adicionales de arriendo ($3.000.000) son daño emergente.",
+    "contraargumento": "El amigo invoca que el contrato es ley para las partes. Precisamente por eso Édgar debía entregar en la fecha pactada; la fuerza obligatoria del contrato no condena al contratante cumplido a esperar indefinidamente, sino que le abre la opción del art. 1546. El exceso de trabajo de Édgar no es fuerza mayor.",
+    "conclusion": "Sandra puede demandar la resolución del contrato, con devolución de los $6 millones, o su cumplimiento, y en ambos casos la indemnización de perjuicios, entre ellos los $3 millones de arriendo adicional.",
+    "errores_comunes": [
+     "Creer que quien pagó un anticipo queda atado a esperar el cumplimiento.",
+     "Exigir un requerimiento previo para constituir en mora cuando el contrato fijó un plazo.",
+     "Olvidar que la indemnización acompaña tanto a la resolución como al cumplimiento."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar qué puede exigir Sandra, que ya pagó el anticipo, frente a un contratista que dejó vencer el plazo sin entregar la cocina.\n\nEl contrato de obra es bilateral, y el artículo 1546 del Código Civil dispone que en esta clase de contratos va envuelta la condición resolutoria en caso de no cumplirse lo pactado: el contratante cumplido puede pedir, a su arbitrio, la resolución o el cumplimiento, con indemnización de perjuicios. Asimismo, el artículo 1608 señala que el deudor está en mora cuando no cumple dentro del término estipulado.\n\nEn efecto, las partes fijaron el 5 de abril de 2026 como fecha de entrega y Édgar no instaló nada; por consiguiente, está en mora desde el día siguiente, sin necesidad de requerimiento. Sandra, en cambio, cumplió lo suyo, ya que transfirió el anticipo y el saldo solo se debía contra entrega. De ahí que tenga la opción de pedir la resolución, con devolución de los $6 millones, o de insistir en el cumplimiento.\n\nAhora bien, el amigo sostiene que el contrato es ley para las partes y que solo queda esperar. Ese argumento se vuelve contra Édgar, porque el artículo 1602 obliga a los dos contratantes y él es quien desconoció lo pactado. Además, tener mucho trabajo atrasado no constituye fuerza mayor, puesto que es un hecho previsible y propio de su oficio.\n\nEn cuanto a los perjuicios, los artículos 1613 a 1615 permiten reclamar el daño emergente causado desde la mora. Tal es el caso de los dos meses adicionales de arriendo, que suman $3 millones y son consecuencia directa del retardo.\n\nEn conclusión, Sandra puede demandar la resolución o el cumplimiento del contrato y, en cualquiera de los dos eventos, la indemnización de los perjuicios que pruebe.",
+   "conectores_usados": [
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "por consiguiente",
+    "en cambio",
+    "ya que",
+    "de ahí que",
+    "ahora bien",
+    "porque",
+    "además",
+    "puesto que",
+    "tal es el caso de",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el contrato no hubiera fijado ninguna fecha para la entrega de la cocina?",
+    "respuesta": "Édgar no estaría en mora por el solo paso del tiempo. Sandra tendría que constituirlo en mora mediante requerimiento, efecto que hoy produce la notificación del auto admisorio de la demanda (art. 94 del Código General del Proceso), y los perjuicios se deberían desde entonces."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-04",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "La lavadora del 502",
+   "enunciado": "El 18 de enero de 2026, Mauricio Arango instaló por su cuenta una lavadora en el apartamento 502 de un edificio de Manizales: unió la manguera de desagüe con cinta aislante porque no quiso pagar un plomero. El 2 de febrero de 2026, mientras estaba de viaje y había dejado programado un ciclo de lavado, la manguera se soltó y el agua corrió durante horas hacia el apartamento 402, propiedad de Elvira Ocampo, pensionada de 70 años. El agua dañó el cielo raso, el piso laminado y un computador; un perito contratado por Elvira calculó las reparaciones en $9 millones. Mauricio se niega a pagar: dice que entre él y Elvira no existe ningún contrato, que no tuvo intención de causarle daño y que todo «fue un accidente». Agrega que debería responder la administración, porque el edificio es viejo. Elvira no tiene seguro de hogar y quiere saber si puede demandarlo.",
+   "pregunta": "¿Debe Mauricio indemnizar a Elvira aunque no exista contrato entre ellos ni haya tenido intención de dañarla?",
+   "pistas": [
+    "La obligación de reparar no nace solo de los contratos: repasa las fuentes de las obligaciones.",
+    "Identifica en el Código Civil la regla general de responsabilidad por el daño causado a otro y verifica uno a uno sus elementos con los hechos."
+   ],
+   "conceptos": [
+    "responsabilidad civil extracontractual",
+    "responsabilidad contractual"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se reúnen los elementos de la responsabilidad civil extracontractual para que Mauricio repare los daños que la fuga de agua causó en el apartamento de Elvira?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 2341",
+      "para_que": "Quien ha cometido delito o culpa que ha inferido daño a otro está obligado a indemnizarlo."
+     },
+     {
+      "norma": "Código Civil, art. 1494",
+      "para_que": "Las obligaciones nacen también del hecho que ha inferido daño a otra persona, no solo del contrato."
+     },
+     {
+      "norma": "Código Civil, arts. 1613 y 1614",
+      "para_que": "Noción de daño emergente y lucro cesante, que orienta la cuantificación del perjuicio."
+     },
+     {
+      "norma": "Ley 446 de 1998, art. 16",
+      "para_que": "La valoración de los daños atiende los principios de reparación integral y equidad."
+     },
+     {
+      "norma": "Código General del Proceso, art. 167",
+      "para_que": "A Elvira le corresponde probar el hecho, la culpa, el daño y el nexo causal."
+     }
+    ],
+    "analisis": "No hay contrato entre los vecinos, de modo que el régimen aplicable es el extracontractual. Sus elementos se verifican: hay un hecho culposo, porque Mauricio hizo una instalación improvisada y dejó la máquina funcionando sin supervisión; hay un daño cierto, tasado por perito en $9 millones; y hay nexo causal, porque el agua provino de esa manguera.\n\nLa culpa no exige intención: basta la negligencia. Tampoco hay causa extraña, pues la fuga era previsible y evitable con una instalación adecuada.",
+    "contraargumento": "Mauricio alega que fue un accidente y que el edificio es viejo. No prospera: el daño no provino de una tubería común ni de un defecto de la construcción, sino de una conexión hecha por él en un bien privado; la antigüedad del edificio no rompe el nexo causal.",
+    "conclusion": "Mauricio debe indemnizar a Elvira por los daños probados. La ausencia de contrato y de intención no lo exonera, porque la fuente de su obligación es el hecho culposo que causó el daño.",
+    "errores_comunes": [
+     "Creer que sin contrato no hay obligación de reparar.",
+     "Exigir dolo cuando la negligencia es suficiente.",
+     "Aceptar como causa extraña un hecho previsible originado en la propia conducta del demandado."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico consiste en establecer si Mauricio debe reparar los daños que sufrió el apartamento de Elvira, a pesar de que entre ellos no existe contrato y de que él no quiso causarlos.\n\nEn primer lugar, el artículo 1494 del Código Civil enseña que las obligaciones no nacen solo de los contratos, sino también del hecho que ha inferido daño a otra persona. En ese sentido, el artículo 2341 establece que quien ha cometido una culpa que causa daño a otro está obligado a indemnizarlo. Por lo tanto, como los vecinos no están ligados por un contrato, el caso se rige por la responsabilidad extracontractual, que exige un hecho culposo, un daño y un nexo causal entre ambos.\n\nEn efecto, los tres elementos concurren. Mauricio unió la manguera con cinta aislante para ahorrarse el plomero y dejó la lavadora programada mientras viajaba, es decir, obró con negligencia. El daño es cierto, puesto que un perito lo tasó en $9 millones, y proviene directamente del agua que salió de esa manguera.\n\nAhora bien, Mauricio sostiene que no tuvo intención y que fue un accidente. Sin embargo, la culpa no requiere el propósito de dañar: basta la falta de cuidado que una persona prudente habría tenido. Tampoco se trata de una causa extraña, porque la fuga era previsible y evitable. De otro lado, la antigüedad del edificio no lo exonera, ya que el agua no salió de una tubería común sino de una conexión hecha por él en su propio apartamento.\n\nEn consecuencia, Mauricio debe indemnizar a Elvira. Además, el artículo 16 de la Ley 446 de 1998 ordena que la reparación sea integral, de modo que debe cubrir el cielo raso, el piso y el computador, en la medida en que ella pruebe su valor.",
+   "conectores_usados": [
+    "a pesar de",
+    "en primer lugar",
+    "por lo tanto",
+    "en efecto",
+    "es decir",
+    "puesto que",
+    "ahora bien",
+    "sin embargo",
+    "porque",
+    "de otro lado",
+    "ya que",
+    "en consecuencia",
+    "además",
+    "de modo que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el agua hubiera salido de la ruptura de una tubería común del edificio que llevaba años sin mantenimiento?",
+    "respuesta": "Faltaría el hecho culposo de Mauricio. La reclamación tendría que dirigirse contra la copropiedad, persona jurídica encargada de conservar los bienes comunes, si se prueba su descuido."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-05",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "Sesenta mil kilómetros",
+   "enunciado": "El 8 de noviembre de 2025, Lucía Fernanda Peña le compró a Hernán Castaño, un particular que anunciaba su camioneta en redes sociales, un vehículo modelo 2019 por $78 millones. En el anuncio y en la conversación previa, Hernán aseguró que la camioneta tenía 60.000 kilómetros, y así lo mostraba el tablero; por ese dato Lucía aceptó el precio, pues las de mayor recorrido se ofrecían por unos $55 millones. El 20 de enero de 2026, al llevarla a revisión, el concesionario le entregó el historial de mantenimientos: en 2024 el vehículo ya registraba 205.000 kilómetros. Un mecánico confirmó que el odómetro había sido manipulado, y un antiguo empleado de Hernán le contó a Lucía que él mismo llevó la camioneta a «devolverle el kilometraje» antes de publicarla. Hernán responde que el traspaso ya se registró, que ella revisó el vehículo antes de comprarlo y que «negocio es negocio».",
+   "pregunta": "¿Puede Lucía dejar sin efectos la compraventa y con qué fundamento?",
+   "pistas": [
+    "Piensa en cómo se formó el consentimiento de Lucía: ¿habría pagado ese precio si hubiera conocido el recorrido real?",
+    "Repasa los vicios del consentimiento del Código Civil, la clase de nulidad que producen y el plazo para pedirla."
+   ],
+   "conceptos": [
+    "vicios del consentimiento",
+    "nulidad relativa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Vició el consentimiento de Lucía la manipulación del odómetro realizada por el vendedor, de modo que la compraventa sea anulable?",
+    "normas": [
+     {
+      "norma": "Código Civil, arts. 1502 y 1508",
+      "para_que": "El consentimiento debe estar libre de vicio; los vicios son error, fuerza y dolo."
+     },
+     {
+      "norma": "Código Civil, art. 1515",
+      "para_que": "El dolo vicia el consentimiento cuando es obra de una de las partes y aparece claramente que sin él no se habría contratado."
+     },
+     {
+      "norma": "Código Civil, arts. 1741 y 1743",
+      "para_que": "Los vicios del consentimiento producen nulidad relativa, que solo puede pedir la parte en cuyo beneficio se establece."
+     },
+     {
+      "norma": "Código Civil, art. 1746",
+      "para_que": "Declarada la nulidad, las partes deben ser restituidas al estado anterior."
+     },
+     {
+      "norma": "Código Civil, art. 1750",
+      "para_que": "El plazo para pedir la rescisión es de cuatro años; en caso de dolo se cuenta desde la celebración del contrato."
+     }
+    ],
+    "analisis": "Hernán alteró el odómetro y anunció un recorrido falso: es una maniobra engañosa realizada por una de las partes. El dato fue determinante, porque el precio de mercado de una camioneta con el recorrido real era muy inferior y Lucía aceptó el precio por ese dato. Se configura el dolo como vicio del consentimiento.\n\nLa consecuencia es la nulidad relativa del contrato. Lucía está dentro del plazo de cuatro años. Declarada la nulidad, ella devuelve la camioneta y Hernán el precio.",
+    "contraargumento": "Hernán alega que Lucía revisó el vehículo y que el traspaso ya se registró. Ninguna de las dos cosas sanea el vicio: la maniobra estaba hecha para engañar aun a un comprador cuidadoso, y el registro del traspaso no convalida un consentimiento viciado.",
+    "conclusion": "Lucía puede demandar la nulidad relativa de la compraventa por dolo y obtener las restituciones mutuas. Debe hacerlo dentro de los cuatro años siguientes a la celebración del contrato.",
+    "errores_comunes": [
+     "Calificar el caso como nulidad absoluta: los vicios del consentimiento generan nulidad relativa.",
+     "Pensar que el registro del traspaso impide anular el contrato.",
+     "No verificar que el dolo provenga de la contraparte y que haya sido determinante."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la manipulación del odómetro vició el consentimiento de Lucía y, por esa vía, permite anular la compraventa celebrada el 8 de noviembre de 2025.\n\nEl artículo 1502 del Código Civil exige, para que una persona se obligue, que su consentimiento no adolezca de vicio, y el artículo 1508 enumera como vicios el error, la fuerza y el dolo. En cuanto al dolo, el artículo 1515 precisa que vicia el consentimiento cuando es obra de una de las partes y cuando aparece claramente que sin él no se hubiera contratado.\n\nEn efecto, ambas condiciones se cumplen. De un lado, fue el propio Hernán quien hizo alterar el kilometraje y anunció un recorrido de 60.000 kilómetros, cuando el real superaba los 205.000. De otro lado, ese dato fue determinante, puesto que Lucía aceptó pagar $78 millones precisamente por el bajo recorrido, mientras que las camionetas con más uso se ofrecían por unos $55 millones.\n\nAhora bien, Hernán replica que ella revisó el vehículo y que el traspaso ya está registrado. Ninguno de los dos argumentos prospera. La revisión no desvirtúa el engaño, porque la maniobra se hizo justamente para que el tablero mostrara un dato falso; y el registro del traspaso no convalida un consentimiento viciado.\n\nPor consiguiente, el contrato adolece de nulidad relativa, conforme al artículo 1741, que solo Lucía puede alegar según el artículo 1743. Además, está en tiempo, ya que el artículo 1750 concede cuatro años contados, en caso de dolo, desde la celebración del contrato.\n\nEn conclusión, Lucía puede demandar la nulidad relativa de la compraventa. Declarada esta, el artículo 1746 ordena volver las cosas al estado anterior, de modo que ella restituye la camioneta y Hernán devuelve el precio.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "de un lado",
+    "de otro lado",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "por consiguiente",
+    "además",
+    "ya que",
+    "en conclusión",
+    "de modo que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el odómetro lo hubiera alterado un dueño anterior y Hernán no lo sabía?",
+    "respuesta": "No habría dolo de la contraparte, de modo que ese vicio no serviría para anular. Lucía tendría que acudir al error sobre una calidad determinante del vehículo o a las acciones por vicios ocultos, con cargas probatorias distintas."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-06",
+   "area": "Civil",
+   "nivel": "basico",
+   "titulo": "El lote vendido en la papelería",
+   "enunciado": "El 12 de agosto de 2025, Isidro Montaño y Blanca Nubia Rincón firmaron en una papelería de Garzón un documento titulado «Contrato de compraventa», en el que Isidro declaró que vendía a Blanca un lote urbano de 200 metros cuadrados por $45 millones. Blanca pagó ese día $30 millones en efectivo y quedó de entregar el resto en diciembre. Ambos firmaron ante dos testigos y autenticaron sus firmas en la notaría, pero nunca otorgaron escritura pública; el documento tampoco dice cuándo ni dónde se haría. En diciembre, Blanca ofreció el saldo y pidió la entrega del lote. Isidro se negó: había recibido una oferta mejor de un vecino. El 9 de marzo de 2026 Blanca consultó a un abogado, convencida de que ya es dueña porque «pagó y firmó», y de que puede exigirle a Isidro la entrega del lote o, al menos, la devolución del dinero con los perjuicios por incumplimiento.",
+   "pregunta": "¿Tiene validez la compraventa firmada por Isidro y Blanca, y qué puede reclamar ella?",
+   "pistas": [
+    "No todos los contratos se perfeccionan con el solo acuerdo: revisa qué formalidad exige la ley para la venta de bienes raíces.",
+    "Determina qué clase de nulidad produce la omisión de una solemnidad y qué efectos tiene su declaración entre las partes."
+   ],
+   "conceptos": [
+    "nulidad absoluta",
+    "incumplimiento del contrato"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es válida la compraventa de un inmueble celebrada por documento privado y, en consecuencia, puede la compradora exigir su cumplimiento o solo la restitución de lo pagado?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 1857",
+      "para_que": "La venta de bienes raíces no se reputa perfecta ante la ley mientras no se otorgue escritura pública."
+     },
+     {
+      "norma": "Código Civil, art. 1500",
+      "para_que": "El contrato solemne está sujeto a formalidades sin las cuales no produce efecto civil."
+     },
+     {
+      "norma": "Código Civil, arts. 1741 y 1742",
+      "para_que": "La omisión de una formalidad exigida por la naturaleza del acto produce nulidad absoluta, que el juez puede declarar de oficio cuando aparece de manifiesto."
+     },
+     {
+      "norma": "Código Civil, art. 1746",
+      "para_que": "La nulidad declarada da derecho a las partes a ser restituidas al estado anterior."
+     },
+     {
+      "norma": "Ley 153 de 1887, art. 89",
+      "para_que": "Requisitos de la promesa de contrato, entre ellos un plazo o condición que fije la época del contrato prometido."
+     }
+    ],
+    "analisis": "La compraventa de inmuebles es un contrato solemne: sin escritura pública no se perfecciona. El documento privado, aunque esté firmado ante testigos y con firmas autenticadas, no reemplaza esa solemnidad. Su omisión genera nulidad absoluta.\n\nTampoco vale como promesa de compraventa, porque no fija plazo ni condición para otorgar la escritura. Blanca no es dueña —el dominio de un inmueble exige además el registro de la escritura— y no puede exigir la entrega ni perjuicios por incumplimiento, porque no hay contrato válido que incumplir. Sí puede pedir que se le devuelvan los $30 millones.",
+    "contraargumento": "Blanca alega que pagó y firmó de buena fe y que las firmas se autenticaron. La autenticación solo da certeza sobre quién firmó; no convierte el documento en escritura pública. Su buena fe se protege con la restitución del precio, no con el cumplimiento de un contrato nulo.",
+    "conclusion": "La compraventa es absolutamente nula por falta de escritura pública. Blanca puede reclamar la restitución de los $30 millones, pero no la entrega del lote ni la indemnización propia del incumplimiento contractual.",
+    "errores_comunes": [
+     "Creer que la autenticación de firmas equivale a la escritura pública.",
+     "Tratar el caso como incumplimiento de un contrato válido y pedir resolución con perjuicios.",
+     "Asumir que el documento vale como promesa sin revisar sus requisitos."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico es si el documento privado firmado el 12 de agosto de 2025 constituye una compraventa válida del lote y, según la respuesta, qué puede reclamar Blanca.\n\nEn primer lugar, el artículo 1857 del Código Civil dispone que la venta de bienes raíces no se reputa perfecta ante la ley mientras no se haya otorgado escritura pública. Se trata, por tanto, de un contrato solemne, y el artículo 1500 advierte que sin la formalidad especial esta clase de contratos no produce efecto civil. A su vez, el artículo 1741 sanciona con nulidad absoluta la omisión de un requisito que la ley exige en consideración a la naturaleza del acto.\n\nEn efecto, Isidro y Blanca firmaron un documento privado y nunca acudieron a la notaría a otorgar la escritura. Por consiguiente, la compraventa es absolutamente nula y Blanca no adquirió el dominio, que además habría exigido el registro del título.\n\nAhora bien, Blanca insiste en que pagó, firmó ante testigos y autenticó su firma. Ese argumento no prospera, porque la autenticación solo acredita quién suscribió el documento y no lo convierte en instrumento público. Tampoco puede salvarse el negocio como promesa de compraventa, ya que el artículo 89 de la Ley 153 de 1887 exige que la promesa fije un plazo o una condición que determine la época del contrato, y el documento guarda silencio al respecto.\n\nDe ahí que Blanca no pueda exigir la entrega del lote ni la indemnización por incumplimiento, puesto que no existe un contrato válido que Isidro haya incumplido. Sin embargo, no queda desprotegida: el artículo 1746 ordena restituir a las partes al estado anterior.\n\nEn conclusión, Blanca solo puede reclamar la devolución de los $30 millones que entregó, y el juez puede declarar la nulidad incluso de oficio, conforme al artículo 1742.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por tanto",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "ahora bien",
+    "porque",
+    "ya que",
+    "de ahí que",
+    "puesto que",
+    "sin embargo",
+    "en conclusión",
+    "incluso"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el documento dijera que las partes prometen celebrar la compraventa y que la escritura se firmará el 15 de diciembre de 2025 en la notaría de Garzón?",
+    "respuesta": "Sería una promesa de compraventa válida, si reúne los demás requisitos del art. 89 de la Ley 153 de 1887. Ante la negativa de Isidro, Blanca podría exigir el otorgamiento de la escritura o la resolución de la promesa, en ambos casos con perjuicios."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-07",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "La piscina del conjunto",
+   "enunciado": "El 15 de febrero de 2026, la asamblea de copropietarios del Conjunto Residencial Mirador del Río, en Neiva, aprobó una cuota extraordinaria de $4 millones por apartamento para construir una piscina. Darío Trujillo, propietario del apartamento 304, asistió a la reunión, votó en contra y dejó constancia de que, a su juicio, no se alcanzó la mayoría calificada que exige el reglamento. El 10 de marzo de 2026 envió una carta a la administradora en la que pedía «anular» la decisión; ella contestó que la asamblea era soberana. Darío siguió insistiendo con mensajes y, finalmente, el 30 de junio de 2026 presentó demanda de impugnación de la decisión ante el juez civil. Sostiene que está en tiempo porque su carta de marzo «interrumpió la prescripción», tal como ocurre con las deudas, y porque la administración no ha alegado nada al respecto. El juez aún no decide sobre la admisión de la demanda.",
+   "pregunta": "¿Presentó Darío oportunamente la demanda de impugnación y tiene algún efecto la carta que envió en marzo?",
+   "pistas": [
+    "Averigua qué término fija el Código General del Proceso para impugnar decisiones de asambleas y qué nombre le da a su vencimiento.",
+    "Compara cómo operan la prescripción y la caducidad frente a los reclamos extrajudiciales y frente a las facultades del juez."
+   ],
+   "conceptos": [
+    "caducidad",
+    "prescripción y caducidad",
+    "prescripción extintiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Operó la caducidad de la acción de impugnación de la decisión de la asamblea, y puede un reclamo extrajudicial interrumpir ese término?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 382",
+      "para_que": "La impugnación de actos de asambleas y demás órganos de personas jurídicas de derecho privado solo puede proponerse, so pena de caducidad, dentro de los dos meses siguientes a la fecha del acto."
+     },
+     {
+      "norma": "Código General del Proceso, art. 90",
+      "para_que": "El juez rechaza la demanda cuando está vencido el término de caducidad para instaurarla."
+     },
+     {
+      "norma": "Ley 675 de 2001 (régimen de propiedad horizontal)",
+      "para_que": "Reconoce la impugnación de las decisiones de la asamblea de copropietarios; verificar el artículo exacto en fuente oficial."
+     },
+     {
+      "norma": "Código Civil, art. 2539, y Código General del Proceso, art. 94",
+      "para_que": "La interrupción por reconocimiento, requerimiento o demanda es propia de la prescripción, no de la caducidad."
+     }
+    ],
+    "analisis": "El término para impugnar la decisión del 15 de febrero de 2026 venció el 15 de abril de 2026. La demanda se presentó el 30 de junio, dos meses y medio después.\n\nEse término es de caducidad: corre de manera objetiva desde la fecha del acto, no se interrumpe con reclamos ni cartas y el juez debe verificarlo de oficio al estudiar la admisión. La interrupción que Darío invoca pertenece al régimen de la prescripción de las obligaciones. Tampoco importa que la administración no haya alegado nada, porque la caducidad no depende de que el demandado la proponga.",
+    "contraargumento": "Darío podría insistir en que el vicio es grave, pues faltó la mayoría calificada. Aun si tuviera razón en el fondo, la caducidad impide al juez estudiarlo: el legislador privilegió la estabilidad de las decisiones de los órganos colectivos.",
+    "conclusion": "La acción caducó el 15 de abril de 2026. La carta de marzo no produjo efecto alguno sobre el término y el juez debe rechazar la demanda.",
+    "errores_comunes": [
+     "Aplicar a la caducidad las reglas de interrupción de la prescripción.",
+     "Creer que la caducidad solo opera si el demandado la alega.",
+     "Contar el término desde la respuesta de la administradora y no desde la fecha del acto."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es doble: si la demanda que Darío presentó el 30 de junio de 2026 fue oportuna y si la carta que envió a la administradora en marzo alteró el término para impugnar.\n\nEl artículo 382 del Código General del Proceso establece que la impugnación de las decisiones de asambleas de personas jurídicas de derecho privado solo puede proponerse, so pena de caducidad, dentro de los dos meses siguientes a la fecha del acto. En efecto, la asamblea decidió el 15 de febrero de 2026; por consiguiente, el plazo venció el 15 de abril y la demanda llegó dos meses y medio tarde.\n\nAhora bien, Darío afirma que su carta interrumpió la prescripción. Ese planteamiento confunde dos instituciones. La prescripción extintiva admite interrupción por el reconocimiento del deudor, el requerimiento escrito o la demanda, y debe ser alegada por quien se beneficia de ella. La caducidad, en cambio, es un término perentorio que corre de manera objetiva, no se interrumpe con reclamos extrajudiciales y puede declararse sin petición de parte. De ahí que la carta del 10 de marzo no haya producido efecto alguno.\n\nPor la misma razón tampoco importa que la administración guarde silencio. El artículo 90 del mismo código ordena rechazar la demanda cuando está vencido el término de caducidad, de modo que el juez debe verificarlo al decidir sobre la admisión.\n\nPodría objetarse que el vicio denunciado es serio, puesto que se habría aprobado una cuota sin la mayoría que exige el reglamento. Sin embargo, incluso si Darío tuviera razón, el vencimiento del plazo impide estudiar el fondo, porque la ley prefiere la estabilidad de las decisiones colectivas.\n\nEn conclusión, la acción caducó y la demanda debe rechazarse. Además, Darío queda obligado a pagar la cuota mientras la decisión conserve sus efectos.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "en cambio",
+    "de ahí que",
+    "de modo que",
+    "puesto que",
+    "sin embargo",
+    "incluso",
+    "porque",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Darío hubiera presentado la demanda el 20 de marzo de 2026?",
+    "respuesta": "Estaría dentro de los dos meses. El juez tendría que admitirla, estudiar si se alcanzó la mayoría exigida por la ley y el reglamento y, si se pide, decidir sobre la suspensión provisional de la decisión impugnada."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-08",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "Las dos cartas de Amparo",
+   "enunciado": "El 1 de septiembre de 2019, Amparo Quintero le prestó $40 millones a Nelson Gaitán, comerciante de repuestos en Pereira, mediante un contrato de mutuo en documento privado con vencimiento el 1 de septiembre de 2020. Nelson no pagó. El 10 de junio de 2025, Amparo le envió por correo certificado una carta en la que le exigía el pago del capital y los intereses; la empresa de mensajería certificó la entrega en el local de Nelson. Como él siguió sin pagar, el 2 de febrero de 2026 le mandó una segunda carta en los mismos términos y, el 16 de marzo de 2026, presentó demanda ejecutiva. Nelson propuso oportunamente la excepción de prescripción: afirma que los cinco años de la acción ejecutiva se cumplieron el 1 de septiembre de 2025, que las cartas «no son demandas» y que solo una demanda notificada a tiempo interrumpe la prescripción. Amparo replica que cada carta reinició el conteo.",
+   "pregunta": "¿Prospera la excepción de prescripción propuesta por Nelson?",
+   "pistas": [
+    "La prescripción puede interrumpirse por vías distintas de la demanda: identifica cuáles reconoce la ley.",
+    "Lee con cuidado el inciso final del artículo 94 del Código General del Proceso: qué exige del requerimiento y cuántas veces puede hacerse."
+   ],
+   "conceptos": [
+    "prescripción extintiva",
+    "prescripción de la acción"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Interrumpió el requerimiento escrito del 10 de junio de 2025 la prescripción de la acción ejecutiva, y qué valor tiene el segundo requerimiento?",
+    "normas": [
+     {
+      "norma": "Código Civil, arts. 2535 y 2536",
+      "para_que": "Término de cinco años de la acción ejecutiva desde la exigibilidad; interrumpida la prescripción, el término comienza a contarse de nuevo."
+     },
+     {
+      "norma": "Código Civil, art. 2539",
+      "para_que": "La prescripción extintiva se interrumpe natural o civilmente."
+     },
+     {
+      "norma": "Código General del Proceso, art. 94, inciso final",
+      "para_que": "El requerimiento escrito hecho directamente por el acreedor al deudor interrumpe la prescripción, por una sola vez."
+     }
+    ],
+    "analisis": "La obligación se hizo exigible el 1 de septiembre de 2020, de modo que los cinco años vencían el 1 de septiembre de 2025. Antes de esa fecha, el 10 de junio de 2025, Amparo requirió por escrito y directamente a Nelson, con constancia de entrega. Ese requerimiento interrumpió la prescripción y el término de cinco años empezó a contarse otra vez desde entonces.\n\nLa segunda carta, en cambio, no tuvo efecto: la ley permite este mecanismo una sola vez. La demanda del 16 de marzo de 2026 se presentó, entonces, dentro del nuevo término, que vence en junio de 2030.",
+    "contraargumento": "Nelson sostiene que solo la demanda notificada interrumpe. Esa era la regla anterior; el Código General del Proceso añadió el requerimiento escrito del acreedor. Si Nelson negara haber recibido la carta, a Amparo le correspondería probar la entrega, y aquí la certificación de la mensajería lo acredita.",
+    "conclusion": "La excepción no prospera: el requerimiento del 10 de junio de 2025 interrumpió oportunamente la prescripción. Amparo se equivoca, sin embargo, al creer que cada carta reinicia el conteo.",
+    "errores_comunes": [
+     "Sostener que la prescripción solo se interrumpe con la demanda.",
+     "Dar efecto interruptor a todos los requerimientos sucesivos.",
+     "No verificar que el requerimiento se haya hecho antes de cumplirse el término y que haya prueba de su entrega."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la acción ejecutiva de Amparo prescribió el 1 de septiembre de 2025, como alega Nelson, o si la carta del 10 de junio de ese año interrumpió el término.\n\nLos artículos 2535 y 2536 del Código Civil fijan en cinco años la prescripción de la acción ejecutiva, contados desde que la obligación se hizo exigible. Además, el artículo 2539 prevé que esa prescripción puede interrumpirse natural o civilmente. A su vez, el inciso final del artículo 94 del Código General del Proceso agregó una forma de interrupción: el requerimiento escrito que el acreedor hace directamente al deudor, que solo puede emplearse una vez.\n\nEn efecto, el mutuo venció el 1 de septiembre de 2020 y el quinquenio se cumplía el mismo día de 2025. Sin embargo, casi tres meses antes Amparo requirió a Nelson por escrito, y la mensajería certificó la entrega en su local. Por consiguiente, la prescripción se interrumpió el 10 de junio de 2025 y, conforme al artículo 2536, el término comenzó a contarse de nuevo desde esa fecha.\n\nAhora bien, Nelson sostiene que las cartas no son demandas. Ese argumento no prospera, porque la ley vigente no exige una demanda: basta el requerimiento escrito y directo del acreedor, siempre que se pruebe. Con todo, Amparo tampoco acierta del todo, ya que la segunda carta, del 2 de febrero de 2026, carece de efecto interruptor; el mecanismo se agota con el primer uso.\n\nDe ahí que la demanda del 16 de marzo de 2026 se haya presentado cuando apenas corrían nueve meses del nuevo término.\n\nEn conclusión, la excepción de prescripción debe negarse y la ejecución continúa. Por último, conviene advertir que, de aquí en adelante, Amparo solo podrá interrumpir la prescripción con la notificación oportuna de la demanda o con un reconocimiento de Nelson.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "a su vez",
+    "en efecto",
+    "sin embargo",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "con todo",
+    "ya que",
+    "de ahí que",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Amparo hubiera enviado la primera carta el 10 de octubre de 2025?",
+    "respuesta": "Para esa fecha la prescripción de la acción ejecutiva ya se había consumado y no puede interrumpirse lo que terminó. La excepción prosperaría, y a Amparo le quedaría la acción ordinaria por los cinco años restantes."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-09",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "«Ella se atravesó»",
+   "enunciado": "El 12 de enero de 2026, hacia las seis de la tarde, un bus de servicio urbano de propiedad de Transportes Sabana S.A.S., conducido por Wilmer Ospina, atropelló a Rosalba Cifuentes, de 52 años, en una avenida de Facatativá. Rosalba sufrió fractura de cadera, estuvo incapacitada cuatro meses y perdió los ingresos de su puesto de arepas. Según el informe de tránsito, ella cruzó la vía a unos veinte metros del paso peatonal mientras miraba el celular; el informe no pudo establecer la velocidad del bus, y el conductor declaró que «ella se atravesó». La empresa se niega a indemnizar: sostiene que Rosalba debe probar que Wilmer conducía con imprudencia o con exceso de velocidad y que, como no hay prueba de ello, la demanda está condenada al fracaso. El 20 de mayo de 2026 Rosalba presentó demanda contra el conductor y la empresa, en la que reclama $60 millones por los perjuicios sufridos.",
+   "pregunta": "¿Debe Rosalba probar la culpa del conductor para obtener la indemnización, y qué efecto tiene su propio comportamiento?",
+   "pistas": [
+    "Conducir un vehículo automotor no se juzga con la regla general de la culpa probada: piensa en el régimen de las actividades que crean un riesgo para los demás.",
+    "Distingue entre la culpa exclusiva de la víctima, que exonera, y la culpa que solo concurre con la del demandado, que reduce la indemnización."
+   ],
+   "conceptos": [
+    "actividades peligrosas",
+    "responsabilidad civil extracontractual"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Opera en favor de Rosalba el régimen de responsabilidad por actividades peligrosas, que la releva de probar la culpa, y cómo incide su imprudencia en la indemnización?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 2356",
+      "para_que": "Fundamento de la responsabilidad por actividades peligrosas, según la interpretación reiterada de la jurisprudencia civil."
+     },
+     {
+      "norma": "Código Civil, art. 2341",
+      "para_que": "Regla general de responsabilidad por culpa, que aquí cede ante el régimen especial."
+     },
+     {
+      "norma": "Código Civil, art. 2344",
+      "para_que": "Solidaridad entre quienes concurren a causar el daño."
+     },
+     {
+      "norma": "Código Civil, art. 2357",
+      "para_que": "La apreciación del daño se reduce si quien lo sufrió se expuso a él imprudentemente."
+     }
+    ],
+    "analisis": "La conducción de automotores es una actividad peligrosa. En ese régimen la víctima prueba el ejercicio de la actividad, el daño y el nexo causal; no tiene que demostrar la imprudencia del conductor. Quien ejerce la actividad o es su guardián —aquí, el conductor y la empresa propietaria— solo se libera probando una causa extraña: fuerza mayor, hecho de un tercero o culpa exclusiva de la víctima.\n\nRosalba cruzó fuera del paso peatonal y distraída. Esa imprudencia existe, pero la empresa no probó que fuera la causa única, imprevisible e irresistible del accidente; la falta de prueba sobre la velocidad del bus juega en contra de los demandados. Lo que procede es reducir la indemnización en la proporción en que la conducta de la víctima contribuyó al daño.",
+    "contraargumento": "La empresa alega que sin prueba de la culpa del conductor no hay responsabilidad. Sería cierto bajo el art. 2341, pero no en actividades peligrosas, donde la carga de exonerarse recae sobre el demandado. Podría prosperar la exoneración total solo si demostrara que el hecho de Rosalba fue la causa exclusiva.",
+    "conclusion": "Rosalba no debe probar la culpa del conductor. El conductor y la empresa responden solidariamente, pero la indemnización se reduce por la imprudencia de la víctima, en la proporción que el juez determine.",
+    "errores_comunes": [
+     "Exigir a la víctima la prueba de la culpa del conductor.",
+     "Tratar toda imprudencia de la víctima como causal de exoneración total.",
+     "Olvidar que la empresa propietaria responde como guardiana de la actividad."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos problemas jurídicos: si Rosalba debe demostrar que Wilmer conducía con imprudencia y qué consecuencia tiene que ella haya cruzado la avenida fuera del paso peatonal y mirando el celular.\n\nLa regla general del artículo 2341 del Código Civil exige que la víctima pruebe la culpa de quien causó el daño. Sin embargo, la jurisprudencia civil ha entendido de manera constante que el artículo 2356 consagra un régimen distinto para las actividades peligrosas, entre las que se cuenta la conducción de automotores. En este régimen, a la víctima le basta probar la actividad, el daño y el nexo causal; el demandado, en cambio, solo se exonera si acredita una causa extraña, es decir, fuerza mayor, hecho de un tercero o culpa exclusiva de la víctima.\n\nEn efecto, el bus atropelló a Rosalba y le causó una fractura que la incapacitó cuatro meses. Por consiguiente, no le corresponde demostrar la velocidad del vehículo, y la tesis de la empresa no prospera. Además, el conductor y la sociedad propietaria, que es guardiana de la actividad, responden solidariamente según el artículo 2344.\n\nAhora bien, la conducta de Rosalba no es irrelevante. El artículo 2357 ordena reducir la apreciación del daño cuando quien lo sufrió se expuso a él imprudentemente. Para que esa imprudencia exonerara del todo, la empresa tendría que probar que fue la causa única del accidente, imprevisible e irresistible para el conductor. No lo hizo, puesto que el informe ni siquiera estableció a qué velocidad iba el bus, y esa duda perjudica a quien tiene la carga de exonerarse.\n\nEn conclusión, los demandados deben indemnizar a Rosalba sin que ella pruebe la culpa del conductor, aunque el juez reducirá la condena en la proporción en que su descuido contribuyó al resultado.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "en cambio",
+    "es decir",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "ahora bien",
+    "puesto que",
+    "en conclusión",
+    "aunque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Rosalba viajaba como pasajera del bus y se fracturó la cadera por una frenada brusca?",
+    "respuesta": "La responsabilidad sería contractual, derivada del contrato de transporte: el transportador se obliga a conducir al pasajero sano y salvo y solo se exonera con una causa extraña. Cambian además el régimen de prescripción y la fuente de la obligación."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-10",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "La posesión que compró Efraín",
+   "enunciado": "En enero de 2014, Anselmo Bedoya ocupó un lote desocupado en las afueras de Rionegro, lo cercó, levantó una casa de madera y sembró frutales, sin título alguno y sin que nadie se lo impidiera. El 10 de marzo de 2020 le vendió a Efraín Londoño «la posesión y las mejoras» por $35 millones, mediante un documento privado con firmas autenticadas, y le entregó el lote ese mismo día. Desde entonces Efraín vive allí con su familia, reemplazó la casa por una de ladrillo, paga el impuesto predial y los vecinos lo tienen por dueño. En el folio de matrícula, el lote figura a nombre de Hortensia Vélez, fallecida en 2010, cuyos herederos nunca han aparecido. El 4 de mayo de 2026 Efraín presentó demanda de pertenencia. El curador ad litem de los herederos se opone: dice que Efraín solo completa seis años de posesión, que carece de justo título y que un documento privado no transfiere nada.",
+   "pregunta": "¿Puede Efraín sumar la posesión de Anselmo para completar el tiempo de la prescripción extraordinaria?",
+   "pistas": [
+    "Define primero qué clase de prescripción adquisitiva invoca Efraín y si esa clase exige justo título.",
+    "El Código Civil permite añadir a la posesión propia la del antecesor: identifica qué requisitos debe cumplir esa suma."
+   ],
+   "conceptos": [
+    "prescripción adquisitiva",
+    "posesión",
+    "usucapión"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Reúne Efraín el tiempo de la prescripción adquisitiva extraordinaria mediante la suma de su posesión con la de su antecesor, aunque el vínculo entre ambos sea un documento privado?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 762",
+      "para_que": "Noción de posesión: tenencia con ánimo de señor o dueño."
+     },
+     {
+      "norma": "Código Civil, arts. 778 y 2521",
+      "para_que": "Permiten añadir a la posesión propia la del antecesor, con sus calidades y vicios, cuando hay una serie no interrumpida de poseedores."
+     },
+     {
+      "norma": "Código Civil, arts. 2531 y 2532 (modificado por la Ley 791 de 2002)",
+      "para_que": "La prescripción extraordinaria no exige título y se cumple con diez años de posesión."
+     },
+     {
+      "norma": "Código General del Proceso, art. 375",
+      "para_que": "Reglas del proceso de pertenencia, incluida la citación de los titulares de derechos reales y de las personas indeterminadas."
+     }
+    ],
+    "analisis": "Efraín no invoca la prescripción ordinaria, que exige justo título y buena fe, sino la extraordinaria, para la cual basta la posesión irregular durante diez años. La objeción sobre la falta de justo título es, por eso, irrelevante.\n\nPor sí solo completa seis años y dos meses. La ley le permite sumar la posesión de Anselmo si prueba tres cosas: que el antecesor fue verdadero poseedor, que existe un vínculo jurídico que explique el paso de la posesión de uno a otro y que ambas posesiones fueron sucesivas e ininterrumpidas. El documento de venta de «la posesión y las mejoras», junto con la entrega del lote, cumple esa función de enlace, aunque no transfiera el dominio. Con los seis años de Anselmo se superan los doce años.",
+    "contraargumento": "El curador dice que un documento privado no transfiere nada. Es cierto respecto del dominio, pero a Efraín no se le pide un título traslaticio de dominio sino un nexo entre posesiones. Sí le corresponde probar con rigor los actos posesorios de Anselmo entre 2014 y 2020; si no lo logra, la suma fracasa.",
+    "conclusion": "Efraín puede sumar la posesión de Anselmo y completar más de diez años, siempre que pruebe la posesión de su antecesor, el vínculo y la continuidad. De ser así, la pertenencia debe declararse.",
+    "errores_comunes": [
+     "Exigir justo título para la prescripción extraordinaria.",
+     "Negar la suma de posesiones porque el negocio entre poseedores no consta en escritura pública registrada.",
+     "Dar por probada la posesión del antecesor sin exigir prueba de sus actos de señorío."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer si Efraín, que ocupa el lote desde el 10 de marzo de 2020, puede añadir a su posesión la de Anselmo para alcanzar los diez años de la prescripción extraordinaria.\n\nLos artículos 2531 y 2532 del Código Civil regulan la prescripción adquisitiva extraordinaria, que no exige título alguno y se consuma con diez años de posesión. Por otra parte, los artículos 778 y 2521 permiten al poseedor añadir a su tiempo el de su antecesor, siempre que lo haga con sus calidades y vicios y que exista una serie no interrumpida de poseedores.\n\nAhora bien, el curador objeta que Efraín carece de justo título. Esa objeción no prospera, porque el justo título solo interesa a la prescripción ordinaria; quien invoca la extraordinaria puede ser un poseedor irregular.\n\nEn cuanto a la suma, la jurisprudencia exige que el antecesor haya sido verdadero poseedor, que un vínculo jurídico explique el paso de la posesión y que las posesiones sean sucesivas. En efecto, Anselmo cercó, construyó y sembró desde enero de 2014 sin reconocer dominio ajeno; luego vendió a Efraín la posesión y las mejoras y le entregó el lote el mismo día, de modo que no hubo solución de continuidad. Si bien el documento privado no transfiere el dominio, tampoco se le pide ese efecto: basta que sirva de enlace entre las dos posesiones.\n\nPor consiguiente, a los seis años y dos meses de Efraín se agregan los seis de Anselmo, con lo cual se superan los doce años. No obstante, la carga de probar los actos posesorios del antecesor recae sobre Efraín, y sin esa prueba la suma fracasaría.\n\nEn conclusión, la pertenencia debe declararse si Efraín demuestra la posesión de Anselmo, el negocio que los vincula y la continuidad entre ambas.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por otra parte",
+    "ahora bien",
+    "porque",
+    "en efecto",
+    "de modo que",
+    "si bien",
+    "por consiguiente",
+    "con lo cual",
+    "no obstante",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Anselmo hubiera abandonado el lote en 2018 y Efraín lo hubiera ocupado por su cuenta en marzo de 2020, sin negocio alguno entre ellos?",
+    "respuesta": "No habría vínculo jurídico ni continuidad, de modo que la suma de posesiones sería improcedente. Efraín solo contaría seis años y la demanda de pertenencia no podría prosperar todavía."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-11",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "El tractor alquilado a otro",
+   "enunciado": "El 20 de enero de 2026, Leonel Guarín vendió a Patricia Suárez, por documento privado, un tractor usado por $90 millones. Pactaron que Patricia pagaría $40 millones a la firma, que Leonel entregaría el tractor con sus papeles el 1 de marzo de 2026 en la finca de ella, en Aguachica, y que Patricia pagaría los $50 millones restantes el 15 de marzo. Incluyeron una cláusula penal de $9 millones a cargo de quien incumpliera. Patricia pagó la primera cuota. El 1 de marzo Leonel no entregó el tractor: lo tenía alquilado a un tercero hasta mayo. El 15 de marzo Patricia no pagó el saldo y le escribió que tenía el dinero disponible en su cuenta, pero que solo lo giraría contra la entrega. El 6 de abril de 2026 Leonel la demandó: pide la resolución del contrato por falta de pago del saldo, la cláusula penal y conservar parte de lo recibido como indemnización.",
+   "pregunta": "¿Puede Leonel obtener la resolución del contrato y la cláusula penal por la falta de pago del saldo?",
+   "pistas": [
+    "Ordena en el tiempo las obligaciones de cada parte: ¿quién debía cumplir primero y quién dejó de hacerlo?",
+    "Revisa quién está legitimado para pedir la resolución según el artículo 1546 del Código Civil y cuándo un contratante no está en mora según el artículo 1609."
+   ],
+   "conceptos": [
+    "responsabilidad contractual",
+    "resolución del contrato",
+    "incumplimiento"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Está legitimado para pedir la resolución, con cláusula penal, el vendedor que incumplió primero su obligación de entregar, frente a la compradora que retuvo el saldo?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 1546",
+      "para_que": "La resolución o el cumplimiento, con perjuicios, corresponde al contratante que cumplió frente al que no cumplió lo pactado."
+     },
+     {
+      "norma": "Código Civil, art. 1609",
+      "para_que": "En los contratos bilaterales ninguno de los contratantes está en mora mientras el otro no cumpla o no se allane a cumplir en la forma y tiempo debidos."
+     },
+     {
+      "norma": "Código Civil, art. 1608",
+      "para_que": "Mora del deudor por vencimiento del término estipulado."
+     },
+     {
+      "norma": "Código Civil, art. 1592",
+      "para_que": "Noción de cláusula penal: pena para asegurar el cumplimiento, a cargo de quien no ejecuta o retarda la obligación."
+     }
+    ],
+    "analisis": "Las obligaciones eran sucesivas: primero la entrega, el 1 de marzo; después el pago del saldo, el 15 de marzo. Leonel incumplió la que vencía primero, y por una razón que le es imputable, pues había alquilado el tractor a un tercero. Patricia cumplió lo que le correspondía hasta ese momento y se allanó a pagar el saldo: avisó que tenía el dinero disponible y que lo giraría contra la entrega.\n\nEn esas condiciones Patricia no está en mora, y Leonel, contratante incumplido, carece de legitimación para pedir la resolución y la pena. Es Patricia quien puede proponer la excepción de contrato no cumplido y, en reconvención, pedir el cumplimiento o la resolución con la cláusula penal a su favor.",
+    "contraargumento": "Leonel dirá que ambos incumplieron y que el contrato debe resolverse por mutuo incumplimiento. No prospera: no hay incumplimientos equivalentes, porque el de Patricia es la respuesta legítima al incumplimiento previo del vendedor.",
+    "conclusion": "Las pretensiones de Leonel deben negarse. Patricia no está en mora y puede exigir, en reconvención, la entrega del tractor o la resolución del contrato, con la cláusula penal de $9 millones a cargo de Leonel.",
+    "errores_comunes": [
+     "Conceder la resolución a quien incumplió primero.",
+     "Calificar como mora la retención del pago que responde a un incumplimiento previo.",
+     "Olvidar que el orden en que debían cumplirse las obligaciones es decisivo."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico consiste en determinar si Leonel, que no entregó el tractor en la fecha pactada, puede pedir la resolución de la compraventa y cobrar la cláusula penal porque Patricia no pagó el saldo.\n\nEn primer lugar, el artículo 1546 del Código Civil concede la acción resolutoria al contratante que cumplió o se allanó a cumplir, frente a aquel que no ejecutó lo pactado. Asimismo, el artículo 1609 dispone que en los contratos bilaterales ninguno de los contratantes está en mora de cumplir mientras el otro no cumpla por su parte o no se allane a hacerlo en la forma y tiempo debidos.\n\nEn efecto, el contrato fijó un orden: Leonel debía entregar el 1 de marzo de 2026 y Patricia pagar el saldo el 15 de marzo. Leonel no entregó, y no por un hecho ajeno, sino porque tenía el tractor alquilado a un tercero. Patricia, en cambio, pagó la primera cuota y manifestó por escrito que tenía el dinero listo para girarlo contra la entrega, es decir, se allanó a cumplir.\n\nPor consiguiente, Patricia no está en mora y Leonel carece de legitimación para pedir la resolución. Tampoco puede cobrar la pena, puesto que el artículo 1592 la impone a quien no ejecuta o retarda su obligación, y ese es él.\n\nAhora bien, Leonel podría alegar que hubo incumplimiento de ambos y que el contrato debe deshacerse sin sanciones. Sin embargo, esa tesis supone incumplimientos recíprocos y equivalentes, y aquí el silencio de Patricia frente al saldo fue la respuesta legítima a un incumplimiento anterior.\n\nEn conclusión, la demanda debe fracasar. Además, Patricia puede proponer la excepción de contrato no cumplido y reconvenir para exigir la entrega del tractor o la resolución, en ambos casos con la cláusula penal de $9 millones a cargo del vendedor.",
+   "conectores_usados": [
+    "porque",
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "en cambio",
+    "es decir",
+    "por consiguiente",
+    "puesto que",
+    "ahora bien",
+    "sin embargo",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el contrato hubiera previsto que Patricia pagaría el saldo el 15 de febrero y Leonel entregaría el tractor el 1 de marzo, y ella no hubiera pagado?",
+    "respuesta": "Patricia habría incumplido primero y Leonel, que todavía no debía entregar, no estaría en mora. Él sí podría pedir la resolución con la cláusula penal."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-12",
+   "area": "Civil",
+   "nivel": "intermedio",
+   "titulo": "La pistola de balines",
+   "enunciado": "El sábado 14 de marzo de 2026, Samuel Arias, de 15 años, jugaba en un parque de Envigado con una pistola de balines que le había regalado un tío. Por presumir ante sus amigos disparó hacia la calle, y un balín impactó el ojo izquierdo de Ofelia Restrepo, de 64 años, que pasaba por la acera. Ofelia perdió parte de la visión de ese ojo y ha gastado $14 millones en cirugías. Samuel vive con su madre, Diana Arias, quien conocía la pistola y le permitía sacarla al parque sin supervisión. El padre, Jairo, está separado de Diana desde 2019, vive en Cúcuta, paga la cuota alimentaria y ve a su hijo en vacaciones. Ofelia quiere demandar a ambos padres. Diana responde que ella no disparó y que su hijo «ya está grande» para responder solo; Jairo, que no vive con el muchacho ni supo del regalo. Samuel no tiene bienes ni ingresos.",
+   "pregunta": "¿Responden civilmente los padres de Samuel por el daño causado a Ofelia?",
+   "pistas": [
+    "Además de responder por los hechos propios, el Código Civil hace responder a ciertas personas por el hecho de quienes están a su cuidado.",
+    "Lee con atención la condición que el artículo 2347 exige respecto de los hijos menores y cómo puede exonerarse quien tiene el deber de vigilancia."
+   ],
+   "conceptos": [
+    "responsabilidad civil extracontractual",
+    "responsabilidad extracontractual por el hecho ajeno"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Deben los padres de un menor de 15 años responder por el daño que este causó, y la respuesta es la misma para la madre que convive con él y para el padre que no?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 2341",
+      "para_que": "Responsabilidad de quien causa un daño por su culpa: cobija al propio Samuel, que por su edad es capaz de cometerla."
+     },
+     {
+      "norma": "Código Civil, art. 2347",
+      "para_que": "Los padres responden del hecho de los hijos menores que habiten en la misma casa; la responsabilidad cesa si con su autoridad y cuidado no hubieran podido impedir el hecho."
+     },
+     {
+      "norma": "Código Civil, art. 2348",
+      "para_que": "Los padres responden siempre por las culpas de sus hijos menores que provengan conocidamente de mala educación o de hábitos viciosos que les han dejado adquirir."
+     },
+     {
+      "norma": "Código Civil, art. 2344",
+      "para_que": "Solidaridad entre los obligados a reparar."
+     }
+    ],
+    "analisis": "Samuel actuó con culpa y es, por su edad, capaz de cometerla; responde, pero es insolvente. Por eso importa la responsabilidad por el hecho ajeno.\n\nDiana convive con su hijo y tenía el deber de vigilarlo. La ley presume su culpa y solo la libera si demuestra que, con el cuidado debido, no pudo impedir el hecho. Ocurre lo contrario: sabía de la pistola y lo dejaba usarla sin supervisión.\n\nJairo no habita con el menor. La presunción del art. 2347 no lo alcanza, porque está ligada a la posibilidad real de vigilar. Para condenarlo habría que probar una culpa propia o el supuesto del art. 2348, y los hechos no lo muestran.",
+    "contraargumento": "Diana alega que no disparó y que su hijo ya puede responder solo. La responsabilidad por el hecho ajeno no exige haber causado materialmente el daño, sino haber faltado al deber de vigilancia; y la capacidad del menor no excluye la de quien lo tiene a su cuidado.",
+    "conclusion": "Responden Samuel y, solidariamente, su madre Diana. Jairo no responde con base en el art. 2347, salvo que se le pruebe una culpa propia.",
+    "errores_comunes": [
+     "Extender la presunción a ambos padres sin verificar la convivencia con el menor.",
+     "Creer que el padre que tiene a su cargo al menor solo responde si él mismo causó el daño.",
+     "Olvidar que el menor capaz de culpa también es responsable."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Diana y Jairo deben reparar el daño que su hijo Samuel, de 15 años, le causó a Ofelia, y si la solución es igual para ambos.\n\nEl artículo 2341 del Código Civil obliga a indemnizar a quien causa un daño con culpa. Samuel disparó hacia la calle por presumir, de modo que obró con imprudencia y, por su edad, responde de sus actos; sin embargo, no tiene bienes. De ahí que interese el artículo 2347, según el cual toda persona responde también del hecho de quienes están a su cuidado y, en particular, los padres responden del hecho de los hijos menores que habiten en la misma casa. Esa responsabilidad cesa si prueban que con su autoridad y cuidado no habrían podido impedirlo.\n\nEn efecto, Diana vive con Samuel, conocía la pistola de balines y le permitía llevarla al parque sin supervisión. Por lo tanto, lejos de desvirtuar la presunción, los hechos confirman que faltó a su deber de vigilancia. Su defensa no prospera, porque esta responsabilidad no exige haber disparado, sino haber descuidado a quien se tenía a cargo; y que el hijo esté grande no la libera, ya que sigue siendo menor.\n\nEn cambio, la situación de Jairo es distinta. Está separado desde 2019, vive en otra ciudad y solo ve al muchacho en vacaciones. Dado que la norma exige que el hijo habite en la misma casa, la presunción no lo cobija. Podría responder únicamente si se le probara una culpa propia o si el hecho proviniera de malos hábitos tolerados por él, en los términos del artículo 2348, y nada de eso aparece.\n\nEn conclusión, Ofelia puede demandar a Samuel y a Diana, quienes responden solidariamente conforme al artículo 2344. Finalmente, la demanda contra Jairo tiene pocas probabilidades de éxito.",
+   "conectores_usados": [
+    "en primer lugar",
+    "de modo que",
+    "sin embargo",
+    "de ahí que",
+    "en efecto",
+    "por lo tanto",
+    "porque",
+    "ya que",
+    "en cambio",
+    "dado que",
+    "en conclusión",
+    "finalmente"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el disparo hubiera ocurrido durante el recreo, dentro del colegio donde estudia Samuel?",
+    "respuesta": "El deber de vigilancia estaría en cabeza del establecimiento educativo, que responde por el hecho de sus alumnos mientras están bajo su cuidado (art. 2347). Los padres, en principio, no responderían, salvo el supuesto del art. 2348."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "civ-13",
+   "area": "Civil",
+   "nivel": "avanzado",
+   "titulo": "El cuidandero de El Recreo",
+   "enunciado": "En 2008, Hipólito Cuesta llegó a la finca El Recreo, en Fusagasugá, contratado como cuidandero por su dueño, Ernesto Barrera, quien le pagaba un salario mensual y le entregaba el dinero para cancelar el impuesto predial. Ernesto murió en junio de 2014; sus tres hijos, residentes en Bogotá, no abrieron la sucesión ni volvieron a pagarle a Hipólito. Desde 2015 él dejó de rendir cuentas, arrendó los potreros a terceros en su propio nombre y se quedó con los cánones. El 5 de marzo de 2016, cuando uno de los hijos llegó a reclamar la finca, Hipólito se negó a entregarle las llaves y le dijo, delante de los vecinos, que la finca era suya y que no reconocía a ningún heredero. El hijo presentó una queja en la inspección de policía, que fue archivada. Nadie volvió. El 20 de agosto de 2026 Hipólito demandó la pertenencia y afirma que posee desde 2008, hace dieciocho años.",
+   "pregunta": "¿Desde cuándo puede contarse la posesión de Hipólito y alcanza el tiempo para la prescripción extraordinaria?",
+   "pistas": [
+    "Hipólito no entró a la finca como dueño: determina en qué calidad lo hizo y si el tiempo o la muerte del propietario cambian esa calidad.",
+    "Un tenedor puede llegar a ser poseedor, pero solo desde que se rebela de manera inequívoca contra el dueño; ubica ese momento en los hechos y cuenta diez años."
+   ],
+   "conceptos": [
+    "posesión",
+    "mera tenencia",
+    "prescripción adquisitiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede quien entró a un predio como mero tenedor adquirirlo por prescripción extraordinaria, y desde qué momento se cuenta su posesión?",
+    "normas": [
+     {
+      "norma": "Código Civil, arts. 762 y 775",
+      "para_que": "Diferencia entre posesión (con ánimo de dueño) y mera tenencia (a nombre de otro)."
+     },
+     {
+      "norma": "Código Civil, art. 777",
+      "para_que": "El simple lapso de tiempo no muda la mera tenencia en posesión."
+     },
+     {
+      "norma": "Código Civil, art. 2531",
+      "para_que": "Reglas de la prescripción extraordinaria; quien empezó como tenedor debe probar que el dueño no ha sido reconocido en los últimos diez años y que poseyó sin violencia, clandestinidad ni interrupción."
+     },
+     {
+      "norma": "Código Civil, art. 2532 (modificado por la Ley 791 de 2002)",
+      "para_que": "Término de diez años."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 94 y 375",
+      "para_que": "Interrupción civil mediante demanda y trámite de la pertenencia."
+     }
+    ],
+    "analisis": "Entre 2008 y 2014 Hipólito fue un empleado que cuidaba la finca a nombre de Ernesto: mera tenencia. La muerte del dueño no cambió su título, y el solo paso del tiempo tampoco. Ese periodo no cuenta.\n\nLa jurisprudencia admite que el tenedor se convierta en poseedor (interversión del título) si desconoce el dominio ajeno con actos inequívocos y públicos. Arrendar los potreros en nombre propio desde 2015 es un indicio, pero el hito indiscutible es el 5 de marzo de 2016, cuando rechazó al heredero y se proclamó dueño. Desde allí hasta la demanda transcurrieron diez años y cinco meses, sin reconocimiento del dueño ni demanda que interrumpiera.",
+    "contraargumento": "Los herederos dirán que quien entra como tenedor conserva siempre esa calidad y que la queja policiva interrumpió la posesión. Lo primero cede ante la prueba de la rebeldía; lo segundo no es cierto, porque la interrupción civil exige una demanda judicial oportunamente notificada, no una queja archivada.",
+    "conclusion": "La posesión no se cuenta desde 2008 sino, con seguridad, desde el 5 de marzo de 2016. Aun así, se completan los diez años y la pertenencia puede prosperar si Hipólito prueba con rigor esos actos de rebeldía.",
+    "errores_comunes": [
+     "Contar como posesión el tiempo en que el demandante fue cuidandero.",
+     "Negar de plano que un tenedor pueda convertirse en poseedor.",
+     "Atribuir efecto interruptor a una queja policiva archivada."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer desde qué momento Hipólito puede considerarse poseedor de la finca y si, desde entonces, transcurrieron los diez años de la prescripción extraordinaria.\n\nEl artículo 762 del Código Civil define la posesión como la tenencia con ánimo de dueño, mientras que el artículo 775 llama mera tenencia a la que se ejerce a nombre de otro. Además, el artículo 777 advierte que el simple lapso de tiempo no muda la mera tenencia en posesión. En efecto, Hipólito llegó en 2008 como cuidandero asalariado de Ernesto; por lo tanto, su afirmación de que posee hace dieciocho años es errónea, y tampoco le sirve haber pagado el predial, puesto que lo hacía con dinero del dueño y por su encargo.\n\nAhora bien, de ahí no se sigue que nunca pueda prescribir. El artículo 2531 admite la prescripción extraordinaria de quien empezó como tenedor, siempre que el dueño no pruebe que se le reconoció dominio en los últimos diez años y que el prescribiente acredite una posesión sin violencia, clandestinidad ni interrupción. La jurisprudencia exige para ello actos inequívocos de rebeldía contra el propietario.\n\nEsos actos existen. Si bien el arriendo de los potreros en nombre propio desde 2015 es apenas un indicio, el 5 de marzo de 2016 Hipólito se negó a entregar las llaves al heredero y se declaró dueño ante los vecinos. Por consiguiente, desde esa fecha hasta el 20 de agosto de 2026 corrieron diez años y cinco meses.\n\nLos herederos podrían invocar la queja policiva. Sin embargo, esta no interrumpió nada, porque la interrupción civil requiere una demanda judicial, conforme al artículo 94 del Código General del Proceso.\n\nEn conclusión, la posesión se cuenta desde marzo de 2016 y el término del artículo 2532 está cumplido, de modo que la pertenencia puede declararse si Hipólito prueba esa rebeldía.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "por lo tanto",
+    "puesto que",
+    "ahora bien",
+    "si bien",
+    "por consiguiente",
+    "sin embargo",
+    "porque",
+    "en conclusión",
+    "de modo que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Hipólito hubiera seguido recibiendo de los herederos su salario de cuidandero hasta diciembre de 2019?",
+    "respuesta": "Hasta esa fecha habría reconocido dominio ajeno y seguiría siendo tenedor. La posesión solo podría contarse desde 2020, y en agosto de 2026 no se habrían cumplido los diez años."
+   },
+   "distractor": "Que Hipólito pagara el impuesto predial desde 2008: lo hacía con dinero del dueño y por su encargo, lo cual es propio de un tenedor y no demuestra ánimo de señor.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-14",
+   "area": "Civil",
+   "nivel": "avanzado",
+   "titulo": "La dirección equivocada",
+   "enunciado": "Octavio Rendón le debe a Fabiola Mejía $60 millones, según un contrato de mutuo en documento privado que venció el 1 de agosto de 2020; nunca hubo abonos ni requerimientos escritos. El 15 de julio de 2025, a dos semanas de cumplirse cinco años, Fabiola presentó demanda ejecutiva. El juzgado libró mandamiento de pago y lo notificó por estado a la demandante el 30 de julio de 2025. Fabiola indicó como dirección de Octavio un local que él había cerrado en 2022; la citación fue devuelta en septiembre de 2025 y su apoderado solo aportó una dirección nueva en junio de 2026. Octavio fue notificado personalmente el 10 de septiembre de 2026 y propuso la excepción de prescripción. Fabiola responde que demandó antes de que vencieran los cinco años y que, además, Octavio es dueño de dos apartamentos y una camioneta con los que puede pagar de sobra. El juzgado resolvió cada memorial en menos de una semana.",
+   "pregunta": "¿Interrumpió la presentación de la demanda la prescripción de la acción ejecutiva de Fabiola?",
+   "pistas": [
+    "Presentar la demanda a tiempo no siempre basta: el Código General del Proceso sujeta la interrupción a una carga posterior del demandante.",
+    "Cuenta el año que prevé el artículo 94 de ese código desde la notificación del mandamiento a la demandante y verifica a quién es atribuible la tardanza."
+   ],
+   "conceptos": [
+    "prescripción extintiva",
+    "notificación",
+    "prescripción de la acción"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Produce efecto interruptor la demanda presentada antes de vencer el término de prescripción, cuando el mandamiento de pago se notifica al demandado después del año previsto en la ley?",
+    "normas": [
+     {
+      "norma": "Código Civil, arts. 2535 y 2536",
+      "para_que": "Prescripción de la acción ejecutiva en cinco años desde la exigibilidad y conversión en ordinaria por otros cinco."
+     },
+     {
+      "norma": "Código General del Proceso, art. 94",
+      "para_que": "La presentación de la demanda interrumpe la prescripción siempre que el mandamiento se notifique al demandado dentro del año siguiente a la notificación de esa providencia al demandante; pasado ese término, el efecto solo se produce con la notificación al demandado."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 291 y 292",
+      "para_que": "Práctica de la notificación personal y por aviso, cuya gestión corresponde a la parte interesada."
+     },
+     {
+      "norma": "Código General del Proceso, art. 442",
+      "para_que": "Oportunidad para proponer excepciones de mérito en el proceso ejecutivo."
+     }
+    ],
+    "analisis": "El mandamiento se notificó a Fabiola el 30 de julio de 2025; ella tenía hasta el 31 de julio de 2026 para lograr la notificación de Octavio. Solo lo consiguió el 10 de septiembre de 2026. La presentación de la demanda, por tanto, no interrumpió la prescripción: el efecto interruptor se produjo con la notificación al demandado, cuando el quinquenio —vencido el 1 de agosto de 2025— ya se había consumado.\n\nLa tardanza es atribuible a la demandante: suministró una dirección desactualizada y dejó pasar nueve meses antes de corregirla, mientras el juzgado tramitó con diligencia. No hay lugar a la morigeración que la jurisprudencia ha admitido cuando la demora proviene del despacho o de maniobras del demandado.",
+    "contraargumento": "Fabiola sostiene que demandó en tiempo. Es verdad, pero la ley condiciona ese efecto a la notificación oportuna. Su mejor argumento sería que la mora no le es imputable; los hechos lo desmienten.",
+    "conclusion": "La excepción de prescripción de la acción ejecutiva prospera. A Fabiola le queda la acción ordinaria, que subsiste por otros cinco años, en un proceso declarativo.",
+    "errores_comunes": [
+     "Creer que basta presentar la demanda antes de vencer el término.",
+     "Contar el año desde la presentación de la demanda y no desde la notificación del mandamiento al demandante.",
+     "Ignorar a quién es imputable la tardanza en notificar."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la demanda que Fabiola presentó el 15 de julio de 2025, dos semanas antes de cumplirse los cinco años, interrumpió la prescripción de la acción ejecutiva, pese a que Octavio solo fue notificado el 10 de septiembre de 2026.\n\nLos artículos 2535 y 2536 del Código Civil fijan en cinco años la prescripción de la acción ejecutiva, contados desde la exigibilidad. Como el mutuo venció el 1 de agosto de 2020, el término se cumplía el 1 de agosto de 2025. A su vez, el artículo 94 del Código General del Proceso dispone que la presentación de la demanda interrumpe la prescripción siempre que el mandamiento ejecutivo se notifique al demandado dentro del año siguiente a la notificación de esa providencia al demandante; pasado ese año, el efecto solo se produce con la notificación al demandado.\n\nEn efecto, el mandamiento se notificó a Fabiola por estado el 30 de julio de 2025, de modo que tenía hasta finales de julio de 2026 para notificar a Octavio. No lo logró, y la notificación personal se surtió el 10 de septiembre de 2026. Por consiguiente, la interrupción solo operó ese día, cuando la prescripción ya estaba consumada desde hacía más de un año.\n\nAhora bien, Fabiola alega que demandó a tiempo. La jurisprudencia ha atenuado el rigor de esta regla cuando la tardanza obedece al juzgado o a la conducta del demandado. Sin embargo, aquí la demora es suya, puesto que indicó un local cerrado desde 2022 y tardó nueve meses en aportar otra dirección, mientras el despacho resolvía cada memorial en pocos días. Por otra parte, que Octavio tenga bienes suficientes carece de relevancia, ya que la solvencia del deudor no incide en el cómputo.\n\nEn conclusión, la excepción prospera. Con todo, Fabiola conserva la acción ordinaria por otros cinco años y puede acudir a un proceso declarativo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "pese a",
+    "a su vez",
+    "en efecto",
+    "de modo que",
+    "por consiguiente",
+    "ahora bien",
+    "sin embargo",
+    "puesto que",
+    "por otra parte",
+    "ya que",
+    "en conclusión",
+    "con todo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Octavio hubiera sido notificado del mandamiento de pago el 20 de mayo de 2026?",
+    "respuesta": "La notificación se habría surtido dentro del año. La interrupción se entendería producida el 15 de julio de 2025, fecha de presentación de la demanda y anterior al vencimiento, de modo que la excepción de prescripción fracasaría."
+   },
+   "distractor": "Que Octavio tenga dos apartamentos y una camioneta: su solvencia nada dice sobre si la acción prescribió.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-15",
+   "area": "Civil",
+   "nivel": "avanzado",
+   "titulo": "La compresa",
+   "enunciado": "El 9 de octubre de 2025, Mariela Zapata, de 45 años, fue operada de la vesícula en la Clínica San Rafael del Sur, institución privada de Pasto con la que contrató directamente la cirugía por $11 millones. Antes del procedimiento firmó un formato de consentimiento informado que describía los riesgos de sangrado e infección y que incluía una frase según la cual la paciente «exonera a la clínica de toda responsabilidad». Tres semanas después volvió con fiebre y dolor intenso; el 2 de noviembre de 2025 otra institución la reintervino y encontró una compresa quirúrgica olvidada en el abdomen. Mariela estuvo hospitalizada veinte días y perdió dos meses de trabajo como contadora independiente. La clínica rechaza el reclamo: afirma que la obligación médica es de medios, que la paciente debe probar la culpa del cirujano, que ella firmó la exoneración y que la institución cuenta con una acreditación de alta calidad vigente. La historia clínica no registra el conteo de compresas.",
+   "pregunta": "¿Responde la clínica por los daños sufridos por Mariela y a quién corresponde probar la culpa?",
+   "pistas": [
+    "Que la obligación del médico sea de medios no significa que el paciente quede sin herramientas probatorias: piensa en lo que revelan los hechos por sí mismos y en quién tiene la información.",
+    "Distingue entre aceptar los riesgos propios de una cirugía y renunciar por anticipado a reclamar por la negligencia del equipo médico."
+   ],
+   "conceptos": [
+    "responsabilidad contractual",
+    "carga de la prueba",
+    "incumplimiento"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Incumplió la clínica el contrato de servicios médicos al dejar una compresa en el abdomen de la paciente, cómo se distribuye la carga de probar la culpa y qué valor tiene la cláusula de exoneración?",
+    "normas": [
+     {
+      "norma": "Código Civil, arts. 1602 y 1604",
+      "para_que": "Fuerza obligatoria del contrato y régimen de la culpa contractual; la prueba de la diligencia incumbe a quien ha debido emplearla."
+     },
+     {
+      "norma": "Código General del Proceso, art. 167",
+      "para_que": "Carga de la prueba y facultad del juez de distribuirla hacia la parte que esté en mejor posición de probar."
+     },
+     {
+      "norma": "Código Civil, arts. 63 y 1522",
+      "para_que": "La culpa grave equivale al dolo en materias civiles y la condonación del dolo futuro no vale: límite de las cláusulas de exoneración."
+     },
+     {
+      "norma": "Código Civil, arts. 1613 y 1614",
+      "para_que": "Daño emergente y lucro cesante indemnizables."
+     },
+     {
+      "norma": "Ley 23 de 1981 y reglamentación de la historia clínica",
+      "para_que": "Deberes del acto médico y de registro completo de la atención; verificar los artículos y la resolución aplicable en fuente oficial."
+     }
+    ],
+    "analisis": "La relación es contractual y la obligación principal, de medios: en principio el paciente debe probar la culpa. Pero el olvido de una compresa es un hecho que no ocurre sin descuido; de él se infiere la negligencia. Además, la clínica es quien tiene la información de lo que pasó en el quirófano, y su historia clínica omite el conteo de compresas: el juez puede exigirle a ella la prueba de su diligencia y valorar esa omisión como indicio en su contra.\n\nEl consentimiento informado cubre los riesgos inherentes que se explicaron, no los errores evitables. La frase de exoneración general no vale frente a la culpa grave. La clínica responde por el hecho de su equipo.",
+    "contraargumento": "La clínica insiste en la obligación de medios. El argumento tendría fuerza frente a una complicación inherente, como una infección tratada conforme a los protocolos; no frente a un cuerpo extraño olvidado, que no es un riesgo de la cirugía sino una falla en su ejecución.",
+    "conclusion": "La clínica responde contractualmente. Debe indemnizar los gastos de la reintervención y la hospitalización, los ingresos dejados de percibir durante dos meses y el perjuicio moral que se acredite.",
+    "errores_comunes": [
+     "Concluir que, por ser de medios la obligación, el paciente pierde si no trae prueba directa de la culpa.",
+     "Dar al consentimiento informado el alcance de una renuncia a reclamar por negligencia.",
+     "Convertir toda obligación médica en obligación de resultado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la clínica incumplió el contrato de servicios médicos celebrado con Mariela y a quién le corresponde demostrar la culpa, dado que la institución se ampara en la obligación de medios y en una cláusula de exoneración.\n\nEl artículo 1604 del Código Civil regula la culpa contractual y, en materia médica, la jurisprudencia ha sostenido que el profesional se obliga a poner sus conocimientos y cuidado, no a garantizar la curación; de ahí que, en principio, el paciente deba probar la negligencia. Sin embargo, el artículo 167 del Código General del Proceso permite al juez distribuir la carga de la prueba y exigirla a la parte que esté en mejor posición de aportarla.\n\nEn efecto, una compresa olvidada en el abdomen es un hecho que habla por sí mismo, puesto que no se produce cuando el equipo actúa con el cuidado debido. Además, la clínica es la única que conoce lo ocurrido en el quirófano y su historia clínica no registra el conteo de compresas, omisión que opera como indicio en su contra. Por consiguiente, la culpa queda demostrada.\n\nAhora bien, la clínica invoca la exoneración firmada por la paciente. Ese argumento no prospera. El consentimiento informado traslada al paciente los riesgos inherentes que se le explicaron, como el sangrado o la infección, pero no los errores evitables. Asimismo, los artículos 63 y 1522 del Código Civil impiden condonar por anticipado el dolo, al que se equipara la culpa grave. Por otra parte, la acreditación de alta calidad es irrelevante, porque no prueba diligencia en esta cirugía.\n\nEn conclusión, la clínica debe indemnizar a Mariela el daño emergente de la reintervención y la hospitalización, el lucro cesante de los dos meses sin trabajar, conforme a los artículos 1613 y 1614, y el perjuicio moral.",
+   "conectores_usados": [
+    "en primer lugar",
+    "dado que",
+    "de ahí que",
+    "sin embargo",
+    "en efecto",
+    "puesto que",
+    "además",
+    "por consiguiente",
+    "ahora bien",
+    "asimismo",
+    "por otra parte",
+    "porque",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si no se hubiera olvidado ninguna compresa y Mariela hubiera sufrido una infección que la historia clínica muestra prevenida y tratada conforme a los protocolos?",
+    "respuesta": "La infección sería la realización de un riesgo inherente e informado. Sin prueba de una conducta negligente, la clínica no respondería, porque su obligación es de medios."
+   },
+   "distractor": "La acreditación de alta calidad de la clínica: es un dato institucional que no prueba diligencia en esta cirugía concreta.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-16",
+   "area": "Civil",
+   "nivel": "avanzado",
+   "titulo": "La bicicleta del abuelo",
+   "enunciado": "El 10 de enero de 2026, Tomás Vergara, de 16 años, vendió a Gerardo Pinzón, comerciante de 40 años, una bicicleta de carreras que había heredado de su abuelo. Acordaron por mensajes un precio de $3 millones, que Gerardo pagó en efectivo al recibir la bicicleta; Tomás le aseguró que tenía 18 años. Los padres de Tomás, que ejercen la patria potestad, no supieron del negocio. Una bicicleta igual cuesta unos $9 millones. Tomás gastó $1 millón en una fiesta y guardó los otros $2 millones, que aún conserva. El 3 de marzo de 2026 los padres se enteraron y, en nombre de su hijo, exigieron a Gerardo devolver la bicicleta; anuncian una demanda de nulidad. Gerardo se opone: dice que el muchacho lo engañó sobre su edad, que el contrato está cumplido por ambas partes y que, si acaso hay que deshacerlo, deben devolverle los $3 millones completos. Añade que el precio bajo no es problema suyo.",
+   "pregunta": "¿Procede la nulidad de la venta y qué debe restituir cada parte?",
+   "pistas": [
+    "Establece qué clase de incapacidad tiene una persona de 16 años y qué tipo de nulidad genera el acto que celebra sin autorización.",
+    "El Código Civil trae reglas especiales sobre la afirmación de mayoría de edad hecha por el incapaz y sobre lo que este debe restituir cuando el contrato se anula."
+   ],
+   "conceptos": [
+    "nulidad relativa",
+    "nulidad absoluta"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es anulable la venta celebrada por un menor de 16 años sin autorización de sus padres, pese a que afirmó ser mayor, y con qué alcance operan las restituciones?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 1504",
+      "para_que": "Los menores que no son impúberes son incapaces, pero su incapacidad no es absoluta."
+     },
+     {
+      "norma": "Código Civil, arts. 1741 y 1743",
+      "para_que": "Los actos de los incapaces relativos adolecen de nulidad relativa, que solo puede alegar aquel en cuyo beneficio la estableció la ley."
+     },
+     {
+      "norma": "Código Civil, art. 1744",
+      "para_que": "El dolo del incapaz para inducir al contrato le impide alegar la nulidad, pero la sola aserción de mayor edad no lo inhabilita."
+     },
+     {
+      "norma": "Código Civil, arts. 1746 y 1747",
+      "para_que": "Restituciones mutuas; quien contrató con un incapaz solo puede pedir restitución en cuanto pruebe que el incapaz se hizo más rico."
+     },
+     {
+      "norma": "Código Civil, art. 1750",
+      "para_que": "El plazo de cuatro años para pedir la rescisión se cuenta, para el incapaz, desde que cesa la incapacidad."
+     }
+    ],
+    "analisis": "Tomás es incapaz relativo y vendió un bien propio sin la autorización de sus padres: el contrato adolece de nulidad relativa, que pueden pedir sus representantes en su nombre. Gerardo no puede alegarla ni oponerse con el argumento del engaño, porque la simple afirmación de ser mayor de edad no priva al menor de la acción; se requeriría una maniobra dolosa.\n\nEn las restituciones, Gerardo devuelve la bicicleta. Tomás solo devuelve aquello en que se hizo más rico: los $2 millones que conserva. El millón gastado en una fiesta no subsiste ni atendió una necesidad.",
+    "contraargumento": "Gerardo alega que el contrato ya se cumplió. El cumplimiento no sanea el vicio; solo lo harían la ratificación de los representantes o el vencimiento del plazo, que ni siquiera ha empezado a correr. Su mejor carta sería probar un verdadero dolo de Tomás, que aquí no existe.",
+    "conclusion": "La nulidad relativa procede. Gerardo restituye la bicicleta y recibe únicamente los $2 millones que Tomás conserva.",
+    "errores_comunes": [
+     "Calificar la nulidad como absoluta, como si Tomás fuera impúber.",
+     "Creer que la mentira sobre la edad impide al menor pedir la nulidad.",
+     "Ordenar la devolución total del precio sin aplicar la regla especial sobre restituciones del incapaz."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si la venta que Tomás, de 16 años, celebró sin autorización de sus padres puede anularse, y qué debe devolver cada contratante.\n\nEl artículo 1504 del Código Civil considera incapaces a los menores que ya no son impúberes, aunque su incapacidad no es absoluta. Por lo tanto, sus actos no adolecen de nulidad absoluta sino relativa, conforme al inciso final del artículo 1741, y esta solo puede alegarla aquel en cuyo beneficio la estableció la ley, según el artículo 1743. En efecto, Tomás vendió un bien heredado sin que intervinieran quienes ejercen la patria potestad; de ahí que sus padres, en su nombre, estén legitimados para pedir la rescisión, mientras que Gerardo no podría invocarla.\n\nAhora bien, Gerardo afirma que fue engañado. El artículo 1744 priva al incapaz de la acción cuando ha habido dolo de su parte para inducir al contrato; sin embargo, la misma norma aclara que la aserción de mayor edad no lo inhabilita. Tomás se limitó a decir que tenía 18 años, es decir, no desplegó una maniobra fraudulenta. Tampoco importa que el contrato esté cumplido, porque la ejecución no sanea el vicio.\n\nEn cuanto a las restituciones, el artículo 1746 ordena volver al estado anterior, pero el artículo 1747 limita lo que puede reclamar quien contrató con un incapaz: solo aquello en que este se hizo más rico. Por consiguiente, Gerardo recupera los $2 millones que Tomás conserva y no el millón gastado en una fiesta.\n\nPor otra parte, el precio bajo no cambia el análisis, ya que la lesión enorme no opera en la venta de muebles.\n\nEn conclusión, procede la nulidad relativa: Gerardo restituye la bicicleta y recibe $2 millones. Además, la acción está en tiempo, pues el plazo del artículo 1750 corre desde que cesa la incapacidad.",
+   "conectores_usados": [
+    "en primer lugar",
+    "aunque",
+    "por lo tanto",
+    "en efecto",
+    "de ahí que",
+    "ahora bien",
+    "sin embargo",
+    "es decir",
+    "porque",
+    "por consiguiente",
+    "por otra parte",
+    "ya que",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Tomás hubiera mostrado una cédula falsificada para hacerse pasar por mayor de edad?",
+    "respuesta": "Habría dolo del incapaz para inducir al contrato. Según el art. 1744 del Código Civil, ni él ni sus representantes podrían alegar la nulidad, y la venta se mantendría."
+   },
+   "distractor": "El precio muy inferior al valor de la bicicleta: la lesión enorme no opera en la venta de bienes muebles, de modo que el bajo precio no es la causa de la invalidez.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-17",
+   "area": "Civil",
+   "nivel": "avanzado",
+   "titulo": "«Una vez aprobado el crédito»",
+   "enunciado": "El 3 de marzo de 2025, Carmenza Ulloa y Fredy Solano firmaron una promesa de compraventa sobre un apartamento de ella en Ibagué, por $280 millones. Fredy pagó $100 millones a la firma y recibió el apartamento, donde vive desde entonces. El documento dice que el saldo se pagará «cuando el banco desembolse el crédito hipotecario del comprador» y que la escritura pública se otorgará «una vez aprobado dicho crédito»; no menciona fecha ni notaría. Las partes autenticaron sus firmas ante notario y pactaron una cláusula penal de $30 millones. El banco negó el crédito en agosto de 2025 y Fredy no ha conseguido otro. El 18 de mayo de 2026 Carmenza demandó: pide la resolución de la promesa por incumplimiento del comprador, la restitución del apartamento, la cláusula penal y conservar los $100 millones como indemnización. Fredy contesta que no ha incumplido, porque la aprobación del crédito no depende de él.",
+   "pregunta": "¿Puede prosperar la resolución de la promesa con cláusula penal, o qué debe decidir el juez?",
+   "pistas": [
+    "Antes de discutir quién incumplió, verifica si la promesa reúne los requisitos que la ley exige para que produzca obligaciones.",
+    "Revisa el requisito relativo a la época del contrato prometido en el artículo 89 de la Ley 153 de 1887 y las consecuencias de su omisión."
+   ],
+   "conceptos": [
+    "nulidad absoluta",
+    "resolución del contrato",
+    "incumplimiento"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es válida una promesa de compraventa que sujeta el otorgamiento de la escritura a la aprobación indeterminada de un crédito, y puede resolverse con cláusula penal un contrato que no reúne los requisitos legales?",
+    "normas": [
+     {
+      "norma": "Ley 153 de 1887, art. 89",
+      "para_que": "La promesa solo produce obligación si, entre otros requisitos, contiene un plazo o condición que fije la época en que ha de celebrarse el contrato."
+     },
+     {
+      "norma": "Código Civil, arts. 1741 y 1742",
+      "para_que": "La omisión de un requisito exigido para el valor del acto según su naturaleza genera nulidad absoluta, declarable de oficio."
+     },
+     {
+      "norma": "Código Civil, art. 1546",
+      "para_que": "La acción resolutoria presupone un contrato bilateral válido."
+     },
+     {
+      "norma": "Código Civil, arts. 1592 y 1746",
+      "para_que": "La cláusula penal es accesoria de una obligación válida; declarada la nulidad proceden las restituciones mutuas."
+     }
+    ],
+    "analisis": "La promesa no fijó la época de la escritura: la remitió a la aprobación de un crédito, hecho incierto en su ocurrencia y en su fecha. La jurisprudencia exige que el plazo o la condición sean determinados, de modo que se sepa con certeza cuándo debe celebrarse el contrato prometido. Falta, entonces, un requisito legal y la promesa es absolutamente nula.\n\nSin contrato válido no hay incumplimiento que resolver ni pena que cobrar, porque la cláusula penal es accesoria. El juez debe declarar de oficio la nulidad y ordenar las restituciones: Fredy devuelve el apartamento y reconoce los frutos; Carmenza devuelve los $100 millones actualizados.",
+    "contraargumento": "Carmenza dirá que ambas partes ejecutaron la promesa y que la voluntad de contratar es clara. La ejecución parcial no sanea la nulidad absoluta derivada de la omisión de un requisito legal.",
+    "conclusion": "La resolución y la cláusula penal no proceden. El juez debe declarar la nulidad absoluta de la promesa y ordenar las restituciones mutuas; Carmenza no puede conservar los $100 millones.",
+    "errores_comunes": [
+     "Discutir el incumplimiento sin examinar antes la validez de la promesa.",
+     "Aceptar como época determinada una condición incierta como la aprobación de un crédito.",
+     "Aplicar la cláusula penal de un contrato nulo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, antes de establecer si Fredy incumplió, el problema jurídico es si la promesa firmada el 3 de marzo de 2025 es válida, porque de ello depende que pueda resolverse y que se cobre la cláusula penal.\n\nEl artículo 89 de la Ley 153 de 1887 dispone que la promesa de celebrar un contrato no produce obligación alguna salvo que reúna ciertos requisitos, entre ellos que contenga un plazo o condición que fije la época en que ha de celebrarse el contrato. La jurisprudencia ha precisado que ese plazo o condición debe ser determinado, de modo que las partes sepan con certeza cuándo deben acudir a la notaría.\n\nEn efecto, el documento dice que la escritura se otorgará una vez aprobado el crédito, sin fecha ni notaría. Se trata de un hecho incierto, que podía ocurrir en cualquier momento o no ocurrir nunca, como finalmente sucedió. Por consiguiente, la promesa no fijó la época del contrato prometido y, conforme al artículo 1741 del Código Civil, es absolutamente nula.\n\nAhora bien, Carmenza podría replicar que las firmas se autenticaron y que ambas partes ejecutaron lo pactado. Sin embargo, la autenticación solo acredita quién firmó, y la ejecución parcial no sanea la omisión de un requisito legal.\n\nDe ahí se siguen dos consecuencias. De un lado, no procede la resolución, puesto que el artículo 1546 supone un contrato válido que alguien incumplió. De otro lado, tampoco la cláusula penal, ya que es accesoria y sigue la suerte de la obligación principal.\n\nEn conclusión, el juez debe declarar de oficio la nulidad, como lo autoriza el artículo 1742, y ordenar las restituciones del artículo 1746: Fredy devuelve el apartamento con sus frutos y Carmenza los $100 millones actualizados, sin que pueda conservarlos como indemnización.",
+   "conectores_usados": [
+    "en primer lugar",
+    "porque",
+    "de modo que",
+    "en efecto",
+    "finalmente",
+    "por consiguiente",
+    "ahora bien",
+    "sin embargo",
+    "de un lado",
+    "puesto que",
+    "de otro lado",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la promesa dijera que la escritura se otorgará el 30 de septiembre de 2025, a las diez de la mañana, en la Notaría Segunda de Ibagué?",
+    "respuesta": "La promesa sería válida. Fredy, que no pagó el saldo ni compareció, habría incumplido —conseguir el crédito era riesgo suyo—, y Carmenza podría pedir la resolución con la cláusula penal y las restituciones."
+   },
+   "distractor": "La autenticación de las firmas ante notario: da certeza sobre quiénes firmaron, pero no suple el requisito de fijar la época del contrato prometido.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-18",
+   "area": "Civil",
+   "nivel": "experto",
+   "titulo": "El pare y los setenta por hora",
+   "enunciado": "El 12 de marzo de 2023, en una intersección de Dosquebradas, un camión de reparto de Distribuidora La Cosecha S.A.S., conducido por su empleado Albeiro Mora, omitió una señal de pare y chocó con la motocicleta de Kevin Londoño, de 27 años, quien según el informe de tránsito circulaba a unos 70 kilómetros por hora en una zona limitada a 30. Kevin sufrió fracturas en una pierna y quedó con una pérdida de capacidad laboral del 22 %. Su licencia de conducción había vencido dos meses antes del accidente. El 20 de mayo de 2026 Kevin demandó a Albeiro y a la empresa. La sociedad se defiende así: primero, como ambos ejercían actividades peligrosas, las presunciones se neutralizan y Kevin debe probar la culpa del camionero; segundo, hubo culpa exclusiva de la víctima; tercero, la acción contra ella prescribió, porque como tercero civilmente responsable por el hecho de su empleado solo podía ser demandada dentro de los tres años siguientes al accidente.",
+   "pregunta": "¿Prosperan las defensas de la empresa sobre neutralización de presunciones, culpa exclusiva de la víctima y prescripción?",
+   "pistas": [
+    "Cuando chocan dos actividades peligrosas, la discusión no termina en quién tiene la carga de probar: pregúntate qué aportó cada conducta al resultado.",
+    "Para la prescripción, define si la empresa responde como un tercero por el hecho ajeno o de manera directa, como persona jurídica y guardiana de la actividad."
+   ],
+   "conceptos": [
+    "actividades peligrosas",
+    "responsabilidad civil extracontractual",
+    "prescripción extintiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Cómo se resuelve la responsabilidad cuando concurren dos actividades peligrosas y ambas partes infringieron normas de tránsito, y qué término de prescripción rige la acción contra la persona jurídica propietaria del vehículo?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 2356",
+      "para_que": "Régimen de responsabilidad por actividades peligrosas, aplicable a la conducción de automotores según jurisprudencia reiterada."
+     },
+     {
+      "norma": "Código Civil, art. 2357",
+      "para_que": "Reducción de la indemnización cuando la víctima se expuso imprudentemente al daño."
+     },
+     {
+      "norma": "Código Civil, art. 2344",
+      "para_que": "Solidaridad entre el conductor y la empresa."
+     },
+     {
+      "norma": "Código Civil, art. 2358",
+      "para_que": "Las acciones contra terceros responsables por el hecho ajeno prescriben en tres años desde la perpetración del acto."
+     },
+     {
+      "norma": "Código Civil, art. 2536",
+      "para_que": "Término general de diez años de la acción ordinaria."
+     }
+    ],
+    "analisis": "Sobre la concurrencia de actividades peligrosas, la tesis de la neutralización de presunciones ha sido defendida, pero la jurisprudencia civil se ha inclinado por examinar la incidencia causal de cada actividad en el daño (línea que debe verificarse en la relatoría). Bajo cualquiera de las dos tesis el resultado aquí es el mismo, porque la culpa del camionero está probada: omitió el pare.\n\nEl exceso de velocidad de Kevin contribuyó al resultado, pero no fue su causa única; hay concurrencia y procede la reducción. La licencia vencida no tiene relación causal.\n\nEn cuanto a la prescripción, el término trienal protege a quienes responden por el hecho ajeno. La jurisprudencia ha sostenido que la persona jurídica responde de manera directa por los actos de sus agentes y, además, la empresa es guardiana del camión. Rige el término de diez años.",
+    "contraargumento": "La empresa insistirá en que su responsabilidad deriva del hecho de un dependiente y que el art. 2358 la ampara. Es su defensa más seria, pero supone tratar a la sociedad como un tercero ajeno a la actividad, cuando el camión operaba en desarrollo de su objeto y bajo su control.",
+    "conclusion": "Ninguna defensa prospera por completo. Albeiro y la empresa responden solidariamente; la indemnización se reduce en la proporción en que el exceso de velocidad de Kevin contribuyó al daño; la acción no está prescrita.",
+    "errores_comunes": [
+     "Dar por cierto que las presunciones se neutralizan y exigir a la víctima prueba plena de la culpa.",
+     "Tratar la licencia vencida como causa del accidente.",
+     "Aplicar el término de tres años a la persona jurídica que ejerce la actividad peligrosa."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso plantea tres problemas: cómo se juzga la colisión de dos actividades peligrosas, si la imprudencia de Kevin exonera a los demandados y si la acción contra la empresa prescribió en tres años.\n\nEl artículo 2356 del Código Civil sustenta el régimen de las actividades peligrosas, entre ellas la conducción. La empresa sostiene que, por ser recíproco el peligro, las presunciones se neutralizan. Esa tesis ha tenido defensores; sin embargo, la jurisprudencia civil se ha orientado a examinar la incidencia causal de cada actividad en el resultado, línea que conviene verificar en la relatoría. Con todo, la discusión pierde peso aquí, porque la culpa de Albeiro está probada: omitió una señal de pare.\n\nAhora bien, Kevin circulaba a 70 kilómetros por hora donde el límite era 30. Esa conducta contribuyó al choque y agravó sus consecuencias, pero no fue su causa exclusiva, puesto que sin la omisión del pare no habría ocurrido. Por consiguiente, no hay exoneración sino concurrencia, y el artículo 2357 ordena reducir la indemnización. En cambio, la licencia vencida es irrelevante, ya que una falta administrativa sin relación con la mecánica del accidente no es causa del daño.\n\nEn cuanto a la prescripción, el artículo 2358 fija tres años para las acciones contra terceros responsables por el hecho ajeno. No obstante, la jurisprudencia ha considerado que la persona jurídica responde directamente por los actos de sus agentes; además, la sociedad era guardiana del camión, que operaba en desarrollo de su objeto. De ahí que rija el término de diez años del artículo 2536 y que la demanda del 20 de mayo de 2026 sea oportuna.\n\nEn conclusión, ninguna defensa prospera por completo: Albeiro y la empresa responden solidariamente, conforme al artículo 2344, con una condena reducida en la proporción que fije el juez.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "con todo",
+    "porque",
+    "ahora bien",
+    "puesto que",
+    "por consiguiente",
+    "en cambio",
+    "ya que",
+    "no obstante",
+    "además",
+    "de ahí que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Kevin hubiera circulado a la velocidad permitida?",
+    "respuesta": "No habría aporte causal de la víctima. La indemnización sería plena, sin la reducción del art. 2357 del Código Civil; las conclusiones sobre la responsabilidad directa de la empresa y la prescripción se mantendrían."
+   },
+   "distractor": "La licencia de conducción vencida de Kevin: es una infracción administrativa sin incidencia causal en el choque.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-19",
+   "area": "Civil",
+   "nivel": "experto",
+   "titulo": "La casa del padre",
+   "enunciado": "Aurelio Paredes murió en mayo de 2009 y dejó una casa de dos pisos en Tunja; nunca se tramitó la sucesión. De sus cuatro hijos, solo Nubia siguió viviendo en la casa. Desde 2010 ella paga el impuesto predial, remodeló el segundo piso y arrendó el local del primero, cuyos cánones conserva. El 14 de febrero de 2013, sus hermanos le pidieron por escrito rendir cuentas de los arriendos y vender la casa para repartir el precio; Nubia respondió, en carta con firma autenticada, que la casa era suya, que no reconocía derecho alguno a nadie y que no entregaría un peso. Los hermanos no hicieron nada más. Uno de ellos, Julián, tenía entonces 13 años. El 2 de junio de 2026 Nubia demandó la pertenencia. Sus hermanos se oponen: dicen que una heredera posee para la comunidad, que contra Julián la prescripción estuvo suspendida mientras fue menor y que Nubia cuidó a su padre enfermo solo para quedarse con la casa.",
+   "pregunta": "¿Puede Nubia adquirir por prescripción extraordinaria la casa que hace parte de la herencia de su padre?",
+   "pistas": [
+    "Quien ocupa un bien de la herencia se presume que lo hace como heredero y para todos: identifica qué hecho permitiría afirmar que Nubia empezó a poseer solo para sí.",
+    "Revisa la regla del Código General del Proceso sobre la pertenencia pedida por un comunero y si la suspensión de la prescripción en favor de los menores se aplica a la extraordinaria."
+   ],
+   "conceptos": [
+    "prescripción adquisitiva",
+    "posesión",
+    "pertenencia"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede una heredera adquirir por prescripción extraordinaria un bien de la herencia frente a sus coherederos, desde cuándo se cuenta su posesión exclusiva y se suspende el término en favor del coheredero menor de edad?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 375",
+      "para_que": "La pertenencia puede pedirla el comunero que, con exclusión de los demás y por el término de la prescripción extraordinaria, haya poseído materialmente el bien común, siempre que su explotación no se deba a acuerdo con los otros comuneros ni a disposición de autoridad o del administrador de la comunidad."
+     },
+     {
+      "norma": "Código Civil, arts. 762 y 777",
+      "para_que": "Posesión con ánimo de dueño; el tiempo no convierte en posesión exclusiva la que se ejerce reconociendo derechos ajenos."
+     },
+     {
+      "norma": "Código Civil, arts. 2531 y 2532",
+      "para_que": "Prescripción extraordinaria de diez años, que no se suspende en favor de las personas enumeradas en el art. 2530."
+     },
+     {
+      "norma": "Código Civil, art. 2530",
+      "para_que": "Suspensión de la prescripción ordinaria en favor de los incapaces."
+     }
+    ],
+    "analisis": "Los actos de Nubia entre 2010 y 2013 —vivir en la casa, pagar el predial, arrendar— son equívocos: una heredera también los realiza en beneficio de la comunidad. No bastan para afirmar posesión exclusiva.\n\nEl 14 de febrero de 2013 la situación cambia: requerida por sus hermanos, Nubia negó por escrito cualquier derecho ajeno y se rehusó a rendir cuentas. Desde ese acto inequívoco, conocido por los demás, posee para sí y con exclusión de ellos; la explotación del local no obedece a acuerdo alguno. Hasta junio de 2026 transcurrieron más de trece años sin demanda de los hermanos.\n\nLa minoría de edad de Julián no altera el cómputo, porque la suspensión rige para la prescripción ordinaria, no para la extraordinaria.",
+    "contraargumento": "Los hermanos sostienen que la heredera posee para la comunidad. Es la presunción de partida, y por eso la prueba de la exclusión debe ser rigurosa; la carta de 2013 la satisface. Si Nubia hubiera girado a sus hermanos parte de los cánones después de esa fecha, el argumento prosperaría.",
+    "conclusion": "Nubia puede adquirir la casa por prescripción extraordinaria. La posesión exclusiva se cuenta desde el 14 de febrero de 2013 y supera los diez años; la suspensión alegada en favor de Julián no opera.",
+    "errores_comunes": [
+     "Contar la posesión desde la muerte del padre o desde 2010, con base en actos equívocos.",
+     "Negar de plano que un heredero o comunero pueda prescribir contra los demás.",
+     "Aplicar a la prescripción extraordinaria la suspensión en favor de los menores."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Nubia, que es una de las herederas, puede ganar por prescripción extraordinaria la casa que dejó su padre, desde cuándo se cuenta su posesión y si el término se suspendió en favor de Julián.\n\nQuien ocupa un bien de la herencia se presume que lo hace como heredero y en beneficio de todos. Sin embargo, el artículo 375 del Código General del Proceso admite la pertenencia a favor del comunero que, con exclusión de los demás condueños y por el término de la prescripción extraordinaria, haya poseído materialmente el bien común, siempre que su explotación económica no se deba a un acuerdo con los otros. A su vez, los artículos 2531 y 2532 del Código Civil fijan ese término en diez años.\n\nAhora bien, no toda la ocupación de Nubia cuenta. Entre 2010 y 2013 vivió en la casa, pagó el predial y arrendó el local, es decir, realizó actos que una heredera también ejecuta para la comunidad. En cambio, el 14 de febrero de 2013 respondió por escrito a sus hermanos que la casa era suya, que no reconocía derecho a nadie y que no rendiría cuentas. Ese acto es inequívoco y fue conocido por ellos; por consiguiente, desde entonces posee con exclusión de los demás, y hasta el 2 de junio de 2026 corrieron más de trece años.\n\nLos hermanos alegan que la prescripción estuvo suspendida mientras Julián fue menor. El argumento no prospera, porque el artículo 2530 suspende la prescripción ordinaria y el artículo 2532 excluye expresamente esa suspensión en la extraordinaria. Por otra parte, que Nubia cuidara a su padre con una u otra intención es irrelevante, puesto que se trata de hechos anteriores a la apertura de la sucesión.\n\nEn conclusión, la pertenencia puede declararse, de modo que la carta de 2013 resulta la prueba decisiva.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "a su vez",
+    "ahora bien",
+    "es decir",
+    "en cambio",
+    "por consiguiente",
+    "porque",
+    "por otra parte",
+    "puesto que",
+    "en conclusión",
+    "de modo que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Nubia hubiera arrendado el local por encargo escrito de sus hermanos y les hubiera girado su parte de los cánones hasta 2020?",
+    "respuesta": "La explotación se debería a un acuerdo entre comuneros y Nubia habría reconocido derechos ajenos hasta 2020. Solo desde entonces podría contarse una posesión exclusiva, y en 2026 no se habrían cumplido los diez años."
+   },
+   "distractor": "Que Nubia cuidara a su padre enfermo y los motivos que se le atribuyen: son hechos anteriores a la muerte del causante y no definen si hubo posesión exclusiva.",
+   "revision_humana": true
+  },
+  {
+   "id": "civ-20",
+   "area": "Civil",
+   "nivel": "experto",
+   "titulo": "El último viaje de Álvaro",
+   "enunciado": "El 8 de junio de 2023, un bus intermunicipal de Expreso Sierra Alta S.A. se volcó en la vía entre Honda y Guaduas cuando le fallaron los frenos en un descenso. Álvaro Montes, de 50 años, que viajaba como pasajero con tiquete pagado, sufrió lesiones graves, estuvo dos meses en cuidados intensivos y murió el 15 de agosto de 2023. El bus tenía al día la revisión técnico-mecánica. El 15 de septiembre de 2025, su esposa y sus dos hijos presentaron una sola demanda contra la empresa en la que reclaman, de un lado, como herederos, los perjuicios que Álvaro padeció en vida —gastos médicos y daño moral por su agonía— y, de otro, los perjuicios propios: el daño moral por su muerte y el sustento que dejaron de recibir. La empresa propone la excepción de prescripción de dos años propia del contrato de transporte, alega que la falla de frenos fue un caso fortuito y objeta que se mezclen dos acciones distintas.",
+   "pregunta": "¿Qué acciones tienen la esposa y los hijos de Álvaro, pueden acumularlas y cuál es el efecto de la prescripción alegada?",
+   "pistas": [
+    "Separa dos posiciones jurídicas de los demandantes: la de herederos del pasajero y la de víctimas directas de su muerte.",
+    "El Código de Comercio regula la prescripción de las acciones del contrato de transporte y la relación entre la acción contractual heredada y la extracontractual propia de los herederos."
+   ],
+   "conceptos": [
+    "responsabilidad contractual",
+    "responsabilidad civil extracontractual",
+    "prescripción extintiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Pueden los herederos de un pasajero fallecido acumular la acción contractual heredada y la acción extracontractual por su propio perjuicio, qué término de prescripción rige cada una y exonera al transportador una falla mecánica?",
+    "normas": [
+     {
+      "norma": "Código de Comercio, normas del contrato de transporte de personas (arts. 982 y 1003, verificar)",
+      "para_que": "El transportador se obliga a conducir a los pasajeros sanos y salvos al lugar de destino y responde de los daños que les sobrevengan, salvo causa extraña."
+     },
+     {
+      "norma": "Código de Comercio, art. 993",
+      "para_que": "Las acciones provenientes del contrato de transporte prescriben en dos años, contados desde que concluyó o debió concluir la obligación de conducción."
+     },
+     {
+      "norma": "Código de Comercio, art. 1006",
+      "para_que": "Los herederos del pasajero fallecido no pueden ejercer acumulativamente la acción contractual transmitida y la extracontractual por el perjuicio propio, pero sí separada o sucesivamente."
+     },
+     {
+      "norma": "Código Civil, arts. 2341, 2356 y 2536",
+      "para_que": "Responsabilidad extracontractual por actividades peligrosas frente a las víctimas indirectas y término de diez años de la acción ordinaria."
+     }
+    ],
+    "analisis": "Los demandantes tienen dos acciones. Como herederos reciben la acción contractual de Álvaro por los daños que sufrió en vida. Como víctimas directas de su muerte, sin vínculo contractual con la empresa, tienen una acción extracontractual por su propio perjuicio.\n\nLa ley prohíbe acumularlas en un mismo proceso. Además, la contractual prescribió: el viaje debió concluir el 8 de junio de 2023 y la demanda se presentó el 15 de septiembre de 2025, vencidos los dos años. La extracontractual, sujeta al término de diez años, está vigente.\n\nLa falla de frenos no es causa extraña: es un riesgo interno de la actividad y del vehículo que el transportador debe controlar; no es exterior a él ni imprevisible.",
+    "contraargumento": "La empresa alega que todo deriva del contrato de transporte y que la prescripción de dos años lo cubre todo. No prospera: la esposa y los hijos no fueron parte del contrato, y su perjuicio personal nace del hecho dañoso, no del tiquete.",
+    "conclusion": "No pueden acumularse las dos acciones. La contractual heredada está prescrita; la extracontractual por el daño propio —moral y pérdida del sustento— es oportuna y debe prosperar, porque la falla de frenos no exonera al transportador.",
+    "errores_comunes": [
+     "Tratar todas las pretensiones como contractuales y declararlas prescritas en bloque.",
+     "Ignorar la prohibición de acumular la acción heredada y la propia.",
+     "Aceptar una falla mecánica del vehículo como caso fortuito."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay que distinguir en qué calidad reclaman la esposa y los hijos de Álvaro, porque de ello dependen el régimen de responsabilidad, la posibilidad de acumular pretensiones y el término de prescripción.\n\nDe un lado, como herederos reciben la acción que tenía el pasajero contra el transportador. El Código de Comercio obliga a este a conducir a los pasajeros sanos y salvos y lo hace responsable de los daños que les sobrevengan, salvo causa extraña; los artículos exactos deben verificarse. De otro lado, como víctimas directas de la muerte no fueron parte del contrato, de modo que su reclamo es extracontractual y se rige por el artículo 2356 del Código Civil, dado que el transporte automotor es una actividad peligrosa.\n\nAhora bien, el artículo 1006 del Código de Comercio impide ejercer acumulativamente la acción contractual transmitida y la extracontractual propia, aunque permite intentarlas separada o sucesivamente. Por consiguiente, la objeción de la empresa sobre la mezcla de acciones es fundada y los demandantes deben escoger.\n\nLa elección la define la prescripción. El artículo 993 del mismo código fija dos años para las acciones del contrato de transporte, contados desde que concluyó o debió concluir el viaje. En efecto, el recorrido debió terminar el 8 de junio de 2023 y la demanda se presentó el 15 de septiembre de 2025; por lo tanto, la acción heredada está prescrita. En cambio, la acción propia se sujeta al término de diez años del artículo 2536 del Código Civil y es oportuna.\n\nPor último, la falla de frenos no exonera. Si bien el bus tenía al día la revisión técnico-mecánica, un defecto del vehículo es un riesgo interno de la actividad y no un hecho exterior e imprevisible.\n\nEn conclusión, prosperan el daño moral propio y la pérdida del sustento; no así los perjuicios heredados.",
+   "conectores_usados": [
+    "en primer lugar",
+    "porque",
+    "de un lado",
+    "de otro lado",
+    "de modo que",
+    "dado que",
+    "ahora bien",
+    "aunque",
+    "por consiguiente",
+    "en efecto",
+    "por lo tanto",
+    "en cambio",
+    "por último",
+    "si bien",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la demanda se hubiera presentado el 10 de mayo de 2025?",
+    "respuesta": "La acción contractual heredada estaría dentro de los dos años. Subsistiría, sin embargo, la prohibición de acumularla con la extracontractual: los demandantes tendrían que ejercerlas por separado o de manera sucesiva."
+   },
+   "distractor": "Que el bus tuviera al día la revisión técnico-mecánica: cumplir un requisito administrativo no convierte la falla de frenos en una causa extraña.",
+   "revision_humana": true
+  }
+ ]
+}

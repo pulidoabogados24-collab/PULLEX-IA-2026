@@ -1,0 +1,1403 @@
+{
+ "area": "Penal",
+ "descripcion": "Banco curado de casos tipo examen modular de Derecho Penal (PULLEX Academia).",
+ "aviso": "Exactitud jurídica: NOT VERIFIED. Casos escritos para practicar; requieren revisión humana (docente o abogado) antes de usarse con estudiantes. Verifica la vigencia y el número de cada norma en la fuente oficial.",
+ "casos": [
+  {
+   "id": "pen-01",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "La bicicleta sin candado",
+   "enunciado": "El 14 de marzo de 2026, hacia las 6:00 p. m., Brayan Stiven Molina, de 22 años, vio una bicicleta de montaña recostada sin candado frente a una panadería del barrio Kennedy, en Bogotá. Su dueña, Paula Andrea Ríos, había entrado a comprar pan. Brayan miró a ambos lados, se subió a la bicicleta y se alejó pedaleando. Dos cuadras después, vecinos que oyeron los gritos de Paula lo detuvieron y llamaron a la Policía. La bicicleta, avaluada en $2.400.000, fue recuperada sin daños. Brayan no ejerció violencia ni amenazó a nadie. En su versión, afirma que solo quería dar una vuelta y que pensaba devolverla, aunque no conoce a Paula y fue alcanzado cuando se dirigía hacia otro barrio. Su defensor sostiene que la conducta es atípica porque la bicicleta estaba sin seguro en la vía pública y porque Brayan nunca logró disponer de ella.",
+   "pregunta": "¿Es típica la conducta de Brayan como hurto y actuó con dolo?",
+   "pistas": [
+    "Descompón el tipo penal de hurto en sus elementos objetivos y en el propósito que exige, y revisa cada uno con los hechos.",
+    "Pregúntate si el descuido de la dueña o la recuperación inmediata de la cosa eliminan la tipicidad, o si solo inciden en el grado de ejecución."
+   ],
+   "conceptos": [
+    "tipicidad",
+    "dolo"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se adecua al tipo penal de hurto el apoderamiento de una bicicleta ajena dejada sin candado en la vía pública, cuando el autor es alcanzado a las dos cuadras y afirma que solo quería usarla?",
+    "normas": [
+     {
+      "norma": "Código Penal (Ley 599 de 2000), art. 239",
+      "para_que": "Describe el hurto: apoderarse de cosa mueble ajena con el propósito de obtener provecho para sí o para otro."
+     },
+     {
+      "norma": "Código Penal, arts. 9 y 10",
+      "para_que": "La conducta punible debe ser típica, antijurídica y culpable; la tipicidad exige adecuación inequívoca al tipo."
+     },
+     {
+      "norma": "Código Penal, art. 22",
+      "para_que": "Define el dolo: conocer los hechos constitutivos de la infracción y querer su realización."
+     },
+     {
+      "norma": "Código Penal, art. 27",
+      "para_que": "Tentativa, si la conducta no se consumó por circunstancias ajenas a la voluntad del autor."
+     }
+    ],
+    "analisis": "En el plano objetivo, Brayan se apoderó de una cosa mueble (la bicicleta) que era ajena. Que estuviera sin candado no la convierte en cosa abandonada ni autoriza a tomarla: Paula conservaba su dominio y estaba a pocos metros. En el plano subjetivo, sabía que la bicicleta no era suya y quiso llevársela; mirar a los lados antes de tomarla y alejarse hacia otro barrio revelan conocimiento y voluntad, además del propósito de provecho.\n\nLa versión de que pensaba devolverla no es creíble: no conocía a la dueña ni tenía cómo restituirla. La recuperación a las dos cuadras no elimina la tipicidad; a lo sumo permite discutir si el hurto quedó en tentativa por no haber alcanzado a disponer de la cosa.",
+    "contraargumento": "La defensa alega atipicidad por el descuido de la víctima y por la falta de disponibilidad. El descuido no excluye ningún elemento del tipo; la falta de disponibilidad no hace atípica la conducta sino que abre el debate sobre la tentativa, que sigue siendo punible con una pena menor.",
+    "conclusion": "La conducta es típica de hurto y dolosa. Es defendible sostener que quedó en grado de tentativa, porque Brayan fue alcanzado de inmediato y no logró disponer de la bicicleta.",
+    "errores_comunes": [
+     "Creer que el descuido de la víctima elimina la tipicidad.",
+     "Confundir la falta de consumación con atipicidad.",
+     "Aceptar la simple afirmación de que iba a devolverla sin contrastarla con los hechos."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la conducta de Brayan se adecua al tipo penal de hurto y si obró con dolo, pese a que la bicicleta estaba sin candado y fue recuperada dos cuadras después.\n\nEl artículo 239 del Código Penal sanciona a quien se apodere de una cosa mueble ajena con el propósito de obtener provecho para sí o para otro, y el artículo 22 define el dolo como el conocimiento de los hechos constitutivos de la infracción y la voluntad de realizarlos. En efecto, la bicicleta es una cosa mueble y pertenecía a Paula, quien solo había entrado a la panadería; por consiguiente, seguía siendo ajena aunque no tuviera candado, ya que el descuido del dueño no convierte un bien en cosa abandonada.\n\nAhora bien, en cuanto al aspecto subjetivo, Brayan miró a ambos lados antes de tomarla y se alejó hacia otro barrio. Esos hechos indican que sabía que no era suya y que quiso llevársela; de ahí que el dolo y el propósito de provecho estén acreditados. Además, su explicación de que solo quería dar una vuelta no resulta creíble, puesto que no conocía a Paula ni tenía forma de devolverle el bien.\n\nLa defensa sostiene que la conducta es atípica porque Brayan nunca logró disponer de la bicicleta. Sin embargo, ese argumento confunde dos planos. La falta de disponibilidad no elimina ningún elemento del tipo; a lo sumo, permite discutir si el hurto se consumó o quedó en tentativa, según el artículo 27, toda vez que fue alcanzado de inmediato por los vecinos. No obstante, la tentativa también es punible, solo que con una pena menor.\n\nEn conclusión, la conducta es típica de hurto y fue realizada con dolo. Por último, es defendible calificarla como tentativa, porque la intervención inmediata de los vecinos impidió que Brayan dispusiera del bien.",
+   "conectores_usados": [
+    "en primer lugar",
+    "pese a",
+    "en efecto",
+    "por consiguiente",
+    "aunque",
+    "ya que",
+    "ahora bien",
+    "de ahí que",
+    "además",
+    "puesto que",
+    "porque",
+    "sin embargo",
+    "toda vez que",
+    "no obstante",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Brayan tomó la bicicleta para alcanzar a un ladrón que acababa de robarle el celular y la devolvió a Paula diez minutos después?",
+    "respuesta": "Faltaría el propósito de obtener provecho propio del hurto común y la restitución fue inmediata; la conducta podría analizarse como un apoderamiento para uso con restitución, que la ley trata con menor pena, o incluso como una conducta justificada por necesidad (verificar)."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-02",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "El palo de escoba",
+   "enunciado": "El 21 de febrero de 2026, a las 11:00 p. m., Óscar Darío Peña, vigilante de 45 años, caminaba hacia su casa en Soledad (Atlántico) cuando Kevin Barrios, de 24 años, lo interceptó con un cuchillo y le exigió el celular. Óscar se lo entregó, pero Kevin, visiblemente alterado, le lanzó una puñalada que le rozó el brazo y se preparó para atacar de nuevo. Óscar tomó un palo de escoba que estaba junto a una caneca y le dio un golpe fuerte en la mano y otro en la cabeza. Kevin cayó, soltó el cuchillo y quedó aturdido; Óscar no lo volvió a golpear y llamó a la Policía. Kevin sufrió una fractura en la mano y una herida en el cuero cabelludo, con incapacidad médico legal de 35 días. La Fiscalía estudia imputar a Óscar lesiones personales dolosas. Un vecino que vio todo opina que Óscar pudo haber salido corriendo.",
+   "pregunta": "¿Es responsable penalmente Óscar por las lesiones que causó a Kevin?",
+   "pistas": [
+    "Las lesiones son típicas, pero la conducta punible exige además antijuridicidad: busca en el artículo 32 del Código Penal la causal aplicable.",
+    "Revisa uno por uno los requisitos: agresión injusta, actualidad, necesidad de la defensa y proporcionalidad. ¿Existe un deber de huir?"
+   ],
+   "conceptos": [
+    "legítima defensa",
+    "antijuridicidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Actuó Óscar amparado por la legítima defensa al golpear a quien lo atacaba con un cuchillo?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 32, num. 6",
+      "para_que": "Legítima defensa: necesidad de defender un derecho propio o ajeno contra injusta agresión actual o inminente, con defensa proporcionada."
+     },
+     {
+      "norma": "Código Penal, arts. 9 y 11",
+      "para_que": "La conducta punible exige antijuridicidad: lesión del bien jurídico sin justa causa."
+     },
+     {
+      "norma": "Código Penal, art. 111",
+      "para_que": "Tipo de lesiones personales."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 332",
+      "para_que": "La existencia de una causal que excluye la responsabilidad es causal de preclusión."
+     }
+    ],
+    "analisis": "Las lesiones a Kevin son típicas, pero la conducta no es antijurídica. Hubo una agresión injusta (un ataque con cuchillo durante un hurto), actual (Kevin ya lo había herido y se preparaba para atacar de nuevo) y dirigida contra la vida e integridad de Óscar. La defensa fue necesaria: no tenía otro medio a mano para detener el ataque. También fue proporcionada: un palo frente a un cuchillo, con dos golpes dirigidos a neutralizar al agresor.\n\nEs decisivo que Óscar se detuvo cuando Kevin soltó el arma y quedó aturdido: la defensa duró lo que duró la agresión.",
+    "contraargumento": "El vecino opina que pudo huir. La legítima defensa no exige huir ni soportar la agresión: quien es atacado injustamente no está obligado a ceder. La gravedad de las lesiones de Kevin tampoco la excluye, pues la proporcionalidad se mide frente a la agresión, no por el resultado aislado.",
+    "conclusion": "Óscar no es responsable penalmente: actuó en legítima defensa. La Fiscalía debe abstenerse de imputar y solicitar la preclusión.",
+    "errores_comunes": [
+     "Negar la legítima defensa porque el agredido pudo huir.",
+     "Medir la proporcionalidad solo comparando las heridas de cada uno.",
+     "Afirmar que la conducta es atípica: es típica, pero está justificada."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Óscar debe responder por las lesiones que causó a Kevin o si su conducta está justificada por la legítima defensa.\n\nEl artículo 9 del Código Penal exige que la conducta punible sea típica, antijurídica y culpable. Si bien golpear a Kevin y fracturarle la mano se adecua al tipo de lesiones personales del artículo 111, el numeral 6 del artículo 32 excluye la responsabilidad de quien obra por la necesidad de defender un derecho propio contra una injusta agresión actual o inminente, siempre que la defensa sea proporcionada.\n\nAhora bien, cada requisito se cumple. En efecto, existió una agresión injusta, porque Kevin lo intimidó con un cuchillo para quitarle el celular. Además, la agresión era actual, puesto que ya lo había herido en el brazo y se preparaba para atacar de nuevo. La defensa era necesaria, toda vez que Óscar no tenía otro medio para detener el ataque, y fue proporcionada, ya que usó un palo de escoba contra un cuchillo y dio solo los golpes que neutralizaron a Kevin. Es decisivo, por otra parte, que dejara de golpearlo cuando soltó el arma; de ahí que la defensa no se extendiera más allá de la agresión.\n\nPodría objetarse, como lo hace el vecino, que Óscar pudo salir corriendo. Sin embargo, la legítima defensa no impone el deber de huir, porque el derecho no tiene que ceder ante lo injusto. Tampoco importa que la incapacidad de Kevin sea de 35 días: la proporcionalidad se mide frente a la agresión que se repele, no por la comparación de las heridas.\n\nEn consecuencia, la conducta de Óscar es típica pero no antijurídica y, por lo tanto, no hay responsabilidad penal. Por último, la Fiscalía debe abstenerse de imputar y pedir la preclusión con base en el artículo 332 de la Ley 906 de 2004.",
+   "conectores_usados": [
+    "en primer lugar",
+    "si bien",
+    "ahora bien",
+    "en efecto",
+    "porque",
+    "además",
+    "puesto que",
+    "toda vez que",
+    "ya que",
+    "por otra parte",
+    "de ahí que",
+    "sin embargo",
+    "en consecuencia",
+    "por lo tanto",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si, con Kevin ya en el suelo y desarmado, Óscar le da varios golpes más en la cabeza?",
+    "respuesta": "La agresión ya había cesado, de modo que esos golpes no están amparados por la legítima defensa. Óscar respondería por las lesiones adicionales, con la posible atenuación por exceso en la causal o por ira (verificar)."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-03",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "A 85 por la zona escolar",
+   "enunciado": "El 8 de enero de 2026, a las 7:30 a. m., Ricardo Tovar conducía su camioneta por una avenida de Villavicencio a 85 km/h, en un tramo escolar señalizado con límite de 30 km/h. Iba atrasado para una reunión. Al llegar a un paso peatonal demarcado, doña Mercedes Lozano, de 67 años, cruzaba la vía con el semáforo peatonal en verde. Ricardo frenó, pero no alcanzó a detenerse y la atropelló. Doña Mercedes murió dos horas después en el hospital. La prueba de alcoholemia de Ricardo fue negativa, su licencia estaba vigente y el vehículo tenía la revisión técnico-mecánica al día. El informe de tránsito concluye que, a 30 km/h, el vehículo se habría detenido varios metros antes del paso peatonal. Ricardo afirma que nunca quiso hacerle daño a nadie y que fue un accidente. La familia de la víctima pide que se le impute homicidio doloso.",
+   "pregunta": "¿A qué título debe responder Ricardo por la muerte de doña Mercedes?",
+   "pistas": [
+    "Distingue las modalidades de la conducta punible: dolo, culpa y preterintención. ¿Cuál encaja con un resultado no querido pero previsible?",
+    "Usa el informe de tránsito para establecer si el exceso de velocidad fue lo que se concretó en la muerte."
+   ],
+   "conceptos": [
+    "culpa",
+    "imputación objetiva",
+    "dolo"
+   ],
+   "solucion": {
+    "problema_juridico": "¿La muerte de doña Mercedes es imputable a Ricardo a título de culpa o de dolo?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 21",
+      "para_que": "Modalidades de la conducta punible: dolo, culpa y preterintención; la culpa solo es punible en los casos señalados por la ley."
+     },
+     {
+      "norma": "Código Penal, art. 23",
+      "para_que": "La conducta es culposa cuando el resultado es producto de la infracción al deber objetivo de cuidado y el agente debió preverlo o, habiéndolo previsto, confió en poder evitarlo."
+     },
+     {
+      "norma": "Código Penal, art. 109",
+      "para_que": "Homicidio culposo."
+     },
+     {
+      "norma": "Código Penal, art. 22",
+      "para_que": "Dolo, incluido el eventual: prever el resultado como probable y dejar su no producción librada al azar."
+     }
+    ],
+    "analisis": "Ricardo infringió el deber objetivo de cuidado: triplicó casi la velocidad permitida en una zona escolar. Con ello creó un riesgo jurídicamente desaprobado, y ese riesgo, no otro, se concretó en el resultado: el informe de tránsito demuestra que a 30 km/h habría frenado antes del paso peatonal. La muerte era previsible para cualquier conductor.\n\nNo hay dolo directo, pues no quiso matar. Tampoco aparecen indicios de dolo eventual: estaba sobrio, intentó frenar y nada sugiere que dejara el resultado librado al azar.",
+    "contraargumento": "La familia sostiene que conducir a 85 km/h en zona escolar equivale a aceptar la muerte de alguien. La gravedad de la imprudencia no convierte por sí sola la culpa en dolo: el dolo eventual exige probar que el agente previó el resultado como probable y lo dejó al azar.",
+    "conclusion": "Ricardo debe responder por homicidio culposo (art. 109), porque el resultado es producto de su infracción al deber objetivo de cuidado.",
+    "errores_comunes": [
+     "Afirmar que no hay delito porque no quiso causar la muerte.",
+     "Convertir en dolo toda imprudencia grave.",
+     "Omitir la relación entre el exceso de velocidad y el resultado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar a qué título responde Ricardo por la muerte de doña Mercedes: si por dolo, como pide la familia, o por culpa.\n\nEl artículo 21 del Código Penal prevé como modalidades de la conducta el dolo, la culpa y la preterintención. A su vez, el artículo 23 define la culpa como la infracción al deber objetivo de cuidado que produce un resultado que el agente debió prever o que, habiéndolo previsto, confió en poder evitar. En efecto, Ricardo conducía a 85 km/h en un tramo escolar con límite de 30; por consiguiente, infringió una regla básica de cuidado y creó un riesgo jurídicamente desaprobado.\n\nAhora bien, no basta con la infracción: el resultado debe ser la concreción de ese riesgo. Así ocurre aquí, puesto que el informe de tránsito concluye que, a la velocidad permitida, el vehículo se habría detenido antes del paso peatonal. Además, doña Mercedes cruzaba con el semáforo en verde, de modo que no hubo ningún aporte de la víctima que explique el resultado. De ahí que la muerte le sea objetivamente imputable.\n\nLa familia sostiene que debe imputarse homicidio doloso. Sin embargo, el artículo 22 exige, incluso para el dolo eventual, que el agente haya previsto el resultado como probable y lo haya dejado librado al azar. No obstante la gravedad de la imprudencia, los hechos muestran lo contrario: Ricardo estaba sobrio, intentó frenar y nada indica que le fuera indiferente atropellar a alguien. Por otro lado, su afirmación de que fue un accidente tampoco lo exonera, porque la culpa no requiere querer el resultado.\n\nEn conclusión, Ricardo debe responder por homicidio culposo, previsto en el artículo 109 del Código Penal. Por último, el buen estado del vehículo y la licencia vigente no excluyen la culpa, pues el deber de cuidado infringido fue el límite de velocidad.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "puesto que",
+    "además",
+    "de modo que",
+    "de ahí que",
+    "sin embargo",
+    "incluso",
+    "no obstante",
+    "por otro lado",
+    "porque",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Ricardo iba a 30 km/h y doña Mercedes cruzó corriendo de improviso por la mitad de la cuadra, entre dos buses?",
+    "respuesta": "Ricardo no habría infringido el deber objetivo de cuidado y se mantuvo dentro del riesgo permitido; el resultado se explicaría por la conducta de la víctima. No habría imputación objetiva ni responsabilidad penal."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-04",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "Cuarenta y dos horas después",
+   "enunciado": "El 3 de abril de 2026, a las 2:15 p. m., dos patrulleros de la Policía observaron en una calle de Pereira a Jhon Fredy Castaño cuando rompía con una piedra el vidrio de un carro estacionado y sacaba un bolso. Lo persiguieron y lo capturaron a media cuadra, con el bolso en la mano. Le leyeron sus derechos, le permitieron llamar a su hermana y lo llevaron a la unidad de reacción inmediata de la Fiscalía, donde fue recibido a las 3:40 p. m. El fiscal de turno estuvo ocupado con otros casos y solo solicitó la audiencia el 5 de abril; Jhon Fredy fue presentado ante el juez de control de garantías ese día a las 9:00 a. m. En la audiencia, la fiscal pide legalizar la captura porque el capturado fue sorprendido en el acto. La defensora no discute la flagrancia, pero afirma que la captura debe declararse ilegal.",
+   "pregunta": "¿Debe el juez de control de garantías declarar legal la captura de Jhon Fredy?",
+   "pistas": [
+    "La legalidad de la captura no depende solo de que haya flagrancia: revisa qué plazo fija la Constitución para poner al capturado a disposición del juez.",
+    "Cuenta las horas entre la aprehensión y la presentación ante el juez, y piensa en la consecuencia si el plazo se superó."
+   ],
+   "conceptos": [
+    "captura en flagrancia",
+    "control de legalidad",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es legal una captura en flagrancia cuando el capturado es puesto a disposición del juez de control de garantías después de las treinta y seis horas?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 28",
+      "para_que": "La persona detenida debe ser puesta a disposición del juez competente dentro de las treinta y seis horas siguientes."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 301",
+      "para_que": "Situaciones de flagrancia, entre ellas ser sorprendido y aprehendido durante la comisión del delito."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 302",
+      "para_que": "Procedimiento en caso de flagrancia y control de legalidad dentro de las treinta y seis horas."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 303",
+      "para_que": "Derechos del capturado."
+     }
+    ],
+    "analisis": "La flagrancia es clara: los policías vieron a Jhon Fredy romper el vidrio y lo aprehendieron de inmediato con el bolso. También se respetaron sus derechos al momento de la captura. Pero el control de legalidad examina además el término: entre las 2:15 p. m. del 3 de abril y las 9:00 a. m. del 5 de abril transcurrieron casi cuarenta y tres horas, y la solicitud de audiencia tampoco se presentó dentro de las treinta y seis.\n\nLa congestión del fiscal no justifica prolongar la privación de la libertad. Superado el término constitucional, la captura se torna ilegal y procede la libertad inmediata.",
+    "contraargumento": "La fiscal insistirá en que la flagrancia es indiscutible. Lo es, pero la legalidad de la aprehensión y la legalidad de su prolongación son cosas distintas. La ilegalidad de la captura no impide formular imputación ni afecta los elementos recogidos en el momento de la flagrancia.",
+    "conclusion": "El juez debe declarar ilegal la captura por vencimiento del término de treinta y seis horas y ordenar la libertad inmediata, sin perjuicio de que la Fiscalía formule imputación y continúe el proceso.",
+    "errores_comunes": [
+     "Creer que la flagrancia basta para legalizar la captura.",
+     "Pensar que la captura ilegal extingue la acción penal o impide la imputación.",
+     "Aceptar la congestión del despacho como justificación del retraso."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la captura de Jhon Fredy puede declararse legal cuando, pese a la flagrancia, fue presentado ante el juez de control de garantías más de treinta y seis horas después de su aprehensión.\n\nEl artículo 28 de la Constitución ordena que toda persona detenida sea puesta a disposición del juez competente dentro de las treinta y seis horas siguientes, y el artículo 302 de la Ley 906 de 2004 reitera ese término para la captura en flagrancia. Además, el artículo 301 define la flagrancia y el 303 enumera los derechos del capturado. Por lo tanto, el control de legalidad abarca tres aspectos: el motivo de la captura, el respeto de los derechos y el cumplimiento del plazo.\n\nAhora bien, los dos primeros aspectos se cumplen. En efecto, los patrulleros vieron a Jhon Fredy romper el vidrio y lo aprehendieron a media cuadra con el bolso, y le leyeron sus derechos y le permitieron llamar a su hermana. Sin embargo, la captura ocurrió el 3 de abril a las 2:15 p. m. y la audiencia se realizó el 5 de abril a las 9:00 a. m., es decir, casi cuarenta y tres horas después; de ahí que el término constitucional se haya superado.\n\nLa fiscal podría alegar que la flagrancia es indiscutible y que la demora obedeció a la congestión del despacho. No obstante, la carga de trabajo del fiscal no autoriza a prolongar la privación de la libertad, porque el plazo es una garantía del capturado y no una formalidad disponible.\n\nEn consecuencia, el juez debe declarar ilegal la captura y ordenar la libertad inmediata de Jhon Fredy. Por último, esa decisión no extingue la acción penal: la Fiscalía puede formular imputación y usar los elementos recogidos en el momento de la flagrancia, pues la ilegalidad recae sobre la prolongación de la detención.",
+   "conectores_usados": [
+    "en primer lugar",
+    "pese a",
+    "además",
+    "por lo tanto",
+    "ahora bien",
+    "en efecto",
+    "sin embargo",
+    "es decir",
+    "de ahí que",
+    "no obstante",
+    "porque",
+    "en consecuencia",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Jhon Fredy fue presentado ante el juez el 4 de abril de 2026 a las 10:00 a. m.?",
+    "respuesta": "Habrían transcurrido menos de veinte horas. Con flagrancia clara, derechos respetados y término cumplido, el juez declararía legal la captura."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-05",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "La burla en la tienda",
+   "enunciado": "El 19 de enero de 2026, en una tienda de Sincelejo, Álvaro Paternina, de 50 años, tomaba una gaseosa cuando su vecino, Néstor Julio Meza, comenzó a gritarle delante de todos que su hija, fallecida dos meses antes en un accidente, se lo había buscado por andar en malos pasos, y se burló de su duelo imitando un llanto. Álvaro, que hasta ese momento estaba tranquilo, se levantó de inmediato, tomó una botella de la mesa y la rompió contra la cara de Néstor, causándole una herida que requirió doce puntos y una incapacidad de 20 días, sin secuelas. Los testigos coinciden en que todo ocurrió en segundos y en que Álvaro temblaba y lloraba después del golpe. Álvaro no tiene antecedentes. Su defensor alega que debe ser absuelto porque cualquiera habría reaccionado igual; la Fiscalía sostiene que debe responder por lesiones personales dolosas sin ninguna rebaja.",
+   "pregunta": "¿Qué efecto tiene el estado emocional de Álvaro sobre su responsabilidad penal?",
+   "pistas": [
+    "Busca en el Código Penal la figura que trata la reacción ante un comportamiento ajeno grave e injustificado, y fíjate en si excluye la responsabilidad o solo reduce la pena.",
+    "Descarta primero la legítima defensa: ¿había una agresión actual que hiciera necesario el golpe?"
+   ],
+   "conceptos": [
+    "ira o intenso dolor",
+    "culpabilidad",
+    "legítima defensa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿La reacción de Álvaro ante la burla sobre su hija fallecida excluye su responsabilidad o solo la atenúa?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 57",
+      "para_que": "Ira o intenso dolor causados por comportamiento ajeno grave e injustificado: pena no menor de la sexta parte del mínimo ni mayor de la mitad del máximo."
+     },
+     {
+      "norma": "Código Penal, art. 111 y siguientes",
+      "para_que": "Lesiones personales."
+     },
+     {
+      "norma": "Código Penal, art. 32, num. 6",
+      "para_que": "Legítima defensa, para descartar su aplicación."
+     },
+     {
+      "norma": "Código Penal, art. 33",
+      "para_que": "Inimputabilidad, para descartar su aplicación."
+     }
+    ],
+    "analisis": "La ira o el intenso dolor no excluyen la responsabilidad: son una circunstancia que disminuye la pena. Exigen tres elementos: un comportamiento ajeno grave e injustificado, un estado de ira o de intenso dolor, y que ese estado haya sido causado por aquel comportamiento. Burlarse del duelo de un padre y culpar a su hija muerta es grave e injustificado; los testigos describen una reacción inmediata y un estado de alteración; y la relación causal es evidente.\n\nNo hay legítima defensa, porque no existía una agresión que hiciera necesario un botellazo. Tampoco inimputabilidad: la alteración emocional no le impidió comprender lo que hacía.",
+    "contraargumento": "La defensa pide absolución; la Fiscalía, pena plena. Ninguna prospera: la ley no trata esta reacción como justificada ni como inexigible, pero tampoco la ignora. La consecuencia es una pena atenuada.",
+    "conclusion": "Álvaro responde por lesiones personales dolosas, con la pena atenuada del artículo 57 por haber obrado en estado de ira e intenso dolor.",
+    "errores_comunes": [
+     "Tratar la ira como causal de ausencia de responsabilidad.",
+     "Confundirla con la legítima defensa o con la inimputabilidad.",
+     "Olvidar que el comportamiento ajeno debe ser grave e injustificado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, la cuestión es si el estado emocional en que Álvaro golpeó a Néstor excluye su responsabilidad penal, como pide la defensa, o si no tiene ningún efecto, como sostiene la Fiscalía.\n\nEl artículo 57 del Código Penal dispone que quien realice la conducta punible en estado de ira o de intenso dolor, causados por un comportamiento ajeno grave e injustificado, incurrirá en una pena no menor de la sexta parte del mínimo ni mayor de la mitad del máximo. Es decir, la norma no elimina la responsabilidad, sino que reduce la pena. Por consiguiente, deben verificarse tres elementos: el comportamiento ajeno, el estado emocional y la relación causal entre ambos.\n\nAhora bien, los tres se presentan. En efecto, Néstor gritó en público que la hija fallecida de Álvaro se lo había buscado y se burló de su duelo, lo cual es un comportamiento grave e injustificado. Además, los testigos afirman que Álvaro estaba tranquilo, reaccionó en segundos y luego temblaba y lloraba; de ahí que el estado de ira e intenso dolor esté acreditado y que su causa haya sido la provocación.\n\nLa defensa alega que cualquiera habría reaccionado igual y pide la absolución. Sin embargo, no hubo legítima defensa, porque las palabras de Néstor no eran una agresión que hiciera necesario un botellazo, ni inimputabilidad, puesto que Álvaro comprendía lo que hacía. No obstante, la Fiscalía tampoco tiene razón al negar toda rebaja, ya que la ley reconoce que el reproche es menor cuando el autor ha sido gravemente provocado.\n\nEn conclusión, Álvaro debe responder por lesiones personales dolosas, pero con la pena atenuada del artículo 57. Por último, la ausencia de antecedentes no cambia la calificación, aunque podrá valorarse al individualizar la pena.",
+   "conectores_usados": [
+    "en primer lugar",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "en efecto",
+    "además",
+    "de ahí que",
+    "sin embargo",
+    "porque",
+    "puesto que",
+    "no obstante",
+    "ya que",
+    "en conclusión",
+    "por último",
+    "aunque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Álvaro se fue a su casa, regresó tres horas después con un machete que afiló y atacó a Néstor?",
+    "respuesta": "El tiempo transcurrido y la preparación del ataque debilitan la relación entre la provocación y el estado emocional y sugieren una decisión reflexiva de venganza. La atenuante probablemente se negaría, aunque la ley no exige una reacción instantánea (verificar)."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-06",
+   "area": "Penal",
+   "nivel": "basico",
+   "titulo": "El salvavidas con audífonos",
+   "enunciado": "El 15 de febrero de 2026, en la piscina de un club de Girardot, trabajaba como salvavidas Camilo Andrés Ruiz, contratado y certificado para vigilar a los bañistas. A las 3:00 p. m., Tomás, un niño de 8 años, comenzó a hundirse en la zona profunda. Varias personas gritaron pidiendo ayuda. Camilo, que estaba sentado en su silla a ocho metros viendo videos en su celular con audífonos, no reaccionó durante casi tres minutos, pese a que un bañista le hizo señas. Finalmente, un turista, Esteban Giraldo, que estaba más lejos y no se lanzó de inmediato porque no sabe nadar bien, sacó al niño con ayuda de un flotador. Tomás fue reanimado, pero sufrió un daño neurológico permanente por la falta de oxígeno. El médico conceptuó que, con un rescate en el primer minuto, no habría tenido secuelas. La familia quiere que respondan penalmente Camilo y Esteban.",
+   "pregunta": "¿Puede atribuirse penalmente el daño sufrido por Tomás a Camilo y a Esteban por no haber actuado a tiempo?",
+   "pistas": [
+    "No toda omisión equivale a causar un resultado: el artículo 25 del Código Penal exige una condición especial en quien omite.",
+    "Compara el deber que tenía cada uno frente al niño y pregúntate si la omisión de Camilo fue dolosa o culposa."
+   ],
+   "conceptos": [
+    "posición de garante",
+    "omisión impropia",
+    "culpa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Responden por las lesiones de Tomás el salvavidas que no lo vigiló y el turista que tardó en rescatarlo?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 25",
+      "para_que": "La conducta punible puede realizarse por omisión cuando quien tiene el deber jurídico de impedir el resultado no lo hace, pudiendo hacerlo; exige posición de garante."
+     },
+     {
+      "norma": "Código Penal, art. 120",
+      "para_que": "Lesiones personales culposas."
+     },
+     {
+      "norma": "Código Penal, art. 23",
+      "para_que": "Culpa por infracción al deber objetivo de cuidado."
+     },
+     {
+      "norma": "Código Penal, art. 131",
+      "para_que": "Omisión de socorro: omitir sin justa causa el auxilio a una persona en grave peligro."
+     }
+    ],
+    "analisis": "Camilo tenía posición de garante: asumió por contrato la protección concreta de los bañistas. Podía impedir el resultado, estaba a ocho metros, y no lo hizo porque se distrajo con el celular. El médico acreditó que un rescate oportuno habría evitado las secuelas, de modo que el resultado le es imputable por omisión. Como no quiso el daño ni lo advirtió, sino que infringió su deber de vigilancia, responde a título de culpa.\n\nEsteban no era garante: ningún deber jurídico especial lo ligaba al niño. Solo le sería exigible el deber general de socorro, que no incumplió, porque no sabe nadar bien y aun así lo rescató.",
+    "contraargumento": "La defensa de Camilo dirá que él no causó el ahogamiento. En la omisión impropia no se exige haber causado físicamente el resultado, sino no haberlo impedido teniendo el deber y la posibilidad de hacerlo.",
+    "conclusion": "Camilo responde por lesiones personales culposas en comisión por omisión. Esteban no tiene responsabilidad penal.",
+    "errores_comunes": [
+     "Atribuir el resultado a cualquier persona que no ayudó, sin verificar la posición de garante.",
+     "Negar la responsabilidad del salvavidas porque no realizó ninguna acción.",
+     "Calificar la omisión de Camilo como dolosa sin prueba de que advirtió el peligro."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer si el daño neurológico de Tomás puede atribuirse a Camilo, el salvavidas, y a Esteban, el turista, por no haber actuado a tiempo.\n\nEl artículo 25 del Código Penal establece que la conducta punible puede realizarse por acción o por omisión, y que responde por el resultado quien, teniendo el deber jurídico de impedirlo y la posibilidad de hacerlo, no lo evita. Para ello exige una posición de garante, por ejemplo cuando el agente ha asumido la protección concreta del bien jurídico. Por consiguiente, no toda persona que omite ayudar responde por el resultado.\n\nAhora bien, Camilo sí era garante. En efecto, fue contratado y certificado precisamente para vigilar a los bañistas, estaba a ocho metros y tenía la capacidad de rescatar al niño. Sin embargo, permaneció casi tres minutos viendo videos con audífonos. Además, el médico conceptuó que un rescate en el primer minuto habría evitado las secuelas; de ahí que el resultado le sea imputable. Como no advirtió el peligro por su propia distracción, su omisión es culposa, en los términos del artículo 23, y encaja en las lesiones personales culposas del artículo 120.\n\nEn cambio, Esteban no tenía ningún deber especial frente a Tomás. A lo sumo le era exigible el deber general de socorro del artículo 131. No obstante, ese delito requiere omitir el auxilio sin justa causa, y él no sabe nadar bien y, aun así, sacó al niño con un flotador.\n\nPodría alegarse que Camilo no causó el ahogamiento. Ese argumento no prospera, porque en la comisión por omisión el reproche consiste en no impedir el resultado que se debía evitar.\n\nEn conclusión, Camilo responde por lesiones personales culposas en comisión por omisión. Por último, Esteban no tiene responsabilidad penal alguna.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por ejemplo",
+    "por consiguiente",
+    "ahora bien",
+    "en efecto",
+    "sin embargo",
+    "además",
+    "de ahí que",
+    "en cambio",
+    "no obstante",
+    "aun así",
+    "porque",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Camilo vio que el niño se hundía y decidió no intervenir porque había discutido con el padre del niño esa mañana?",
+    "respuesta": "La omisión sería dolosa: conoció el peligro y decidió no actuar. Respondería por las lesiones a título de dolo, e incluso podría discutirse una tentativa de homicidio por omisión."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-07",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "«Si algo pasa, pues de malas»",
+   "enunciado": "El 1 de enero de 2026, a las 4:00 a. m., Sebastián Londoño, de 28 años, salió de una fiesta en Envigado después de beber durante seis horas. Sus amigos le pidieron que no manejara y uno le ofreció llevarlo; él respondió que manejaba mejor prendido y que, si algo pasaba, pues de malas. Condujo su automóvil a 110 km/h por una avenida urbana, se pasó dos semáforos en rojo y, en el tercero, embistió una motocicleta en la que iban Laura Marín y su esposo, que cruzaban con luz verde. Laura murió en el acto; su esposo quedó con fracturas múltiples. La prueba de alcoholemia arrojó grado tres. Sebastián no intentó huir y pidió perdón llorando. La Fiscalía imputó homicidio y lesiones a título de dolo eventual; la defensa sostiene que se trata de culpa con representación, porque Sebastián jamás quiso matar a nadie y confiaba en su pericia.",
+   "pregunta": "¿Debe responder Sebastián a título de dolo eventual o de culpa con representación?",
+   "pistas": [
+    "Ambas figuras parten de que el autor previó el resultado; la diferencia está en su actitud frente a él. Lee con cuidado los artículos 22 y 23 del Código Penal.",
+    "Busca en los hechos indicadores objetivos de esa actitud: lo que dijo, las advertencias que recibió y la acumulación de riesgos."
+   ],
+   "conceptos": [
+    "dolo eventual",
+    "culpa",
+    "imputación objetiva"
+   ],
+   "solucion": {
+    "problema_juridico": "¿La muerte y las lesiones causadas por un conductor ebrio, a alta velocidad y que desatendió varios semáforos, le son imputables por dolo eventual o por culpa con representación?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 22",
+      "para_que": "Es dolosa la conducta cuando la infracción ha sido prevista como probable y su no producción se deja librada al azar."
+     },
+     {
+      "norma": "Código Penal, art. 23",
+      "para_que": "En la culpa con representación el agente prevé el resultado pero confía en poder evitarlo."
+     },
+     {
+      "norma": "Código Penal, arts. 103 y 109",
+      "para_que": "Homicidio doloso y homicidio culposo: la calificación cambia sustancialmente la pena."
+     }
+    ],
+    "analisis": "La diferencia no está en querer la muerte, que tampoco exige el dolo eventual, sino en la actitud frente al resultado previsto. En la culpa con representación el autor confía, con algún fundamento, en evitarlo; en el dolo eventual lo deja al azar.\n\nLos indicadores apuntan al dolo eventual: sus amigos le advirtieron el peligro y le ofrecieron una alternativa; su respuesta muestra que previó el resultado y le fue indiferente; acumuló riesgos (grado tres de alcohol, 110 km/h en vía urbana, tres semáforos en rojo); y no realizó ninguna maniobra para evitar la colisión. La confianza en su pericia carecía de base racional en ese estado.",
+    "contraargumento": "La defensa invoca el arrepentimiento, que no huyera y su confianza en sí mismo. La conducta posterior no define el aspecto subjetivo del hecho, y una confianza irracional no es la que distingue a la culpa. Con todo, la calificación depende de que la frase y las advertencias se prueben en juicio; sin ellas, el debate se inclina hacia la culpa.",
+    "conclusion": "Es defendible la imputación por dolo eventual, siempre que se prueben la advertencia de los amigos y la respuesta de Sebastián. Se trata de una distinción discutida, que debe argumentarse con indicadores objetivos.",
+    "errores_comunes": [
+     "Decir que no hay dolo porque no quiso matar.",
+     "Deducir el dolo eventual solo del estado de embriaguez.",
+     "Valorar el arrepentimiento posterior como si definiera la modalidad de la conducta."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si la muerte de Laura y las lesiones de su esposo son imputables a Sebastián a título de dolo eventual o de culpa con representación.\n\nEl artículo 22 del Código Penal considera dolosa la conducta cuando la realización de la infracción ha sido prevista como probable y su no producción se deja librada al azar. Por el contrario, el artículo 23 describe la culpa con representación como el caso en que el agente prevé el resultado, pero confía en poder evitarlo. De ahí que ambas figuras compartan la previsión y se distingan por la actitud del autor: indiferencia en un caso, confianza en el otro.\n\nAhora bien, esa actitud se infiere de indicadores objetivos. En efecto, los amigos de Sebastián le pidieron que no manejara y uno le ofreció llevarlo, de modo que conoció el peligro y tuvo una alternativa. Además, respondió que, si algo pasaba, pues de malas, lo cual expresa que dejó el resultado al azar. A ello se suma la acumulación de riesgos: alcoholemia en grado tres, 110 km/h en una avenida urbana y tres semáforos en rojo. Por consiguiente, la confianza en su pericia no tenía ningún fundamento racional.\n\nLa defensa sostiene que jamás quiso matar y que su llanto y el hecho de no huir lo demuestran. Sin embargo, el dolo eventual no exige querer la muerte, y la conducta posterior no define lo que el autor aceptó al conducir. No obstante, la defensa acierta en un punto: la embriaguez por sí sola no basta, porque la mayoría de estos casos son culposos.\n\nEn conclusión, la imputación por dolo eventual es defendible, puesto que los hechos muestran previsión e indiferencia. Por último, esa conclusión depende de que en juicio se prueben la advertencia y la frase de Sebastián; sin ellas, la calificación se acercaría a la culpa.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por el contrario",
+    "de ahí que",
+    "ahora bien",
+    "en efecto",
+    "de modo que",
+    "además",
+    "por consiguiente",
+    "sin embargo",
+    "no obstante",
+    "porque",
+    "en conclusión",
+    "puesto que",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Sebastián iba sobrio, a 70 km/h en una zona de 60, y pasó un único semáforo en rojo por ir distraído con el radio?",
+    "respuesta": "No habría indicadores de que previó el resultado y lo dejó al azar. La conducta sería culposa y respondería por homicidio y lesiones culposas."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-08",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "Cinco golpes de más",
+   "enunciado": "El 27 de febrero de 2026, a la 1:00 a. m., Hernando Cuéllar, comerciante de 52 años, sorprendió en la sala de su casa, en Popayán, a Duván Ordóñez, de 19 años, quien había entrado por una ventana y cargaba un televisor. Duván, al verse descubierto, sacó una navaja y avanzó hacia Hernando. Hernando tomó un bate que guardaba detrás de la puerta y le golpeó el brazo; la navaja cayó al suelo y Duván quedó arrodillado, quejándose y diciendo que ya se iba. Hernando, según su propio relato, estaba ciego de la rabia y del susto y le dio cinco golpes más en la espalda y la cabeza. Duván sufrió un trauma craneoencefálico y permaneció doce días en cuidados intensivos; sobrevivió con secuelas. La esposa de Hernando grabó parte de los hechos con su celular. La defensa pide la absolución por legítima defensa privilegiada, por tratarse de un extraño que penetró en su habitación.",
+   "pregunta": "¿Están amparados por la legítima defensa todos los golpes que Hernando dio a Duván?",
+   "pistas": [
+    "Divide los hechos en dos momentos y pregúntate en cuál de ellos subsiste una agresión actual.",
+    "La presunción a favor de quien rechaza al intruso en su habitación, ¿es absoluta o admite prueba en contrario? Revisa también qué dice la ley sobre el exceso."
+   ],
+   "conceptos": [
+    "legítima defensa",
+    "antijuridicidad",
+    "proporcionalidad de la defensa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Cubre la legítima defensa, incluida su presunción frente al intruso, los golpes dados cuando el agresor ya estaba desarmado y rendido?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 32, num. 6",
+      "para_que": "Legítima defensa y presunción a favor de quien rechaza al extraño que indebidamente penetra en su habitación o dependencias inmediatas."
+     },
+     {
+      "norma": "Código Penal, art. 32, inciso sobre el exceso (verificar ubicación)",
+      "para_que": "Quien excede los límites de la causal incurre en pena no menor de la sexta parte del mínimo ni mayor de la mitad del máximo."
+     },
+     {
+      "norma": "Código Penal, art. 57",
+      "para_que": "Ira o intenso dolor, como posible atenuante alternativa."
+     },
+     {
+      "norma": "Código Penal, art. 111 y siguientes",
+      "para_que": "Lesiones personales."
+     }
+    ],
+    "analisis": "Primer momento: Duván, intruso nocturno, avanzó con una navaja. El golpe en el brazo fue una defensa necesaria y proporcionada, cubierta además por la presunción a favor del morador. Segundo momento: la navaja estaba en el suelo y Duván, arrodillado, anunciaba que se iba. La agresión había cesado; ya no había nada que repeler. Los cinco golpes adicionales, que causaron el trauma craneoencefálico, no fueron defensa.\n\nLa presunción admite prueba en contrario y aquí la desvirtúan el propio relato de Hernando y el video. La ley prevé una pena atenuada para quien excede los límites de la causal; es discutible si esa regla cubre el exceso que ocurre cuando la agresión ya terminó, o si en ese caso solo cabe la atenuación por ira (verificar).",
+    "contraargumento": "La defensa invoca la legítima defensa privilegiada. Esta no es una licencia para castigar al intruso: es una presunción de que quien lo rechaza se defiende, y cede cuando se prueba que la agresión terminó.",
+    "conclusion": "El primer golpe está justificado. Por los cinco siguientes Hernando responde penalmente, con pena atenuada por exceso en la legítima defensa o, en su defecto, por ira.",
+    "errores_comunes": [
+     "Tratar la presunción del intruso como absoluta.",
+     "Analizar los hechos como un solo bloque, sin separar el momento en que cesa la agresión.",
+     "Absolver por el miedo o la rabia sin encuadrarlos en una figura legal."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, la cuestión es si todos los golpes que Hernando dio a Duván están amparados por la legítima defensa, en especial por la presunción que protege a quien rechaza a un intruso en su habitación.\n\nEl numeral 6 del artículo 32 del Código Penal excluye la responsabilidad de quien defiende un derecho contra una agresión injusta, actual o inminente, con una defensa proporcionada, y presume la legítima defensa en quien rechaza al extraño que indebidamente ha penetrado en su habitación. Ahora bien, el mismo artículo sanciona con una pena reducida a quien excede los límites de la causal. Por consiguiente, lo decisivo es establecer hasta cuándo hubo una agresión que repeler.\n\nLos hechos tienen dos momentos. En el primero, Duván, que había entrado de noche por una ventana, sacó una navaja y avanzó hacia Hernando; de ahí que el golpe en el brazo fuera una defensa necesaria y proporcionada, además de cubierta por la presunción. En el segundo, en cambio, la navaja estaba en el suelo y Duván permanecía arrodillado diciendo que se iba. En efecto, la agresión había cesado, de modo que los cinco golpes en la espalda y la cabeza ya no defendían nada.\n\nLa defensa sostiene que la legítima defensa privilegiada ampara toda la reacción. Sin embargo, esa presunción admite prueba en contrario, y aquí la desvirtúan el relato del propio Hernando, que reconoce haber actuado ciego de la rabia y del susto, y el video grabado por su esposa. No obstante, ese estado emocional no es irrelevante, puesto que explica el exceso y permite atenuar la pena.\n\nEn conclusión, el primer golpe está justificado, pero Hernando debe responder por las lesiones causadas con los cinco golpes posteriores. Por último, la pena debe atenuarse por exceso en la legítima defensa o, si se entiende que esta ya no existía, por la ira provocada por la intrusión.",
+   "conectores_usados": [
+    "en primer lugar",
+    "ahora bien",
+    "por consiguiente",
+    "de ahí que",
+    "además",
+    "en cambio",
+    "en efecto",
+    "de modo que",
+    "sin embargo",
+    "no obstante",
+    "puesto que",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Duván, después del primer golpe, recoge la navaja y se lanza de nuevo contra Hernando?",
+    "respuesta": "La agresión seguiría siendo actual y los golpes posteriores serían necesarios para repelerla. Toda la reacción quedaría amparada por la legítima defensa, siempre que cesara cuando Duván fuera neutralizado."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-09",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "La mitad que no era la mitad",
+   "enunciado": "El 10 de marzo de 2026, Yeison Cardona fue capturado en flagrancia en Armenia cuando salía de un almacén con tres celulares que había tomado de una vitrina tras intimidar a la vendedora con un arma de juguete. En la audiencia concentrada del 11 de marzo, la Fiscalía le imputó hurto calificado y agravado; Yeison no aceptó cargos. El 2 de abril de 2026, antes de que se presentara el escrito de acusación, su defensor le propuso a la fiscal un preacuerdo: Yeison aceptaría su responsabilidad a cambio de una rebaja de la mitad de la pena, como dice el artículo 351. La fiscal respondió que, por haber sido capturado en flagrancia, la rebaja no puede ser esa. Los celulares fueron recuperados en la captura y Yeison no tiene antecedentes. La dueña del almacén manifestó que no se opone a un acuerdo si le pagan el vidrio de la vitrina, que se rompió.",
+   "pregunta": "¿Es viable el preacuerdo propuesto y qué rebaja de pena puede obtener Yeison?",
+   "pistas": [
+    "Ubica el momento procesal: entre la imputación y la acusación, ¿qué rebaja máxima prevé la ley para quien acepta cargos o preacuerda?",
+    "Revisa el parágrafo que la Ley 1453 de 2011 agregó al artículo sobre flagrancia en el Código de Procedimiento Penal."
+   ],
+   "conceptos": [
+    "preacuerdo",
+    "captura en flagrancia",
+    "aceptación de cargos"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede un imputado capturado en flagrancia obtener, mediante preacuerdo celebrado antes de la acusación, la rebaja de hasta la mitad de la pena?",
+    "normas": [
+     {
+      "norma": "Ley 906 de 2004, arts. 348 y 350",
+      "para_que": "Finalidades de los preacuerdos y posibilidad de celebrarlos desde la imputación hasta antes del escrito de acusación."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 351",
+      "para_que": "La aceptación de cargos en esta etapa comporta una rebaja de hasta la mitad de la pena."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 301, parágrafo (adicionado por la Ley 1453 de 2011)",
+      "para_que": "El capturado en flagrancia solo tiene derecho a una cuarta parte del beneficio del artículo 351."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 349",
+      "para_que": "Si hubo incremento patrimonial, el preacuerdo exige reintegrar parte de lo obtenido y asegurar el resto."
+     }
+    ],
+    "analisis": "El preacuerdo es procedente por la etapa: se propone después de la imputación y antes de la acusación. La víctima debe ser oída, pero no tiene poder de veto, y el juez de conocimiento verifica que el acuerdo sea voluntario y respete las garantías.\n\nLa rebaja, sin embargo, no puede ser de hasta la mitad. Como Yeison fue capturado en flagrancia, la ley limita el beneficio a una cuarta parte del previsto en el artículo 351, lo que en esta etapa equivale a una rebaja de hasta el 12,5 %. No hay incremento patrimonial que reintegrar, porque los celulares se recuperaron. Queda por evaluar si la Fiscalía puede pactar otra modalidad, como la eliminación de una circunstancia de agravación, y con qué límites (verificar la jurisprudencia vigente).",
+    "contraargumento": "El defensor dirá que el artículo 351 no distingue. La norma debe leerse junto con el parágrafo del artículo 301, que es especial para la flagrancia. Sí es cierto que los preacuerdos admiten modalidades distintas de la simple rebaja.",
+    "conclusion": "El preacuerdo es viable, pero la rebaja por aceptación no puede superar la cuarta parte del beneficio del artículo 351. La reparación del vidrio puede pactarse y favorece la aprobación del acuerdo.",
+    "errores_comunes": [
+     "Aplicar la rebaja de la mitad sin considerar la flagrancia.",
+     "Creer que la víctima puede vetar el preacuerdo.",
+     "Olvidar el control del juez de conocimiento sobre el acuerdo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Yeison, capturado en flagrancia, puede obtener mediante un preacuerdo anterior a la acusación la rebaja de la mitad de la pena que propone su defensor.\n\nLos artículos 348 y 350 de la Ley 906 de 2004 permiten que la Fiscalía y el imputado celebren preacuerdos desde la audiencia de imputación y hasta antes de que se presente el escrito de acusación. Además, el artículo 351 prevé que la aceptación de cargos en esa etapa comporta una rebaja de hasta la mitad de la pena. Por lo tanto, en cuanto a la oportunidad, la propuesta del 2 de abril de 2026 es procedente.\n\nAhora bien, el parágrafo que la Ley 1453 de 2011 agregó al artículo 301 dispone que quien es capturado en flagrancia solo tiene derecho a una cuarta parte del beneficio del artículo 351. En efecto, Yeison fue sorprendido al salir del almacén con los tres celulares; por consiguiente, la rebaja por aceptación no puede ser de hasta la mitad, sino de hasta una cuarta parte de esa mitad, es decir, cerca del 12,5 %.\n\nEl defensor podría insistir en que el artículo 351 no hace distinciones. Sin embargo, esa norma debe leerse junto con la regla especial de la flagrancia; de ahí que la fiscal tenga razón. No obstante, el defensor acierta en que los preacuerdos admiten otras modalidades, como eliminar una circunstancia de agravación, aunque sus límites deben verificarse en la jurisprudencia.\n\nPor otra parte, el artículo 349 exige reintegrar el incremento patrimonial, pero aquí no lo hubo, puesto que los celulares se recuperaron. A su vez, la dueña del almacén debe ser oída, aunque no puede vetar el acuerdo.\n\nEn conclusión, el preacuerdo es viable, pero con una rebaja limitada por la flagrancia. Por último, pagar el vidrio de la vitrina facilitará que el juez de conocimiento lo apruebe.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "por lo tanto",
+    "ahora bien",
+    "en efecto",
+    "por consiguiente",
+    "es decir",
+    "sin embargo",
+    "de ahí que",
+    "no obstante",
+    "aunque",
+    "por otra parte",
+    "puesto que",
+    "a su vez",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Yeison no fue capturado en flagrancia, sino identificado tres semanas después por las cámaras del almacén?",
+    "respuesta": "No se aplicaría el límite de la flagrancia. En esta etapa, la aceptación de cargos o el preacuerdo le permitiría obtener una rebaja de hasta la mitad de la pena."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-10",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "La comunidad está indignada",
+   "enunciado": "El 5 de febrero de 2026, la Fiscalía imputó a Sandra Milena Rincón, de 34 años, el delito de estafa agravada, por haber recibido $90 millones de quince familias de Tunja a cambio de cupos en un supuesto programa de vivienda que no existía. Sandra no aceptó cargos. En la misma audiencia, el fiscal pidió detención preventiva en establecimiento carcelario, con el argumento de que el delito es grave y la comunidad está indignada. Aportó las denuncias, los recibos firmados por Sandra y un informe según el cual, entre 2022 y 2025, ella hizo lo mismo en otras dos ciudades con nombres distintos y cambió tres veces de domicilio sin avisar. La defensa se opone: Sandra es madre cabeza de familia de un niño de 5 años al que cuida sola, vive en Tunja desde hace un año y se presentó voluntariamente a la audiencia. Pide que no se imponga ninguna medida o, en subsidio, una que no la prive de la libertad.",
+   "pregunta": "¿Procede imponer a Sandra Milena una medida de aseguramiento privativa de la libertad y en qué modalidad?",
+   "pistas": [
+    "Separa dos pasos: la inferencia razonable de autoría y el fin constitucional que justifica la medida. ¿La gravedad del delito basta por sí sola?",
+    "Revisa las causales de sustitución de la detención carcelaria por la domiciliaria y la situación del niño."
+   ],
+   "conceptos": [
+    "medida de aseguramiento",
+    "detención preventiva",
+    "interés superior"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se cumplen los requisitos para imponer detención preventiva a la imputada y, de ser así, debe cumplirse en establecimiento carcelario o en su domicilio?",
+    "normas": [
+     {
+      "norma": "Ley 906 de 2004, art. 308",
+      "para_que": "Requisitos: inferencia razonable de autoría y que la medida sea necesaria para evitar la obstrucción de la justicia, proteger a la comunidad o a la víctima, o asegurar la comparecencia."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 310 y 312",
+      "para_que": "Criterios de peligro para la comunidad y de no comparecencia; la gravedad no basta por sí sola."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 313",
+      "para_que": "Procedencia de la detención preventiva según el delito y la pena."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 314, num. 5",
+      "para_que": "Sustitución por detención domiciliaria para la madre cabeza de familia de hijo menor que esté bajo su cuidado."
+     },
+     {
+      "norma": "Constitución Política, arts. 28 y 44",
+      "para_que": "La libertad es la regla; los derechos de los niños prevalecen."
+     }
+    ],
+    "analisis": "La inferencia razonable está soportada: quince denuncias coincidentes y recibos firmados por la imputada. En cuanto al fin, la indignación de la comunidad no es un criterio legal y la gravedad del delito no basta sola. Pero el informe aporta datos concretos: repitió la misma conducta en otras dos ciudades con nombres distintos, lo que indica probable continuación de la actividad delictiva, y cambió tres veces de domicilio sin avisar, lo que soporta el riesgo de no comparecencia.\n\nLa medida privativa es, entonces, necesaria. Sobre la modalidad, Sandra es madre cabeza de familia de un niño de 5 años bajo su cuidado exclusivo, supuesto de sustitución por detención domiciliaria, que además protege el interés superior del niño.",
+    "contraargumento": "La defensa alega arraigo y presentación voluntaria. Son datos relevantes, pero un año de residencia frente a tres cambios de domicilio y el uso de nombres distintos no desvirtúan el riesgo. Sí respaldan que la medida se cumpla en el domicilio y no en la cárcel.",
+    "conclusion": "Procede la detención preventiva, fundada en la probable continuación de la actividad delictiva y en el riesgo de no comparecencia, no en la indignación social. Debe sustituirse por detención domiciliaria por su condición de madre cabeza de familia.",
+    "errores_comunes": [
+     "Fundar la medida en la gravedad del delito o en la alarma social.",
+     "Omitir el análisis de necesidad y proporcionalidad.",
+     "Olvidar la sustitución por detención domiciliaria y la situación del niño."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer si se cumplen los requisitos para imponer a Sandra Milena una medida de aseguramiento privativa de la libertad y, en caso afirmativo, en qué modalidad debe cumplirse.\n\nEl artículo 308 de la Ley 906 de 2004 exige dos condiciones: una inferencia razonable de que el imputado es autor de la conducta y que la medida sea necesaria para evitar la obstrucción de la justicia, proteger a la comunidad o a la víctima, o asegurar la comparecencia. Además, los artículos 310 y 312 desarrollan esos fines y advierten que la gravedad de la conducta no es suficiente por sí sola. En efecto, la libertad es la regla según el artículo 28 de la Constitución.\n\nAhora bien, la inferencia razonable está acreditada, puesto que hay quince denuncias coincidentes y recibos firmados por Sandra. En cuanto al fin, el fiscal invoca la indignación de la comunidad, argumento que no tiene respaldo legal. Sin embargo, el informe que aportó sí lo tiene: Sandra repitió la misma conducta en otras dos ciudades con nombres distintos y cambió tres veces de domicilio sin avisar. Por consiguiente, existe un riesgo concreto de continuación de la actividad delictiva y de no comparecencia.\n\nLa defensa alega arraigo y presentación voluntaria. No obstante, un año de residencia en Tunja no desvirtúa ese riesgo; de ahí que la medida privativa sea necesaria. Con todo, la defensa acierta en la modalidad: el numeral 5 del artículo 314 permite sustituir la detención carcelaria por la domiciliaria cuando la imputada es madre cabeza de familia de un hijo menor bajo su cuidado, y el artículo 44 superior hace prevalecer los derechos del niño de 5 años.\n\nEn conclusión, procede la detención preventiva, pero fundada en los fines legales y no en la alarma social. Por último, debe cumplirse en el domicilio de Sandra, con los controles que fije el juez.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "ahora bien",
+    "puesto que",
+    "sin embargo",
+    "por consiguiente",
+    "no obstante",
+    "de ahí que",
+    "con todo",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si no existe el informe sobre hechos similares ni sobre los cambios de domicilio, y el único argumento del fiscal es la gravedad del delito?",
+    "respuesta": "No se acreditaría ningún fin constitucional que haga necesaria la medida. El juez debería negar la detención preventiva y, a lo sumo, imponer una medida no privativa de la libertad si se demuestra su necesidad."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-11",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "El hurto que ya se reparó",
+   "enunciado": "El 20 de enero de 2026, Daniel Felipe Arias, estudiante de 19 años sin antecedentes, tomó de un supermercado de Cali dos botellas de licor y un paquete de carne, por un valor total de $310.000, y fue retenido por los vigilantes en la salida. El supermercado denunció. El 9 de febrero de 2026, antes de la imputación, Daniel pagó el valor de los productos y una suma adicional por los perjuicios, y el representante legal firmó un documento en el que se declara totalmente reparado y sin interés en continuar. La fiscal del caso considera aplicar el principio de oportunidad. Un compañero suyo opina que no puede hacerlo porque la Fiscalía está obligada a perseguir todos los delitos y que, en todo caso, bastaría con que ella decidiera por su cuenta, sin acudir a ningún juez. El hurto quedó registrado por las cámaras y no hay discusión sobre los hechos.",
+   "pregunta": "¿Puede la fiscal aplicar el principio de oportunidad en este caso y qué control debe tener esa decisión?",
+   "pistas": [
+    "La obligación de perseguir los delitos tiene una excepción prevista en la propia Constitución: búscala en el artículo que regula las funciones de la Fiscalía.",
+    "Revisa la causal del Código de Procedimiento Penal relacionada con delitos de pena baja y reparación integral, y qué juez controla su aplicación."
+   ],
+   "conceptos": [
+    "principio de oportunidad",
+    "tipicidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede el principio de oportunidad frente a un hurto de menor cuantía cuya víctima fue reparada integralmente, y quién controla su aplicación?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 250",
+      "para_que": "La Fiscalía debe ejercer la acción penal, salvo en los casos que la ley establezca para aplicar el principio de oportunidad, sometido al control del juez de garantías."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 321 a 323",
+      "para_que": "El principio de oportunidad como facultad reglada para suspender, interrumpir o renunciar a la persecución penal."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 324, causal primera (verificar)",
+      "para_que": "Delitos con pena máxima que no exceda de seis años, con reparación integral de la víctima y ausencia de interés del Estado en la persecución."
+     },
+     {
+      "norma": "Ley 906 de 2004, art. 327",
+      "para_que": "Control judicial de la aplicación del principio de oportunidad por el juez de control de garantías."
+     },
+     {
+      "norma": "Código Penal, art. 239",
+      "para_que": "Hurto, con pena menor cuando la cuantía no supera diez salarios mínimos."
+     }
+    ],
+    "analisis": "La conducta es típica de hurto: el principio de oportunidad no niega el delito, sino que permite al Estado renunciar a perseguirlo por razones de política criminal. La obligación de perseguir no es absoluta: la Constitución autoriza la excepción en los casos fijados por la ley.\n\nAquí se cumple una causal: por la cuantía, la pena del hurto no supera el límite legal; la víctima fue reparada integralmente y lo declaró por escrito; y el interés del Estado decae frente a un joven sin antecedentes y un daño ya resarcido. La decisión no es libre: debe someterse al control del juez de garantías, en audiencia donde la víctima puede ser oída.",
+    "contraargumento": "El compañero invoca la obligatoriedad de la acción penal y, a la vez, sostiene que la fiscal puede decidir sola. Lo primero desconoce la excepción constitucional; lo segundo, el control judicial, que es precisamente la garantía de que la facultad sea reglada y no arbitraria.",
+    "conclusion": "La fiscal puede aplicar el principio de oportunidad, con sustento en la causal de pena baja y reparación integral, y debe someter su decisión al control del juez de control de garantías.",
+    "errores_comunes": [
+     "Afirmar que el principio de oportunidad vuelve atípica la conducta.",
+     "Creer que la Fiscalía lo aplica sin control judicial.",
+     "No explorar otras salidas propias de los delitos de menor cuantía, como la conciliación (verificar)."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la fiscal puede renunciar a la persecución penal del hurto cometido por Daniel, mediante el principio de oportunidad, y qué control debe tener esa decisión.\n\nEl artículo 250 de la Constitución impone a la Fiscalía la obligación de adelantar la acción penal, pero admite como excepción el principio de oportunidad en los casos que la ley establezca, sometido al control del juez de garantías. A su vez, los artículos 321 a 324 de la Ley 906 de 2004 lo regulan como una facultad reglada y prevén, entre sus causales, la de los delitos de pena baja cuando la víctima ha sido reparada integralmente y el interés del Estado decae. Por lo tanto, el compañero de la fiscal se equivoca al afirmar que la persecución es siempre obligatoria.\n\nAhora bien, la causal se cumple. En efecto, el hurto recayó sobre bienes por $310.000, cuantía para la cual el artículo 239 del Código Penal prevé una pena reducida que no supera el límite legal. Además, Daniel pagó los productos y los perjuicios, y el representante del supermercado se declaró totalmente reparado; de ahí que la reparación sea integral. A ello se suma que Daniel tiene 19 años y carece de antecedentes, con lo cual la persecución pierde justificación.\n\nSin embargo, la conducta sigue siendo típica: el principio de oportunidad no niega el delito, sino que renuncia a perseguirlo. No obstante, tampoco es una decisión libre de la fiscal, como sugiere su compañero. El artículo 327 exige que el juez de control de garantías verifique su legalidad en audiencia, porque así se evita la arbitrariedad y se escucha a la víctima.\n\nEn conclusión, la fiscal puede aplicar el principio de oportunidad con fundamento en la reparación integral. Por último, debe someter la decisión al juez de control de garantías dentro del término legal.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "por lo tanto",
+    "ahora bien",
+    "en efecto",
+    "además",
+    "de ahí que",
+    "con lo cual",
+    "sin embargo",
+    "no obstante",
+    "porque",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si lo hurtado fue una camioneta avaluada en $180 millones y Daniel no ha reparado a la víctima?",
+    "respuesta": "No se cumpliría la causal: la pena del hurto por esa cuantía supera el límite previsto y no hay reparación integral. La fiscal no podría aplicar el principio de oportunidad con ese fundamento."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-12",
+   "area": "Penal",
+   "nivel": "intermedio",
+   "titulo": "El puñetazo y el quirófano",
+   "enunciado": "El 7 de marzo de 2026, durante una riña en un bar de Yopal, Fabián Romero le dio un puñetazo en la cara a Luis Eduardo Vega, quien cayó y se fracturó la mandíbula. La lesión no comprometía su vida: según el dictamen inicial, requería una cirugía sencilla y una incapacidad de 40 días. En el hospital, el anestesiólogo, que llevaba treinta horas de turno continuo, administró por error una dosis diez veces superior a la indicada y no vigiló los monitores. Luis Eduardo sufrió un paro cardiorrespiratorio y murió el 9 de marzo de 2026. La necropsia concluyó que la causa de la muerte fue la sobredosis de anestesia y que la fractura, por sí sola, no era idónea para producirla. La Fiscalía quiere imputar a Fabián homicidio preterintencional, con el argumento de que, si no le hubiera pegado, Luis Eduardo no habría estado en el quirófano. Fabián reconoce el golpe.",
+   "pregunta": "¿Puede imputarse a Fabián la muerte de Luis Eduardo?",
+   "pistas": [
+    "Que el golpe sea una condición sin la cual la muerte no habría ocurrido no agota el análisis: ¿qué riesgo creó Fabián y cuál se concretó en la muerte?",
+    "Piensa en el efecto de la intervención gravemente negligente de un tercero sobre la atribución del resultado."
+   ],
+   "conceptos": [
+    "imputación objetiva",
+    "nexo causal",
+    "dolo",
+    "culpa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es imputable al autor de una lesión no mortal la muerte de la víctima causada por un error médico grave durante el tratamiento de esa lesión?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 9",
+      "para_que": "La causalidad por sí sola no basta para la imputación jurídica del resultado."
+     },
+     {
+      "norma": "Código Penal, arts. 24 y 105",
+      "para_que": "Preterintención y homicidio preterintencional: el resultado más grave debe ser previsible."
+     },
+     {
+      "norma": "Código Penal, art. 111 y siguientes",
+      "para_que": "Lesiones personales dolosas."
+     },
+     {
+      "norma": "Código Penal, art. 109",
+      "para_que": "Homicidio culposo, para la eventual responsabilidad del anestesiólogo."
+     }
+    ],
+    "analisis": "El golpe es una causa natural de la muerte, pero el propio Código advierte que la causalidad no basta. La imputación objetiva exige que el autor haya creado un riesgo jurídicamente desaprobado y que ese mismo riesgo se concrete en el resultado. Fabián creó el riesgo propio de una fractura de mandíbula; ese riesgo no se concretó en la muerte, porque la necropsia descartó que la fractura fuera idónea para producirla.\n\nLa muerte fue la realización de un riesgo distinto, creado por la conducta gravemente negligente del anestesiólogo. Tampoco era previsible para Fabián un error de esa magnitud, lo que excluye la preterintención.",
+    "contraargumento": "La Fiscalía razona con la fórmula de la condición necesaria. Con ella respondería por la muerte cualquiera que pusiera una condición remota. Distinto sería un error médico leve o una complicación propia de la lesión: en esos casos el riesgo inicial sí se concretaría en el resultado.",
+    "conclusion": "A Fabián no puede imputársele la muerte. Responde por lesiones personales dolosas; el anestesiólogo debe ser investigado por homicidio culposo.",
+    "errores_comunes": [
+     "Identificar causalidad natural con imputación jurídica del resultado.",
+     "Imputar homicidio preterintencional sin verificar la previsibilidad del resultado.",
+     "Pensar que la intervención de un tercero siempre exonera, sin distinguir entre error leve y negligencia grave."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la muerte de Luis Eduardo puede imputarse a Fabián, autor del puñetazo que le fracturó la mandíbula, cuando la causa directa del deceso fue una sobredosis de anestesia.\n\nEl artículo 9 del Código Penal advierte que la causalidad por sí sola no basta para la imputación jurídica del resultado. Por consiguiente, no es suficiente afirmar, como hace la Fiscalía, que sin el golpe la víctima no habría estado en el quirófano. La imputación objetiva exige, además, que el autor haya creado un riesgo jurídicamente desaprobado y que ese mismo riesgo sea el que se concreta en el resultado.\n\nAhora bien, Fabián creó el riesgo propio de una fractura de mandíbula. Sin embargo, la necropsia concluyó que esa lesión no era idónea para causar la muerte y que esta se debió a una dosis de anestesia diez veces superior a la indicada, administrada por un médico que tampoco vigiló los monitores. En efecto, el resultado fue la realización de un riesgo distinto, creado por la conducta gravemente negligente de un tercero; de ahí que la muerte no le sea atribuible a Fabián.\n\nLa Fiscalía propone el homicidio preterintencional de los artículos 24 y 105. No obstante, esa figura exige que el resultado más grave sea previsible, y un error médico de esa magnitud no lo era para quien da un puñetazo en una riña. Distinto sería que la muerte derivara de una complicación propia de la lesión o de un error médico leve, puesto que en esos casos el riesgo inicial sí se habría concretado.\n\nEn conclusión, Fabián debe responder únicamente por lesiones personales dolosas, ya que quiso golpear y causó la fractura. Por último, la conducta del anestesiólogo debe investigarse como un posible homicidio culposo, porque infringió de manera grave su deber objetivo de cuidado.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por consiguiente",
+    "además",
+    "ahora bien",
+    "sin embargo",
+    "en efecto",
+    "de ahí que",
+    "no obstante",
+    "puesto que",
+    "en conclusión",
+    "ya que",
+    "por último",
+    "porque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Luis Eduardo muere por una hemorragia interna causada directamente por el golpe, pese a una atención médica adecuada?",
+    "respuesta": "El riesgo creado por Fabián sí se habría concretado en la muerte. Si ese resultado era previsible, respondería por homicidio preterintencional."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "pen-13",
+   "area": "Penal",
+   "nivel": "avanzado",
+   "titulo": "El revólver del padre",
+   "enunciado": "Gustavo Mahecha, ganadero de 61 años de una vereda de Arauca, heredó en 2019 un revólver de su padre, amparado por un permiso a nombre de este. El 12 de febrero de 2026, en un retén, la Policía encontró el revólver en la guantera de su camioneta, cuando Gustavo iba al pueblo a vender ganado. Gustavo explicó que un funcionario de la alcaldía le había dicho en 2020 que, por ser heredero, el permiso de su padre le servía mientras hacía la sucesión, y que por eso nunca tramitó uno propio. Presentó el permiso vencido del padre y una constancia de que la sucesión sigue en trámite. Gustavo cursó hasta tercero de primaria. La Fiscalía le imputó porte ilegal de armas de fuego. La defensa alega que no hubo dolo o, en subsidio, que obró convencido de que su conducta era lícita. El día del retén, Gustavo llevaba además $18 millones en efectivo.",
+   "pregunta": "¿Qué clase de error alega Gustavo y qué consecuencia tendría sobre su responsabilidad penal?",
+   "pistas": [
+    "Distingue el error sobre un elemento del tipo del error sobre la licitud de la conducta: el tipo de porte de armas incluye la expresión «sin permiso de autoridad competente».",
+    "La consecuencia cambia según el error sea vencible o invencible: valora el nivel educativo de Gustavo, el consejo del funcionario y el tiempo transcurrido."
+   ],
+   "conceptos": [
+    "error de prohibición",
+    "dolo",
+    "tipicidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿El convencimiento de que el permiso del padre lo amparaba constituye un error de tipo o un error de prohibición, y es vencible o invencible?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 365",
+      "para_que": "Sanciona el porte de armas de fuego sin permiso de autoridad competente."
+     },
+     {
+      "norma": "Código Penal, art. 32, num. 10",
+      "para_que": "Error de tipo: si es invencible excluye la responsabilidad; si es vencible, la conducta se castiga como culposa solo cuando la ley prevé esa modalidad."
+     },
+     {
+      "norma": "Código Penal, art. 32, num. 11",
+      "para_que": "Error de prohibición: si es invencible excluye la responsabilidad; si es vencible, la pena se rebaja en la mitad."
+     },
+     {
+      "norma": "Código Penal, arts. 22 y 12",
+      "para_que": "Dolo y culpabilidad."
+     }
+    ],
+    "analisis": "Gustavo sabía que llevaba un arma y que las armas requieren permiso; su error recae sobre si el permiso de su padre lo amparaba. Como la falta de permiso es un elemento normativo del tipo, es defendible calificarlo como error de tipo: creyó que concurría el permiso. La Fiscalía dirá que es un error de prohibición, porque versa sobre el alcance de una autorización legal.\n\nLa clasificación importa por la consecuencia. El error parece vencible: aunque Gustavo tiene escasa formación y recibió un consejo de un funcionario, este no era la autoridad competente, pasaron seis años y el permiso estaba vencido. Si es error de tipo vencible, la conducta sería impune, porque el porte de armas no tiene modalidad culposa. Si es error de prohibición vencible, habría condena con la pena rebajada en la mitad.",
+    "contraargumento": "La Fiscalía sostendrá que el desconocimiento de la ley no sirve de excusa y que el error era fácilmente superable. La vencibilidad no convierte el error en irrelevante: solo define su efecto. El dinero en efectivo que llevaba Gustavo es un hecho distractor, explicado por la venta de ganado.",
+    "conclusion": "Gustavo obró bajo un error vencible. La tesis más favorable y defendible es el error de tipo sobre el elemento normativo del permiso, que excluiría el dolo y, al no existir modalidad culposa, la responsabilidad; en subsidio, error de prohibición vencible con pena reducida a la mitad (verificar la postura de la Sala de Casación Penal).",
+    "errores_comunes": [
+     "Decir que la ignorancia de la ley nunca tiene efectos penales.",
+     "No distinguir entre error de tipo y error de prohibición ni sus consecuencias.",
+     "Declarar invencible el error sin analizar el tiempo transcurrido y la posibilidad de consultar a la autoridad competente."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar qué clase de error alega Gustavo al creer que el permiso de su padre lo amparaba para portar el revólver, y cuál sería su consecuencia.\n\nEl artículo 365 del Código Penal sanciona el porte de armas de fuego sin permiso de autoridad competente. A su vez, el artículo 32 distingue dos errores: el de tipo, en el numeral 10, que recae sobre un elemento de la descripción típica y excluye el dolo; y el de prohibición, en el numeral 11, que recae sobre la licitud de la conducta y afecta la culpabilidad. Además, sus efectos difieren cuando el error es vencible: el de tipo solo permite castigar por culpa si la ley prevé esa modalidad, mientras que el de prohibición reduce la pena a la mitad.\n\nAhora bien, Gustavo sabía que llevaba un arma y que se requiere un permiso; su equivocación recae sobre la vigencia y el alcance del permiso de su padre. En efecto, la ausencia de permiso es un elemento normativo del tipo; de ahí que sea defendible calificarlo como error de tipo, porque creyó que ese elemento no concurría. Sin embargo, la Fiscalía puede sostener que se trata de un error de prohibición, puesto que versa sobre el alcance de una autorización legal.\n\nEn cuanto a la vencibilidad, Gustavo cursó hasta tercero de primaria y recibió el consejo de un funcionario. No obstante, ese funcionario no era la autoridad competente, pasaron seis años y el permiso estaba vencido; por consiguiente, el error era superable con una consulta mínima. Por otro lado, los $18 millones que llevaba se explican por la venta de ganado y no tienen relevancia.\n\nEn conclusión, el error es vencible. Por último, si se califica como error de tipo, la conducta quedaría impune por no existir porte culposo; si se califica como error de prohibición, Gustavo respondería con la pena reducida a la mitad.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "además",
+    "ahora bien",
+    "en efecto",
+    "de ahí que",
+    "porque",
+    "sin embargo",
+    "puesto que",
+    "no obstante",
+    "por consiguiente",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Gustavo sabía que necesitaba un permiso propio y simplemente no lo tramitó porque le parecía un trámite costoso?",
+    "respuesta": "No habría ningún error: conocía la exigencia y decidió incumplirla. Actuaría con dolo y respondería plenamente por el porte ilegal de armas."
+   },
+   "distractor": "Los $18 millones en efectivo que llevaba Gustavo el día del retén: se explican por la venta de ganado y no inciden en el análisis del error.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-14",
+   "area": "Penal",
+   "nivel": "avanzado",
+   "titulo": "El que esperaba en el carro",
+   "enunciado": "El 18 de febrero de 2026, Andrés, Mauricio y Jairo acordaron hurtar una joyería de Bucaramanga. Según el plan, Andrés y Mauricio entrarían con armas de fuego descargadas, solo para asustar, mientras Jairo esperaría afuera en un automóvil con el motor encendido para la huida. Jairo, además, había estudiado durante una semana los horarios del vigilante. Durante el hurto, el dueño de la joyería, don Efraín, intentó activar la alarma y Mauricio, sin que estuviera previsto, lo golpeó con la cacha del arma en la cabeza, causándole una herida con incapacidad de 25 días. Los tres huyeron en el carro con joyas avaluadas en $120 millones y fueron capturados dos días después. Jairo alega que es apenas un cómplice, porque nunca entró a la joyería ni tocó las joyas, y que no debe responder por las lesiones, que no hacían parte del plan. Jairo es primo del dueño del carro, quien no sabía nada.",
+   "pregunta": "¿A qué título responde Jairo por el hurto y por las lesiones causadas a don Efraín?",
+   "pistas": [
+    "La coautoría no exige ejecutar de propia mano el verbo rector: revisa los criterios del artículo 29 del Código Penal y valora la importancia del aporte de Jairo.",
+    "Frente a las lesiones, pregúntate si la violencia contra quien se resistiera era previsible dentro de un plan con armas."
+   ],
+   "conceptos": [
+    "dolo eventual",
+    "tipicidad",
+    "conducta"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es coautor o cómplice quien planea el hurto y conduce el vehículo de huida, y responde por la violencia no pactada que ejerce otro de los intervinientes?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 29",
+      "para_que": "Son coautores quienes, mediando acuerdo común, actúan con división del trabajo criminal atendiendo la importancia del aporte."
+     },
+     {
+      "norma": "Código Penal, art. 30",
+      "para_que": "Es cómplice quien contribuye a la realización de la conducta o presta ayuda posterior por concierto previo; su pena se reduce."
+     },
+     {
+      "norma": "Código Penal, arts. 239, 240 y 241",
+      "para_que": "Hurto, hurto calificado por violencia sobre las personas y circunstancias de agravación."
+     },
+     {
+      "norma": "Código Penal, art. 22",
+      "para_que": "Dolo eventual, para la atribución de resultados previstos como probables."
+     }
+    ],
+    "analisis": "Hubo acuerdo común, división de funciones y un aporte de Jairo que no era accesorio: estudió los horarios del vigilante y aseguró la huida, sin la cual el plan no se habría ejecutado como se concibió. Eso lo hace coautor, no cómplice, aunque no entrara a la joyería ni tocara las joyas.\n\nSobre las lesiones, el exceso de un coautor no se atribuye a los demás cuando es ajeno al plan. Pero aquí el plan incluía armas para doblegar a las personas: que alguien se resistiera y fuera golpeado era un desarrollo previsible. Por eso, al menos la violencia que califica el hurto se extiende a todos. Atribuirle además a Jairo el delito de lesiones exige demostrar que previó ese resultado como probable y lo aceptó.",
+    "contraargumento": "Jairo insiste en que no dominó el hecho dentro de la joyería. La coautoría por división del trabajo se funda en el dominio funcional: cada uno controla su parte, y la suya era esencial. El parentesco con el dueño del carro es irrelevante.",
+    "conclusion": "Jairo es coautor del hurto calificado y agravado. Las lesiones se le pueden atribuir a título de dolo eventual si se prueba que la violencia contra quien se resistiera era previsible y aceptada dentro del plan, lo cual es defendible por el uso de armas.",
+    "errores_comunes": [
+     "Considerar cómplice a quien no ejecuta materialmente el apoderamiento.",
+     "Atribuir automáticamente a todos cualquier exceso de un coautor, o negarlo siempre.",
+     "Darle relevancia al parentesco con el dueño del vehículo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico tiene dos partes: si Jairo es coautor o cómplice del hurto de la joyería y si debe responder por las lesiones que Mauricio causó a don Efraín sin que estuvieran en el plan.\n\nEl artículo 29 del Código Penal considera coautores a quienes, mediando un acuerdo común, actúan con división del trabajo criminal atendiendo la importancia del aporte. En cambio, el artículo 30 reserva la complicidad para quien presta una contribución no esencial o una ayuda posterior. En efecto, los tres acordaron el hurto y repartieron las tareas; además, Jairo estudió durante una semana los horarios del vigilante y esperó con el motor encendido, de modo que su aporte fue esencial para que el plan funcionara. Por consiguiente, es coautor, aunque nunca entrara a la joyería ni tocara las joyas.\n\nAhora bien, en cuanto a las lesiones, la regla es que el exceso de un coautor no se atribuye a los demás. Sin embargo, esa regla tiene un límite: los resultados previsibles dentro del riesgo del plan sí les son imputables. El plan incluía armas de fuego para intimidar; de ahí que fuera previsible que alguien se resistiera y que se empleara violencia para doblegarlo. Por lo tanto, la violencia sobre las personas, que califica el hurto según el artículo 240, alcanza a todos.\n\nJairo alega que las armas estaban descargadas y que solo eran para asustar. No obstante, un arma descargada también sirve para golpear, y quien acepta usarla contra personas acepta ese riesgo. Con todo, imputarle además el delito de lesiones exige probar el dolo eventual, es decir, que previó el golpe como probable. Por otro lado, su parentesco con el dueño del carro carece de relevancia.\n\nEn conclusión, Jairo responde como coautor del hurto calificado y agravado. Por último, las lesiones pueden atribuírsele por dolo eventual, tesis defendible por el uso pactado de armas.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en cambio",
+    "en efecto",
+    "además",
+    "de modo que",
+    "por consiguiente",
+    "aunque",
+    "ahora bien",
+    "sin embargo",
+    "de ahí que",
+    "por lo tanto",
+    "no obstante",
+    "con todo",
+    "es decir",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Jairo solo prestó el carro la noche anterior, sabiendo para qué era, y no participó en el plan ni en la huida?",
+    "respuesta": "Su aporte sería una contribución no esencial: respondería como cómplice del hurto, con la pena reducida que prevé el artículo 30, y sería más difícil atribuirle las lesiones."
+   },
+   "distractor": "Que Jairo sea primo del dueño del carro, quien no sabía nada: no incide en su grado de participación.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-15",
+   "area": "Penal",
+   "nivel": "avanzado",
+   "titulo": "Ocho años después de la estafa",
+   "enunciado": "Entre marzo y junio de 2017, Roberto Salgado recibió $60 millones de Elsa Pineda en Cartagena, tras hacerle creer con escrituras falsas que le vendía un lote que no era suyo. El último pago fue el 28 de junio de 2017. Elsa denunció el 5 de agosto de 2017. La investigación estuvo inactiva varios años por cambios de fiscal. El 14 de octubre de 2025, la Fiscalía formuló imputación a Roberto por estafa; él no aceptó cargos. El escrito de acusación se presentó el 20 de enero de 2026. En la audiencia de acusación del 3 de marzo de 2026, la defensa pide que se declare la prescripción de la acción penal porque ya pasaron más de ocho años desde los hechos. La fiscal responde que la imputación interrumpió el término. Roberto fue condenado en 2021 por inasistencia alimentaria en un proceso distinto. Para este ejercicio, asume que la pena máxima de la estafa imputada es de 144 meses de prisión.",
+   "pregunta": "¿Prescribió la acción penal por la estafa atribuida a Roberto?",
+   "pistas": [
+    "El término de prescripción no es un número fijo de años: se calcula con la pena máxima del delito, dentro de un mínimo y un máximo legales.",
+    "Revisa qué efecto produce la formulación de imputación sobre el término y cuánto dura el nuevo plazo."
+   ],
+   "conceptos": [
+    "formulación de imputación",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Había prescrito la acción penal al momento de la imputación o de la audiencia de acusación, teniendo en cuenta el efecto interruptor de la formulación de imputación?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 83",
+      "para_que": "La acción penal prescribe en un tiempo igual al máximo de la pena fijada en la ley, sin ser inferior a cinco años ni exceder de veinte."
+     },
+     {
+      "norma": "Código Penal, art. 84",
+      "para_que": "En las conductas de ejecución instantánea el término se cuenta desde la consumación."
+     },
+     {
+      "norma": "Código Penal, art. 86, y Ley 906 de 2004, art. 292",
+      "para_que": "La formulación de imputación interrumpe la prescripción; desde entonces corre un nuevo término igual a la mitad del inicial, no inferior a tres años ni superior a diez."
+     },
+     {
+      "norma": "Código Penal, art. 246",
+      "para_que": "Estafa."
+     }
+    ],
+    "analisis": "Con una pena máxima de 144 meses, el término de prescripción es de doce años. La estafa se consumó cuando Roberto obtuvo el provecho; tomando el último pago, el 28 de junio de 2017, la acción prescribiría en junio de 2029 si no hubiera interrupción.\n\nLa imputación se formuló el 14 de octubre de 2025, dentro de esos doce años. Ese acto interrumpió la prescripción y dio inicio a un nuevo término igual a la mitad del primero: seis años, que vencerían en octubre de 2031. Para el 3 de marzo de 2026, la acción no había prescrito.",
+    "contraargumento": "La defensa cuenta ocho años y afirma que es demasiado tiempo. La inactividad de la Fiscalía es reprochable, pero la prescripción se rige por los términos legales y no por una apreciación de razonabilidad. La condena de 2021 por otro delito es un hecho distractor.",
+    "conclusion": "La acción penal no ha prescrito. La solicitud de la defensa debe negarse y el proceso debe continuar.",
+    "errores_comunes": [
+     "Usar un término fijo de prescripción sin calcularlo con la pena máxima.",
+     "Olvidar que la imputación interrumpe el término y que el nuevo plazo es la mitad del inicial.",
+     "Contar el término desde la denuncia y no desde la consumación."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la acción penal por la estafa atribuida a Roberto había prescrito cuando la defensa lo alegó, el 3 de marzo de 2026, más de ocho años después de los hechos.\n\nEl artículo 83 del Código Penal dispone que la acción penal prescribe en un tiempo igual al máximo de la pena fijada en la ley, sin que pueda ser inferior a cinco años ni superior a veinte. Además, el artículo 84 ordena contar el término, en las conductas instantáneas, desde su consumación. A su vez, el artículo 86 del mismo código y el artículo 292 de la Ley 906 de 2004 establecen que la formulación de imputación interrumpe la prescripción y que, a partir de ella, corre un nuevo término igual a la mitad del inicial, no inferior a tres años ni superior a diez.\n\nAhora bien, con una pena máxima de 144 meses, el término inicial es de doce años. En efecto, la estafa se consumó cuando Roberto obtuvo el provecho, lo cual ocurrió a más tardar con el último pago, el 28 de junio de 2017; por consiguiente, la acción habría prescrito en junio de 2029. Sin embargo, la imputación se formuló el 14 de octubre de 2025, es decir, dentro de ese plazo. De ahí que el término se haya interrumpido y que desde esa fecha corra uno nuevo de seis años, que vence en octubre de 2031.\n\nLa defensa sostiene que ocho años de espera son excesivos. No obstante, aunque la inactividad de la Fiscalía merece reproche, la prescripción depende de los términos legales y no de una valoración general de la demora. Por otro lado, la condena de 2021 por inasistencia alimentaria no tiene incidencia alguna en este cálculo.\n\nEn conclusión, la acción penal no ha prescrito. Por último, el juez debe negar la solicitud y continuar con la audiencia de acusación.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "a su vez",
+    "ahora bien",
+    "en efecto",
+    "por consiguiente",
+    "sin embargo",
+    "es decir",
+    "de ahí que",
+    "no obstante",
+    "aunque",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la imputación se hubiera formulado el 14 de octubre de 2029?",
+    "respuesta": "Para esa fecha ya habrían transcurrido más de doce años desde la consumación. La acción habría prescrito antes de la imputación, que no podría interrumpir un término ya vencido, y procedería la preclusión."
+   },
+   "distractor": "La condena de Roberto en 2021 por inasistencia alimentaria en otro proceso: no afecta el cálculo de la prescripción.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-16",
+   "area": "Penal",
+   "nivel": "avanzado",
+   "titulo": "La cabaña en el páramo",
+   "enunciado": "El 6 de enero de 2026, Marcos Ibarra y su hija Sofía, de 9 años, hacían una caminata por un páramo de Boyacá cuando los sorprendió una tormenta con granizo y la temperatura bajó de cero grados. Marcos había revisado el pronóstico, que anunciaba buen tiempo. Perdieron el sendero y, al anochecer, Sofía comenzó a mostrar signos de hipotermia. Sin señal de celular, Marcos encontró una cabaña cerrada, de propiedad de Ignacio Fonseca, que no estaba. Rompió una ventana, entraron, encendieron la chimenea con la leña que había, consumieron unas latas de comida y usaron cobijas. A la mañana siguiente bajaron al pueblo, donde Marcos buscó a Ignacio, le contó lo ocurrido y le ofreció pagar. Ignacio lo denunció por violación de habitación ajena, daño en bien ajeno y hurto; los daños y lo consumido suman $450.000. Afirma que Marcos no se estaba defendiendo de nadie. Ignacio es conocido en el pueblo por negarse a prestar la cabaña a los caminantes.",
+   "pregunta": "¿Es penalmente responsable Marcos por haber entrado a la cabaña y usado lo que había en ella?",
+   "pistas": [
+    "Ignacio tiene razón en que no hubo agresión de una persona: busca entonces en el artículo 32 la causal que no exige un agresor.",
+    "Verifica cada requisito de esa causal: peligro actual, inevitable de otra manera, no causado por imprudencia, y la relación entre el bien salvado y el sacrificado."
+   ],
+   "conceptos": [
+    "antijuridicidad",
+    "legítima defensa",
+    "tipicidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Está justificada la conducta de quien irrumpe en una vivienda ajena y consume bienes ajenos para proteger a su hija de la hipotermia?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 32, num. 7",
+      "para_que": "Estado de necesidad: proteger un derecho propio o ajeno de un peligro actual o inminente, inevitable de otra manera, que el agente no haya causado intencionalmente o por imprudencia y que no tenga el deber jurídico de afrontar."
+     },
+     {
+      "norma": "Código Penal, art. 32, num. 6",
+      "para_que": "Legítima defensa, que exige una agresión injusta."
+     },
+     {
+      "norma": "Código Penal, arts. 189, 239 y 265",
+      "para_que": "Violación de habitación ajena, hurto y daño en bien ajeno."
+     },
+     {
+      "norma": "Código Penal, art. 11",
+      "para_que": "Antijuridicidad: lesión del bien jurídico sin justa causa."
+     }
+    ],
+    "analisis": "Las conductas son típicas, pero la antijuridicidad exige que la lesión ocurra sin justa causa. No hay legítima defensa, porque nadie agredió a Marcos; el peligro provenía de la naturaleza. Esa es precisamente la hipótesis del estado de necesidad.\n\nSe cumplen sus requisitos: el peligro era actual (hipotermia de una niña a temperaturas bajo cero); inevitable de otra manera (sin sendero, sin señal y de noche); no fue causado por imprudencia, pues Marcos había consultado un pronóstico favorable; y no tenía el deber jurídico de afrontarlo. Además, el bien salvado, la vida y la salud de la niña, es claramente superior a los bienes patrimoniales sacrificados, y Marcos solo usó lo indispensable.",
+    "contraargumento": "Ignacio alega que no hubo agresión. Tiene razón, y por eso no se aplica la legítima defensa, pero el estado de necesidad no la requiere. Lo que sí subsiste es la obligación de indemnizarle el daño (verificar el fundamento civil). La fama de Ignacio en el pueblo es irrelevante.",
+    "conclusion": "Marcos no es penalmente responsable: actuó en estado de necesidad. Debe, en todo caso, pagar a Ignacio los daños y lo consumido.",
+    "errores_comunes": [
+     "Invocar la legítima defensa cuando no hay agresión humana.",
+     "Afirmar que la conducta es atípica: es típica, pero justificada.",
+     "Olvidar el requisito de que el peligro no haya sido causado por imprudencia del agente."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si Marcos es penalmente responsable por haber roto la ventana de la cabaña de Ignacio, entrado a ella y consumido leña y alimentos, o si su conducta está justificada.\n\nLas conductas se adecuan a los tipos de violación de habitación ajena, daño en bien ajeno y hurto. Sin embargo, el artículo 11 del Código Penal exige que la lesión del bien jurídico ocurra sin justa causa, y el artículo 32 enumera las causales que excluyen la responsabilidad. Ahora bien, Ignacio acierta en que no se aplica la legítima defensa del numeral 6, porque esta supone una agresión injusta de una persona. En cambio, el numeral 7 regula el estado de necesidad, que procede frente a un peligro actual o inminente, inevitable de otra manera, que el agente no haya causado intencionalmente o por imprudencia y que no tenga el deber jurídico de afrontar.\n\nEn efecto, todos esos requisitos concurren. El peligro era actual, puesto que Sofía, de 9 años, mostraba signos de hipotermia a temperaturas bajo cero. Además, era inevitable de otra manera, ya que habían perdido el sendero, no tenían señal y había anochecido. Tampoco fue causado por imprudencia, toda vez que Marcos había revisado un pronóstico que anunciaba buen tiempo. Por consiguiente, entrar a la cabaña era el único medio para proteger la vida de la niña, bien muy superior a los $450.000 afectados.\n\nPodría objetarse que la propiedad de Ignacio también merece protección. No obstante, el estado de necesidad resuelve precisamente ese conflicto en favor del bien de mayor valor, y Marcos solo usó lo indispensable. Por otro lado, la fama de Ignacio de no prestar la cabaña es irrelevante.\n\nEn conclusión, la conducta de Marcos es típica pero no antijurídica; de ahí que no haya responsabilidad penal. Por último, subsiste su deber de indemnizar a Ignacio, que él mismo ofreció cumplir.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "ahora bien",
+    "porque",
+    "en cambio",
+    "en efecto",
+    "puesto que",
+    "además",
+    "ya que",
+    "toda vez que",
+    "por consiguiente",
+    "no obstante",
+    "por otro lado",
+    "en conclusión",
+    "de ahí que",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Marcos salió a caminar con la niña pese a conocer una alerta roja por tormenta en el páramo?",
+    "respuesta": "El peligro habría sido causado por su propia imprudencia, lo que impide reconocer plenamente el estado de necesidad. Habría que examinar si procede una atenuación, sin excluir la responsabilidad (verificar)."
+   },
+   "distractor": "La fama de Ignacio de negarse a prestar la cabaña a los caminantes: no tiene relevancia para la justificación.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-17",
+   "area": "Penal",
+   "nivel": "avanzado",
+   "titulo": "«Todo fue un malentendido»",
+   "enunciado": "El 23 de enero de 2026, vecinos de un conjunto en Soacha llamaron a la Policía al escuchar gritos. Los agentes encontraron a Diana Marcela Suárez con el labio roto y hematomas en los brazos, y a su compañero permanente, Wilmer Acosta, alterado. Diana dijo que Wilmer la golpeó porque la comida estaba fría y que no era la primera vez; el dictamen de Medicina Legal fijó una incapacidad de 12 días. Wilmer fue capturado. El 9 de febrero de 2026, Diana se presentó ante la fiscal, dijo que todo fue un malentendido, que quiere retirar la denuncia porque Wilmer es quien paga el arriendo y que ya se reconciliaron. La defensa pide archivar por desistimiento de la víctima o, en subsidio, aplicar el principio de oportunidad por reparación, pues Wilmer le regaló a Diana un celular nuevo. Wilmer registra una condena de 2023 por lesiones personales contra una expareja. El conjunto tiene cámaras, pero solo en el parqueadero.",
+   "pregunta": "¿Puede la Fiscalía archivar el caso por el desistimiento de Diana o aplicar el principio de oportunidad?",
+   "pistas": [
+    "Establece primero qué delito se configura cuando el maltrato ocurre entre compañeros permanentes y si ese delito requiere querella.",
+    "Para el principio de oportunidad, pregúntate si hay verdadera reparación y si el interés del Estado en perseguir ha decaído."
+   ],
+   "conceptos": [
+    "principio de oportunidad",
+    "tipicidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Tiene efecto extintivo el desistimiento de la víctima en un caso de violencia intrafamiliar y es procedente el principio de oportunidad?",
+    "normas": [
+     {
+      "norma": "Código Penal, art. 229",
+      "para_que": "Violencia intrafamiliar: maltrato físico o psicológico a un miembro del núcleo familiar."
+     },
+     {
+      "norma": "Ley 1542 de 2012",
+      "para_que": "Eliminó el carácter querellable y desistible de la violencia intrafamiliar."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 74 y 76",
+      "para_que": "Delitos querellables y desistimiento de la querella."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 321 a 324",
+      "para_que": "Principio de oportunidad y sus causales."
+     },
+     {
+      "norma": "Ley 1257 de 2008",
+      "para_que": "Deber de debida diligencia frente a la violencia contra las mujeres."
+     }
+    ],
+    "analisis": "El maltrato físico entre compañeros permanentes se adecua a la violencia intrafamiliar, no a unas simples lesiones. Ese delito se investiga de oficio: no requiere querella ni admite desistimiento, de modo que la retractación de Diana no extingue la acción. La Fiscalía puede sostener el caso con otras pruebas: el dictamen de Medicina Legal, los policías, los vecinos y lo que Diana manifestó inicialmente.\n\nEl principio de oportunidad tampoco resulta procedente. Un regalo no es reparación integral; la retractación obedece a la dependencia económica, no a la ausencia de daño; hay un antecedente por violencia contra otra pareja y un relato de agresiones repetidas. El interés del Estado en la persecución no ha decaído: lo refuerza el deber de debida diligencia.",
+    "contraargumento": "La defensa invocará la autonomía de Diana y la unidad familiar. La ley sustrajo este delito de la disponibilidad de la víctima precisamente porque la dependencia económica y emocional suele explicar las retractaciones. Las cámaras del parqueadero no aportan nada.",
+    "conclusion": "No procede el archivo por desistimiento ni, en estas condiciones, el principio de oportunidad. La Fiscalía debe continuar la investigación por violencia intrafamiliar y evaluar medidas de protección para Diana.",
+    "errores_comunes": [
+     "Tratar el caso como lesiones personales querellables.",
+     "Dar efecto extintivo a la retractación de la víctima.",
+     "Aceptar un regalo como reparación integral."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la retractación de Diana permite archivar la investigación contra Wilmer o, en subsidio, aplicar el principio de oportunidad.\n\nEl artículo 229 del Código Penal sanciona como violencia intrafamiliar el maltrato físico o psicológico a un miembro del núcleo familiar, que comprende a los compañeros permanentes. En efecto, Wilmer golpeó a Diana en la casa que comparten y le causó una incapacidad de 12 días; por consiguiente, la conducta no es una simple lesión personal. Además, la Ley 1542 de 2012 eliminó el carácter querellable y desistible de este delito, de modo que se investiga de oficio.\n\nAhora bien, la defensa pide el archivo por desistimiento. Ese argumento no prospera, porque el desistimiento solo extingue la acción en los delitos querellables del artículo 74 de la Ley 906 de 2004, y este no lo es. De ahí que la Fiscalía pueda continuar con las demás pruebas: el dictamen de Medicina Legal, el testimonio de los policías y de los vecinos, y lo que Diana manifestó el día de los hechos.\n\nEn subsidio, se propone el principio de oportunidad por reparación. Sin embargo, un celular de regalo no constituye una reparación integral. A ello se suma que Diana explicó su retractación por la dependencia económica, que relató agresiones anteriores y que Wilmer fue condenado en 2023 por lesiones contra otra pareja. Por lo tanto, el interés del Estado en la persecución no ha decaído; por el contrario, la Ley 1257 de 2008 impone un deber de debida diligencia.\n\nPodría alegarse que debe respetarse la autonomía de Diana. No obstante, la ley sustrajo este delito de la voluntad de la víctima justamente porque esa voluntad suele estar condicionada. Por otro lado, las cámaras del parqueadero no aportan nada.\n\nEn conclusión, no proceden el archivo ni el principio de oportunidad. Por último, la Fiscalía debe continuar y evaluar medidas de protección.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "de modo que",
+    "ahora bien",
+    "porque",
+    "de ahí que",
+    "sin embargo",
+    "por lo tanto",
+    "por el contrario",
+    "no obstante",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si los hechos consistieron en insultos entre dos vecinos sin ningún vínculo familiar, y el ofendido desiste?",
+    "respuesta": "Se trataría de una posible injuria, delito querellable. El desistimiento del querellante extinguiría la acción penal y, antes de eso, sería exigible la conciliación."
+   },
+   "distractor": "Las cámaras del conjunto, que solo cubren el parqueadero: no aportan nada sobre los hechos ocurridos dentro del apartamento.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-18",
+   "area": "Penal",
+   "nivel": "experto",
+   "titulo": "El preacuerdo que la madre acepta",
+   "enunciado": "El 15 de noviembre de 2025, Germán Tavera, de 41 años, fue capturado en flagrancia en Ibagué cuando realizaba tocamientos de contenido sexual a una niña de 10 años, hija de una vecina, en la escalera del edificio. El 16 de noviembre le imputaron actos sexuales con menor de catorce años y no aceptó cargos. El 2 de febrero de 2026, antes de la acusación, su defensor propuso un preacuerdo: Germán aceptaría su responsabilidad a cambio de la rebaja de pena por aceptación y de la prisión domiciliaria. Argumenta que así se evita que la niña declare en juicio, lo cual protegería su interés superior, y que Germán carece de antecedentes y pidió perdón a la familia. La madre de la niña está de acuerdo con tal de que esto termine pronto. La fiscal duda. Germán, que es contador, ofreció además pagar $20 millones como reparación, que la madre aún no ha recibido.",
+   "pregunta": "¿Puede la Fiscalía celebrar el preacuerdo propuesto y qué alternativas existen para proteger a la niña?",
+   "pistas": [
+    "El Código de la Infancia y la Adolescencia contiene una norma específica sobre beneficios y mecanismos sustitutivos cuando la víctima de ciertos delitos es un niño.",
+    "Distingue entre aceptar cargos y recibir una rebaja por hacerlo, y piensa en los mecanismos para evitar la revictimización de la niña sin acudir a un preacuerdo con beneficios."
+   ],
+   "conceptos": [
+    "preacuerdo",
+    "interés superior",
+    "captura en flagrancia"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es legal un preacuerdo con rebaja de pena y prisión domiciliaria por un delito sexual cometido contra una niña, aunque la madre de la víctima lo acepte?",
+    "normas": [
+     {
+      "norma": "Ley 1098 de 2006, art. 199",
+      "para_que": "En delitos contra la libertad, integridad y formación sexuales cometidos contra niños, no proceden rebajas por preacuerdos ni otros beneficios o subrogados."
+     },
+     {
+      "norma": "Código Penal, art. 209",
+      "para_que": "Actos sexuales con menor de catorce años."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 348 a 351",
+      "para_que": "Régimen general de preacuerdos y control judicial de su legalidad."
+     },
+     {
+      "norma": "Constitución Política, art. 44, y Ley 1098 de 2006, arts. 8 y 9",
+      "para_que": "Interés superior y prevalencia de los derechos de los niños."
+     },
+     {
+      "norma": "Ley 1652 de 2013",
+      "para_que": "Entrevista forense a niños víctimas de delitos sexuales, para evitar su revictimización."
+     }
+    ],
+    "analisis": "La ley prohíbe expresamente conceder rebajas de pena por preacuerdos y beneficios como la prisión domiciliaria cuando la víctima de un delito sexual es un niño. El preacuerdo propuesto es, por tanto, ilegal en lo que pide, y el juez de conocimiento debería improbarlo.\n\nEsa prohibición no impide que Germán acepte su responsabilidad: puede hacerlo, pero sin obtener las rebajas. Y el interés superior de la niña se protege por otra vía: la ley permite recibir su versión mediante una entrevista forense realizada por personal especializado, que evita que declare repetidamente o en juicio. La flagrancia, que normalmente limita la rebaja, aquí es irrelevante porque no hay rebaja posible.",
+    "contraargumento": "La defensa invoca el interés superior de la niña y el consentimiento de la madre. El interés superior no se usa para favorecer al procesado cuando la ley, precisamente en nombre de ese interés, excluyó los beneficios; y la madre no puede disponer de una prohibición de orden público. La profesión de Germán es irrelevante.",
+    "conclusion": "La Fiscalía no puede celebrar el preacuerdo con rebaja de pena ni con prisión domiciliaria. Germán puede aceptar cargos sin beneficios, y la protección de la niña debe asegurarse mediante la entrevista forense y medidas de acompañamiento. La reparación ofrecida puede recibirse, pero no genera las rebajas prohibidas.",
+    "errores_comunes": [
+     "Aplicar las reglas generales de los preacuerdos sin revisar la norma especial sobre niños víctimas.",
+     "Creer que el consentimiento de la madre o de la víctima habilita el beneficio.",
+     "Confundir la prohibición de rebajas con la imposibilidad de aceptar cargos."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la Fiscalía puede celebrar con Germán un preacuerdo que le otorgue rebaja de pena y prisión domiciliaria por un delito sexual contra una niña de 10 años, y cómo proteger a la víctima.\n\nLos artículos 348 a 351 de la Ley 906 de 2004 permiten, como regla general, los preacuerdos desde la imputación. Sin embargo, el artículo 199 de la Ley 1098 de 2006 establece una excepción: cuando se trata de delitos contra la libertad, integridad y formación sexuales cometidos contra niños, no proceden las rebajas de pena por preacuerdos ni otros beneficios o subrogados. En efecto, a Germán se le imputaron actos sexuales con menor de catorce años, previstos en el artículo 209 del Código Penal; por consiguiente, la rebaja y la prisión domiciliaria que pide están prohibidas.\n\nAhora bien, la defensa sostiene que el acuerdo protege el interés superior de la niña, porque evita que declare en juicio, y que la madre lo acepta. Ese argumento no prospera. De un lado, el legislador excluyó los beneficios precisamente en nombre de ese interés; de otro lado, la madre no puede disponer de una prohibición de orden público. Además, la revictimización se evita por otra vía, puesto que la Ley 1652 de 2013 permite recoger la versión de la niña mediante una entrevista forense a cargo de personal especializado.\n\nNo obstante, la prohibición no impide que Germán acepte su responsabilidad: puede hacerlo sin recibir rebajas, con lo cual también se evita el juicio. De ahí que la flagrancia, que normalmente limita el beneficio, sea aquí indiferente. Por otro lado, que Germán sea contador no tiene relevancia, y la reparación ofrecida puede recibirse sin generar los beneficios excluidos.\n\nEn conclusión, la Fiscalía no puede celebrar el preacuerdo propuesto. Por último, debe informar a Germán que solo puede aceptar cargos sin beneficios y asegurar la protección de la niña.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "de un lado",
+    "de otro lado",
+    "además",
+    "puesto que",
+    "no obstante",
+    "con lo cual",
+    "de ahí que",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la víctima de los tocamientos tuviera 19 años y el delito imputado fuera acto sexual violento?",
+    "respuesta": "No se aplicaría la prohibición del Código de la Infancia y la Adolescencia, porque la víctima es adulta. El preacuerdo sería posible, con la rebaja limitada por la captura en flagrancia."
+   },
+   "distractor": "Que Germán sea contador: su profesión no incide en la legalidad del preacuerdo.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-19",
+   "area": "Penal",
+   "nivel": "experto",
+   "titulo": "La llamada anónima",
+   "enunciado": "El 11 de marzo de 2026, a las 5:00 a. m., cuatro policías ingresaron sin orden judicial ni de fiscal a la casa de Elkin Zúñiga, en Buenaventura, tras recibir una llamada anónima según la cual allí se guardaba droga. Elkin dormía. Los policías rompieron la puerta, registraron la casa durante una hora y hallaron, dentro de un armario, doce kilos de cocaína y una pistola. Capturaron a Elkin y en el informe escribieron que hubo flagrancia, porque tenía la droga en su poder. Lo presentaron al juez de control de garantías el 12 de marzo a las 10:00 a. m. La fiscal pide legalizar el registro y la captura, formular imputación por tráfico de estupefacientes y porte ilegal de armas, e imponer detención preventiva con base en lo incautado. La defensa pide declarar ilegal todo el procedimiento. Elkin tiene una anotación de 2018 por una riña. Un vecino afirma que en esa casa entraba y salía mucha gente.",
+   "pregunta": "¿Son legales el registro y la captura, y puede imponerse una medida de aseguramiento con base en lo incautado?",
+   "pistas": [
+    "Pregúntate si una llamada anónima permite ingresar a un domicilio sin orden y si la flagrancia puede descubrirse gracias al propio ingreso.",
+    "Sigue la cadena: si el registro es ilegal, ¿qué pasa con lo hallado, con la captura y con el soporte de la medida de aseguramiento?"
+   ],
+   "conceptos": [
+    "captura en flagrancia",
+    "prueba ilícita",
+    "medida de aseguramiento"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es válido un allanamiento sin orden motivado por una llamada anónima, y pueden fundarse en sus hallazgos la captura y la detención preventiva?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 28",
+      "para_que": "El domicilio solo puede ser registrado en virtud de mandamiento escrito de autoridad judicial competente."
+     },
+     {
+      "norma": "Constitución Política, art. 29",
+      "para_que": "Es nula de pleno derecho la prueba obtenida con violación del debido proceso."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 219 y 230",
+      "para_que": "El registro y allanamiento requiere orden; excepciones como el consentimiento o situaciones de emergencia (verificar)."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 23 y 455",
+      "para_que": "Cláusula de exclusión, que alcanza la prueba derivada, y criterios de fuente independiente, vínculo atenuado y descubrimiento inevitable."
+     },
+     {
+      "norma": "Ley 906 de 2004, arts. 301 y 308",
+      "para_que": "Flagrancia y requisitos de la medida de aseguramiento, que deben sustentarse en elementos legalmente obtenidos."
+     }
+    ],
+    "analisis": "El ingreso se hizo sin orden y sin ninguna de las excepciones: no hubo consentimiento, ni emergencia, ni una flagrancia percibida antes de entrar. Una llamada anónima es, a lo sumo, un punto de partida para investigar y solicitar la orden. La flagrancia que alega la Policía es circular: solo se conoció la droga gracias al ingreso ilegal.\n\nEn consecuencia, el registro es ilegal y lo hallado debe excluirse. La captura, que se fundó exclusivamente en ese hallazgo, también es ilegal y procede la libertad. Sin los elementos excluidos no hay soporte para la inferencia razonable que exige la medida de aseguramiento, ni, en rigor, para la imputación.",
+    "contraargumento": "La fiscal dirá que la droga existe y que excluirla favorece la impunidad. La Constitución resolvió ese conflicto: el Estado no puede aprovechar la prueba que obtiene violando derechos. Solo podría rescatarla si demuestra una fuente independiente o un descubrimiento inevitable, que aquí no aparecen. La anotación de 2018 y el dicho del vecino son irrelevantes.",
+    "conclusion": "El registro y la captura son ilegales; los elementos incautados deben excluirse; no puede imponerse medida de aseguramiento con base en ellos. La Fiscalía puede seguir investigando con fuentes independientes.",
+    "errores_comunes": [
+     "Aceptar la flagrancia descubierta con el propio allanamiento ilegal.",
+     "Legalizar la captura aunque el registro que la originó sea ilegal.",
+     "Dar valor a la llamada anónima como motivo suficiente para ingresar sin orden."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si son legales el registro de la casa de Elkin y su captura, y si lo incautado puede sustentar una medida de aseguramiento.\n\nEl artículo 28 de la Constitución protege el domicilio y solo permite registrarlo con mandamiento escrito de autoridad judicial competente. A su vez, la Ley 906 de 2004 exige orden para el registro y allanamiento y admite excepciones estrictas, como el consentimiento del morador o la flagrancia. Además, el artículo 29 superior declara nula de pleno derecho la prueba obtenida con violación del debido proceso, y el artículo 23 de la misma ley extiende la exclusión a las pruebas que sean consecuencia de aquella.\n\nAhora bien, los policías entraron sin orden y sin ninguna excepción. En efecto, una llamada anónima no es un motivo que autorice a romper una puerta, sino apenas un dato para investigar y pedir la orden. La Policía alega flagrancia porque Elkin tenía la droga en su poder. Sin embargo, ese razonamiento es circular, puesto que la droga solo se conoció gracias al ingreso ilegal; de ahí que no pueda justificarlo. Por consiguiente, el registro es ilegal y los doce kilos de cocaína y la pistola deben excluirse.\n\nLa captura corre la misma suerte, porque se fundó exclusivamente en el hallazgo. En cuanto a la medida de aseguramiento, el artículo 308 exige una inferencia razonable de autoría basada en elementos legalmente obtenidos; por lo tanto, sin lo incautado carece de soporte.\n\nLa fiscal podría objetar que así se favorece la impunidad. No obstante, el artículo 455 solo permite rescatar la prueba si hay una fuente independiente, un vínculo atenuado o un descubrimiento inevitable, y nada de eso aparece. Por otro lado, la anotación de 2018 y el comentario del vecino son irrelevantes.\n\nEn conclusión, el juez debe declarar ilegales el registro y la captura, excluir lo hallado y negar la medida. Por último, la Fiscalía puede continuar investigando con fuentes independientes.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "además",
+    "ahora bien",
+    "en efecto",
+    "porque",
+    "sin embargo",
+    "puesto que",
+    "de ahí que",
+    "por consiguiente",
+    "por lo tanto",
+    "no obstante",
+    "por otro lado",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si los policías, desde la calle, vieron a Elkin entregar paquetes de droga por la ventana y él corrió a refugiarse dentro de su casa?",
+    "respuesta": "Habría una flagrancia percibida antes del ingreso y un delincuente que se refugia en su domicilio, hipótesis en la que la Constitución permite penetrar en él para aprehenderlo. El ingreso, la captura y lo hallado serían legales."
+   },
+   "distractor": "La anotación de Elkin por una riña en 2018 y el comentario del vecino sobre el movimiento de personas en la casa: no legitiman el ingreso ni sustentan la medida.",
+   "revision_humana": true
+  },
+  {
+   "id": "pen-20",
+   "area": "Penal",
+   "nivel": "experto",
+   "titulo": "El cuchillo de la cocina",
+   "enunciado": "El 4 de febrero de 2026, en un barrio de Barranquilla, Yeferson, de 15 años, vio cómo Brandon, de 20, golpeaba e insultaba a su madre en la puerta de la casa por una deuda de $200.000. Yeferson entró a la cocina, tomó un cuchillo y, cuando Brandon ya se retiraba caminando por la calle, lo alcanzó y le causó una herida en el tórax que le produjo la muerte. Fue aprehendido minutos después. La Fiscalía pide que se le juzgue como adulto, por la gravedad del hecho, y que se le imponga la pena de homicidio del Código Penal. La defensa alega legítima defensa de un tercero o, en subsidio, ira e intenso dolor, y sostiene que, por ser menor, Yeferson no es responsable penalmente. Yeferson cursa noveno grado, no tiene anotaciones y su madre es su única red de apoyo. El padre de Brandon es un comerciante reconocido que exige cárcel para ese muchacho.",
+   "pregunta": "¿Es penalmente responsable Yeferson, bajo qué sistema debe ser juzgado y qué efecto tienen las circunstancias que alega la defensa?",
+   "pistas": [
+    "Ni la Fiscalía ni la defensa aciertan sobre la edad: revisa desde qué edad y hasta cuál se aplica el sistema de responsabilidad penal para adolescentes.",
+    "Para la legítima defensa, fíjate en qué estaba haciendo Brandon cuando fue atacado; para la ira, en lo que Yeferson acababa de presenciar."
+   ],
+   "conceptos": [
+    "culpabilidad",
+    "ira o intenso dolor",
+    "legítima defensa",
+    "interés superior"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Cómo responde un adolescente de 15 años que causa la muerte de quien acababa de golpear a su madre, cuando la agresión ya había cesado?",
+    "normas": [
+     {
+      "norma": "Ley 1098 de 2006, arts. 139 y 140",
+      "para_que": "Sistema de responsabilidad penal para adolescentes entre 14 y 18 años, con finalidad pedagógica, específica y diferenciada."
+     },
+     {
+      "norma": "Ley 1098 de 2006, art. 142",
+      "para_que": "Los menores de 14 años no son juzgados ni declarados responsables penalmente."
+     },
+     {
+      "norma": "Ley 1098 de 2006, arts. 177 y 187 (verificar rangos vigentes)",
+      "para_que": "Sanciones aplicables y privación de la libertad en centro de atención especializada."
+     },
+     {
+      "norma": "Código Penal, art. 32, num. 6",
+      "para_que": "Legítima defensa de un derecho propio o ajeno frente a agresión actual o inminente."
+     },
+     {
+      "norma": "Código Penal, arts. 57 y 103",
+      "para_que": "Ira o intenso dolor y homicidio."
+     }
+    ],
+    "analisis": "Con 15 años, Yeferson sí es responsable, pero dentro del sistema para adolescentes: no puede ser juzgado como adulto ni recibir la pena del Código Penal, sino una sanción con finalidad pedagógica y restaurativa. La gravedad del hecho no cambia el sistema aplicable; incide en la sanción, que para el homicidio doloso puede ser la privación de la libertad en centro de atención especializada dentro del rango legal.\n\nNo hay legítima defensa de tercero: cuando Yeferson atacó, Brandon ya se retiraba, de modo que la agresión contra la madre había cesado. En cambio, presenciar los golpes e insultos a su madre es un comportamiento ajeno grave e injustificado que explica un estado de ira; esa circunstancia debe valorarse para graduar la sanción (verificar su aplicación en el sistema de adolescentes).",
+    "contraargumento": "La Fiscalía invoca la gravedad; la defensa, la minoría de edad como exención total. Ambas desconocen el diseño legal: entre los 14 y los 18 años hay responsabilidad, pero diferenciada. La exigencia del padre de Brandon no tiene relevancia jurídica.",
+    "conclusion": "Yeferson es responsable de homicidio dentro del sistema de responsabilidad penal para adolescentes. No se configura la legítima defensa; la ira debe considerarse al graduar la sanción, que tendrá carácter pedagógico y se cumplirá en un centro especializado, no en una cárcel de adultos.",
+    "errores_comunes": [
+     "Afirmar que un menor de 18 años no responde penalmente en ningún caso.",
+     "Aceptar el juzgamiento como adulto por la gravedad del delito.",
+     "Reconocer la legítima defensa cuando la agresión ya había terminado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico tiene tres partes: si Yeferson, de 15 años, es penalmente responsable; bajo qué sistema debe ser juzgado; y qué efecto tienen la legítima defensa de tercero y la ira que alega su defensa.\n\nEl artículo 139 de la Ley 1098 de 2006 crea el sistema de responsabilidad penal para adolescentes, aplicable a quienes tengan entre 14 y 18 años al momento del hecho, y el artículo 142 excluye de responsabilidad solo a los menores de 14. Por consiguiente, ninguna de las partes acierta: Yeferson sí responde, pero no como adulto. Además, el artículo 140 asigna a ese sistema una finalidad pedagógica, específica y diferenciada; de ahí que la gravedad del hecho no permita imponerle la pena de homicidio del Código Penal, sino una de las sanciones del artículo 177.\n\nAhora bien, en cuanto a la legítima defensa, el numeral 6 del artículo 32 del Código Penal exige una agresión actual o inminente. Sin embargo, Brandon ya se retiraba por la calle cuando Yeferson lo alcanzó; en efecto, la agresión contra la madre había cesado y el ataque no buscaba repelerla. Por lo tanto, esa causal no se configura.\n\nDistinta es la ira. El artículo 57 la reconoce cuando la conducta se realiza en ese estado, causado por un comportamiento ajeno grave e injustificado, y ver a la propia madre golpeada e insultada lo es. No obstante, la ira no excluye la responsabilidad: atenúa la consecuencia, de modo que debe valorarse al escoger y graduar la sanción. Por otro lado, la exigencia del padre de Brandon no tiene relevancia jurídica.\n\nEn conclusión, Yeferson es responsable de homicidio dentro del sistema para adolescentes. Por último, la sanción, incluso si es privativa de la libertad, debe cumplirse en un centro de atención especializada, con enfoque pedagógico y considerando su edad, su escolaridad y su red de apoyo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por consiguiente",
+    "además",
+    "de ahí que",
+    "ahora bien",
+    "sin embargo",
+    "en efecto",
+    "por lo tanto",
+    "no obstante",
+    "de modo que",
+    "por otro lado",
+    "en conclusión",
+    "por último",
+    "incluso"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Yeferson tuviera 13 años al momento de los hechos?",
+    "respuesta": "No podría ser juzgado ni declarado responsable penalmente. Sería vinculado a un proceso administrativo de verificación y restablecimiento de derechos a cargo de la autoridad de familia."
+   },
+   "distractor": "Que el padre de Brandon sea un comerciante reconocido y exija cárcel: no incide en el sistema aplicable ni en la sanción.",
+   "revision_humana": true
+  }
+ ]
+}

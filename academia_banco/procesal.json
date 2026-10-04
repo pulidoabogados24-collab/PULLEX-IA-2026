@@ -1,0 +1,1372 @@
+{
+ "area": "Procesal",
+ "descripcion": "Banco curado de casos tipo examen de Derecho Procesal para el Laboratorio de casos (PULLEX Academia).",
+ "aviso": "Exactitud jurídica: NOT VERIFIED. Casos escritos para practicar; requieren revisión humana (docente o abogado) antes de usarse con estudiantes. Verifica la vigencia y el número de cada norma en la fuente oficial.",
+ "casos": [
+  {
+   "id": "proc-01",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "«El juez del circuito es más serio»",
+   "enunciado": "Inés Fajardo le prestó $20 millones a un vecino de Popayán, quien firmó un documento privado en el que se obligó a pagar el 1 de diciembre de 2025. Como no pagó, el 16 de febrero de 2026 Inés presentó la demanda para cobrar esa suma ante un juez civil del circuito de la ciudad. Lo hizo a propósito: un conocido le aconsejó acudir al circuito porque «esos jueces tienen más jerarquía», la sentencia sería más sólida y, si perdía, podría apelar ante el tribunal superior. Su única pretensión es el pago de los $20 millones con intereses. El juez del circuito aún no ha decidido sobre la admisión. Inés pregunta si escogió bien el juzgado, qué puede pasar con su demanda y si, tramitada donde corresponda, tendrá la posibilidad de apelar una decisión desfavorable. El deudor vive y trabaja en Popayán, de modo que sobre el lugar no hay discusión.",
+   "pregunta": "¿Es competente el juez civil del circuito para conocer la demanda de Inés, y tendrá el proceso segunda instancia?",
+   "pistas": [
+    "La ley reparte los asuntos entre jueces municipales y del circuito según el valor de lo que se reclama.",
+    "Revisa en el Código General del Proceso qué juez conoce de los procesos de mínima cuantía y en qué instancia."
+   ],
+   "conceptos": [
+    "competencia",
+    "cuantía",
+    "apelación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué juez es competente, por el factor objetivo de la cuantía, para conocer de una pretensión de $20 millones, y en qué instancia?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 25",
+      "para_que": "Clasifica los procesos en mínima, menor y mayor cuantía según el valor de las pretensiones en salarios mínimos."
+     },
+     {
+      "norma": "Código General del Proceso, art. 26",
+      "para_que": "La cuantía se determina por el valor de las pretensiones al tiempo de la demanda."
+     },
+     {
+      "norma": "Código General del Proceso, art. 17",
+      "para_que": "Los jueces civiles municipales conocen en única instancia de los procesos contenciosos de mínima cuantía."
+     },
+     {
+      "norma": "Código General del Proceso, art. 20",
+      "para_que": "Los jueces civiles del circuito conocen en primera instancia de los procesos de mayor cuantía."
+     },
+     {
+      "norma": "Código General del Proceso, art. 90, y Constitución Política, art. 31",
+      "para_que": "Rechazo de la demanda por falta de competencia con remisión al juez competente; la doble instancia admite las excepciones que consagre la ley."
+     }
+    ],
+    "analisis": "La competencia no se escoge por preferencia del demandante. Entre jueces municipales y del circuito, el criterio es la cuantía. Una pretensión de $20 millones está muy por debajo del tope de la mínima cuantía, de modo que el asunto corresponde al juez civil municipal —o al de pequeñas causas donde exista— en única instancia.\n\nEl juez del circuito debe rechazar la demanda por falta de competencia y remitirla al juez competente; Inés no pierde su demanda, pero sí tiempo. Como el proceso es de única instancia, la sentencia no será apelable: es una de las excepciones legales a la doble instancia.",
+    "contraargumento": "Inés cree que acudir a un juez de mayor jerarquía le da más garantías. Las reglas de competencia son de orden público y buscan repartir racionalmente la carga judicial; la solidez de la sentencia no depende de la categoría del juzgado.",
+    "conclusion": "El juez civil del circuito no es competente. La demanda debe remitirse al juez civil municipal, que la tramitará en única instancia, sin recurso de apelación contra la sentencia.",
+    "errores_comunes": [
+     "Creer que el demandante puede elegir libremente la categoría del juez.",
+     "Suponer que todos los procesos tienen dos instancias.",
+     "Pensar que el rechazo por falta de competencia termina el proceso, cuando ordena la remisión."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el juez civil del circuito puede conocer la demanda con la que Inés cobra $20 millones y si ese proceso tendrá dos instancias.\n\nEl artículo 25 del Código General del Proceso clasifica los procesos en de mínima, menor y mayor cuantía, según el valor de las pretensiones medido en salarios mínimos, y el artículo 26 ordena determinar ese valor al tiempo de la demanda. A su vez, el artículo 17 asigna a los jueces civiles municipales, en única instancia, los procesos contenciosos de mínima cuantía, mientras que el artículo 20 reserva a los jueces del circuito, en primera instancia, los de mayor cuantía.\n\nEn efecto, Inés reclama $20 millones más intereses, suma que queda muy por debajo del límite de la mínima cuantía. Por consiguiente, el competente es el juez civil municipal, o el de pequeñas causas donde exista, y no el del circuito.\n\nAhora bien, Inés escogió el circuito porque le pareció un juez de mayor jerarquía. Ese argumento no prospera, porque las reglas de competencia son de orden público y no dependen de la preferencia de las partes. Sin embargo, el error no le hace perder la demanda: el artículo 90 dispone que, cuando el juez rechaza por falta de competencia, la envía con sus anexos al que considere competente.\n\nEn cuanto a la apelación, el proceso será de única instancia; de ahí que la sentencia no pueda apelarse ante el tribunal. Esto no desconoce el debido proceso, puesto que el artículo 31 de la Constitución permite que la ley establezca excepciones a la doble instancia.\n\nEn conclusión, el juez del circuito debe remitir la demanda al juez municipal, y la sentencia que este dicte no tendrá apelación. Además, conviene revisar la cuantía antes de presentar cualquier demanda.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "sin embargo",
+    "de ahí que",
+    "puesto que",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Inés reclamara $600 millones por el mismo préstamo?",
+    "respuesta": "Sería un proceso de mayor cuantía. El competente sería el juez civil del circuito en primera instancia, y la sentencia podría apelarse ante el tribunal superior."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-02",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "El domicilio pactado en Cali",
+   "enunciado": "Textiles Farallones S.A.S., con domicilio en Cali, vendió telas a crédito a Edgardo Benavides, comerciante domiciliado en Pasto. El contrato, firmado el 5 de septiembre de 2025, dice que el precio de $95 millones se pagará en Pasto, contra la entrega de la mercancía en el almacén del comprador, e incluye una cláusula según la cual «para todos los efectos judiciales las partes fijan como domicilio la ciudad de Cali». Edgardo recibió las telas y no pagó. El 9 de marzo de 2026 la vendedora presentó la demanda ante un juez civil de Cali. Invoca dos razones: que allí tiene su domicilio la demandante, a quien le resulta costoso litigar en otra ciudad, y que las partes pactaron expresamente a Cali como domicilio judicial. Edgardo, notificado, quiere saber si está obligado a defenderse en Cali o si puede pedir que el proceso se tramite en Pasto.",
+   "pregunta": "¿Es competente el juez de Cali para conocer la demanda contra Edgardo?",
+   "pistas": [
+    "La regla general de competencia territorial mira al demandado, no al demandante.",
+    "Revisa en el artículo 28 del Código General del Proceso el fuero adicional para los procesos originados en un contrato y lo que dice sobre los domicilios pactados."
+   ],
+   "conceptos": [
+    "competencia",
+    "factor territorial"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué juez es competente por el factor territorial para conocer de una demanda originada en un contrato, y qué valor tiene la cláusula que fija un domicilio para efectos judiciales?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 1",
+      "para_que": "En los procesos contenciosos es competente, salvo disposición en contrario, el juez del domicilio del demandado."
+     },
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 3",
+      "para_que": "En los procesos originados en un negocio jurídico es también competente el juez del lugar de cumplimiento de cualquiera de las obligaciones; la estipulación de domicilio contractual para efectos judiciales se tiene por no escrita."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 100 y 101",
+      "para_que": "La falta de competencia se alega como excepción previa en el término de traslado; si prospera, el expediente se remite al juez competente."
+     },
+     {
+      "norma": "Código General del Proceso, art. 16",
+      "para_que": "La competencia territorial se prorroga si no se reclama en tiempo."
+     }
+    ],
+    "analisis": "El domicilio de la demandante no es un criterio de competencia. La regla general es el domicilio del demandado: Pasto. Como el proceso nace de un contrato, la demandante podía escoger además el lugar de cumplimiento de las obligaciones; pero el pago se pactó en Pasto y la entrega se hizo allí. Los dos fueros conducen al mismo juez.\n\nLa cláusula que fija a Cali como domicilio judicial no produce efecto: la ley la tiene por no escrita, precisamente para evitar que la parte fuerte imponga el juez de su conveniencia.\n\nEdgardo debe proponer la excepción previa de falta de competencia dentro del traslado; si calla, la competencia del juez de Cali se prorroga.",
+    "contraargumento": "La vendedora invoca la autonomía de la voluntad. En materia de competencia las partes no pueden disponer: solo pueden elegir entre los fueros concurrentes que la ley ofrece, y aquí ninguno apunta a Cali.",
+    "conclusion": "El juez de Cali no es competente; lo es el de Pasto. Edgardo debe alegarlo oportunamente como excepción previa para que el proceso sea remitido.",
+    "errores_comunes": [
+     "Fijar la competencia por el domicilio del demandante.",
+     "Dar validez a la cláusula de domicilio contractual para efectos judiciales.",
+     "Olvidar que la falta de competencia territorial se sanea si no se alega a tiempo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el juez civil de Cali puede conocer de la demanda contra Edgardo, a pesar de que este vive en Pasto y de que allí debía pagarse el precio.\n\nEl numeral 1 del artículo 28 del Código General del Proceso establece que en los procesos contenciosos, salvo disposición legal en contrario, es competente el juez del domicilio del demandado. Además, el numeral 3 agrega que en los procesos originados en un negocio jurídico es también competente el juez del lugar de cumplimiento de cualquiera de las obligaciones, y advierte que la estipulación de domicilio contractual para efectos judiciales se tendrá por no escrita.\n\nEn efecto, Edgardo está domiciliado en Pasto, y el contrato dispuso que la mercancía se entregaría y el precio se pagaría en esa ciudad. Por consiguiente, tanto el fuero general como el contractual señalan al juez de Pasto.\n\nAhora bien, la vendedora ofrece dos razones para litigar en Cali. La primera, que allí tiene su domicilio, no prospera, porque la ley protege al demandado y no atiende a la comodidad de quien demanda. La segunda, que las partes pactaron a Cali como domicilio judicial, tampoco, puesto que la norma priva expresamente de efecto a esa cláusula; de lo contrario, el contratante más fuerte impondría siempre su juez.\n\nEn cuanto al camino procesal, Edgardo debe proponer la excepción previa de falta de competencia dentro del término de traslado, conforme a los artículos 100 y 101; si prospera, el juez remitirá el expediente a Pasto y lo actuado conservará validez. Sin embargo, no puede guardar silencio, ya que el artículo 16 dispone que la competencia territorial se prorroga cuando no se reclama en tiempo.\n\nEn conclusión, el juez de Cali no es competente y el proceso debe tramitarse en Pasto, siempre que Edgardo lo alegue oportunamente.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a pesar de",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "sin embargo",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el contrato hubiera previsto que el precio se pagaría en las oficinas de la vendedora, en Cali?",
+    "respuesta": "Cali sería el lugar de cumplimiento de una de las obligaciones. La demandante podría elegir entre el juez de Pasto y el de Cali, y el juez de Cali sería competente."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-03",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "Notificado «por estado»",
+   "enunciado": "Ferretería El Martillo S.A.S. demandó a Julio Sánchez por el incumplimiento de un contrato de suministro. El juez admitió la demanda por auto del 3 de febrero de 2026, que la secretaría notificó por estado. El abogado de la demandante no envió citación ni aviso a la dirección física de Julio ni mensaje alguno a su correo electrónico, que conocía; consideró que bastaba el estado, porque «cualquiera puede consultar los procesos por internet». Vencido el término que se contó desde esa anotación, el juez tuvo por no contestada la demanda, dio por ciertos los hechos y fijó fecha para la audiencia. Julio se enteró del proceso el 20 de abril de 2026, por un vecino que vio su nombre en la página de la Rama Judicial. Quiere saber si lo actuado es válido y qué debe hacer. La demandante sostiene que la publicidad del estado es suficiente y que Julio fue descuidado.",
+   "pregunta": "¿Fue válida la notificación del auto admisorio a Julio y qué puede hacer él?",
+   "pistas": [
+    "No todas las providencias se notifican de la misma manera: identifica cuáles exigen notificación personal.",
+    "Revisa qué consecuencia prevé el Código General del Proceso para la indebida notificación del auto admisorio y cuándo debe alegarse."
+   ],
+   "conceptos": [
+    "notificación",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede notificarse por estado el auto admisorio de la demanda al demandado, y qué efecto tiene esa irregularidad sobre la actuación posterior?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 290",
+      "para_que": "Debe notificarse personalmente al demandado el auto admisorio de la demanda."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 291 y 292",
+      "para_que": "Trámite de la notificación personal mediante citación y, en subsidio, de la notificación por aviso."
+     },
+     {
+      "norma": "Ley 2213 de 2022, art. 8",
+      "para_que": "La notificación personal puede hacerse mediante mensaje de datos a la dirección electrónica del demandado, con la providencia y los anexos."
+     },
+     {
+      "norma": "Código General del Proceso, art. 133, numeral 8",
+      "para_que": "Es nulo el proceso cuando no se practica en legal forma la notificación del auto admisorio."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 134 a 136 y 301",
+      "para_que": "Oportunidad y requisitos para alegar la nulidad, saneamiento y notificación por conducta concluyente al pedirla."
+     }
+    ],
+    "analisis": "La primera providencia que se dicta contra el demandado debe notificársele personalmente, porque de ella depende su posibilidad de defenderse. La notificación por estado sirve para las providencias posteriores, cuando las partes ya están vinculadas.\n\nAquí no se intentó ninguna de las formas previstas: ni citación, ni aviso, ni mensaje de datos. La anotación en el estado no notificó a Julio, y el término de traslado nunca empezó a correr. Lo actuado desde entonces —tener por no contestada la demanda y dar por ciertos los hechos— está viciado de nulidad.\n\nJulio debe alegar la nulidad en su primera actuación. Si interviene sin proponerla, la sanea.",
+    "contraargumento": "La demandante invoca la publicidad del estado y el descuido de Julio. Nadie tiene la carga de revisar a diario si ha sido demandado; por eso la ley exige una comunicación dirigida a él, cuya gestión corresponde al demandante.",
+    "conclusion": "La notificación no fue válida. Julio debe pedir de inmediato la nulidad de lo actuado por indebida notificación; decretada, podrá contestar la demanda dentro del término de traslado.",
+    "errores_comunes": [
+     "Creer que todas las providencias pueden notificarse por estado.",
+     "Trasladar al demandado la carga de averiguar si existe un proceso en su contra.",
+     "Actuar en el proceso sin alegar la nulidad y sanearla sin advertirlo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el auto admisorio del 3 de febrero de 2026 quedó debidamente notificado a Julio con su inclusión en el estado y, de no ser así, qué remedio tiene.\n\nEl artículo 290 del Código General del Proceso ordena notificar personalmente al demandado el auto admisorio de la demanda. Los artículos 291 y 292 regulan cómo hacerlo, mediante una citación a su dirección y, en subsidio, un aviso; además, el artículo 8 de la Ley 2213 de 2022 permite surtir esa notificación con un mensaje de datos enviado a su correo electrónico, acompañado de la providencia y los anexos. La notificación por estado, en cambio, se reserva para las providencias posteriores.\n\nEn efecto, el abogado de la demandante no envió citación, aviso ni mensaje alguno, a pesar de conocer la dirección y el correo de Julio. Por consiguiente, este nunca fue notificado y el término para contestar no empezó a correr. De ahí que el juez no pudiera tener por no contestada la demanda ni dar por ciertos los hechos.\n\nAhora bien, la demandante sostiene que el estado es público y que Julio fue descuidado. Ese argumento no prospera, porque nadie tiene el deber de vigilar si ha sido demandado; es al demandante a quien corresponde gestionar la notificación, puesto que de ella depende el derecho de defensa.\n\nEn cuanto al remedio, el numeral 8 del artículo 133 sanciona con nulidad la falta de notificación en legal forma del auto admisorio. Julio debe alegarla en su primera actuación, ya que el artículo 136 la entiende saneada si la parte interviene sin proponerla.\n\nEn conclusión, lo actuado después de la admisión es nulo respecto de Julio. Finalmente, decretada la nulidad, él quedará notificado por conducta concluyente y podrá contestar dentro del traslado.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en cambio",
+    "en efecto",
+    "a pesar de",
+    "por consiguiente",
+    "de ahí que",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "ya que",
+    "en conclusión",
+    "finalmente"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la demandante hubiera enviado al correo electrónico de Julio el auto admisorio, la demanda y sus anexos, con constancia de entrega?",
+    "respuesta": "La notificación personal se habría surtido en debida forma conforme a la Ley 2213 de 2022. El término de traslado habría corrido y, si Julio no contestó, la decisión de tener por no contestada la demanda sería válida."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-04",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "Siete días después",
+   "enunciado": "En un proceso verbal de responsabilidad civil, el juez negó, por auto del 2 de marzo de 2026, el dictamen pericial que había pedido la demandada, Constructora Bahía S.A.S., por considerarlo innecesario. El auto se notificó por estado el 3 de marzo. La abogada de la constructora radicó un escrito de «recurso de apelación» el 12 de marzo de 2026, siete días hábiles después de la notificación. En él explica que la semana anterior tuvo audiencias en otras ciudades, que el dictamen es la prueba más importante de su defensa y que el derecho de defensa debe prevalecer sobre los formalismos. No había interpuesto antes recurso de reposición. El juez debe decidir si concede la apelación. La parte demandante se opone: afirma que el auto quedó en firme y que la carga de trabajo de un abogado no suspende los términos. No hubo interrupción del proceso ni cierre extraordinario del despacho en esos días.",
+   "pregunta": "¿Debe el juez conceder el recurso de apelación contra el auto que negó la prueba?",
+   "pistas": [
+    "Verifica dos cosas por separado: si el auto es apelable y si el recurso se interpuso a tiempo.",
+    "Revisa los artículos 321 y 322 del Código General del Proceso y el efecto del vencimiento de los términos."
+   ],
+   "conceptos": [
+    "recursos",
+    "apelación",
+    "reposición"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede y es oportuna la apelación interpuesta siete días después de la notificación por estado del auto que negó una prueba?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 321",
+      "para_que": "Es apelable el auto que niega el decreto o la práctica de pruebas."
+     },
+     {
+      "norma": "Código General del Proceso, art. 322",
+      "para_que": "La apelación contra autos dictados fuera de audiencia debe interponerse dentro de los tres días siguientes a su notificación por estado."
+     },
+     {
+      "norma": "Código General del Proceso, art. 318",
+      "para_que": "Recurso de reposición, también dentro de los tres días siguientes a la notificación."
+     },
+     {
+      "norma": "Código General del Proceso, art. 117",
+      "para_que": "Los términos procesales son perentorios e improrrogables."
+     },
+     {
+      "norma": "Código General del Proceso, art. 302",
+      "para_que": "Las providencias quedan ejecutoriadas tres días después de notificadas, si no se interponen los recursos."
+     }
+    ],
+    "analisis": "El auto sí es apelable: la ley incluye expresamente el que niega el decreto de una prueba. El problema es la oportunidad. Notificado por estado el 3 de marzo, el término de tres días venció el 6 de marzo de 2026. El recurso se radicó el 12 de marzo, cuando el auto ya estaba ejecutoriado.\n\nLos términos son perentorios. Las ocupaciones profesionales de la abogada no constituyen una causa legal de interrupción ni de suspensión. El juez debe negar el recurso por extemporáneo.",
+    "contraargumento": "La abogada invoca la prevalencia del derecho de defensa sobre las formas. Los términos para recurrir no son un formalismo vacío: garantizan la igualdad entre las partes y el avance del proceso. La defensa se ejerció mal, no fue impedida.",
+    "conclusion": "El juez debe negar la apelación por extemporánea. El auto que negó el dictamen quedó en firme el 6 de marzo de 2026.",
+    "errores_comunes": [
+     "Confundir la procedencia del recurso con su oportunidad.",
+     "Creer que la importancia de la prueba permite ampliar el término.",
+     "Contar el término desde la fecha del auto y no desde su notificación."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico tiene dos partes: si el auto que negó el dictamen pericial admite apelación y, en caso afirmativo, si el recurso de la constructora se interpuso dentro del término legal.\n\nEn cuanto a la procedencia, el artículo 321 del Código General del Proceso enumera los autos apelables e incluye el que niegue el decreto o la práctica de pruebas. Por lo tanto, la decisión del 2 de marzo de 2026 sí era susceptible de apelación.\n\nEn cuanto a la oportunidad, el artículo 322 dispone que la apelación contra un auto dictado fuera de audiencia debe interponerse ante el juez que lo profirió, por escrito, dentro de los tres días siguientes a su notificación por estado. Además, el artículo 117 advierte que los términos son perentorios e improrrogables. En efecto, el auto se notificó el 3 de marzo, de modo que el plazo venció el 6 de marzo. La abogada radicó su escrito el 12 de marzo, es decir, cuatro días hábiles después del vencimiento. Por consiguiente, el recurso es extemporáneo y el auto ya había cobrado ejecutoria, según el artículo 302.\n\nAhora bien, la constructora alega que su apoderada tuvo audiencias en otras ciudades y que el derecho de defensa prevalece sobre los formalismos. Ese argumento no prospera, porque la carga laboral de un abogado no es causa de interrupción ni de suspensión del proceso. Tampoco se trata de un simple rito: los términos aseguran la igualdad de las partes, y la demandante tiene derecho a que la decisión quede en firme.\n\nPor otra parte, la constructora pudo haber interpuesto reposición y, en subsidio, apelación dentro de esos tres días, conforme al artículo 318, y no lo hizo.\n\nEn conclusión, el juez debe negar la apelación por extemporánea, aunque la prueba fuera importante para la defensa.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por lo tanto",
+    "además",
+    "en efecto",
+    "de modo que",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "por otra parte",
+    "en conclusión",
+    "aunque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la abogada hubiera radicado el recurso el 5 de marzo de 2026?",
+    "respuesta": "El recurso sería oportuno y procedente. El juez tendría que concederlo y el superior decidiría si el dictamen debía decretarse."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-05",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "El yerno que «dio la cara»",
+   "enunciado": "El 14 de agosto de 2025, Ramón Castiblanco compró un automóvil usado de propiedad de Olga Marín, quien figura como titular en el registro. El negocio lo adelantó el yerno de Olga, Fernando Rico: mostró el vehículo, negoció el precio y recibió los $48 millones, por los que entregó un recibo firmado «por Olga Marín, su mandatario Fernando Rico». El contrato de compraventa lo firmó la propia Olga. En octubre de 2025 el automóvil fue inmovilizado por un embargo anterior a la venta. El 2 de febrero de 2026 Ramón demandó la resolución del contrato y la devolución del precio, pero dirigió la demanda únicamente contra Fernando, «porque fue quien dio la cara y recibió la plata». Fernando contestó que él no vendió nada y que no es parte del contrato. Ramón insiste en que, si Fernando recibió el dinero, es él quien debe devolverlo.",
+   "pregunta": "¿Puede prosperar la demanda de Ramón contra Fernando?",
+   "pistas": [
+    "Antes de examinar si hubo incumplimiento, pregúntate si el demandado es la persona obligada por el contrato.",
+    "Piensa en los efectos de los actos que una persona realiza a nombre de otra y en cómo debe terminar un proceso dirigido contra quien no es el obligado."
+   ],
+   "conceptos": [
+    "legitimación en la causa",
+    "legitimación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Está legitimado en la causa por pasiva quien intervino en un contrato como mandatario de la vendedora, y qué decisión corresponde si no lo está?",
+    "normas": [
+     {
+      "norma": "Código Civil, art. 1505",
+      "para_que": "Lo que una persona ejecuta a nombre de otra, estando facultada para representarla, produce respecto del representado los mismos efectos que si hubiera contratado él mismo."
+     },
+     {
+      "norma": "Código Civil, arts. 1546 y 1602",
+      "para_que": "La resolución por incumplimiento se dirige contra el contratante incumplido; el contrato obliga a quienes lo celebran."
+     },
+     {
+      "norma": "Código General del Proceso, art. 278",
+      "para_que": "El juez dicta sentencia anticipada cuando encuentra probada la carencia de legitimación en la causa."
+     },
+     {
+      "norma": "Código General del Proceso, art. 282",
+      "para_que": "El juez reconoce de oficio los hechos que constituyen una excepción, salvo las que deben alegarse."
+     }
+    ],
+    "analisis": "La legitimación en la causa es la coincidencia entre las partes del proceso y los sujetos de la relación sustancial que se discute. La resolución de un contrato y la restitución del precio solo pueden pedirse contra el otro contratante.\n\nLa vendedora fue Olga: era la dueña, firmó el contrato y a su nombre se expidió el recibo. Fernando actuó como mandatario, de manera expresa; los efectos de sus actos recaen sobre Olga. Él no es parte del contrato y no está obligado a devolver el precio.\n\nLa falta de legitimación no produce nulidad ni inadmisión: lleva a una sentencia que niega las pretensiones, incluso anticipada.",
+    "contraargumento": "Ramón alega que Fernando recibió el dinero. Lo recibió para Olga, y así consta en el recibo. Ramón podría perseguir a Fernando solo si este hubiera actuado en nombre propio o hubiera excedido su encargo, lo que no se afirma.",
+    "conclusion": "La demanda contra Fernando no puede prosperar, por falta de legitimación en la causa por pasiva. Ramón debe demandar a Olga, que es la vendedora.",
+    "errores_comunes": [
+     "Demandar a quien intervino materialmente en el negocio y no a quien se obligó.",
+     "Tratar la falta de legitimación como un defecto formal subsanable o como una nulidad.",
+     "Confundir la legitimación en la causa con la capacidad para comparecer al proceso."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Fernando, que negoció la venta y recibió el dinero, puede ser condenado a devolver el precio, o si la demanda debió dirigirse contra otra persona.\n\nLa legitimación en la causa consiste en que quien demanda y quien es demandado sean los titulares de la relación jurídica sustancial que se debate. En materia contractual, el artículo 1602 del Código Civil hace del contrato una ley para las partes que lo celebran, y el artículo 1546 concede la acción resolutoria contra el contratante que no cumplió. Además, el artículo 1505 dispone que lo que una persona ejecuta a nombre de otra, estando facultada para representarla, produce respecto del representado iguales efectos que si este hubiera contratado.\n\nEn efecto, la dueña del automóvil era Olga, ella firmó el contrato de compraventa y el recibo dice que Fernando recibió el precio como su mandatario. Por consiguiente, la vendedora fue Olga y los actos de Fernando la obligaron a ella. Fernando no es parte del contrato cuya resolución se pide.\n\nAhora bien, Ramón sostiene que quien recibió la plata debe devolverla. Ese argumento no prospera, porque Fernando la recibió para otra persona y así consta en el documento; la obligación de restituir el precio es de quien vendió. Si bien Fernando dio la cara en la negociación, eso no lo convierte en contratante.\n\nEn cuanto a la consecuencia procesal, la falta de legitimación en la causa por pasiva no genera nulidad ni rechazo de la demanda, sino una decisión de fondo que niega las pretensiones. De ahí que el artículo 278 del Código General del Proceso autorice al juez a dictar sentencia anticipada cuando la encuentra probada.\n\nEn conclusión, la demanda contra Fernando debe fracasar. Sin embargo, Ramón conserva su acción contra Olga, y debe ejercerla en un nuevo proceso.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "si bien",
+    "de ahí que",
+    "en conclusión",
+    "sin embargo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Fernando hubiera vendido el automóvil en su propio nombre, sin mencionar a Olga, y hubiera firmado él el contrato?",
+    "respuesta": "Fernando sería el vendedor frente a Ramón y estaría legitimado en la causa por pasiva. La demanda de resolución y restitución del precio podría prosperar contra él."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-06",
+   "area": "Procesal",
+   "nivel": "basico",
+   "titulo": "La demanda que no se subsanó",
+   "enunciado": "El 2 de febrero de 2026, el abogado de Carlos Trujillo presentó una demanda verbal contra una aseguradora, en la que reclama $120 millones por el pago de un seguro de vida. No anexó el poder ni la constancia de haber agotado la conciliación extrajudicial. Por auto del 9 de febrero, notificado por estado el día 10, el juez inadmitió la demanda, señaló esos dos defectos y concedió cinco días para subsanarlos. El abogado no hizo nada: estaba convencido de que el juez debía admitir la demanda y pedir los documentos más adelante. El 20 de febrero de 2026 el juez la rechazó. El abogado le dice a su cliente que el rechazo viola el derecho de acceso a la justicia, que contra esa decisión no cabe recurso alguno y que la única salida es una acción de tutela. Carlos pregunta si eso es cierto y si perdió definitivamente su reclamación.",
+   "pregunta": "¿Fue correcto el rechazo de la demanda y qué puede hacer Carlos frente a esa decisión?",
+   "pistas": [
+    "Distingue entre inadmitir y rechazar una demanda, y fíjate en qué ocurre cuando no se corrigen los defectos señalados.",
+    "Averigua si el auto que rechaza la demanda tiene recursos y si esa decisión impide volver a demandar."
+   ],
+   "conceptos": [
+    "recursos",
+    "apelación",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede el rechazo de la demanda que no se subsana dentro del término concedido, qué recursos tiene esa decisión y qué efectos produce sobre el derecho del demandante?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, arts. 82 y 84",
+      "para_que": "Requisitos de la demanda y anexos, entre ellos el poder."
+     },
+     {
+      "norma": "Código General del Proceso, art. 90",
+      "para_que": "El juez inadmite la demanda cuando le faltan requisitos o anexos o no se acredita la conciliación prejudicial exigida, concede cinco días para subsanar y, si no se subsana, la rechaza."
+     },
+     {
+      "norma": "Código General del Proceso, art. 321",
+      "para_que": "Es apelable el auto que rechaza la demanda."
+     },
+     {
+      "norma": "Ley 2220 de 2022",
+      "para_que": "La conciliación extrajudicial como requisito de procedibilidad en los asuntos civiles conciliables; verificar el artículo en fuente oficial."
+     },
+     {
+      "norma": "Constitución Política, art. 86, y Decreto 2591 de 1991, art. 6",
+      "para_que": "La tutela no procede cuando existe otro medio de defensa judicial."
+     }
+    ],
+    "analisis": "El juez actuó conforme a la ley. La falta de poder y de la constancia de conciliación son causales de inadmisión; el auto las señaló con precisión y dio el término de cinco días. Ese término venció el 17 de febrero sin que el abogado corrigiera nada. El rechazo era la consecuencia obligada.\n\nEl abogado se equivoca en lo demás. El auto que rechaza la demanda es apelable, de modo que la tutela es improcedente por existir otro medio. Y el rechazo no decide el fondo ni hace tránsito a cosa juzgada: Carlos puede presentar de nuevo la demanda con los anexos completos, vigilando que no prescriba la acción derivada del seguro.",
+    "contraargumento": "El abogado invoca el acceso a la justicia. Ese derecho no exime de cumplir los requisitos que permiten tramitar el proceso con garantías para ambas partes; el juez dio la oportunidad de corregir y no fue aprovechada.",
+    "conclusion": "El rechazo fue correcto. Carlos puede apelarlo, aunque con pocas probabilidades, o presentar una nueva demanda en debida forma; no perdió su derecho, salvo que deje prescribir la acción.",
+    "errores_comunes": [
+     "Creer que el juez debe admitir la demanda incompleta y pedir después los anexos.",
+     "Afirmar que el rechazo de la demanda carece de recursos y acudir directamente a la tutela.",
+     "Confundir el rechazo de la demanda con una decisión de fondo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos cuestiones: si el juez podía rechazar la demanda de Carlos y qué alternativas tiene él ahora.\n\nEl artículo 84 del Código General del Proceso exige acompañar a la demanda el poder, y el artículo 90 ordena al juez declararla inadmisible, entre otros casos, cuando no se acompañen los anexos de ley o no se acredite que se agotó la conciliación prejudicial como requisito de procedibilidad. La misma norma dispone que el juez señalará con precisión los defectos para que el demandante los subsane en cinco días, so pena de rechazo.\n\nEn efecto, la demanda carecía del poder y de la constancia de conciliación, y el auto del 9 de febrero de 2026, notificado el día 10, indicó ambos defectos. El término venció el 17 de febrero sin que el abogado actuara. Por consiguiente, el rechazo del 20 de febrero se ajusta a la ley.\n\nAhora bien, el abogado sostiene que el juez debía admitir y pedir los documentos después, y que el rechazo viola el acceso a la justicia. Ese argumento no prospera, porque la ley no permite adelantar el proceso sin los presupuestos mínimos, y además el juez dio la oportunidad de corregir.\n\nTampoco es cierto que no haya recursos. El artículo 321 declara apelable el auto que rechaza la demanda; de ahí que la tutela resulte improcedente, puesto que el artículo 86 de la Constitución la reserva para cuando no existe otro medio de defensa judicial.\n\nPor último, Carlos no ha perdido su reclamación. El rechazo no resuelve el fondo ni produce cosa juzgada, de modo que puede presentar una nueva demanda con los anexos completos. Sin embargo, debe hacerlo pronto, ya que el tiempo sigue corriendo para la prescripción de la acción derivada del seguro.\n\nEn conclusión, lo aconsejable es agotar la conciliación y demandar de nuevo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "además",
+    "de ahí que",
+    "puesto que",
+    "por último",
+    "de modo que",
+    "sin embargo",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el abogado hubiera aportado el poder y la constancia de conciliación el 16 de febrero de 2026?",
+    "respuesta": "La demanda habría quedado subsanada dentro de los cinco días. El juez tendría que admitirla y ordenar la notificación de la aseguradora."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-07",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "La finca está en Fusagasugá",
+   "enunciado": "Marina Quiroga, domiciliada en Bogotá, es propietaria inscrita de una finca ubicada en Fusagasugá que ocupa desde 2023, sin su consentimiento, Evaristo Peña, quien también tiene su domicilio en Bogotá y va a la finca los fines de semana. El 19 de enero de 2026 Marina presentó demanda reivindicatoria ante un juez civil del circuito de Bogotá: razonó que ambos viven allí y que la regla general de competencia es el domicilio del demandado. Evaristo, notificado, propuso dentro del término de traslado, en escrito separado, la excepción previa de falta de competencia, y pidió que el proceso se remita a Fusagasugá. Marina se opone: insiste en la regla del domicilio del demandado y agrega que, de todos modos, la competencia territorial es prorrogable, de manera que el juez de Bogotá puede seguir conociendo. El juez debe resolver la excepción antes de continuar el trámite.",
+   "pregunta": "¿Debe prosperar la excepción previa de falta de competencia propuesta por Evaristo?",
+   "pistas": [
+    "La regla del domicilio del demandado opera «salvo disposición legal en contrario»: busca la regla especial para los procesos sobre derechos reales.",
+    "Pregúntate cuándo se prorroga la competencia territorial y si eso ocurrió aquí."
+   ],
+   "conceptos": [
+    "competencia",
+    "factor territorial"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué juez es competente por el factor territorial para conocer de una acción reivindicatoria, y puede prorrogarse la competencia cuando el demandado la objeta oportunamente?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 7",
+      "para_que": "En los procesos en que se ejercen derechos reales es competente, de modo privativo, el juez del lugar donde están ubicados los bienes."
+     },
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 1",
+      "para_que": "Regla general del domicilio del demandado, que cede ante disposición especial."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 100 y 101",
+      "para_que": "Excepción previa de falta de competencia, su oportunidad y efectos: remisión al juez competente."
+     },
+     {
+      "norma": "Código General del Proceso, art. 16",
+      "para_que": "La falta de competencia por factores distintos del subjetivo y el funcional se prorroga cuando no se reclama en tiempo; lo actuado conserva validez."
+     },
+     {
+      "norma": "Código Civil, art. 946",
+      "para_que": "Acción reivindicatoria o de dominio."
+     }
+    ],
+    "analisis": "La reivindicación es el ejercicio de un derecho real: el dominio. Para esos procesos la ley fija un fuero privativo, el del lugar de ubicación del bien, que excluye el fuero general del domicilio del demandado. La finca está en Fusagasugá; el competente es el juez de ese circuito.\n\nMarina acierta en que la competencia territorial es prorrogable, pero la prórroga solo opera cuando el demandado no la reclama a tiempo. Evaristo la alegó dentro del traslado y por la vía prevista. No hay prórroga.\n\nLa excepción debe prosperar. El juez de Bogotá debe remitir el expediente al de Fusagasugá; lo actuado conserva validez.",
+    "contraargumento": "Marina invoca la comodidad de ambas partes, que viven en Bogotá. El fuero real privativo atiende a la cercanía del juez con el bien —para la inspección y las pruebas—, no al domicilio de los litigantes, y no depende de su conveniencia.",
+    "conclusion": "La excepción previa prospera: el juez competente es el del lugar de ubicación de la finca. El expediente debe remitirse al juez civil del circuito de Fusagasugá.",
+    "errores_comunes": [
+     "Aplicar el fuero general del domicilio cuando existe un fuero privativo.",
+     "Confundir prorrogable con disponible por el demandante.",
+     "Creer que la falta de competencia anula lo actuado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos cuestiones: cuál es el juez competente por el territorio para la acción reivindicatoria de Marina y si el juez de Bogotá puede seguir conociendo por haberse prorrogado su competencia.\n\nEl numeral 1 del artículo 28 del Código General del Proceso consagra como regla general el domicilio del demandado, salvo disposición legal en contrario. Una de esas disposiciones es el numeral 7 del mismo artículo, según el cual, en los procesos en que se ejerciten derechos reales, es competente, de modo privativo, el juez del lugar donde estén ubicados los bienes.\n\nEn efecto, Marina ejerce la acción de dominio del artículo 946 del Código Civil, es decir, un derecho real, y la finca se encuentra en Fusagasugá. Por consiguiente, el fuero real excluye el del domicilio, y el competente es el juez del circuito de ese municipio, aunque ambas partes vivan en Bogotá.\n\nAhora bien, Marina sostiene que la competencia territorial es prorrogable. Tiene razón en el punto de partida, puesto que el artículo 16 dispone que la falta de competencia por factores distintos del subjetivo y el funcional es prorrogable. Sin embargo, la misma norma condiciona la prórroga a que no se reclame en tiempo. Evaristo propuso la excepción previa dentro del término de traslado y en escrito separado, como lo exigen los artículos 100 y 101; de ahí que no haya operado prórroga alguna.\n\nPor otra parte, el argumento de la comodidad no prospera, porque el fuero privativo busca que el proceso se tramite cerca del bien, donde se practicarán la inspección y las demás pruebas.\n\nEn conclusión, la excepción debe prosperar y el juez de Bogotá debe remitir el expediente al de Fusagasugá. Además, lo actuado hasta ese momento conserva su validez, de modo que la demanda y su notificación no se pierden.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "aunque",
+    "ahora bien",
+    "puesto que",
+    "sin embargo",
+    "de ahí que",
+    "por otra parte",
+    "porque",
+    "en conclusión",
+    "además",
+    "de modo que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Evaristo hubiera contestado la demanda sin proponer la excepción previa de falta de competencia?",
+    "respuesta": "La competencia del juez de Bogotá se habría prorrogado por no reclamarse en tiempo. El proceso seguiría allí y Evaristo no podría alegar después ese defecto."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-08",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "«Conozco el auto admisorio»",
+   "enunciado": "En un proceso verbal de mayor cuantía, el juez admitió la demanda contra Lucero Avendaño por auto del 3 de febrero de 2026. La demandante no había logrado notificarla: la citación fue devuelta. El 10 de marzo de 2026 Lucero radicó un escrito con su firma en el que dice: «conozco el auto admisorio del 3 de febrero de 2026 dictado en este proceso y solicito copia de la demanda y de sus anexos». No retiró las copias ni hizo nada más. El 15 de mayo de 2026 presentó, por medio de abogado, la contestación de la demanda con excepciones de mérito. Sostiene que está en tiempo, porque nunca recibió una citación ni un aviso en debida forma, de modo que el término de traslado, que es de veinte días, no ha empezado a correr. La demandante pide que la contestación se tenga por extemporánea. No hubo suspensión del proceso en ese lapso.",
+   "pregunta": "¿Presentó Lucero oportunamente la contestación de la demanda?",
+   "pistas": [
+    "La notificación personal no es la única forma en que el demandado queda vinculado: revisa qué ocurre cuando él mismo manifiesta conocer la providencia.",
+    "Determina desde cuándo corre el traslado en ese supuesto y qué consecuencia tiene no contestar a tiempo."
+   ],
+   "conceptos": [
+    "notificación",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Quedó notificada por conducta concluyente la demandada que manifestó por escrito conocer el auto admisorio, desde cuándo corre el traslado y qué efecto tiene la contestación tardía?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 301",
+      "para_que": "Cuando una parte manifiesta que conoce determinada providencia o la menciona en escrito que lleve su firma, se considera notificada por conducta concluyente en la fecha de presentación del escrito."
+     },
+     {
+      "norma": "Código General del Proceso, art. 91",
+      "para_que": "Notificado por conducta concluyente, el demandado puede solicitar copia de la demanda y sus anexos dentro de los tres días siguientes, vencidos los cuales corre el término de traslado."
+     },
+     {
+      "norma": "Código General del Proceso, art. 369",
+      "para_que": "Traslado de veinte días en el proceso verbal."
+     },
+     {
+      "norma": "Código General del Proceso, art. 97",
+      "para_que": "La falta de contestación hace presumir ciertos los hechos susceptibles de confesión contenidos en la demanda."
+     },
+     {
+      "norma": "Código General del Proceso, art. 117",
+      "para_que": "Perentoriedad de los términos."
+     }
+    ],
+    "analisis": "La notificación busca que el demandado conozca la providencia. Si él mismo declara por escrito que la conoce, ese fin está cumplido y la ley lo tiene por notificado desde ese día. Lucero firmó y radicó el 10 de marzo de 2026 un escrito en el que identifica el auto admisorio por su fecha: quedó notificada por conducta concluyente.\n\nDesde entonces tuvo tres días para retirar las copias; vencidos, empezaron a correr los veinte días del traslado, que terminaron en abril. La contestación del 15 de mayo es extemporánea. Las irregularidades de la citación anterior quedaron superadas por su propia manifestación.\n\nLa consecuencia es que se presumen ciertos los hechos de la demanda susceptibles de confesión, aunque Lucero puede intervenir en adelante.",
+    "contraargumento": "Lucero alega que nunca fue citada en debida forma. Es verdad, pero la conducta concluyente es una forma autónoma de notificación; no puede prevalerse del defecto quien reconoció expresamente conocer la providencia.",
+    "conclusion": "La contestación fue extemporánea. Lucero quedó notificada el 10 de marzo de 2026 y el traslado venció antes del 15 de mayo; se aplican las consecuencias de la falta de contestación.",
+    "errores_comunes": [
+     "Creer que solo la citación y el aviso notifican el auto admisorio.",
+     "Contar el traslado desde el día mismo del escrito, sin los tres días para retirar copias.",
+     "Suponer que la contestación tardía produce los mismos efectos que la oportuna."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es desde cuándo quedó notificada Lucero del auto admisorio y, en consecuencia, si la contestación que presentó el 15 de mayo de 2026 fue oportuna.\n\nEl artículo 301 del Código General del Proceso dispone que, cuando una parte manifiesta que conoce determinada providencia o la menciona en escrito que lleve su firma, se considera notificada por conducta concluyente de esa providencia en la fecha de presentación del escrito. Además, el artículo 91 prevé que, en ese caso, el demandado puede solicitar en la secretaría la reproducción de la demanda y sus anexos dentro de los tres días siguientes, vencidos los cuales comienza a correr el término de traslado, que en el proceso verbal es de veinte días según el artículo 369.\n\nEn efecto, el 10 de marzo de 2026 Lucero radicó un escrito firmado en el que afirma conocer el auto admisorio del 3 de febrero. Por consiguiente, ese día quedó notificada. Los tres días para retirar copias vencieron a mediados de marzo y, desde entonces, corrieron los veinte días del traslado, que terminaron en abril, sin que hubiera suspensión alguna. De ahí que la contestación del 15 de mayo sea extemporánea.\n\nAhora bien, Lucero sostiene que nunca recibió citación ni aviso en debida forma. Ese argumento no prospera, porque la conducta concluyente es una forma de notificación distinta, que opera precisamente cuando las otras no se han surtido; quien declara conocer la providencia no puede alegar después que la ignoraba. Tampoco importa que no haya retirado las copias, puesto que la ley solo le concede el plazo para pedirlas.\n\nEn cuanto a los efectos, el artículo 97 presume ciertos los hechos susceptibles de confesión cuando la demanda no se contesta. Sin embargo, Lucero puede seguir interviniendo en el proceso.\n\nEn conclusión, la contestación debe tenerse por no presentada en tiempo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en consecuencia",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "de ahí que",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "sin embargo",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si, en lugar de ese escrito, Lucero hubiera otorgado poder a un abogado sin mencionar el auto?",
+    "respuesta": "Se entendería notificada por conducta concluyente de todas las providencias el día en que se notifique el auto que le reconoce personería al abogado. El traslado se contaría desde ese momento."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-09",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "«Apelo», y nada más",
+   "enunciado": "El 12 de marzo de 2026, en audiencia, un juez civil del circuito de Montería dictó sentencia de primera instancia y condenó a Agropecuaria Sinú S.A.S. a pagar $340 millones por el incumplimiento de un contrato. Terminada la lectura, el apoderado de la demandada dijo: «interpongo recurso de apelación», sin exponer motivo alguno. El juez le advirtió que podía precisar sus reparos en ese momento o dentro de los tres días siguientes. El apoderado no presentó escrito alguno. El 24 de marzo de 2026 el juez declaró desierto el recurso. El apoderado pide reposición: afirma que bastaba con manifestar su inconformidad en la audiencia, que los motivos se exponen ante el tribunal, que es el que decide, y que la doble instancia es una garantía constitucional que no puede sacrificarse por una formalidad. La parte demandante pide que se mantenga la decisión y que la sentencia quede en firme.",
+   "pregunta": "¿Fue correcta la decisión de declarar desierto el recurso de apelación?",
+   "pistas": [
+    "La apelación de sentencias tiene varios momentos y cargas distintas: interponer, precisar los reparos y sustentar.",
+    "Revisa en el artículo 322 del Código General del Proceso qué debe hacer el apelante ante el juez de primera instancia y qué pasa si no lo hace."
+   ],
+   "conceptos": [
+    "apelación",
+    "recursos",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Debe declararse desierto el recurso de apelación contra una sentencia cuando el apelante lo interpone en la audiencia pero no precisa los reparos concretos en el término legal?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 322",
+      "para_que": "La apelación contra la sentencia dictada en audiencia se interpone en ella; el apelante debe precisar los reparos concretos al interponerla o dentro de los tres días siguientes, y si no lo hace el juez de primera instancia declara desierto el recurso."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 327 y 328",
+      "para_que": "La sustentación ante el superior versa sobre los reparos formulados, que delimitan su competencia."
+     },
+     {
+      "norma": "Constitución Política, arts. 29 y 31",
+      "para_que": "Debido proceso y doble instancia, que se ejercen en las condiciones que fija la ley."
+     },
+     {
+      "norma": "Código General del Proceso, art. 117",
+      "para_que": "Perentoriedad de los términos."
+     }
+    ],
+    "analisis": "La apelación de una sentencia exige tres cargas: interponerla oportunamente, precisar de manera breve los reparos concretos ante el juez que la dictó y sustentarla después ante el superior. El apoderado cumplió solo la primera.\n\nLos reparos concretos no son un formalismo: fijan el objeto de la segunda instancia, porque el superior solo puede pronunciarse sobre ellos, y permiten a la contraparte saber qué se discutirá. El término de tres días venció el 17 de marzo de 2026 sin escrito alguno. La ley atribuye expresamente al juez de primera instancia el deber de declarar desierto el recurso en ese caso.",
+    "contraargumento": "El apoderado invoca la doble instancia. Es una garantía sujeta a las cargas que la ley impone para ejercerla; no se le impidió apelar, sino que dejó de cumplir una carga clara, que además el juez le recordó.",
+    "conclusion": "La decisión fue correcta. El recurso quedó desierto y la sentencia de primera instancia está en firme.",
+    "errores_comunes": [
+     "Creer que basta manifestar la intención de apelar.",
+     "Confundir los reparos concretos ante el juez de primera instancia con la sustentación ante el superior.",
+     "Invocar la doble instancia para omitir cargas procesales expresas."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el apoderado de la demandada cumplió las cargas necesarias para que su apelación contra la sentencia del 12 de marzo de 2026 fuera concedida.\n\nEl artículo 322 del Código General del Proceso dispone que la apelación contra una providencia dictada en audiencia debe interponerse verbalmente, inmediatamente después de pronunciada. Además, cuando se apela una sentencia, exige al apelante precisar, de manera breve, los reparos concretos que le hace a la decisión, al momento de interponer el recurso o dentro de los tres días siguientes a la audiencia, y ordena al juez de primera instancia declararlo desierto si no lo hace. Sobre esos reparos versará luego la sustentación ante el superior, cuya competencia se limita a ellos según el artículo 328.\n\nEn efecto, el apoderado se limitó a decir que apelaba. No expuso motivo alguno en la audiencia ni presentó escrito dentro de los tres días, que vencieron el 17 de marzo, pese a que el juez le recordó esa carga. Por consiguiente, faltó el requisito de los reparos concretos y la deserción se ajusta a la ley.\n\nAhora bien, el apoderado alega que los motivos se exponen ante el tribunal. Ese argumento confunde dos momentos distintos. Los reparos ante el juez de primera instancia delimitan lo que se discutirá; la sustentación ante el superior los desarrolla. Sin los primeros, la segunda carece de objeto. Tampoco prospera la invocación de la doble instancia, porque el artículo 31 de la Constitución la garantiza en las condiciones que fije la ley, y aquí nadie impidió recurrir.\n\nPor otra parte, no se trata de una simple formalidad, puesto que los reparos permiten a la contraparte conocer el alcance del debate.\n\nEn conclusión, la reposición debe negarse. De ahí que la sentencia haya quedado en firme y pueda ejecutarse.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "pese a",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "por otra parte",
+    "puesto que",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el apoderado hubiera presentado el 16 de marzo de 2026 un escrito con tres reparos concretos contra la sentencia?",
+    "respuesta": "Habría cumplido la carga dentro de los tres días. El juez tendría que conceder la apelación, y el apoderado debería sustentar después esos reparos ante el tribunal."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-10",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "«La empresa es mía»",
+   "enunciado": "Maderas del Darién S.A.S. vendió madera a Constructora Urabá Ltda. por $95 millones, según factura expedida a nombre de la sociedad vendedora el 6 de octubre de 2025. La constructora no pagó. Ernesto Mosquera, accionista del 60 % y gerente de Maderas del Darién, presentó el 9 de febrero de 2026 una demanda «en nombre propio», en la que pide que la constructora le pague a él los $95 millones, «porque la empresa es suya y el perjuicio lo sufre él». La constructora contestó y propuso la que llamó «excepción previa de falta de legitimación». El juez de primera instancia duda entre tres caminos: inadmitir la demanda para que se corrija, declarar una nulidad por indebida representación o decidir de otra manera. Ernesto insiste en que, como representante legal y socio mayoritario, él y la sociedad son en la práctica la misma persona.",
+   "pregunta": "¿Tiene Ernesto legitimación para reclamar en nombre propio el pago de la factura, y cómo debe resolverlo el juez?",
+   "pistas": [
+    "Pregúntate quién es el acreedor de la obligación que se cobra: ¿el socio o la sociedad?",
+    "Distingue la falta de legitimación en la causa de los defectos de capacidad o de representación, y revisa en qué momento y con qué decisión se resuelve cada uno."
+   ],
+   "conceptos": [
+    "legitimación en la causa",
+    "legitimación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Está legitimado en la causa por activa el socio que reclama para sí un crédito de la sociedad, y cuál es la decisión procesal adecuada frente a esa carencia?",
+    "normas": [
+     {
+      "norma": "Código de Comercio, art. 98",
+      "para_que": "La sociedad, una vez constituida legalmente, forma una persona jurídica distinta de los socios individualmente considerados."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 53 y 54",
+      "para_que": "Capacidad para ser parte y para comparecer; las personas jurídicas comparecen por medio de sus representantes."
+     },
+     {
+      "norma": "Código General del Proceso, art. 100",
+      "para_que": "Lista taxativa de excepciones previas, que no incluye la falta de legitimación en la causa."
+     },
+     {
+      "norma": "Código General del Proceso, art. 278",
+      "para_que": "Sentencia anticipada cuando se encuentra probada la carencia de legitimación en la causa."
+     },
+     {
+      "norma": "Código General del Proceso, art. 133",
+      "para_que": "Causales de nulidad, entre ellas la indebida representación de alguna de las partes."
+     }
+    ],
+    "analisis": "La acreedora del precio es la sociedad: ella vendió y a su nombre está la factura. La sociedad es una persona distinta de sus socios, aunque uno de ellos tenga la mayoría y sea el gerente. Ernesto no es titular del crédito; carece de legitimación en la causa por activa.\n\nNo es un problema de representación. Habría indebida representación si alguien actuara a nombre de la sociedad sin facultades; aquí Ernesto no actúa por ella, sino para sí. Tampoco es un defecto formal que se corrija inadmitiendo la demanda, ni figura entre las excepciones previas.\n\nLa carencia de legitimación es un asunto de fondo: conduce a negar las pretensiones, y el juez puede hacerlo mediante sentencia anticipada.",
+    "contraargumento": "Ernesto alega que él y la sociedad son lo mismo. Esa identidad es precisamente lo que el derecho societario niega: la separación de patrimonios que lo protege frente a los acreedores de la sociedad le impide también apropiarse de los créditos de esta.",
+    "conclusion": "Ernesto carece de legitimación en la causa por activa. El juez debe dictar sentencia anticipada que niegue las pretensiones; la sociedad, representada por él, puede demandar el pago.",
+    "errores_comunes": [
+     "Confundir la legitimación en la causa con la capacidad para comparecer o con la representación.",
+     "Tratar la falta de legitimación como excepción previa o como causal de nulidad.",
+     "Identificar al socio mayoritario con la sociedad."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos cuestiones: si Ernesto puede reclamar para sí el precio de la madera y, de no ser así, qué decisión debe adoptar el juez.\n\nEn cuanto a lo primero, la legitimación en la causa exige que quien demanda sea el titular del derecho sustancial discutido. El artículo 98 del Código de Comercio establece que la sociedad, una vez constituida legalmente, forma una persona jurídica distinta de los socios individualmente considerados. En efecto, la madera la vendió Maderas del Darién y la factura está a su nombre; por consiguiente, la acreedora es la sociedad y no Ernesto, aunque tenga el 60 % de las acciones y sea el gerente.\n\nAhora bien, Ernesto sostiene que él y la empresa son en la práctica la misma persona. Ese argumento no prospera, porque la separación de patrimonios opera en los dos sentidos: lo protege frente a las deudas sociales y, a la vez, le impide cobrar para sí los créditos de la sociedad.\n\nEn cuanto a lo segundo, el juez no debe inadmitir la demanda, puesto que no falta un requisito formal. Tampoco hay nulidad por indebida representación del artículo 133 del Código General del Proceso, ya que Ernesto no actuó a nombre de la sociedad sin facultades, sino en nombre propio. Además, la falta de legitimación no figura en la lista taxativa de excepciones previas del artículo 100, de modo que la denominación que le dio la constructora es incorrecta.\n\nSe trata, en cambio, de un asunto de fondo. De ahí que el artículo 278 permita dictar sentencia anticipada cuando se encuentre probada la carencia de legitimación en la causa, con el efecto de negar las pretensiones.\n\nEn conclusión, el juez debe negar la demanda mediante sentencia anticipada. Finalmente, la sociedad, representada por el propio Ernesto conforme al artículo 54, puede demandar el pago de la factura.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "aunque",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "ya que",
+    "además",
+    "de modo que",
+    "en cambio",
+    "de ahí que",
+    "en conclusión",
+    "finalmente"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Ernesto hubiera presentado la demanda como representante legal de Maderas del Darién S.A.S., a nombre de la sociedad?",
+    "respuesta": "La demandante sería la sociedad, titular del crédito, y habría legitimación en la causa por activa. El proceso continuaría para decidir de fondo sobre el pago de la factura."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-11",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "La cláusula que se alegó al final",
+   "enunciado": "Ferretería Atlántico S.A.S. y Cementos del Litoral S.A. celebraron un contrato de suministro que contiene esta cláusula: «toda diferencia relativa a este contrato será resuelta por un tribunal de arbitramento». El 10 de noviembre de 2025 la ferretería demandó a la cementera ante un juez civil del circuito de Barranquilla, por $400 millones. La cementera contestó la demanda de fondo, propuso la excepción de pago parcial, pidió pruebas y asistió a la audiencia inicial sin mencionar la cláusula. El 14 de abril de 2026, en los alegatos de conclusión, cuando la prueba le había sido desfavorable, alegó por primera vez que el juez carecía de jurisdicción por existir un pacto arbitral, y pidió que se declarara la nulidad de todo lo actuado y se remitiera el asunto a los árbitros. La ferretería se opone y pide que se dicte sentencia.",
+   "pregunta": "¿Debe el juez declarar la nulidad de lo actuado por la existencia de la cláusula compromisoria?",
+   "pistas": [
+    "El pacto arbitral no priva por sí solo al juez de conocer: revisa cómo y cuándo debe hacerlo valer el demandado.",
+    "Consulta el parágrafo del artículo 21 de la Ley 1563 de 2012 y las reglas sobre quién puede alegar una nulidad."
+   ],
+   "conceptos": [
+    "competencia",
+    "jurisdicción",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué efecto tiene que el demandado no proponga oportunamente la excepción de cláusula compromisoria y la alegue solo en los alegatos de conclusión?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, arts. 100 y 101",
+      "para_que": "La existencia de compromiso o cláusula compromisoria es una excepción previa, que debe proponerse en el término de traslado de la demanda."
+     },
+     {
+      "norma": "Ley 1563 de 2012, art. 21",
+      "para_que": "La no interposición de la excepción de compromiso o cláusula compromisoria ante el juez implica la renuncia al pacto arbitral para el caso concreto."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 135 y 136",
+      "para_que": "No puede alegar la nulidad quien actuó en el proceso sin proponerla ni quien omitió alegarla como excepción previa; la nulidad se sanea en esos casos."
+     },
+     {
+      "norma": "Constitución Política, art. 116",
+      "para_que": "Los particulares pueden ser investidos transitoriamente de la función de administrar justicia como árbitros habilitados por las partes."
+     }
+    ],
+    "analisis": "El arbitraje nace de la voluntad de las partes, y por eso mismo ellas pueden renunciar a él. La forma de hacer valer el pacto ante un juez es la excepción previa, dentro del traslado de la demanda. La cementera no la propuso: contestó de fondo, formuló excepciones de mérito, pidió pruebas y participó en la audiencia.\n\nLa ley arbitral asigna a ese silencio un efecto preciso: renuncia al pacto para el caso concreto. El juez conserva su competencia. Además, quien pudo alegar un hecho como excepción previa y no lo hizo no puede invocarlo luego como nulidad. La alegación tardía, hecha cuando la prueba resultó adversa, no puede prosperar.",
+    "contraargumento": "La cementera dirá que la falta de jurisdicción es insaneable. Lo es cuando la ley atribuye el asunto a otra jurisdicción; el arbitraje, en cambio, depende de un pacto disponible, y la ley prevé expresamente su renuncia tácita.",
+    "conclusion": "El juez no debe declarar la nulidad. La cementera renunció al pacto arbitral para este caso y el proceso debe terminar con sentencia de fondo.",
+    "errores_comunes": [
+     "Creer que la cláusula compromisoria impide automáticamente que el juez conozca.",
+     "Permitir que se alegue como nulidad lo que debió proponerse como excepción previa.",
+     "Equiparar el pacto arbitral con la falta de jurisdicción improrrogable."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la cláusula compromisoria, alegada por la cementera en los alegatos de conclusión, obliga al juez a anular lo actuado y a enviar el asunto a un tribunal arbitral.\n\nEl artículo 100 del Código General del Proceso incluye entre las excepciones previas la existencia de compromiso o cláusula compromisoria, y el artículo 101 exige proponerlas dentro del término de traslado de la demanda. Además, el parágrafo del artículo 21 de la Ley 1563 de 2012 dispone que la no interposición de esa excepción ante el juez implica la renuncia al pacto arbitral para el caso concreto.\n\nEn efecto, la cementera contestó la demanda de fondo, propuso la excepción de pago parcial, pidió pruebas y asistió a la audiencia inicial sin decir una palabra sobre la cláusula. Solo la invocó el 14 de abril de 2026, cuando la prueba le era desfavorable. Por consiguiente, renunció tácitamente al arbitraje y el juez conservó su competencia.\n\nAhora bien, la cementera podría sostener que la falta de jurisdicción no se sanea. Ese argumento no prospera, porque el arbitraje no es una jurisdicción impuesta por la ley, sino una habilitación que las partes otorgan y de la cual pueden disponer, como lo permite el artículo 116 de la Constitución. Si bien el pacto las vincula, también pueden abandonarlo, expresa o tácitamente.\n\nPor otra parte, las reglas de las nulidades conducen a lo mismo. El artículo 135 impide alegar la nulidad a quien omitió proponer como excepción previa el hecho que la configura, y el artículo 136 la tiene por saneada cuando la parte actuó sin proponerla. De ahí que la petición sea además contraria a la lealtad procesal, puesto que se formula según el resultado de la prueba.\n\nEn conclusión, el juez debe negar la nulidad y dictar sentencia de fondo.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "si bien",
+    "por otra parte",
+    "de ahí que",
+    "puesto que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la cementera hubiera propuesto la excepción previa de cláusula compromisoria dentro del término de traslado?",
+    "respuesta": "La excepción habría prosperado. El juez tendría que dar por terminado el proceso y las partes deberían acudir al tribunal de arbitramento pactado."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-12",
+   "area": "Procesal",
+   "nivel": "intermedio",
+   "titulo": "Treinta días para notificar",
+   "enunciado": "Gilma Rentería presentó demanda ejecutiva contra Rosendo Paz por $50 millones, con base en un contrato de mutuo. El juez libró mandamiento de pago el 20 de mayo de 2025 y decretó el embargo de un vehículo. Gilma no gestionó la notificación de Rosendo. Por auto del 3 de febrero de 2026, notificado por estado al día siguiente, el juez la requirió para que cumpliera esa carga dentro de los treinta días siguientes, con la advertencia de que, de no hacerlo, decretaría el desistimiento tácito. Gilma no hizo nada. El 7 de abril de 2026 el juez declaró terminado el proceso por desistimiento tácito y ordenó levantar el embargo. Gilma está indignada: sostiene que el juez debía impulsar el proceso de oficio, que con esa decisión perdió su dinero para siempre y que contra ella no puede hacer nada. La obligación se hizo exigible el 1 de julio de 2022.",
+   "pregunta": "¿Fue procedente el desistimiento tácito y qué consecuencias tiene para Gilma?",
+   "pistas": [
+    "El impulso oficioso del proceso tiene un límite: los actos que solo la parte puede cumplir.",
+    "Lee el artículo 317 del Código General del Proceso: requisitos, recursos, efectos de la primera declaratoria y lo que ocurre con la interrupción de la prescripción."
+   ],
+   "conceptos": [
+    "notificación",
+    "prescripción de la acción",
+    "recursos"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede el desistimiento tácito cuando la demandante no cumple la carga de notificar pese al requerimiento, y qué efectos tiene sobre su derecho y sobre la prescripción?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 317",
+      "para_que": "Si la parte no cumple en treinta días la carga procesal que el juez le requiere, se tiene por desistida tácitamente la actuación; la primera declaratoria permite demandar de nuevo pasados seis meses, pero deja sin efecto la interrupción de la prescripción; la segunda extingue el derecho; el auto es apelable."
+     },
+     {
+      "norma": "Código General del Proceso, art. 8",
+      "para_que": "Los jueces impulsan los procesos de oficio, salvo los actos que la ley reserva a las partes."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 291 y 292",
+      "para_que": "La gestión de la notificación personal y por aviso corresponde a la parte interesada."
+     },
+     {
+      "norma": "Código Civil, art. 2536",
+      "para_que": "Prescripción de la acción ejecutiva en cinco años."
+     }
+    ],
+    "analisis": "El juez dirige el proceso, pero la notificación del demandado es una carga de quien demanda. Gilma estuvo ocho meses sin gestionarla; el juez la requirió con el término y la advertencia legales, y ella no actuó. Vencidos los treinta días, el desistimiento tácito era procedente, con levantamiento de las medidas cautelares.\n\nGilma se equivoca en dos cosas. El auto que decreta el desistimiento es apelable. Y la primera declaratoria no extingue el derecho: puede volver a demandar una vez pasen seis meses desde la ejecutoria.\n\nEl riesgo real es otro. La ley deja sin efecto la interrupción de la prescripción que había producido la demanda. Como la obligación se hizo exigible el 1 de julio de 2022, los cinco años de la acción ejecutiva vencen el 1 de julio de 2027: debe demandar de nuevo antes de esa fecha.",
+    "contraargumento": "Gilma alega el deber de impulso oficioso. Ese deber no alcanza los actos que dependen de la parte; la figura existe para que los procesos no permanezcan indefinidamente inactivos por desidia del interesado.",
+    "conclusion": "El desistimiento tácito fue procedente. Gilma no perdió su derecho: puede apelar o demandar de nuevo pasados seis meses, pero ya sin el beneficio de la interrupción de la prescripción.",
+    "errores_comunes": [
+     "Creer que el juez debe suplir las cargas procesales de las partes.",
+     "Pensar que el primer desistimiento tácito extingue la obligación.",
+     "Olvidar su efecto sobre la interrupción de la prescripción."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos cuestiones: si el juez podía terminar el proceso ejecutivo por desistimiento tácito y qué consecuencias tiene esa decisión para Gilma.\n\nEl artículo 317 del Código General del Proceso dispone que, cuando para continuar el trámite se requiera el cumplimiento de una carga procesal de la parte, el juez le ordenará cumplirla dentro de los treinta días siguientes; vencido ese término sin que lo haga, tendrá por desistida tácitamente la actuación. Asimismo, el artículo 8 impone al juez el impulso de los procesos, salvo los actos que la ley reserva a las partes.\n\nEn efecto, la notificación del mandamiento de pago al demandado es una gestión que corresponde a la ejecutante, conforme a los artículos 291 y 292. Gilma no la adelantó en ocho meses, y tampoco dentro de los treinta días que le fijó el auto notificado el 4 de febrero de 2026. Por consiguiente, la decisión del 7 de abril se ajusta a la ley, y su reproche sobre el impulso oficioso no prospera, porque el juez no puede notificar por ella.\n\nAhora bien, Gilma cree que no puede hacer nada y que perdió su dinero. Ninguna de las dos cosas es cierta. De un lado, el artículo 317 declara apelable el auto que decreta el desistimiento. De otro lado, el desistimiento decretado por primera vez no impide presentar de nuevo la demanda, transcurridos seis meses desde la ejecutoria; solo el segundo extingue el derecho.\n\nSin embargo, la decisión tiene un costo. La misma norma deja sin efecto la interrupción de la prescripción que había producido la demanda. Como la obligación se hizo exigible el 1 de julio de 2022 y la acción ejecutiva prescribe en cinco años, según el artículo 2536 del Código Civil, el término vence el 1 de julio de 2027.\n\nEn conclusión, el desistimiento fue procedente. De ahí que Gilma deba demandar de nuevo antes de esa fecha y gestionar la notificación.",
+   "conectores_usados": [
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "por consiguiente",
+    "porque",
+    "ahora bien",
+    "de un lado",
+    "de otro lado",
+    "sin embargo",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si este fuera el segundo desistimiento tácito decretado entre las mismas partes y por la misma obligación?",
+    "respuesta": "Según el art. 317 del Código General del Proceso, el segundo desistimiento tácito extingue el derecho pretendido. Gilma no podría volver a demandar el cobro de esa obligación."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "proc-13",
+   "area": "Procesal",
+   "nivel": "avanzado",
+   "titulo": "Emplazada con el correo a la vista",
+   "enunciado": "Inmobiliaria Los Cedros S.A.S. demandó a Patricia Otálora la resolución de una promesa de compraventa. En la demanda afirmó, bajo juramento, que ignoraba su paradero y pidió emplazarla, a pesar de que el contrato registraba el correo electrónico y el celular de Patricia y de que ambas se habían escrito por esos medios hasta semanas antes. Patricia fue emplazada, se le designó curador ad litem y el 10 de septiembre de 2025 se dictó sentencia en su contra, que quedó ejecutoriada. Patricia, que se había mudado de Tunja a Cartagena en 2024, se enteró el 16 de marzo de 2026, cuando le embargaron una cuenta bancaria en la ejecución de la sentencia. Quiere dejar sin efectos lo decidido. La inmobiliaria responde que la sentencia hizo tránsito a cosa juzgada, que el curador la defendió y que ella se mudó sin avisar. Patricia aún no ha presentado ningún escrito en el proceso.",
+   "pregunta": "¿Puede Patricia obtener la nulidad de lo actuado después de la sentencia ejecutoriada, y por qué vía?",
+   "pistas": [
+    "El emplazamiento es una forma excepcional de notificación: verifica cuándo procede y qué pasa si se pide sin que se cumpla ese supuesto.",
+    "Revisa en el Código General del Proceso las oportunidades para alegar la nulidad por indebida notificación cuando ya hay sentencia."
+   ],
+   "conceptos": [
+    "notificación",
+    "emplazamiento",
+    "debido proceso",
+    "recursos"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es válido el emplazamiento del demandado cuando el demandante conocía medios para notificarlo, y puede alegarse esa nulidad después de la sentencia ejecutoriada?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 293",
+      "para_que": "El emplazamiento procede cuando el demandante manifiesta que ignora el lugar donde puede ser citado el demandado."
+     },
+     {
+      "norma": "Código General del Proceso, art. 291, y Ley 2213 de 2022, art. 8",
+      "para_que": "La notificación personal puede intentarse en la dirección física o electrónica del demandado."
+     },
+     {
+      "norma": "Código General del Proceso, art. 133, numeral 8",
+      "para_que": "Nulidad por no practicarse en legal forma la notificación del auto admisorio o el emplazamiento."
+     },
+     {
+      "norma": "Código General del Proceso, art. 134",
+      "para_que": "La nulidad por falta de notificación o emplazamiento puede alegarse también en la ejecución de la sentencia o mediante el recurso de revisión, si no pudo alegarse antes."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 136, 355 y 356",
+      "para_que": "Saneamiento de la nulidad por actuar sin proponerla; causal y término del recurso de revisión."
+     }
+    ],
+    "analisis": "El emplazamiento solo procede cuando de verdad se ignora dónde ubicar al demandado. La inmobiliaria conocía el correo y el celular de Patricia y los usaba; debió intentar la notificación por esos medios. Su afirmación bajo juramento fue contraria a la realidad, y el emplazamiento es irregular. El curador ad litem no suple la defensa de quien pudo ser notificado.\n\nLa cosa juzgada no impide alegar este vicio. La ley permite hacerlo después de la sentencia, como excepción o incidente en su ejecución, o mediante el recurso extraordinario de revisión, a quien no tuvo oportunidad de alegarlo antes. Patricia está en esa situación.\n\nDebe hacerlo en su primera actuación: si interviene sin proponer la nulidad, la sanea.",
+    "contraargumento": "La inmobiliaria invoca la firmeza de la sentencia. La cosa juzgada supone un proceso en el que el vencido pudo defenderse; por eso la falta de notificación es causal de revisión. Su defensa prosperaría si probara que no tenía ningún medio para ubicar a Patricia.",
+    "conclusion": "Patricia puede obtener la nulidad de lo actuado desde el emplazamiento. Debe alegarla de inmediato en la ejecución de la sentencia o, en su defecto, mediante el recurso de revisión dentro del término legal.",
+    "errores_comunes": [
+     "Considerar válido el emplazamiento por el solo juramento del demandante.",
+     "Creer que la sentencia ejecutoriada cierra toda posibilidad de alegar la falta de notificación.",
+     "Actuar en la ejecución sin proponer la nulidad y sanearla."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos problemas: si el emplazamiento de Patricia fue válido y, de no serlo, si todavía puede atacarse una sentencia que ya está ejecutoriada.\n\nEl artículo 293 del Código General del Proceso permite emplazar al demandado cuando el demandante manifiesta que ignora el lugar donde puede ser citado. Se trata de una forma excepcional, porque el artículo 291 y el artículo 8 de la Ley 2213 de 2022 ordenan intentar antes la notificación personal en la dirección física o electrónica. Además, el numeral 8 del artículo 133 sanciona con nulidad el proceso cuando no se practica en legal forma la notificación del auto admisorio o el emplazamiento.\n\nEn efecto, la inmobiliaria tenía el correo electrónico y el celular de Patricia en el propio contrato y se comunicó con ella por esos medios hasta poco antes de demandar. Por consiguiente, no ignoraba cómo ubicarla, y su manifestación bajo juramento no correspondía a la realidad. De ahí que el emplazamiento sea irregular y que la intervención del curador ad litem no lo convalide.\n\nAhora bien, la inmobiliaria invoca la cosa juzgada. Ese argumento no prospera, porque el artículo 134 permite alegar la nulidad por falta de notificación o emplazamiento después de la sentencia, como excepción en su ejecución o mediante el recurso de revisión, cuando la parte no pudo alegarla antes. Patricia solo se enteró el 16 de marzo de 2026, con el embargo. Por otra parte, su mudanza a Cartagena es irrelevante, puesto que no la hacía ilocalizable.\n\nSin embargo, Patricia debe ser cuidadosa. El artículo 136 entiende saneada la nulidad cuando la parte actúa sin proponerla; así pues, su primer escrito debe ser la solicitud de nulidad.\n\nEn conclusión, puede pedir la nulidad en la ejecución de la sentencia y, en subsidio, acudir a la revisión de los artículos 355 y 356, dentro del término legal.",
+   "conectores_usados": [
+    "en primer lugar",
+    "porque",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "de ahí que",
+    "ahora bien",
+    "por otra parte",
+    "puesto que",
+    "sin embargo",
+    "así pues",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Patricia, al enterarse del embargo, hubiera presentado un memorial pidiendo plazo para pagar, sin alegar la nulidad?",
+    "respuesta": "Habría actuado en el proceso sin proponer la nulidad, con lo cual esta quedaría saneada conforme al art. 136 del Código General del Proceso. Ya no podría invocar la indebida notificación."
+   },
+   "distractor": "Que Patricia se mudara a Cartagena sin avisar: la demandante tenía su correo y su celular, de modo que el cambio de ciudad no hacía desconocido su paradero.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-14",
+   "area": "Procesal",
+   "nivel": "avanzado",
+   "titulo": "Dos fueros privativos",
+   "enunciado": "Electrificadora del Sur S.A. E.S.P., empresa de servicios públicos de carácter oficial con domicilio en Neiva, presentó el 2 de febrero de 2026 una demanda para imponer una servidumbre de conducción de energía eléctrica sobre la finca La Esmeralda, de 300 hectáreas, ubicada en Pitalito y de propiedad de Abelardo Cuéllar, domiciliado en ese municipio. Radicó la demanda en Neiva. El juez de Neiva la remitió a Pitalito, invocando el fuero privativo del lugar de ubicación del bien. El juez de Pitalito se declaró a su vez incompetente y devolvió el expediente, con apoyo en el fuero privativo del domicilio de la entidad pública. Trabado el conflicto, Abelardo sostiene que litigar en Neiva, a casi doscientos kilómetros, le resulta gravoso, que el juez debe inspeccionar el predio y que la regla de los derechos reales es clara. La electrificadora insiste en su propio fuero.",
+   "pregunta": "¿Qué juez es competente para conocer del proceso de servidumbre?",
+   "pistas": [
+    "El artículo 28 del Código General del Proceso contiene más de un fuero privativo: identifica los dos que concurren en este caso.",
+    "Busca en el artículo 29 del mismo código la regla que resuelve cuál prevalece."
+   ],
+   "conceptos": [
+    "competencia",
+    "factor territorial"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Cuál fuero prevalece cuando concurren el fuero real privativo y el fuero privativo del domicilio de la entidad pública que es parte en el proceso?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 7",
+      "para_que": "Competencia privativa del juez del lugar de ubicación del bien en los procesos sobre derechos reales y servidumbres."
+     },
+     {
+      "norma": "Código General del Proceso, art. 28, numeral 10",
+      "para_que": "Competencia privativa del juez del domicilio de la entidad pública cuando esta es parte en el proceso."
+     },
+     {
+      "norma": "Código General del Proceso, art. 29",
+      "para_que": "Es prevalente la competencia establecida en consideración a la calidad de las partes."
+     },
+     {
+      "norma": "Código General del Proceso, art. 139",
+      "para_que": "Trámite de los conflictos de competencia, que resuelve el superior funcional común de los jueces enfrentados."
+     }
+    ],
+    "analisis": "Concurren dos reglas que la ley califica de privativas. Por la naturaleza del asunto —una servidumbre—, el juez del lugar del bien: Pitalito. Por la calidad de una de las partes —una entidad pública—, el juez de su domicilio: Neiva. Ambas no pueden aplicarse a la vez.\n\nEl propio código ofrece el criterio de solución: prevalece la competencia fijada en consideración a la calidad de las partes. La Sala de Casación Civil de la Corte Suprema, al dirimir conflictos de este tipo, unificó su criterio en ese sentido y ha considerado que el fuero de la entidad pública no es renunciable (verificar las providencias vigentes).\n\nEl competente es el juez de Neiva. La inspección del predio puede practicarse por comisión.",
+    "contraargumento": "Abelardo invoca la cercanía del juez con el bien y su propia dificultad para desplazarse. Son razones atendibles que explican el fuero real, pero el legislador resolvió expresamente el choque a favor del fuero personal; la virtualidad y la comisión atenúan la carga.",
+    "conclusion": "Es competente el juez del domicilio de la entidad pública, en Neiva, porque prevalece el fuero establecido por la calidad de las partes.",
+    "errores_comunes": [
+     "Aplicar el fuero real sin advertir que una de las partes es una entidad pública.",
+     "Resolver el conflicto por criterios de conveniencia y no por la regla de prevalencia.",
+     "Creer que la entidad pública puede escoger libremente entre los dos fueros."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es cuál de los dos jueces enfrentados debe conocer de la demanda de servidumbre: el del lugar donde está la finca o el del domicilio de la entidad pública demandante.\n\nEl numeral 7 del artículo 28 del Código General del Proceso atribuye de modo privativo al juez del lugar de ubicación de los bienes los procesos en que se ejerciten derechos reales y los de servidumbres. A su vez, el numeral 10 del mismo artículo dispone que, en los procesos contenciosos en que sea parte una entidad pública, conocerá en forma privativa el juez del domicilio de la respectiva entidad.\n\nEn efecto, la finca está en Pitalito, y la demandante es una empresa de servicios públicos de carácter oficial domiciliada en Neiva. Por consiguiente, concurren dos fueros privativos que conducen a jueces distintos, y ambos despachos tenían una norma en la cual apoyarse.\n\nAhora bien, el código prevé cómo resolver ese choque. El artículo 29 señala que es prevalente la competencia establecida en consideración a la calidad de las partes. De ahí que el fuero personal de la entidad pública se imponga sobre el fuero real. La Sala de Casación Civil de la Corte Suprema, al dirimir conflictos de esta clase, unificó su criterio en ese sentido, punto que conviene verificar.\n\nAbelardo sostiene que litigar en Neiva le resulta gravoso y que el juez debe inspeccionar el predio. Esos argumentos no prosperan, porque la regla de prevalencia es expresa; además, la inspección puede practicarse por comisión, y buena parte de las actuaciones pueden surtirse por medios virtuales. Por otra parte, la extensión de la finca es irrelevante, puesto que la competencia no depende del tamaño del bien.\n\nEn conclusión, el superior que dirima el conflicto, conforme al artículo 139, debe asignar el conocimiento al juez de Neiva.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "de ahí que",
+    "porque",
+    "además",
+    "por otra parte",
+    "puesto que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la demandante fuera una empresa privada de energía, sin participación estatal?",
+    "respuesta": "No operaría el fuero de las entidades públicas. Regiría únicamente el fuero real privativo y el competente sería el juez de Pitalito, lugar de ubicación de la finca."
+   },
+   "distractor": "La extensión de la finca, de 300 hectáreas: el tamaño del predio no incide en la regla de competencia aplicable.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-15",
+   "area": "Procesal",
+   "nivel": "avanzado",
+   "titulo": "El tribunal que subió la condena",
+   "enunciado": "Luz Marina Echeverri demandó a Transportes del Café S.A. por $200 millones, a raíz de un accidente de tránsito. El 14 de octubre de 2025 el juez de primera instancia declaró la responsabilidad de la empresa y la condenó a pagar $80 millones. Solo la demandada apeló, con un único reparo: que no hubo culpa de su conductor, por lo cual pidió ser absuelta. Luz Marina no apeló ni adhirió al recurso. El 9 de marzo de 2026 el tribunal confirmó la responsabilidad y, «por encontrar mal liquidado el lucro cesante», elevó la condena a $150 millones, con un cálculo actuarial que nadie discute en cuanto a su corrección matemática. La empresa sostiene que el tribunal desbordó su competencia y empeoró su situación. Luz Marina responde que el tribunal solo hizo justicia, que las cuentas están bien hechas y que el juez de segunda instancia tiene plenos poderes para corregir errores.",
+   "pregunta": "¿Podía el tribunal aumentar la condena al resolver la apelación de la demandada?",
+   "pistas": [
+    "La competencia del juez de segunda instancia está delimitada por lo que el apelante le plantea.",
+    "Revisa el artículo 328 del Código General del Proceso: qué puede decidir el superior y qué límite tiene cuando solo una parte apela."
+   ],
+   "conceptos": [
+    "apelación",
+    "recursos",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede el juez de segunda instancia hacer más gravosa la situación del apelante único, pronunciándose sobre un punto que no fue objeto de reparo?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 328",
+      "para_que": "El superior debe pronunciarse solamente sobre los argumentos del apelante y no puede hacer más desfavorable la situación del apelante único, salvo que la modificación exija reformar puntos íntimamente relacionados; si ambas partes apelan o hay adhesión, resuelve sin limitaciones."
+     },
+     {
+      "norma": "Código General del Proceso, art. 322",
+      "para_que": "Reparos concretos del apelante y apelación adhesiva de la parte que no apeló."
+     },
+     {
+      "norma": "Código General del Proceso, art. 320",
+      "para_que": "El recurso tiene por objeto que el superior examine la decisión únicamente en relación con los reparos formulados."
+     },
+     {
+      "norma": "Constitución Política, arts. 29 y 31",
+      "para_que": "Debido proceso y prohibición de reforma en perjuicio del apelante único."
+     }
+    ],
+    "analisis": "El recurso de apelación abre la segunda instancia en la medida de lo apelado. La empresa formuló un solo reparo: la ausencia de culpa. Sobre eso debía pronunciarse el tribunal, y lo hizo al confirmar la responsabilidad.\n\nLa cuantía de la condena no fue materia del recurso. Luz Marina, a quien el fallo le negó $120 millones de lo pedido, no apeló ni adhirió: consintió la liquidación. Al aumentar la condena, el tribunal decidió sobre un punto que no se le planteó y agravó la situación de la única apelante. No se trata de un punto íntimamente ligado a la modificación, porque la decisión sobre la culpa no se modificó.\n\nLa sentencia de segunda instancia excede la competencia del superior. La empresa puede acudir a los remedios disponibles; por la cuantía, la casación parece inviable, y quedaría la tutela contra providencia judicial si se cumplen sus requisitos.",
+    "contraargumento": "Luz Marina alega que el tribunal corrigió un error evidente. La justicia material no autoriza al juez a suplir la inactividad de la parte que no recurrió; para eso tenía la apelación y la adhesión.",
+    "conclusion": "El tribunal no podía aumentar la condena: desconoció el límite de los reparos y la prohibición de reforma en perjuicio del apelante único.",
+    "errores_comunes": [
+     "Creer que el juez de segunda instancia revisa todo el fallo sin restricciones.",
+     "Olvidar que la parte que no apela ni adhiere consiente lo que le fue desfavorable.",
+     "Justificar la reforma en perjuicio por la corrección del resultado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el tribunal, al resolver una apelación interpuesta solo por la demandada, podía elevar la condena de $80 a $150 millones.\n\nEl artículo 320 del Código General del Proceso señala que la apelación tiene por objeto que el superior examine la cuestión decidida únicamente en relación con los reparos concretos formulados por el apelante. En el mismo sentido, el artículo 328 ordena al juez de segunda instancia pronunciarse solamente sobre los argumentos expuestos por el apelante y le prohíbe hacer más desfavorable la situación del apelante único, salvo que en razón de la modificación fuera indispensable reformar puntos íntimamente relacionados con ella. La misma norma aclara que, cuando ambas partes apelan o la que no apeló adhiere al recurso, el superior resuelve sin limitaciones.\n\nEn efecto, la empresa formuló un único reparo, la ausencia de culpa, y pidió ser absuelta. Luz Marina, a quien se le reconoció menos de lo que pedía, no apeló ni adhirió, es decir, consintió la liquidación. Por consiguiente, el monto de la condena no hacía parte del debate en segunda instancia, y el tribunal, al aumentarlo, decidió sobre un punto ajeno al recurso y agravó la situación de la única apelante.\n\nAhora bien, Luz Marina sostiene que el tribunal tiene plenos poderes para corregir errores y que las cuentas están bien. Ese argumento no prospera, porque la corrección del cálculo no amplía la competencia del superior. Tampoco opera la excepción legal, puesto que el tribunal no modificó la decisión sobre la culpa; de ahí que no hubiera un punto conexo que ajustar.\n\nEn conclusión, el tribunal vulneró el debido proceso y la prohibición de reforma en perjuicio que consagra el artículo 31 de la Constitución. Sin embargo, la empresa debe examinar con cuidado los remedios disponibles, entre ellos la tutela contra la providencia.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en razón de",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "de ahí que",
+    "en conclusión",
+    "sin embargo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Luz Marina hubiera adherido a la apelación para pedir que se aumentara el lucro cesante?",
+    "respuesta": "El tribunal podría resolver sin limitaciones, conforme al art. 328 del Código General del Proceso, y el aumento de la condena sería válido."
+   },
+   "distractor": "La corrección matemática del cálculo actuarial: que las cuentas estén bien hechas no amplía la competencia del tribunal.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-16",
+   "area": "Procesal",
+   "nivel": "avanzado",
+   "titulo": "La compradora que vive en Australia",
+   "enunciado": "Los hermanos Pedro y Lucía Vargas compraron en común y por partes iguales una casa a Hortensia Lozano, mediante escritura pública de 2024. El 16 de junio de 2025 Hortensia demandó la nulidad absoluta de esa compraventa, pero dirigió la demanda únicamente contra Pedro: explicó que Lucía vive en Australia y que notificarla sería muy demorado. El juez admitió la demanda sin advertir nada. Pedro contestó sin referirse al asunto. Practicadas las pruebas, el 23 de febrero de 2026 el juez dictó sentencia que declara nulo el contrato «respecto de ambos compradores» y ordena cancelar la escritura. Lucía se enteró por su hermano. Hortensia sostiene que Pedro defendió los intereses de los dos, que el resultado habría sido el mismo y que Lucía, en todo caso, no tenía nada distinto que alegar. Pedro apeló la sentencia y pide que se revise la validez de lo actuado.",
+   "pregunta": "¿Es válida la sentencia dictada sin haber vinculado a Lucía al proceso?",
+   "pistas": [
+    "Hay relaciones jurídicas que no pueden decidirse sin la presencia de todos sus sujetos: identifica la figura procesal que lo exige.",
+    "Revisa el artículo 61 del Código General del Proceso y lo que dispone el artículo 134 cuando ya se dictó sentencia."
+   ],
+   "conceptos": [
+    "legitimación en la causa",
+    "notificación",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede decidirse la nulidad de un contrato sin citar a todos los contratantes, y qué ocurre con la sentencia dictada sin integrar el litisconsorcio necesario?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 61",
+      "para_que": "Cuando el proceso versa sobre relaciones o actos jurídicos que deben resolverse de manera uniforme para todos sus sujetos, la demanda debe dirigirse contra todos; si no, el juez ordena su citación mientras no se haya dictado sentencia de primera instancia."
+     },
+     {
+      "norma": "Código General del Proceso, art. 100",
+      "para_que": "Es excepción previa no comprender la demanda a todos los litisconsortes necesarios."
+     },
+     {
+      "norma": "Código General del Proceso, art. 133, numeral 8",
+      "para_que": "Nulidad cuando no se notifica o emplaza en legal forma a quienes deben ser citados como partes."
+     },
+     {
+      "norma": "Código General del Proceso, art. 134",
+      "para_que": "Cuando exista litisconsorcio necesario y se haya proferido sentencia sin integrarlo, esta se anula y se integra el contradictorio."
+     },
+     {
+      "norma": "Constitución Política, art. 29",
+      "para_que": "Nadie puede ser afectado por una decisión judicial sin haber sido oído."
+     }
+    ],
+    "analisis": "La nulidad de un contrato no puede declararse para unos contratantes y mantenerse para otros: el contrato es válido o nulo respecto de todos. Los dos compradores son litisconsortes necesarios y ambos debían ser demandados.\n\nLa demanda se dirigió solo contra Pedro. El juez debió ordenar la citación de Lucía al admitirla o, en todo caso, antes de dictar sentencia. No lo hizo, y la sentencia la despoja de su derecho de dominio sin haberla oído.\n\nLa ley prevé la consecuencia: la sentencia se anula y se integra el contradictorio. Lo actuado conserva validez respecto de quienes sí intervinieron, pero Lucía debe poder contestar y pedir pruebas.",
+    "contraargumento": "Hortensia alega que el resultado habría sido el mismo. El derecho de defensa no depende de un pronóstico sobre su utilidad; Lucía podía tener hechos y pruebas propios. Pedro no la representaba.",
+    "conclusion": "La sentencia no es válida. Debe anularse para citar a Lucía, integrar el litisconsorcio necesario y decidir de nuevo con su intervención.",
+    "errores_comunes": [
+     "Creer que un codemandado defiende válidamente los intereses de quien no fue citado.",
+     "Confundir el litisconsorcio necesario con el facultativo.",
+     "Tratar la falta de integración como un asunto que se sanea por el silencio de quien sí fue demandado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el juez podía declarar la nulidad de la compraventa respecto de los dos compradores cuando solo uno de ellos fue demandado y notificado.\n\nEl artículo 61 del Código General del Proceso regula el litisconsorcio necesario: cuando el proceso versa sobre relaciones o actos jurídicos respecto de los cuales, por su naturaleza, haya de resolverse de manera uniforme y no sea posible decidir de mérito sin la comparecencia de todos sus sujetos, la demanda debe dirigirse contra todos. Si no se hace así, el juez debe ordenar la citación de los faltantes, mientras no se haya dictado sentencia de primera instancia.\n\nEn efecto, Pedro y Lucía compraron la casa en común. La nulidad del contrato no puede declararse para uno y no para el otro, es decir, la decisión tiene que ser uniforme. Por consiguiente, ambos eran litisconsortes necesarios, y la falta de legitimación completa en el extremo demandado impedía decidir de fondo sin Lucía.\n\nAhora bien, Hortensia sostiene que Pedro defendió los intereses de los dos y que el resultado habría sido igual. Ese argumento no prospera, porque Pedro no representaba a su hermana, y el artículo 29 de la Constitución impide privar a alguien de un derecho sin haberlo oído. Por otra parte, que Lucía viva en Australia es irrelevante, puesto que la dificultad de notificar no suprime el deber de hacerlo.\n\nEn cuanto a la consecuencia, el numeral 8 del artículo 133 sanciona con nulidad la falta de notificación de quienes deben ser citados como partes. Además, el artículo 134 dispone que, cuando exista litisconsorcio necesario y se hubiere proferido sentencia, esta se anulará y se integrará el contradictorio.\n\nEn conclusión, el superior debe anular la sentencia y ordenar la citación de Lucía. De ahí que el proceso deba decidirse de nuevo con su intervención.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "por otra parte",
+    "puesto que",
+    "además",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Hortensia hubiera demandado a Pedro solo para cobrarle una suma que él, y únicamente él, le debía por otro negocio?",
+    "respuesta": "No habría una relación que exigiera decisión uniforme frente a Lucía. No existiría litisconsorcio necesario y la sentencia contra Pedro sería válida sin citar a su hermana."
+   },
+   "distractor": "Que Lucía viva en Australia: la dificultad para notificarla no exime de vincularla al proceso.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-17",
+   "area": "Procesal",
+   "nivel": "avanzado",
+   "titulo": "Novecientos millones y un salvamento de voto",
+   "enunciado": "Agroindustrias del Cesar S.A.S. demandó a Química Altamira S.A., en proceso verbal de responsabilidad civil, por $3.000 millones, por los daños que un herbicida defectuoso habría causado a sus cultivos. El juez del circuito condenó a la demandada a pagar $900 millones. Ambas partes apelaron. El 5 de febrero de 2026 el tribunal superior confirmó íntegramente la sentencia, con salvamento de voto de uno de sus magistrados. Las dos partes quieren acudir al recurso de casación. Química Altamira considera injusta la condena y afirma que el salvamento demuestra que el asunto es discutible y merece ser revisado por la Corte. Agroindustrias reclama que se le negaron $2.100 millones de lo que pidió. Los abogados preguntan si la casación procede para alguna de ellas, o para ambas, y dentro de qué plazo deben interponerla. Ninguna de las pretensiones se refiere al estado civil de las personas.",
+   "pregunta": "¿Cuál de las partes puede recurrir en casación la sentencia del tribunal?",
+   "pistas": [
+    "La casación no es una tercera instancia: revisa contra qué sentencias procede y qué exige en materia de cuantía.",
+    "El interés para recurrir se mide por separado para cada parte, según lo que la sentencia le negó o le impuso."
+   ],
+   "conceptos": [
+    "casación",
+    "recursos",
+    "cuantía"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede el recurso de casación contra la sentencia de segunda instancia dictada en un proceso declarativo, y cómo se determina el interés para recurrir de cada parte?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 334",
+      "para_que": "La casación procede contra las sentencias dictadas por los tribunales superiores en segunda instancia en toda clase de procesos declarativos, entre otros casos."
+     },
+     {
+      "norma": "Código General del Proceso, art. 338",
+      "para_que": "Cuando las pretensiones son esencialmente económicas, el recurso procede si el valor actual de la resolución desfavorable al recurrente supera los mil salarios mínimos legales mensuales."
+     },
+     {
+      "norma": "Código General del Proceso, art. 337",
+      "para_que": "El recurso se interpone dentro de los cinco días siguientes a la notificación de la sentencia."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 333 y 336",
+      "para_que": "Fines del recurso y causales de casación."
+     }
+    ],
+    "analisis": "La sentencia es de un tribunal superior, en segunda instancia, en un proceso declarativo: por su naturaleza admite casación. Falta el requisito de la cuantía, que se mide para cada recurrente por el valor de lo que la sentencia le resultó desfavorable.\n\nA Química Altamira la sentencia la perjudica en $900 millones, suma inferior a mil salarios mínimos mensuales de 2026: carece de interés para recurrir. A Agroindustrias se le negaron $2.100 millones de lo pedido, valor que supera el umbral: sí tiene interés.\n\nEl salvamento de voto no cuenta. La casación es un recurso extraordinario, con causales taxativas, y no una nueva oportunidad para discutir lo opinable.",
+    "contraargumento": "Química Altamira dirá que resulta desigual que su contraparte pueda recurrir y ella no. El interés para recurrir es individual: cada parte responde por el agravio que le causa el fallo. Debe verificarse el valor del salario mínimo vigente para confirmar el umbral.",
+    "conclusion": "Solo Agroindustrias del Cesar puede recurrir en casación, dentro de los cinco días siguientes a la notificación de la sentencia. Química Altamira no alcanza la cuantía del interés para recurrir.",
+    "errores_comunes": [
+     "Medir el interés para recurrir por el valor total del proceso y no por el agravio de cada parte.",
+     "Tratar la casación como una tercera instancia.",
+     "Creer que un salvamento de voto abre el recurso."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la sentencia del tribunal admite el recurso de casación y, de ser así, cuál de las dos partes cumple los requisitos para interponerlo.\n\nEl artículo 334 del Código General del Proceso establece que la casación procede contra las sentencias proferidas por los tribunales superiores en segunda instancia, entre otros casos, cuando son dictadas en toda clase de procesos declarativos. Además, el artículo 338 dispone que, cuando las pretensiones sean esencialmente económicas, el recurso procede si el valor actual de la resolución desfavorable al recurrente es superior a mil salarios mínimos legales mensuales vigentes.\n\nEn efecto, la sentencia del 5 de febrero de 2026 la dictó un tribunal superior en segunda instancia, en un proceso verbal de responsabilidad civil; por lo tanto, cumple el primer requisito. En cuanto a la cuantía, el interés se mide por separado para cada parte, según el agravio que le causa el fallo.\n\nAhora bien, las dos partes no están en la misma situación. De un lado, a Química Altamira la sentencia la condena a $900 millones, cifra que no alcanza los mil salarios mínimos de 2026; por consiguiente, no tiene interés para recurrir. De otro lado, a Agroindustrias se le negaron $2.100 millones de los $3.000 que pidió, valor que supera con holgura ese umbral; de ahí que sí pueda recurrir.\n\nQuímica Altamira invoca el salvamento de voto. Ese argumento no prospera, porque la casación es un recurso extraordinario, sujeto a las causales del artículo 336, y no una tercera instancia para lo discutible. Tampoco es una desigualdad, puesto que cada parte responde por su propio agravio.\n\nEn conclusión, solo Agroindustrias puede interponer el recurso, dentro de los cinco días siguientes a la notificación de la sentencia, según el artículo 337. Con todo, conviene verificar el salario mínimo vigente.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "por lo tanto",
+    "ahora bien",
+    "de un lado",
+    "por consiguiente",
+    "de otro lado",
+    "de ahí que",
+    "porque",
+    "puesto que",
+    "en conclusión",
+    "con todo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la sentencia del tribunal se hubiera dictado en un proceso ejecutivo por las mismas sumas?",
+    "respuesta": "La casación no procedería para ninguna de las partes, porque el proceso ejecutivo no es declarativo y sus sentencias no están entre las que admiten ese recurso."
+   },
+   "distractor": "El salvamento de voto de un magistrado: que la decisión no haya sido unánime no incide en la procedencia del recurso.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-18",
+   "area": "Procesal",
+   "nivel": "experto",
+   "titulo": "Catorce páginas que no bastaron",
+   "enunciado": "El 2 de marzo de 2026, un juez civil del circuito negó, en sentencia escrita, las pretensiones de la Clínica Los Arrayanes S.A.S. contra una aseguradora. La clínica apeló dentro de los tres días siguientes, con un escrito de catorce páginas que desarrolla cinco reparos, con análisis de las pruebas y de las normas que estima vulneradas. El tribunal admitió el recurso por auto del 6 de abril de 2026. La apelante no presentó escrito de sustentación dentro de los cinco días siguientes a la ejecutoria de ese auto, y el 27 de abril el tribunal declaró desierto el recurso. La clínica pide reposición: sostiene que su escrito inicial ya contenía la sustentación completa y que exigirle repetirlo es un exceso ritual que sacrifica el derecho sustancial. Añade que la aseguradora no se opuso a la admisión del recurso. Si la reposición fracasa, piensa acudir a la acción de tutela.",
+   "pregunta": "¿Se ajusta a derecho la declaratoria de deserción y qué posibilidades tiene la clínica de revertirla?",
+   "pistas": [
+    "Distingue las dos cargas del apelante de una sentencia: los reparos ante el juez de primera instancia y la sustentación ante el superior.",
+    "Sobre el efecto de no sustentar ante el superior cuando los reparos iniciales fueron extensos hay criterios encontrados entre las altas cortes: identifica los argumentos de cada lado."
+   ],
+   "conceptos": [
+    "apelación",
+    "recursos",
+    "debido proceso",
+    "tutela contra providencia"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Debe declararse desierta la apelación cuando el apelante no sustenta ante el superior dentro del término legal, pese a haber presentado ante el juez de primera instancia unos reparos ampliamente argumentados?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 322",
+      "para_que": "Reparos concretos ante el juez de primera instancia, sobre los cuales versará la sustentación ante el superior; deserción del recurso no sustentado."
+     },
+     {
+      "norma": "Ley 2213 de 2022, art. 12",
+      "para_que": "En la apelación de sentencias civiles y de familia, ejecutoriado el auto que admite el recurso, el apelante debe sustentarlo por escrito dentro de los cinco días siguientes; si no lo hace oportunamente, se declara desierto."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 327 y 328",
+      "para_que": "Trámite de la apelación de sentencias y competencia del superior."
+     },
+     {
+      "norma": "Constitución Política, arts. 29, 228 y 229",
+      "para_que": "Debido proceso, prevalencia del derecho sustancial y acceso a la administración de justicia."
+     },
+     {
+      "norma": "Constitución Política, art. 86",
+      "para_que": "Tutela contra providencias judiciales, de procedencia excepcional."
+     }
+    ],
+    "analisis": "El texto legal distingue dos cargas y sanciona con la deserción la omisión de la segunda. Con esa lectura, la decisión del tribunal es correcta: la clínica no sustentó ante el superior en el término de cinco días.\n\nEl caso, sin embargo, se ubica en una zona de precedente disputado. La Sala de Casación Civil, en sede de tutela, ha sostenido de manera predominante que la sustentación ante el superior es una carga autónoma e ineludible. Otras decisiones —de la Sala de Casación Laboral y de la Corte Constitucional, también en tutela— han considerado que declarar desierto un recurso cuyos reparos iniciales ya contienen la argumentación completa constituye un exceso ritual manifiesto (las providencias vigentes deben verificarse en las relatorías).\n\nLa clínica tiene, entonces, un argumento serio pero incierto: su escrito de catorce páginas cumple materialmente la finalidad de la sustentación.",
+    "contraargumento": "El tribunal puede replicar que la ley fija la carga y su consecuencia en términos expresos, y que la igualdad de las partes exige aplicarla. Es la posición más segura en el estado actual; la tesis de la clínica depende de que el juez acoja la sustentación anticipada.",
+    "conclusion": "La deserción se ajusta al texto legal y a la posición mayoritaria de la jurisdicción civil. La clínica puede insistir en reposición y, agotada, intentar la tutela por defecto procedimental por exceso ritual manifiesto, con resultado incierto.",
+    "errores_comunes": [
+     "Confundir los reparos concretos con la sustentación ante el superior.",
+     "Afirmar con certeza cualquiera de las dos tesis, ignorando que el precedente está en disputa.",
+     "Acudir a la tutela sin agotar los recursos disponibles contra el auto."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el tribunal podía declarar desierta la apelación de la clínica por no haberla sustentado ante él, a pesar de que su escrito inicial desarrolló ampliamente cinco reparos.\n\nEl artículo 322 del Código General del Proceso exige al apelante precisar ante el juez de primera instancia los reparos concretos contra la sentencia, sobre los cuales versará la sustentación que hará ante el superior. A su vez, el artículo 12 de la Ley 2213 de 2022 dispone que, ejecutoriado el auto que admite la apelación, el apelante debe sustentar el recurso por escrito dentro de los cinco días siguientes, y que, si no lo hace oportunamente, se declarará desierto.\n\nEn efecto, la clínica formuló sus reparos en tiempo, pero no presentó escrito alguno ante el tribunal después de la admisión. Por consiguiente, con apego al texto legal, la deserción resulta procedente. Además, la falta de oposición de la aseguradora es irrelevante, puesto que no releva a la apelante de sus cargas.\n\nAhora bien, la clínica alega un exceso ritual. Ese argumento no es descartable, porque el precedente está en disputa. De un lado, la Sala de Casación Civil ha sostenido de manera predominante, en sede de tutela, que la sustentación ante el superior es una carga distinta de los reparos y que su omisión acarrea la deserción. De otro lado, decisiones de la Sala Laboral y de la Corte Constitucional han estimado que, cuando el escrito inicial ya contiene una argumentación completa, declarar desierto el recurso sacrifica el derecho sustancial que protege el artículo 228 de la Constitución. Las providencias vigentes deben verificarse.\n\nEn conclusión, la decisión se ajusta a la ley y a la posición mayoritaria civil. Sin embargo, la clínica puede insistir en la reposición y, si fracasa, acudir a la tutela contra la providencia por defecto procedimental, con un resultado que hoy es incierto.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a pesar de",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "de un lado",
+    "de otro lado",
+    "en conclusión",
+    "sin embargo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la clínica hubiera presentado ante el tribunal, dentro de los cinco días, un escrito breve que reiterara y remitiera a los reparos formulados en primera instancia?",
+    "respuesta": "Habría cumplido la carga de sustentar ante el superior dentro del término. El tribunal no podría declarar desierto el recurso y tendría que resolverlo de fondo dentro de los límites de los reparos."
+   },
+   "distractor": "Que la aseguradora no se opusiera a la admisión del recurso: el silencio de la contraparte no releva al apelante de sus cargas.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-19",
+   "area": "Procesal",
+   "nivel": "experto",
+   "titulo": "Quince meses para la sentencia",
+   "enunciado": "En un proceso verbal de simulación, el auto admisorio se notificó a la demandada, Sociedad Inversora del Norte S.A.S., el 10 de febrero de 2025. El juez no prorrogó el término para decidir. La sentencia de primera instancia, desfavorable a la demandada, se dictó el 20 de mayo de 2026, quince meses después de aquella notificación. Durante el trámite ninguna de las partes dijo nada sobre el plazo: la demandada asistió a las audiencias de marzo y abril de 2026, practicó pruebas y presentó sus alegatos de conclusión. En el recurso de apelación pide, por primera vez, que se declare nula la sentencia: sostiene que el juez perdió automáticamente la competencia el 10 de febrero de 2026, al cumplirse un año, y que todo lo actuado después es nulo de pleno derecho e insaneable. Subraya que el expediente tiene doce cuadernos y que por eso el trámite fue lento.",
+   "pregunta": "¿Es nula la sentencia por haberse dictado después de vencido el término de un año?",
+   "pistas": [
+    "Lee el artículo 121 del Código General del Proceso y averigua cómo lo condicionó la Corte Constitucional respecto de la expresión «de pleno derecho».",
+    "Aplica las reglas generales de saneamiento de las nulidades a la conducta que tuvo la demandada después de vencido el término."
+   ],
+   "conceptos": [
+    "competencia",
+    "debido proceso",
+    "apelación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Opera automáticamente la pérdida de competencia por el vencimiento del término para dictar sentencia, y es saneable la nulidad de lo actuado con posterioridad cuando las partes guardaron silencio?",
+    "normas": [
+     {
+      "norma": "Código General del Proceso, art. 121",
+      "para_que": "Salvo interrupción o suspensión, no puede transcurrir más de un año para dictar sentencia de primera instancia desde la notificación del auto admisorio al demandado; vencido, el juez pierde competencia y es nula la actuación posterior. El término puede prorrogarse hasta por seis meses."
+     },
+     {
+      "norma": "Jurisprudencia de la Corte Constitucional sobre el art. 121",
+      "para_que": "Retiró la expresión «de pleno derecho» y condicionó la norma: la nulidad debe alegarse antes de proferirse la sentencia y es saneable (verificar la sentencia en la relatoría)."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 135 y 136",
+      "para_que": "No puede alegar la nulidad quien actuó sin proponerla; se sanea cuando la parte que podía alegarla no lo hizo oportunamente."
+     },
+     {
+      "norma": "Código General del Proceso, art. 132",
+      "para_que": "Control de legalidad en cada etapa, tras el cual los vicios no alegados no pueden invocarse después."
+     }
+    ],
+    "analisis": "El término se cumplió el 10 de febrero de 2026 sin prórroga. Bajo la lectura original de la norma, sostenida por un sector de la jurisprudencia civil, la pérdida de competencia era automática y la nulidad, de pleno derecho.\n\nEsa lectura cambió. La Corte Constitucional retiró del ordenamiento la expresión «de pleno derecho» y condicionó la disposición: la pérdida de competencia no opera sola; requiere que alguna de las partes la alegue antes de que se dicte la sentencia, y la nulidad queda sometida al régimen general, incluido el saneamiento.\n\nLa demandada, después de vencido el año, asistió a audiencias, practicó pruebas y alegó de conclusión sin decir nada. Solo invocó el vicio cuando conoció una sentencia adversa. Convalidó la actuación y la nulidad está saneada.",
+    "contraargumento": "La demandada dirá que la duración razonable del proceso es una garantía que no puede quedar al arbitrio del juez. Lo es, y por eso podía exigir su respeto en cualquier momento antes del fallo; lo que no puede es reservarse el argumento para usarlo según el resultado.",
+    "conclusion": "La sentencia no es nula. La nulidad por vencimiento del término no opera de pleno derecho y quedó saneada por la actuación de la demandada sin alegarla antes del fallo.",
+    "errores_comunes": [
+     "Aplicar el art. 121 según su texto original, sin el condicionamiento constitucional.",
+     "Considerar insaneable la nulidad.",
+     "Admitir que la parte alegue el vicio después de conocer una sentencia desfavorable."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la sentencia del 20 de mayo de 2026 es nula por haberse dictado quince meses después de notificado el auto admisorio, y si ese vicio podía alegarse por primera vez en la apelación.\n\nEl artículo 121 del Código General del Proceso dispone que, salvo interrupción o suspensión, no podrá transcurrir un lapso superior a un año para dictar sentencia de primera instancia, contado desde la notificación del auto admisorio a la parte demandada; vencido ese término sin prórroga, el funcionario pierde competencia y es nula la actuación posterior. En efecto, la notificación se surtió el 10 de febrero de 2025, de modo que el año venció el 10 de febrero de 2026 y la sentencia llegó tres meses después.\n\nAhora bien, la demandada sostiene que la nulidad es automática e insaneable. Esa era la consecuencia que algunos jueces derivaban del texto original. Sin embargo, la Corte Constitucional retiró la expresión que hacía operar la nulidad de pleno derecho y condicionó la norma, en el sentido de que la pérdida de competencia debe ser alegada por alguna de las partes antes de proferirse la sentencia y de que la nulidad es saneable. Esa decisión debe verificarse en la relatoría.\n\nPor consiguiente, se aplican las reglas generales. El artículo 135 impide alegar la nulidad a quien actuó en el proceso sin proponerla, y el artículo 136 la tiene por saneada cuando la parte que podía alegarla no lo hizo oportunamente. La demandada asistió a las audiencias de marzo y abril de 2026, practicó pruebas y alegó de conclusión, es decir, convalidó la actuación; de ahí que su reclamo sea tardío. Por otra parte, el volumen del expediente es irrelevante.\n\nEn conclusión, la sentencia no es nula y el superior debe resolver el fondo de la apelación.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "de modo que",
+    "ahora bien",
+    "sin embargo",
+    "por consiguiente",
+    "es decir",
+    "de ahí que",
+    "por otra parte",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la demandada hubiera pedido al juez, el 16 de febrero de 2026, que declarara la pérdida de competencia?",
+    "respuesta": "La habría alegado oportunamente, antes de la sentencia. El juez tendría que remitir el expediente al juez que le sigue en turno, y la actuación que adelantara después de esa solicitud sería anulable."
+   },
+   "distractor": "Los doce cuadernos del expediente: el volumen del proceso no altera el cómputo del término ni la oportunidad para alegar la nulidad.",
+   "revision_humana": true
+  },
+  {
+   "id": "proc-20",
+   "area": "Procesal",
+   "nivel": "experto",
+   "titulo": "El hospital ante el juez civil",
+   "enunciado": "El 14 de marzo de 2024, Blanca Ortiz fue operada en el Hospital Regional San Lucas, empresa social del Estado del orden departamental, por un cirujano vinculado al hospital, y sufrió una lesión de la vía biliar. El 10 de marzo de 2026 demandó ante un juez civil del circuito al hospital y al cirujano, por responsabilidad médica, y reclamó $700 millones. El juez admitió la demanda. El hospital propuso la falta de jurisdicción. El 3 de agosto de 2026 el juez la declaró y ordenó remitir el expediente a los juzgados administrativos. El hospital sostiene ahora que todo lo actuado ante el juez civil es nulo y que, como el expediente llegó a la jurisdicción competente cuando ya habían pasado más de dos años desde la cirugía, operó la caducidad de la reparación directa. Añade que el cirujano es de nacionalidad extranjera. Blanca teme haber perdido su derecho por un error de su abogado.",
+   "pregunta": "¿Qué efectos tiene la declaratoria de falta de jurisdicción sobre lo actuado y sobre la caducidad?",
+   "pistas": [
+    "Identifica primero a qué jurisdicción corresponde juzgar la responsabilidad de una entidad pública.",
+    "Revisa en el Código General del Proceso y en el CPACA qué ocurre con lo actuado y con la fecha de presentación de la demanda cuando el juez se declara sin jurisdicción y remite el expediente."
+   ],
+   "conceptos": [
+    "jurisdicción",
+    "competencia",
+    "caducidad",
+    "reparación directa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Corresponde a la jurisdicción contenciosa conocer de la responsabilidad médica de un hospital público, y conserva efectos la demanda presentada en tiempo ante un juez de otra jurisdicción?",
+    "normas": [
+     {
+      "norma": "CPACA (Ley 1437 de 2011), arts. 104 y 140",
+      "para_que": "La jurisdicción contenciosa conoce de la responsabilidad extracontractual de las entidades públicas, por el medio de control de reparación directa."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Caducidad de dos años de la reparación directa."
+     },
+     {
+      "norma": "Código General del Proceso, arts. 16 y 138",
+      "para_que": "La jurisdicción es improrrogable; declarada su falta, lo actuado conserva validez y el proceso se envía al juez competente, salvo la sentencia, que sería nula."
+     },
+     {
+      "norma": "CPACA, art. 168",
+      "para_que": "En caso de falta de jurisdicción, el expediente se remite al competente y, para todos los efectos legales, se tiene en cuenta la presentación inicial de la demanda."
+     },
+     {
+      "norma": "Constitución Política, art. 241",
+      "para_que": "La Corte Constitucional dirime los conflictos de competencia entre las distintas jurisdicciones."
+     }
+    ],
+    "analisis": "El hospital es una entidad pública; su responsabilidad se juzga por la jurisdicción contenciosa mediante la reparación directa. El juez civil carecía de jurisdicción, y ese defecto no se sanea por el silencio ni por la admisión.\n\nPero la consecuencia no es la que pretende el hospital. La ley procesal dispone que, declarada la falta de jurisdicción, lo actuado conserva validez —salvo una sentencia, que aquí no existe— y el proceso se remite. Y la norma contenciosa ordena tener en cuenta, para todos los efectos, la presentación inicial. La demanda se radicó el 10 de marzo de 2026, antes de cumplirse dos años desde la cirugía del 14 de marzo de 2024: no hay caducidad.\n\nEl juez administrativo ordenará adecuar la demanda al medio de control y verificará sus requisitos propios, entre ellos la conciliación extrajudicial (verificar cómo se subsana en estos casos).",
+    "contraargumento": "El hospital sostiene que la demanda ante juez sin jurisdicción no puede interrumpir nada. El legislador decidió lo contrario para que el error en la escogencia de la jurisdicción, frecuente en materias fronterizas como la responsabilidad médica, no sacrifique el derecho de acción.",
+    "conclusion": "La jurisdicción competente es la contenciosa. Lo actuado conserva validez y no hay caducidad, porque se tiene en cuenta la fecha de presentación inicial de la demanda.",
+    "errores_comunes": [
+     "Creer que la falta de jurisdicción anula todo lo actuado.",
+     "Contar la caducidad hasta la fecha en que el expediente llega al juez competente.",
+     "Suponer que la admisión de la demanda por el juez civil prorroga su jurisdicción."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay que resolver tres cuestiones: qué jurisdicción debe conocer del caso, qué ocurre con lo actuado ante el juez civil y si operó la caducidad.\n\nEn cuanto a la jurisdicción, el artículo 104 del CPACA asigna a la jurisdicción de lo contencioso administrativo las controversias relativas a la responsabilidad extracontractual de las entidades públicas, que se tramitan por la reparación directa del artículo 140. En efecto, el hospital es una empresa social del Estado; por consiguiente, el juez civil carecía de jurisdicción. Además, el artículo 16 del Código General del Proceso la declara improrrogable, de modo que la admisión de la demanda no la saneó.\n\nAhora bien, el hospital deduce de allí que todo lo actuado es nulo. Ese argumento no prospera, porque el mismo artículo 16 y el artículo 138 disponen que, declarada la falta de jurisdicción, lo actuado conserva su validez y el proceso se envía de inmediato al juez competente; solo sería nula la sentencia, que aquí no se ha dictado.\n\nEn cuanto a la caducidad, el artículo 164 del CPACA concede dos años para la reparación directa. Sin embargo, el artículo 168 ordena que, en caso de falta de jurisdicción, se remita el expediente y que para todos los efectos legales se tenga en cuenta la presentación inicial. Blanca demandó el 10 de marzo de 2026 y la cirugía fue el 14 de marzo de 2024; de ahí que la demanda se entienda presentada dentro del término, aunque el expediente llegue después a los juzgados administrativos.\n\nPor otra parte, la nacionalidad del cirujano es irrelevante, puesto que no altera la jurisdicción ni el cómputo.\n\nEn conclusión, el proceso continúa ante el juez administrativo, sin caducidad. No obstante, Blanca deberá adecuar la demanda y acreditar los requisitos propios del medio de control, como la conciliación extrajudicial.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "de modo que",
+    "ahora bien",
+    "porque",
+    "sin embargo",
+    "de ahí que",
+    "aunque",
+    "por otra parte",
+    "puesto que",
+    "en conclusión",
+    "no obstante"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Blanca hubiera presentado la demanda ante el juez civil el 20 de mayo de 2026?",
+    "respuesta": "La presentación inicial ya estaría por fuera de los dos años contados desde la cirugía. Remitido el expediente, el juez administrativo tendría que declarar la caducidad, salvo que el daño se hubiera conocido después."
+   },
+   "distractor": "La nacionalidad extranjera del cirujano: no incide en la jurisdicción competente ni en el cómputo de la caducidad.",
+   "revision_humana": true
+  }
+ ]
+}
