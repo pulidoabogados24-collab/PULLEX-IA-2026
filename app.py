@@ -1583,7 +1583,8 @@ def _caso_publico(fila, datos: dict) -> dict:
             "titulo": datos.get("titulo", "Caso"), "enunciado": datos.get("enunciado", ""),
             "pregunta": datos.get("pregunta", ""), "n_pistas": len(datos.get("pistas") or []),
             "cambio": datos.get("cambio"), "padre_id": fila["padre_id"],
-            "foco": datos.get("foco_nombre") or None}
+            "foco": datos.get("foco_nombre") or None,
+            "origen": "banco" if datos.get("origen") == "banco" else "modelo"}
 
 
 def _caso_de(caso_id, email: str):
@@ -1603,12 +1604,69 @@ def modular_opciones(request: Request):
     usuario_actual(request)
     return {"areas": MODULAR_AREAS,
             "niveles": [{"id": k, "nombre": k.capitalize().replace("Basico", "Básico")} for k in MODULAR_NIVELES],
-            "rubrica": [{"id": i, "nombre": n, "max": m} for i, n, m in RUBRICA]}
+            "rubrica": [{"id": i, "nombre": n, "max": m} for i, n, m in RUBRICA],
+            "banco": {"total": len(academia.BANCO), "por_area": _banco_conteo(), "aviso": BANCO_AVISO}}
+
+
+# Banco curado (academia_banco/*.json): casos escritos de antemano que se sirven sin llamar al modelo
+# y sin descontar consultas. Su exactitud jurídica no está verificada: lo dice cada respuesta.
+BANCO_AVISO = ("Caso del banco curado: no gasta consulta. Exactitud jurídica NOT VERIFIED; requiere "
+               "revisión de un docente o abogado y verificación de cada norma en la fuente oficial.")
+BANCO_CAMPOS = ("titulo", "enunciado", "pregunta", "pistas", "conceptos", "solucion", "respuesta_modelo",
+                "conectores_usados", "variacion", "distractor")
+
+
+def _banco_conteo() -> dict:
+    conteo = {}
+    for c in academia.BANCO:
+        conteo.setdefault(c["area"], {}).setdefault(c["nivel"], 0)
+        conteo[c["area"]][c["nivel"]] += 1
+    return conteo
+
+
+def _banco_servidos(email: str) -> dict:
+    """{banco_id: último momento en que se le sirvió} — para no repetirle casos al estudiante."""
+    servidos = {}
+    with closing(db()) as con:
+        filas = con.execute("SELECT datos, creado FROM modular_casos WHERE usuario=? AND datos LIKE ?",
+                            (email, '%"banco_id"%')).fetchall()
+    for f in filas:
+        try:
+            bid = json.loads(f["datos"]).get("banco_id")
+        except (TypeError, ValueError):
+            continue
+        if bid:
+            servidos[bid] = max(servidos.get(bid, 0), f["creado"] or 0)
+    return servidos
+
+
+def _caso_del_banco(u: dict, area: str, nivel: str, foco) -> dict:
+    """Sirve un caso curado (por área y nivel, o por concepto del mapa). No llama al modelo ni
+    descuenta consultas; lo guarda como caso propio del estudiante para pistas, solución y evaluación."""
+    if not u["activo"]:
+        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+    concepto = foco["id"] if foco is not None and foco["id"] in academia.INDICE else None
+    elegido, repetido = academia.elegir_del_banco(area, nivel, _banco_servidos(u["email"]), concepto_id=concepto)
+    if elegido is None:
+        raise HTTPException(404, "El banco curado no tiene casos para esa selección")
+    caso = {k: elegido[k] for k in BANCO_CAMPOS if elegido.get(k)}
+    caso.update(origen="banco", banco_id=elegido["id"], revision_humana=True)
+    if foco is not None:
+        caso["foco"], caso["foco_nombre"] = foco["id"], foco["nombre"]
+    with closing(db()) as con:
+        cur = con.execute("INSERT INTO modular_casos(usuario,area,nivel,datos,padre_id,creado) "
+                          "VALUES(?,?,?,?,?,?)", (u["email"], elegido["area"], elegido["nivel"],
+                                                  json.dumps(caso, ensure_ascii=False), None, time.time()))
+        con.commit()
+        fila = con.execute("SELECT * FROM modular_casos WHERE id=?", (cur.lastrowid,)).fetchone()
+    return {**_caso_publico(fila, caso), "banco_id": elegido["id"], "curado": True, "gasta_consulta": False,
+            "repetido": repetido, "aviso": BANCO_AVISO, "restantes": _restantes(u["email"])}
 
 
 @app.post("/api/modular/caso")
 async def modular_caso(request: Request):
-    """Genera un caso nuevo (o una variación "¿qué cambia si…?" de uno anterior). Cuesta 1 consulta."""
+    """Genera un caso nuevo (o una variación "¿qué cambia si…?" de uno anterior). Cuesta 1 consulta.
+    Con {"origen": "banco"} sirve un caso del banco curado: sin modelo y sin gastar consulta."""
     u = usuario_actual(request)
     datos = await json_de(request)
     padre = None
@@ -1631,6 +1689,11 @@ async def modular_caso(request: Request):
         nivel = datos.get("nivel", "basico")
         if area not in MODULAR_AREAS or nivel not in MODULAR_NIVELES:
             raise HTTPException(400, "Elige un área y un nivel válidos")
+    origen = str(datos.get("origen") or "modelo").lower()
+    if origen not in ("modelo", "banco"):
+        raise HTTPException(400, "Origen inválido: usa «modelo» o «banco»")
+    if origen == "banco" and padre is None:
+        return _caso_del_banco(u, area, nivel, foco)
     if not ANTHROPIC_API_KEY:
         raise HTTPException(503, "El motor de IA no está configurado en el servidor")
     restantes = consumir_consulta(u)
@@ -1746,10 +1809,16 @@ def modular_solucion(caso_id: int, request: Request):
     u = usuario_actual(request)
     _, caso = _caso_de(caso_id, u["email"])
     sol = caso.get("solucion") or {}
-    return {"problema_juridico": sol.get("problema_juridico", ""), "normas": sol.get("normas") or [],
-            "analisis": sol.get("analisis", ""), "contraargumento": sol.get("contraargumento", ""),
-            "conclusion": sol.get("conclusion", ""), "errores_comunes": sol.get("errores_comunes") or [],
-            "conceptos": caso.get("conceptos") or []}
+    r = {"problema_juridico": sol.get("problema_juridico", ""), "normas": sol.get("normas") or [],
+         "analisis": sol.get("analisis", ""), "contraargumento": sol.get("contraargumento", ""),
+         "conclusion": sol.get("conclusion", ""), "errores_comunes": sol.get("errores_comunes") or [],
+         "conceptos": caso.get("conceptos") or []}
+    if caso.get("origen") == "banco":
+        r.update(origen="banco", banco_id=caso.get("banco_id"), aviso=BANCO_AVISO,
+                 respuesta_modelo=caso.get("respuesta_modelo", ""),
+                 conectores_usados=caso.get("conectores_usados") or [],
+                 variacion=caso.get("variacion"), distractor=caso.get("distractor"))
+    return r
 
 
 @app.get("/api/modular/progreso")

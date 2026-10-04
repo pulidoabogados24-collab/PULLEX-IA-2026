@@ -13,6 +13,7 @@ el modelo devuelva conceptos (`conceptos`, `conceptos_debiles`) reconocibles.
 | Estado por concepto | tabla `conocimiento` (usuario, concepto) | aciertos, fallos, caja 0-5, próximo repaso, primer/último visto, último fallo, fecha de superación. |
 | Repetición espaciada | `academia.registrar_resultado()` | Error → caja 1, repaso mañana. Acierto (puntaje total ≥ 60 y el concepto no fue señalado como débil) → sube una caja: 1, 3, 7, 15, 30 días. Caja ≥ 4 = Dominado; al llegar ahí un error previo queda "superado". Con puntaje < 60, los conceptos no señalados solo se registran como vistos. |
 | Caso enfocado | `POST /api/modular/caso {concepto_id}` | Solo acepta ids del mapa o conceptos libres del propio estudiante; nunca texto libre del cliente en el prompt. Nivel por defecto: el sugerido para esa área. |
+| Banco curado | `academia_banco/*.json`, `POST /api/modular/caso {origen: "banco"}` | 180 casos escritos de antemano (20 por área). Se sirven sin llamar al modelo y sin gastar consulta; la respuesta lo indica (`origen`, `gasta_consulta: false`, `aviso`). Exactitud jurídica NOT VERIFIED: requieren revisión humana. Detalle en `docs/coordinacion/PUL-015-banco-de-casos.md`. |
 
 ## Rutas nuevas
 
