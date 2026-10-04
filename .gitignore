@@ -14,7 +14,11 @@ pullex.db
 *.key
 *.pem
 .pytest_cache/
-.claude/
+# Claude Code: solo se versionan las skills y los subagentes del proyecto (PUL-018).
+# Todo lo demás de .claude/ (worktrees, ajustes locales, memoria, datos de sesión) queda fuera.
+.claude/*
+!.claude/skills/
+!.claude/agents/
 
 # Motor de fuentes: el índice y la lista de exclusión son del operador (no se suben)
 corpus/
