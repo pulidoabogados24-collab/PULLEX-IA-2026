@@ -1,0 +1,348 @@
+{
+ "_nota": "Biblioteca FICTICIA para la demostración (demo/pullex-demo.html y demo/servidor_simulado.py). Ningún identificador ni enlace existe en Google Drive; los textos son ejemplos escritos para la demostración y no son modelos revisados.",
+ "inventario": {
+  "resumen": {
+   "raices": [
+    "DEMO-RAIZ"
+   ],
+   "denominador": "PROVISIONAL",
+   "carpetas_truncadas_por_el_conector": 0,
+   "denominador_detalle": {
+    "carpetas_de_terceros": "DESCONOCIDO: en la biblioteca real el conector solo devuelve lo que el dueño ya abrió"
+   }
+  },
+  "elementos": [
+   {
+    "drive_id": "DEMO-RAIZ",
+    "titulo": "BIBLIOTECA DE DEMOSTRACIÓN",
+    "mime": "application/vnd.google-apps.folder",
+    "carpeta_id": null,
+    "modificado": "2026-01-10T10:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/drive/folders/DEMO-RAIZ",
+    "estado": "ENCONTRADO",
+    "ruta": ""
+   },
+   {
+    "drive_id": "DEMO-PET-FOTOMULTA",
+    "titulo": "Modelo derecho de petición por fotomulta.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-PET",
+    "tamano": 9800,
+    "modificado": "2026-03-12T15:00:00Z",
+    "creado": "2026-03-12T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-PET-FOTOMULTA/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/DERECHOS DE PETICION"
+   },
+   {
+    "drive_id": "DEMO-PET-SERVICIOS",
+    "titulo": "Modelo derecho de petición ante empresa de servicios públicos.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-PET",
+    "tamano": 9100,
+    "modificado": "2025-11-04T15:00:00Z",
+    "creado": "2025-11-04T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-PET-SERVICIOS/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/DERECHOS DE PETICION"
+   },
+   {
+    "drive_id": "DEMO-PET-SERVICIOS-2",
+    "titulo": "Modelo derecho de petición ante empresa de servicios públicos (1).docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-CIV",
+    "tamano": 9400,
+    "modificado": "2026-02-20T15:00:00Z",
+    "creado": "2026-02-20T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-PET-SERVICIOS-2/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/CIVIL"
+   },
+   {
+    "drive_id": "DEMO-PET-INTERNET",
+    "titulo": "Derecho de petición para cancelar servicio de internet.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-PET",
+    "tamano": 8700,
+    "modificado": "2026-05-02T15:00:00Z",
+    "creado": "2026-05-02T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-PET-INTERNET/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/DERECHOS DE PETICION"
+   },
+   {
+    "drive_id": "DEMO-TUT-SALUD",
+    "titulo": "Acción de tutela por negación de medicamento (EPS).docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-TUT",
+    "tamano": 15100,
+    "modificado": "2026-06-18T15:00:00Z",
+    "creado": "2026-06-18T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-TUT-SALUD/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/ACCIONES DE TUTELA"
+   },
+   {
+    "drive_id": "DEMO-TUT-HABEAS",
+    "titulo": "Tutela habeas data.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-TUT",
+    "tamano": 10800,
+    "modificado": "2024-02-24T23:01:18Z",
+    "creado": "2024-02-24T23:01:18Z",
+    "propietario": "tercero",
+    "enlace": "https://drive.google.com/file/d/DEMO-TUT-HABEAS/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/ACCIONES DE TUTELA"
+   },
+   {
+    "drive_id": "DEMO-DEM-ALIMENTOS",
+    "titulo": "Demanda de alimentos.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-FAM",
+    "tamano": 15200,
+    "modificado": "2026-04-09T15:00:00Z",
+    "creado": "2026-04-09T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-DEM-ALIMENTOS/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/FAMILIA"
+   },
+   {
+    "drive_id": "DEMO-DEN-HURTO",
+    "titulo": "Denuncia por hurto.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-PEN",
+    "tamano": 11900,
+    "modificado": "2023-08-04T21:51:32Z",
+    "creado": "2023-08-04T21:51:32Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-DEN-HURTO/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/PENAL"
+   },
+   {
+    "drive_id": "DEMO-CON-ARRIENDO",
+    "titulo": "Contrato de arrendamiento de vivienda urbana.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-CIV",
+    "tamano": 20100,
+    "modificado": "2026-01-22T15:00:00Z",
+    "creado": "2026-01-22T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-CON-ARRIENDO/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/CIVIL"
+   },
+   {
+    "drive_id": "DEMO-POD-ESPECIAL",
+    "titulo": "Poder especial.doc",
+    "mime": "application/msword",
+    "carpeta_id": "DEMO-CARP-CIV",
+    "tamano": 24000,
+    "modificado": "2025-09-15T15:00:00Z",
+    "creado": "2025-09-15T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-POD-ESPECIAL/view",
+    "extension": "doc",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/CIVIL"
+   },
+   {
+    "drive_id": "DEMO-MC-EMBARGO",
+    "titulo": "Solicitud de medidas cautelares embargo y secuestro.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-MC",
+    "tamano": 10200,
+    "modificado": "2024-06-01T15:00:00Z",
+    "creado": "2024-06-01T15:00:00Z",
+    "propietario": "tercero",
+    "enlace": "https://drive.google.com/file/d/DEMO-MC-EMBARGO/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MEDIDAS CAUTELARES"
+   },
+   {
+    "drive_id": "DEMO-EST-PETICION",
+    "titulo": "Preguntas sobre el derecho de petición.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-EST",
+    "tamano": 30100,
+    "modificado": "2025-03-01T15:00:00Z",
+    "creado": "2025-03-01T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-EST-PETICION/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MATERIAL DE ESTUDIO"
+   },
+   {
+    "drive_id": "DEMO-LEY-1755",
+    "titulo": "LEY 1755 DE 2015.doc",
+    "mime": "application/msword",
+    "carpeta_id": "DEMO-CARP-LEY",
+    "tamano": 91000,
+    "modificado": "2026-07-21T20:22:12Z",
+    "creado": "2026-07-21T20:22:12Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-LEY-1755/view",
+    "extension": "doc",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/LEYES/2015"
+   },
+   {
+    "drive_id": "DEMO-DEC-2591",
+    "titulo": "DECRETO 2591 DE 1991.doc",
+    "mime": "application/msword",
+    "carpeta_id": "DEMO-CARP-LEY",
+    "tamano": 64000,
+    "modificado": "2026-07-21T20:22:12Z",
+    "creado": "2026-07-21T20:22:12Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-DEC-2591/view",
+    "extension": "doc",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/LEYES/1991"
+   },
+   {
+    "drive_id": "DEMO-COD-CGP",
+    "titulo": "Codigo general del proceso.pdf",
+    "mime": "application/pdf",
+    "carpeta_id": "DEMO-CARP-COD",
+    "tamano": 2100000,
+    "modificado": "2026-07-21T20:22:12Z",
+    "creado": "2026-07-21T20:22:12Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-COD-CGP/view",
+    "extension": "pdf",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/CODIGOS"
+   },
+   {
+    "drive_id": "DEMO-JUR-EJEMPLO-1",
+    "titulo": "Sentencia de ejemplo de la demostración (laboral) 2022.doc",
+    "mime": "application/msword",
+    "carpeta_id": "DEMO-CARP-JUR",
+    "tamano": 140000,
+    "modificado": "2026-07-21T20:22:12Z",
+    "creado": "2026-07-21T20:22:12Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-JUR-EJEMPLO-1/view",
+    "extension": "doc",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/JURISPRUDENCIA DE EJEMPLO/SALA LABORAL"
+   },
+   {
+    "drive_id": "DEMO-JUR-EJEMPLO-2",
+    "titulo": "Sentencia de ejemplo de la demostración (civil) 2023.doc",
+    "mime": "application/msword",
+    "carpeta_id": "DEMO-CARP-JURC",
+    "tamano": 150000,
+    "modificado": "2026-07-21T20:22:12Z",
+    "creado": "2026-07-21T20:22:12Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-JUR-EJEMPLO-2/view",
+    "extension": "doc",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/JURISPRUDENCIA DE EJEMPLO/SALA CIVIL"
+   },
+   {
+    "drive_id": "DEMO-RESERVADO",
+    "titulo": "[título reservado]",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-TUT",
+    "tamano": 10829,
+    "modificado": "2024-02-24T23:01:46Z",
+    "creado": "2024-02-24T23:01:46Z",
+    "propietario": "tercero",
+    "enlace": "https://drive.google.com/file/d/DEMO-RESERVADO/view",
+    "extension": "docx",
+    "estado": "PENDIENTE",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/ACCIONES DE TUTELA",
+    "sensibilidad": "POSIBLE_DATO_PERSONAL",
+    "motivo": "posible dato personal: requiere clasificación humana antes de leer o indexar"
+   },
+   {
+    "drive_id": "DEMO-EXCLUIDO",
+    "titulo": "Minuta retirada por el dueño (ejemplo).docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "carpeta_id": "DEMO-CARP-CIV",
+    "tamano": 5000,
+    "modificado": "2026-01-22T15:00:00Z",
+    "creado": "2026-01-22T15:00:00Z",
+    "propietario": "propio",
+    "enlace": "https://drive.google.com/file/d/DEMO-EXCLUIDO/view",
+    "extension": "docx",
+    "estado": "ENCONTRADO",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/MODELOS Y MINUTAS/CIVIL"
+   }
+  ]
+ },
+ "textos": {
+  "DEMO-PET-FOTOMULTA": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nCiudad y fecha: ____________\n\nSeñores\nSECRETARÍA DE MOVILIDAD\n[NOMBRE DE LA CIUDAD]\n\nREFERENCIA: Derecho de petición por comparendo electrónico\n\nHECHOS\n\n1. El día (fecha del comparendo) se impuso un comparendo al vehículo de placas ____________.\n2. No recibí notificación dentro del término que señala la ley.\n\nPETICIÓN\n\nCon fundamento en el artículo 23 de la Constitución Política y en la Ley 1755 de 2015, solicito que se revise la actuación y se me informe el estado del comparendo.\n\nANEXOS\n\n- Copia del comparendo\n- Copia de la licencia de tránsito\n\nNOTIFICACIONES\n\nRecibiré notificaciones en la dirección ____________.\n",
+  "DEMO-PET-SERVICIOS": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nSeñores\nEMPRESA DE SERVICIOS PÚBLICOS\n[NOMBRE DE LA EMPRESA]\n\nREFERENCIA: Derecho de petición\n\nHECHOS\n\n1. La factura del período [MES Y AÑO] llegó con un cobro que no corresponde al consumo habitual.\n\nPETICIÓN\n\nCon fundamento en el artículo 23 de la Constitución Política y en la Ley 1755 de 2015, solicito la revisión de la factura y la explicación del cobro.\n\nANEXOS\n\n- Copia de la factura\n\nNOTIFICACIONES\n\nRecibiré notificaciones en la dirección ____________.\n",
+  "DEMO-PET-SERVICIOS-2": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nSeñores\nEMPRESA DE SERVICIOS PÚBLICOS\n[NOMBRE DE LA EMPRESA]\n\nREFERENCIA: Derecho de petición\n\nHECHOS\n\n1. La factura del período [MES Y AÑO] llegó con un cobro que no corresponde al consumo habitual.\n2. Presenté un reclamo verbal que no fue atendido.\n\nPETICIÓN\n\nCon fundamento en el artículo 23 de la Constitución Política y en la Ley 1755 de 2015, solicito la revisión de la factura y la explicación del cobro.\n\nPRUEBAS\n\n- Copia de la factura\n- Constancia del reclamo\n\nNOTIFICACIONES\n\nRecibiré notificaciones en la dirección ____________.\n",
+  "DEMO-TUT-SALUD": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nSeñor\nJUEZ (REPARTO)\n[CIUDAD]\n\nREFERENCIA: Acción de tutela\n\nACCIONANTE: [NOMBRE DEL ACCIONANTE]\nACCIONADA: [NOMBRE DE LA EPS]\n\nHECHOS\n\n1. El médico tratante formuló el medicamento (nombre del medicamento).\n2. La entidad no lo ha entregado.\n\nDERECHOS VULNERADOS\n\nSalud y vida en condiciones dignas.\n\nPRETENSIONES\n\nCon fundamento en el artículo 86 de la Constitución Política y en el Decreto 2591 de 1991, solicito que se ordene la entrega del medicamento.\n\nPRUEBAS\n\n- Fórmula médica\n- Historia clínica\n\nJURAMENTO\n\nManifiesto que no he presentado otra tutela por los mismos hechos.\n\nNOTIFICACIONES\n\nRecibiré notificaciones en ____________.\n",
+  "DEMO-TUT-HABEAS": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nSeñor\nJUEZ (REPARTO)\n\nREFERENCIA: Acción de tutela por habeas data\n\nHECHOS\n\n1. La entidad mantiene un reporte negativo que ya debió retirarse.\n\nPRETENSIONES\n\nQue se ordene corregir el reporte.\n",
+  "DEMO-CON-ARRIENDO": "Ejemplo de la demostración de PULLEX: texto ficticio, no es un modelo revisado.\n\nCONTRATO DE ARRENDAMIENTO DE VIVIENDA URBANA\n\nARRENDADOR: [NOMBRE DEL ARRENDADOR]\nARRENDATARIO: [NOMBRE DEL ARRENDATARIO]\n\nPRIMERA. OBJETO\n\nEl arrendador entrega al arrendatario el inmueble ubicado en ____________.\n\nSEGUNDA. CANON\n\nEl canon mensual es de ____________ pesos.\n\nTERCERA. DURACIÓN\n\nEl término del contrato es de ____________ meses.\n\nEste contrato se rige por la Ley 820 de 2003.\n"
+ },
+ "fichas": {
+  "_nota": "Fichas de la biblioteca de DEMOSTRACIÓN. En la biblioteca real este archivo es biblioteca/fichas.json y lo llena una persona.",
+  "DEMO-EXCLUIDO": {
+   "acceso": "excluido"
+  },
+  "DEMO-TUT-SALUD": {
+   "validacion_juridica": "validado",
+   "fecha_revision": "2026-06-20",
+   "revisor": "Revisión de ejemplo (demostración)",
+   "finalidad": "Pedir al juez de tutela que ordene a la EPS entregar un medicamento formulado por el médico tratante.",
+   "supuestos_uso": [
+    "Hay fórmula del médico tratante.",
+    "La EPS negó o demoró la entrega."
+   ],
+   "limites": [
+    "Ejemplo de la demostración: la revisión que aquí aparece es ficticia."
+   ]
+  }
+ },
+ "mapa": {
+  "nota": "Mapa de carpetas de la biblioteca de DEMOSTRACIÓN.",
+  "carpetas": [
+   {
+    "drive_id": "DEMO-CARP-JUR",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/JURISPRUDENCIA DE EJEMPLO/SALA LABORAL",
+    "tipo_documental": "jurisprudencia",
+    "confianza_tipo": "alta",
+    "regla_tipo": "T09",
+    "area": "laboral y seguridad social",
+    "confianza_area": "alta",
+    "regla_area": "A05"
+   },
+   {
+    "drive_id": "DEMO-CARP-JURC",
+    "ruta": "BIBLIOTECA DE DEMOSTRACIÓN/JURISPRUDENCIA DE EJEMPLO/SALA CIVIL",
+    "tipo_documental": "jurisprudencia",
+    "confianza_tipo": "alta",
+    "regla_tipo": "T09",
+    "area": "civil",
+    "confianza_area": "alta",
+    "regla_area": "A03"
+   }
+  ]
+ }
+}

@@ -1,85 +1,69 @@
-# Procedimientos jurídicos J01–J09 y registro de reglas
+# Prompts de PULLEX IA
 
-Sección 9 de `docs/coordinacion/ESPECIFICACION-LEXCOL.md`. Código en `procedimientos/` y `reglas.py`; datos en
-`reglas/`. Fecha de esta versión: 2026-10-02.
+Estado: borrador de PUL-018. **Ningún prompt de esta carpeta se ha probado contra el modelo real** (no hay clave de
+API en el entorno donde se escribieron). Se probó que se cargan y se ensamblan (`tests/test_prompts_calidad.py`),
+no que mejoren las respuestas.
 
 ## Qué hay
 
-| Id | Procedimiento | Módulo | Ruta HTTP | Estado real |
-|---|---|---|---|---|
-| J01 | [Clasificación y orientación](J01-clasificacion-y-orientacion.md) | `j01_clasificacion.py` | `POST /api/procedimientos/clasificar` | PROBADO |
-| J02 | [Recuperación de modelos](J02-recuperacion-de-modelos.md) | `j02_modelos.py` | `POST /api/procedimientos/modelos` | PROBADO (solo catálogo interno) |
-| J03 | [Verificación normativa temporal](J03-verificacion-normativa-temporal.md) | `j03_vigencia.py` | `POST /api/procedimientos/vigencia` | PROBADO |
-| J04 | [Análisis jurisprudencial](J04-analisis-jurisprudencial.md) | `j04_jurisprudencia.py` | `POST /api/procedimientos/jurisprudencia` | PROBADO (ficha y validación; sin base de sentencias) |
-| J05 | [Cómputo de términos](J05-computo-de-terminos.md) | `j05_terminos.py`, `calendario.py` | `POST /api/procedimientos/terminos` | PROBADO |
-| J06 | [Liquidaciones](J06-liquidaciones.md) | `j06_liquidaciones.py` | `POST /api/procedimientos/liquidacion` | PROBADO |
-| J07 | [Matriz probatoria](J07-matriz-probatoria.md) | `j07_matriz_probatoria.py` | `POST /api/procedimientos/matriz-probatoria` | PROBADO |
-| J08 | [Generación y revisión de escritos](J08-generacion-y-revision-de-escritos.md) | `j08_escritos.py` | `POST /api/procedimientos/verificar-escrito` | PROBADO (verificador); generación sin integrar al flujo |
-| J09 | [Actualización e impacto](J09-actualizacion-e-impacto.md) | `j09_impacto.py` | `POST /api/procedimientos/impacto` (administración) | PROBADO |
+| Archivo | Qué es | Quién lo carga |
+|---|---|---|
+| `calidad_respuesta.md` | Bloque de calidad de respuesta: contrato de respuesta, intención, cobertura, profundidad, seguimientos, no inventar lo jurídico, incertidumbre y cómo continuar | `prompts_calidad.cargar_bloque()` |
+| `PROMPT-MAESTRO-PULLEX.md` | Prompt maestro integrado: identidad, el bloque anterior, modos, verbos, análisis de casos, voces, reglas jurídicas y límites | `prompts_calidad.cargar_maestro({...})` |
 
-«PROBADO» = pruebas automáticas propias y, en J05 y J06, evaluación con casos calculados a mano. Ninguno está
-OPERATIVO: falta la revisión de un profesional del derecho y uso con casos reales. Además: `GET /api/procedimientos`
-(catálogo y opciones de la interfaz) y `GET /api/reglas` ([registro de reglas](REGISTRO-DE-REGLAS.md)).
+Reglas de formato de cada archivo:
+- Metadato en comentarios HTML al principio: `<!-- version: X.Y.Z | fecha: AAAA-MM-DD | estado: … -->`.
+- El texto que se carga va entre `<!-- INICIO -->` y `<!-- FIN -->`; lo que está fuera no llega al modelo.
+- En el prompt maestro, `{{CALIDAD_RESPUESTA}}`, `{{GUIA_ESCRITURA}}`, `{{VOZ_ESTUDIANTE}}`, `{{VOZ_ABOGADO}}` y
+  `{{VOZ_CIUDADANO}}` se sustituyen al cargar. Las cuatro últimas son las constantes de `estilo_redaccion.py`, para
+  no copiar texto que ya existe y que se desfasaría. Si falta un valor, `cargar_maestro` lanza `ErrorPrompt`:
+  es mejor no arrancar que enviar un marcador sin resolver al modelo.
 
-Todas las rutas exigen sesión, no llaman al modelo de IA y no descuentan consultas. Límite: 90 llamadas por minuto
-por cuenta.
+## Cómo lo usa el backend
 
-## Lo determinista y lo que queda a juicio profesional
+```python
+import prompts_calidad as pc
+import estilo_redaccion as redaccion
 
-Cada salida separa cuatro listas:
-
-- `normas`: reglas del registro usadas, con identificador, versión, estado y enlace de la fuente.
-- `supuestos`: lo que el cálculo dio por cierto (por ejemplo, «el sábado no se contó como día hábil»).
-- `advertencias`: reglas no verificadas usadas y reglas cuya vigencia a la fecha del cálculo no está comprobada.
-- `juicio_profesional`: lo que el procedimiento no decide.
-
-Estados comunes: `CALCULADO` (o el propio de cada procedimiento), `ABSTENCION` (falta un dato esencial: no hay
-resultado) y `CONTRADICCION` (los datos son imposibles o incoherentes: tampoco hay resultado).
-
-## Disciplina de fuentes (sección 10)
-
-Cada regla jurídica material se comprobó el 2026-10-02 en una fuente oficial y quedó en `reglas/registro.json` con
-enlace, fecha de consulta y cita. Cómo se consultó:
-
-- Secretaría del Senado (`secretariasenado.gov.co`): texto descargado y leído literalmente.
-- Gestor Normativo de Función Pública, Banco de la República, Rama Judicial y Corte Constitucional: lectura con
-  la herramienta de consulta web, pidiendo cita literal. El registro lo indica en `metodo_verificacion`.
-- **No accesibles desde el entorno de trabajo**: `suin-juriscol.gov.co` y `mintrabajo.gov.co`. Lo que dependía de
-  ellas quedó `NO_VERIFICADO` (ver «Lo que falta verificar» en el registro).
-
-Hallazgos de la verificación que cambiaron el código respecto de lo que se habría escrito de memoria:
-
-1. **Ley 2578 de 2026** (1 de junio): el 9 de julio es festivo nacional y se traslada al lunes. Confirmado en la
-   Secretaría del Senado, en la Carta Circular GE-0203 de 2026 del Banco de la República y en la Circular
-   PCSJC26-26 del Consejo Superior de la Judicatura. Por eso la regla de festivos tiene dos versiones.
-2. El art. 177 del Código Sustantivo del Trabajo publicado por la Secretaría del Senado omite el «once de
-   noviembre» entre los festivos trasladables; el texto de Función Pública lo incluye y el Banco de la República
-   publica ese festivo en lunes. Queda anotada la discrepancia.
-3. El art. 14 del CPACA tuvo una ampliación temporal (Decreto Legislativo 491 de 2020, art. 5, derogado por la
-   Ley 2207 de 2022). El número de días ampliados no se pudo leer en la fuente: esa versión está `NO_VERIFICADO`
-   y la calculadora se abstiene para peticiones de ese período.
-
-## Evaluación (sección 12)
-
-`evaluacion/procedimientos.jsonl` y `evaluacion/evaluar_procedimientos.py`. 45 casos de J05 y J06 con resultado
-esperado calculado a mano y explicado, en dos conjuntos: desarrollo (18) y medición (27). Umbral fijado antes de
-medir: 100 %. Resultado de la primera ejecución (2026-10-02): 45/45; medición 27/27.
-
-Límite de esta evaluación: los resultados esperados los calculó la misma sesión que escribió el código, con las
-mismas reglas. Mide que el programa hace lo que la regla registrada dice, no que la regla esté bien interpretada.
-Falta un conjunto calculado por un abogado o contador independiente.
-
-```bash
-python evaluacion/evaluar_procedimientos.py            # tabla y código de salida
-python -m pytest -q tests/test_reglas.py tests/test_procedimientos_*.py
-python scripts/tabla_reglas.py                         # regenera REGISTRO-DE-REGLAS.md
+maestro = pc.cargar_maestro({
+    "GUIA_ESCRITURA": redaccion.GUIA_ESCRITURA,
+    "VOZ_ESTUDIANTE": redaccion.VOZ_ESTUDIANTE,
+    "VOZ_ABOGADO": redaccion.VOZ_ABOGADO,
+    "VOZ_CIUDADANO": redaccion.VOZ_CIUDADANO,
+})
 ```
 
-## Mantenimiento del registro
+Dos formas de integrarlo, a decidir por quien toque `app.py` (PUL-017):
+1. **Mínima:** dejar el `SYSTEM_PROMPT` actual y añadir `pc.cargar_bloque()` justo después de la presentación.
+   El texto es fijo, así que sigue siendo cacheable (`cache_control`) como el resto del bloque estático.
+2. **Completa:** reemplazar el `SYSTEM_PROMPT` por `cargar_maestro(...)`. El maestro conserva las reglas jurídicas y
+   los límites del actual; si hay diferencias de fondo, vale el actual hasta que un abogado revise el maestro.
 
-1. Verificar la norma en la fuente oficial y anotar enlace, fecha y cita.
-2. Si cambia una regla existente: cerrar la versión actual (`vigencia.hasta` = día anterior al cambio) y agregar
-   la versión siguiente con su `vigencia.desde`. No se edita una versión ya publicada. `J09` propone este cambio.
-3. Correr `python -m pytest -q tests/test_reglas.py` (valida esquema, enlaces oficiales y que las versiones no se
-   solapen) y `python scripts/tabla_reglas.py`.
-4. Revertir es quitar la versión nueva y reabrir la anterior: el historial de git conserva ambas.
+Lo que cambia por consulta (fecha, nombre, memoria, fragmentos del corpus, modo elegido) va en el bloque dinámico
+sin caché, como hoy. Los modos RÁPIDO, ESTÁNDAR, PROFUNDO, etc. del maestro son criterio del modelo; la decisión
+dura de presupuesto de tokens y de modelo es del enrutador del backend, no del prompt.
+
+## Cómo se versiona
+
+- Versión semántica en el metadato: **patch** para corregir una errata o precisar una frase sin cambiar la conducta;
+  **minor** para añadir una regla o un modo; **major** para cambiar una prioridad o quitar una regla.
+- Todo cambio de conducta (minor o major) se acompaña de: la nota en este README (tabla de abajo), una corrida de
+  `python evaluacion/evaluar_calidad.py` sobre respuestas guardadas y, cuando haya clave, una corrida contra el
+  modelo con el conjunto `evaluacion/calidad_respuesta.jsonl`. Sin la corrida real, el cambio queda como
+  «NOT VERIFIED» en la nota.
+- Los archivos se versionan en git; no hay copias con fecha en el nombre.
+
+| Versión | Fecha | Cambio | Medido contra el modelo real |
+|---|---|---|---|
+| 1.0.0 | 2026-10-04 | Primera redacción del bloque y del maestro a partir de la especificación del dueño (`docs/coordinacion/ESPECIFICACION-MOTOR-RESPUESTAS.md`) y de `docs/17-CALIDAD-DE-RESPUESTA.md` | No |
+
+## Qué prueba y qué no
+
+`tests/test_prompts_calidad.py` comprueba formato (marcadores, versión, cuerpo no vacío), que el bloque menciona
+cada obligación clave y que no contiene emojis ni nombres de universidades. No comprueba que el modelo obedezca.
+
+## Qué falta
+
+- Medir antes y después con el modelo real y el conjunto de evaluación (PUL-008 lo bloquea hasta que haya clave).
+- Que un abogado revise las reglas jurídicas del maestro.
+- Medir cuántos tokens agrega el bloque (hoy son unas 1.200 palabras; no se midió el costo).
