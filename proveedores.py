@@ -21,6 +21,12 @@ Implementaciones:
   https://developers.openai.com/api/docs/guides/tools-web-search (web_search con filters.allowed_domains)
   NOT VERIFIED contra la API real: no hay clave de OpenAI en este entorno; solo se probó con un doble.
 
+PUL-017: además de texto, búsqueda y citas, el stream emite ``{"tipo": "parada", "motivo": …, "tokens_salida": n}``
+con el motivo de parada NORMALIZADO (``fin``, ``limite``, ``pausa``, ``rechazo``, ``contexto``; ver motor_respuesta.PARADA_*).
+Antes de este cambio el motivo se descartaba y una respuesta cortada por max_tokens se mostraba como terminada
+(docs/audit/AI_RESPONSE_QUALITY_AUDIT.md, hallazgo C2). ``completar_texto`` hace lo mismo para llamadas sin streaming y
+las continúa automáticamente.
+
 Respaldo: si el proveedor principal falla por error de servidor, saturación o red ANTES de emitir texto,
 se intenta una vez el proveedor de respaldo (``PULLEX_RESPALDO``) y se deja constancia en el log sin
 datos personales (solo proveedor, tipo de error y código HTTP).
@@ -29,6 +35,8 @@ import os
 import logging
 
 import anthropic
+
+import motor_respuesta as motor
 
 log = logging.getLogger("pullex.proveedores")
 
@@ -94,6 +102,18 @@ def _texto_sistema(system) -> str:
 
 
 # ------------------------------------------------------------------------------- Anthropic --
+_MOTIVOS_ANTHROPIC = {"end_turn": motor.PARADA_FIN, "stop_sequence": motor.PARADA_FIN, "tool_use": motor.PARADA_FIN,
+                      "max_tokens": motor.PARADA_LIMITE, "pause_turn": motor.PARADA_PAUSA,
+                      "refusal": motor.PARADA_RECHAZO, "model_context_window_exceeded": motor.PARADA_CONTEXTO}
+
+
+def motivo_anthropic(stop_reason) -> str:
+    """stop_reason de la Messages API → motivo normalizado ('' si no vino)."""
+    if not stop_reason:
+        return ""
+    return _MOTIVOS_ANTHROPIC.get(str(stop_reason), motor.PARADA_FIN)
+
+
 def evento_anthropic(evento, web: dict):
     """Traduce un evento del stream del SDK de Anthropic a un evento para el cliente (o None).
 
@@ -102,6 +122,12 @@ def evento_anthropic(evento, web: dict):
     - Resultados de búsqueda (web_search_tool_result) y citas (citations_delta con
       web_search_result_location) se acumulan en `web` para el evento final "fuentes"."""
     tipo = getattr(evento, "type", "")
+    if tipo == "message_delta":
+        motivo = motivo_anthropic(getattr(getattr(evento, "delta", None), "stop_reason", None))
+        if not motivo:
+            return None
+        uso = getattr(evento, "usage", None)
+        return {"tipo": "parada", "motivo": motivo, "tokens_salida": int(getattr(uso, "output_tokens", 0) or 0)}
     if tipo == "content_block_start":
         bloque = getattr(evento, "content_block", None)
         btipo = getattr(bloque, "type", "")
@@ -144,16 +170,33 @@ class AnthropicProveedor:
         cliente = anthropic.Anthropic(api_key=self.api_key)
         with cliente.messages.stream(model=self.modelo, max_tokens=max_tokens, system=system,
                                      messages=messages, tools=list(tools or []), **self.opciones) as s:
+            ultima = ""
             for evento in s:
                 salida = evento_anthropic(evento, web)
                 if salida is not None:
+                    if salida["tipo"] == "parada":
+                        ultima = salida["motivo"]
                     yield salida
+            # pause_turn: para pedir que el turno siga hay que devolver el contenido del asistente tal cual
+            # (incluidas las búsquedas del servidor). Solo existe en el stream real del SDK.
+            final = getattr(s, "get_final_message", None)
+            if ultima == motor.PARADA_PAUSA and callable(final):
+                try:
+                    bloques = [b.model_dump(exclude_none=True) for b in final().content]
+                    yield {"tipo": "contenido_asistente", "bloques": bloques}
+                except Exception:       # noqa: BLE001 - sin los bloques se continúa con el texto
+                    log.warning("no se pudo leer el mensaje final tras pause_turn")
 
-    def crear_texto(self, system, user: str, max_tokens: int) -> str:
+    def crear(self, system, messages, max_tokens: int) -> tuple:
+        """Una llamada sin streaming: (texto, motivo de parada normalizado)."""
         cliente = anthropic.Anthropic(api_key=self.api_key)
         r = cliente.messages.create(model=self.modelo, max_tokens=max_tokens, system=system,
-                                    messages=[{"role": "user", "content": user}], **self.opciones)
-        return "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+                                    messages=messages, **self.opciones)
+        texto = "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+        return texto, motivo_anthropic(getattr(r, "stop_reason", None))
+
+    def crear_texto(self, system, user: str, max_tokens: int) -> str:
+        return self.crear(system, [{"role": "user", "content": user}], max_tokens)[0]
 
 
 # ---------------------------------------------------------------------------------- OpenAI --
@@ -226,6 +269,15 @@ def evento_openai(evento, web: dict):
                 if url and url not in web["resultados"]:
                     web["resultados"][url] = {"titulo": url, "fecha": None}
         return None
+    if tipo == "response.completed":
+        uso = _campo(_campo(evento, "response"), "usage")
+        return {"tipo": "parada", "motivo": motor.PARADA_FIN, "tokens_salida": int(_campo(uso, "output_tokens", 0) or 0)}
+    if tipo == "response.incomplete":
+        resp = _campo(evento, "response")
+        razon = str(_campo(_campo(resp, "incomplete_details"), "reason") or "")
+        uso = _campo(resp, "usage")
+        motivo = motor.PARADA_LIMITE if razon == "max_output_tokens" else motor.PARADA_RECHAZO
+        return {"tipo": "parada", "motivo": motivo, "tokens_salida": int(_campo(uso, "output_tokens", 0) or 0)}
     if tipo in ("response.failed", "error"):
         err = _campo(_campo(evento, "response"), "error") if tipo == "response.failed" else evento
         codigo = str(_campo(err, "code") or "desconocido")
@@ -267,10 +319,19 @@ class OpenAIProveedor:
             if salida is not None:
                 yield salida
 
-    def crear_texto(self, system, user: str, max_tokens: int) -> str:
+    def crear(self, system, messages, max_tokens: int) -> tuple:
+        """Una llamada sin streaming: (texto, motivo de parada normalizado)."""
         cliente = _openai().OpenAI(api_key=self.api_key)
-        r = cliente.responses.create(input=[{"role": "user", "content": user}], **self._base(system, max_tokens))
-        return getattr(r, "output_text", "") or ""
+        r = cliente.responses.create(input=mensajes_openai(messages), **self._base(system, max_tokens))
+        razon = str(_campo(_campo(r, "incomplete_details"), "reason") or "")
+        if _campo(r, "status") == "incomplete" or razon:
+            motivo = motor.PARADA_LIMITE if razon in ("", "max_output_tokens") else motor.PARADA_RECHAZO
+        else:
+            motivo = motor.PARADA_FIN if _campo(r, "status") == "completed" else ""
+        return getattr(r, "output_text", "") or "", motivo
+
+    def crear_texto(self, system, user: str, max_tokens: int) -> str:
+        return self.crear(system, [{"role": "user", "content": user}], max_tokens)[0]
 
 
 # ------------------------------------------------------------------ configuración y respaldo --
@@ -334,3 +395,38 @@ def crear_texto(cadena: list, system, user: str, max_tokens: int) -> str:
             raise
         _registrar_respaldo(principal, respaldo, e)
     return respaldo.crear_texto(system, user, max_tokens)
+
+
+# ------------------------------------------------------------- llamadas completas (PUL-017) --
+def _crear(proveedor, system, messages, max_tokens) -> tuple:
+    if hasattr(proveedor, "crear"):
+        return proveedor.crear(system, messages, max_tokens)
+    return proveedor.crear_texto(system, messages[-1]["content"], max_tokens), ""     # dobles de prueba antiguos
+
+
+def crear_con_parada(cadena: list, system, messages: list, max_tokens: int) -> tuple:
+    """Como crear_texto, pero con una lista de mensajes y devolviendo (texto, motivo de parada)."""
+    principal, respaldo = cadena[0], (cadena[1] if len(cadena) > 1 else None)
+    try:
+        return _crear(principal, system, messages, max_tokens)
+    except Exception as e:
+        if respaldo is None or not respaldo.configurado or not es_recuperable(e):
+            raise
+        _registrar_respaldo(principal, respaldo, e)
+    return _crear(respaldo, system, messages, max_tokens)
+
+
+def completar_texto(cadena: list, system, user: str, max_tokens: int, max_continuaciones: int = 2) -> tuple:
+    """Genera un texto completo sin streaming. Si el modelo se corta por límite de longitud, pide la continuación (hasta
+    ``max_continuaciones`` veces) y empalma el texto sin duplicar. Devuelve (texto, completo): ``completo`` es False si
+    después de todo sigue cortado, para que quien lo guarde no lo presente como terminado."""
+    mensajes = [{"role": "user", "content": user}]
+    texto = ""
+    for _ in range(max_continuaciones + 1):
+        parte, motivo = crear_con_parada(cadena, system, mensajes, max_tokens)
+        texto = motor.unir_continuacion(texto, parte) if texto else parte
+        if motivo not in (motor.PARADA_LIMITE, motor.PARADA_PAUSA, motor.PARADA_CONTEXTO):
+            return texto, True
+        mensajes = [{"role": "user", "content": user}, {"role": "assistant", "content": texto.rstrip() or "…"},
+                    {"role": "user", "content": motor.INSTRUCCION_CONTINUAR}]
+    return texto, False

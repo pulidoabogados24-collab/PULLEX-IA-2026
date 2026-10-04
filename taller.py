@@ -35,6 +35,8 @@ MIN_ESCRITO = 250          # caracteres: menos que esto no se evalúa (ni se cob
 MAX_ESCRITO = 20000
 MAX_TOKENS_ESCENARIO = 2200
 MAX_TOKENS_EVAL = 3200
+AVISO_MODELO_INCOMPLETO = ("\n\n> **Aviso:** este escrito modelo quedó incompleto porque la respuesta se cortó por límite de longitud. "
+                          "Vuelve a pedirlo para obtenerlo completo.")
 MAX_TOKENS_MODELO = 5000
 
 NIVELES = {
@@ -649,7 +651,7 @@ def instalar(m) -> APIRouter:
             # Misma cadena de proveedores que el resto de la app (principal y respaldo). El texto sale pulido:
             # estilo_redaccion.pulir no toca citas, [COMPLETAR: …] ni «(verificar vigencia)».
             max_tokens = MAX_TOKENS_MODELO + (0 if "haiku" in m.MODELO else m.MARGEN_THINKING)
-            texto = m.proveedores.crear_texto(m.cadena_ia(), TALLER_SISTEMA_MODELO, pedido, max_tokens)
+            texto, completo = m.proveedores.completar_texto(m.cadena_ia(), TALLER_SISTEMA_MODELO, pedido, max_tokens)
             texto = estilo_redaccion.pulir(texto.strip())
             if len(texto) < 200:
                 raise ValueError("modelo vacío")
@@ -658,6 +660,10 @@ def instalar(m) -> APIRouter:
             m.log.exception("fallo generando escrito modelo error_id=%s", eid)
             raise HTTPException(503, f"No pude preparar el escrito modelo en este momento (código {eid}). Intenta de nuevo.")
         texto = texto[:30000]
+        if not completo:
+            # Cortado por el límite de longitud aun después de continuar: se muestra con aviso pero NO se guarda ni se
+            # comparte en la caché de modelos curados, para que el próximo intento lo genere completo.
+            return {"texto": texto + AVISO_MODELO_INCOMPLETO, "nuevo": True, "revision_humana": True, "incompleto": True}
         with closing(m.db()) as con:
             if fila["curado_id"]:
                 con.execute("INSERT OR IGNORE INTO taller_modelos(curado_id,texto,creado) VALUES(?,?,?)",

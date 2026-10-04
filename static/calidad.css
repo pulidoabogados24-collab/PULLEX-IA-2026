@@ -1,0 +1,23 @@
+/* Respuestas incompletas («Continuar») y valoración 👍/👎 del chat (PUL-017). Solo tokens de static/tema.css. */
+.aviso-inc{margin:12px 0 0;padding:10px 12px;border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:var(--radius);background:var(--surface-2);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.aviso-inc p{margin:0;flex:1 1 240px;font-size:.85rem;line-height:1.5;color:var(--text)}
+.btn-continuar{font-size:.85rem;font-weight:650;padding:8px 16px;border-radius:999px;background:var(--accent);color:#fff;
+  border:1px solid var(--accent);cursor:pointer;min-height:40px}
+.btn-continuar:hover{filter:brightness(1.08)}
+.btn-continuar:focus-visible,.vl-btn:focus-visible,.vl-chip:focus-visible,.vl-enviar:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.b.ia.continuando .md::after,.b.ia.reparando .md::after{display:block;margin-top:8px;font-size:.78rem;color:var(--text-2)}
+.b.ia.continuando .md::after{content:"Completando la respuesta…"}
+.b.ia.reparando .md::after{content:"Revisando que no falte nada…"}
+
+.valorar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}
+.vl-btn{font-size:.95rem;line-height:1;padding:6px 9px;border-radius:7px;border:1px solid transparent;background:transparent;cursor:pointer;min-height:32px}
+.vl-btn:hover{background:var(--surface-2)}
+.vl-btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.vl-estado{font-size:.78rem;color:var(--text-2)}
+.vl-motivos{flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.vl-motivos.hidden{display:none}
+.vl-chip{font-size:.78rem;padding:5px 11px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;min-height:32px}
+.vl-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);font-weight:650}
+.vl-enviar{font-size:.78rem;font-weight:650;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;min-height:32px}
+@media(max-width:560px){.btn-continuar{width:100%}}

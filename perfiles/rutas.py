@@ -185,7 +185,11 @@ def montar(app, nucleo):
             elif tipo == "web_search_tool_result" and isinstance(getattr(b, "content", None), list):
                 web += [{"titulo": getattr(x, "title", None), "url": getattr(x, "url", None)} for x in b.content]
         uso = getattr(r, "usage", None)
-        return {"texto": "".join(texto), "busquedas_web": busquedas, "fuentes_web": web,
+        cortada = getattr(r, "stop_reason", None) == "max_tokens"
+        if cortada:
+            # Una salida cortada por el límite no puede pasar por completa ni alimentar al perfil siguiente sin aviso.
+            texto.append("\n\n[AVISO: la respuesta de este perfil se cortó por límite de longitud y puede estar incompleta.]")
+        return {"texto": "".join(texto), "cortada": cortada, "busquedas_web": busquedas, "fuentes_web": web,
                 "tokens_entrada": getattr(uso, "input_tokens", None), "tokens_salida": getattr(uso, "output_tokens", None)}
 
     @app.post("/api/coordinador/ejecutar")

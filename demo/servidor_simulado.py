@@ -280,6 +280,40 @@ class _StreamTexto:
         return False
 
 
+# Respuestas CORTADAS por el límite de longitud (PUL-017), para probar «Continuar» sin un modelo real. Se activan con una
+# marca dentro del mensaje de la persona: [[CORTE]] se corta en la 1.ª llamada y la continuación automática la completa;
+# [[CORTE-SIEMPRE]] se corta también en las 3 continuaciones automáticas (queda «incompleta» y aparece el botón) y se
+# completa recién cuando la persona pulsa «Continuar». El estado vive en memoria del proceso del simulador.
+_SEGMENTOS_CORTE = [
+    "Primer tramo de la respuesta simulada: la acción de tutela procede cuando no existe otro medio de defensa judicial.",
+    "Segundo tramo de la respuesta simulada: se verifica la inmediatez y la subsidiariedad antes de presentarla.",
+    "Tercer tramo de la respuesta simulada: el juez tiene un plazo corto para decidir una vez recibida la solicitud.",
+    "Cuarto tramo de la respuesta simulada: la decisión puede impugnarse dentro de los tres días siguientes.",
+    "Conclusión de la respuesta simulada: este ejemplo es de demostración; verifica la norma en la fuente oficial.",
+]
+_LLAMADAS_CORTE = {}
+
+
+class _StreamCortado:
+    def __init__(self, clave, cortes):
+        n = _LLAMADAS_CORTE.get(clave, 0)
+        _LLAMADAS_CORTE[clave] = n + 1
+        i = min(n, len(_SEGMENTOS_CORTE) - 1)
+        self.cortada = n < cortes
+        self.texto = ("\n\n" if n else "") + (_SEGMENTOS_CORTE[i] if self.cortada
+                                              else "\n\n".join(_SEGMENTOS_CORTE[i:]))
+
+    def __enter__(self):
+        ev = [_Ev(t) for t in _trozos(self.texto, 20)]
+        ev.append(types.SimpleNamespace(type="message_delta", delta=types.SimpleNamespace(
+            stop_reason="max_tokens" if self.cortada else "end_turn"),
+            usage=types.SimpleNamespace(output_tokens=max(1, len(self.texto) // 4))))
+        return iter(ev)
+
+    def __exit__(self, *a):
+        return False
+
+
 class _Modelo:
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
@@ -288,6 +322,13 @@ class _Modelo:
         ultimo = messages[-1]["content"] if messages else ""
         ultimo = ultimo if isinstance(ultimo, str) else " ".join(b.get("text", "") for b in ultimo)
         sis = " ".join(b.get("text", "") for b in system) if isinstance(system, list) else str(system)
+        textos = [(m["role"], m["content"] if isinstance(m["content"], str) else " ".join(
+            b.get("text", "") for b in m["content"] if isinstance(b, dict))) for m in messages]
+        usuario = [t for r, t in textos if r == "user"]
+        # La pregunta vigente es el último mensaje de la persona; si ese es la orden de continuar, es la anterior.
+        vigente = usuario[-2] if len(usuario) > 1 and "se cortó" in usuario[-1] else (usuario[-1] if usuario else "")
+        if "[[CORTE" in vigente:
+            return _StreamCortado(vigente, 4 if "[[CORTE-SIEMPRE]]" in vigente else 1)
         if "PULLEX DOCUMENTOS" in sis:  # Automatizador: un paso de un flujo o del asistente
             return _StreamTexto(_paso_ejemplo(ultimo))
         s = _Stream(system, web=bool(tools))
