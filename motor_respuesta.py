@@ -1024,23 +1024,27 @@ class EstadoGeneracion:
 
 
 def generar(abrir, mensajes: list, estado: EstadoGeneracion, c: Contrato, *, max_continuaciones: int = None,
-            es_recuperable=None, reloj=time.monotonic):
+            es_recuperable=None, previo: str = "", reloj=time.monotonic):
     """Generador de eventos del chat. ``abrir(mensajes)`` devuelve el iterable de eventos del proveedor
     ({'tipo': 'texto'|'busqueda'|'parada'|'contenido_asistente'}). Si la respuesta se corta por límite (o el servidor
     pausa el turno) pide la continuación y empalma el texto sin duplicarlo, hasta ``max_continuaciones`` veces; si
     después sigue cortada, lo deja en ``estado`` (completo=False) y NUNCA la presenta como terminada. Al final, MINERVA
-    puede pedir UNA reparación de partes sin contestar. Si ``abrir`` lanza una excepción con texto ya emitido, la
+    puede pedir UNA reparación de partes sin contestar. ``previo``: texto ya escrito de una respuesta que se está
+    CONTINUANDO a pedido de la persona (``mensajes`` no lo incluye: la primera llamada ya es una continuación). Si ``abrir`` lanza una excepción con texto ya emitido, la
     respuesta queda «interrumpida» (y se reintenta la continuación una vez si ``es_recuperable(e)``)."""
     max_cont = MAX_CONTINUACIONES if max_continuaciones is None else max_continuaciones
     base = list(mensajes)
     inicio = reloj()
     intento = 0
     reintento_caida = False
+    if previo:
+        estado.agregar(previo)
     while True:
         previo = estado.texto
-        unidor = UnidorContinuacion(previo) if intento > 0 and previo else None
+        es_continuacion = intento > 0 or bool(previo)
+        unidor = UnidorContinuacion(previo) if es_continuacion and previo else None
         parada, bloques_asistente, fallo = "", None, None
-        msgs = base if intento == 0 else _mensajes_continuacion(base, previo, estado.bloques_asistente)
+        msgs = _mensajes_continuacion(base, previo, estado.bloques_asistente) if es_continuacion else base
         estado.bloques_asistente = None
         try:
             for ev in abrir(msgs):

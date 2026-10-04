@@ -47,8 +47,10 @@ import biblioteca
 import documentos
 import estilo_redaccion as redaccion
 import fuentes
+import motor_respuesta as motor
 import motores
 import proveedores
+import telemetria_respuestas as telemetria
 
 load_dotenv()
 
@@ -83,8 +85,14 @@ MODELO_BOLETIN = os.getenv("PULLEX_MODELO_BOLETIN", MODELO)
 ESFUERZO = os.getenv("PULLEX_ESFUERZO", "medium").strip().lower()
 if ESFUERZO not in ("", "low", "medium", "high", "xhigh", "max"):
     ESFUERZO = "medium"
-# Tope de salida del chat. Con thinking adaptativo, el razonamiento cuenta dentro de max_tokens.
-MAX_TOKENS_CHAT = int(os.getenv("PULLEX_MAX_TOKENS", "8000"))
+# Tope ABSOLUTO de salida del chat (PUL-017). Antes era un 8000 fijo para todo, con el razonamiento (thinking
+# adaptativo) contado dentro: una consulta compleja podía gastarlo casi todo pensando y cortarse a mitad de la
+# respuesta (docs/audit/AI_RESPONSE_QUALITY_AUDIT.md, C1). Ahora el max_tokens de cada consulta sale de su
+# profundidad (motor_respuesta.presupuesto_tokens) y este valor solo es el techo.
+MAX_TOKENS_CHAT = motor.TOPE_TOKENS_CHAT
+# Latido SSE (segundos sin eventos antes de enviar un comentario ": latido") y tiempo máximo sin ninguna señal del proveedor.
+LATIDO_S = float(os.getenv("PULLEX_LATIDO_S", "15"))
+INACTIVIDAD_S = float(os.getenv("PULLEX_INACTIVIDAD_S", "150"))
 WEB_MAX_USOS = int(os.getenv("PULLEX_WEB_MAX_USOS", "5"))
 
 
@@ -560,6 +568,7 @@ with closing(db()) as con:
         actualizado REAL NOT NULL, PRIMARY KEY(usuario, tipo));
     """)
     academia.crear_tabla(con)
+    telemetria.crear_tabla(con)
     con.commit()
     # Migración suave: si la base ya existía sin la columna email_verificado, se agrega.
     # Cuentas ya existentes (creadas antes de este cambio) quedan como no verificadas —
@@ -581,6 +590,12 @@ with closing(db()) as con:
     # Fuentes consultadas por cada respuesta (JSON). Mensajes anteriores quedan con NULL.
     try:
         con.execute("ALTER TABLE mensajes ADD COLUMN fuentes TEXT")
+        con.commit()
+    except sqlite3.OperationalError:
+        pass
+    # PUL-017: 1 = la respuesta quedó cortada (límite de longitud o conexión interrumpida) y se puede continuar.
+    try:
+        con.execute("ALTER TABLE mensajes ADD COLUMN incompleta INTEGER DEFAULT 0")
         con.commit()
     except sqlite3.OperationalError:
         pass
@@ -1379,6 +1394,7 @@ def borrar(cid: int, request: Request):
     u = usuario_actual(request)
     conversacion_de(cid, u["email"])
     with closing(db()) as con:
+        telemetria.borrar_de_mensajes(con, cid)      # la telemetría de sus respuestas se va con la conversación
         con.execute("DELETE FROM mensajes WHERE conv=?", (cid,))
         con.execute("DELETE FROM conversaciones WHERE id=? AND usuario=?", (cid, u["email"]))
         con.commit()
@@ -1408,11 +1424,12 @@ def mensajes(cid: int, request: Request):
     conversacion_de(cid, u["email"])
     with closing(db()) as con:
         filas = con.execute(
-            "SELECT rol,contenido,fuentes FROM mensajes WHERE conv=? ORDER BY id", (cid,)).fetchall()
+            "SELECT id,rol,contenido,fuentes,incompleta FROM mensajes WHERE conv=? ORDER BY id", (cid,)).fetchall()
     salida = []
     for f in filas:
-        m = {"rol": f["rol"], "contenido": f["contenido"]}
+        m = {"id": f["id"], "rol": f["rol"], "contenido": f["contenido"]}
         if f["rol"] == "assistant":
+            m["incompleta"] = bool(f["incompleta"])
             try:
                 m["fuentes"] = json.loads(f["fuentes"]) if f["fuentes"] else []
             except ValueError:
@@ -1463,16 +1480,199 @@ def fuentes_de_respuesta(frags: list, web: dict, respuesta: str) -> list:
     return lista
 
 
+MENSAJE_MOTOR_NO_DISPONIBLE = (
+    "⚠️ El motor de IA no está disponible en este momento (código {eid}).\n\n"
+    "**Mientras se restablece, puedes consultar directamente:**\n"
+    "- Normas vigentes: [SUIN-Juriscol](https://www.suin-juriscol.gov.co) y "
+    "[Secretaría del Senado](http://www.secretariasenado.gov.co)\n"
+    "- Jurisprudencia: [Corte Constitucional](https://www.corteconstitucional.gov.co), "
+    "[Corte Suprema](https://cortesuprema.gov.co), "
+    "[Consejo de Estado](https://www.consejodeestado.gov.co)\n"
+    "- Estado de procesos: [Rama Judicial](https://www.ramajudicial.gov.co)\n\n"
+    "Tu consulta quedó guardada; vuelve a intentarlo en unos minutos "
+    "(no se te descontará doble).")
+
+
+def anonimo(email: str) -> str:
+    """Código irreversible del usuario para la telemetría de calidad (HMAC con el secreto de la app)."""
+    return hmac.new(SECRET, ("calidad:" + (email or "")).encode(), hashlib.sha256).hexdigest()[:16]
+
+
+def _sse_dato(ev: dict) -> str:
+    return "data: " + json.dumps(ev) + "\n\n"
+
+
+def _armar_system(u: dict, prefs: dict, modo: str, estilo: str, texto: str, contrato, info_ctx: dict):
+    """Mensaje de sistema del chat: el fijo y la guía de calidad van cacheados; lo dinámico (agentes, modo, voz, nombre,
+    memoria, CONTRATO DE RESPUESTA, contexto recortado y corpus) va aparte. Devuelve (system, fragmentos del corpus)."""
+    consulta = contrato.consulta_recuperacion or texto
+    din = f"Fecha de hoy: {fecha_hoy()} (UTC)." + enrutar_agentes(consulta)
+    if estilo in ESTILOS and ESTILOS[estilo]:
+        din += "\n\n" + ESTILOS[estilo]
+    if modo != "auto":
+        din += f"\n\nEl usuario seleccionó explícitamente el modo {modo.upper()}: responde en ese registro."
+    voz = redaccion.instruccion_voz(prefs.get("escritura", "auto"))
+    if voz:
+        din += "\n\n" + voz
+    din += (f"\n\nLa persona se llama {u['nombre']}. Puedes usar su nombre con naturalidad, "
+            "sin repetirlo en cada respuesta.")
+    if prefs.get("areas"):
+        din += ("\n\nAREAS DE INTERÉS del usuario (dales prioridad y contexto cuando apliquen): "
+                + ", ".join(prefs["areas"]) + ".")
+    if prefs.get("memoria"):
+        din += ("\n\nMEMORIA SOBRE EL USUARIO (recuérdala y tenla en cuenta en tus respuestas): "
+                + prefs["memoria"])
+    din += motor.contrato_a_instruccion(contrato)
+    din += motor.nota_contexto_omitido(info_ctx)
+    bloque, frags = bloque_corpus(consulta)
+    din += bloque
+    system = [{"type": "text", "text": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}]
+    calidad, _origen = motor.cargar_calidad()
+    if calidad:
+        system.append({"type": "text", "text": calidad, "cache_control": {"type": "ephemeral"}})
+    if din.strip():
+        system.append({"type": "text", "text": din})
+    return system, frags
+
+
+def _flujo_chat(*, email: str, cid: int, contrato, mensajes_api: list, system: list, frags: list, restantes: int,
+                info_ctx: dict, usar_web: bool, previo: str = "", mensaje_id: int = None, cobrada: bool = True,
+                fuentes_previas: list = None):
+    """Generador SSE del chat. Genera con continuación automática si se corta por límite (nunca presenta como
+    terminada una respuesta cortada), guarda lo que haya llegado aunque la conexión se pierda, y registra la
+    telemetría de calidad. ``previo`` + ``mensaje_id``: se está CONTINUANDO una respuesta incompleta guardada."""
+    t0 = time.monotonic()
+    cadena = cadena_ia()
+    herramientas = [herramienta_web()] if usar_web else []
+    haiku = cadena[0].nombre == "anthropic" and "haiku" in MODELO
+    max_tokens = motor.presupuesto_tokens(contrato, tope=MAX_TOKENS_CHAT, haiku=haiku)
+    web = {"resultados": {}, "citas": {}}
+    estado = motor.EstadoGeneracion()
+    estado_listo = {"guardado": False}
+
+    def abrir(msgs):
+        return proveedores.stream_texto(cadena, system, msgs, max_tokens, herramientas, web)
+
+    def fabrica():
+        return motor.generar(abrir, mensajes_api, estado, contrato, es_recuperable=proveedores.es_recuperable,
+                             previo=previo)
+
+    def guardar(texto: str, incompleta: bool, lista: list) -> int:
+        """Inserta la respuesta (o actualiza la que se está continuando). Devuelve el id del mensaje."""
+        with closing(db()) as con:
+            if mensaje_id:
+                con.execute("UPDATE mensajes SET contenido=?, incompleta=?, fuentes=? WHERE id=?",
+                            (texto, int(incompleta), json.dumps(lista, ensure_ascii=False) if lista else None, mensaje_id))
+                con.commit()
+                return mensaje_id
+            cur = con.execute("INSERT INTO mensajes(conv,rol,contenido,creada,fuentes,incompleta) VALUES(?,?,?,?,?,?)",
+                              (cid, "assistant", texto, time.time(),
+                               json.dumps(lista, ensure_ascii=False) if lista else None, int(incompleta)))
+            con.commit()
+            return cur.lastrowid
+
+    yield _sse_dato({"tipo": "restantes", "restantes": max(0, restantes)})
+    fallo = False
+    try:
+        try:
+            for ev in motor.con_latido(fabrica, LATIDO_S, INACTIVIDAD_S):
+                if ev is motor.LATIDO:
+                    yield ": latido\n\n"        # comentario SSE: el navegador lo ignora, los intermediarios lo ven pasar
+                    continue
+                yield _sse_dato(ev)
+        except (anthropic.APIError, proveedores.ErrorProveedor, motor.TiempoAgotado) as e:
+            eid = _nuevo_error_id()
+            log.error("fallo del proveedor de IA error_id=%s tipo=%s", eid, type(e).__name__, exc_info=True)
+            if estado.texto.strip():
+                # Ya había texto (solo puede ocurrir por falta de señales del proveedor): se conserva y queda incompleta.
+                estado.parada, estado.completo = motor.PARADA_INTERRUMPIDA, False
+            else:
+                # Sin una sola palabra emitida: modo degradado con fuentes oficiales, y se devuelve la consulta.
+                fallo = True
+                msg = MENSAJE_MOTOR_NO_DISPONIBLE.format(eid=eid)
+                estado.partes[:] = [msg]
+                if cobrada:
+                    try:
+                        reintegrar_consulta(email)
+                    except Exception:      # noqa: BLE001
+                        pass
+                yield _sse_dato({"tipo": "texto", "texto": msg})
+        respuesta = estado.texto
+        completo = estado.completo and not fallo
+        # Estilo (estilo_redaccion.pulir): se aplica una vez, al terminar, y solo a respuestas completas (el estilo depende
+        # del texto entero: el cierre, cuántas negritas hay…). Una respuesta cortada se guarda tal cual para poder continuarla.
+        if completo:
+            pulida = redaccion.pulir(respuesta)
+            if pulida != respuesta and pulida.strip():
+                respuesta = pulida
+                yield "data: " + json.dumps({"tipo": "pulido", "texto": respuesta}, ensure_ascii=False) + "\n\n"
+        lista = [] if fallo else fuentes_de_respuesta(frags, web, respuesta)
+        if previo and fuentes_previas:
+            vistas = {f.get("url") or f.get("titulo") for f in lista}
+            lista = lista + [f for f in fuentes_previas if (f.get("url") or f.get("titulo")) not in vistas]
+        mid = guardar(respuesta, not completo and not fallo, lista)
+        estado_listo["guardado"] = True
+        _registrar_calidad(email, mid, contrato, estado, respuesta, completo, t0, max_tokens, len(lista),
+                           usar_web, info_ctx, continuada=bool(previo))
+        if not completo and not fallo:
+            yield _sse_dato({"tipo": "incompleta", "motivo": estado.parada or "desconocida", "mensaje_id": mid})
+        yield "data: " + json.dumps({"tipo": "fuentes", "fuentes": lista}, ensure_ascii=False) + "\n\n"
+        yield _sse_dato({"tipo": "fin", "mensaje_id": mid, "completo": bool(completo)})
+    finally:
+        if not estado_listo["guardado"]:
+            # La persona cerró la página, se perdió la conexión o hubo un error inesperado: lo ya generado se conserva
+            # marcado como incompleto para poder continuarlo (antes se perdía por completo).
+            try:
+                parcial = estado.texto
+                if parcial.strip():
+                    mid = guardar(parcial, True, [])
+                    _registrar_calidad(email, mid, contrato, estado, parcial, False, t0, max_tokens, 0, usar_web, info_ctx,
+                                       continuada=bool(previo), interrumpida=True)
+            except Exception:       # noqa: BLE001 - nunca romper el cierre del flujo
+                log.exception("no se pudo guardar la respuesta parcial")
+
+
+def _registrar_calidad(email, mid, contrato, estado, respuesta, completo, t0, max_tokens, n_fuentes, usar_web, info_ctx,
+                       continuada=False, interrumpida=False):
+    """Telemetría local de la respuesta (solo etiquetas y conteos; ver telemetria_respuestas)."""
+    try:
+        inf = estado.informe or motor.verificar_cobertura(contrato, respuesta, estado.parada)
+        datos = {"modelo": MODELO, "intencion": contrato.intencion, "entregable": contrato.entregable,
+                 "profundidad": contrato.profundidad, "area": contrato.area, "riesgo": contrato.riesgo,
+                 "n_partes": contrato.n_partes, "n_cubiertas": max(0, contrato.n_partes - len(inf.faltantes)) if contrato.n_partes else 0,
+                 "veredicto": inf.veredicto, "puntaje": inf.puntaje, "caracteres": len(respuesta), "palabras": len(respuesta.split()),
+                 "tokens_salida": estado.tokens_salida, "max_tokens": max_tokens,
+                 "latencia_ms": int((time.monotonic() - t0) * 1000),
+                 "primer_texto_ms": int(estado.primer_texto_s * 1000) if estado.primer_texto_s is not None else None,
+                 "parada": motor.PARADA_INTERRUMPIDA if interrumpida else (estado.parada or "desconocida"),
+                 "continuaciones": estado.continuaciones, "reparada": estado.reparada, "incompleta": not completo,
+                 "fuentes": n_fuentes, "web": usar_web, "seguimiento": contrato.es_seguimiento,
+                 "reparacion_intencion": contrato.reparacion, "contexto_omitidos": (info_ctx or {}).get("omitidos", 0),
+                 "sin_conclusion": inf.sin_conclusion, "exceso_advertencias": inf.exceso_advertencias,
+                 "prompt_calidad": motor.cargar_calidad()[1]}
+        with closing(db()) as con:
+            if continuada:
+                telemetria.marcar_continuar(con, mid)
+                telemetria.actualizar_resultado(con, mid, {k: datos[k] for k in (
+                    "caracteres", "palabras", "incompleta", "parada", "veredicto", "puntaje", "sin_conclusion")})
+            else:
+                telemetria.registrar(con, mid, anonimo(email), datos)
+    except Exception:       # noqa: BLE001 - la telemetría nunca debe romper una respuesta
+        log.exception("no se pudo registrar la telemetría de calidad")
+
+
 @app.post("/api/chat")
 async def chat(request: Request):
     u = usuario_actual(request)
     if not u["activo"]:
         raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
     u = reiniciar_periodo_si_aplica(u)
-    if u["usadas"] >= u["limite"]:
-        raise HTTPException(402, "Alcanzaste el límite de consultas de tu plan. Actualiza tu plan para seguir.")
 
     datos = await json_de(request)
+    if datos.get("continuar") is True:
+        return _chat_continuar(u, datos)
+    if u["usadas"] >= u["limite"]:
+        raise HTTPException(402, "Alcanzaste el límite de consultas de tu plan. Actualiza tu plan para seguir.")
     if "conversacion" not in datos or not isinstance(datos.get("mensaje"), str):
         raise HTTPException(400, "Solicitud mal formada")
     cid = conversacion_de(datos["conversacion"], u["email"])["id"]
@@ -1482,6 +1682,7 @@ async def chat(request: Request):
     modo = datos.get("modo", prefs.get("modo", "auto"))
     if modo not in ("auto", "profesional", "ciudadano"):
         modo = "auto"
+    estilo = datos.get("estilo", "directo")
     # Adjuntos: lista de {tipo:"image"|"document", media_type, datos(base64), nombre}
     adjuntos = datos.get("adjuntos", []) or []
     if not isinstance(adjuntos, list) or len(adjuntos) > MAX_ADJUNTOS:
@@ -1525,6 +1726,12 @@ async def chat(request: Request):
                                 (u["email"],)).fetchone()["r"]
         con.commit()
 
+    # HERMES: contrato de respuesta (qué se pidió, partes obligatorias, profundidad, riesgo) a partir del mensaje y de lo
+    # que la persona ya dijo en esta conversación.
+    previos_usuario = [f["contenido"] for f in historial[:-1] if f["rol"] == "user"]
+    contrato = motor.clasificar(texto, historial_usuario=previos_usuario, n_adjuntos=len(adjuntos), estilo=estilo,
+                                modo=modo, web_activa=usar_web)
+
     mensajes_api = [{"role": f["rol"], "content": f["contenido"]} for f in historial]
     # Adjunta los archivos (imágenes/PDF) al último mensaje del usuario para esta consulta.
     if adjuntos and mensajes_api:
@@ -1539,94 +1746,88 @@ async def chat(request: Request):
                                 "media_type": a.get("media_type", "application/pdf"),
                                 "data": a.get("datos", "")}})
         mensajes_api[-1] = {"role": "user", "content": bloques}
+    # Contexto: si la conversación es enorme se recorta sin perder la pregunta actual, los hechos iniciales ni las cifras.
+    mensajes_api, info_ctx = motor.recortar_historial(mensajes_api)
 
-    # SYSTEM_PROMPT es fijo → se cachea (prompt caching) para abaratar cada consulta.
-    # Lo dinámico (agentes, modo, nombre, memoria, corpus) va en un segundo bloque sin caché.
-    din = f"Fecha de hoy: {fecha_hoy()} (UTC)." + enrutar_agentes(texto)
+    system, frags = _armar_system(u, prefs, modo, estilo, texto, contrato, info_ctx)
+    gen = _flujo_chat(email=u["email"], cid=cid, contrato=contrato, mensajes_api=mensajes_api, system=system,
+                      frags=frags, restantes=restantes, info_ctx=info_ctx, usar_web=usar_web)
+    return StreamingResponse(gen, media_type="text/event-stream", headers=CABECERAS_SSE)
+
+
+# Cabeceras del stream: sin caché y sin buffering en proxies (X-Accel-Buffering lo respetan nginx y varios balanceadores).
+CABECERAS_SSE = {"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"}
+
+
+def _chat_continuar(u: dict, datos: dict):
+    """«Continuar» una respuesta que quedó incompleta (cortada por límite o por la conexión). No gasta consultas del plan."""
+    limitar_cuenta("continuar:" + u["email"], 30, 600)
+    cid = conversacion_de(datos.get("conversacion"), u["email"])["id"]
+    if not ia_configurada():
+        raise HTTPException(503, "El motor de IA no está configurado en el servidor")
+    prefs = preferencias_de(u)
+    usar_web = bool(datos.get("web", prefs.get("web", True)))
+    modo = datos.get("modo", prefs.get("modo", "auto"))
+    if modo not in ("auto", "profesional", "ciudadano"):
+        modo = "auto"
     estilo = datos.get("estilo", "directo")
-    if estilo in ESTILOS and ESTILOS[estilo]:
-        din += "\n\n" + ESTILOS[estilo]
-    if modo != "auto":
-        din += f"\n\nEl usuario seleccionó explícitamente el modo {modo.upper()}: responde en ese registro."
-    voz = redaccion.instruccion_voz(prefs.get("escritura", "auto"))
-    if voz:
-        din += "\n\n" + voz
-    din += (f"\n\nLa persona se llama {u['nombre']}. Puedes usar su nombre con naturalidad, "
-            "sin repetirlo en cada respuesta.")
-    if prefs.get("areas"):
-        din += ("\n\nAREAS DE INTERÉS del usuario (dales prioridad y contexto cuando apliquen): "
-                + ", ".join(prefs["areas"]) + ".")
-    if prefs.get("memoria"):
-        din += ("\n\nMEMORIA SOBRE EL USUARIO (recuérdala y tenla en cuenta en tus respuestas): "
-                + prefs["memoria"])
-    bloque, frags = bloque_corpus(texto)
-    din += bloque
+    with closing(db()) as con:
+        filas = con.execute("SELECT id,rol,contenido,fuentes,incompleta FROM mensajes WHERE conv=? ORDER BY id",
+                            (cid,)).fetchall()
+        restantes = con.execute("SELECT limite-usadas r FROM usuarios WHERE email=?", (u["email"],)).fetchone()["r"]
+    if not filas or filas[-1]["rol"] != "assistant" or not filas[-1]["incompleta"]:
+        raise HTTPException(400, "No hay una respuesta incompleta para continuar. Vuelve a abrir la consulta.")
+    ultima = filas[-1]
+    usuarios = [f["contenido"] for f in filas if f["rol"] == "user"]
+    pregunta = usuarios[-1] if usuarios else ""
+    contrato = motor.clasificar(pregunta, historial_usuario=usuarios[:-1], n_adjuntos=0, estilo=estilo, modo=modo,
+                                web_activa=usar_web)
+    base = [{"role": f["rol"], "content": f["contenido"]} for f in filas[:-1]]
+    base, info_ctx = motor.recortar_historial(base)
+    system, frags = _armar_system(u, prefs, modo, estilo, pregunta, contrato, info_ctx)
+    try:
+        previas = json.loads(ultima["fuentes"]) if ultima["fuentes"] else []
+    except ValueError:
+        previas = []
+    gen = _flujo_chat(email=u["email"], cid=cid, contrato=contrato, mensajes_api=base, system=system, frags=frags,
+                      restantes=restantes, info_ctx=info_ctx, usar_web=usar_web, previo=ultima["contenido"],
+                      mensaje_id=ultima["id"], cobrada=False, fuentes_previas=previas)
+    return StreamingResponse(gen, media_type="text/event-stream", headers=CABECERAS_SSE)
 
-    system = [{"type": "text", "text": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}]
-    if din.strip():
-        system.append({"type": "text", "text": din})
 
-    cadena = cadena_ia()
-    herramientas = [herramienta_web()] if usar_web else []
+FEEDBACK_VALORES = telemetria.VALORES
 
-    def flujo():
-        yield "data: " + json.dumps({"tipo": "restantes", "restantes": max(0, restantes)}) + "\n\n"
-        completo = []
-        web = {"resultados": {}, "citas": {}}
-        fallo = False
-        try:
-            for salida in proveedores.stream_texto(cadena, system, mensajes_api, MAX_TOKENS_CHAT,
-                                                   herramientas, web):
-                if salida["tipo"] == "texto":
-                    completo.append(salida["texto"])
-                yield "data: " + json.dumps(salida) + "\n\n"
-        except (anthropic.APIError, proveedores.ErrorProveedor):
-            # FAIL-SAFE: nunca dejar al usuario sin respuesta — modo degradado con
-            # orientación básica y fuentes oficiales para consultar manualmente. El detalle
-            # técnico va al log con un código; al usuario no se le muestran internos.
-            fallo = True
-            eid = _nuevo_error_id()
-            log.exception("fallo del proveedor de IA error_id=%s", eid)
-            msg = (f"⚠️ El motor de IA no está disponible en este momento (código {eid}).\n\n"
-                   "**Mientras se restablece, puedes consultar directamente:**\n"
-                   "- Normas vigentes: [SUIN-Juriscol](https://www.suin-juriscol.gov.co) y "
-                   "[Secretaría del Senado](http://www.secretariasenado.gov.co)\n"
-                   "- Jurisprudencia: [Corte Constitucional](https://www.corteconstitucional.gov.co), "
-                   "[Corte Suprema](https://cortesuprema.gov.co), "
-                   "[Consejo de Estado](https://www.consejodeestado.gov.co)\n"
-                   "- Estado de procesos: [Rama Judicial](https://www.ramajudicial.gov.co)\n\n"
-                   "Tu consulta quedó guardada; vuelve a intentarlo en unos minutos "
-                   "(no se te descontará doble).")
-            completo.append(msg)
-            # devuelve la consulta al usuario: no se cobra la fallida
-            try:
-                with closing(db()) as con:
-                    con.execute("UPDATE usuarios SET usadas=MAX(usadas-1,0) WHERE email=?",
-                                (u["email"],))
-                    con.commit()
-            except Exception:
-                pass
-            yield "data: " + json.dumps({"tipo": "texto", "texto": msg}) + "\n\n"
-        respuesta = "".join(completo)
-        # Estilo (estilo_redaccion.pulir): no se aplica a los trozos del streaming, porque sus reglas
-        # dependen del texto completo (el cierre, cuántas negritas hay, si una raya tiene pareja) y lo ya
-        # enviado no se puede retirar. Se aplica una vez, al terminar: se guarda el texto pulido y el
-        # cliente recibe el evento "pulido" para reemplazar lo que mostró. El mensaje de fallo no se toca.
-        if not fallo:
-            pulida = redaccion.pulir(respuesta)
-            if pulida != respuesta and pulida.strip():
-                respuesta = pulida
-                yield "data: " + json.dumps({"tipo": "pulido", "texto": respuesta}, ensure_ascii=False) + "\n\n"
-        lista = [] if fallo else fuentes_de_respuesta(frags, web, respuesta)
-        with closing(db()) as con:
-            con.execute("INSERT INTO mensajes(conv,rol,contenido,creada,fuentes) VALUES(?,?,?,?,?)",
-                        (cid, "assistant", respuesta, time.time(),
-                         json.dumps(lista, ensure_ascii=False) if lista else None))
-            con.commit()
-        yield "data: " + json.dumps({"tipo": "fuentes", "fuentes": lista}, ensure_ascii=False) + "\n\n"
-        yield "data: " + json.dumps({"tipo": "fin"}) + "\n\n"
 
-    return StreamingResponse(flujo(), media_type="text/event-stream")
+@app.post("/api/feedback")
+async def feedback(request: Request):
+    """Valoración 👍/👎 de una respuesta, con motivos de una lista cerrada (sin texto libre). Alimenta la telemetría de
+    calidad; no cuesta consultas. Solo se puede valorar una respuesta propia."""
+    u = usuario_actual(request)
+    limitar_cuenta("feedback:" + u["email"], 60, 300)
+    datos = await json_de(request)
+    try:
+        mid = int(datos.get("mensaje"))
+    except (TypeError, ValueError):
+        raise HTTPException(400, "Respuesta inválida")
+    valor = datos.get("valor")
+    if valor not in FEEDBACK_VALORES:
+        raise HTTPException(400, "Valoración inválida")
+    with closing(db()) as con:
+        f = con.execute("SELECT m.id FROM mensajes m JOIN conversaciones c ON c.id=m.conv "
+                        "WHERE m.id=? AND c.usuario=? AND m.rol='assistant'", (mid, u["email"])).fetchone()
+        if not f:
+            raise HTTPException(404, "Respuesta no encontrada")
+        motivos = telemetria.valorar(con, mid, anonimo(u["email"]), valor, datos.get("motivos"))
+    return {"ok": True, "valor": valor, "motivos": motivos}
+
+
+@app.get("/api/admin/calidad")
+def admin_calidad(request: Request, dias: int = 30):
+    """Tablero de calidad de las respuestas (solo etiquetas y conteos)."""
+    admin_actual(request)
+    dias = max(1, min(int(dias), 365))
+    with closing(db()) as con:
+        return telemetria.resumen(con, dias)
 
 # ------------------------------------------------------- revisar estilo --
 # Herramienta interna "Revisar estilo": detecta en un texto (una respuesta de PULLEX, un borrador o el

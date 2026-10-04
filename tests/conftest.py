@@ -9,6 +9,7 @@ import importlib
 import json
 import os
 import sys
+import time
 import types
 from pathlib import Path
 
@@ -32,6 +33,18 @@ class _Evento:
         self.delta = types.SimpleNamespace(type="text_delta", text=texto)
 
 
+def _eventos_guion(texto, motivo):
+    """Eventos de una respuesta guionada (PUL-017): el texto en trozos y, al final, el message_delta con el stop_reason
+    (o una excepción, si ``motivo`` es una, que se lanza después de entregar el texto)."""
+    for i in range(0, len(texto), 20):
+        yield _Evento(texto[i:i + 20])
+    if isinstance(motivo, BaseException):
+        raise motivo
+    if motivo:
+        yield types.SimpleNamespace(type="message_delta", delta=types.SimpleNamespace(stop_reason=motivo),
+                                    usage=types.SimpleNamespace(output_tokens=max(1, len(texto) // 4)))
+
+
 class _Stream:
     """Devuelve como respuesta el historial que recibió el modelo. Así una prueba puede
     demostrar si mensajes de OTRO usuario llegaron al modelo (fuga entre usuarios)."""
@@ -43,6 +56,12 @@ class _Stream:
 
     def __enter__(self):
         FakeAnthropic.ultima_llamada = {"messages": self.messages, "system": self.system, **self.extra}
+        FakeAnthropic.llamadas_stream.append(FakeAnthropic.ultima_llamada)
+        if FakeAnthropic.demora:
+            time.sleep(FakeAnthropic.demora)
+        if FakeAnthropic.guion:      # respuesta guionada: (texto, stop_reason | excepción), una por llamada
+            texto, motivo = FakeAnthropic.guion.pop(0)
+            return _eventos_guion(texto, motivo)
         partes = []
         for m in self.messages:
             c = m["content"]
@@ -78,6 +97,9 @@ class FakeAnthropic:
     ultima_llamada = None
     eventos_extra = []   # eventos del SDK antes de la respuesta (p. ej. thinking, búsqueda web)
     eventos_final = []   # eventos después (p. ej. una cita)
+    guion = []           # PUL-017: [(texto, stop_reason | excepción)], una entrada por llamada a stream
+    demora = 0.0         # segundos que tarda el modelo simulado en empezar a responder (para probar el latido)
+    llamadas_stream = [] # todas las llamadas a stream, en orden
 
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
