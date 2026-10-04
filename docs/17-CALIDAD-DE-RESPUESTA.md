@@ -187,7 +187,7 @@ prompt. Se infiere de F5 y de que `MAX_TOKENS_CHAT` vale 8.000 con razonamiento 
 Para saberlo hay que registrar el motivo de parada de cada respuesta (punto 100) y contar cuántas terminan en
 `max_tokens`.
 
-H2. El bloque de calidad añadirá algo menos de 900 palabras al prompt fijo. Es texto cacheable como el resto, pero
+H2. El bloque de calidad añade unas 1.200 palabras (unos 7.400 caracteres) al prompt fijo. Es texto cacheable como el resto, pero
 el costo y la latencia de ese aumento no se midieron, ni se sabe si mejora o empeora las respuestas simples.
 
 H3. La instrucción «responde primero, sin avisos repetidos» reducirá las advertencias redundantes. Es plausible por
