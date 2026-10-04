@@ -400,7 +400,7 @@ def test_frontend_sin_js_en_linea_y_con_los_controles():
     assert "Revisar estilo" in (RAIZ / "static" / "documentos.js").read_text(encoding="utf-8")
 
 
-# ------------------------------------------------- Modular Lab y Taller de escritos (PUL-014) --
+# ------------------------------------------------- Laboratorio de casos y Taller de escritos (PUL-014) --
 RELLENO = ("¡Excelente pregunta! Cabe destacar que la tutela procede 😊 porque la EPS negó el medicamento "
            "formulado por la médica tratante — sin motivación — y no existe otro medio eficaz. Es importante "
            "destacar que se cumple la inmediatez. Espero que esta información te sea útil.")

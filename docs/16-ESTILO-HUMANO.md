@@ -33,7 +33,7 @@ son propios).
 | ICFES, Guía de orientación Saber Pro, módulo Comunicación Jurídica 2025-2: <https://www.icfes.gov.co/wp-content/uploads/2025/09/comunicacion-juridica-saber-pro-2025-2.pdf> | Lo que el Estado evalúa en el egresado de Derecho: comunicar soluciones jurídicas con estructuras argumentativas coherentes; manejar el lenguaje jurídico y los métodos de interpretación (40 %); evaluar textos con los principios de la argumentación jurídica, la pertinencia de las fuentes y las características de cada género (sentencia, memorial, concepto, ley) (60 %). |
 | Ediciones Rodio, "Casos prácticos: estructura y pasos para resolverlos": <https://www.edicionesrodio.com/blog/consejos-para-oposiciones/casos-practicos-estructura-y-pasos-para-resolverlos/> | Estructura esperada: leer y subrayar lo que se pregunta, identificar el problema, invocar la norma, desarrollar la solución aplicada a los hechos y cerrar con una conclusión breve. Errores que se castigan: desorden, no contestar lo preguntado, no fundamentar en norma, extenderse sin foco y dejar la respuesta sin conclusión. Es una fuente española (oposiciones), útil por el método. |
 
-Para Colombia se suma la rúbrica que PULLEX ya usa en Modular Lab (problema 20, normas 20, argumentación 20,
+Para Colombia se suma la rúbrica que PULLEX ya usa en Laboratorio de casos (problema 20, normas 20, argumentación 20,
 aplicación 20, conclusión 10, claridad 10). **NOT VERIFIED**: no se consultaron rúbricas internas de facultades de
 Derecho colombianas (no son públicas o no se encontraron); la voz de estudiante se apoya en el marco del ICFES,
 en el método general de casos y en la rúbrica propia.

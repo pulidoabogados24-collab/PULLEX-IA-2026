@@ -120,11 +120,11 @@ La regla prefiere excluir de más. Es una heurística por nombre: **no lee el co
 
 | Variable | Por defecto | Para qué |
 |---|---|---|
-| `PULLEX_MODELO` | `claude-sonnet-5-5` | Modelo del chat y del Modular Lab. `claude-haiku-4-5` para abaratar. |
+| `PULLEX_MODELO` | `claude-sonnet-5-5` | Modelo del chat y del Laboratorio de casos. `claude-haiku-4-5` para abaratar. |
 | `PULLEX_MODELO_BOLETIN` | el de arriba | Modelo del boletín diario. |
 | `PULLEX_ESFUERZO` | `medium` | `output_config.effort` (low, medium, high, xhigh, max). Vacío = no se envía (la API usa `high` en Sonnet 5.5). Con Haiku nunca se envía (no lo admite). |
 | `PULLEX_MAX_TOKENS` | `8000` | Tope de salida del chat (incluye el razonamiento). |
-| `PULLEX_MARGEN_THINKING` | `4000` | Tokens extra para el Modular Lab con modelos que razonan, para que el JSON no salga cortado. |
+| `PULLEX_MARGEN_THINKING` | `4000` | Tokens extra para el Laboratorio de casos con modelos que razonan, para que el JSON no salga cortado. |
 | `PULLEX_WEB_DOMINIOS` | 24 dominios oficiales | Lista separada por comas para `allowed_domains`. `*` quita la restricción. |
 | `PULLEX_WEB_MAX_USOS` | `5` | Máximo de búsquedas web por respuesta. |
 | `PULLEX_CORPUS_DB` | `corpus/corpus.db` | Ruta del índice. |
@@ -146,13 +146,13 @@ permitidos en la consola de Anthropic, esta lista debe ser un subconjunto de aqu
 
 ## Modelo: Sonnet 5.5
 
-- Chat, Modular Lab y (si no se cambia) boletín usan `claude-sonnet-5-5`: 2 USD por millón de tokens de entrada y
+- Chat, Laboratorio de casos y (si no se cambia) boletín usan `claude-sonnet-5-5`: 2 USD por millón de tokens de entrada y
   10 USD por millón de salida; thinking adaptativo (documentación oficial de modelos, consultada el 1-oct-2026).
 - No se envía el parámetro `thinking` (queda el comportamiento por defecto de la API). Sí se envía
   `output_config: {"effort": "medium"}` (el SDK 1.9.0 lo admite; la documentación de *effort* lista Sonnet 5.5
   como compatible y su valor por defecto es `high`).
 - El streaming solo reenvía deltas de **texto**; los bloques de razonamiento (`thinking_delta`, `signature_delta`)
-  nunca llegan al usuario ni se guardan (probado con eventos simulados). El Modular Lab solo lee bloques de texto.
+  nunca llegan al usuario ni se guardan (probado con eventos simulados). El Laboratorio de casos solo lee bloques de texto.
 
 ### Costo aproximado por consulta
 

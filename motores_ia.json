@@ -37,7 +37,7 @@
    "funcion": "Redacta todas las respuestas generadas de la aplicación.",
    "usos": [
     "Chat jurídico con streaming (POST /api/chat) y sus cinco formas de respuesta",
-    "Modular Lab: generación de casos y evaluación con rúbrica (/api/modular/*)",
+    "Laboratorio de casos: generación de casos y evaluación con rúbrica (/api/modular/*)",
     "Documentos: borradores, flujos por pasos y asistente (/api/documentos/generar, /api/flujos/ejecutar, /api/asistente/*)",
     "Biblioteca: solo la explicación opcional de una recomendación (/api/biblioteca/recomendar con explicar=true); la búsqueda no lo usa"
    ],
@@ -71,7 +71,7 @@
     "estado": "solo simuladas",
     "detalle": "Pytest con un doble del modelo y pruebas de navegador con el servidor simulado. Ninguna llamada real."
    },
-   "alternativa_si_falla": "En el chat: mensaje de modo degradado con enlaces a fuentes oficiales y reintegro de la consulta. En Modular Lab, Documentos y Biblioteca: error 503 con código de seguimiento y reintegro; la recomendación determinista de la Biblioteca se entrega igual. Cambio manual de modelo con PULLEX_MODELO (el código prevé claude-haiku-4-5, que no admite el parámetro de esfuerzo). No hay proveedor alterno automático en esta rama (existe uno sin fusionar en pul/planes-y-proveedores)."
+   "alternativa_si_falla": "En el chat: mensaje de modo degradado con enlaces a fuentes oficiales y reintegro de la consulta. En Laboratorio de casos, Documentos y Biblioteca: error 503 con código de seguimiento y reintegro; la recomendación determinista de la Biblioteca se entrega igual. Cambio manual de modelo con PULLEX_MODELO (el código prevé claude-haiku-4-5, que no admite el parámetro de esfuerzo). No hay proveedor alterno automático en esta rama (existe uno sin fusionar en pul/planes-y-proveedores)."
   },
   {
    "id": "lenguaje_boletin",

@@ -96,7 +96,7 @@ RASGOS_A_EVITAR_ESCRITOS = (
     "ámbito de», «Juega un papel fundamental»). Sin introducción que anuncie el escrito ni cierre de cortesía "
     "(«Espero que…», «Quedo atento…»): el escrito empieza por su encabezado y termina en la firma.")
 
-# Para quien EVALÚA (Modular Lab y Taller de escritos): cómo redactar la retroalimentación y qué mirar en el
+# Para quien EVALÚA (Laboratorio de casos y Taller de escritos): cómo redactar la retroalimentación y qué mirar en el
 # criterio de redacción. El estilo nunca mueve el puntaje de los criterios jurídicos.
 ESTILO_EVALUACION = """CÓMO ESCRIBES LA RETROALIMENTACIÓN
 - Como un docente que corrige a mano: directa y concreta, con las palabras del caso. Di qué falta o qué sobra
@@ -557,7 +557,7 @@ def revisar(texto: str) -> dict:
 
 
 def resumen_estilo(texto: str, maximo: int = 5) -> dict:
-    """Revisión de estilo compacta para acompañar una evaluación (Modular Lab y Taller de escritos): los rasgos
+    """Revisión de estilo compacta para acompañar una evaluación (Laboratorio de casos y Taller de escritos): los rasgos
     más pesados con su sugerencia y un ejemplo tomado del propio texto. Es determinista y no altera el puntaje."""
     r = revisar(texto)
     return {"valoracion": r["valoracion"], "puntaje": r["puntaje"], "parece_ia": r["parece_ia"],

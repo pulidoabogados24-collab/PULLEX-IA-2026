@@ -1,6 +1,6 @@
 # Registro de perfiles de PULLEX
 
-Versión 1.0.0 · esquema `pullex-perfiles/1` · huella `594430c17b0bcbd5`
+Versión 1.0.0 · esquema `pullex-perfiles/1` · huella `fe68c1c880763af0`
 
 Archivo generado por `python -m perfiles.generar`. **No se edita a mano**: los datos fuente están en `perfiles/definiciones.py` y `perfiles/areas/`. La versión completa y legible por máquina es `perfiles/registro.json`; el diseño está en `docs/16-PERFILES-Y-COORDINADOR.md`.
 
@@ -61,7 +61,7 @@ Funciones: F01 recepción y delimitación; F02 búsqueda de fuentes o antecedent
 | Búsqueda en el repositorio de PULLEX (documentación y código) (`repositorio`) | EXISTE | automatica | 500 | Coincidencia por palabras sobre docs/, código y pruebas. Solo para administración. |
 | Búsqueda web restringida a documentación técnica oficial y estándares (`web_tecnica`) | EXISTE | automatica | 150 | Se activa solo si la ejecución lo pide. No verificada contra la API real desde este entorno. |
 | Estado del servicio (motor configurado, base de datos, corpus) (`estado_plataforma`) | EXISTE | automatica | 50 | Datos de configuración no sensibles; no incluye métricas de carga. |
-| Modular Lab (casos de estudio con rúbrica) (`modular_lab`) | EXISTE | relevo | 0 | Herramienta de estudio. Ningún perfil la usa hoy. |
+| Laboratorio de casos (casos de estudio con rúbrica) (`modular_lab`) | EXISTE | relevo | 0 | Herramienta de estudio. Ningún perfil la usa hoy. |
 | Calculadora determinista de términos (días hábiles, vacancia, suspensiones) (`calculadora_terminos`) | PROPUESTA | automatica | 3 | Procedimiento J05 de la especificación. Depende de un calendario judicial verificado. |
 | Calculadora determinista de liquidaciones (fórmulas versionadas) (`calculadora_liquidaciones`) | PROPUESTA | automatica | 16 | Procedimiento J06. Depende de tablas oficiales verificadas (salario mínimo, IPC, tasas). |
 | Buscador de modelos y minutas de la biblioteca de Drive (`biblioteca_modelos`) | PROPUESTA | automatica | 3 | Hoy solo hay un inventario parcial de metadatos (biblioteca/inventario.json); nada leído ni indexado. |
@@ -891,7 +891,7 @@ Fuentes: MODELO, opciones_modelo y los topes de tokens en app.py; .env.example y
 
 ### A05-S07 · instrucciones
 
-Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Modular Lab, del automatizador y de los perfiles, y la separación entre instrucciones y datos.
+Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Laboratorio de casos, del automatizador y de los perfiles, y la separación entre instrucciones y datos.
 
 Fuentes: SYSTEM_PROMPT, AGENTES y ESTILOS en app.py; SISTEMA_BASE y SISTEMA_PLAN en documentos.py; perfiles/definiciones.py (reglas de los perfiles); docs/03-LEGAL-STANDARDS.md; documentación oficial del proveedor del modelo sobre redacción de instrucciones.
 
@@ -904,7 +904,7 @@ Fuentes: SYSTEM_PROMPT, AGENTES y ESTILOS en app.py; SISTEMA_BASE y SISTEMA_PLAN
 - **A05-S07-F07** · producción del entregable · Conectado a herramientas — Produce el entregable de las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión): instrucción versionada con propósito, reglas, formato de salida, casos de prueba y comparación contra la versión anterior. Usa solo hechos confirmados, deja entre corchetes lo pendiente y no inventa datos.
 - **A05-S07-F08** · pruebas y comprobaciones · Definido — Comprueba un trabajo sobre las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión) contra criterios verificables. (1) La instrucción nueva se compara con la anterior sobre los mismos casos y reporta el resultado. (2) Las reglas de fuentes y de «No verificado» siguen presentes y sin contradicciones. Reporta pasa, falla o no verificable, con la evidencia.
 - **A05-S07-F09** · revisión crítica independiente · Conectado a herramientas — Revisa con independencia un trabajo sobre las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión) y busca en especial estos dos riesgos. Cambiar una instrucción sin medir contra la versión anterior y empeorar sin saberlo. Meter en la instrucción un dato que cambia (fechas, cifras, vigencias) como si fuera fijo. Ordena los hallazgos por severidad y sustenta cada uno; no rehace el trabajo.
-- **A05-S07-F10** · síntesis y control de calidad · Conectado a herramientas — Sintetiza para decisión lo producido sobre las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión). Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Modular Lab, del automatizador y de los perfiles, y la separación entre instrucciones y datos. Declara qué quedó verificado, qué sigue «No verificado» y qué falta, y confirma si el resultado cubre ese alcance.
+- **A05-S07-F10** · síntesis y control de calidad · Conectado a herramientas — Sintetiza para decisión lo producido sobre las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión). Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Laboratorio de casos, del automatizador y de los perfiles, y la separación entre instrucciones y datos. Declara qué quedó verificado, qué sigue «No verificado» y qué falta, y confirma si el resultado cubre ese alcance.
 
 ### A05-S08 · coordinación de agentes
 

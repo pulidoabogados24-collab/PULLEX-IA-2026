@@ -1,7 +1,7 @@
 """
 Proveedores de IA de PULLEX (docs/15-PLANES-Y-PROVEEDORES.md).
 
-Una interfaz común con dos operaciones, usada por el chat, el Modular Lab y el automatizador:
+Una interfaz común con dos operaciones, usada por el chat, el Laboratorio de casos y el automatizador:
 
 - ``stream(system, messages, max_tokens, tools, web)``: genera eventos ``{"tipo": "texto", "texto": …}``
   y ``{"tipo": "busqueda"}``; acumula en ``web`` los resultados (``web["resultados"]``) y las citas

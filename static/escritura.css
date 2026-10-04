@@ -4,7 +4,7 @@
    personalización de cada usuario. Se enlaza DESPUÉS del <style> de index.html.
    ========================================================================================= */
 
-/* ---- pestañas del Modular Lab: Casos · Taller de escritos · Cómo contestar ---- */
+/* ---- pestañas del Laboratorio de casos: Casos · Taller de escritos · Cómo contestar ---- */
 .tl-tabs-cont{max-width:880px;margin:0 auto;padding:calc(20px * var(--esp)) 20px 0}
 .tl-tabs{display:flex;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
 .tl-tabs button{flex:1 1 auto;min-width:0;padding:9px 12px;border-radius:calc(var(--radius) - 5px);background:transparent;

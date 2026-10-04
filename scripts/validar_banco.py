@@ -1,4 +1,4 @@
-"""Valida el banco curado de casos del Modular Lab (academia_banco/*.json).
+"""Valida el banco curado de casos del Laboratorio de casos (academia_banco/*.json).
 
     python scripts/validar_banco.py            → informe legible; sale con 1 si hay errores
     python scripts/validar_banco.py --json     → el mismo informe en JSON

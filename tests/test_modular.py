@@ -1,4 +1,4 @@
-"""Modular Lab y formas de respuesta del chat (con el doble del modelo)."""
+"""Laboratorio de casos y formas de respuesta del chat (con el doble del modelo)."""
 from conftest import FakeAnthropic, auth, chat, nuevo_usuario
 
 RESPUESTA = ("Procede la tutela porque el derecho a la salud es fundamental. La EPS negó un "

@@ -108,11 +108,11 @@ def revisar_plan(pg, nombre, plan):
     tienen = {v for v in ("inicio", "modular", "mapa", "chat", "documentos", "config")
               if pg.locator(f"#n-{v} .nav-candado").count()}
     ok(tienen == candados, f"{nombre}/{plan}: candados en la navegación {sorted(tienen)}")
-    # Inicio (camino «aprender»): la tarjeta del Modular Lab indica el plan si está bloqueada.
+    # Inicio (camino «aprender»): la tarjeta del Laboratorio de casos indica el plan si está bloqueada.
     pg.click("#cam-aprender")
-    tarj = pg.locator("#capgrid .captarj", has_text="Practicar un modular")
+    tarj = pg.locator("#capgrid .captarj", has_text="Resolver un caso")
     tag = tarj.locator(".plan-tag").count()
-    ok(tag == (1 if "modular" in candados else 0), f"{nombre}/{plan}: Inicio indica el plan en «Practicar un modular»")
+    ok(tag == (1 if "modular" in candados else 0), f"{nombre}/{plan}: Inicio indica el plan en «Resolver un caso»")
     if "modular" in candados:
         pg.wait_for_selector("#tablero .mejora-tc")
         ok("Pro" in pg.inner_text("#tablero .mejora-tc"), f"{nombre}/{plan}: tablero invita al plan Pro sin llamar a la API")

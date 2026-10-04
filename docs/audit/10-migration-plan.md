@@ -14,7 +14,7 @@ FastAPI — monolito modular (se parte app.py en paquetes, NO en microservicios)
    │                 → skills versionadas → recuperación (RAG) → borrador
    │                 → revisor adversarial ("abogado del diablo") → Citation Guard
    │                 → compositor de respuesta (con fuentes y estado de verificación)
-   ├─ academy/       Modular Lab, rúbricas, banco de errores, repaso espaciado, mapa de conceptos
+   ├─ academy/       Laboratorio de casos, rúbricas, banco de errores, repaso espaciado, mapa de conceptos
    ├─ professional/  workspaces, expedientes, documentos, cronologías, matriz de pruebas
    └─ institutional/ organizaciones, miembros, roles, aislamiento por organización
    ▼
@@ -86,7 +86,7 @@ Toda consulta de datos de negocio filtra por `usuario_id` o por `organizacion_id
 | **2** | PostgreSQL gestionado + backups diarios probados con restauración; partir `app.py` en módulos; sesión en servidor con cookie `HttpOnly` + CSRF; tabla de auditoría; MFA para admin; `uuid` públicos; RBAC mínimo (STUDENT, ADMIN) con permisos por recurso; política de tratamiento de datos y autorización en el registro (**revisión jurídica humana**) | Restauración de backup ensayada; pruebas AUTH/AUTHZ/WEB-003 CSRF; política publicada |
 | **3** | Legal Brain v1: clasificador de intención + dominio (llamada barata), `respuestas_meta` por respuesta, prompts y skills versionados en base, revisor adversarial en segunda pasada para respuestas jurídicas de fondo, recorte del historial | Registro de modelo/tokens/fuentes en cada respuesta; batería de 50 preguntas doradas revisadas por un abogado |
 | **4** | RAG verificable: corpus del Drive (solo `01`–`06`, nunca expedientes de clientes) → `fuentes_juridicas` + `fragmentos` con vigencia; Citation Guard que marca cada cita VERIFICADA / PARCIAL / SIN VERIFICAR / NO ENCONTRADA; "derecho a una fecha" usando `vigente_desde/hasta` | Pruebas anti-alucinación: sentencia inexistente, norma derogada, premisa falsa |
-| **5** | Modular Lab v1 (ver recomendación abajo) | Rúbrica calibrada con 20 casos revisados por un docente |
+| **5** | Laboratorio de casos v1 (ver recomendación abajo) | Rúbrica calibrada con 20 casos revisados por un docente |
 | **6** | Academy completa: banco de errores, repaso espaciado, mapa de conceptos, modo socrático, examinador, oral con cronómetro, "¿qué cambia si…?" | Métricas de aprendizaje sin mecánicas compulsivas |
 | **7** | Professional: workspaces, carga segura de documentos (MIME real, SHA-256, fuera de `/static`), pasarela de privacidad (detección y seudonimización de PII), cronologías, matriz de pruebas, Document Studio | **Puerta dura:** ningún expediente real antes de cerrar Fase 2 y revisar los términos de datos del proveedor de IA |
 | **8** | Institutional: organizaciones, miembros, roles, aislamiento verificado (pruebas TENANT-001, fugas por búsqueda, vector, caché y exportación) | Pruebas de aislamiento en verde |
@@ -94,7 +94,7 @@ Toda consulta de datos de negocio filtra por `usuario_id` o por `organizacion_id
 
 ### Recomendación sobre el orden (decisión de Josep)
 
-El plan maestro pone Academia en la fase 6. Mi recomendación es adelantar un **Modular Lab v0 inmediatamente después de la Fase 2**, antes del RAG completo, por tres razones: (1) el mercado que paga hoy son estudiantes, y el Modular Lab es lo que diferencia a PULLEX de "otro chat jurídico"; (2) técnicamente es barato sobre la base actual — un generador de casos, una pantalla de respuesta, una rúbrica y dos tablas (`casos`, `intentos`); (3) valida con usuarios reales si el método pedagógico funciona antes de invertir en el corpus. El riesgo es que la retroalimentación cite normas sin Citation Guard; se mitiga usando casos **revisados por un humano** con `fuentes_esperadas` fijadas de antemano, en lugar de dejar que el modelo invente la solución de referencia.
+El plan maestro pone Academia en la fase 6. Mi recomendación es adelantar un **Laboratorio de casos v0 inmediatamente después de la Fase 2**, antes del RAG completo, por tres razones: (1) el mercado que paga hoy son estudiantes, y el Laboratorio de casos es lo que diferencia a PULLEX de "otro chat jurídico"; (2) técnicamente es barato sobre la base actual — un generador de casos, una pantalla de respuesta, una rúbrica y dos tablas (`casos`, `intentos`); (3) valida con usuarios reales si el método pedagógico funciona antes de invertir en el corpus. El riesgo es que la retroalimentación cite normas sin Citation Guard; se mitiga usando casos **revisados por un humano** con `fuentes_esperadas` fijadas de antemano, en lugar de dejar que el modelo invente la solución de referencia.
 
 ## Archivos que tocará cada fase (estimado)
 

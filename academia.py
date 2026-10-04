@@ -429,7 +429,7 @@ CATEGORIAS_CONECTORES = [
       "tal es el caso de", "como ocurre con"]),
 ]
 NOMBRE_CATEGORIA = {c: n for c, n, _, _ in CATEGORIAS_CONECTORES}
-# Orden en que se sugieren las categorías que faltan (las que más pesan en un modular, primero).
+# Orden en que se sugieren las categorías que faltan (las que más pesan en un caso, primero).
 PRIORIDAD_SUGERENCIA = ["contraste", "consecuencia", "conclusion", "orden", "causa", "adicion", "ejemplificacion"]
 
 _FRASE_A_CATEGORIA = {}
@@ -524,7 +524,7 @@ def conectores_publicos() -> list:
 
 
 # ------------------------------------------------------------------- Banco curado de casos --
-# 180 casos tipo examen modular escritos con criterio docente (academia_banco/*.json, uno por área).
+# 180 casos tipo examen escritos con criterio docente (academia_banco/*.json, uno por área).
 # Se sirven sin llamar al modelo y sin consumir consultas. Todos llevan revision_humana: true: su
 # exactitud jurídica debe revisarla un docente antes de usarlos como material oficial.
 BANCO_DIR = Path(__file__).resolve().parent / "academia_banco"

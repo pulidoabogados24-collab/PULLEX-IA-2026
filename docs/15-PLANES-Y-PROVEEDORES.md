@@ -6,7 +6,7 @@ Dos cosas independientes viven aquí: **qué puede usar cada plan** y **qué mot
 
 Decisión del dueño (1-oct-2026):
 
-| Plan | Precio/mes (COP) | Consultas/mes | Consultar (chat) | Academia: Modular Lab, Mi mapa, Taller de escritos | Automatizador: Documentos, Flujos, Asistente |
+| Plan | Precio/mes (COP) | Consultas/mes | Consultar (chat) | Academia: Laboratorio de casos, Mi mapa, Taller de escritos | Automatizador: Documentos, Flujos, Asistente |
 |---|---:|---:|:---:|:---:|:---:|
 | Prueba gratis | $0 | 10 (no se renuevan) | Sí | Sí | Sí |
 | Básico | $30.000 | 200 | Sí | No | No |
@@ -35,7 +35,7 @@ Decisión del dueño (1-oct-2026):
 
   ```json
   HTTP 403
-  {"detail": "Modular Lab y Mi mapa está disponible desde el plan Pro. Mejora tu plan para usarlo.",
+  {"detail": "Laboratorio de casos y Mi mapa está disponible desde el plan Pro. Mejora tu plan para usarlo.",
    "codigo": "plan_insuficiente", "funcion": "academia", "plan_requerido": "pro"}
   ```
 
@@ -72,7 +72,7 @@ Decisión del dueño (1-oct-2026):
 
 Interfaz común con dos operaciones: `stream(...)` (chat y pasos de los flujos; emite eventos de texto y de
 búsqueda, y acumula las fuentes web) y `crear_texto(...)` (llamadas que esperan un JSON o un documento).
-La usan el chat, `llamar_json` (Modular Lab y plan del asistente), la generación de documentos y los
+La usan el chat, `llamar_json` (Laboratorio de casos y plan del asistente), la generación de documentos y los
 pasos de flujos y asistente. El evento SSE `fuentes` no cambia.
 
 | Proveedor | Implementación | Modelo por defecto | Clave |

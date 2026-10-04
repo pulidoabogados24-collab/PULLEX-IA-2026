@@ -40,7 +40,7 @@ Operativas en código y probadas con el modelo simulado (rama `academia`):
 
 - Cuentas: registro, ingreso, verificación de correo, recuperación de clave, cierre de sesiones, panel de administración, cupo de consultas por plan.
 - Chat jurídico con streaming, historial de conversaciones, adjuntos, cinco formas de respuesta, bloque "Fuentes consultadas".
-- Academia: Modular Lab (caso, pistas, evaluación con rúbrica, solución, variación), Mi mapa del Derecho (61 conceptos), banco de errores, repasos espaciados, tablero de estudio.
+- Academia: Laboratorio de casos (caso, pistas, evaluación con rúbrica, solución, variación), Mi mapa del Derecho (61 conceptos), banco de errores, repasos espaciados, tablero de estudio.
 - Motor de fuentes: índice de texto completo SQLite FTS5, script de ingesta, web limitada a sitios oficiales, evento de fuentes por respuesta.
 - Automatizador: catálogo de 203 tipos de escrito en 15 áreas, generación, exportación a Word, 7 flujos, asistente de pasos encadenados.
 - Apariencia personalizable por usuario: 6 temas, acento, tipografía, densidad, imagen de fondo, avatar y logo.

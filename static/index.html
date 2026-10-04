@@ -120,6 +120,17 @@ main{flex:1;overflow:auto;position:relative;scroll-behavior:smooth}
 .vista{display:none;height:100%}
 .vista.on{display:block;animation:entra var(--t-media) var(--curva)}
 .wrap{max-width:880px;margin:0 auto;padding:calc(28px * var(--esp)) 20px 48px}
+/* Pantallas medianas (tableta y portátil pequeño): la barra tiene 7 secciones; usa los nombres cortos y,
+   si aún no cabe, deja solo el ícono de las secciones inactivas para que nada se salga de la pantalla. */
+@media(min-width:760px) and (max-width:1439px){
+  nav .l-largo{display:none} nav .l-corto{display:inline}
+  nav button{padding:8px 9px;gap:6px}
+  .creditos .cp{display:none}
+}
+@media(min-width:760px) and (max-width:1039px){
+  nav button{padding:8px 8px}
+  nav button:not(.on) span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
 @media(max-width:759px){
   .cab{padding:8px 14px;min-height:54px;gap:8px}
   .h-logo .marca{font-size:1rem}
@@ -291,7 +302,7 @@ textarea.inp{font-family:inherit;font-size:.92rem;line-height:1.55;resize:vertic
   .captarj .ir .i{width:16px;height:16px}
 }
 
-/* ---------------------------------------------------------------------- Modular Lab -- */
+/* ---------------------------------------------------------------------- Laboratorio de casos -- */
 .ml-costo{font-size:.8rem;color:var(--text-2);margin:12px 0 0}
 .ml-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .ml-cambio{background:var(--accent-soft);border-radius:var(--radius-sm);padding:10px 13px;font-size:.88rem;margin-bottom:12px;color:var(--text)}
@@ -1098,7 +1109,7 @@ select.per-inp{appearance:auto}
     </section>
     <section class="auth-ben" aria-label="Qué incluye PULLEX">
       <ul>
-        <li><span class="ico"><svg class="i s"><use href="#i-modular"/></svg></span><div><b>Modular Lab</b><span>Resuelves un caso de examen y recibes una evaluación con rúbrica: qué identificaste, qué omitiste y cómo mejorar.</span></div></li>
+        <li><span class="ico"><svg class="i s"><use href="#i-modular"/></svg></span><div><b>Laboratorio de casos</b><span>Resuelves un caso de examen y recibes una evaluación con rúbrica: qué identificaste, qué omitiste y cómo mejorar.</span></div></li>
         <li><span class="ico"><svg class="i s"><use href="#i-fuentes"/></svg></span><div><b>Fuentes a la vista</b><span>Cada respuesta lista lo que consultó y te avisa cuándo una norma debe verificarse en la fuente oficial.</span></div></li>
         <li><span class="ico"><svg class="i s"><use href="#i-escrito"/></svg></span><div><b>Escritos guiados</b><span>Tutelas y derechos de petición con un formulario paso a paso y la estructura procesal colombiana.</span></div></li>
         <li><span class="ico"><svg class="i s"><use href="#i-mapa"/></svg></span><div><b>Tu mapa del Derecho</b><span>Qué dominas, qué confundes y cuándo repasar, según lo que practicas.</span></div></li>
@@ -1140,7 +1151,7 @@ select.per-inp{appearance:auto}
     </div>
     <nav aria-label="Secciones">
       <button id="n-inicio" class="on" data-click="ver" data-arg-click="inicio"><svg class="i s" aria-hidden="true"><use href="#i-inicio"/></svg><span>Inicio</span></button>
-      <button id="n-modular" data-click="ver" data-arg-click="modular"><svg class="i s" aria-hidden="true"><use href="#i-modular"/></svg><span class="l-largo">Modular Lab</span><span class="l-corto">Modular</span></button>
+      <button id="n-modular" data-click="ver" data-arg-click="modular"><svg class="i s" aria-hidden="true"><use href="#i-modular"/></svg><span class="l-largo">Laboratorio de casos</span><span class="l-corto">Casos</span></button>
       <button id="n-mapa" data-click="ver" data-arg-click="mapa"><svg class="i s" aria-hidden="true"><use href="#i-mapa"/></svg><span>Mi mapa</span></button>
       <button id="n-chat" data-click="ver" data-arg-click="chat"><svg class="i s" aria-hidden="true"><use href="#i-chat"/></svg><span>Consultar</span></button>
       <button id="n-documentos" data-click="ver" data-arg-click="documentos"><svg class="i s" aria-hidden="true"><use href="#i-docs"/></svg><span class="l-largo">Documentos</span><span class="l-corto">Escritos</span></button>
@@ -1201,7 +1212,7 @@ select.per-inp{appearance:auto}
     </section>
 
     <section id="v-modular" class="vista">
-      <!-- Academia de escritos (static/taller.js): pestañas Casos (el Modular Lab de siempre, el .wrap de abajo),
+      <!-- Academia de escritos (static/taller.js): pestañas Casos (el Laboratorio de casos de siempre, el .wrap de abajo),
            Taller de escritos y Cómo contestar. -->
       <div class="tl-tabs-cont">
         <div class="tl-tabs" role="tablist" aria-label="Academia: casos y escritos">
@@ -1215,8 +1226,8 @@ select.per-inp{appearance:auto}
       <div class="wrap">
         <div class="cab-vista ml-cab">
           <p class="eyebrow claim">PULLEX Academia</p>
-          <h2 class="display">Modular Lab</h2>
-          <p>Entrena cómo se resuelve un caso de examen. Primero lo intentas tú; después PULLEX evalúa tu respuesta con una rúbrica y te dice qué omitiste y cómo mejorar.</p>
+          <h2 class="display">Laboratorio de casos</h2>
+          <p>El laboratorio para contestar y resolver casos. Primero lo intentas tú; después PULLEX evalúa tu respuesta con una rúbrica y te dice qué omitiste y cómo mejorar.</p>
         </div>
 
         <div class="panel" id="ml-config">
@@ -1274,16 +1285,16 @@ select.per-inp{appearance:auto}
         <div class="cab-vista ml-cab">
           <p class="eyebrow claim">PULLEX Academia</p>
           <h2 class="display">Mi mapa del Derecho</h2>
-          <p>Tu mapa personal: qué dominas, qué estás aprendiendo y qué confundes. Se actualiza cada vez que PULLEX evalúa uno de tus modulares, y te propone repasos espaciados para que no olvides lo que ya corregiste.</p>
+          <p>Tu mapa personal: qué dominas, qué estás aprendiendo y qué confundes. Se actualiza cada vez que PULLEX evalúa uno de tus casos, y te propone repasos espaciados para que no olvides lo que ya corregiste.</p>
         </div>
         <div class="mapa-res" id="mapa-res"></div>
         <div class="panel" id="mapa-hoy">
           <h3>Para repasar</h3>
-          <div id="mapa-hoy-cuerpo" class="vacio">Cuando evalúes tu primer modular, aquí aparecerán los conceptos que te toca repasar.</div>
+          <div id="mapa-hoy-cuerpo" class="vacio">Cuando evalúes tu primer caso, aquí aparecerán los conceptos que te toca repasar.</div>
         </div>
         <div class="panel" id="mapa-errores">
           <h3>Banco de errores</h3>
-          <div id="mapa-err-cuerpo" class="vacio">Aún no hay errores registrados. Cada concepto que confundas en un modular quedará aquí hasta que lo domines.</div>
+          <div id="mapa-err-cuerpo" class="vacio">Aún no hay errores registrados. Cada concepto que confundas en un caso quedará aquí hasta que lo domines.</div>
         </div>
         <div class="panel">
           <h3>Mapa del Derecho</h3>

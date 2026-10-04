@@ -1,4 +1,4 @@
-"""Acceso por plan: Básico = Consultar; Pro = + Academia (Modular Lab, Mi mapa, Taller);
+"""Acceso por plan: Básico = Consultar; Pro = + Academia (Laboratorio de casos, Mi mapa, Taller);
 Premium = + Automatizador (Documentos, Flujos, Asistente); Prueba = todo (limitado por sus 10
 consultas); administrador = todo."""
 import re

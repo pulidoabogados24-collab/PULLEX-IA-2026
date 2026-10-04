@@ -631,11 +631,11 @@ if(esIOS()&&!esStandalone())mostrarBotonInstalar();
 function abrirSelectorArchivo(){document.getElementById('file').click()}
 
 // =========================================================================================
-// PULLEX Academia — dos caminos en el inicio y Modular Lab
+// PULLEX Academia — dos caminos en el inicio y Laboratorio de casos
 // =========================================================================================
 const APRENDER=[
   {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-   t:'Practicar un modular',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
+   t:'Resolver un caso',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
   {ic:'<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
    t:'Enséñame un tema',d:'Explicación por capas, con ejemplo, norma y el error más común.',
    p:'Quiero aprender este tema: ',estilo:'ensename'},
@@ -700,7 +700,7 @@ async function api(url,opts){
   return d;
 }
 
-// ------------------------------------------------------------------------ Modular Lab --
+// ------------------------------------------------------------------------ Laboratorio de casos --
 const ML={opciones:null,area:null,nivel:'basico',caso:null,pistas:0,evaluado:false,confirmarSol:false};
 async function mlInit(){
   if(!ML.opciones){
@@ -910,7 +910,7 @@ async function cargarTablero(){
   if(CAMINO!=='aprender'){t.classList.add('hidden');return}
   if(typeof tieneFuncion==='function'&&!tieneFuncion('academia')){ // sin Academia: una invitación, sin llamar a la API
     t.textContent='';const c=el('div','tcard mejora-tc');const k=el('div','k');k.appendChild(plIcono('candado'));
-    k.appendChild(document.createTextNode(' Modular Lab · plan '+plNombre(plRequerido('academia'))));c.appendChild(k);
+    k.appendChild(document.createTextNode(' Laboratorio de casos · plan '+plNombre(plRequerido('academia'))));c.appendChild(k);
     c.appendChild(el('div','v','Practica casos tipo examen y deja que PULLEX te evalúe'));
     c.appendChild(el('div','s','Rúbrica, mapa de lo que dominas y repasos espaciados. Mientras tanto, «Enséñame», «Resuélvelo conmigo» y «Examíname» funcionan en Consultar.'));
     c.appendChild(boton('Conocer el plan '+plNombre(plRequerido('academia')),'bsec',()=>ver('modular')));
@@ -937,7 +937,7 @@ async function cargarTablero(){
   if(r.tema_debil&&(!rec||rec.concepto_id!==r.tema_debil.id))card('Tema débil',r.tema_debil.nombre,
     'Lo has confundido '+r.tema_debil.fallos+(r.tema_debil.fallos===1?' vez':' veces')+'.',
     boton('Explícamelo','bsec',()=>explicarConcepto(r.tema_debil.nombre)));
-  if(r.ultimo_modular)card('Último modular',r.ultimo_modular.titulo,r.ultimo_modular.area+' · '+r.ultimo_modular.puntaje+'/100',
+  if(r.ultimo_modular)card('Último caso',r.ultimo_modular.titulo,r.ultimo_modular.area+' · '+r.ultimo_modular.puntaje+'/100',
     boton('Mi mapa','bsec',()=>ver('mapa')));
   t.classList.toggle('hidden',!t.children.length);
 }
@@ -998,7 +998,7 @@ function pintarAreaMapa(){
   const info=$('mapa-area-info');info.textContent='';
   const partes=[['Dominados',a.resumen.dominado],['En progreso',a.resumen.en_progreso],['Débiles',a.resumen.debil]];
   partes.forEach(([t,n],i)=>{info.appendChild(document.createTextNode((i?' · ':'')+t+': '));info.appendChild(el('b',null,n))});
-  info.appendChild(document.createTextNode(a.promedio!=null?' · Promedio en modulares: ':' · Aún sin modulares en esta área'));
+  info.appendChild(document.createTextNode(a.promedio!=null?' · Promedio en casos: ':' · Aún sin casos resueltos en esta área'));
   if(a.promedio!=null){info.appendChild(el('b',null,a.promedio+'/100'))}
   info.appendChild(document.createTextNode(' · Nivel sugerido: '));info.appendChild(el('b',null,NOMBRE_NIVEL[a.nivel_recomendado]));
   const cont=$('mapa-temas');cont.textContent='';

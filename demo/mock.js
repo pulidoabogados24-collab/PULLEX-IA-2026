@@ -14,7 +14,7 @@ const PLAN_FUNCIONES={prueba:FUNCIONES,basico:['chat'],pro:['chat','academia'],p
 const PLAN_REQUERIDO={academia:'pro',automatizador:'premium'};
 const PREFIJOS_FUNCION=[['/api/modular','academia'],['/api/academia','academia'],['/api/taller','academia'],
   ['/api/documentos','automatizador'],['/api/flujos','automatizador'],['/api/asistente','automatizador']];
-const NOMBRE_FUNCION={academia:'Modular Lab y Mi mapa',automatizador:'Documentos, Flujos y Asistente'};
+const NOMBRE_FUNCION={academia:'Laboratorio de casos y Mi mapa',automatizador:'Documentos, Flujos y Asistente'};
 const PLAN_DEMO=(()=>{try{const p=new URLSearchParams(location.search).get('plan');return PLANES[p]?p:'premium'}catch(e){return 'premium'}})();
 function funcionDeRuta(r){const f=PREFIJOS_FUNCION.find(([p])=>r===p||r.startsWith(p+'/'));return f?f[1]:null}
 const AREAS=['Constitucional / Tutela','Penal','Civil','Familia','Laboral','Administrativo','Comercial / Societario',

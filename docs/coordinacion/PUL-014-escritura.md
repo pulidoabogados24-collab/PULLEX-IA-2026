@@ -9,7 +9,7 @@ Responsable: Claude · Revisor: Codex (pendiente) · Estado: EN REVISIÓN · Ram
    serviles sin tocar citas, `[COMPLETAR: …]` ni «(verificar vigencia)») y la ruta `POST /api/estilo/revisar`
    (no gasta consultas, disponible en todos los planes).
 2. **Taller de escritos** (`taller.py`, `static/taller.js`): se integró `pul/wip-taller-escritos` y se terminó el
-   frontend. El Modular Lab ahora tiene tres pestañas: **Casos** (lo de siempre), **Taller de escritos** y
+   frontend. El Laboratorio de casos ahora tiene tres pestañas: **Casos** (lo de siempre), **Taller de escritos** y
    **Cómo contestar**. No se agregó ningún botón a la barra (siguen 7).
    - Taller: 14 tipos de escrito × 3 niveles; escenario del banco curado (42 escenarios, gratis) o nuevo con IA
      (1 consulta); lista de comprobación de partes obligatorias; editor con borrador guardado en el navegador;
@@ -48,9 +48,9 @@ Responsable: Claude · Revisor: Codex (pendiente) · Estado: EN REVISIÓN · Ram
 - La demo de un solo archivo no calcula la revisión de estilo (lo hace el servidor): el botón avisa que no está disponible.
 
 ## Decisiones tomadas
-- El Taller vive dentro de Modular Lab (pestañas) en lugar de ocupar un botón nuevo: la barra en celular ya tiene 7.
+- El Taller vive dentro de Laboratorio de casos (pestañas) en lugar de ocupar un botón nuevo: la barra en celular ya tiene 7.
 - Las lecciones son texto fijo, sin modelo: se pueden revisar y corregir una sola vez por un docente.
 - La revisión de estilo acompaña la evaluación del Taller pero no cambia el puntaje.
 
 ## Siguiente paso ejecutable
-Fusionar `pul/014-escritura` en `pul/integracion` cuando Codex la revise; después, PUL-015 (banco del Modular Lab).
+Fusionar `pul/014-escritura` en `pul/integracion` cuando Codex la revise; después, PUL-015 (banco del Laboratorio de casos).

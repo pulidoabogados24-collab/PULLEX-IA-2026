@@ -1,4 +1,4 @@
-"""Prueba de navegador de la Academia de escritos (pestañas del Modular Lab: Casos · Taller de escritos · Cómo contestar).
+"""Prueba de navegador de la Academia de escritos (pestañas del Laboratorio de casos: Casos · Taller de escritos · Cómo contestar).
 
 Uso: con el servidor simulado corriendo (modelo SIMULADO: prueba el flujo, no la calidad jurídica),
     rm -f pullex.db && PORT=8785 /home/claude/work/venv/bin/python demo/servidor_simulado.py
@@ -123,7 +123,7 @@ def taller(pg, nombre, demo=False):
     pg.wait_for_selector("#ml-areas button")
     ok(pg.locator(".tl-tabs [role=tab]").count() == 3 and pg.get_attribute("#tl-tab-casos", "aria-selected") == "true",
        f"{nombre}: tres pestañas y «Casos» seleccionada")
-    ok(pg.locator("#tl-taller").is_hidden() and pg.locator("#ml-areas").is_visible(), f"{nombre}: Casos muestra el Modular Lab de siempre")
+    ok(pg.locator("#tl-taller").is_hidden() and pg.locator("#ml-areas").is_visible(), f"{nombre}: Casos muestra el Laboratorio de casos de siempre")
     sin_desborde(pg, nombre, "pestañas")
 
     pg.click("#tl-tab-taller")
@@ -239,7 +239,7 @@ with sync_playwright() as p:
         entrar(pg, cuenta("pro"))
         taller(pg, nombre)
         como(pg, nombre)
-        # Volver a Casos y a otra sección: el Modular Lab sigue funcionando.
+        # Volver a Casos y a otra sección: el Laboratorio de casos sigue funcionando.
         pg.click("#tl-tab-casos")
         ok(pg.locator("#ml-areas").is_visible() and pg.locator("#tl-taller").is_hidden(), f"{nombre}: volver a Casos")
         pg.keyboard.press("ArrowRight")
@@ -273,7 +273,7 @@ with sync_playwright() as p:
     entrar(pg, cuenta("basico"))
     pg.click("#n-modular")
     pg.wait_for_selector("#v-mejora.on .plan-card")
-    ok(pg.locator("#v-modular.on").count() == 0 and pg.locator(".tl-tabs").is_hidden(), "básico: Modular Lab y la Academia de escritos muestran la pantalla de mejora")
+    ok(pg.locator("#v-modular.on").count() == 0 and pg.locator(".tl-tabs").is_hidden(), "básico: Laboratorio de casos y la Academia de escritos muestran la pantalla de mejora")
     pg.click("#n-inicio")
     pg.wait_for_timeout(600)
     ok(pedidos == [], f"básico: la interfaz no pide /api/taller/* {pedidos[:2] or ''}")

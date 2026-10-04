@@ -18,7 +18,7 @@ Detalle completo, paleta, temas y ratios de contraste: `docs/12-DISENO-Y-APARIEN
   nueva usa SOLO tokens. Los nombres viejos (`--azul`, `--oro`…) quedan como alias.
 - **Tipografía:** Fraunces (títulos) + Inter (texto), autohospedadas; pares alternativos Clásica y Moderna.
 - **Claro por defecto**, oscuro elegante y automático; 6 temas curados; contraste AA verificado.
-- **Layout:** 5 vistas (Inicio / Modular Lab / Mi mapa / Consultar / Ajustes); en móvil, barra inferior.
+- **Layout:** 5 vistas (Inicio / Laboratorio de casos / Mi mapa / Consultar / Ajustes); en móvil, barra inferior.
 - **Cada usuario personaliza** colores, tema, tipografía, tamaño, densidad, esquinas e imágenes
   (fondo del Inicio, foto, logo) en Ajustes → Apariencia; se guarda en su cuenta.
 

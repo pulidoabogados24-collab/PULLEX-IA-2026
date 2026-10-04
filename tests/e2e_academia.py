@@ -1,4 +1,4 @@
-"""Prueba de navegador de PULLEX Academia (tablero, Modular Lab → Mi mapa, repasos).
+"""Prueba de navegador de PULLEX Academia (tablero, Laboratorio de casos → Mi mapa, repasos).
 
 Uso: con `python demo/servidor_simulado.py` corriendo (modelo simulado, sin clave de API),
     BASE=http://127.0.0.1:8000 python3 tests/e2e_academia.py
@@ -31,7 +31,7 @@ with sync_playwright() as p:
         pg.wait_for_selector("#tablero .tcard")
         ok(pg.locator("#tablero .tcard.rec").count() == 1, f"{nombre}: tablero muestra caso recomendado a usuario nuevo")
         pg.screenshot(path=f"{OUT}/{nombre}-1-inicio-nuevo.png")
-        # Modular Lab: Penal
+        # Laboratorio de casos: Penal
         pg.click("#n-modular"); pg.wait_for_selector("#ml-areas button")
         pg.locator("#ml-areas button", has_text="Penal").click()
         pg.click("#ml-generar"); pg.wait_for_selector("#ml-caso:not(.hidden)")

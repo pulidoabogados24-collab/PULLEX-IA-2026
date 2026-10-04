@@ -166,7 +166,7 @@ SUBESPECIALIDADES = [
               "cambiar de modelo", "costo del modelo", "modelo de respaldo"]),
     S("S07", "instrucciones",
       tema="las instrucciones de sistema de la plataforma (qué se le ordena al modelo y en qué versión)",
-      objeto="Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Modular Lab, "
+      objeto="Cubre la redacción, el versionado y la prueba de los mensajes de sistema del chat, del Laboratorio de casos, "
              "del automatizador y de los perfiles, y la separación entre instrucciones y datos.",
       entradas=["la instrucción que se quiere escribir o cambiar", "el comportamiento observado y el esperado",
                 "los casos de prueba que debe seguir cumpliendo"],

@@ -2,7 +2,7 @@
 
     cd pullex-ia && python demo/servidor_simulado.py      → http://localhost:8000
 
-Usa el backend real (registro, cupos, base de datos, Modular Lab) pero reemplaza las llamadas
+Usa el backend real (registro, cupos, base de datos, Laboratorio de casos) pero reemplaza las llamadas
 a Claude por respuestas de ejemplo tomadas de demo/datos_demo.json. La Biblioteca usa un catálogo
 ficticio (demo/biblioteca_demo.json), no el inventario real del Drive. Útil para mostrar la app o
 probar la interfaz; NO sirve para evaluar la calidad jurídica del modelo.

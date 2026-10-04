@@ -1,5 +1,5 @@
 // =========================================================================================
-// PULLEX Academia — Academia de escritos: pestañas del Modular Lab (Casos · Taller de escritos ·
+// PULLEX Academia — Academia de escritos: pestañas del Laboratorio de casos (Casos · Taller de escritos ·
 // Cómo contestar). Se carga después de app.js y usa sus utilidades globales ($, api, md, toast, ver,
 // mlInit, mlElegir, PERFIL, CAMINO). Sin JavaScript en línea: todo con addEventListener. Lo que viene
 // del servidor o del modelo se pinta con textContent; solo el escrito modelo (Markdown) pasa por md()
@@ -273,7 +273,7 @@ async function tlTarjetaInicio(){
 // ======================================================================== Cómo contestar --
 // Lecciones estáticas. Las normas se nombran con «verificar vigencia» y sin números de sentencias.
 const TL_LECCIONES=[
-  {id:'metodo',n:'1',t:'Cómo contestar un modular',d:'El método PULLEX en 8 pasos, con un caso resuelto.',min:'6 min'},
+  {id:'metodo',n:'1',t:'Cómo contestar un caso',d:'El método PULLEX en 8 pasos, con un caso resuelto.',min:'6 min'},
   {id:'hechos',n:'2',t:'Hechos relevantes y distractores',d:'Lee el caso como lo lee quien lo calificará.',min:'4 min'},
   {id:'conectores',n:'3',t:'Conectores y párrafos',d:'El párrafo argumentativo y el conector que lo sostiene.',min:'4 min'},
   {id:'estructura',n:'4',t:'Estructura de los escritos',d:'Esqueleto de tutela, petición, demanda y recurso.',min:'5 min'},
@@ -369,7 +369,7 @@ const TL_ERRORES=[
   ['Estructura','Olvidar juramento, notificaciones o firma','Repasa la lista de comprobación antes de entregar.'],
   ['Estilo','Adjetivos y ataques a la contraparte','El tono sobrio convence más: hechos y razones.'],
   ['Estilo','Transcribir normas completas','Cita el artículo y explica en una frase para qué lo usas.'],
-  ['Problema','Responder otra pregunta (en el modular)','Copia la pregunta del examen y responde exactamente eso.'],
+  ['Problema','Responder otra pregunta (en un caso)','Copia la pregunta del examen y responde exactamente eso.'],
   ['Procedencia','Confundir prescripción y caducidad','La caducidad no se interrumpe como la prescripción y el juez la declara de oficio.']];
 const TL_QUIZ={q:'¿Cuál de estas pretensiones de una tutela está mejor formulada?',
   o:[['Que se protejan mis derechos y se haga lo que en derecho corresponda.',false,'Es vaga: el juez no sabe qué ordenar.'],
@@ -380,7 +380,7 @@ function tlComoInit(){
   const raiz=document.getElementById('tl-como');if(!raiz||TL.comoListo)return;TL.comoListo=true;
   raiz.appendChild(tE('div',{class:'cab-vista'},tE('p',{class:'eyebrow claim',text:'PULLEX Academia'}),
     tE('h2',{class:'display',text:'Cómo contestar'}),
-    tE('p',{text:'Lecciones cortas para responder modulares y redactar escritos. Cada una trae un ejercicio con respuesta inmediata y termina en «Practicar ahora». Nada de esto gasta consultas.'})));
+    tE('p',{text:'Lecciones cortas para contestar casos y redactar escritos. Cada una trae un ejercicio con respuesta inmediata y termina en «Practicar ahora». Nada de esto gasta consultas.'})));
   const lay=tE('div',{class:'tl-como-lay'});
   const nav=tE('div',{class:'tl-lecciones',role:'tablist','aria-label':'Lecciones','aria-orientation':'vertical'});
   TL_LECCIONES.forEach(l=>nav.appendChild(tE('button',{type:'button',role:'tab',id:'tl-lec-'+l.id,'aria-controls':'tl-leccion',
@@ -417,7 +417,7 @@ function tlPracticar(p,texto,fn){
 
 // (a) Método PULLEX en 8 pasos, con un caso resuelto paso a paso.
 function tlLecMetodo(p){
-  p.appendChild(tE('p',{class:'tl-intro',text:'Un modular no se gana con memoria, sino con orden. El método PULLEX son ocho preguntas que te haces siempre en el mismo orden. Míralo aplicado a un caso.'}));
+  p.appendChild(tE('p',{class:'tl-intro',text:'Un caso no se resuelve con memoria, sino con orden. El método PULLEX son ocho preguntas que te haces siempre en el mismo orden. Míralo aplicado a un caso.'}));
   p.appendChild(tE('div',{class:'tl-caso'},tE('span',{class:'eyebrow',text:'Caso'}),tE('p',null,TL_CASO_METODO)));
   const puntos=tE('div',{class:'tl-pasos-nav',role:'group','aria-label':'Pasos del método'});
   TL_PASOS.forEach((s,i)=>puntos.appendChild(tE('button',{type:'button',class:'tl-punto','data-i':String(i),
@@ -427,7 +427,7 @@ function tlLecMetodo(p){
   p.appendChild(tE('div',{class:'ml-acc tl-paso-acc'},tBtn('Anterior','bsec',()=>tlPaso(TL.paso-1),{id:'tl-paso-ant'}),
     tBtn('Siguiente','bpri',()=>tlPaso(TL.paso+1),{id:'tl-paso-sig'})));
   tlPaso(TL.paso||0);
-  p.appendChild(tE('div',{class:'lb2',text:'Errores frecuentes al contestar un modular'}));
+  p.appendChild(tE('div',{class:'lb2',text:'Errores frecuentes al contestar un caso'}));
   const ul=tE('ul',{class:'tl-viñetas'});
   ['Responder sin leer la pregunta completa: subraya qué te piden (¿procede?, ¿qué acción?, ¿quién responde?).',
    'Mezclar el análisis de todos los requisitos en un solo párrafo.',
@@ -510,7 +510,7 @@ function tlLecEstructura(p){
 
 // (e) Errores que hacen perder puntos, con una pregunta de control.
 function tlLecErrores(p){
-  p.appendChild(tE('p',{class:'tl-intro',text:'Estos son los errores que más puntos restan en la rúbrica de escritos y en los modulares. Cada uno dice en qué criterio pesa.'}));
+  p.appendChild(tE('p',{class:'tl-intro',text:'Estos son los errores que más puntos restan en la rúbrica de escritos y en los casos. Cada uno dice en qué criterio pesa.'}));
   const g=tE('div',{class:'tl-errores'});
   TL_ERRORES.forEach(([crit,t,s])=>g.appendChild(tE('div',{class:'tl-err'},tE('span',{class:'tag',text:crit}),tE('b',null,t),tE('span',null,s))));
   p.appendChild(g);
@@ -529,7 +529,7 @@ function tlLecErrores(p){
   TL_TABS.forEach(t=>{const b=document.getElementById('tl-tab-'+t);if(b){b.addEventListener('click',()=>tlTab(t));b.addEventListener('keydown',tlTabTeclas)}});
   const w=tlCasosWrap();if(w){if(!w.id)w.id='tl-panel-casos';w.setAttribute('role','tabpanel');w.setAttribute('aria-labelledby','tl-tab-casos')}
   const bc=document.getElementById('tl-tab-casos');if(bc&&w)bc.setAttribute('aria-controls',w.id);
-  // Mostrar un caso del Modular Lab (desde Mi mapa, el tablero o «Practicar») siempre vuelve a la pestaña Casos.
+  // Mostrar un caso del Laboratorio de casos (desde Mi mapa, el tablero o «Practicar») siempre vuelve a la pestaña Casos.
   if(typeof mlMostrarCaso==='function'){const o=mlMostrarCaso;mlMostrarCaso=function(){if(TL.tab!=='casos')tlTab('casos',{sinScroll:true});return o.apply(this,arguments)}}
   if(typeof mlElegir==='function'){const o=mlElegir;mlElegir=function(){if(TL.tab!=='casos')tlTab('casos',{sinScroll:true});return o.apply(this,arguments)}}
   // Tablero de Inicio: agrega «Practica un escrito» cuando aplica (después de que app.js arma el tablero).

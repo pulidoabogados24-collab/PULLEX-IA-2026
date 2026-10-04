@@ -154,7 +154,7 @@ PLANES = {
 
 # Acceso por plan (decisión del dueño, docs/15-PLANES-Y-PROVEEDORES.md):
 #   chat          = Consultar (todas las cuentas).
-#   academia      = Modular Lab, Mi mapa, banco de errores, repasos y el Taller de escritos.
+#   academia      = Laboratorio de casos, Mi mapa, banco de errores, repasos y el Taller de escritos.
 #   automatizador = Documentos, Flujos y Asistente.
 FUNCIONES = ("chat", "academia", "automatizador")
 # Plan de prueba (gratis, 10 consultas): acceso a TODO para conocer el producto; lo limita su cupo de
@@ -187,7 +187,7 @@ PREFIJOS_FUNCION = (
 # escribe al administrador, que asigna el plan en /admin. La pantalla de mejora reutiliza ese flujo.
 CONTACTO_PLANES = {"correo": os.getenv("PULLEX_CONTACTO_PLANES", "Pulidoabogados24@gmail.com").strip(),
                    "medio_pago": "Nequi"}
-NOMBRE_FUNCION = {"chat": "Consultar", "academia": "Modular Lab y Mi mapa",
+NOMBRE_FUNCION = {"chat": "Consultar", "academia": "Laboratorio de casos y Mi mapa",
                   "automatizador": "Documentos, Flujos y Asistente"}
 
 AREAS = ["Constitucional / Tutela", "Penal", "Civil", "Familia", "Laboral",
@@ -1648,7 +1648,7 @@ async def estilo_revisar(request: Request):
     return redaccion.revisar(texto)
 
 # --------------------------------------------------------- MODULAR LAB --
-# Entrena la resolución de casos tipo examen modular: el estudiante ve el caso SIN la solución,
+# Entrena la resolución de casos tipo examen: el estudiante ve el caso SIN la solución,
 # responde, pide pistas si las necesita y recibe una evaluación con rúbrica. La solución de
 # referencia se genera junto con el caso, se guarda en el servidor y solo se entrega cuando el
 # estudiante la pide (así no se "filtra" antes de intentar).
@@ -1666,7 +1666,7 @@ RUBRICA = [("problema", "Identificación del problema", 20), ("normas", "Marco n
            ("conclusion", "Conclusión", 10), ("claridad", "Claridad jurídica", 10)]
 
 MODULAR_SISTEMA = """Eres el banco de casos de PULLEX Academia para estudiantes de Derecho en
-Colombia. Escribes casos hipotéticos tipo examen modular, realistas y con nombres ficticios.
+Colombia. Escribes casos hipotéticos tipo examen, realistas y con nombres ficticios.
 Reglas: derecho colombiano vigente; no inventes números de sentencias ni artículos — si no
 estás seguro de un número exacto, nombra la norma o la institución sin número y marca
 "verificar"; la solución debe ser defendible y señalar la vigencia a confirmar. Responde SOLO
@@ -1715,7 +1715,7 @@ MARGEN_THINKING = int(os.getenv("PULLEX_MARGEN_THINKING", "4000"))
 
 def llamar_json(usuario: str, max_tokens: int = 2500, sistema: str = None) -> dict:
     """Pide al modelo un JSON; reintenta una vez si viene mal formado. Solo lee bloques de texto
-    (los de thinking se ignoran). `sistema` reemplaza el mensaje de sistema del Modular Lab."""
+    (los de thinking se ignoran). `sistema` reemplaza el mensaje de sistema del Laboratorio de casos."""
     cadena = cadena_ia()
     if "haiku" not in MODELO:
         max_tokens += MARGEN_THINKING
@@ -2105,7 +2105,7 @@ def academia_errores(request: Request):
 
 @app.get("/api/academia/resumen")
 def academia_resumen(request: Request):
-    """Tablero de estudio: continuar, próximo repaso, tema débil, caso recomendado, último modular."""
+    """Tablero de estudio: continuar, próximo repaso, tema débil, caso recomendado, último caso."""
     u = usuario_actual(request)
     email, ahora = u["email"], time.time()
     fin_de_hoy = academia.fin_del_dia(ahora)

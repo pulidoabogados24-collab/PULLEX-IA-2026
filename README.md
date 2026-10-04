@@ -40,7 +40,7 @@ python app.py
 |----------|-----------:|--------------:|---------|
 | Prueba   |         $0 |            10 | Todo, para conocer el producto (lo limita el cupo) |
 | Básico   |    $30.000 |           200 | Consultar (chat) |
-| Pro      |    $45.000 |           500 | Consultar + Academia (Modular Lab, Mi mapa, Taller de escritos) |
+| Pro      |    $45.000 |           500 | Consultar + Academia (Laboratorio de casos, Mi mapa, Taller de escritos) |
 | Premium  |    $60.000 |         1.000 | Todo: Consultar + Academia + Automatizador (Documentos, Flujos, Asistente) |
 
 El acceso por plan se aplica en el servidor (403 `plan_insuficiente`) y en la interfaz (candados, pantalla de
@@ -64,7 +64,7 @@ y regenerar el boletín.
 
 - **Inicio con dos caminos:** "Estoy aprendiendo Derecho" y "Estoy trabajando en un asunto". Cada uno
   muestra sus propias herramientas; la elección se recuerda en la cuenta.
-- **Modular Lab:** eliges área y nivel, PULLEX genera un caso tipo examen **sin mostrar la solución**,
+- **Laboratorio de casos:** eliges área y nivel, PULLEX genera un caso tipo examen **sin mostrar la solución**,
   respondes, pides hasta 2 pistas, y recibes una evaluación con rúbrica (problema 20, normas 20,
   argumentación 20, aplicación 20, conclusión 10, claridad 10) con lo que identificaste, lo que omitiste,
   la norma que faltó, el argumento contrario y cómo mejorar. Luego puedes ver la solución de referencia
@@ -82,7 +82,7 @@ y regenerar el boletín.
   próximo repaso (1, 3, 7, 15 y 30 días). "Hoy" se calcula en hora de Colombia.
 - **Tablero de estudio en el inicio:** caso recomendado (con nivel sugerido según tu promedio en el
   área), continuar el último caso sin responder, próximo repaso, tema débil y último modular.
-- **Escalera de ayuda en Modular Lab:** Pista 1 → Pista 2 → Explícame el concepto → Ver solución.
+- **Escalera de ayuda en Laboratorio de casos:** Pista 1 → Pista 2 → Explícame el concepto → Ver solución.
   Detalle técnico en `docs/10-ACADEMIA.md`.
 - **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
   socrático), Examíname (simulacro oral) y Audita mi respuesta.
@@ -170,7 +170,7 @@ repositorio, y defines en **Environment**:
 
 ```bash
 pip install -r requirements-dev.txt
-pytest tests                  # 174 pruebas: seguridad, regresión, Modular Lab, Academia, fuentes, apariencia, documentos, planes y proveedores (sin API real)
+pytest tests                  # 174 pruebas: seguridad, regresión, Laboratorio de casos, Academia, fuentes, apariencia, documentos, planes y proveedores (sin API real)
 pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
 ```
 

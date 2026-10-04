@@ -175,7 +175,7 @@ Mínimo de cada grupo de pares (AA exige 4,5:1 para texto y 3:1 para bordes de c
 
 Peor par de texto en todos los temas: **5,17:1** (acento como texto sobre acento suave, Caribe
 claro). Además se corrió **axe-core 4.10 (regla `color-contrast`)** sobre las pantallas reales
-—Inicio, Modular Lab con caso evaluado, Mi mapa con un concepto abierto, Consultar con fuentes
+—Inicio, Laboratorio de casos con caso evaluado, Mi mapa con un concepto abierto, Consultar con fuentes
 desplegadas y Ajustes— en los 6 temas × 2 modos: **0 infracciones**.
 
 No verificado: texto sobre una **foto de fondo** subida por el usuario (axe no puede medir sobre

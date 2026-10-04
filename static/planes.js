@@ -3,7 +3,7 @@
 // utilidades globales (ESTADO, PERFIL, $, el, ver, toast). Sin JavaScript en línea: los botones usan
 // addEventListener y los datos del servidor se pintan con textContent.
 //   Básico  = Consultar.
-//   Pro     = Consultar + Academia (Modular Lab, Mi mapa y el Taller de escritos).
+//   Pro     = Consultar + Academia (Laboratorio de casos, Mi mapa y el Taller de escritos).
 //   Premium = todo: + Automatizador (Documentos, Flujos y Asistente).
 //   Prueba  = todo, limitado por sus consultas gratis. Administrador = todo.
 // El servidor es quien decide (403 «plan_insuficiente»); esto solo evita que el usuario choque con él.
@@ -12,10 +12,10 @@ const VISTA_FUNCION={modular:'academia',mapa:'academia',taller:'academia',docume
 const FUNCIONES_TODAS=['chat','academia','automatizador'];
 const FUNCION_INFO={
   chat:{corto:'Consultar',d:'Chat jurídico con fuentes, adjuntos y búsqueda en sitios oficiales.'},
-  academia:{corto:'Modular Lab y Mi mapa',d:'Casos tipo examen con rúbrica, mapa del Derecho, banco de errores y repasos.',
+  academia:{corto:'Laboratorio de casos y Mi mapa',d:'Casos tipo examen con rúbrica, mapa del Derecho, banco de errores y repasos.',
     eyebrow:'PULLEX Academia',titulo:'Entrena como en el examen, con un tutor que recuerda tus errores',
-    lead:'Modular Lab y Mi mapa del Derecho están en el plan Pro. Resuelves casos tipo examen, PULLEX te evalúa con rúbrica y tu mapa personal te dice qué repasar y cuándo.',
-    beneficios:['Casos tipo modular en 9 áreas, con pistas y solución de referencia',
+    lead:'Laboratorio de casos y Mi mapa del Derecho están en el plan Pro. Resuelves casos tipo examen, PULLEX te evalúa con rúbrica y tu mapa personal te dice qué repasar y cuándo.',
+    beneficios:['Casos tipo examen en 9 áreas, con pistas y solución de referencia',
       'Evaluación con rúbrica: lo que identificaste, lo que omitiste y cómo mejorar',
       'Mi mapa del Derecho: 61 conceptos con tu estado en cada uno',
       'Banco de errores y repasos espaciados a 1, 3, 7, 15 y 30 días']},

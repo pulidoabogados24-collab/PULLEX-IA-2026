@@ -88,7 +88,7 @@ HERRAMIENTAS = {
         "evidencia": [("app.py", '@app.get("/salud")'), ("coordinador.py", "def _h_estado_plataforma(")],
         "nota": "Datos de configuración no sensibles; no incluye métricas de carga."},
     "modular_lab": {
-        "nombre": "Modular Lab (casos de estudio con rúbrica)",
+        "nombre": "Laboratorio de casos (casos de estudio con rúbrica)",
         "estado": "EXISTE", "modo": "relevo", "solo_admin": False,
         "evidencia": [("app.py", '@app.post("/api/modular/caso")')],
         "nota": "Herramienta de estudio. Ningún perfil la usa hoy."},
