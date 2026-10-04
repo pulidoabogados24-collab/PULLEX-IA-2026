@@ -100,6 +100,8 @@ class FakeAnthropic:
     guion = []           # PUL-017: [(texto, stop_reason | excepción)], una entrada por llamada a stream
     demora = 0.0         # segundos que tarda el modelo simulado en empezar a responder (para probar el latido)
     llamadas_stream = [] # todas las llamadas a stream, en orden
+    guion_create = []    # PUL-017: [(texto, stop_reason)] para las llamadas a messages.create (sin streaming), una por llamada
+    llamadas_create = [] # kwargs de cada create atendido por guion_create
 
     def __init__(self, *a, **k):
         self.messages = types.SimpleNamespace(stream=self._stream, create=self._create)
@@ -161,6 +163,11 @@ class FakeAnthropic:
 
     def _create(self, **k):
         FakeAnthropic.ultima_create = k
+        if FakeAnthropic.guion_create:
+            texto, motivo = FakeAnthropic.guion_create.pop(0)
+            FakeAnthropic.llamadas_create.append(k)
+            return types.SimpleNamespace(content=[_Bloque(texto)], stop_reason=motivo,
+                                         usage=types.SimpleNamespace(input_tokens=10, output_tokens=max(1, len(texto) // 4)))
         sistema = k.get("system") or ""
         if isinstance(sistema, list):
             sistema = " ".join(b.get("text", "") for b in sistema)

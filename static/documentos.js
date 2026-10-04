@@ -303,6 +303,7 @@ async function docCorrerPasos(cont,url,body,titulos){
       s.appendChild(textos[ev.n]);salidas.appendChild(s)}
     else if(ev.tipo==='texto'){bufs[ev.n]=(bufs[ev.n]||'')+ev.texto;if(!raf)raf=requestAnimationFrame(render)}
     else if(ev.tipo==='paso_fin')marcar(ev.n,'ok','Listo');
+    else if(ev.tipo==='paso_incompleto'){marcar(ev.n,'mal','Incompleto');salidas.appendChild(dE('p',{class:'doc-error',role:'alert',text:ev.mensaje}))}
     else if(ev.tipo==='error'){marcar(ev.n,'mal','Error');salidas.appendChild(dE('p',{class:'doc-error',role:'alert',text:ev.mensaje}))}
     else if(ev.tipo==='documento')docId=ev.id;
     else if(ev.tipo==='fin')fin=ev});

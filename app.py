@@ -1035,16 +1035,25 @@ con la corporación, el tipo/número si se conoce y el tema)
 Cierra con una línea: "Verifica siempre en la fuente oficial antes de citar en un escrito."
 """
 
+MAX_TOKENS_BOLETIN = int(os.getenv("PULLEX_MAX_TOKENS_BOLETIN", "4000"))
+
+
 def generar_boletin_texto() -> str:
     try:
         cliente = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
         r = cliente.messages.create(
-            model=MODELO_BOLETIN, max_tokens=1800,
+            model=MODELO_BOLETIN, max_tokens=MAX_TOKENS_BOLETIN,
             messages=[{"role": "user", "content": BOLETIN_PROMPT}],
             tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
         )
         partes = [b.text for b in r.content if getattr(b, "type", "") == "text"]
-        return "\n".join(partes).strip() or "No fue posible generar el boletín hoy."
+        texto = "\n".join(partes).strip()
+        if not texto:
+            return "No fue posible generar el boletín hoy."
+        if getattr(r, "stop_reason", None) in ("max_tokens", "pause_turn"):
+            # Antes un boletín cortado por el límite se guardaba y se mostraba todo el día como si estuviera completo.
+            texto += "\n\n_Aviso: el boletín de hoy quedó incompleto porque la respuesta se cortó por límite de longitud._"
+        return texto
     except Exception:
         eid = _nuevo_error_id()
         log.exception("fallo generando boletín error_id=%s", eid)
@@ -1912,6 +1921,7 @@ def _extraer_json(texto: str) -> dict:
 # Margen extra de max_tokens para el razonamiento (thinking adaptativo) de modelos que no son Haiku:
 # el razonamiento cuenta dentro de max_tokens y, sin margen, el JSON podría salir cortado.
 MARGEN_THINKING = int(os.getenv("PULLEX_MARGEN_THINKING", "4000"))
+MAX_TOKENS_JSON_TOPE = int(os.getenv("PULLEX_MAX_TOKENS_JSON_TOPE", "16000"))
 
 
 def llamar_json(usuario: str, max_tokens: int = 2500, sistema: str = None) -> dict:
@@ -1921,12 +1931,16 @@ def llamar_json(usuario: str, max_tokens: int = 2500, sistema: str = None) -> di
     if "haiku" not in MODELO:
         max_tokens += MARGEN_THINKING
     ultimo = None
-    for _ in range(2):
-        texto = proveedores.crear_texto(cadena, sistema or MODULAR_SISTEMA, usuario, max_tokens)
+    mensajes = [{"role": "user", "content": usuario}]
+    for _ in range(3):
+        texto, motivo = proveedores.crear_con_parada(cadena, sistema or MODULAR_SISTEMA, mensajes, max_tokens)
         try:
             return _extraer_json(texto)
         except (ValueError, json.JSONDecodeError) as e:
             ultimo = e
+            if motivo == motor.PARADA_LIMITE:
+                # El JSON salió cortado por el límite de longitud: reintentar igual daría lo mismo; se duplica el límite.
+                max_tokens = min(max_tokens * 2, MAX_TOKENS_JSON_TOPE)
     raise ValueError(f"JSON inválido del modelo: {ultimo}")
 
 
@@ -2370,6 +2384,9 @@ def academia_resumen(request: Request):
 # guardado tiene dueño: nadie lee, edita, exporta ni borra los de otro (404, no 403).
 MAX_TOKENS_DOCUMENTO = int(os.getenv("PULLEX_MAX_TOKENS_DOCUMENTO", "7000"))
 MAX_TOKENS_PASO = int(os.getenv("PULLEX_MAX_TOKENS_PASO", "4000"))
+AVISO_PASO_INCOMPLETO = "\n\n> **Aviso:** este paso quedó incompleto porque la respuesta se cortó por límite de longitud. Vuelve a ejecutarlo."
+AVISO_DOCUMENTO_INCOMPLETO = ("Este borrador quedó INCOMPLETO: la respuesta de la IA se cortó por límite de longitud. "
+                              "Genera el documento de nuevo antes de usarlo.")
 MAX_TEXTO_DOCUMENTO = 60000
 MAX_PREVIOS = 24000          # caracteres de resultados anteriores que recibe cada paso
 ENCABEZADO_FORMULARIO = "DATOS DEL FORMULARIO DEL USUARIO para el documento."
@@ -2488,8 +2505,9 @@ async def documentos_generar(request: Request):
     prefs = preferencias_de(u)
     voz = documentos.voz_documento(t, prefs.get("escritura", "auto"), prefs.get("camino", "trabajar"))
     try:
-        salida = proveedores.crear_texto(cadena_ia(), _sistema(documentos.SISTEMA_DOCUMENTO, voz), pedido,
-                                         _max_tokens(MAX_TOKENS_DOCUMENTO))
+        # Si el borrador se corta por límite de longitud se pide la continuación; si aun así queda cortado se dice.
+        salida, completo = proveedores.completar_texto(cadena_ia(), _sistema(documentos.SISTEMA_DOCUMENTO, voz), pedido,
+                                                       _max_tokens(MAX_TOKENS_DOCUMENTO))
         texto, verificar = documentos.procesar_salida(salida)
         if len(texto) < 20:
             raise ValueError("respuesta vacía")
@@ -2501,6 +2519,9 @@ async def documentos_generar(request: Request):
                                  "No se descontó la consulta; intenta de nuevo.")
     texto = documentos.asegurar_rotulo(t, texto)
     advertencias = documentos.advertencias_de(t)
+    if not completo:
+        texto += "\n\n> **Aviso:** este borrador quedó incompleto porque la respuesta se cortó por límite de longitud. Genéralo de nuevo."
+        advertencias = [AVISO_DOCUMENTO_INCOMPLETO] + list(advertencias)
     lista_fuentes = fuentes.para_cliente(frags, texto)
     titulo = documentos.titulo_documento(t, limpios)
     did = _guardar_documento(u["email"], t["id"], titulo, "documento", limpios, texto, verificar,
@@ -2508,7 +2529,7 @@ async def documentos_generar(request: Request):
     return {"id": did, "tipo": t["id"], "tipo_nombre": t["nombre"], "titulo": titulo, "texto": texto,
             "verificar": verificar, "advertencias": advertencias, "fuentes": lista_fuentes, "campos": limpios,
             "borrador_funcionario": t["borrador_funcionario"], "origen": "documento",
-            "restantes": max(0, restantes)}
+            "incompleto": not completo, "restantes": max(0, restantes)}
 
 
 @app.get("/api/documentos/mis")
@@ -2596,7 +2617,7 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
     total = len(pasos)
 
     def flujo():
-        resultados = []
+        resultados, incompletos = [], []
         completo = False
         yield _sse({"tipo": "inicio", "titulo": nombre, "total": total, "pasos": [p["titulo"] for p in pasos]})
         try:
@@ -2614,15 +2635,16 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
                     cupo = max(2000, MAX_PREVIOS // len(resultados))
                     previos = "\n\n".join(f"### Paso {k}. {t}\n{x[:cupo]}" for k, (t, x) in enumerate(resultados, 1))
                     pedido += envolver_como_datos(previos, encabezado=ENCABEZADO_PREVIOS)
-                partes = []
+                estado_paso = motor.EstadoGeneracion()
                 try:
-                    for salida in proveedores.stream_texto(cadena, sistema, [{"role": "user", "content": pedido}],
-                                                           _max_tokens(MAX_TOKENS_PASO), []):
+                    abrir = (lambda msgs: proveedores.stream_texto(cadena, sistema, msgs, _max_tokens(MAX_TOKENS_PASO), []))
+                    for salida in motor.generar(abrir, [{"role": "user", "content": pedido}], estado_paso,
+                                                motor.Contrato(intencion="redaccion"), reparar=False,
+                                                es_recuperable=proveedores.es_recuperable):
                         if salida["tipo"] == "texto":
-                            partes.append(salida["texto"])
                             yield _sse({"tipo": "texto", "n": n, "texto": salida["texto"]})
                     # Lo transmitido ya se mostró tal cual; lo que se guarda y pasa al paso siguiente va pulido.
-                    texto = redaccion.pulir("".join(partes).strip())
+                    texto = redaccion.pulir(estado_paso.texto.strip())
                     if not texto:
                         raise ValueError("paso vacío")
                 except Exception:
@@ -2633,12 +2655,19 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
                                 "No se descontó la consulta de ese paso; los pasos anteriores quedaron guardados."})
                     yield _sse({"tipo": "restantes", "restantes": _restantes(email)})
                     break
+                if not estado_paso.completo:
+                    # Se cortó por límite de longitud aun después de pedir la continuación: se deja constancia visible.
+                    texto += AVISO_PASO_INCOMPLETO
+                    incompletos.append(n)
                 resultados.append((paso["titulo"], texto))
                 yield _sse({"tipo": "paso_fin", "n": n})
-            completo = len(resultados) == total
+                if n in incompletos:
+                    yield _sse({"tipo": "paso_incompleto", "n": n,
+                                "mensaje": f"El paso {n} quedó incompleto: la respuesta se cortó por límite de longitud."})
+            completo = len(resultados) == total and not incompletos
         finally:
             if al_terminar:
-                al_terminar(len(resultados) == total)
+                al_terminar(len(resultados) == total and not incompletos)
         if resultados:
             cuerpo = f"# {nombre}\n\n" + "\n\n".join(f"## Paso {k}. {t}\n\n{x}" for k, (t, x) in enumerate(resultados, 1))
             _, verificar = documentos.separar_respuesta(cuerpo)
