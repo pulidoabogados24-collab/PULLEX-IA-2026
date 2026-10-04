@@ -83,7 +83,8 @@ funcione en PULLEX (ver sección 4).
   `model_context_window_exceeded` como truncamiento, continuar sin duplicar y, si no puede, avisar en lugar de
   presentar la respuesta como completa (puntos 13 y 14 de la especificación). `evaluar_calidad.py` incluye
   `detectar_truncamiento` para detectar en el texto los síntomas que quedan cuando el motivo de parada no se
-  conserva (frase cortada, lista numerada a medias, bloque de código sin cerrar, encabezado final sin cuerpo).
+  conserva (termina en una palabra que pide continuación, bloque de código sin cerrar, encabezado o «:» final sin
+  cuerpo, paréntesis o comillas abiertos) y, si el motivo de parada sí se conserva, lo toma como prueba.
   Es una red de seguridad, no un sustituto de leer el motivo de parada.
 
 ### 3.2 Entender la intención y no responder una pregunta vecina
@@ -119,12 +120,14 @@ funcione en PULLEX (ver sección 4).
 - **Aplicación.**
   1. El prompt autoriza expresamente a decir «no pude verificar esto», describe qué hacer cuando no se está seguro
      y exige corregir la premisa falsa de entrada (coherente con el `SYSTEM_PROMPT` actual).
-  2. `evaluar_calidad.citas_sospechosas` es una revisión determinista de forma: extrae las referencias a
-     sentencias y normas del texto y marca las que tienen formato imposible o riesgoso. Por ejemplo, una
-     sentencia de tutela sin número, una sentencia con un año fuera de rango (la Corte Constitucional empezó en 1992),
-     un artículo cuyo número no existe en el código citado, un radicado con formato impropio, o una cita
-     textual atribuida a una sentencia sin su número. **No verifica que la sentencia exista**: eso exige consultar
-     la relatoría (punto 40 de la especificación), y esa consulta no se hizo aquí.
+  2. `evaluar_calidad.citas_sospechosas` es una revisión determinista de forma. Marca como graves: una sentencia
+     con número cero o improbable (por ejemplo T-99999) o con un año fuera del rango posible (la Corte
+     Constitucional empezó en 1992); un artículo con un número muy por encima de los que tiene el código citado
+     (los topes son generosos y están en el código para revisarlos); una ley cuyo número no es coherente con su
+     año; un decreto con año imposible. Marca como avisos: una sentencia sin año, un radicado o un magistrado
+     ponente que la persona no dio, y una cita textual atribuida a una providencia. Lo que la persona ya escribió en
+     su consulta no se marca. **No verifica que la sentencia exista**: eso exige consultar la relatoría (punto 40
+     de la especificación), y esa consulta no se hizo aquí.
   3. Se prefiere la recuperación sobre la memoria del modelo y que las citas del corpus se marquen `[F#]` como ya
      hace PULLEX.
 
