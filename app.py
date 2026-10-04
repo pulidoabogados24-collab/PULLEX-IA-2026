@@ -569,6 +569,7 @@ with closing(db()) as con:
     """)
     academia.crear_tabla(con)
     telemetria.crear_tabla(con)
+    telemetria.purgar(con, int(os.getenv("PULLEX_TELEMETRIA_DIAS", "180")))      # retención: sin texto sensible, pero no indefinida
     con.commit()
     # Migración suave: si la base ya existía sin la columna email_verificado, se agrega.
     # Cuentas ya existentes (creadas antes de este cambio) quedan como no verificadas —

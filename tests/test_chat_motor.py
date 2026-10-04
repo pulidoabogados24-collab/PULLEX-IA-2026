@@ -362,3 +362,13 @@ def test_el_prompt_de_sistema_sigue_siendo_el_mismo_bloque_cacheado(cliente, mod
     _, _, t = nuevo_usuario(cliente)
     _enviar(cliente, t, _conv(cliente, t), "Hola")
     assert FakeAnthropic.ultima_llamada["system"][0]["text"] == modulo.SYSTEM_PROMPT
+
+
+def test_la_telemetria_vieja_se_purga(modulo):
+    from telemetria_respuestas import purgar, registrar
+    with closing(modulo.db()) as con:
+        registrar(con, 987654, "anon", {"intencion": "pregunta", "caracteres": 10})
+        con.execute("UPDATE calidad_respuestas SET creada=? WHERE mensaje_id=987654", (time.time() - 400 * 86400,))
+        con.commit()
+        assert purgar(con, 180) >= 1
+        assert con.execute("SELECT 1 FROM calidad_respuestas WHERE mensaje_id=987654").fetchone() is None
