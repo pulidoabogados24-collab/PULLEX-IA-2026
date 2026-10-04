@@ -1,0 +1,1343 @@
+{
+ "area": "Laboral",
+ "descripcion": "Banco curado de casos tipo examen de Derecho Laboral para el Laboratorio de casos (PULLEX Academia).",
+ "aviso": "Exactitud jurídica: NOT VERIFIED. Casos escritos para practicar; requieren revisión humana (docente o abogado) antes de usarse con estudiantes. Verifica la vigencia y el número de cada norma en la fuente oficial.",
+ "casos": [
+  {
+   "id": "lab-01",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "El «contratista» del mostrador",
+   "enunciado": "Desde el 2 de mayo de 2023, Brayan Estiven Mosquera atiende el mostrador de la Ferretería El Tornillo Dorado, en Soacha, de propiedad de Hernando Ruiz. Firmó un documento titulado «contrato de prestación de servicios», que se renovó cada seis meses. Trabaja de lunes a sábado, de siete de la mañana a cinco de la tarde, usa el uniforme del negocio, recibe órdenes del administrador sobre precios y turnos y debe pedir permiso para ausentarse. Recibe $2.000.000 mensuales contra una cuenta de cobro y él mismo paga su seguridad social como independiente. El 30 de abril de 2026 Hernando le comunicó que no renovaría el contrato. Brayan pidió su liquidación y Hernando se negó: dice que firmaron un contrato civil, que por eso no hay prestaciones y que el propio Brayan aceptó esas condiciones con su firma. Brayan quiere saber si tiene algo que reclamar después de tres años de servicio.",
+   "pregunta": "¿Existió un contrato de trabajo entre Brayan y Hernando, pese al documento de prestación de servicios?",
+   "pistas": [
+    "No te quedes en el título del documento: observa cómo se prestó el servicio en la práctica.",
+    "Repasa los tres elementos esenciales del contrato de trabajo y el principio constitucional que hace prevalecer los hechos sobre las formas."
+   ],
+   "conceptos": [
+    "primacía de la realidad",
+    "subordinación",
+    "elementos del contrato"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se configuró un contrato de trabajo entre las partes, a pesar de haber suscrito contratos de prestación de servicios?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Primacía de la realidad sobre las formalidades e irrenunciabilidad de los beneficios mínimos laborales."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 23",
+      "para_que": "Elementos esenciales del contrato de trabajo: actividad personal, continuada subordinación y salario; reunidos, hay contrato de trabajo cualquiera sea el nombre que se le dé."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 24",
+      "para_que": "Se presume que toda relación de trabajo personal está regida por un contrato de trabajo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 249 y 306, y Ley 50 de 1990, art. 99",
+      "para_que": "Cesantías y prima de servicios que se derivan de la declaración del contrato."
+     }
+    ],
+    "analisis": "Brayan prestó personalmente el servicio durante tres años y recibió una remuneración mensual fija. Probada la prestación personal, se presume el contrato de trabajo y a Hernando le correspondería desvirtuarlo demostrando autonomía. Los hechos muestran lo contrario: horario impuesto, uniforme, órdenes sobre precios y turnos y necesidad de pedir permiso. Eso es subordinación.\n\nReunidos los tres elementos, existe contrato de trabajo aunque el documento diga otra cosa. La firma de Brayan no cambia la conclusión, porque los derechos mínimos son irrenunciables.",
+    "contraargumento": "Hernando alega que Brayan aceptó un contrato civil y pagaba su seguridad social como independiente. Son formas que la realidad desmiente: quien cumple horario y obedece órdenes no es un contratista autónomo, y el pago de aportes como independiente fue una consecuencia de la forma impuesta.",
+    "conclusion": "Existió un contrato de trabajo. Brayan puede reclamar cesantías, intereses, primas, vacaciones, los aportes a seguridad social a cargo del empleador y lo que corresponda por la terminación.",
+    "errores_comunes": [
+     "Decidir por el nombre del contrato y no por la forma en que se ejecutó.",
+     "Creer que la firma del trabajador equivale a una renuncia válida de sus derechos.",
+     "Omitir la presunción del art. 24 y exigir al trabajador la prueba directa de la subordinación."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si entre Brayan y Hernando existió un contrato de trabajo, aunque durante tres años hayan firmado documentos de prestación de servicios.\n\nEl artículo 23 del Código Sustantivo del Trabajo señala que hay contrato de trabajo cuando concurren tres elementos: la actividad personal del trabajador, la continuada subordinación respecto del empleador y un salario. La misma norma agrega que, reunidos esos elementos, el contrato no deja de serlo por el nombre que se le dé. Además, el artículo 24 presume que toda relación de trabajo personal está regida por un contrato de trabajo, y el artículo 53 de la Constitución ordena preferir la realidad sobre las formas.\n\nEn efecto, Brayan atendió personalmente el mostrador y recibió $2.000.000 cada mes, de modo que la prestación personal y la remuneración están fuera de discusión. En cuanto a la subordinación, cumplía un horario de lunes a sábado, usaba el uniforme, recibía órdenes del administrador y debía pedir permiso para ausentarse. Por consiguiente, no actuaba con la autonomía propia de un contratista, sino bajo el poder de dirección del dueño.\n\nAhora bien, Hernando alega que Brayan firmó un contrato civil y que pagaba su seguridad social como independiente. Ese argumento no prospera, porque el documento y la cuenta de cobro son apenas la forma que el empleador escogió, y la Constitución impide que el trabajador renuncie a sus garantías mínimas. Tampoco desvirtúa la presunción, puesto que nada indica que Brayan organizara su trabajo con libertad.\n\nEn conclusión, existió un contrato de trabajo desde el 2 de mayo de 2023. De ahí que Brayan pueda reclamar cesantías, intereses, primas de servicios, vacaciones y los aportes a seguridad social, así como las consecuencias de la terminación.",
+   "conectores_usados": [
+    "en primer lugar",
+    "aunque",
+    "además",
+    "en efecto",
+    "de modo que",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "puesto que",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Brayan fuera un electricista al que la ferretería llama de vez en cuando para reparaciones, que trabaja con sus herramientas, sin horario y para otros clientes?",
+    "respuesta": "Faltaría la subordinación. Sería un contratista independiente que presta servicios con autonomía, y la presunción del contrato de trabajo quedaría desvirtuada; no habría lugar a prestaciones sociales."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-02",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "«Por decisión de la empresa»",
+   "enunciado": "Luz Dary Castaño trabajó como auxiliar contable de Confecciones Brisa S.A.S., en Itagüí, con contrato a término indefinido, desde el 1 de marzo de 2021. Su último salario fue de $2.100.000 mensuales. El 31 de agosto de 2025 la gerente le entregó una carta que decía: «por decisión de la empresa, su contrato termina hoy». La carta no le atribuyó ninguna falta. Le pagaron los salarios pendientes, las prestaciones sociales y las vacaciones, pero ninguna suma adicional. Cuando Luz Dary preguntó por la indemnización, la gerente respondió que la empresa puede terminar los contratos cuando quiera, que le había avisado de palabra con quince días de anticipación y que, al haberle pagado todas las prestaciones, quedó a paz y salvo. El 15 de septiembre de 2025 Luz Dary consulta si tiene derecho a algo más y cuánto sería, pues lleva cuatro años y medio en la empresa.",
+   "pregunta": "¿Tiene derecho Luz Dary a una indemnización por la terminación de su contrato y cómo se calcula?",
+   "pistas": [
+    "El empleador puede terminar el contrato sin justa causa, pero esa decisión tiene un costo fijado por la ley.",
+    "Busca en el artículo 64 del Código Sustantivo del Trabajo la tabla para contratos a término indefinido y aplícala a cuatro años y medio de servicio."
+   ],
+   "conceptos": [
+    "despido sin justa causa",
+    "indemnización por despido"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Debe el empleador indemnizar a la trabajadora cuyo contrato a término indefinido terminó unilateralmente sin invocar justa causa, y en qué cuantía?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62",
+      "para_que": "Enumera las justas causas de terminación; fuera de ellas el despido es injusto."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64 (modificado por la Ley 789 de 2002)",
+      "para_que": "Indemnización por despido sin justa causa; en contratos indefinidos y salarios inferiores a diez mínimos: treinta días por el primer año y veinte por cada año adicional, proporcionalmente por fracción."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 61",
+      "para_que": "Modos de terminación del contrato de trabajo."
+     }
+    ],
+    "analisis": "La carta no invocó ninguna de las justas causas legales: es un despido sin justa causa. El empleador puede hacerlo, pero debe pagar la indemnización tarifada. No existe un preaviso de quince días que la reemplace, y menos uno verbal; el pago de prestaciones es una obligación distinta.\n\nLuz Dary trabajó cuatro años y medio y devengaba menos de diez salarios mínimos. Le corresponden treinta días por el primer año y veinte por cada uno de los tres años y medio restantes, es decir, setenta días más: cien días en total. Con un salario diario de $70.000, la indemnización asciende a $7.000.000.",
+    "contraargumento": "La gerente afirma que la empresa es libre de terminar los contratos y que ya pagó todo. La libertad de despedir existe, pero condicionada al pago de la indemnización; las prestaciones retribuyen el servicio prestado, no reparan la pérdida del empleo.",
+    "conclusion": "Luz Dary tiene derecho a la indemnización por despido sin justa causa, equivalente a cien días de salario, esto es, $7.000.000 (verificar que la tabla del art. 64 siga vigente tras la Ley 2466 de 2025).",
+    "errores_comunes": [
+     "Confundir el pago de prestaciones sociales con la indemnización por despido.",
+     "Creer que un aviso verbal de quince días exime de indemnizar.",
+     "Calcular veinte días por todos los años sin aplicar los treinta días del primero ni la fracción."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico consiste en establecer si la empresa debe indemnizar a Luz Dary por haber terminado su contrato a término indefinido el 31 de agosto de 2025 sin atribuirle falta alguna y, en caso afirmativo, cuánto debe pagarle.\n\nEn primer lugar, el artículo 62 del Código Sustantivo del Trabajo enumera las justas causas que permiten al empleador terminar el contrato sin costo. Cuando la terminación no se funda en ninguna de ellas, el artículo 64 lo obliga a pagar una indemnización. Para los contratos a término indefinido de trabajadores que devengan menos de diez salarios mínimos, esa indemnización equivale a treinta días de salario por el primer año y a veinte días adicionales por cada año subsiguiente, proporcionalmente por fracción.\n\nEn efecto, la carta solo dice que el contrato termina por decisión de la empresa, es decir, no invoca causal alguna. Por lo tanto, se trata de un despido sin justa causa.\n\nAhora bien, la gerente sostiene que la empresa puede despedir cuando quiera, que avisó con quince días y que pagó las prestaciones. Ninguno de esos argumentos prospera. Si bien el empleador puede terminar el contrato sin justa causa, la ley le impone a cambio la indemnización. Además, el aviso de quince días no sustituye ese pago, y menos si fue verbal. Por otra parte, las prestaciones retribuyen el trabajo ya prestado, mientras que la indemnización repara la pérdida del empleo.\n\nEn cuanto al monto, Luz Dary completó cuatro años y medio. Le corresponden treinta días por el primer año y veinte por cada uno de los tres años y medio siguientes, o sea setenta días. En consecuencia, la indemnización es de cien días de salario, que a razón de $70.000 diarios suman $7.000.000.\n\nEn conclusión, la empresa le adeuda esa suma, sin perjuicio de verificar la vigencia de la tabla legal.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "es decir",
+    "por lo tanto",
+    "ahora bien",
+    "si bien",
+    "además",
+    "por otra parte",
+    "en consecuencia",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la carta hubiera invocado, y la empresa probara, que Luz Dary alteró registros contables para apropiarse de dinero?",
+    "respuesta": "Habría una justa causa de despido de las previstas en el art. 62 del Código Sustantivo del Trabajo. La terminación sería válida y no generaría indemnización, aunque sí el pago de salarios y prestaciones causados."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-03",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "Salario «con todo incluido»",
+   "enunciado": "Yeison Palacios trabaja desde el 1 de julio de 2024 como auxiliar de bodega en Distribuciones El Cóndor Ltda., en Yopal, con un contrato verbal a término indefinido y un salario de $2.200.000 mensuales. En dos años no ha recibido prima de servicios, no le han consignado cesantías en un fondo ni le han pagado intereses sobre ellas. El 10 de julio de 2026 preguntó por esos pagos. El dueño le contestó que, cuando lo contrató, acordaron de palabra un «salario integral» que ya incluía todo, que por eso gana más que el mínimo y que Yeison aceptó esas condiciones y nunca reclamó. Le recordó, además, que le paga puntualmente y que lo tiene afiliado a seguridad social. Yeison no firmó ningún documento. Un compañero le dice que, si aceptó ese trato, ya no puede pedir nada, porque «lo pactado obliga» y no hay nada por escrito que diga lo contrario.",
+   "pregunta": "¿Tiene derecho Yeison a las prestaciones sociales, o el acuerdo verbal de salario «con todo incluido» se lo impide?",
+   "pistas": [
+    "Identifica cuáles son las prestaciones sociales comunes a cargo del empleador y si el trabajador puede renunciar a ellas.",
+    "Revisa los requisitos de forma y de cuantía que el artículo 132 del Código Sustantivo del Trabajo exige para pactar salario integral."
+   ],
+   "conceptos": [
+    "prestaciones sociales",
+    "cesantías",
+    "prima de servicios",
+    "salario"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es válido un acuerdo verbal de salario integral con un trabajador que devenga $2.200.000, de manera que excluya el pago de las prestaciones sociales?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 132",
+      "para_que": "El salario integral exige estipulación escrita y un salario ordinario superior a diez salarios mínimos legales mensuales, más el factor prestacional."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 249, y Ley 50 de 1990, art. 99",
+      "para_que": "Auxilio de cesantía de un mes de salario por año y deber de consignarlo anualmente en un fondo, con sanción por la omisión."
+     },
+     {
+      "norma": "Ley 52 de 1975",
+      "para_que": "Intereses sobre las cesantías."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 306",
+      "para_que": "Prima de servicios."
+     },
+     {
+      "norma": "Constitución Política, art. 53, y Código Sustantivo del Trabajo, arts. 14 y 43",
+      "para_que": "Irrenunciabilidad de los derechos laborales e ineficacia de las estipulaciones que desmejoran al trabajador."
+     }
+    ],
+    "analisis": "El salario integral es la única forma legal de pagar un salario que ya retribuya las prestaciones. Exige dos condiciones que aquí faltan: pacto escrito y un salario superior a diez mínimos, además del factor prestacional. Yeison gana $2.200.000 y no firmó nada.\n\nEl acuerdo verbal no produce efecto. Las prestaciones son derechos mínimos irrenunciables, de modo que el silencio de Yeison durante dos años tampoco equivale a renuncia. El empleador debe las cesantías de cada año con sus intereses, las primas y, por no haber consignado las cesantías, se expone a la sanción legal.",
+    "contraargumento": "El dueño alega que lo pactado obliga y que paga más del mínimo. La autonomía de la voluntad cede ante normas de orden público: pagar un salario superior al mínimo no autoriza a suprimir prestaciones que la ley ordena pagar por separado.",
+    "conclusion": "Yeison tiene derecho a cesantías, intereses y primas de servicios causadas desde el 1 de julio de 2024. El acuerdo verbal de salario integral es ineficaz.",
+    "errores_comunes": [
+     "Aceptar un salario integral verbal o por debajo del tope legal.",
+     "Pensar que el trabajador pierde sus prestaciones por no haberlas reclamado.",
+     "Confundir la afiliación a seguridad social con el pago de las prestaciones sociales."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el acuerdo verbal de salario con todo incluido priva a Yeison de las prestaciones sociales que no ha recibido desde el 1 de julio de 2024.\n\nLa ley impone al empleador el pago de un auxilio de cesantía equivalente a un mes de salario por cada año, conforme al artículo 249 del Código Sustantivo del Trabajo, que debe consignarse anualmente en un fondo según el artículo 99 de la Ley 50 de 1990. Asimismo, la Ley 52 de 1975 ordena pagar intereses sobre las cesantías y el artículo 306 del mismo código consagra la prima de servicios. Solo existe una modalidad en la que el salario retribuye también las prestaciones: el salario integral del artículo 132, que exige estipulación escrita y un salario superior a diez salarios mínimos mensuales, más el factor prestacional.\n\nEn efecto, Yeison devenga $2.200.000 y no firmó documento alguno. Por consiguiente, no se cumple ninguno de los dos requisitos y el supuesto salario integral no existe.\n\nAhora bien, el dueño insiste en que lo pactado obliga y en que Yeison nunca reclamó. Ese argumento no prospera, porque el artículo 53 de la Constitución y el artículo 14 del código declaran irrenunciables los derechos laborales mínimos, y el artículo 43 priva de efecto a las estipulaciones que desmejoran al trabajador. De ahí que ni el acuerdo ni el silencio de dos años equivalgan a una renuncia válida. Tampoco importa que el salario supere el mínimo o que haya afiliación a seguridad social, ya que se trata de obligaciones distintas.\n\nEn conclusión, la empresa debe a Yeison las cesantías con sus intereses y las primas de servicios de todo el periodo. Además, por no haber consignado las cesantías se expone a la sanción prevista en la Ley 50 de 1990.",
+   "conectores_usados": [
+    "en primer lugar",
+    "con todo",
+    "asimismo",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "de ahí que",
+    "ya que",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Yeison fuera gerente y hubiera pactado por escrito un salario integral superior a trece salarios mínimos mensuales?",
+    "respuesta": "El pacto sería válido: el salario ya compensaría cesantías, intereses y primas, y no podría reclamarlas por separado. Conservaría el derecho a vacaciones y a los aportes a seguridad social."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-04",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "La ecografía y la carta",
+   "enunciado": "Paola Andrea Ríos es cajera del Supermercado La Economía S.A.S., en Cartago, con contrato a término indefinido desde 2022. El 12 de enero de 2026 informó por correo electrónico a la oficina de recursos humanos que tenía ocho semanas de embarazo y adjuntó la ecografía; la jefa de personal le respondió con una felicitación. El 6 de febrero de 2026 recibió una carta de despido «sin justa causa», acompañada del pago de la indemnización del artículo 64 del Código Sustantivo del Trabajo. La empresa no pidió permiso al inspector del trabajo. Según el gerente, la decisión obedeció a una reorganización de turnos que nada tiene que ver con el embarazo y, pagada la indemnización, la empresa quedó a paz y salvo. Paola es el único sostén de su hogar, perdió con el empleo la afiliación como cotizante y teme quedarse sin licencia de maternidad. Quiere saber si el despido puede mantenerse.",
+   "pregunta": "¿Es eficaz el despido de Paola y qué puede reclamar?",
+   "pistas": [
+    "La ley protege de manera especial a la trabajadora embarazada frente al despido: averigua qué requisito previo debe cumplir el empleador.",
+    "Revisa los artículos 239 y 240 del Código Sustantivo del Trabajo y la presunción que establecen."
+   ],
+   "conceptos": [
+    "estabilidad laboral reforzada",
+    "embarazo",
+    "despido"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Produce efectos el despido sin justa causa de una trabajadora embarazada, conocido su estado por el empleador, cuando no se obtuvo permiso del inspector del trabajo y se pagó la indemnización ordinaria?",
+    "normas": [
+     {
+      "norma": "Constitución Política, arts. 43 y 53",
+      "para_que": "Protección especial a la mujer durante el embarazo y después del parto, y a la maternidad en el trabajo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 239",
+      "para_que": "Prohíbe despedir por motivo de embarazo o lactancia, presume ese motivo cuando el despido ocurre en el periodo protegido sin autorización y fija una indemnización especial de sesenta días."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 240",
+      "para_que": "Para despedir a una trabajadora durante el embarazo se requiere autorización del inspector del trabajo, fundada en una justa causa."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 241",
+      "para_que": "No produce efecto el despido comunicado durante los descansos y licencias de maternidad."
+     }
+    ],
+    "analisis": "La empresa conocía el embarazo desde el 12 de enero y despidió el 6 de febrero sin permiso del inspector. Opera la presunción de que el despido tuvo por motivo el embarazo, y la empresa no la desvirtúa con la sola mención de una reorganización de turnos. Además, el inspector únicamente autoriza cuando existe justa causa, y aquí se despidió sin ella.\n\nLa consecuencia, según la jurisprudencia constitucional y laboral, es la ineficacia del despido: procede el reintegro con pago de salarios y prestaciones dejados de percibir, la indemnización especial de sesenta días y la garantía de la licencia de maternidad.",
+    "contraargumento": "El gerente sostiene que pagó la indemnización del art. 64. Esa indemnización corresponde al despido ordinario; no reemplaza el permiso ni convalida un despido prohibido. Lo pagado podrá compensarse con lo que resulte a favor de Paola.",
+    "conclusion": "El despido es ineficaz. Paola puede reclamar el reintegro, los salarios y prestaciones dejados de percibir, la indemnización de sesenta días y la garantía de su licencia de maternidad.",
+    "errores_comunes": [
+     "Creer que pagar la indemnización ordinaria permite despedir a una trabajadora embarazada.",
+     "Exigir a la trabajadora la prueba de que el motivo fue el embarazo, cuando la ley lo presume.",
+     "Olvidar que el permiso del inspector exige una justa causa."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si produce efectos el despido de Paola, comunicado el 6 de febrero de 2026 cuando la empresa ya sabía de su embarazo, sin permiso del inspector del trabajo y con pago de la indemnización ordinaria.\n\nEl artículo 43 de la Constitución ordena una protección especial a la mujer durante el embarazo. En desarrollo de ese mandato, el artículo 239 del Código Sustantivo del Trabajo prohíbe despedir por motivo de embarazo y presume que ese fue el motivo cuando el despido ocurre dentro del periodo protegido sin autorización. A su vez, el artículo 240 exige que el empleador obtenga permiso del inspector del trabajo, quien solo puede concederlo con fundamento en una justa causa.\n\nEn efecto, Paola avisó su estado el 12 de enero y recibió respuesta de la jefa de personal, de modo que el conocimiento del empleador está probado. Tres semanas después fue despedida sin que la empresa acudiera al inspector. Por consiguiente, opera la presunción legal y a la empresa le correspondía desvirtuarla.\n\nAhora bien, el gerente invoca una reorganización de turnos. Esa explicación no basta, porque no es una justa causa y, aunque lo fuera, debía someterse antes al inspector. Tampoco prospera el argumento del pago, puesto que la indemnización del artículo 64 repara el despido común y no convalida uno prohibido por la ley.\n\nDe ahí que el despido sea ineficaz, según lo ha sostenido de manera reiterada la jurisprudencia. En consecuencia, Paola tiene derecho al reintegro, a los salarios y prestaciones dejados de percibir y a la indemnización de sesenta días que prevé el artículo 239.\n\nEn conclusión, el despido no puede mantenerse. Además, la empresa debe restablecer la afiliación para garantizar la licencia de maternidad, y lo ya pagado podrá compensarse.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "de modo que",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "aunque",
+    "puesto que",
+    "de ahí que",
+    "en consecuencia",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la empresa hubiera pedido y obtenido permiso del inspector del trabajo, tras probar que Paola se apropió de dinero de la caja?",
+    "respuesta": "El despido sería válido: habría una justa causa comprobada y la autorización previa que exige el art. 240 del Código Sustantivo del Trabajo. No habría reintegro ni indemnización especial."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-05",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "Cuatro años de espera",
+   "enunciado": "Ramiro Caicedo trabajó como conductor de Transportes del Sur Ltda., en Popayán, con contrato de trabajo escrito, del 1 de febrero de 2018 al 30 de junio de 2022, día en que renunció. Al retirarse no le pagaron la liquidación final: las cesantías del último año, la prima proporcional y las vacaciones pendientes, que suman unos $5 millones. Durante los meses siguientes fue varias veces a la oficina y pidió de palabra su pago; nadie le dio respuesta. Nunca envió una carta, un correo ni un mensaje escrito a la empresa. El 15 de agosto de 2026 presentó demanda ordinaria laboral. La empresa propuso la excepción de prescripción. Ramiro replica que los derechos laborales son irrenunciables y que, por lo mismo, no pueden extinguirse por el paso del tiempo; agrega que sus visitas a la oficina demuestran que nunca abandonó el reclamo y que varios compañeros pueden dar fe de ellas.",
+   "pregunta": "¿Prospera la excepción de prescripción frente a las acreencias laborales que reclama Ramiro?",
+   "pistas": [
+    "Que un derecho sea irrenunciable no significa que la acción para cobrarlo dure para siempre.",
+    "Consulta en los artículos 488 y 489 del Código Sustantivo del Trabajo el término de prescripción y la única forma en que el trabajador puede interrumpirlo fuera del proceso."
+   ],
+   "conceptos": [
+    "prescripción laboral",
+    "prestaciones sociales"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Prescribieron las acciones para cobrar prestaciones y vacaciones exigibles desde junio de 2022, reclamadas judicialmente en agosto de 2026 sin reclamo escrito previo?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 488",
+      "para_que": "Las acciones correspondientes a los derechos laborales prescriben en tres años, contados desde que la obligación se hizo exigible."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 489",
+      "para_que": "El simple reclamo escrito del trabajador, recibido por el empleador, interrumpe la prescripción por una sola vez."
+     },
+     {
+      "norma": "Norma procesal laboral sobre prescripción (verificar el artículo vigente tras la Ley 2452 de 2025)",
+      "para_que": "Reitera el término trienal y la interrupción por reclamo escrito."
+     },
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Irrenunciabilidad de los beneficios mínimos, que no equivale a imprescriptibilidad de las acciones."
+     }
+    ],
+    "analisis": "Las acreencias de la liquidación final se hicieron exigibles el 30 de junio de 2022, al terminar el contrato. El término de tres años venció el 30 de junio de 2025. La demanda se presentó más de un año después.\n\nLa ley permite interrumpir la prescripción con un simple reclamo escrito recibido por el empleador. Ramiro solo hizo reclamos verbales, que no tienen ese efecto, aunque haya testigos. La irrenunciabilidad impide que el trabajador disponga de sus derechos mínimos por acuerdo, pero no elimina la carga de ejercer la acción en tiempo.",
+    "contraargumento": "Ramiro invoca la irrenunciabilidad. El argumento confunde el derecho con la acción: la prescripción no es una renuncia, sino la consecuencia legal de la inactividad. La jurisprudencia solo ha excluido de esta regla asuntos específicos, como los aportes para pensión (verificar).",
+    "conclusion": "La excepción de prescripción prospera respecto de cesantías, prima y vacaciones. Ramiro podría insistir únicamente en lo relativo a aportes pensionales omitidos, si los hubiera.",
+    "errores_comunes": [
+     "Sostener que los derechos laborales no prescriben por ser irrenunciables.",
+     "Dar efecto interruptor a los reclamos verbales.",
+     "Contar el término desde el inicio del contrato o desde la demanda, y no desde la exigibilidad."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico es si las acciones de Ramiro para cobrar cesantías, prima y vacaciones estaban prescritas cuando demandó el 15 de agosto de 2026.\n\nEn primer lugar, el artículo 488 del Código Sustantivo del Trabajo dispone que las acciones correspondientes a los derechos laborales prescriben en tres años, contados desde que la respectiva obligación se hizo exigible. Además, el artículo 489 permite al trabajador interrumpir ese término, por una sola vez, mediante un simple reclamo escrito recibido por el empleador sobre un derecho determinado.\n\nEn efecto, la liquidación final se hizo exigible el 30 de junio de 2022, cuando terminó el contrato. Por consiguiente, los tres años se cumplieron el 30 de junio de 2025 y la demanda llegó más de un año tarde. Tampoco hubo interrupción, puesto que Ramiro nunca envió una carta ni un correo; se limitó a pedir su pago de palabra.\n\nAhora bien, Ramiro alega que los derechos laborales son irrenunciables. Ese argumento no prospera, porque confunde dos planos. La irrenunciabilidad del artículo 53 de la Constitución impide que el trabajador se despoje de sus garantías mínimas por un acuerdo; la prescripción, en cambio, no es un acto de disposición, sino la consecuencia que la ley atribuye a no ejercer la acción en tiempo. De ahí que un derecho irrenunciable pueda dejar de ser exigible judicialmente.\n\nTampoco le ayudan sus visitas a la oficina. Aunque sus compañeros las confirmen, la ley exige que el reclamo conste por escrito, de modo que la prueba testimonial de un reclamo verbal es inútil.\n\nEn conclusión, la excepción prospera y las pretensiones deben negarse. Por último, conviene revisar si la empresa omitió aportes a pensión, ya que la jurisprudencia les ha dado un tratamiento distinto frente a la prescripción, punto que debe verificarse.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "en cambio",
+    "de ahí que",
+    "aunque",
+    "de modo que",
+    "en conclusión",
+    "por último",
+    "ya que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el 10 de mayo de 2025 Ramiro hubiera enviado a la empresa un correo, con acuse de recibo, reclamando el pago de su liquidación?",
+    "respuesta": "Ese reclamo escrito, hecho antes de vencer los tres años, habría interrumpido la prescripción por una vez. El término volvería a contarse desde el 10 de mayo de 2025 y la demanda de agosto de 2026 sería oportuna."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-06",
+   "area": "Laboral",
+   "nivel": "basico",
+   "titulo": "«Cuando mejore la temporada»",
+   "enunciado": "Camila Andrea Torres trabajó como recepcionista del Hotel Mirador del Lago S.A.S., en Paipa, del 15 de enero de 2023 al 31 de marzo de 2026, cuando presentó su renuncia. Su salario era de $2.400.000 mensuales. La empresa elaboró la liquidación final por $6.300.000, que comprende quince días de salario pendientes, cesantías, intereses, prima proporcional y vacaciones, pero no se la pagó: el gerente le explicó que el hotel pasaba por una baja ocupación y que le pagaría «cuando mejore la temporada». El 1 de julio de 2026, tres meses después, Camila sigue sin recibir un peso. El gerente sostiene que la deuda está reconocida por escrito, que no hay mala fe sino falta de liquidez y que, como fue ella quien renunció, la empresa no tiene por qué pagar sanción alguna. Camila consiguió otro empleo en mayo, con menor salario, y quiere saber qué puede cobrar además de la liquidación.",
+   "pregunta": "¿Tiene derecho Camila a la indemnización moratoria por la falta de pago de su liquidación?",
+   "pistas": [
+    "La ley sanciona al empleador que, al terminar el contrato, no paga lo que debe: identifica la norma y lo que exige.",
+    "Esa sanción no es automática: pregúntate si la razón que da el hotel es una justificación atendible."
+   ],
+   "conceptos": [
+    "indemnización moratoria",
+    "buena fe",
+    "prestaciones sociales"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede la indemnización moratoria cuando el empleador reconoce la deuda de salarios y prestaciones, pero no la paga al terminar el contrato por falta de liquidez?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 65 (modificado por la Ley 789 de 2002)",
+      "para_que": "Si a la terminación del contrato el empleador no paga salarios y prestaciones debidos, debe un día de salario por cada día de retardo, con los límites temporales que fija la norma."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 28",
+      "para_que": "El trabajador no asume los riesgos ni las pérdidas del empleador."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 249 y 306",
+      "para_que": "Cesantías y prima de servicios incluidas en la liquidación."
+     }
+    ],
+    "analisis": "El contrato terminó el 31 de marzo de 2026 y el hotel no pagó salarios ni prestaciones. Se cumple el supuesto de la norma, que no distingue según quién haya terminado el contrato: aplica también cuando el trabajador renuncia.\n\nLa jurisprudencia laboral ha precisado que la sanción no es automática: el juez examina si el empleador obró de buena fe, es decir, si tuvo razones serias para creer que no debía. Aquí no hay duda sobre la deuda: el hotel la liquidó y la reconoció. La falta de liquidez no es una razón atendible, porque las dificultades económicas son un riesgo del empleador. Con un salario diario de $80.000, la sanción corre desde el 1 de abril de 2026.",
+    "contraargumento": "El gerente alega ausencia de mala fe. La buena fe que exonera supone una discusión razonable sobre la existencia de la obligación, no la simple imposibilidad o decisión de no pagar una deuda cierta. Si quería liberarse, debió pagar lo liquidado o consignarlo.",
+    "conclusion": "Camila tiene derecho, además de la liquidación, a la indemnización moratoria de $80.000 diarios desde el 1 de abril de 2026 hasta el pago, dentro de los límites del art. 65.",
+    "errores_comunes": [
+     "Creer que la moratoria solo procede cuando hay despido.",
+     "Aceptar la iliquidez como prueba de buena fe.",
+     "Tratar la sanción como automática, sin analizar la conducta del empleador."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el hotel debe a Camila la indemnización moratoria por no haberle pagado la liquidación final al terminar el contrato, el 31 de marzo de 2026.\n\nEl artículo 65 del Código Sustantivo del Trabajo establece que, si a la terminación del contrato el empleador no paga al trabajador los salarios y prestaciones debidos, debe pagarle como indemnización una suma igual al último salario diario por cada día de retardo, con los límites temporales que la misma norma prevé. La jurisprudencia laboral ha precisado que esta sanción no es automática, puesto que el juez debe examinar si el empleador obró de buena fe, esto es, si tuvo razones atendibles para no pagar.\n\nEn efecto, el hotel liquidó $6.300.000 por salarios, cesantías, intereses, prima y vacaciones, y tres meses después no ha pagado nada. Por consiguiente, el supuesto de hecho de la norma está cumplido.\n\nAhora bien, el gerente plantea dos defensas. De un lado, que Camila renunció. Ese argumento no prospera, porque el artículo 65 se refiere a la terminación del contrato sin distinguir su causa. De otro lado, que no hay mala fe sino falta de liquidez. Sin embargo, la buena fe que exonera supone una duda razonable sobre la existencia de la deuda, y aquí la propia empresa la reconoció por escrito. Además, el artículo 28 del mismo código impide trasladar al trabajador los riesgos o pérdidas del negocio; de ahí que la baja ocupación no justifique el retardo.\n\nEn cuanto al monto, el salario diario es de $80.000 y la sanción corre desde el 1 de abril de 2026. Tampoco importa que Camila tenga otro empleo, ya que la moratoria castiga el incumplimiento del empleador.\n\nEn conclusión, Camila puede cobrar la liquidación y la indemnización moratoria hasta que se verifique el pago.",
+   "conectores_usados": [
+    "en primer lugar",
+    "puesto que",
+    "esto es",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "de un lado",
+    "porque",
+    "de otro lado",
+    "sin embargo",
+    "además",
+    "de ahí que",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el hotel hubiera pagado toda la liquidación salvo unos bonos, por discutir con argumentos serios si constituían salario?",
+    "respuesta": "Respecto de la diferencia discutida podría reconocerse la buena fe del empleador, si su tesis era razonable y pagó oportunamente lo no discutido. En ese caso no se impondría la indemnización moratoria, aunque al final se le condenara a reliquidar."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-07",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "La diseñadora y sus tres clientes",
+   "enunciado": "Daniela Marcela Ortiz, diseñadora gráfica de Medellín, celebró el 1 de febrero de 2024 un contrato de prestación de servicios con la agencia Publicidad Norte S.A.S. para elaborar las piezas mensuales de tres marcas, por honorarios de $4.000.000 al mes. Trabaja desde su casa con su propio computador y sus licencias, define sus horarios, entrega las piezas en las fechas acordadas y recibe observaciones del director creativo sobre el resultado; no asiste a reuniones de personal ni tiene correo corporativo. En el mismo periodo facturó trabajos a otras dos empresas y, cuando viajó tres semanas en 2025, encargó las piezas a un colega a quien ella misma pagó. El 31 de marzo de 2026 la agencia dio por terminado el contrato. Daniela reclama prestaciones e indemnización: alega que prestó un servicio personal y remunerado durante más de dos años, que recibía instrucciones del director y que la ley presume el contrato de trabajo.",
+   "pregunta": "¿Existió un contrato de trabajo entre Daniela y la agencia?",
+   "pistas": [
+    "La presunción del contrato de trabajo ayuda a quien prueba la prestación personal del servicio, pero admite prueba en contrario.",
+    "Distingue entre recibir órdenes sobre el modo, el tiempo y la cantidad de trabajo, y recibir observaciones sobre el resultado encargado."
+   ],
+   "conceptos": [
+    "subordinación",
+    "autonomía técnica",
+    "presunción del contrato"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Logra la agencia desvirtuar la presunción de contrato de trabajo demostrando que la diseñadora actuó con autonomía, y equivalen a subordinación las observaciones sobre las piezas entregadas?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 23",
+      "para_que": "La subordinación consiste en la facultad del empleador de exigir el cumplimiento de órdenes sobre el modo, tiempo o cantidad de trabajo e imponer reglamentos."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 24",
+      "para_que": "Presunción legal de contrato de trabajo, que admite prueba en contrario."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 34",
+      "para_que": "Contratista independiente: quien ejecuta obras o servicios con sus propios medios y con libertad y autonomía técnica y directiva."
+     },
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Primacía de la realidad, que opera en ambos sentidos: también confirma la independencia cuando esta es real."
+     }
+    ],
+    "analisis": "Daniela prestó servicios remunerados, lo que activa la presunción. Pero la agencia la desvirtúa con los hechos: ella trabaja con medios propios, fija sus horarios, no está integrada a la organización, atiende simultáneamente a otros clientes y pudo hacerse reemplazar por un colega pagado por ella, lo que excluye incluso el carácter estrictamente personal del servicio.\n\nLas observaciones del director creativo recaen sobre el resultado contratado. Todo contratante puede verificar que el producto se ajuste a lo pedido; eso es coordinación, no poder de dirección sobre el modo, el tiempo y la cantidad de trabajo.",
+    "contraargumento": "Daniela invoca la duración de más de dos años y las instrucciones recibidas. La continuidad no convierte un contrato civil en laboral, y las instrucciones sobre el resultado son compatibles con la autonomía. Su tesis prosperaría si se probara horario, exclusividad o sometimiento a reglamentos.",
+    "conclusion": "No existió contrato de trabajo. La presunción quedó desvirtuada y Daniela no tiene derecho a prestaciones ni a indemnización por despido.",
+    "errores_comunes": [
+     "Tratar la presunción del art. 24 como si no admitiera prueba en contrario.",
+     "Confundir la supervisión del resultado con la subordinación.",
+     "Deducir un contrato de trabajo de la sola duración de la relación."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos cuestiones por resolver: si la presunción de contrato de trabajo favorece a Daniela y si las observaciones que recibía del director creativo constituyen subordinación.\n\nEl artículo 24 del Código Sustantivo del Trabajo presume que toda relación de trabajo personal está regida por un contrato de trabajo. Daniela prestó servicios remunerados durante más de dos años, de modo que la presunción opera a su favor. Sin embargo, se trata de una presunción legal que admite prueba en contrario, y a la agencia le basta demostrar que el servicio se ejecutó con autonomía.\n\nEn efecto, los hechos muestran esa autonomía. Daniela trabaja desde su casa con su propio computador y sus licencias, define sus horarios, no tiene correo corporativo ni asiste a reuniones de personal. Además, en el mismo periodo facturó a otras dos empresas y, durante un viaje, encargó las piezas a un colega pagado por ella, lo que incluso pone en duda el carácter personal de la prestación. Esa es la figura del contratista independiente que describe el artículo 34 del mismo código.\n\nAhora bien, Daniela insiste en que recibía instrucciones. El artículo 23 define la subordinación como la facultad de exigir el cumplimiento de órdenes en cuanto al modo, tiempo o cantidad de trabajo. En cambio, las observaciones del director recaían sobre el resultado encargado, es decir, sobre si las piezas correspondían a lo contratado. Por lo tanto, se trata de la coordinación propia de cualquier contrato de servicios y no del poder de dirección de un empleador.\n\nPor último, la duración de la relación no altera el análisis, porque un contrato civil puede ser prolongado sin volverse laboral.\n\nEn conclusión, la presunción quedó desvirtuada y no existió contrato de trabajo; de ahí que Daniela no pueda reclamar prestaciones ni indemnización.",
+   "conectores_usados": [
+    "en primer lugar",
+    "de modo que",
+    "sin embargo",
+    "en efecto",
+    "además",
+    "incluso",
+    "ahora bien",
+    "en cambio",
+    "es decir",
+    "por lo tanto",
+    "por último",
+    "porque",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la agencia le exigiera a Daniela trabajar de ocho a cinco en sus oficinas, con equipos de la empresa, bajo las órdenes diarias del director y sin poder delegar?",
+    "respuesta": "Habría subordinación y prestación estrictamente personal. La presunción no se desvirtuaría y, por primacía de la realidad, se declararía el contrato de trabajo con sus prestaciones."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-08",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "Diez días de aviso",
+   "enunciado": "Jhon Fredy Bermúdez firmó con Seguridad Atlas Ltda., de Barranquilla, un contrato de trabajo a término fijo de un año como supervisor, del 1 de marzo de 2025 al 28 de febrero de 2026, con un salario de $2.700.000. El 18 de febrero de 2026, diez días antes del vencimiento, la empresa le entregó una carta en la que le informaba que el contrato «no será prorrogado». Jhon Fredy trabajó hasta el 28 de febrero y al día siguiente le impidieron el ingreso. Le pagaron salarios y prestaciones, sin indemnización. La empresa sostiene que el contrato venció por expiración del plazo pactado, que esa es una causa legal de terminación y que el aviso, aunque tardío, cumplió su finalidad de informar. Añade que Jhon Fredy había tenido dos llamados de atención por llegar tarde, aunque la carta no los mencionó. Él considera que la empresa no podía sacarlo y pide que se le indique cuánto puede cobrar.",
+   "pregunta": "¿Terminó válidamente el contrato por vencimiento del plazo y qué puede reclamar Jhon Fredy?",
+   "pistas": [
+    "En el contrato a término fijo, el vencimiento del plazo no basta por sí solo: la ley exige un aviso con cierta anticipación.",
+    "Determina qué ocurre con el contrato cuando el aviso no es oportuno y cómo se indemniza la terminación injusta de un contrato a término fijo."
+   ],
+   "conceptos": [
+    "despido sin justa causa",
+    "indemnización por despido",
+    "justa causa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se prorrogó el contrato a término fijo por la falta de preaviso oportuno, de modo que la desvinculación constituye un despido sin justa causa, y cuál es la indemnización?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 46",
+      "para_que": "Si ninguna de las partes avisa por escrito, con antelación no inferior a treinta días, su decisión de no prorrogar el contrato a término fijo, este se entiende renovado (verificar el texto vigente tras la Ley 2466 de 2025)."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 61",
+      "para_que": "La expiración del plazo fijo pactado es un modo de terminación, siempre que se cumpla el preaviso."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64",
+      "para_que": "En los contratos a término fijo, la indemnización equivale a los salarios del tiempo que falte para cumplir el plazo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62, parágrafo",
+      "para_que": "La causal de terminación debe manifestarse en el momento de la extinción; después no pueden alegarse otras."
+     }
+    ],
+    "analisis": "El aviso se entregó el 18 de febrero, diez días antes del vencimiento, cuando la ley exige al menos treinta. El aviso tardío equivale a no haber avisado: el contrato se entendió renovado por un periodo igual al inicial, es decir, hasta el 28 de febrero de 2027.\n\nAl impedirle el ingreso, la empresa terminó unilateralmente un contrato vigente sin justa causa. La indemnización corresponde a los salarios del tiempo faltante: doce meses, o sea $32.400.000. Los llamados de atención no se invocaron en la carta y, en todo caso, llegar tarde dos veces difícilmente configura una justa causa.",
+    "contraargumento": "La empresa alega que el aviso cumplió su finalidad informativa. La antelación de treinta días es un requisito de eficacia, no una formalidad: garantiza que el trabajador pueda prever la pérdida del empleo. La ley fija la consecuencia de su omisión.",
+    "conclusion": "El contrato no terminó por vencimiento del plazo: se prorrogó por un año y fue terminado sin justa causa. Jhon Fredy puede reclamar $32.400.000 de indemnización.",
+    "errores_comunes": [
+     "Creer que el contrato a término fijo termina solo, sin preaviso.",
+     "Calcular la indemnización con la tabla de los contratos indefinidos.",
+     "Aceptar motivos que el empleador no expresó al terminar el contrato."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es doble: si el contrato de Jhon Fredy terminó por expiración del plazo el 28 de febrero de 2026 y, de no ser así, qué indemnización le corresponde.\n\nEl artículo 46 del Código Sustantivo del Trabajo dispone que, si antes del vencimiento del término ninguna de las partes avisa por escrito a la otra su decisión de no prorrogar el contrato, con una antelación no inferior a treinta días, este se entiende renovado por un periodo igual al inicialmente pactado. Asimismo, el artículo 61 reconoce la expiración del plazo como modo de terminación, pero esa causa solo opera cuando el preaviso se dio en tiempo.\n\nEn efecto, la empresa entregó la carta el 18 de febrero de 2026, apenas diez días antes del vencimiento. Por consiguiente, el aviso fue ineficaz y el contrato se prorrogó por un año, hasta el 28 de febrero de 2027. De ahí que impedirle el ingreso equivalga a un despido sin justa causa.\n\nAhora bien, la empresa sostiene que el aviso, aunque tardío, cumplió su finalidad. Ese argumento no prospera, porque la antelación de treinta días es precisamente lo que protege al trabajador, y la ley señala la consecuencia de no respetarla. Tampoco le sirven los llamados de atención, ya que el parágrafo del artículo 62 exige manifestar la causal al momento de la terminación y prohíbe alegar después motivos distintos; además, dos retardos difícilmente constituyen una falta grave.\n\nEn cuanto a la indemnización, el artículo 64 la fija, para los contratos a término fijo, en el valor de los salarios correspondientes al tiempo que falte para cumplir el plazo. Faltaban doce meses, con lo cual la suma asciende a $32.400.000.\n\nEn conclusión, el contrato no terminó válidamente y Jhon Fredy puede reclamar esa indemnización, previa verificación del texto vigente del artículo 46.",
+   "conectores_usados": [
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "por consiguiente",
+    "de ahí que",
+    "ahora bien",
+    "aunque",
+    "porque",
+    "ya que",
+    "además",
+    "con lo cual",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la carta de no prórroga se hubiera entregado el 20 de enero de 2026?",
+    "respuesta": "El preaviso habría sido oportuno, con más de treinta días de antelación. El contrato habría terminado el 28 de febrero de 2026 por expiración del plazo pactado, sin lugar a indemnización."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-09",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "El motivo que apareció en la contestación",
+   "enunciado": "El 14 de noviembre de 2025, Almacenes Rondón S.A.S., de Cúcuta, despidió a Gustavo Peñaranda, jefe de bodega con nueve años exactos de servicio, contrato a término indefinido y salario de $3.000.000. La carta dice: «por reestructuración del área de logística, la empresa da por terminado su contrato a partir de la fecha». No le pagaron indemnización. Gustavo demandó el 20 de enero de 2026. En la contestación, la empresa alegó por primera vez que el verdadero motivo fue un faltante de inventario de $18 millones detectado en octubre de 2025, del que responsabiliza a Gustavo, y aportó un informe de auditoría elaborado en diciembre, después del despido. Sostiene que el juez debe valorar esa prueba porque demuestra una falta grave y que, de todos modos, la reestructuración es una razón válida para terminar contratos. Gustavo niega el faltante y dice que nunca fue llamado a dar explicaciones.",
+   "pregunta": "¿Puede la empresa justificar el despido con el faltante de inventario que no mencionó en la carta?",
+   "pistas": [
+    "Fíjate en el momento en que el empleador debe expresar el motivo de la terminación y en lo que ocurre con los motivos que calla.",
+    "Verifica si la reestructuración de un área figura entre las justas causas del artículo 62 del Código Sustantivo del Trabajo."
+   ],
+   "conceptos": [
+    "justa causa",
+    "despido sin justa causa",
+    "indemnización por despido"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede el empleador alegar en el proceso una causal de despido distinta de la que manifestó al terminar el contrato, y constituye justa causa la reestructuración invocada en la carta?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62, parágrafo",
+      "para_que": "Quien termina unilateralmente el contrato debe manifestar a la otra parte, en el momento de la extinción, la causal o motivo; posteriormente no pueden alegarse válidamente causales distintas."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62, literal a)",
+      "para_que": "Lista taxativa de justas causas por parte del empleador, entre las que no figura la reestructuración."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64",
+      "para_que": "Indemnización por despido sin justa causa en contratos a término indefinido."
+     },
+     {
+      "norma": "Código General del Proceso, art. 167",
+      "para_que": "Al trabajador le basta probar el despido; al empleador le corresponde probar la justa causa."
+     }
+    ],
+    "analisis": "La carta solo invocó una reestructuración. Ese motivo no es una justa causa legal: puede explicar la decisión empresarial, pero no exime de indemnizar. El faltante de inventario apareció por primera vez en la contestación, de modo que la ley impide valorarlo como justificación, cualquiera que sea su mérito. La auditoría posterior al despido confirma que no fue el motivo expresado.\n\nEl despido es, entonces, injusto. Con nueve años de servicio y salario inferior a diez mínimos, la indemnización es de treinta días por el primer año y veinte por cada uno de los ocho siguientes: ciento noventa días, es decir, $19.000.000.",
+    "contraargumento": "La empresa pide que prevalezca la verdad material sobre la carta. La regla protege el derecho de defensa del trabajador: debe conocer desde el inicio los hechos que se le imputan para controvertirlos. Si la empresa cree que Gustavo le causó un perjuicio, tiene otras vías, pero no puede usarlo para justificar a posteriori el despido.",
+    "conclusion": "La empresa no puede justificar el despido con el faltante. El despido es sin justa causa y Gustavo tiene derecho a una indemnización de $19.000.000.",
+    "errores_comunes": [
+     "Valorar causales que el empleador no expresó al momento del despido.",
+     "Considerar la reestructuración como justa causa.",
+     "Exigir al trabajador la prueba de que no cometió la falta."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso plantea dos problemas: si la empresa puede alegar en el proceso un motivo que calló en la carta de despido y si la reestructuración que sí invocó constituye justa causa.\n\nEl parágrafo del artículo 62 del Código Sustantivo del Trabajo ordena que la parte que termina unilateralmente el contrato manifieste a la otra, en el momento de la extinción, la causal o motivo de su decisión, y agrega que posteriormente no pueden alegarse válidamente causales distintas. En efecto, la carta del 14 de noviembre de 2025 solo mencionó la reestructuración del área de logística; el faltante de inventario apareció en la contestación de la demanda. Por consiguiente, el juez no puede tenerlo como justificación del despido, cualquiera que sea el valor del informe de auditoría, que además se elaboró después de la terminación.\n\nAhora bien, la empresa sostiene que debe prevalecer lo realmente ocurrido. Ese argumento no prospera, porque la regla protege el derecho de defensa del trabajador, quien debe conocer desde el principio los hechos que se le atribuyen. A ello se agrega que Gustavo nunca fue llamado a dar explicaciones.\n\nEn cuanto a la reestructuración, el literal a) del mismo artículo enumera de manera taxativa las justas causas del empleador y ninguna se refiere a la reorganización de la empresa. Si bien esa razón puede explicar la decisión, no la exime del pago; de ahí que el despido sea sin justa causa.\n\nPor lo tanto, procede la indemnización del artículo 64. Con nueve años de servicio y un salario inferior a diez mínimos, corresponden treinta días por el primer año y veinte por cada uno de los ocho restantes, esto es, ciento noventa días, que a $100.000 diarios suman $19.000.000.\n\nEn conclusión, la defensa fracasa y la empresa debe pagar esa suma.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "ahora bien",
+    "porque",
+    "si bien",
+    "de ahí que",
+    "por lo tanto",
+    "esto es",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la carta de despido hubiera invocado el faltante de inventario y la empresa lo probara, después de oír a Gustavo en descargos?",
+    "respuesta": "La causal se habría expresado oportunamente y, de probarse que el faltante es imputable a Gustavo como falta grave, existiría justa causa. El despido no generaría indemnización."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-10",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "El portero de la cementera",
+   "enunciado": "Wilson Cárdenas, operario de cargue de Cementos del Valle S.A., en Yumbo, con contrato a término indefinido desde 2017, sufrió en 2024 una hernia discal. Estuvo incapacitado cuatro meses y regresó con recomendaciones médicas de no levantar más de diez kilos, que la EPS remitió a la empresa; en junio de 2025 fue calificado con una pérdida de capacidad laboral del 21 %. La empresa lo reubicó en la portería. El 9 de marzo de 2026 lo despidió «sin justa causa», con pago completo de la indemnización del artículo 64 del Código Sustantivo del Trabajo. No pidió autorización al Ministerio del Trabajo. La empresa explica que el cargo de portería se suprimió por la instalación de un sistema automático de acceso, que la indemnización cubre cualquier perjuicio y que Wilson no está en condición de invalidez, pues su calificación no llega al 50 %. Wilson tiene 51 años y dos hijos estudiando.",
+   "pregunta": "¿Es eficaz el despido de Wilson y qué efecto tiene el pago de la indemnización?",
+   "pistas": [
+    "La protección por razones de salud no se reserva a quienes están en invalidez: piensa en a quiénes cobija y qué debe conocer el empleador.",
+    "Revisa el artículo 26 de la Ley 361 de 1997: qué requisito previo impone y qué consecuencias fija si se omite."
+   ],
+   "conceptos": [
+    "estabilidad laboral reforzada",
+    "debilidad manifiesta",
+    "despido"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Podía el empleador despedir sin justa causa, y sin autorización del Ministerio del Trabajo, a un trabajador con limitaciones de salud conocidas, pagando la indemnización ordinaria?",
+    "normas": [
+     {
+      "norma": "Ley 361 de 1997, art. 26",
+      "para_que": "Nadie puede ser despedido por razón de su discapacidad sin autorización de la oficina de trabajo; el despido sin ella da lugar a una indemnización de ciento ochenta días de salario, sin perjuicio de las demás prestaciones e indemnizaciones."
+     },
+     {
+      "norma": "Constitución Política, arts. 13, 47, 53 y 54",
+      "para_que": "Igualdad material, protección de las personas en situación de debilidad y estabilidad en el empleo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64",
+      "para_que": "Indemnización del despido ordinario, que no sustituye la autorización."
+     }
+    ],
+    "analisis": "Wilson tiene una condición de salud que limita de manera sustancial su trabajo: restricciones médicas permanentes y una pérdida de capacidad laboral del 21 %. El empleador la conocía, al punto de haberlo reubicado. No se exige invalidez; la protección cobija a quien, por su salud, enfrenta barreras para desempeñar su labor (los criterios de las altas cortes sobre el umbral no son idénticos y deben verificarse).\n\nDespedido sin autorización, se presume que la terminación obedeció a su condición. La supresión del cargo es justamente lo que debía acreditarse ante el Ministerio, junto con la imposibilidad de otra reubicación. El despido es ineficaz: proceden el reintegro a un cargo compatible, los salarios y prestaciones dejados de percibir y la indemnización de ciento ochenta días.",
+    "contraargumento": "La empresa invoca una razón objetiva y el pago de la indemnización. La razón objetiva puede ser cierta, pero debía someterse al control previo de la autoridad; pagar la indemnización ordinaria no convalida la omisión.",
+    "conclusion": "El despido es ineficaz. Wilson tiene derecho al reintegro, a los salarios y prestaciones dejados de percibir y a ciento ochenta días de salario; la indemnización ya pagada podrá compensarse.",
+    "errores_comunes": [
+     "Exigir una pérdida de capacidad laboral del 50 % para aplicar la protección.",
+     "Creer que la indemnización del art. 64 reemplaza la autorización del Ministerio.",
+     "Olvidar que el empleador debe conocer la condición de salud para que opere la presunción."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si la empresa podía despedir a Wilson sin justa causa y sin autorización del Ministerio del Trabajo, y si el pago de la indemnización ordinaria convalida esa decisión.\n\nEl artículo 26 de la Ley 361 de 1997 prohíbe despedir a una persona por razón de su discapacidad, salvo que medie autorización de la oficina de trabajo, y dispone que quien sea despedido sin ese requisito tiene derecho a una indemnización equivalente a ciento ochenta días de salario, sin perjuicio de las demás prestaciones e indemnizaciones. La jurisprudencia ha extendido esta garantía a los trabajadores cuya condición de salud les dificulta sustancialmente el desempeño de sus labores, siempre que el empleador la conozca.\n\nEn efecto, Wilson tiene una hernia discal, restricciones médicas permanentes y una pérdida de capacidad laboral del 21 %. Además, la empresa conocía su situación, puesto que recibió las recomendaciones de la EPS y lo reubicó en la portería. Por consiguiente, está amparado por la estabilidad laboral reforzada y se presume que el despido obedeció a su estado de salud.\n\nAhora bien, la empresa plantea tres defensas. Sostiene que Wilson no es inválido; sin embargo, la protección no exige una pérdida del 50 %, que es el umbral de la pensión de invalidez. Alega también que el cargo se suprimió; no obstante, esa razón debía acreditarse ante el Ministerio, junto con la imposibilidad de otra reubicación. Por último, invoca el pago de la indemnización, pero esta repara el despido común y no suple la autorización.\n\nEn conclusión, el despido es ineficaz. De ahí que Wilson pueda pedir el reintegro a un cargo compatible, los salarios y prestaciones dejados de percibir y los ciento ochenta días de salario; lo ya pagado se compensa. Conviene, con todo, verificar el criterio vigente de las altas cortes sobre el alcance de la protección.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "además",
+    "puesto que",
+    "por consiguiente",
+    "ahora bien",
+    "sin embargo",
+    "no obstante",
+    "por último",
+    "en conclusión",
+    "de ahí que",
+    "con todo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la empresa hubiera obtenido autorización del Ministerio del Trabajo, tras demostrar la supresión real del cargo y la imposibilidad de reubicar a Wilson?",
+    "respuesta": "La terminación sería eficaz, porque se habría cumplido el control previo que exige el art. 26 de la Ley 361 de 1997. Wilson solo tendría derecho a la indemnización ordinaria por despido sin justa causa."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-11",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "Comisiones que «no son salario»",
+   "enunciado": "Andrés Felipe Quiroga es asesor comercial de Motos del Caribe S.A.S., en Montería, desde el 1 de febrero de 2023, con contrato a término indefinido. Recibe un básico de $1.800.000 y una comisión del 2 % sobre sus ventas, que en promedio le representa $1.500.000 mensuales. El contrato, que él firmó, contiene una cláusula según la cual las comisiones «no constituyen salario para ningún efecto». En otra cláusula las partes acordaron expresamente que el auxilio de alimentación de $200.000 mensuales, entregado en bonos de supermercado, tampoco tendría carácter salarial. La empresa liquida primas, cesantías, vacaciones y aportes únicamente sobre el básico. El 2 de junio de 2026 Andrés pidió que se reliquidaran sus prestaciones con todo lo que recibe. La empresa se negó: sostiene que la ley permite a las partes excluir pagos del salario, que Andrés firmó ambas cláusulas y que lo pactado debe respetarse.",
+   "pregunta": "¿Deben incluirse las comisiones y el auxilio de alimentación en la base para liquidar las prestaciones de Andrés?",
+   "pistas": [
+    "Pregúntate qué retribuye cada pago: ¿el trabajo mismo de vender o una necesidad del trabajador que la empresa quiso aliviar?",
+    "Compara los artículos 127 y 128 del Código Sustantivo del Trabajo y define hasta dónde llega el pacto de exclusión salarial."
+   ],
+   "conceptos": [
+    "salario",
+    "prestaciones sociales",
+    "primacía de la realidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Pueden las partes excluir por pacto el carácter salarial de las comisiones por ventas y del auxilio de alimentación, para efectos de liquidar prestaciones sociales?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 127",
+      "para_que": "Es salario todo lo que el trabajador recibe como contraprestación directa del servicio, cualquiera sea su denominación; menciona expresamente las comisiones y los porcentajes sobre ventas."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 128",
+      "para_que": "No son salario las sumas ocasionales por mera liberalidad, lo que se entrega para desempeñar las funciones ni los beneficios o auxilios que las partes acuerden expresamente como no salariales, como la alimentación."
+     },
+     {
+      "norma": "Constitución Política, art. 53, y Código Sustantivo del Trabajo, art. 43",
+      "para_que": "Primacía de la realidad, irrenunciabilidad e ineficacia de las cláusulas que desconocen los mínimos legales."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 249 y 306",
+      "para_que": "Cesantías y prima de servicios, que se liquidan sobre el salario."
+     }
+    ],
+    "analisis": "Los dos pagos tienen naturaleza distinta. La comisión remunera directamente la actividad de vender: es contraprestación del servicio, y la ley la incluye de manera expresa entre los elementos del salario. El pacto de exclusión no puede cambiar esa naturaleza; frente a las comisiones la cláusula es ineficaz, y la base de liquidación debe ser de unos $3.300.000.\n\nEl auxilio de alimentación, en cambio, no retribuye el servicio sino que alivia una necesidad del trabajador. Es precisamente uno de los beneficios que las partes pueden acordar como no salariales, siempre que lo hagan de manera expresa, como aquí ocurrió.",
+    "contraargumento": "La empresa invoca la libertad de pactar del art. 128. Esa facultad existe, pero recae sobre beneficios que no son contraprestación directa del trabajo; no permite restar carácter salarial a lo que por esencia lo tiene.",
+    "conclusion": "Las comisiones deben incluirse en la base de liquidación y la empresa debe reliquidar prestaciones, vacaciones y aportes desde 2023. El auxilio de alimentación queda válidamente excluido.",
+    "errores_comunes": [
+     "Aceptar cualquier pacto de exclusión salarial por el solo hecho de estar firmado.",
+     "Negar todo efecto al pacto, incluso frente a auxilios que la ley permite excluir.",
+     "No analizar por separado la naturaleza de cada pago."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la empresa puede dejar por fuera de la base de liquidación dos pagos que Andrés recibe cada mes, con apoyo en las cláusulas que él firmó: las comisiones por ventas y el auxilio de alimentación.\n\nEl artículo 127 del Código Sustantivo del Trabajo define como salario todo lo que recibe el trabajador como contraprestación directa del servicio, cualquiera que sea la denominación que se adopte, y menciona expresamente los porcentajes sobre ventas y las comisiones. Por otra parte, el artículo 128 excluye del salario, entre otros, los beneficios o auxilios habituales u ocasionales acordados entre las partes, cuando hayan dispuesto expresamente que no lo constituyen, tales como la alimentación.\n\nAhora bien, las dos cláusulas no corren la misma suerte. En cuanto a las comisiones, Andrés las gana por vender, es decir, retribuyen de manera directa su trabajo. Por consiguiente, son salario por naturaleza, y el pacto que les niega ese carácter carece de efecto, porque el artículo 53 de la Constitución hace prevalecer la realidad sobre las formas y el artículo 43 del código priva de valor a las estipulaciones que desconocen los mínimos legales. De ahí que la base deba incluir el promedio de $1.500.000.\n\nEn cambio, el auxilio de alimentación no remunera el servicio, sino que atiende una necesidad del trabajador. Además, las partes lo excluyeron de forma expresa, que es justamente lo que el artículo 128 autoriza. Sin embargo, conviene verificar los límites que la ley fija para estos pagos frente a los aportes a seguridad social.\n\nLa empresa alega que lo firmado debe respetarse. Ese argumento solo prospera a medias, puesto que la libertad de pactar no alcanza a lo que es contraprestación directa del trabajo.\n\nEn conclusión, deben reliquidarse primas, cesantías, vacaciones y aportes con las comisiones, pero no con el auxilio.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por otra parte",
+    "ahora bien",
+    "es decir",
+    "por consiguiente",
+    "porque",
+    "de ahí que",
+    "en cambio",
+    "además",
+    "sin embargo",
+    "puesto que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si, en lugar de comisiones mensuales, Andrés hubiera recibido una sola vez un bono que la empresa decidió entregar por liberalidad al cierre de un buen año?",
+    "respuesta": "Ese pago ocasional y por mera liberalidad no sería salario, conforme al art. 128 del Código Sustantivo del Trabajo, y no entraría en la base de liquidación de las prestaciones."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-12",
+   "area": "Laboral",
+   "nivel": "intermedio",
+   "titulo": "Las cartas de la cocinera",
+   "enunciado": "Marleny Córdoba trabajó como cocinera en el restaurante Sabor Llanero, de propiedad de Eutimio Parra, en Villavicencio, del 1 de febrero de 2017 al 15 de marzo de 2021, con contrato verbal. Eutimio nunca le pagó primas de servicios ni le consignó cesantías. El 1 de marzo de 2024 Marleny le entregó una carta, que él firmó como recibida, en la que reclamaba «las primas y cesantías de todo el tiempo trabajado». No obtuvo respuesta. En abril de 2025 le envió una segunda carta igual. El 10 de septiembre de 2026 presentó demanda. Eutimio propone la excepción de prescripción: sostiene que todo prescribió el 15 de marzo de 2024, tres años después del retiro, y que las cartas no son demandas. Marleny responde que con sus dos cartas todo quedó a salvo, incluidas las primas de 2017, y que cada carta volvió a darle tres años para demandar.",
+   "pregunta": "¿Qué acreencias de Marleny están prescritas y cuáles puede cobrar todavía?",
+   "pistas": [
+    "No todas las obligaciones se hicieron exigibles el mismo día: distingue las que se causan periódicamente de las que se pagan al terminar el contrato.",
+    "Aplica el artículo 489 del Código Sustantivo del Trabajo: qué interrumpe la prescripción, cuántas veces y respecto de qué derechos."
+   ],
+   "conceptos": [
+    "prescripción laboral",
+    "prestaciones sociales",
+    "cesantías"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué efecto tuvo el reclamo escrito del 1 de marzo de 2024 sobre la prescripción de primas y cesantías causadas entre 2017 y 2021, y qué valor tiene el segundo reclamo?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 488",
+      "para_que": "Prescripción de tres años contados desde que cada obligación se hizo exigible."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 489",
+      "para_que": "El reclamo escrito recibido por el empleador interrumpe la prescripción por una sola vez y el término vuelve a contarse desde el reclamo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 249 y 306",
+      "para_que": "Cesantías y prima de servicios; la prima se paga por semestres, de modo que cada una tiene su propia fecha de exigibilidad."
+     },
+     {
+      "norma": "Norma procesal laboral sobre prescripción (verificar el artículo vigente tras la Ley 2452 de 2025)",
+      "para_que": "Reitera el término y la interrupción por reclamo escrito."
+     }
+    ],
+    "analisis": "El reclamo del 1 de marzo de 2024 fue escrito y recibido, de modo que sí interrumpió la prescripción, pero solo respecto de lo que para esa fecha no había prescrito.\n\nLas primas se hacen exigibles cada semestre. Todas las causadas hasta diciembre de 2020 llevaban más de tres años de exigibles el 1 de marzo de 2024: estaban prescritas y un reclamo no revive lo extinguido. La prima proporcional de 2021, exigible al terminar el contrato, sí quedó cobijada.\n\nLas cesantías, según la jurisprudencia laboral, se hacen exigibles para el trabajador al terminar el contrato (criterio que debe verificarse). El 1 de marzo de 2024 no habían pasado tres años desde el 15 de marzo de 2021; la interrupción las cobijó en su totalidad y la demanda de septiembre de 2026 es oportuna. La segunda carta carece de efecto.",
+    "contraargumento": "Eutimio alega que las cartas no son demandas. La ley laboral no exige demanda: basta el reclamo escrito recibido por el empleador. Su defensa sí prospera frente a las primas antiguas.",
+    "conclusion": "Están prescritas las primas de 2017 a 2020. Marleny puede cobrar las cesantías de toda la relación, con sus consecuencias, y la prima proporcional de 2021.",
+    "errores_comunes": [
+     "Contar un solo término para todas las acreencias desde la terminación del contrato.",
+     "Creer que el reclamo escrito revive derechos ya prescritos.",
+     "Dar efecto interruptor al segundo reclamo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es qué efecto tuvieron las cartas de Marleny sobre la prescripción de las primas y las cesantías causadas entre 2017 y 2021, dado que demandó el 10 de septiembre de 2026.\n\nEl artículo 488 del Código Sustantivo del Trabajo fija en tres años la prescripción de las acciones laborales, contados desde que la respectiva obligación se hizo exigible. A su vez, el artículo 489 dispone que el simple reclamo escrito del trabajador, recibido por el empleador, la interrumpe por una sola vez, y que el término comienza a contarse de nuevo a partir del reclamo.\n\nEn efecto, la carta del 1 de marzo de 2024 fue firmada por Eutimio como recibida. Por consiguiente, interrumpió la prescripción, y no prospera su argumento de que las cartas no son demandas, puesto que la ley laboral no exige una demanda. Sin embargo, la interrupción solo protege lo que en esa fecha seguía vivo.\n\nAhora bien, no todas las acreencias nacieron el mismo día. De un lado, las primas de servicios se pagan por semestres y cada una es exigible en su fecha; de ahí que las causadas entre 2017 y diciembre de 2020 llevaran más de tres años de exigibles cuando llegó la carta y estuvieran ya prescritas. De otro lado, las cesantías se hacen exigibles para el trabajador al terminar el contrato, según lo ha sostenido la jurisprudencia laboral, criterio que conviene verificar. Como el retiro ocurrió el 15 de marzo de 2021, el reclamo llegó dos semanas antes de cumplirse los tres años y las cobijó todas, al igual que la prima proporcional de 2021.\n\nPor otra parte, la segunda carta no produjo efecto, porque la interrupción opera una sola vez. Con todo, la demanda se presentó dentro de los tres años siguientes al primer reclamo.\n\nEn conclusión, la excepción prospera respecto de las primas de 2017 a 2020 y fracasa frente a las cesantías y la prima de 2021.",
+   "conectores_usados": [
+    "en primer lugar",
+    "dado que",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "puesto que",
+    "sin embargo",
+    "ahora bien",
+    "de un lado",
+    "de ahí que",
+    "de otro lado",
+    "por otra parte",
+    "porque",
+    "con todo",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Marleny hubiera entregado la primera carta el 1 de abril de 2024?",
+    "respuesta": "Para esa fecha ya habrían pasado más de tres años desde la terminación del contrato y no quedaría nada que interrumpir. La excepción de prescripción prosperaría frente a primas y cesantías, salvo lo relativo a aportes para pensión."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "lab-13",
+   "area": "Laboral",
+   "nivel": "avanzado",
+   "titulo": "La «asociada» de la planta",
+   "enunciado": "Desde el 3 de marzo de 2021, Yolima Asprilla empaca producto terminado en la planta de Alimentos Río Claro S.A., en Caloto. Para ingresar tuvo que afiliarse a la Cooperativa de Trabajo Asociado Manos Unidas, con la que firmó un «convenio de asociación». Recibe «compensaciones» mensuales de $1.900.000, cumple los turnos que fija el jefe de planta de Río Claro, usa la dotación y el carné de esa empresa, y es ese jefe quien le llama la atención y le autoriza los permisos. La cooperativa solo tramita los pagos; nunca la ha convocado a una asamblea. Los fines de semana Yolima vende empanadas en su barrio. El 30 de enero de 2026 Río Claro pidió a la cooperativa «retirarla del servicio». Yolima reclama prestaciones e indemnización a ambas. Río Claro responde que no es su empleadora, pues contrató con la cooperativa un servicio de empaque; la cooperativa, que Yolima es asociada y dueña, no trabajadora.",
+   "pregunta": "¿Quién fue el verdadero empleador de Yolima y quién responde por sus acreencias laborales?",
+   "pistas": [
+    "Identifica quién ejerció en la práctica el poder de dirección sobre Yolima y qué papel real cumplió la cooperativa.",
+    "Revisa la prohibición de la Ley 1429 de 2010 sobre actividades misionales permanentes y la figura del simple intermediario del Código Sustantivo del Trabajo."
+   ],
+   "conceptos": [
+    "primacía de la realidad",
+    "subordinación",
+    "elementos del contrato"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Existió un contrato de trabajo entre la empresa usuaria y la persona vinculada formalmente como asociada de una cooperativa, y cómo responde la cooperativa que solo sirvió de intermediaria?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 53, y Código Sustantivo del Trabajo, arts. 23 y 24",
+      "para_que": "Primacía de la realidad, elementos del contrato de trabajo y presunción de su existencia."
+     },
+     {
+      "norma": "Ley 1429 de 2010, art. 63",
+      "para_que": "Prohíbe vincular personal para actividades misionales permanentes mediante cooperativas de trabajo asociado que hagan intermediación laboral."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 35",
+      "para_que": "Simple intermediario: quien contrata servicios de otros para ejecutar trabajos en beneficio y por cuenta de un empleador; si no declara esa calidad, responde solidariamente."
+     },
+     {
+      "norma": "Ley 1233 de 2008 (régimen de las cooperativas de trabajo asociado)",
+      "para_que": "Prohíbe a estas cooperativas actuar como empresas de intermediación; verificar el artículo exacto en fuente oficial."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 64 y 65",
+      "para_que": "Indemnización por despido injusto e indemnización moratoria."
+     }
+    ],
+    "analisis": "El trabajo asociado supone autogestión: los asociados organizan y dirigen su propio trabajo. Aquí la cooperativa no dirigió nada; solo pagó. Quien fijó turnos, entregó dotación, sancionó y autorizó permisos fue Río Claro. Además, empacar el producto es parte del proceso productivo ordinario de la empresa, es decir, una actividad misional permanente que no podía atenderse por esta vía.\n\nRío Claro fue la verdadera empleadora desde el 3 de marzo de 2021, con contrato a término indefinido. La cooperativa actuó como simple intermediaria que ocultó su calidad y responde solidariamente. La orden de retirarla equivale a un despido sin justa causa.",
+    "contraargumento": "Río Claro alega que contrató un servicio y no personal. Sería atendible si la cooperativa hubiera ejecutado el empaque con autonomía, medios y dirección propios; los hechos muestran que solo suministró trabajadores.",
+    "conclusion": "Río Claro fue la empleadora y debe prestaciones, vacaciones, aportes e indemnización por despido; la cooperativa responde solidariamente. Procede examinar la moratoria, pues la forma asociativa se usó para eludir obligaciones.",
+    "errores_comunes": [
+     "Detenerse en el convenio de asociación y en la palabra «compensaciones».",
+     "Condenar solo a la cooperativa, que no ejerció subordinación.",
+     "Olvidar que la actividad era misional y permanente."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es quién fue el verdadero empleador de Yolima: la cooperativa a la que se afilió o la empresa en cuya planta trabajó durante casi cinco años.\n\nEl artículo 53 de la Constitución hace prevalecer la realidad sobre las formas, y el artículo 23 del Código Sustantivo del Trabajo señala que existe contrato de trabajo cuando concurren la prestación personal, la subordinación y la remuneración. Además, el artículo 63 de la Ley 1429 de 2010 prohíbe vincular personal para el desarrollo de actividades misionales permanentes a través de cooperativas de trabajo asociado que hagan intermediación laboral.\n\nEn efecto, el trabajo asociado supone que los asociados dirigen su propia labor. Sin embargo, la cooperativa se limitó a tramitar pagos y nunca convocó a Yolima a una asamblea. En cambio, el jefe de planta de Río Claro fijaba los turnos, le llamaba la atención y autorizaba sus permisos, y ella usaba la dotación y el carné de esa empresa. Por consiguiente, la subordinación la ejerció Río Claro. A ello se suma que empacar el producto terminado integra el proceso productivo ordinario, es decir, es una actividad misional y permanente.\n\nAhora bien, Río Claro sostiene que contrató un servicio de empaque. Ese argumento no prospera, porque la cooperativa no aportó medios, supervisión ni autonomía: suministró personal. De ahí que encaje en la figura del simple intermediario del artículo 35 del código y que, por haber ocultado esa calidad, responda solidariamente. Por otra parte, la venta de empanadas los fines de semana es irrelevante, ya que ocurre fuera de la jornada.\n\nEn conclusión, existió un contrato de trabajo a término indefinido con Río Claro desde el 3 de marzo de 2021. En consecuencia, esta debe las prestaciones, las vacaciones, los aportes y la indemnización por el despido injusto, y la cooperativa responde solidariamente.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "sin embargo",
+    "en cambio",
+    "por consiguiente",
+    "es decir",
+    "ahora bien",
+    "porque",
+    "de ahí que",
+    "por otra parte",
+    "ya que",
+    "en conclusión",
+    "en consecuencia"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la cooperativa prestara con sus propios equipos, supervisores y reglamentos un servicio de aseo en las oficinas de Río Claro, y fueran sus órganos los que dirigieran a Yolima?",
+    "respuesta": "Habría una prestación autónoma de un servicio no misional y un verdadero trabajo asociado. Río Claro no sería empleadora y la relación de Yolima se regiría por el régimen cooperativo."
+   },
+   "distractor": "La venta de empanadas los fines de semana: una actividad independiente fuera de la jornada no desvirtúa la subordinación en la planta.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-14",
+   "area": "Laboral",
+   "nivel": "avanzado",
+   "titulo": "La buena fe de la clínica",
+   "enunciado": "Entre el 1 de abril de 2019 y el 31 de marzo de 2025, Ingrid Paola Mena trabajó como auxiliar de enfermería en la Clínica Santa Lucía del Norte S.A.S., de Valledupar, mediante contratos sucesivos de prestación de servicios. Cumplía turnos de doce horas asignados por la jefe de enfermería, figuraba en los cuadros de turnos, usaba uniforme institucional, estaba sujeta al reglamento interno y fue amonestada por escrito dos veces. Cobraba $2.300.000 mensuales con cuenta de cobro y pagaba su seguridad social como independiente. Al terminar el último contrato la clínica no le pagó suma alguna. Ingrid demandó el 12 de enero de 2026: pide declarar el contrato de trabajo, las prestaciones, la sanción por no consignación de cesantías y la indemnización moratoria. La clínica admite que quizá deba prestaciones, pero se opone a las sanciones: alega que creyó sinceramente que el contrato era civil, que pagó siempre los honorarios con puntualidad y que Ingrid nunca protestó.",
+   "pregunta": "¿Proceden la indemnización moratoria y la sanción por no consignación de cesantías, o la buena fe alegada por la clínica las excluye?",
+   "pistas": [
+    "Las sanciones por mora no se imponen de manera automática, pero tampoco se evitan con solo afirmar que se creía estar ante un contrato civil.",
+    "Pregúntate si, con los hechos que la propia clínica conocía, era razonable creer que Ingrid actuaba con autonomía."
+   ],
+   "conceptos": [
+    "indemnización moratoria",
+    "buena fe",
+    "primacía de la realidad",
+    "cesantías"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Actuó de buena fe el empleador que encubrió bajo contratos de prestación de servicios una relación con signos evidentes de subordinación, de modo que deba exonerarse de las sanciones por mora?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 65",
+      "para_que": "Indemnización moratoria por no pagar salarios y prestaciones a la terminación del contrato."
+     },
+     {
+      "norma": "Ley 50 de 1990, art. 99",
+      "para_que": "Deber de consignar las cesantías cada año en un fondo y sanción de un día de salario por cada día de retardo."
+     },
+     {
+      "norma": "Constitución Política, art. 53, y Código Sustantivo del Trabajo, arts. 23 y 24",
+      "para_que": "Contrato realidad: fundamento de la declaración que precede a las sanciones."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 488",
+      "para_que": "Prescripción trienal, que puede afectar las sanciones más antiguas si el empleador la alega."
+     }
+    ],
+    "analisis": "Ambas sanciones exigen valorar la conducta del empleador. La jurisprudencia laboral exonera a quien demuestra razones serias y atendibles para haber creído que no debía; no basta invocar el contrato civil, ni tampoco la declaración judicial del contrato realidad impone por sí sola la condena.\n\nAquí la clínica asignaba turnos, sometía a Ingrid a su reglamento y la amonestó por escrito: ejerció el poder disciplinario, que es la expresión más clara de la subordinación. Con esos hechos, que ella misma produjo, no podía creer razonablemente que trataba con una contratista autónoma. No hay buena fe.\n\nProceden la moratoria desde el 1 de abril de 2025 y la sanción por las cesantías que nunca se consignaron, dentro de lo no prescrito.",
+    "contraargumento": "La clínica alega creencia sincera y silencio de la trabajadora. La buena fe se mide con parámetros objetivos, no con la mera convicción; y el silencio de quien necesita el empleo no legitima la forma contractual.",
+    "conclusion": "La buena fe alegada no se configura. Además de las prestaciones, proceden la indemnización moratoria y la sanción por no consignación de cesantías, con el límite de la prescripción que se pruebe.",
+    "errores_comunes": [
+     "Imponer las sanciones automáticamente por el solo hecho de declararse el contrato realidad.",
+     "Exonerar al empleador porque firmó contratos de prestación de servicios.",
+     "Confundir el pago puntual de honorarios con el pago de prestaciones."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico no es ya la existencia del contrato de trabajo, que la clínica casi admite, sino si su alegada buena fe la libera de la indemnización moratoria y de la sanción por no consignar las cesantías.\n\nEl artículo 65 del Código Sustantivo del Trabajo sanciona al empleador que, a la terminación del contrato, no paga los salarios y prestaciones debidos, y el artículo 99 de la Ley 50 de 1990 castiga con un día de salario por cada día de retardo la falta de consignación anual de las cesantías. La jurisprudencia laboral ha sostenido que ninguna de las dos opera automáticamente: el juez debe examinar si el empleador tuvo razones serias y atendibles para creer que no debía. Asimismo, ha advertido que la sola existencia de un contrato de prestación de servicios no prueba esa buena fe.\n\nEn efecto, la clínica asignaba a Ingrid turnos de doce horas, la incluía en los cuadros de turnos, la sometía al reglamento interno y la amonestó por escrito dos veces. Sancionar es ejercer el poder disciplinario, es decir, la manifestación más nítida de la subordinación. Por consiguiente, con hechos que ella misma produjo, la clínica no podía creer de manera razonable que trataba con una contratista independiente.\n\nAhora bien, la clínica invoca su creencia sincera, la puntualidad en los honorarios y el silencio de Ingrid. Ninguno de esos argumentos prospera. La buena fe se aprecia con criterios objetivos y no por la convicción íntima; pagar honorarios a tiempo es cumplir la forma escogida, no las prestaciones; y el silencio de quien necesita el empleo no convalida nada, puesto que sus derechos son irrenunciables.\n\nEn conclusión, proceden la moratoria desde el 1 de abril de 2025 y la sanción por las cesantías no consignadas. No obstante, si la clínica alega la prescripción del artículo 488, las sanciones más antiguas podrían verse afectadas.",
+   "conectores_usados": [
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "puesto que",
+    "en conclusión",
+    "no obstante"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Ingrid fuera una médica especialista que atendía dos tardes por semana, fijaba su propia agenda, cobraba por paciente y mantenía su consultorio particular?",
+    "respuesta": "La relación tendría rasgos reales de autonomía. Aun si el juez declarara un contrato de trabajo por algún indicio, la creencia de la clínica sería razonable y podría exonerarse de las sanciones por buena fe."
+   },
+   "distractor": "El pago puntual de los honorarios: cumplir lo pactado bajo la forma civil no demuestra una creencia razonable de que no existía contrato de trabajo.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-15",
+   "area": "Laboral",
+   "nivel": "avanzado",
+   "titulo": "La renuncia de Fabián",
+   "enunciado": "Fabián Enrique Lozano trabaja desde el 1 de junio de 2020 como técnico de mantenimiento en Refrigeración Polar Ltda., de Girardot, con contrato a término indefinido y salario de $2.400.000. Desde noviembre de 2025 la empresa dejó de pagarle el salario completo: le abonó sumas parciales en diciembre y enero y nada en febrero; además, según el reporte de su fondo de pensiones, no ha pagado aportes desde octubre de 2025. Fabián reclamó por correo el 15 de enero y el 20 de febrero de 2026, sin respuesta. El 2 de marzo de 2026 entregó una carta en la que da por terminado el contrato «por el incumplimiento sistemático de la empresa en el pago de salarios y aportes a seguridad social desde noviembre de 2025». En abril consiguió empleo en otra empresa. Reclama la indemnización por despido. La empresa contesta que él renunció voluntariamente, que quien renuncia no es indemnizado y que ya tiene otro trabajo.",
+   "pregunta": "¿Tiene derecho Fabián a la indemnización por despido injusto, a pesar de haber sido él quien terminó el contrato?",
+   "pistas": [
+    "La ley también prevé justas causas para que el trabajador termine el contrato; cuando concurren, la terminación se imputa al empleador.",
+    "Verifica en el artículo 62 del Código Sustantivo del Trabajo qué debe hacer el trabajador al momento de retirarse para poder invocar después esa causa."
+   ],
+   "conceptos": [
+    "despido",
+    "justa causa",
+    "indemnización por despido"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Constituye despido indirecto la terminación del contrato por el trabajador, motivada en el incumplimiento sistemático del empleador en el pago de salarios y aportes, y genera la indemnización del despido injusto?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62, literal b)",
+      "para_que": "Justas causas para que el trabajador termine el contrato, entre ellas el incumplimiento sistemático y sin razones válidas de las obligaciones legales o convencionales del empleador."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 62, parágrafo",
+      "para_que": "Quien termina el contrato debe manifestar la causal en ese momento; después no puede alegar otras."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 57",
+      "para_que": "Obligación del empleador de pagar la remuneración pactada en las condiciones y periodos convenidos."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64",
+      "para_que": "La indemnización procede también cuando el trabajador termina el contrato por una justa causa imputable al empleador."
+     }
+    ],
+    "analisis": "Cuando el trabajador se retira por una justa causa atribuible al empleador hay despido indirecto, y la ley lo indemniza como un despido injusto. Se requieren tres cosas: que la causa exista, que el trabajador la pruebe y que la haya expresado al terminar el contrato.\n\nEl impago total o parcial del salario durante cuatro meses y la omisión de aportes durante cinco son incumplimientos graves y reiterados de la obligación principal del empleador. Fabián los reclamó dos veces y los invocó con precisión en su carta. Tiene además los correos y el reporte del fondo para probarlos.\n\nCon cinco años y nueve meses de servicio, la indemnización es de treinta días por el primer año y veinte por cada uno de los 4,75 años restantes: ciento veinticinco días, esto es, $10.000.000.",
+    "contraargumento": "La empresa dice que fue una renuncia voluntaria. No lo es la que obedece a que el empleador dejó de pagar: la voluntad del trabajador fue provocada por el incumplimiento. Sí le correspondía a Fabián probar los hechos que invocó.",
+    "conclusion": "Fabián tiene derecho a la indemnización por despido indirecto, de $10.000.000, además de los salarios adeudados, las prestaciones, los aportes y la indemnización moratoria que resulte.",
+    "errores_comunes": [
+     "Tratar toda terminación por iniciativa del trabajador como renuncia sin consecuencias.",
+     "Olvidar que la causal debe expresarse en la carta de retiro.",
+     "Negar la indemnización porque el trabajador encontró otro empleo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en determinar si la carta que Fabián entregó el 2 de marzo de 2026 es una simple renuncia o una terminación con justa causa imputable al empleador, que da lugar a indemnización.\n\nEl literal b) del artículo 62 del Código Sustantivo del Trabajo enumera las justas causas para que el trabajador dé por terminado el contrato, entre ellas el incumplimiento sistemático, sin razones válidas, de las obligaciones legales o convencionales del empleador. A su vez, el artículo 64 extiende la indemnización por despido injusto al evento en que el trabajador termina el contrato por una de esas causas, figura conocida como despido indirecto. Además, el parágrafo del artículo 62 exige manifestar el motivo en el momento de la terminación.\n\nEn efecto, pagar el salario es la obligación principal del empleador según el artículo 57, y la empresa la incumplió durante cuatro meses seguidos: pagos parciales en diciembre y enero y ninguno en febrero. Asimismo, dejó de cotizar a pensiones desde octubre de 2025. Fabián reclamó dos veces por correo sin obtener respuesta, de modo que el incumplimiento fue reiterado y carece de justificación. Por otra parte, la carta señala con precisión esos hechos, con lo cual se cumple la exigencia del parágrafo.\n\nAhora bien, la empresa afirma que quien renuncia no es indemnizado. Ese argumento no prospera, porque no hay renuncia libre cuando el retiro obedece al impago del salario. Tampoco importa que Fabián trabaje en otra empresa desde abril, ya que la indemnización legal es tarifada y no depende del desempleo posterior.\n\nPor consiguiente, con cinco años y nueve meses de servicio le corresponden treinta días por el primer año y noventa y cinco por el tiempo restante, esto es, ciento veinticinco días.\n\nEn conclusión, la empresa debe $10.000.000 de indemnización, además de los salarios, prestaciones y aportes adeudados.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "además",
+    "en efecto",
+    "asimismo",
+    "de modo que",
+    "por otra parte",
+    "con lo cual",
+    "ahora bien",
+    "porque",
+    "ya que",
+    "por consiguiente",
+    "esto es",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la carta de Fabián solo dijera «renuncio por motivos personales»?",
+    "respuesta": "Sería una renuncia pura y simple. Fabián no podría alegar después el incumplimiento del empleador como causa de la terminación, y no tendría derecho a la indemnización por despido, aunque sí a cobrar los salarios y prestaciones adeudados con la moratoria."
+   },
+   "distractor": "Que Fabián consiguiera otro empleo en abril: la indemnización tarifada no depende de que el trabajador siga desempleado.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-16",
+   "area": "Laboral",
+   "nivel": "avanzado",
+   "titulo": "El plazo que vencía en el quinto mes",
+   "enunciado": "Katherine Julieth Osorio firmó con Call Center Andino S.A.S., de Pereira, un contrato a término fijo de un año, del 1 de abril de 2025 al 31 de marzo de 2026, como agente de servicio al cliente. El 20 de enero de 2026 informó por escrito a su supervisor que estaba embarazada y entregó el certificado médico. El 16 de febrero de 2026, con más de treinta días de anticipación, la empresa le notificó que el contrato no sería prorrogado. El 31 de marzo dejó de trabajar; tenía cinco meses de gestación. La empresa no acudió al inspector del trabajo. En abril contrató a otra persona para la misma campaña, que sigue en operación. Sostiene que no despidió a nadie: el contrato terminó por vencimiento del plazo, con preaviso oportuno, y esa es una causa objetiva. Agrega que la última evaluación de desempeño de Katherine fue apenas aceptable.",
+   "pregunta": "¿Podía la empresa dar por terminado el contrato a término fijo de Katherine por vencimiento del plazo?",
+   "pistas": [
+    "La protección de la maternidad no distingue entre modalidades de contrato: piensa en qué debe hacer el empleador que conoce el embarazo antes de hacer valer el plazo.",
+    "Pregúntate si la necesidad que justificó contratar a Katherine desapareció o sigue existiendo."
+   ],
+   "conceptos": [
+    "estabilidad laboral reforzada",
+    "embarazo",
+    "fuero"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es eficaz la terminación de un contrato a término fijo por vencimiento del plazo, con preaviso oportuno, cuando la trabajadora está embarazada, el empleador lo sabe y subsiste la necesidad del servicio?",
+    "normas": [
+     {
+      "norma": "Constitución Política, arts. 43 y 53",
+      "para_que": "Protección especial a la mujer embarazada y a la maternidad en el trabajo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 239 y 240",
+      "para_que": "Prohibición de despedir por motivo de embarazo, presunción e intervención previa del inspector del trabajo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 46 y 61",
+      "para_que": "Preaviso y expiración del plazo como modo de terminación del contrato a término fijo."
+     },
+     {
+      "norma": "Jurisprudencia constitucional de unificación sobre fuero de maternidad",
+      "para_que": "Reglas según la modalidad contractual y el conocimiento del empleador; deben verificarse en la relatoría las sentencias vigentes."
+     }
+    ],
+    "analisis": "Hay una tensión entre un modo legal de terminación —el vencimiento del plazo con preaviso— y la protección reforzada de la maternidad. La jurisprudencia constitucional la ha resuelto así: el fuero opera en todas las modalidades de contrato; si el empleador conoce el embarazo y quiere hacer valer el plazo, debe acudir al inspector del trabajo para que verifique si desaparecieron las causas que originaron la contratación. Si subsisten, el contrato debe renovarse al menos durante el embarazo y la licencia.\n\nLa empresa conocía el embarazo desde el 20 de enero, no acudió al inspector y la campaña continúa, al punto de que contrató un reemplazo. La no renovación es ineficaz.",
+    "contraargumento": "La empresa alega que el vencimiento es una causa objetiva y que cumplió el preaviso. Lo sería si la necesidad del servicio hubiera terminado y así lo hubiera constatado el inspector; el reemplazo demuestra lo contrario.",
+    "conclusion": "La terminación no produce efectos. Proceden la renovación del contrato, el pago de salarios y cotizaciones dejados de percibir, la garantía de la licencia de maternidad y la indemnización especial que corresponda.",
+    "errores_comunes": [
+     "Creer que el fuero de maternidad solo protege en contratos a término indefinido.",
+     "Dar por suficiente el preaviso de treinta días.",
+     "Omitir el análisis del conocimiento del empleador y de la subsistencia de la causa del contrato."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la empresa podía hacer valer el vencimiento del plazo, con un preaviso oportuno, frente a una trabajadora cuyo embarazo conocía desde el 20 de enero de 2026.\n\nLos artículos 46 y 61 del Código Sustantivo del Trabajo permiten que el contrato a término fijo termine por expiración del plazo cuando se avisa con treinta días de antelación. Sin embargo, el artículo 43 de la Constitución ordena proteger de manera especial a la mujer embarazada, y los artículos 239 y 240 del código prohíben despedirla por ese motivo y exigen la intervención del inspector del trabajo. La jurisprudencia constitucional de unificación, que conviene verificar en la relatoría, ha precisado que esta protección opera en todas las modalidades de contrato: si el empleador conoce el embarazo y pretende terminar por vencimiento del plazo, debe acudir al inspector para que constate si desaparecieron las causas que dieron origen a la contratación.\n\nEn efecto, Katherine informó su estado por escrito y entregó el certificado médico. Además, la empresa no acudió al inspector, y la campaña para la que fue contratada sigue en operación, al punto de que en abril vinculó a otra persona para el mismo puesto. Por consiguiente, la causa del contrato subsiste y la no renovación carece de efectos.\n\nAhora bien, la empresa sostiene que el vencimiento es una causa objetiva. Lo sería si la necesidad del servicio hubiera terminado; no obstante, el reemplazo demuestra lo contrario. Por otra parte, la evaluación de desempeño es irrelevante, puesto que no fue el motivo invocado ni constituye justa causa.\n\nEn conclusión, el contrato debe entenderse renovado. De ahí que Katherine tenga derecho a los salarios y cotizaciones dejados de percibir, a la licencia de maternidad y a la indemnización especial del artículo 239.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "en efecto",
+    "además",
+    "por consiguiente",
+    "ahora bien",
+    "no obstante",
+    "por otra parte",
+    "puesto que",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Katherine no hubiera informado su embarazo y la empresa no hubiera tenido forma de conocerlo antes del 31 de marzo?",
+    "respuesta": "Según la jurisprudencia de unificación más reciente, que debe verificarse, sin conocimiento del empleador no se presume la discriminación ni se le imponen la renovación y la indemnización; la protección de la maternidad recaería en el sistema de seguridad social."
+   },
+   "distractor": "La evaluación de desempeño apenas aceptable: no fue la razón invocada ni constituye por sí misma una justa causa.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-17",
+   "area": "Laboral",
+   "nivel": "avanzado",
+   "titulo": "El estucador y la constructora",
+   "enunciado": "Constructora Horizonte S.A.S. levanta un edificio de apartamentos en Armenia y contrató con Acabados Giraldo, establecimiento de Rubiel Giraldo, la pintura y el estuco de las torres. Rubiel vinculó a Edwin Marulanda como estucador el 1 de agosto de 2025, con contrato verbal y salario de $2.200.000. Edwin trabajó en la obra hasta el 28 de febrero de 2026, cuando Rubiel desapareció sin pagarle los dos últimos meses de salario ni prestación alguna. Edwin demandó a Rubiel y a la constructora. Esta se opone: dice que nunca le dio órdenes a Edwin, que le pagó a Rubiel todas las actas de obra, que en el contrato civil el contratista «asume de manera exclusiva toda obligación laboral» y que Rubiel tiene su matrícula mercantil al día. Edwin no pretende que la constructora sea declarada su empleadora; solo quiere que alguien le pague lo que se le debe.",
+   "pregunta": "¿Responde la constructora por los salarios y prestaciones que Rubiel le debe a Edwin?",
+   "pistas": [
+    "No toda responsabilidad laboral exige ser el empleador: la ley prevé un caso en que responde también quien se beneficia de la obra.",
+    "Lee el artículo 34 del Código Sustantivo del Trabajo y pregúntate si pintar y estucar un edificio es una labor extraña al negocio de una constructora."
+   ],
+   "conceptos": [
+    "salario",
+    "prestaciones sociales",
+    "indemnización moratoria"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es solidariamente responsable el dueño de la obra por las acreencias laborales de los trabajadores de su contratista independiente, aunque no haya ejercido subordinación y haya pactado que el contratista asumiría esas obligaciones?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 34",
+      "para_que": "El contratista independiente es el verdadero empleador, pero el beneficiario o dueño de la obra responde solidariamente por salarios, prestaciones e indemnizaciones, salvo que se trate de labores extrañas a las actividades normales de su empresa."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 23 y 24",
+      "para_que": "Contrato de trabajo entre Edwin y Rubiel."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 65",
+      "para_que": "Indemnización moratoria por el no pago de salarios y prestaciones a la terminación."
+     },
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Garantías mínimas irrenunciables que no pueden afectarse por pactos entre terceros."
+     }
+    ],
+    "analisis": "Edwin fue trabajador de Rubiel, contratista independiente y verdadero empleador. La constructora no lo subordinó, y por eso no es su empleadora. Pero la ley la hace solidariamente responsable como beneficiaria de la obra, a menos que la labor sea extraña a su actividad normal.\n\nPintar y estucar las torres es parte del proceso de construir un edificio: no es una labor ajena al negocio de una constructora. Opera la solidaridad por salarios, prestaciones e indemnizaciones, incluida la moratoria que se cause.\n\nLa cláusula según la cual el contratista asume toda obligación laboral solo produce efectos entre las partes del contrato civil; no es oponible al trabajador. El pago de las actas tampoco libera.",
+    "contraargumento": "La constructora alega que nunca dio órdenes. Es cierto, y por eso no es empleadora; pero la solidaridad del art. 34 no exige subordinación, sino beneficiarse de una labor propia del giro del negocio.",
+    "conclusion": "La constructora responde solidariamente con Rubiel por salarios, prestaciones e indemnizaciones. Pagada la condena, puede repetir contra el contratista con base en la cláusula pactada.",
+    "errores_comunes": [
+     "Negar la responsabilidad del dueño de la obra porque no ejerció subordinación.",
+     "Dar efecto frente al trabajador a la cláusula de asunción exclusiva de obligaciones laborales.",
+     "No examinar si la labor es propia o extraña a la actividad del beneficiario."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la constructora debe responder por los salarios y prestaciones de Edwin, aunque su empleador haya sido Rubiel y aunque ella nunca le haya dado órdenes.\n\nEl artículo 34 del Código Sustantivo del Trabajo considera verdaderos empleadores a los contratistas independientes que ejecutan obras con sus propios medios y con autonomía técnica y directiva. Sin embargo, la misma norma dispone que el beneficiario del trabajo o dueño de la obra es solidariamente responsable con el contratista por el valor de los salarios, prestaciones e indemnizaciones de los trabajadores, a menos que se trate de labores extrañas a las actividades normales de su empresa o negocio.\n\nEn efecto, la constructora levanta un edificio y encargó a Rubiel la pintura y el estuco de las torres, es decir, una etapa del mismo proceso constructivo. Por consiguiente, no se trata de una labor ajena a su actividad y la solidaridad opera.\n\nAhora bien, la constructora opone tres defensas. Alega que no ejerció subordinación; pero la solidaridad no la exige, porque no convierte al dueño de la obra en empleador, sino en garante de las acreencias. Invoca además la cláusula según la cual el contratista asume toda obligación laboral; no obstante, ese pacto solo vincula a quienes lo firmaron y no puede oponerse al trabajador, cuyos derechos son irrenunciables conforme al artículo 53 de la Constitución. Por último, afirma que pagó las actas de obra, lo que tampoco la libera frente a Edwin. Por otra parte, la matrícula mercantil de Rubiel es irrelevante.\n\nEn conclusión, la constructora responde solidariamente por los dos meses de salario, las prestaciones causadas desde el 1 de agosto de 2025 y la indemnización moratoria del artículo 65. De ahí que, una vez pague, pueda repetir contra Rubiel con apoyo en la cláusula pactada.",
+   "conectores_usados": [
+    "en primer lugar",
+    "aunque",
+    "sin embargo",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "además",
+    "no obstante",
+    "por último",
+    "por otra parte",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si quien contrató a Rubiel para pintar su sede hubiera sido un banco?",
+    "respuesta": "Pintar un local es una labor extraña a la actividad normal de un banco. No habría solidaridad y Edwin solo podría cobrar a Rubiel, su empleador."
+   },
+   "distractor": "Que Rubiel tenga la matrícula mercantil al día: confirma que es un contratista formal, pero no incide en la solidaridad.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-18",
+   "area": "Laboral",
+   "nivel": "experto",
+   "titulo": "Siete metros sin arnés",
+   "enunciado": "El 10 de mayo de 2023, Darwin Mosquera, ayudante de obra de Estructuras Metálicas del Cauca S.A.S., cayó desde una cubierta a siete metros de altura mientras instalaba tejas. No tenía arnés ni línea de vida, nunca recibió el curso de trabajo en alturas y el supervisor había ordenado «terminar ese mismo día». Darwin se había quitado el casco por el calor. Sufrió fractura de columna; el dictamen que le fijó una pérdida de capacidad laboral del 38 % quedó en firme el 20 de noviembre de 2023. La administradora de riesgos laborales le pagó las incapacidades y una indemnización por incapacidad permanente parcial. El 3 de agosto de 2026 Darwin demandó a la empresa por la indemnización plena de perjuicios. La empresa responde que la administradora de riesgos ya lo indemnizó, que en subsidio debe descontarse lo pagado, que el accidente se debió a la imprudencia del trabajador y que la acción prescribió el 10 de mayo de 2026.",
+   "pregunta": "¿Debe la empresa indemnizar plenamente a Darwin, además de lo que pagó la administradora de riesgos laborales?",
+   "pistas": [
+    "Frente a un accidente de trabajo coexisten dos responsabilidades de distinta naturaleza: la del sistema de riesgos laborales y la del empleador que incurre en culpa.",
+    "Define quién debe probar la diligencia cuando se imputa la omisión de medidas de seguridad y desde cuándo corre la prescripción cuando el daño se consolida con un dictamen."
+   ],
+   "conceptos": [
+    "carga de la prueba",
+    "prescripción laboral",
+    "responsabilidad contractual"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede la indemnización plena de perjuicios por culpa del empleador en un accidente de trabajo, pese al pago de prestaciones por el sistema de riesgos laborales, y cómo operan la carga de la prueba, el descuento y la prescripción?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 216",
+      "para_que": "Cuando hay culpa suficientemente comprobada del empleador en el accidente de trabajo, este debe la indemnización total y ordinaria de perjuicios."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 56 y 57",
+      "para_que": "Obligaciones de protección y seguridad y de suministrar elementos adecuados de protección."
+     },
+     {
+      "norma": "Decreto Ley 1295 de 1994, Ley 776 de 2002 y Ley 1562 de 2012",
+      "para_que": "Prestaciones tarifadas del sistema de riesgos laborales, de naturaleza objetiva."
+     },
+     {
+      "norma": "Código Civil, art. 1604",
+      "para_que": "La prueba de la diligencia incumbe a quien ha debido emplearla."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 488",
+      "para_que": "Prescripción trienal desde la exigibilidad."
+     }
+    ],
+    "analisis": "Las prestaciones del sistema de riesgos laborales cubren el riesgo profesional de manera objetiva y tarifada. La indemnización plena tiene otra fuente: la culpa del empleador. Son compatibles.\n\nLa culpa está acreditada: trabajo en alturas sin arnés ni línea de vida, sin capacitación y bajo presión del supervisor. Cuando se imputa la omisión de deberes de protección, al trabajador le basta probar esas circunstancias y al empleador le corresponde demostrar que fue diligente; no lo hizo.\n\nLa jurisprudencia laboral ha sostenido que lo pagado por la administradora de riesgos no se descuenta de la indemnización plena, por tener causa distinta, y que el término de prescripción corre desde que el trabajador conoce la consolidación del daño, es decir, desde la firmeza del dictamen (ambos criterios deben verificarse). Contado desde el 20 de noviembre de 2023, la demanda es oportuna.",
+    "contraargumento": "La empresa alega la imprudencia de Darwin. Quitarse el casco es una falta, pero no fue la causa de la caída ni de la fractura; y un trabajador sin capacitación ni equipo no puede cargar con el riesgo que el empleador debía controlar.",
+    "conclusion": "La empresa debe la indemnización plena: lucro cesante, daño emergente y perjuicios inmateriales. No procede el descuento de lo pagado por la administradora de riesgos ni la prescripción.",
+    "errores_comunes": [
+     "Creer que las prestaciones del sistema de riesgos laborales excluyen la responsabilidad del empleador.",
+     "Exigir al trabajador la prueba de que el empleador no fue diligente.",
+     "Contar la prescripción desde el accidente sin considerar la fecha en que se consolidó el daño."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso plantea cuatro cuestiones: si la indemnización del empleador es compatible con las prestaciones del sistema de riesgos laborales, quién prueba la culpa, si procede algún descuento y si la acción prescribió.\n\nEl sistema de riesgos laborales, regulado entre otras por la Ley 776 de 2002 y la Ley 1562 de 2012, reconoce prestaciones tarifadas sin indagar por la culpa. En cambio, el artículo 216 del Código Sustantivo del Trabajo obliga al empleador a la indemnización total y ordinaria de perjuicios cuando existe culpa suficientemente comprobada suya en el accidente. Por lo tanto, se trata de dos responsabilidades de distinta naturaleza y la primera defensa no prospera.\n\nEn cuanto a la culpa, los artículos 56 y 57 del mismo código imponen al empleador obligaciones de protección y seguridad. En efecto, Darwin trabajaba a siete metros sin arnés ni línea de vida, sin curso de alturas y bajo la orden de terminar ese día. La jurisprudencia laboral, con apoyo en el artículo 1604 del Código Civil, ha entendido que, cuando se imputa la omisión de esos deberes, al empleador le corresponde demostrar su diligencia, y la empresa nada probó.\n\nAhora bien, se alega la imprudencia de Darwin. Si bien quitarse el casco fue un descuido, la lesión fue una fractura de columna causada por la caída; de ahí que esa conducta no explique el daño ni exonere a la empresa.\n\nPor otra parte, la jurisprudencia ha negado el descuento de lo pagado por la administradora de riesgos, porque tiene causa distinta, y ha contado los tres años del artículo 488 desde que el trabajador conoce la consolidación del daño. Como el dictamen quedó en firme el 20 de noviembre de 2023, la demanda del 3 de agosto de 2026 es oportuna. Ambos criterios deben verificarse.\n\nEn conclusión, la empresa debe indemnizar plenamente a Darwin.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en cambio",
+    "por lo tanto",
+    "en efecto",
+    "ahora bien",
+    "si bien",
+    "de ahí que",
+    "por otra parte",
+    "porque",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la empresa hubiera entregado arnés certificado, instalado líneas de vida y capacitado a Darwin, y él se hubiera desenganchado contra la orden expresa del supervisor?",
+    "respuesta": "La empresa habría probado su diligencia y no habría culpa suya. Darwin solo tendría derecho a las prestaciones del sistema de riesgos laborales, que no dependen de la culpa."
+   },
+   "distractor": "Que Darwin se hubiera quitado el casco: la lesión fue una fractura de columna por una caída sin arnés, de modo que esa omisión no explica el daño.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-19",
+   "area": "Laboral",
+   "nivel": "experto",
+   "titulo": "Dos millones «por las molestias»",
+   "enunciado": "Durante cinco años, del 1 de marzo de 2020 al 28 de febrero de 2025, Nelly Bohórquez trabajó como secretaria de la Inmobiliaria Santa Clara Ltda., en Zipaquirá, bajo sucesivos contratos de prestación de servicios: cumplía horario de oficina, tenía carné, correo institucional y un jefe inmediato que le autorizaba los permisos. Devengaba $2.000.000 mensuales. Al terminar la relación, la gerente le ofreció $2.000.000 «por las molestias» y le hizo firmar, ante dos testigos y con huella, un «contrato de transacción» en el que Nelly declara que fue contratista independiente, que renuncia a cualquier reclamación laboral presente o futura y que el acuerdo hace tránsito a cosa juzgada. El 15 de abril de 2026 Nelly demandó el pago de cesantías, intereses, primas y vacaciones de los cinco años. La inmobiliaria propone las excepciones de transacción y cosa juzgada, y la de prescripción respecto de todo lo anterior a abril de 2023.",
+   "pregunta": "¿Impide la transacción firmada por Nelly que reclame sus prestaciones, y qué efecto tiene la prescripción alegada?",
+   "pistas": [
+    "En materia laboral se puede transigir, pero no sobre cualquier derecho: identifica el límite que fija el Código Sustantivo del Trabajo.",
+    "Para la prescripción, separa las acreencias que se causaron periódicamente de las que solo se hicieron exigibles al terminar la relación."
+   ],
+   "conceptos": [
+    "prestaciones sociales",
+    "prescripción laboral",
+    "primacía de la realidad"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es eficaz la transacción por la cual una trabajadora, vinculada mediante contratos de prestación de servicios, renuncia a toda reclamación laboral a cambio de una suma, y qué acreencias subsisten frente a la prescripción?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 15",
+      "para_que": "La transacción es válida en asuntos del trabajo, salvo cuando recae sobre derechos ciertos e indiscutibles."
+     },
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Irrenunciabilidad de los beneficios mínimos y facultad de transigir y conciliar solo sobre derechos inciertos y discutibles; primacía de la realidad."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 23 y 24",
+      "para_que": "Elementos y presunción del contrato de trabajo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 488 y 489",
+      "para_que": "Prescripción trienal de las acciones laborales."
+     }
+    ],
+    "analisis": "Un derecho es cierto e indiscutible cuando no hay duda sobre los hechos que lo originan ni sobre su exigibilidad. Aquí la subordinación era evidente —horario, carné, correo, jefe que autoriza permisos—, de modo que el contrato de trabajo y las prestaciones causadas en cinco años no eran realmente discutibles. La jurisprudencia ha advertido que un derecho no se vuelve incierto solo porque el empleador lo niegue. La transacción no produce efectos sobre esos derechos ni cosa juzgada; los $2.000.000 se imputan a lo debido.\n\nLa prescripción sí prospera en parte. Presentada la demanda en abril de 2026, están prescritas las acreencias exigibles antes de abril de 2023: las primas de 2020 a 2022 y los intereses de esos años. Las cesantías, exigibles al terminar la relación en febrero de 2025 según la jurisprudencia (verificar), subsisten íntegras, lo mismo que las primas posteriores.",
+    "contraargumento": "La inmobiliaria dirá que la existencia misma del contrato de trabajo estaba en discusión y que, por eso, podía transigirse. Sería válido ante una duda real y seria sobre los hechos; no cuando la forma civil encubría una subordinación manifiesta.",
+    "conclusion": "La transacción y la cosa juzgada no prosperan. La prescripción prospera parcialmente: Nelly puede cobrar las cesantías de toda la relación y las primas, intereses y vacaciones no prescritos, descontados los $2.000.000 recibidos.",
+    "errores_comunes": [
+     "Dar plenos efectos a la transacción por estar firmada y con testigos.",
+     "Anular la transacción y, además, ignorar la prescripción parcial.",
+     "Considerar discutible un derecho solo porque el empleador lo desconoce."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos problemas: si la transacción que Nelly firmó le impide reclamar y, de no ser así, qué parte de sus acreencias está prescrita.\n\nEl artículo 15 del Código Sustantivo del Trabajo declara válida la transacción en los asuntos del trabajo, salvo cuando se trate de derechos ciertos e indiscutibles. En el mismo sentido, el artículo 53 de la Constitución consagra la irrenunciabilidad de los beneficios mínimos y solo permite transigir sobre derechos inciertos y discutibles. Un derecho es cierto cuando no hay duda sobre los hechos que le dan origen.\n\nEn efecto, Nelly cumplía horario, portaba carné, usaba correo institucional y dependía de un jefe que le autorizaba los permisos. Por consiguiente, la subordinación era manifiesta y, conforme a los artículos 23 y 24 del código, existió un contrato de trabajo cuyas prestaciones ya estaban causadas. De ahí que el acuerdo no pudiera recaer sobre ellas y que no produzca cosa juzgada. La firma ante testigos y con huella no cambia la conclusión, puesto que solo prueba que firmó.\n\nAhora bien, la inmobiliaria alegará que la existencia del contrato era discutible. Ese argumento no prospera, porque un derecho no se vuelve incierto por la sola negativa del empleador; se requiere una duda seria sobre los hechos, y aquí no la había.\n\nEn cambio, la prescripción sí prospera en parte. El artículo 488 fija tres años desde la exigibilidad de cada obligación. Como la demanda es del 15 de abril de 2026, están prescritas las primas e intereses exigibles antes de abril de 2023. No obstante, las cesantías se hicieron exigibles al terminar la relación, en febrero de 2025, según la jurisprudencia, criterio que debe verificarse.\n\nEn conclusión, Nelly puede cobrar las cesantías de los cinco años y lo demás no prescrito, con descuento de los $2.000.000 recibidos.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "de ahí que",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "en cambio",
+    "no obstante",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si las partes hubieran discutido seriamente si unos pagos ocasionales eran salario y hubieran conciliado ese punto ante el inspector del trabajo?",
+    "respuesta": "Se trataría de un derecho incierto y discutible. La conciliación sería válida y haría tránsito a cosa juzgada sobre ese punto, de modo que Nelly no podría volver a reclamarlo."
+   },
+   "distractor": "La firma ante dos testigos y con huella: acredita que Nelly firmó, no que el acuerdo sea válido.",
+   "revision_humana": true
+  },
+  {
+   "id": "lab-20",
+   "area": "Laboral",
+   "nivel": "experto",
+   "titulo": "La fonda cambió de nombre",
+   "enunciado": "Mery Luz Agudelo es cocinera desde el 1 de febrero de 2019 en el restaurante La Fonda de Leo, en Rionegro, con contrato verbal a término indefinido. Su primer empleador, Leonidas Marín, nunca le pagó primas de servicios. El 1 de julio de 2024 Leonidas vendió el establecimiento a Inversiones Sazón S.A.S., que siguió operando en el mismo local, con la misma cocina, la misma carta y el mismo personal, aunque cambió el nombre y la decoración. Mery no dejó de trabajar un solo día. La sociedad sí le pagó las primas desde entonces. El 30 de abril de 2026 la despidió sin justa causa y le liquidó la indemnización contando solo un año y diez meses de servicio; su salario era de $2.400.000. El 1 de septiembre de 2026 Mery demandó a Leonidas y a la sociedad: pide reliquidar la indemnización y el pago de las primas de 2019 a junio de 2024. La sociedad alega que no responde por lo anterior a su compra; ambos demandados proponen prescripción.",
+   "pregunta": "¿Con qué antigüedad debe indemnizarse a Mery, quién responde por las primas anteriores a la venta y cuáles están prescritas?",
+   "pistas": [
+    "Cuando un establecimiento cambia de dueño y sigue funcionando igual, pregúntate qué ocurre con los contratos de trabajo vigentes.",
+    "Revisa los artículos 67 a 69 del Código Sustantivo del Trabajo sobre responsabilidad del antiguo y del nuevo empleador, y aplica la prescripción a cada prima según su fecha de exigibilidad."
+   ],
+   "conceptos": [
+    "despido sin justa causa",
+    "prescripción laboral",
+    "prestaciones sociales"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Hubo sustitución de empleadores con la venta del establecimiento, qué efectos tiene sobre la antigüedad y sobre la responsabilidad por obligaciones anteriores, y qué primas subsisten frente a la prescripción?",
+    "normas": [
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 67",
+      "para_que": "Hay sustitución de empleadores cuando cambia el empleador, subsiste la identidad del establecimiento y continúan los servicios del trabajador."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 68",
+      "para_que": "La sola sustitución no extingue, suspende ni modifica los contratos de trabajo existentes."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 69",
+      "para_que": "El antiguo y el nuevo empleador responden solidariamente por las obligaciones exigibles a la fecha de la sustitución; las posteriores son del nuevo."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, art. 64",
+      "para_que": "Indemnización por despido sin justa causa según el tiempo de servicio."
+     },
+     {
+      "norma": "Código Sustantivo del Trabajo, arts. 306 y 488",
+      "para_que": "Prima de servicios semestral y prescripción trienal desde la exigibilidad de cada una."
+     }
+    ],
+    "analisis": "Concurren los tres elementos de la sustitución: cambió el empleador, el restaurante siguió funcionando con el mismo giro, local y personal, y Mery continuó sin interrupción. El contrato es uno solo desde el 1 de febrero de 2019.\n\nLa indemnización debe calcularse con siete años y tres meses: treinta días por el primer año y veinte por cada uno de los 6,25 restantes, es decir, ciento cincuenta y cinco días, que a $80.000 diarios dan $12.400.000, menos lo ya pagado.\n\nLas primas anteriores a la venta eran obligaciones exigibles a esa fecha: responden solidariamente Leonidas y la sociedad. Pero la prescripción alegada extingue las exigibles antes del 1 de septiembre de 2023. Subsisten la de diciembre de 2023 y la de junio de 2024.",
+    "contraargumento": "La sociedad alega que solo responde desde su compra. La ley dice lo contrario respecto de lo exigible al momento de la sustitución; lo que sí puede hacer es repetir contra Leonidas.",
+    "conclusion": "Hubo sustitución de empleadores. La indemnización se reliquida con siete años y tres meses de antigüedad; por las primas de diciembre de 2023 y junio de 2024 responden solidariamente ambos demandados; las anteriores están prescritas.",
+    "errores_comunes": [
+     "Tratar la venta del establecimiento como el fin de un contrato y el inicio de otro.",
+     "Liberar al nuevo empleador de las obligaciones exigibles al momento de la sustitución.",
+     "Declarar prescritas o vigentes todas las primas en bloque, sin mirar la fecha de cada una."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso exige resolver tres cuestiones: si la venta del restaurante produjo una sustitución de empleadores, quién responde por las primas anteriores y cuáles de ellas sobreviven a la prescripción.\n\nEl artículo 67 del Código Sustantivo del Trabajo entiende por sustitución todo cambio de un empleador por otro, siempre que subsista la identidad del establecimiento y continúen los servicios del trabajador. Asimismo, el artículo 68 dispone que la sola sustitución no extingue ni modifica los contratos. En efecto, la sociedad siguió operando en el mismo local, con la misma cocina, carta y personal, y Mery no dejó de trabajar un día. Por consiguiente, su contrato es uno solo desde el 1 de febrero de 2019. El cambio de nombre y de decoración es irrelevante, puesto que el giro del negocio no varió.\n\nDe ahí que la indemnización del artículo 64 deba liquidarse con siete años y tres meses: treinta días por el primer año y ciento veinticinco por el tiempo restante, esto es, ciento cincuenta y cinco días, que a $80.000 diarios suman $12.400.000, menos lo ya pagado.\n\nAhora bien, la sociedad sostiene que no responde por lo anterior a su compra. Ese argumento no prospera, porque el artículo 69 hace solidariamente responsables al antiguo y al nuevo empleador por las obligaciones exigibles a la fecha de la sustitución.\n\nSin embargo, la prescripción limita el reclamo. El artículo 488 concede tres años desde la exigibilidad de cada prima y la demanda se presentó el 1 de septiembre de 2026; por lo tanto, están prescritas las primas exigibles antes del 1 de septiembre de 2023.\n\nEn conclusión, proceden la reliquidación de la indemnización y, a cargo solidario de ambos demandados, las primas de diciembre de 2023 y junio de 2024. Además, la sociedad puede repetir contra Leonidas.",
+   "conectores_usados": [
+    "en primer lugar",
+    "asimismo",
+    "en efecto",
+    "por consiguiente",
+    "puesto que",
+    "de ahí que",
+    "esto es",
+    "ahora bien",
+    "porque",
+    "sin embargo",
+    "por lo tanto",
+    "en conclusión",
+    "además"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Leonidas hubiera cerrado el restaurante y liquidado a Mery, y tres meses después la sociedad hubiera abierto en el mismo local una ferretería donde la contrató como vendedora?",
+    "respuesta": "No habría identidad de establecimiento ni continuidad del servicio, de modo que no existiría sustitución. Sería un contrato nuevo: la antigüedad se contaría solo con la sociedad, que no respondería por las deudas de Leonidas."
+   },
+   "distractor": "El cambio de nombre y de decoración del restaurante: no altera la identidad del establecimiento ni interrumpe la continuidad del contrato.",
+   "revision_humana": true
+  }
+ ]
+}
