@@ -1,0 +1,9 @@
+{
+ "_nota": "Fichas FICTICIAS para las pruebas de la biblioteca: lo que una persona fijaría en biblioteca/fichas.json.",
+ "PRUEBA-X1": {"acceso": "restringido"},
+ "PRUEBA-X2": {"acceso": "excluido"},
+ "PRUEBA-X3": {"acceso": "excluido"},
+ "PRUEBA-D1": {"validacion_juridica": "validado", "fecha_revision": "2026-06-01", "revisor": "Revisión de prueba",
+               "finalidad": "Pedir al juez de familia que fije la cuota de alimentos de un menor.",
+               "supuestos_uso": ["El obligado no cubre los gastos del menor."], "anexos": ["Registro civil de nacimiento"]}
+}
