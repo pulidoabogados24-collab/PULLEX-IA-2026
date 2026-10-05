@@ -136,7 +136,9 @@ def ia_activa() -> dict:
                        "modelo": p.modelo, "configurado": p.configurado})
     return {"principal": salida[0], "respaldo": salida[1] if len(salida) > 1 else None}
 APP_SECRET_FILE = "app_secret.key"
-DB = "pullex.db"
+# Ruta de la base SQLite. En Vercel el disco es de solo lectura salvo /tmp: define PULLEX_DB=/tmp/pullex.db
+# (los datos NO persisten entre arranques en frío; ver docs/coordinacion/PUL-019-vercel.md).
+DB = os.getenv("PULLEX_DB", "pullex.db")
 
 ADMIN_EMAIL = os.getenv("PULLEX_ADMIN_EMAIL", os.getenv("LEXCOL_ADMIN_EMAIL", "admin@pullex.co"))
 ADMIN_CLAVE = os.getenv("PULLEX_ADMIN_CLAVE", os.getenv("LEXCOL_ADMIN_CLAVE", ""))
