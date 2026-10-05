@@ -1,6 +1,6 @@
 # PUL-019 · Despliegue en Vercel (preparación)
 
-Estado: PREPARADO, NO DESPLEGADO NI PROBADO EN VERCEL.
+Estado: DESPLEGADO EN VERCEL Y CARGANDO (5-oct-2026). Solo se comprobó que la página principal responde; ingreso, chat con modelo real y streaming siguen sin probar en Vercel.
 
 Qué se hizo: `vercel.json` (FastAPI, `maxDuration` 300 s para el streaming del chat), `.vercelignore` (excluye pruebas, demo, docs) y `DB` configurable con `PULLEX_DB` en `app.py`.
 
@@ -18,7 +18,7 @@ Limitaciones reales (no ocultar):
 
 Siguiente paso ejecutable: crear el repositorio en GitHub (el dueño), subir el código, importarlo en Vercel y poner las variables.
 
-## Estado al 5-oct-2026: NO ARRANCA TODAVÍA EN VERCEL
+## Diagnóstico del 5-oct-2026 (antes del arreglo)
 
 Proyecto de Vercel: `pullex-ia-2026-j8yf`. Los despliegues construyen bien, pero la función falla al iniciar.
 
@@ -39,3 +39,15 @@ Arreglo mínimo: subir a `main` las 7 carpetas (`procedimientos`, `perfiles`, `a
 Arreglo de fondo pendiente (PUL-009): dar a la sesión acceso de escritura al repositorio para dejar `main` idéntico a `pul/integracion` y borrar los archivos sueltos. Hoy el proxy de Git lo rechaza (403: el repositorio no está entre los autorizados de la sesión).
 
 Nota: `includeFiles` en `vercel.json` (commit 1122915) fue una hipótesis equivocada sobre la causa; es inofensivo y ya está en `main`.
+
+## Arreglo aplicado el 5-oct-2026
+
+- Commit `9e1f5c6` en `main` (hecho desde el navegador de la app de Claude con la sesión de GitHub del dueño, porque la sesión no tiene permiso de escritura por Git): sube 84 archivos a sus carpetas (`procedimientos/`, `perfiles/`, `perfiles/areas/`, `academia_banco/`, `prompts/`, `reglas/`, `biblioteca/`, `static/`, `static/fonts/`). El contenido se tomó de los mismos archivos que ya estaban sueltos en la raíz de `main`, verificando el hash de cada uno contra `pul/integracion`.
+- Verificado después: los árboles de `procedimientos`, `perfiles`, `academia_banco`, `prompts`, `reglas` y `biblioteca` en `main` son idénticos a los de `pul/integracion`; los 30 archivos de `static` coinciden.
+- Verificado en producción: `https://pullex-ia-2026-j8yf.vercel.app/` devuelve la página de PULLEX IA (título y formulario de ingreso), ya sin error 500.
+
+Pendiente:
+- Probar en Vercel el ingreso con la cuenta de administrador, el chat con modelo real y el streaming.
+- `main` sigue con los archivos sueltos en la raíz (no estorban, pero ensucian) y sin `.gitignore` ni `.vercelignore`; `static/` tiene 10 archivos sobrantes de la vista previa de marca.
+- La rama `pul/integracion` (79 commits locales) sigue sin subirse: falta acceso de escritura de la sesión al repositorio (PUL-009).
+- Los datos en Vercel son temporales (`/tmp`); base persistente pendiente (PUL-003).
