@@ -17,3 +17,25 @@ Limitaciones reales (no ocultar):
 4. Render (`render.yaml`) sigue siendo el despliegue probado en la guía 08, con las mismas limitaciones de base de datos efímera en el plan gratuito.
 
 Siguiente paso ejecutable: crear el repositorio en GitHub (el dueño), subir el código, importarlo en Vercel y poner las variables.
+
+## Estado al 5-oct-2026: NO ARRANCA TODAVÍA EN VERCEL
+
+Proyecto de Vercel: `pullex-ia-2026-j8yf`. Los despliegues construyen bien, pero la función falla al iniciar.
+
+Errores ya resueltos (confirmado en los registros de Vercel):
+- `sqlite3.OperationalError: attempt to write a readonly database` → `app.py` usa `/tmp` cuando `VERCEL=1` (commit d8704d5).
+- `PULLEX_ADMIN_CLAVE no está definida` → variables puestas en el proyecto.
+
+Error vigente: `ModuleNotFoundError: No module named 'procedimientos'` (`app.py`, línea 2822).
+
+Causa comprobada (lectura del árbol público de `main` en GitHub): los archivos se subieron **aplanados en la raíz**. `rutas.py`, `calendario.py`, `j01_…j09_*.py`, `a01…a10.py`, `app.js`, `civil.json`, etc. están sueltos en la raíz; hay duplicados con sufijo (`rutas (3).py`, `registro (4).json`, `__init__ (1).py`) y dos archivos `download` (eran `.gitignore` y `.vercelignore`). **No existen** en `main` las carpetas `procedimientos/`, `perfiles/`, `academia_banco/`, `prompts/`, `reglas/` ni `biblioteca/`, y `static/` está desactualizada.
+
+Lo que sí está bien en `main`: los archivos `.py` de la raíz coinciden byte a byte con `pul/integracion` (comparación de hashes de blob), salvo `README.md` (pisado por otro README) y `app.py` (subido a mano; funciona según los registros).
+
+Prueba local hecha (no sustituye la prueba en Vercel): con `VERCEL=1` y las variables de administrador, la app importa y responde `GET /` 200, estáticos 200 y `POST /api/login` 200, tanto con el árbol limpio (aplicando `.vercelignore`) como reproduciendo el estado previsto de GitHub (raíz con los archivos sueltos + las 7 carpetas correctas). Los archivos sueltos de la raíz no pisan ningún módulo real.
+
+Arreglo mínimo: subir a `main` las 7 carpetas (`procedimientos`, `perfiles`, `academia_banco`, `prompts`, `reglas`, `biblioteca`, `static`; 85 archivos) **arrastrando las carpetas**, no los archivos.
+
+Arreglo de fondo pendiente (PUL-009): dar a la sesión acceso de escritura al repositorio para dejar `main` idéntico a `pul/integracion` y borrar los archivos sueltos. Hoy el proxy de Git lo rechaza (403: el repositorio no está entre los autorizados de la sesión).
+
+Nota: `includeFiles` en `vercel.json` (commit 1122915) fue una hipótesis equivocada sobre la causa; es inofensivo y ya está en `main`.
