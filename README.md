@@ -1,141 +1,69 @@
-# PULLEX IA — Asistente Jurídico Colombiano (multiusuario)
+# Prompts de PULLEX IA
 
-Aplicación web para **vender por suscripción a estudiantes de Derecho**.
-Cada estudiante tiene su cuenta con un **plan y un límite de consultas**; tú, como
-administrador, activas las cuentas cuando te pagan (por Nequi u otro medio).
-Motor **Claude Haiku** (económico) vía la API oficial de Anthropic, con búsqueda
-web, boletín jurídico diario, adjuntar PDF/fotos, memoria y exportar a PDF/Excel.
+Estado: borrador de PUL-018. **Ningún prompt de esta carpeta se ha probado contra el modelo real** (no hay clave de
+API en el entorno donde se escribieron). Se probó que se cargan y se ensamblan (`tests/test_prompts_calidad.py`),
+no que mejoren las respuestas.
 
-## Requisitos
+## Qué hay
 
-- **Python 3.10 o superior**.
-- Una **clave de la API de Claude**: console.anthropic.com → *API Keys* (se paga por uso).
+| Archivo | Qué es | Quién lo carga |
+|---|---|---|
+| `calidad_respuesta.md` | Bloque de calidad de respuesta: contrato de respuesta, intención, cobertura, profundidad, seguimientos, no inventar lo jurídico, incertidumbre y cómo continuar | `prompts_calidad.cargar_bloque()` |
+| `PROMPT-MAESTRO-PULLEX.md` | Prompt maestro integrado: identidad, el bloque anterior, modos, verbos, análisis de casos, voces, reglas jurídicas y límites | `prompts_calidad.cargar_maestro({...})` |
 
-## Instalación local (5 minutos)
+Reglas de formato de cada archivo:
+- Metadato en comentarios HTML al principio: `<!-- version: X.Y.Z | fecha: AAAA-MM-DD | estado: … -->`.
+- El texto que se carga va entre `<!-- INICIO -->` y `<!-- FIN -->`; lo que está fuera no llega al modelo.
+- En el prompt maestro, `{{CALIDAD_RESPUESTA}}`, `{{GUIA_ESCRITURA}}`, `{{VOZ_ESTUDIANTE}}`, `{{VOZ_ABOGADO}}` y
+  `{{VOZ_CIUDADANO}}` se sustituyen al cargar. Las cuatro últimas son las constantes de `estilo_redaccion.py`, para
+  no copiar texto que ya existe y que se desfasaría. Si falta un valor, `cargar_maestro` lanza `ErrorPrompt`:
+  es mejor no arrancar que enviar un marcador sin resolver al modelo.
 
-```bash
-cd pullex-ia
-python -m venv venv
-source venv/bin/activate            # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env                # Windows: copy .env.example .env
-#   Abre .env y pega tu ANTHROPIC_API_KEY y define el correo/clave del admin
-python app.py
+## Cómo lo usa el backend
+
+```python
+import prompts_calidad as pc
+import estilo_redaccion as redaccion
+
+maestro = pc.cargar_maestro({
+    "GUIA_ESCRITURA": redaccion.GUIA_ESCRITURA,
+    "VOZ_ESTUDIANTE": redaccion.VOZ_ESTUDIANTE,
+    "VOZ_ABOGADO": redaccion.VOZ_ABOGADO,
+    "VOZ_CIUDADANO": redaccion.VOZ_CIUDADANO,
+})
 ```
 
-- App para estudiantes: **http://localhost:8000**
-- Panel de administrador: **http://localhost:8000/admin**
+Dos formas de integrarlo, a decidir por quien toque `app.py` (PUL-017):
+1. **Mínima:** dejar el `SYSTEM_PROMPT` actual y añadir `pc.cargar_bloque()` justo después de la presentación.
+   El texto es fijo, así que sigue siendo cacheable (`cache_control`) como el resto del bloque estático.
+2. **Completa:** reemplazar el `SYSTEM_PROMPT` por `cargar_maestro(...)`. El maestro conserva las reglas jurídicas y
+   los límites del actual; si hay diferencias de fondo, vale el actual hasta que un abogado revise el maestro.
 
-## Cómo funciona el negocio
+Lo que cambia por consulta (fecha, nombre, memoria, fragmentos del corpus, modo elegido) va en el bloque dinámico
+sin caché, como hoy. Los modos RÁPIDO, ESTÁNDAR, PROFUNDO, etc. del maestro son criterio del modelo; la decisión
+dura de presupuesto de tokens y de modelo es del enrutador del backend, no del prompt.
 
-1. El estudiante entra a la app y **crea su cuenta** → recibe **10 consultas gratis** (plan Prueba).
-2. Cuando quiere más, **paga por Nequi** y te avisa.
-3. Tú entras a **/admin**, buscas su correo, le asignas el plan (Básico/Pro/Premium) y **activas** la cuenta.
-4. El límite de consultas por plan **protege tu costo de API**: nunca gastas más de lo que cobras.
+## Cómo se versiona
 
-### Planes (editables en `app.py` → `PLANES`)
+- Versión semántica en el metadato: **patch** para corregir una errata o precisar una frase sin cambiar la conducta;
+  **minor** para añadir una regla o un modo; **major** para cambiar una prioridad o quitar una regla.
+- Todo cambio de conducta (minor o major) se acompaña de: la nota en este README (tabla de abajo), una corrida de
+  `python evaluacion/evaluar_calidad.py` sobre respuestas guardadas y, cuando haya clave, una corrida contra el
+  modelo con el conjunto `evaluacion/calidad_respuesta.jsonl`. Sin la corrida real, el cambio queda como
+  «NOT VERIFIED» en la nota.
+- Los archivos se versionan en git; no hay copias con fecha en el nombre.
 
-| Plan     | Precio/mes | Consultas/mes |
-|----------|-----------:|--------------:|
-| Prueba   |         $0 |            10 |
-| Básico   |    $30.000 |           200 |
-| Pro      |    $45.000 |           500 |
-| Premium  |    $60.000 |         1.000 |
+| Versión | Fecha | Cambio | Medido contra el modelo real |
+|---|---|---|---|
+| 1.0.0 | 2026-10-04 | Primera redacción del bloque y del maestro a partir de la especificación del dueño (`docs/coordinacion/ESPECIFICACION-MOTOR-RESPUESTAS.md`) y de `docs/17-CALIDAD-DE-RESPUESTA.md` | No |
 
-## Administrador
+## Qué prueba y qué no
 
-Se crea solo al arrancar, con las variables `PULLEX_ADMIN_EMAIL` y `PULLEX_ADMIN_CLAVE`.
-**Cambia esa clave por una segura.** Con esa cuenta entras a `/admin` para gestionar estudiantes
-y regenerar el boletín.
+`tests/test_prompts_calidad.py` comprueba formato (marcadores, versión, cuerpo no vacío), que el bloque menciona
+cada obligación clave y que no contiene emojis ni nombres de universidades. No comprueba que el modelo obedezca.
 
-## Novedades (PULLEX Academia)
+## Qué falta
 
-- **Inicio con dos caminos:** "Estoy aprendiendo Derecho" y "Estoy trabajando en un asunto". Cada uno
-  muestra sus propias herramientas; la elección se recuerda en la cuenta.
-- **Modular Lab:** eliges área y nivel, PULLEX genera un caso tipo examen **sin mostrar la solución**,
-  respondes, pides hasta 2 pistas, y recibes una evaluación con rúbrica (problema 20, normas 20,
-  argumentación 20, aplicación 20, conclusión 10, claridad 10) con lo que identificaste, lo que omitiste,
-  la norma que faltó, el argumento contrario y cómo mejorar. Luego puedes ver la solución de referencia
-  o pedir una variación "¿Qué cambia si…?". Generar un caso y evaluar cuestan 1 consulta cada uno;
-  pistas y solución son gratis.
-- **Progreso:** casos evaluados, promedio por área y conceptos a reforzar (con acceso directo a
-  "Enséñame" sobre ese concepto).
-- **Forma de respuesta en el chat:** Respuesta directa, Enséñame, Resuélvelo conmigo (tutor
-  socrático), Examíname (simulacro oral) y Audita mi respuesta.
-- **Demo sin servidor:** `python demo/construir_demo.py` genera `demo/pullex-demo.html`, la app completa
-  con datos de ejemplo para mostrarla. `python demo/servidor_simulado.py` levanta el backend real con
-  un modelo simulado (sin clave de API) en http://localhost:8000.
-
-## Funciones
-
-- **Inicio dinámico**: boletín jurídico del día (noticias, jurisprudencia y novedades
-  normativas) generado con búsqueda web y **cacheado 1 vez al día** (no gasta las consultas
-  del estudiante).
-- **Chat fluido** con streaming, trato humano y capaz de responder también temas no jurídicos.
-- **Adjuntar** PDF, fotos o documentos para analizarlos.
-- **Memoria**: cada estudiante escribe lo que quiere que PULLEX recuerde de él.
-- **Personalización**: áreas de interés, modo (Automático/Técnico/Sencillo), tema claro/oscuro,
-  búsqueda web por defecto.
-- **Exportar**: imprimir/guardar en **PDF**, descargar respuesta, y exportar tablas
-  (liquidaciones) a **Excel/CSV**.
-- **Cada estudiante tiene su propia cuenta** (correo + contraseña que crea él mismo), con
-  **verificación de correo** y **recuperación de contraseña** por correo (ver abajo).
-
-## Verificación de correo y recuperación de contraseña
-
-Cada estudiante se registra con su propio correo y contraseña. Al crear la cuenta, PULLEX IA
-le envía un correo de confirmación (enlace de un solo uso, vence en 24 horas); mientras no lo
-confirme, ve un aviso en la app con un botón para reenviarlo. Si olvida su contraseña, desde
-"¿Olvidaste tu contraseña?" en la pantalla de ingreso recibe un enlace (vence en 1 hora) para
-elegir una nueva — por seguridad, la respuesta es idéntica exista o no esa cuenta, para que
-nadie pueda usar ese formulario y averiguar qué correos están registrados.
-
-**Para que estos correos salgan de verdad**, consigue una clave gratis en
-[resend.com](https://resend.com) (capa gratuita: 3.000 correos/mes) y ponla en la variable
-`RESEND_API_KEY` (en tu `.env` local o en Render). Sin esa clave, la app funciona igual —
-solo que esos correos no se envían y queda un aviso en el log del servidor. También define
-`PULLEX_APP_URL` con la URL pública real de tu app (en Render, la que te asigna tu servicio),
-para que los enlaces de los correos apunten al lugar correcto.
-
-## Desplegar en internet (Render.com, gratis)
-
-El archivo `render.yaml` ya deja todo listo. En Render creas un *Blueprint* apuntando a tu
-repositorio, y defines en **Environment**:
-
-- `ANTHROPIC_API_KEY` → tu clave real.
-- `PULLEX_ADMIN_EMAIL` y `PULLEX_ADMIN_CLAVE` → tu correo y una clave segura de admin.
-- `RESEND_API_KEY` (opcional) → para que salgan los correos de verificación/recuperación.
-- `PULLEX_APP_URL` → tu URL real de Render, tras el primer despliegue.
-
-## Seguridad
-
-- Contraseñas cifradas (PBKDF2-SHA256, 200.000 iteraciones, sal por usuario).
-- Sesiones con tokens firmados (HMAC), 14 días, **revocables**: cambiar o restablecer la contraseña
-  cierra las demás sesiones, y hay "Cerrar sesión en todos los dispositivos" en Configuración.
-- Cada conversación solo la puede ver, escribir o borrar su dueño (autorización por recurso).
-- Límite de intentos por IP **y por cuenta** en ingreso, recuperación y cambio de contraseña.
-- Cabeceras de seguridad y Content-Security-Policy estricta: ningún JavaScript en línea (los botones usan
-  `data-click` y un despachador con lista blanca en `static/app.js`); scripts de CDN con SRI.
-  **Regla para quien edite el frontend:** no agregar `onclick="..."` ni `<script>` en línea; la CSP los
-  bloquea y `tests/test_seguridad.py::test_WEB_006` falla si aparecen.
-- Enlaces de verificación/recuperación de un solo uso y con vencimiento (24h / 1h).
-- Historial en SQLite (`pullex.db`). **Ojo:** en el plan gratuito de Render el disco es efímero;
-  descarga la base antes de cada despliegue hasta migrar a una base gestionada.
-- Estado verificado, hallazgos abiertos y plan: `docs/audit/` (empieza por `09-risks-current.md`).
-
-## Pruebas
-
-```bash
-pip install -r requirements-dev.txt
-pytest tests                  # 49 pruebas: seguridad + regresión (no llaman a la API real)
-pip-audit -r requirements.txt # vulnerabilidades conocidas en dependencias
-```
-
-Con el servidor corriendo, `tests/e2e_navegador.py` repite las verificaciones en un navegador real
-(requiere Playwright y las variables `PULLEX_ADMIN_EMAIL` / `PULLEX_ADMIN_CLAVE`).
-
-## Advertencia
-
-PULLEX IA es una herramienta de **apoyo y estudio**. Ninguna norma o sentencia debe usarse en un
-escrito judicial sin confirmarla en la fuente oficial. No sustituye a un abogado ni garantiza
-resultados. Trata los datos personales conforme a la Ley 1581 de 2012.
+- Medir antes y después con el modelo real y el conjunto de evaluación (PUL-008 lo bloquea hasta que haya clave).
+- Que un abogado revise las reglas jurídicas del maestro.
+- Medir cuántos tokens agrega el bloque (hoy son unas 1.200 palabras; no se midió el costo).

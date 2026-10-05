@@ -1,0 +1,1370 @@
+{
+ "area": "Administrativo",
+ "descripcion": "Banco curado de casos tipo examen de Derecho Administrativo para el Laboratorio de casos (PULLEX Academia).",
+ "aviso": "Exactitud jurídica: NOT VERIFIED. Casos escritos para practicar; requieren revisión humana (docente o abogado) antes de usarse con estudiantes. Verifica la vigencia y el número de cada norma en la fuente oficial.",
+ "casos": [
+  {
+   "id": "adm-01",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "El «aporte de seguridad» del alcalde",
+   "enunciado": "El 2 de febrero de 2026, el alcalde del municipio de Monteluna expidió el Decreto 015, publicado ese mismo día, que fija un «aporte obligatorio de seguridad» de $80.000 mensuales a cargo de todos los establecimientos de comercio. Ni la ley ni el concejo municipal crearon ese cobro. Ómar Villamizar, docente pensionado que no tiene negocio alguno, considera que el decreto es ilegal y quiere que desaparezca del ordenamiento. El 22 de junio de 2026 consultó a un abogado amigo, quien le respondió tres cosas: que no puede demandar porque el decreto no lo afecta personalmente; que antes tendría que agotar una conciliación con el municipio, y que de todas maneras ya pasaron más de cuatro meses desde la publicación, de modo que cualquier demanda llegaría tarde. Ómar no pretende que le devuelvan dinero, porque nada ha pagado; solo le molesta que el alcalde cobre lo que no puede cobrar.",
+   "pregunta": "¿Puede Ómar demandar el Decreto 015 y mediante qué medio de control?",
+   "pistas": [
+    "Fíjate en la clase de acto: ¿se dirige a personas determinadas o a todos los que estén en cierta situación?",
+    "Busca en el CPACA el medio de control que cualquier persona puede ejercer en defensa de la legalidad y revisa si tiene término de caducidad."
+   ],
+   "conceptos": [
+    "nulidad simple",
+    "medio de control de nulidad",
+    "caducidad del medio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Está legitimado un ciudadano no afectado para demandar un acto administrativo general, por qué medio de control, y está sujeto a caducidad o a conciliación previa?",
+    "normas": [
+     {
+      "norma": "CPACA (Ley 1437 de 2011), art. 137",
+      "para_que": "Toda persona puede pedir la nulidad de los actos administrativos de carácter general, por las causales allí previstas, entre ellas la falta de competencia y la infracción de las normas en que debían fundarse."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "La demanda de nulidad puede presentarse en cualquier tiempo."
+     },
+     {
+      "norma": "CPACA, art. 161",
+      "para_que": "La conciliación extrajudicial es requisito cuando los asuntos son conciliables, lo que no ocurre con la legalidad de un acto general."
+     },
+     {
+      "norma": "Constitución Política, art. 338",
+      "para_que": "En tiempo de paz solo el Congreso, las asambleas y los concejos pueden imponer contribuciones fiscales o parafiscales."
+     }
+    ],
+    "analisis": "El decreto es un acto administrativo general: obliga a todos los establecimientos de comercio, sin individualizarlos. Contra esos actos procede el medio de control de nulidad, que es público: lo puede ejercer cualquier persona, sin demostrar un interés propio, porque su finalidad es proteger la legalidad.\n\nNo tiene caducidad y no exige conciliación, pues la legalidad de un acto general no es un asunto del que las partes puedan disponer. En el fondo, el alcalde carecía de competencia para crear un cobro obligatorio que solo pueden establecer los órganos de representación popular.",
+    "contraargumento": "El abogado confunde este medio con el de nulidad y restablecimiento del derecho, que sí exige un derecho lesionado, tiene cuatro meses de caducidad y requiere conciliación cuando el asunto es conciliable. Esas reglas serían pertinentes para un comerciante que pidiera la devolución de lo pagado.",
+    "conclusion": "Ómar puede demandar el Decreto 015 mediante el medio de control de nulidad, en cualquier tiempo y sin conciliación previa. La sentencia, si prospera, retira el acto del ordenamiento, pero no ordena devoluciones.",
+    "errores_comunes": [
+     "Exigir interés personal o afectación directa para demandar un acto general.",
+     "Aplicar a la nulidad el término de cuatro meses del restablecimiento del derecho.",
+     "Creer que la conciliación extrajudicial es requisito en todos los medios de control."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Ómar, que no es comerciante ni ha pagado nada, puede demandar el Decreto 015 y por cuál medio de control.\n\nEl artículo 137 del CPACA dispone que toda persona puede solicitar, por sí o por medio de representante, que se declare la nulidad de los actos administrativos de carácter general, cuando hayan sido expedidos con infracción de las normas en que debían fundarse o sin competencia, entre otras causales. Además, el artículo 164 del mismo código permite presentar esa demanda en cualquier tiempo.\n\nEn efecto, el decreto impone un cobro a todos los establecimientos de comercio del municipio, es decir, se dirige a un grupo indeterminado de personas. Por consiguiente, es un acto general y contra él procede el medio de control de nulidad. Como se trata de una acción pública en defensa de la legalidad, Ómar no necesita demostrar que el decreto lo perjudica.\n\nAhora bien, el abogado le opuso tres obstáculos y ninguno prospera. La falta de afectación personal no importa, porque la ley legitima a cualquier persona. Tampoco se requiere conciliación extrajudicial, ya que el artículo 161 la exige para asuntos conciliables y la legalidad de un acto general no lo es. Por último, los cuatro meses que mencionó corresponden a la nulidad y restablecimiento del derecho, medio distinto que busca reparar un derecho particular.\n\nEn cuanto al fondo, el artículo 338 de la Constitución reserva al Congreso, las asambleas y los concejos la facultad de imponer contribuciones; de ahí que el alcalde haya actuado sin competencia.\n\nEn conclusión, Ómar puede demandar la nulidad del decreto sin límite de tiempo. No obstante, debe saber que la sentencia solo retira el acto del ordenamiento y no ordena devolver lo que los comerciantes hayan pagado.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "es decir",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "ya que",
+    "por último",
+    "de ahí que",
+    "en conclusión",
+    "no obstante"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si quien consulta es una comerciante que pagó el aporte durante tres meses y quiere que se lo devuelvan?",
+    "respuesta": "Ella persigue el restablecimiento de un derecho propio. Debe acudir a la nulidad y restablecimiento del derecho, sujeta a caducidad de cuatro meses y, en principio, a conciliación extrajudicial previa."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-02",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "La multa al Fogón de Doña Rita",
+   "enunciado": "La Secretaría de Salud del municipio de Villa del Rosal impuso a Rita Ospino, propietaria del restaurante El Fogón de Doña Rita, una multa de $12 millones mediante la Resolución 045, por supuestas fallas sanitarias. La resolución le fue notificada personalmente el 2 de marzo de 2026 e indicó que contra ella solo procedía el recurso de reposición, que Rita no interpuso. Para evitar el cierre del negocio, pagó la multa. Rita sostiene que el acta de visita en que se apoya la sanción corresponde a otro local de la misma cuadra y que su restaurante nunca fue inspeccionado. El 20 de mayo de 2026 consultó qué hacer: quiere que la resolución se anule y que le devuelvan el dinero. Un conocido le aconsejó presentar una «nulidad simple, que no vence nunca», y otro le sugirió una reparación directa, porque el municipio le causó un daño.",
+   "pregunta": "¿Qué medio de control debe ejercer Rita, dentro de qué término y con qué requisitos previos?",
+   "pistas": [
+    "Identifica de dónde proviene el perjuicio de Rita: ¿de un hecho de la administración o de una decisión escrita dirigida a ella?",
+    "Revisa en el CPACA el término para demandar actos particulares, si la reposición es un recurso obligatorio y qué trámite previo exige la ley cuando se reclama dinero."
+   ],
+   "conceptos": [
+    "restablecimiento del derecho",
+    "caducidad del medio",
+    "conciliación prejudicial"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Cuál es el medio de control idóneo para obtener la anulación de un acto administrativo particular sancionatorio y la devolución de lo pagado, y cuáles son su término y sus requisitos de procedibilidad?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 138",
+      "para_que": "Quien se crea lesionado en un derecho por un acto administrativo particular puede pedir su nulidad y el restablecimiento del derecho, además de la reparación del daño."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "La demanda debe presentarse dentro de los cuatro meses siguientes a la notificación del acto."
+     },
+     {
+      "norma": "CPACA, art. 161",
+      "para_que": "Requisitos de procedibilidad: conciliación extrajudicial en asuntos conciliables y ejercicio de los recursos obligatorios."
+     },
+     {
+      "norma": "CPACA, art. 76",
+      "para_que": "El recurso de apelación es obligatorio para acudir a la jurisdicción; el de reposición no."
+     },
+     {
+      "norma": "CPACA, art. 137",
+      "para_que": "Causales de nulidad aplicables, entre ellas la falsa motivación."
+     }
+    ],
+    "analisis": "El perjuicio de Rita proviene de un acto administrativo particular: la resolución que la sancionó. El medio idóneo es la nulidad y restablecimiento del derecho, que permite anular el acto y, como restablecimiento, obtener la devolución de la multa.\n\nEl término es de cuatro meses contados desde el día siguiente a la notificación del 2 de marzo de 2026: vence a comienzos de julio. Como pretende una suma de dinero, el asunto es conciliable y debe intentar antes la conciliación extrajudicial, cuya solicitud suspende la caducidad. No haber interpuesto reposición no le cierra la vía judicial, porque ese recurso no es obligatorio. La causal sería la falsa motivación: la sanción se apoya en una visita a otro local.",
+    "contraargumento": "La nulidad simple no caduca, pero no sirve para recuperar el dinero y, si se usa contra un acto particular para obtener un restablecimiento, el juez le da el trámite del medio correcto con su caducidad. La reparación directa procede por hechos u omisiones, no cuando el daño nace de un acto administrativo.",
+    "conclusion": "Rita debe solicitar la conciliación extrajudicial y demandar en nulidad y restablecimiento del derecho antes de que venzan los cuatro meses, pidiendo la nulidad de la Resolución 045 y la devolución de los $12 millones.",
+    "errores_comunes": [
+     "Escoger la nulidad simple para evitar la caducidad de un acto particular.",
+     "Acudir a la reparación directa cuando la fuente del daño es un acto administrativo.",
+     "Creer que no interponer reposición impide demandar."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico consiste en identificar el medio de control con el que Rita puede lograr que se anule la Resolución 045 y se le devuelva la multa, así como el plazo y los requisitos para ejercerlo.\n\nEn primer lugar, el artículo 138 del CPACA establece que toda persona que se crea lesionada en un derecho subjetivo por un acto administrativo particular puede pedir que se declare su nulidad y se le restablezca el derecho. En efecto, el perjuicio de Rita no proviene de un hecho material, sino de una resolución dirigida a ella que le impuso una sanción; por lo tanto, el medio idóneo es la nulidad y restablecimiento del derecho, y la devolución del dinero es justamente el restablecimiento.\n\nEn cuanto al plazo, el artículo 164 concede cuatro meses contados a partir del día siguiente a la notificación. Como esta ocurrió el 2 de marzo de 2026, el término vence a comienzos de julio. Además, el artículo 161 exige dos requisitos previos. De un lado, la conciliación extrajudicial, puesto que la pretensión es económica y conciliable; su solicitud suspende la caducidad. De otro lado, el ejercicio de los recursos obligatorios; sin embargo, el artículo 76 solo califica como obligatoria la apelación, de modo que no haber interpuesto reposición no le impide demandar.\n\nAhora bien, los consejos que recibió son equivocados. La nulidad simple no caduca, pero no permite recuperar el dinero, y el juez la tramitaría como restablecimiento si advierte ese propósito. A su vez, la reparación directa se reserva para los daños causados por hechos u omisiones, no por actos administrativos.\n\nEn conclusión, Rita debe convocar a conciliación y demandar antes de julio, con fundamento en la falsa motivación, porque la sanción se apoya en la visita a otro local.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por lo tanto",
+    "además",
+    "de un lado",
+    "puesto que",
+    "de otro lado",
+    "sin embargo",
+    "de modo que",
+    "ahora bien",
+    "a su vez",
+    "en conclusión",
+    "porque"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la resolución hubiera indicado que procedía el recurso de apelación y Rita no lo hubiera interpuesto?",
+    "respuesta": "Faltaría un requisito de procedibilidad: la apelación es obligatoria para acudir a la jurisdicción. El acto habría quedado en firme y la demanda no podría admitirse."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-03",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "El arco de microfútbol",
+   "enunciado": "El 11 de marzo de 2026, durante el recreo en la Institución Educativa La Esperanza, colegio oficial del municipio de Valle Claro, un arco de microfútbol oxidado y sin anclaje cayó sobre Juan Esteban Rivas, de 9 años, y le fracturó el fémur. El niño fue operado y estuvo tres meses sin caminar. En septiembre de 2025, varios padres habían advertido por escrito al rector y a la Secretaría de Educación municipal sobre el mal estado del arco, sin que nadie lo retirara ni lo asegurara. El municipio, que tiene a su cargo la planta física del colegio, respondió al reclamo de los padres de Juan Esteban que se trató de un accidente propio de los juegos infantiles, que no existe ninguna decisión administrativa que se pueda anular y que, si quieren reclamar, deben demandar personalmente al rector. Los padres gastaron $8 millones en terapias y transporte.",
+   "pregunta": "¿Pueden los padres de Juan Esteban reclamar una indemnización al municipio y por cuál medio de control?",
+   "pistas": [
+    "No toda actuación del Estado es un acto administrativo: piensa en los daños que provienen de lo que la administración hace o deja de hacer.",
+    "Revisa el artículo 90 de la Constitución y el medio de control del CPACA para los daños causados por hechos y omisiones."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "daño antijurídico",
+    "falla del servicio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es imputable al municipio el daño sufrido por un estudiante de un colegio oficial a causa de un elemento en mal estado, y cuál es el medio de control para reclamar la indemnización?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 90",
+      "para_que": "El Estado responde patrimonialmente por los daños antijurídicos que le sean imputables, causados por la acción o la omisión de las autoridades."
+     },
+     {
+      "norma": "CPACA, art. 140",
+      "para_que": "Reparación directa: procede cuando el daño proviene de un hecho, una omisión o una operación administrativa."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Término de dos años, contados desde el día siguiente a la ocurrencia del hecho u omisión o desde que se conoció el daño."
+     },
+     {
+      "norma": "CPACA, art. 161",
+      "para_que": "Conciliación extrajudicial como requisito de procedibilidad en la reparación directa."
+     },
+     {
+      "norma": "Constitución Política, art. 44",
+      "para_que": "Prevalencia de los derechos de los niños, que refuerza el deber de cuidado en los establecimientos educativos."
+     }
+    ],
+    "analisis": "El daño no proviene de un acto administrativo sino de una omisión: el municipio no mantuvo ni aseguró un elemento del colegio, pese a que fue advertido por escrito seis meses antes. El niño no tenía por qué soportar esa lesión: es un daño antijurídico. Y es imputable al municipio a título de falla del servicio, porque incumplió su deber de mantener la planta física y de custodiar a los estudiantes durante la jornada.\n\nEl medio de control es la reparación directa, que no exige acto previo. Los padres pueden demandar en nombre del niño y por sus propios perjuicios, dentro de los dos años siguientes al 11 de marzo de 2026, previa conciliación extrajudicial.",
+    "contraargumento": "El municipio alega que fue un accidente de juego. No lo es un arco oxidado y sin anclaje cuya caída era previsible y había sido advertida. Tampoco deben demandar al rector: quien responde ante la víctima es la entidad; contra el funcionario cabría la repetición si obró con dolo o culpa grave.",
+    "conclusion": "Los padres pueden demandar al municipio en reparación directa por falla del servicio. Procede la indemnización de los perjuicios materiales e inmateriales del niño y de su familia.",
+    "errores_comunes": [
+     "Buscar un acto administrativo para anular cuando el daño viene de una omisión.",
+     "Demandar al funcionario en lugar de la entidad pública.",
+     "Omitir la conciliación extrajudicial previa."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el municipio debe responder por la fractura de Juan Esteban y cuál es el camino procesal para reclamar la indemnización.\n\nEl artículo 90 de la Constitución dispone que el Estado responde patrimonialmente por los daños antijurídicos que le sean imputables, causados por la acción o la omisión de las autoridades públicas. En desarrollo de esa cláusula, el artículo 140 del CPACA consagra la reparación directa para los daños que provienen de un hecho, una omisión o una operación administrativa.\n\nEn efecto, aquí concurren los dos elementos de la responsabilidad. De un lado, hay un daño antijurídico, puesto que un niño de 9 años no tiene el deber de soportar una fractura mientras está en el colegio. De otro lado, ese daño es imputable al municipio, que tiene a su cargo la planta física: el arco estaba oxidado y sin anclaje, y los padres lo habían advertido por escrito en septiembre de 2025 sin que nadie actuara. Se trata, por consiguiente, de una falla del servicio por omisión del deber de mantenimiento y de custodia de los estudiantes.\n\nAhora bien, el municipio sostiene que no hay ningún acto que anular y que los padres deben demandar al rector. Ninguno de los dos argumentos prospera. La reparación directa no exige un acto administrativo previo, precisamente porque el daño nace de una omisión. Además, frente a la víctima responde la entidad; el funcionario solo sería llamado en repetición si actuó con dolo o culpa grave. Tampoco fue un simple accidente de juego, ya que la caída era previsible y evitable.\n\nEn conclusión, los padres pueden demandar al municipio en reparación directa, en nombre del niño y en el propio. Por último, deben agotar la conciliación extrajudicial que exige el artículo 161 y demandar dentro de los dos años previstos en el artículo 164.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "de un lado",
+    "puesto que",
+    "de otro lado",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "además",
+    "ya que",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el accidente hubiera ocurrido en un colegio privado?",
+    "respuesta": "No habría responsabilidad del Estado ni reparación directa. Los padres tendrían que acudir a la jurisdicción ordinaria y demandar al colegio por responsabilidad civil, con fundamento en su deber de cuidado sobre los alumnos."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-04",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "«Los mismos con las mismas»",
+   "enunciado": "La Secretaría de Educación del departamento de Los Andes negó a la docente Esperanza Lara el ascenso en el escalafón mediante la Resolución 318, que le fue notificada personalmente el 12 de enero de 2026. La resolución indicó de manera expresa que contra ella procedían el recurso de reposición, ante el mismo funcionario, y el de apelación, ante el gobernador, dentro de los diez días siguientes a la notificación. Esperanza, molesta, decidió no interponer ninguno: «son los mismos con las mismas», dijo. Dejó vencer los diez días y, después de una conciliación extrajudicial fallida, presentó el 20 de abril de 2026 demanda de nulidad y restablecimiento del derecho, dentro de los cuatro meses. El departamento propuso como defensa que la demandante no agotó los recursos obligatorios. Esperanza replica que los recursos son un derecho y no una obligación, y que nadie puede forzarla a discutir con quien ya le negó la petición.",
+   "pregunta": "¿Podía Esperanza demandar la Resolución 318 sin haber interpuesto los recursos que procedían contra ella?",
+   "pistas": [
+    "No todos los recursos administrativos tienen el mismo tratamiento: uno de ellos es condición para acudir al juez.",
+    "Lee conjuntamente los artículos 76 y 161 del CPACA."
+   ],
+   "conceptos": [
+    "recurso de apelación",
+    "recursos administrativos",
+    "restablecimiento del derecho"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Constituye requisito de procedibilidad de la demanda de nulidad y restablecimiento del derecho haber interpuesto el recurso de apelación que procedía contra el acto?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 74",
+      "para_que": "Recursos contra los actos definitivos: reposición, apelación y queja."
+     },
+     {
+      "norma": "CPACA, art. 76",
+      "para_que": "Los recursos se interponen dentro de los diez días siguientes a la notificación; la apelación es obligatoria para acceder a la jurisdicción, la reposición y la queja no."
+     },
+     {
+      "norma": "CPACA, art. 161",
+      "para_que": "Para demandar la nulidad de un acto particular deben haberse ejercido y decidido los recursos obligatorios; no se exige si la administración no dio oportunidad de interponerlos."
+     },
+     {
+      "norma": "CPACA, art. 87",
+      "para_que": "Firmeza del acto cuando vence el término sin que se interpongan los recursos."
+     }
+    ],
+    "analisis": "La resolución informó correctamente los recursos, la autoridad ante la cual se presentaban y el plazo. Esperanza podía prescindir de la reposición, que es facultativa. La apelación, en cambio, es obligatoria cuando procede: la ley quiere que el superior tenga la oportunidad de corregir la decisión antes de que el asunto llegue al juez.\n\nAl no apelar, el acto quedó en firme y faltó un requisito de procedibilidad. La demanda no podía admitirse y, admitida, la defensa del departamento prospera. El defecto ya no es subsanable, porque el término para recurrir venció.",
+    "contraargumento": "Esperanza dice que los recursos son un derecho. Lo son, pero la ley condiciona el acceso a la jurisdicción al ejercicio de uno de ellos. Su argumento solo prosperaría si la administración no le hubiera dado la oportunidad de recurrir, por ejemplo omitiendo indicar los recursos procedentes.",
+    "conclusion": "Esperanza no podía demandar sin haber apelado. La demanda debe terminar sin decisión de fondo, por falta del requisito de procedibilidad.",
+    "errores_comunes": [
+     "Creer que todos los recursos son facultativos.",
+     "Exigir también la reposición como requisito para demandar.",
+     "Pasar por alto la excepción que opera cuando la administración no informa los recursos."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si Esperanza podía acudir al juez administrativo sin haber interpuesto los recursos que la propia Resolución 318 le indicó.\n\nEl artículo 74 del CPACA prevé contra los actos definitivos los recursos de reposición, apelación y queja, y el artículo 76 señala que deben interponerse dentro de los diez días siguientes a la notificación. La misma norma distingue entre ellos: el recurso de apelación es obligatorio para acceder a la jurisdicción, mientras que los de reposición y queja no lo son. A su vez, el artículo 161 convierte esa regla en requisito de procedibilidad, pues exige que, cuando se pretenda la nulidad de un acto particular, se hayan ejercido y decidido los recursos que la ley califica de obligatorios.\n\nEn efecto, la resolución informó que procedían la reposición y la apelación ante el gobernador, y le dio el plazo legal. Esperanza podía prescindir de la primera, pero no de la segunda. Por consiguiente, al dejar vencer los diez días sin apelar, el acto quedó en firme, conforme al artículo 87, y no se cumplió el requisito para demandar.\n\nAhora bien, Esperanza replica que recurrir es un derecho y no una obligación. Ese argumento no prospera, porque la ley no la fuerza a recurrir, sino que condiciona la demanda a que el superior haya tenido la oportunidad de revisar la decisión. Además, tampoco la favorece la excepción del artículo 161, según la cual el requisito no se exige cuando la administración no dio oportunidad de interponer los recursos, ya que aquí fueron indicados con claridad.\n\nEn conclusión, la defensa del departamento prospera y el proceso debe terminar sin decisión de fondo. De ahí que la conciliación previa y la presentación dentro de los cuatro meses no basten para salvar la demanda.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "además",
+    "ya que",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la resolución hubiera dicho que contra ella no procedía recurso alguno, a pesar de que la ley sí concedía apelación?",
+    "respuesta": "La administración no habría dado la oportunidad de recurrir. Según el art. 161 del CPACA, el requisito no sería exigible y Esperanza podría demandar directamente dentro de los cuatro meses."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-05",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "Los viáticos que nadie responde",
+   "enunciado": "Humberto Sarmiento, técnico operativo de la Gobernación de Los Andes, radicó el 5 de noviembre de 2025 una petición escrita en la que solicitó el pago de $7 millones por viáticos de cuatro comisiones de servicio cumplidas ese año; anexó las resoluciones que ordenaron las comisiones y los informes de cumplimiento. Recibió constancia de radicado. El 20 de abril de 2026, más de cinco meses después, no ha recibido respuesta alguna. Un compañero le dice que debe seguir esperando, porque «mientras no haya resolución no hay nada que demandar». Otro le asegura lo contrario: que el silencio de la entidad significa que le aprobaron el pago, porque «el que calla otorga», y que ya puede cobrar por la vía ejecutiva con la copia de su petición. Humberto no quiere perder más tiempo y pregunta qué efecto jurídico tiene el silencio de la gobernación y qué caminos le quedan.",
+   "pregunta": "¿Qué efecto jurídico produjo el silencio de la gobernación frente a la petición de Humberto y qué puede hacer él?",
+   "pistas": [
+    "La ley atribuye una consecuencia al paso del tiempo sin respuesta: averigua cuál es la regla general y cuánto tiempo debe transcurrir.",
+    "Revisa el artículo 83 del CPACA y el término para demandar los actos que nacen del silencio."
+   ],
+   "conceptos": [
+    "silencio administrativo",
+    "silencio negativo",
+    "derecho de petición"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué efecto tiene la falta de respuesta de la administración a una petición de reconocimiento económico, pasados más de tres meses, y qué mecanismos tiene el peticionario?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 83",
+      "para_que": "Transcurridos tres meses desde la presentación de una petición sin que se notifique decisión, se entiende que esta es negativa; el silencio no exime a la autoridad del deber de decidir."
+     },
+     {
+      "norma": "CPACA, art. 84",
+      "para_que": "El silencio positivo solo opera en los casos expresamente previstos en disposiciones legales especiales."
+     },
+     {
+      "norma": "CPACA, arts. 138 y 164",
+      "para_que": "El acto presunto puede demandarse en nulidad y restablecimiento del derecho, y la demanda contra actos producto del silencio puede presentarse en cualquier tiempo."
+     },
+     {
+      "norma": "Constitución Política, art. 23, y Ley 1755 de 2015",
+      "para_que": "Derecho de petición y deber de respuesta oportuna y de fondo."
+     }
+    ],
+    "analisis": "La regla general es el silencio negativo. Pasados tres meses desde el 5 de noviembre de 2025, es decir, desde el 5 de febrero de 2026, se entiende que la petición fue negada. Nace un acto ficto o presunto que le abre a Humberto la vía judicial sin esperar más.\n\nNo hay silencio positivo, porque ninguna norma especial lo prevé para el pago de viáticos. La copia de la petición no es un título ejecutivo. Humberto puede demandar el acto presunto en nulidad y restablecimiento del derecho, sin el apremio de los cuatro meses, o insistir en una respuesta expresa: la gobernación sigue obligada a decidir.",
+    "contraargumento": "El primer compañero cree que sin resolución no hay acto demandable. La figura del silencio existe precisamente para que la inactividad de la administración no deje al ciudadano sin acceso al juez.",
+    "conclusion": "Se configuró el silencio administrativo negativo. Humberto puede demandar el acto presunto en nulidad y restablecimiento del derecho o exigir la respuesta expresa a que tiene derecho.",
+    "errores_comunes": [
+     "Aplicar el refrán «el que calla otorga» como si fuera la regla legal.",
+     "Creer que hay que esperar indefinidamente una decisión expresa.",
+     "Suponer que el silencio libera a la entidad de su deber de responder."
+    ]
+   },
+   "respuesta_modelo": "El problema jurídico es qué consecuencia tiene que la gobernación no haya respondido en más de cinco meses la petición de pago de viáticos y qué puede hacer Humberto.\n\nEn primer lugar, el artículo 83 del CPACA dispone que, transcurridos tres meses contados a partir de la presentación de una petición sin que se haya notificado decisión que la resuelva, se entenderá que esta es negativa. En cambio, el artículo 84 advierte que el silencio solo equivale a decisión positiva en los casos expresamente previstos en disposiciones legales especiales.\n\nEn efecto, Humberto radicó su petición el 5 de noviembre de 2025 y para el 5 de febrero de 2026 no se le había notificado respuesta. Por consiguiente, desde esa fecha existe un acto presunto que niega el pago. Como ninguna ley atribuye efecto favorable al silencio frente al cobro de viáticos, la tesis del segundo compañero no prospera: el refrán no es la regla legal, y la copia de la petición no presta mérito ejecutivo.\n\nAhora bien, tampoco acierta quien le aconseja seguir esperando. El silencio negativo es una garantía para el ciudadano, puesto que le permite acudir al juez aunque la administración no decida. De ahí que Humberto pueda demandar el acto presunto mediante la nulidad y restablecimiento del derecho del artículo 138, y el artículo 164 permite hacerlo en cualquier tiempo cuando la demanda se dirige contra actos producto del silencio.\n\nAdemás, el mismo artículo 83 aclara que el silencio no exime a la autoridad de responsabilidad ni del deber de decidir. Así pues, Humberto conserva su derecho de petición y puede exigir una respuesta expresa y de fondo.\n\nEn conclusión, se configuró el silencio negativo: Humberto no tiene un pago aprobado, pero sí la posibilidad de demandar de inmediato o de insistir en la respuesta.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en cambio",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "puesto que",
+    "aunque",
+    "de ahí que",
+    "además",
+    "así pues",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el 11 de mayo de 2026 la gobernación le notifica una resolución expresa que niega los viáticos?",
+    "respuesta": "Habría un acto expreso. Humberto tendría que interponer los recursos obligatorios que se le indiquen y demandar dentro de los cuatro meses siguientes a la notificación, ya sin la posibilidad de hacerlo en cualquier tiempo."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-06",
+   "area": "Administrativo",
+   "nivel": "basico",
+   "titulo": "Las mesas en el andén",
+   "enunciado": "El 10 de noviembre de 2025, Rosa Elena Tamayo, dueña de una cafetería en el centro del municipio de Puerto Sereno, pidió por escrito a la Secretaría de Gobierno permiso para instalar seis mesas en el andén frente a su local. Pasaron cuatro meses sin respuesta. Convencida de que «el que calla otorga», el 16 de marzo de 2026 instaló las mesas. El 30 de marzo, funcionarios de la alcaldía le ordenaron retirarlas y le anunciaron la apertura de una actuación sancionatoria por ocupación indebida del espacio público. Rosa Elena alega que operó a su favor el silencio administrativo positivo y exhibe, como prueba del permiso, la copia de su petición con el sello de recibido. Añade que varios locales vecinos tienen mesas en el andén desde hace años y que la alcaldía tuvo tiempo de sobra para contestarle. No ha presentado ningún otro escrito ni ha acudido a un notario.",
+   "pregunta": "¿Obtuvo Rosa Elena el permiso por silencio administrativo positivo?",
+   "pistas": [
+    "Pregúntate cuál es la regla general del silencio de la administración y cuándo, por excepción, favorece al peticionario.",
+    "Revisa los artículos 83 a 85 del CPACA: qué exige la ley para que haya silencio positivo y cómo se hace valer."
+   ],
+   "conceptos": [
+    "silencio positivo",
+    "silencio administrativo",
+    "derecho de petición"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Configura silencio administrativo positivo la falta de respuesta a una solicitud de permiso de ocupación del espacio público?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 83",
+      "para_que": "Regla general: pasados tres meses sin respuesta, la petición se entiende negada."
+     },
+     {
+      "norma": "CPACA, art. 84",
+      "para_que": "El silencio positivo solo procede en los casos expresamente previstos en disposiciones legales especiales."
+     },
+     {
+      "norma": "CPACA, art. 85",
+      "para_que": "Para invocar el silencio positivo debe protocolizarse la constancia o copia de la petición con una declaración jurada de no haber recibido respuesta."
+     },
+     {
+      "norma": "Constitución Política, arts. 63 y 82",
+      "para_que": "Los bienes de uso público son inalienables e imprescriptibles y el Estado debe proteger la integridad del espacio público."
+     }
+    ],
+    "analisis": "El silencio de la administración equivale, por regla general, a una negativa. Solo es positivo cuando una ley especial lo establece de manera expresa para un trámite determinado. Ninguna norma prevé ese efecto para los permisos de ocupación del espacio público, que además recaen sobre bienes de uso público de protección reforzada.\n\nLo que se configuró fue un silencio negativo desde febrero de 2026. Y aun en los casos en que la ley reconoce el silencio positivo, no basta la copia con sello: debe protocolizarse ante notario con una declaración jurada. Rosa Elena no tiene permiso y la ocupación es irregular.",
+    "contraargumento": "Rosa Elena invoca la demora de la alcaldía y las mesas de los vecinos. La demora vulnera su derecho de petición y le permite exigir respuesta o demandar el acto presunto, pero no crea el permiso; la situación de los vecinos no genera derechos a su favor.",
+    "conclusion": "No operó el silencio positivo. La petición se entiende negada y Rosa Elena debe retirar las mesas; puede insistir en una respuesta de fondo o demandar el acto presunto.",
+    "errores_comunes": [
+     "Tomar el silencio positivo como regla general.",
+     "Creer que la copia sellada de la petición prueba el permiso.",
+     "Confundir la vulneración del derecho de petición con el otorgamiento de lo pedido."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la falta de respuesta de la Secretaría de Gobierno durante cuatro meses le concedió a Rosa Elena el permiso para ocupar el andén.\n\nEl artículo 83 del CPACA establece la regla general: transcurridos tres meses desde la presentación de una petición sin que se notifique decisión, se entiende que esta es negativa. Por el contrario, el artículo 84 señala que el silencio solo equivale a una decisión positiva en los casos expresamente previstos en disposiciones legales especiales. Además, el artículo 85 exige que quien invoque el silencio positivo protocolice ante notario la constancia o copia de la petición, junto con una declaración jurada de no haber recibido respuesta.\n\nEn efecto, ninguna ley atribuye efecto favorable al silencio frente a las solicitudes de ocupación del espacio público. Se trata, por lo demás, de bienes de uso público que la Constitución protege en sus artículos 63 y 82. Por consiguiente, desde febrero de 2026 la petición se entiende negada, y la instalación de las mesas carece de respaldo.\n\nAhora bien, Rosa Elena exhibe la copia con sello de recibido. Ese documento solo prueba que presentó la petición; incluso en los trámites donde sí opera el silencio positivo haría falta la protocolización, que ella no realizó. Tampoco le sirve que los vecinos tengan mesas, puesto que la tolerancia frente a otros no le otorga un derecho.\n\nSin embargo, la demora de la alcaldía no es inocua. Vulnera su derecho de petición, de modo que Rosa Elena puede exigir una respuesta de fondo, porque el silencio no exime a la autoridad del deber de decidir, o demandar el acto presunto.\n\nEn conclusión, no obtuvo el permiso y debe retirar las mesas mientras la administración decide expresamente.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por el contrario",
+    "además",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "incluso",
+    "puesto que",
+    "sin embargo",
+    "de modo que",
+    "porque",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Rosa Elena hubiera reclamado ante la empresa de acueducto por un cobro excesivo y esta no hubiera respondido dentro del plazo legal?",
+    "respuesta": "El régimen de servicios públicos domiciliarios (Ley 142 de 1994, art. 158; verificar) sí prevé el silencio positivo: vencido el término sin respuesta, la reclamación se entiende resuelta a favor del usuario."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-07",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "Los diez días que quedaban",
+   "enunciado": "Mediante la Resolución 120, notificada personalmente el 10 de febrero de 2026, la Secretaría de Salud del departamento de Los Andes canceló la habilitación del consultorio odontológico de Marcela Duarte y ordenó su cierre. Contra la resolución solo procedía reposición, que Marcela no interpuso. El 1 de junio de 2026 su abogada radicó ante la Procuraduría una solicitud de conciliación extrajudicial, en la que pidió dejar sin efectos la resolución y pagar $60 millones por los ingresos perdidos. La audiencia fracasó y la constancia de no acuerdo se expidió el 20 de julio de 2026. La demanda de nulidad y restablecimiento del derecho se presentó el 28 de julio de 2026. El departamento propone la excepción de caducidad: afirma que entre el 11 de febrero y el 28 de julio transcurrieron más de cinco meses, cuando la ley solo concede cuatro, y que la conciliación es un trámite previo que no altera los términos judiciales.",
+   "pregunta": "¿Caducó el medio de control de nulidad y restablecimiento del derecho ejercido por Marcela?",
+   "pistas": [
+    "Calcula primero cuándo vencían los cuatro meses y cuántos días faltaban el día en que se pidió la conciliación.",
+    "Averigua qué efecto tiene la solicitud de conciliación extrajudicial sobre el término de caducidad y cuándo se reanuda el conteo."
+   ],
+   "conceptos": [
+    "caducidad del medio",
+    "conciliación prejudicial",
+    "restablecimiento del derecho"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Suspende la solicitud de conciliación extrajudicial el término de caducidad de cuatro meses, y fue oportuna la demanda presentada ocho días después de la constancia de no acuerdo?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Cuatro meses para demandar la nulidad y restablecimiento del derecho, contados desde el día siguiente a la notificación del acto."
+     },
+     {
+      "norma": "CPACA, art. 161",
+      "para_que": "La conciliación extrajudicial es requisito de procedibilidad cuando el asunto es conciliable."
+     },
+     {
+      "norma": "Ley 2220 de 2022 (Estatuto de Conciliación)",
+      "para_que": "La presentación de la solicitud de conciliación suspende el término de caducidad hasta que se logre el acuerdo, se expida la constancia o transcurran tres meses, lo que ocurra primero; verificar el artículo exacto en fuente oficial."
+     },
+     {
+      "norma": "CPACA, art. 76",
+      "para_que": "La reposición no es recurso obligatorio."
+     }
+    ],
+    "analisis": "Los cuatro meses empezaron a correr el 11 de febrero de 2026 y vencían el 11 de junio. La solicitud de conciliación se radicó el 1 de junio, cuando faltaban diez días. Desde ese momento el término quedó suspendido, y se reanudó al día siguiente de la constancia del 20 de julio. Los diez días restantes vencían el 30 de julio.\n\nLa demanda se presentó el 28 de julio: fue oportuna. La suspensión no es una gracia sino la consecuencia de que la ley exige la conciliación antes de demandar; sin ella, el requisito consumiría el tiempo del administrado.",
+    "contraargumento": "El departamento cuenta el tiempo de corrido. Tendría razón si la solicitud se hubiera presentado después del 11 de junio, porque la conciliación suspende un término vigente, pero no revive uno vencido.",
+    "conclusion": "No operó la caducidad. Descontado el periodo de suspensión, la demanda se presentó dentro de los cuatro meses.",
+    "errores_comunes": [
+     "Contar los cuatro meses de corrido, sin descontar la suspensión por conciliación.",
+     "Creer que, expedida la constancia, el término de cuatro meses vuelve a empezar desde cero.",
+     "Pedir la conciliación con el término ya vencido y suponer que eso lo revive."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la demanda de Marcela, presentada el 28 de julio de 2026, llegó después de vencidos los cuatro meses de caducidad, como afirma el departamento, o si la conciliación extrajudicial alteró ese conteo.\n\nEl artículo 164 del CPACA fija en cuatro meses el término para demandar la nulidad y restablecimiento del derecho, contados a partir del día siguiente a la notificación del acto. A su vez, el artículo 161 exige agotar la conciliación extrajudicial cuando el asunto es conciliable, y la Ley 2220 de 2022 dispone que la presentación de la solicitud suspende el término de caducidad hasta que se expida la constancia de no acuerdo o transcurran tres meses, lo que ocurra primero.\n\nEn efecto, la resolución se notificó el 10 de febrero de 2026; por lo tanto, los cuatro meses corrían hasta el 11 de junio. Marcela pidió una suma de dinero, de modo que el asunto era conciliable, y su abogada radicó la solicitud el 1 de junio, cuando faltaban diez días. Desde ese momento el término se suspendió. La constancia se expidió el 20 de julio y el conteo se reanudó al día siguiente; por consiguiente, los diez días restantes vencían el 30 de julio y la demanda del 28 fue oportuna.\n\nAhora bien, el departamento sostiene que la conciliación no afecta los términos judiciales. Ese argumento no prospera, porque la suspensión es la contrapartida de un requisito que la propia ley impone antes de demandar. Con todo, conviene precisar dos límites: la suspensión no hace que los cuatro meses empiecen de nuevo, y tampoco revive un término ya vencido.\n\nPor otra parte, no haber interpuesto reposición es irrelevante, ya que ese recurso no es obligatorio.\n\nEn conclusión, la excepción de caducidad debe negarse.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a su vez",
+    "en efecto",
+    "por lo tanto",
+    "de modo que",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "con todo",
+    "por otra parte",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la solicitud de conciliación se hubiera radicado el 15 de junio de 2026?",
+    "respuesta": "Para esa fecha los cuatro meses ya habían vencido. La conciliación no revive un término expirado, de modo que la excepción de caducidad prosperaría."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-08",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "El kiosco demolido",
+   "enunciado": "Mediante la Resolución 033, notificada personalmente el 15 de enero de 2025, la Secretaría de Gobierno del municipio de Valle Claro ordenó a Evelio Ramos demoler en treinta días un kiosco de comidas, por ocupar supuestamente el espacio público, y advirtió que, de no hacerlo, el municipio ejecutaría la demolición a su costa. Evelio no interpuso recursos ni demandó. El 20 de marzo de 2025, una cuadrilla municipal demolió el kiosco, sin excesos y en los términos de la resolución. Evelio afirma, con plano y escritura en mano, que el kiosco estaba dentro de su predio. El 10 de septiembre de 2026 presentó demanda de reparación directa por $70 millones: sostiene que el daño lo causó una operación administrativa, la demolición, y que está dentro de los dos años. El municipio responde que el daño proviene de un acto administrativo en firme que nunca fue demandado.",
+   "pregunta": "¿Es la reparación directa el medio de control procedente para la reclamación de Evelio y fue oportuna su demanda?",
+   "pistas": [
+    "Pregúntate cuál es la verdadera causa del daño: ¿la actuación material de la cuadrilla o la decisión que ordenó demoler?",
+    "Recuerda que el juez puede dar a la demanda el trámite que corresponde, pero el término de caducidad es el del medio de control adecuado."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "restablecimiento del derecho",
+    "caducidad del medio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué medio de control procede cuando el daño proviene de la ejecución regular de un acto administrativo que el demandante considera ilegal, y qué término de caducidad se aplica?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 138",
+      "para_que": "Nulidad y restablecimiento del derecho contra actos particulares que lesionan un derecho, con reparación del daño."
+     },
+     {
+      "norma": "CPACA, art. 140",
+      "para_que": "Reparación directa por hechos, omisiones y operaciones administrativas."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Caducidad de cuatro meses para la nulidad y restablecimiento y de dos años para la reparación directa."
+     },
+     {
+      "norma": "CPACA, art. 171",
+      "para_que": "El juez da a la demanda el trámite que le corresponde, aunque el demandante haya indicado una vía procesal inadecuada."
+     },
+     {
+      "norma": "CPACA, art. 169",
+      "para_que": "Rechazo de la demanda cuando ha operado la caducidad."
+     }
+    ],
+    "analisis": "La demolición fue la ejecución material de lo que ordenó la Resolución 033, sin desbordarla. Si el kiosco estaba en predio privado, lo ilegal fue la decisión, no la forma de ejecutarla. Cuando la fuente del daño es un acto administrativo particular que se reputa ilegal, el medio procedente es la nulidad y restablecimiento del derecho: mientras el acto no se anule, goza de presunción de legalidad y su ejecución es legítima.\n\nEl juez debe adecuar el trámite, pero entonces aplica la caducidad de cuatro meses, que venció el 16 de mayo de 2025. La demanda de septiembre de 2026 es extemporánea.",
+    "contraargumento": "Evelio alega que la demolición es una operación administrativa. La reparación directa procedería si el daño derivara de la ejecución irregular —por ejemplo, demoler más de lo ordenado o hacerlo sin acto previo—, no de la legalidad de la orden.",
+    "conclusion": "La reparación directa no es el medio procedente. Adecuada la demanda a nulidad y restablecimiento del derecho, la caducidad ya había operado y debe rechazarse.",
+    "errores_comunes": [
+     "Escoger el medio de control por el término de caducidad más conveniente.",
+     "Tratar la ejecución regular de un acto como una fuente autónoma de daño.",
+     "Creer que la adecuación del trámite por el juez salva la caducidad."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos problemas: cuál es el medio de control que corresponde a la reclamación de Evelio y, definido este, si la demanda del 10 de septiembre de 2026 fue oportuna.\n\nEl artículo 140 del CPACA reserva la reparación directa para los daños causados por hechos, omisiones u operaciones administrativas. En cambio, el artículo 138 consagra la nulidad y restablecimiento del derecho para quien se crea lesionado por un acto administrativo particular. La jurisprudencia contenciosa ha precisado que el criterio para escoger entre ambos es la fuente del daño: si este proviene de una decisión que se considera ilegal, hay que anularla, porque mientras tanto se presume legal y su ejecución es legítima.\n\nEn efecto, la cuadrilla demolió el kiosco sin excesos y en los términos de la Resolución 033. Lo que Evelio discute no es la manera de ejecutar, sino que el municipio haya ordenado demoler una construcción ubicada, según él, en su predio. Por consiguiente, el daño tiene origen en el acto y el medio procedente es la nulidad y restablecimiento del derecho.\n\nAhora bien, el error en la vía no conduce por sí solo al fracaso, puesto que el artículo 171 ordena al juez dar a la demanda el trámite que le corresponda. Sin embargo, la adecuación trae consigo el término del medio correcto. El artículo 164 concede cuatro meses desde la notificación, que ocurrió el 15 de enero de 2025; de ahí que el plazo venciera el 16 de mayo de 2025.\n\nEvelio insiste en que la demolición fue una operación administrativa. Ese argumento solo prosperaría si la ejecución hubiera sido irregular, por ejemplo, si se hubiera demolido más de lo ordenado.\n\nEn conclusión, la demanda debe rechazarse por caducidad, conforme al artículo 169.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en cambio",
+    "porque",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "puesto que",
+    "sin embargo",
+    "de ahí que",
+    "por ejemplo",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la cuadrilla, además del kiosco, hubiera demolido por error el muro de la casa de Evelio, que la resolución no mencionaba?",
+    "respuesta": "El daño al muro provendría de un exceso en la ejecución, es decir, de una operación administrativa irregular. Frente a ese perjuicio procedería la reparación directa, con caducidad de dos años."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-09",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "Trece meses para decidir la apelación",
+   "enunciado": "La Dirección de Vigilancia de la Secretaría de Salud del departamento de Los Andes sancionó a la Clínica Vida Plena S.A.S. con multa de $50 millones, mediante la Resolución 410, notificada el 17 de febrero de 2025. El 3 de marzo de 2025 la clínica interpuso oportunamente reposición y, en subsidio, apelación. La reposición se resolvió de manera desfavorable en junio de 2025. La apelación, a cargo del secretario de despacho, no se decidió durante meses. El 10 de abril de 2026 la clínica recibió la notificación de la Resolución 122, fechada el 6 de abril de 2026, que confirma la multa, y poco después un requerimiento de pago. La clínica sostiene que la sanción ya no existe. La Secretaría responde que, según la regla general, el silencio frente a los recursos es negativo, que simplemente hubo una demora por congestión y que, en todo caso, el recurso ya fue resuelto.",
+   "pregunta": "¿Qué efecto tuvo la demora de más de un año en decidir la apelación contra la sanción?",
+   "pistas": [
+    "El silencio frente a los recursos tiene una regla general y una regla especial para el procedimiento sancionatorio.",
+    "Lee el artículo 52 del CPACA: qué plazo fija para decidir los recursos contra el acto sancionatorio y qué consecuencia prevé si no se cumple."
+   ],
+   "conceptos": [
+    "recursos administrativos",
+    "silencio positivo",
+    "recurso de apelación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Opera el silencio positivo a favor del sancionado cuando la administración no decide los recursos contra el acto sancionatorio dentro del año siguiente a su interposición, y qué valor tiene la decisión tardía?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 52",
+      "para_que": "Los recursos contra el acto sancionatorio deben decidirse, so pena de pérdida de competencia, dentro de un año desde su debida y oportuna interposición; si no, se entienden fallados a favor del recurrente."
+     },
+     {
+      "norma": "CPACA, art. 86",
+      "para_que": "Regla general: transcurridos dos meses desde la interposición de los recursos sin decisión notificada, se entiende que la decisión es negativa."
+     },
+     {
+      "norma": "CPACA, art. 85",
+      "para_que": "Procedimiento para invocar el silencio positivo mediante protocolización."
+     },
+     {
+      "norma": "CPACA, arts. 137 y 138",
+      "para_que": "La falta de competencia es causal de nulidad del acto expedido tardíamente."
+     }
+    ],
+    "analisis": "En el procedimiento administrativo sancionatorio rige una regla especial. La apelación se interpuso el 3 de marzo de 2025; la administración tenía hasta el 3 de marzo de 2026 para decidirla. No lo hizo: la Resolución 122 es del 6 de abril de 2026 y se notificó el 10 de abril.\n\nVencido el año, la autoridad perdió competencia y el recurso se entiende fallado a favor de la clínica. La Resolución 122 fue expedida sin competencia y no puede revivir la sanción. La clínica debe protocolizar el silencio positivo y oponerlo al cobro; si la administración insiste, puede demandar la Resolución 122 por falta de competencia.",
+    "contraargumento": "La Secretaría invoca la regla general del silencio negativo en recursos. Esa regla permite al recurrente demandar sin esperar, pero cede ante la norma especial del procedimiento sancionatorio. La congestión no suspende un plazo que la ley fija bajo pena de pérdida de competencia. Debe verificarse que no exista norma sectorial distinta.",
+    "conclusion": "Operó el silencio positivo a favor de la clínica: la apelación se entiende resuelta favorablemente y la multa quedó sin efecto. La Resolución 122 es nula por falta de competencia.",
+    "errores_comunes": [
+     "Aplicar al procedimiento sancionatorio la regla general del silencio negativo en recursos.",
+     "Dar validez a la decisión expedida después de vencido el año.",
+     "Olvidar que el silencio positivo debe protocolizarse para hacerlo valer."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es qué consecuencia tiene que la Secretaría haya tardado más de un año en decidir la apelación contra la multa y qué valor conserva la resolución que finalmente la confirmó.\n\nLa regla general sobre el silencio en los recursos está en el artículo 86 del CPACA: transcurridos dos meses desde su interposición sin decisión notificada, se entiende que esta es negativa. Sin embargo, el artículo 52 trae una regla especial para el procedimiento sancionatorio, según la cual los actos que resuelven los recursos deben ser decididos, so pena de pérdida de competencia, en el término de un año contado a partir de su debida y oportuna interposición; si no se deciden en ese plazo, se entienden fallados a favor del recurrente.\n\nEn efecto, la clínica interpuso la apelación el 3 de marzo de 2025, dentro del término legal. Por consiguiente, la administración tenía hasta el 3 de marzo de 2026 para resolverla. No lo hizo: la Resolución 122 tiene fecha del 6 de abril de 2026 y se notificó el 10 de abril. De ahí que el recurso se entienda resuelto en favor de la clínica y que la multa haya quedado sin efecto.\n\nAhora bien, la Secretaría alega que el silencio en recursos es negativo y que solo hubo una demora por congestión. Ese argumento no prospera, porque la norma especial prevalece sobre la general y fija el plazo bajo pena de pérdida de competencia. Además, la resolución tardía no revive la sanción, ya que fue expedida por una autoridad que ya no podía decidir.\n\nEn conclusión, operó el silencio positivo. La clínica debe protocolizarlo conforme al artículo 85 y oponerlo al cobro; por último, si la administración insiste, puede demandar la Resolución 122 por falta de competencia. Conviene verificar que no exista una norma sectorial distinta.",
+   "conectores_usados": [
+    "en primer lugar",
+    "finalmente",
+    "sin embargo",
+    "en efecto",
+    "por consiguiente",
+    "de ahí que",
+    "ahora bien",
+    "porque",
+    "además",
+    "ya que",
+    "en conclusión",
+    "por último"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la apelación se hubiera decidido y notificado el 20 de enero de 2026?",
+    "respuesta": "La decisión se habría producido dentro del año. La sanción quedaría en firme y a la clínica solo le restaría demandar en nulidad y restablecimiento del derecho dentro de los cuatro meses siguientes a esa notificación."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-10",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "El disparo en la persecución",
+   "enunciado": "El 8 de febrero de 2026, en un barrio comercial de Tuluá, dos patrulleros de la policía perseguían a pie a un hombre que acababa de hurtar un celular. Uno de los patrulleros disparó su arma de dotación hacia el fugitivo; el proyectil hirió en el abdomen a Leidy Johana Perea, de 23 años, que esperaba el bus en la acera. Leidy perdió un riñón y estuvo incapacitada cinco meses. La entidad rechazó su reclamación con tres argumentos: que el verdadero causante del daño fue el delincuente, cuya huida provocó la persecución; que el patrullero actuó en cumplimiento de un deber legal, por lo cual no hubo falla alguna, y que, si Leidy quiere una indemnización, debe demandar al patrullero ante la justicia ordinaria. Contra el uniformado se abrió una investigación disciplinaria. El hombre perseguido no portaba armas y fue capturado dos cuadras más adelante.",
+   "pregunta": "¿Responde el Estado por las lesiones de Leidy y bajo qué fundamento?",
+   "pistas": [
+    "La responsabilidad del Estado no siempre exige probar una falla: piensa en los daños causados con instrumentos que crean un riesgo para todos.",
+    "Analiza si la huida del delincuente rompe el vínculo entre el disparo del agente y la lesión."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "daño antijurídico",
+    "falla del servicio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Es imputable al Estado el daño causado a un tercero ajeno con un arma de dotación oficial durante un procedimiento policial, y exonera a la entidad el hecho del delincuente perseguido?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 90",
+      "para_que": "Responsabilidad patrimonial del Estado por daños antijurídicos imputables y deber de repetir contra el agente que obró con dolo o culpa grave."
+     },
+     {
+      "norma": "CPACA, art. 140",
+      "para_que": "Reparación directa por hechos de la administración."
+     },
+     {
+      "norma": "CPACA, arts. 161 y 164",
+      "para_que": "Conciliación extrajudicial previa y caducidad de dos años."
+     },
+     {
+      "norma": "Ley 678 de 2001",
+      "para_que": "Acción de repetición contra el servidor que causó el daño con dolo o culpa grave."
+     }
+    ],
+    "analisis": "Leidy era un tercero ajeno al procedimiento y no tenía el deber de soportar la lesión: el daño es antijurídico. Fue causado por un agente del Estado, en servicio y con arma de dotación.\n\nLa jurisprudencia contenciosa ha admitido dos caminos de imputación. Por riesgo excepcional, porque el uso de armas de fuego es una actividad peligrosa que el Estado introduce y cuyos daños a terceros debe asumir aunque el agente haya obrado correctamente. Y por falla del servicio, si se demuestra que disparar en una vía concurrida para detener a un hombre desarmado que huía con un celular fue un uso desproporcionado de la fuerza, como sugieren los hechos.\n\nEl hecho del delincuente no exonera: él no disparó; la causa adecuada de la lesión fue la decisión del patrullero.",
+    "contraargumento": "La entidad invoca el cumplimiento de un deber legal. Ese argumento puede excluir la falla, pero no el régimen de riesgo, que no depende de la ilicitud de la conducta. Y la víctima no está obligada a perseguir al agente: demanda a la entidad.",
+    "conclusion": "El Estado responde por las lesiones de Leidy. Ella puede demandar en reparación directa a la Nación, por conducto de la entidad policial, y la entidad podrá repetir contra el patrullero si se prueba dolo o culpa grave.",
+    "errores_comunes": [
+     "Creer que sin conducta irregular del agente no hay responsabilidad del Estado.",
+     "Aceptar como hecho de un tercero la conducta de quien solo dio ocasión al procedimiento.",
+     "Dirigir la demanda contra el agente y no contra la entidad."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso plantea dos problemas: bajo qué título responde el Estado por la lesión de Leidy y si la huida del delincuente lo exonera.\n\nEl artículo 90 de la Constitución impone al Estado responder por los daños antijurídicos que le sean imputables, causados por la acción o la omisión de las autoridades. En efecto, Leidy era una persona ajena al procedimiento que esperaba el bus, de modo que no tenía el deber jurídico de soportar la pérdida de un riñón. El daño es, por tanto, antijurídico, y lo causó un patrullero en servicio con su arma de dotación.\n\nEn cuanto a la imputación, la jurisprudencia contenciosa ha reconocido dos títulos. De un lado, el riesgo excepcional: el uso de armas de fuego es una actividad peligrosa que el Estado despliega en beneficio de todos y, por consiguiente, debe asumir los daños que cause a terceros aunque el agente haya actuado conforme a su deber. De otro lado, la falla del servicio, que aquí también se insinúa, puesto que se disparó en una zona comercial contra un hombre desarmado que huía con un celular, lo cual parece desproporcionado.\n\nAhora bien, la entidad alega el hecho de un tercero. Ese argumento no prospera, porque el delincuente no disparó; su huida fue solo la ocasión del procedimiento, mientras que la causa de la lesión fue la decisión del patrullero. Tampoco sirve invocar el cumplimiento de un deber legal, ya que este excluiría a lo sumo la falla, pero no el régimen de riesgo.\n\nPor otra parte, Leidy no tiene que demandar al uniformado. El medio de control es la reparación directa del artículo 140 del CPACA, contra la entidad, previa conciliación y dentro de los dos años.\n\nEn conclusión, el Estado debe indemnizarla, sin perjuicio de repetir contra el patrullero si obró con dolo o culpa grave.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "de modo que",
+    "por tanto",
+    "de un lado",
+    "por consiguiente",
+    "aunque",
+    "de otro lado",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "ya que",
+    "por otra parte",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el disparo que hirió a Leidy lo hubiera hecho el delincuente al huir?",
+    "respuesta": "El daño sería obra de un tercero. El Estado no respondería, salvo que se probara una falla concreta, como haber omitido una protección que le era exigible ante un riesgo conocido."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-11",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "La nulidad «que no vence»",
+   "enunciado": "Mediante el Decreto 088 del 10 de marzo de 2025, comunicado ese mismo día, el alcalde del municipio de Puerto Sereno declaró insubsistente el nombramiento de Clara Inés Bedoya, secretaria de despacho, cargo de libre nombramiento y remoción. Clara Inés está convencida de que la decisión fue una represalia por haberse negado a favorecer a un contratista, pero dejó pasar el tiempo. El 15 de enero de 2026, diez meses después, presentó una demanda que tituló «nulidad simple», en la que pide únicamente que se anule el Decreto 088 «en defensa de la legalidad»; de manera deliberada no solicitó el reintegro ni el pago de salarios. Su abogado le explicó que así evitaban el problema del tiempo, porque la acción de nulidad no tiene caducidad y cualquier persona puede ejercerla. El municipio pide que la demanda se rechace. El cargo fue provisto con otra persona en abril de 2025.",
+   "pregunta": "¿Puede tramitarse como nulidad simple la demanda de Clara Inés contra el decreto que la declaró insubsistente?",
+   "pistas": [
+    "El nombre que el demandante le pone a su demanda no define el medio de control: importa lo que ocurriría si la sentencia le diera la razón.",
+    "Revisa en el artículo 137 del CPACA en qué casos excepcionales procede la nulidad contra actos de contenido particular y qué dice su parágrafo."
+   ],
+   "conceptos": [
+    "nulidad simple",
+    "restablecimiento del derecho",
+    "caducidad del medio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede el medio de control de nulidad contra un acto particular cuando su anulación restablecería automáticamente un derecho del demandante, y qué término de caducidad rige?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 137",
+      "para_que": "La nulidad procede contra actos generales y, por excepción, contra actos particulares, entre otros casos cuando no se persiga ni se genere el restablecimiento automático de un derecho; si la demanda lo persigue, se tramita como nulidad y restablecimiento."
+     },
+     {
+      "norma": "CPACA, art. 138",
+      "para_que": "Nulidad y restablecimiento del derecho para quien se crea lesionado por un acto particular."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Caducidad de cuatro meses contados desde la comunicación o notificación del acto."
+     },
+     {
+      "norma": "CPACA, art. 169",
+      "para_que": "Rechazo de la demanda por caducidad."
+     }
+    ],
+    "analisis": "El Decreto 088 es un acto particular: afecta solo a Clara Inés. La ley admite demandar actos particulares en simple nulidad en supuestos excepcionales; el pertinente exige que la sentencia no genere el restablecimiento automático de un derecho subjetivo.\n\nSi se anulara la insubsistencia, el nombramiento de Clara Inés recobraría sus efectos: quedaría restablecida en su cargo aunque no lo haya pedido. La omisión deliberada de las pretensiones de reintegro no cambia la naturaleza del litigio. La demanda debe tramitarse como nulidad y restablecimiento del derecho, cuyo término venció el 11 de julio de 2025.",
+    "contraargumento": "Clara Inés dirá que solo defiende la legalidad y que la desviación de poder interesa a todos. El interés general en la legalidad existe, pero el legislador impidió que se use la nulidad para eludir la caducidad cuando el efecto práctico es un restablecimiento individual.",
+    "conclusion": "La demanda no puede tramitarse como nulidad simple. Reconducida a nulidad y restablecimiento del derecho, está caducada y debe rechazarse.",
+    "errores_comunes": [
+     "Creer que basta omitir las pretensiones de restablecimiento para estar ante una nulidad simple.",
+     "Afirmar que la nulidad nunca procede contra actos particulares.",
+     "Olvidar que la reconducción del medio de control arrastra su término de caducidad."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico consiste en establecer si la demanda de Clara Inés, que solo pide anular el Decreto 088, puede tramitarse como nulidad simple y, por esa vía, escapar a la caducidad.\n\nEl artículo 137 del CPACA consagra la nulidad contra los actos administrativos de carácter general y, por excepción, contra actos de contenido particular en cuatro casos; el primero exige que con la demanda no se persiga, o de la sentencia no se genere, el restablecimiento automático de un derecho subjetivo. Además, el parágrafo de la norma dispone que, si de la demanda se desprende que se persigue ese restablecimiento, se tramitará conforme a las reglas de la nulidad y restablecimiento del derecho.\n\nEn efecto, el decreto declaró insubsistente a una persona determinada, es decir, es un acto particular. Si el juez lo anulara, el nombramiento de Clara Inés recobraría su vigencia y ella quedaría restablecida en el cargo, aunque no lo haya pedido. Por consiguiente, la sentencia generaría un restablecimiento automático y el caso no cabe en la excepción.\n\nAhora bien, su abogado sostiene que la demanda se limita a defender la legalidad. Ese argumento no prospera, porque el medio de control no depende del título ni de las pretensiones que el demandante decida callar, sino del efecto real de la decisión. De ahí que el juez deba dar a la demanda el trámite del artículo 138.\n\nEsa reconducción tiene una consecuencia decisiva. El artículo 164 fija en cuatro meses la caducidad, contados desde la comunicación del acto, que ocurrió el 10 de marzo de 2025; por lo tanto, el término venció en julio de ese año y la demanda de enero de 2026 es extemporánea.\n\nEn conclusión, la demanda debe rechazarse por caducidad, según el artículo 169. Por otra parte, que el cargo esté ocupado por otra persona no altera el análisis.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "es decir",
+    "aunque",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "de ahí que",
+    "por lo tanto",
+    "en conclusión",
+    "por otra parte"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si lo demandado fuera un decreto del alcalde que fija, de manera general, el manual de funciones de todos los cargos de la alcaldía?",
+    "respuesta": "Sería un acto de carácter general. Procedería la nulidad simple, que cualquier persona puede ejercer en cualquier tiempo, sin que la sentencia restablezca derechos particulares."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-12",
+   "area": "Administrativo",
+   "nivel": "intermedio",
+   "titulo": "El aviso en el local que ya no era suyo",
+   "enunciado": "Por la Resolución 501 del 4 de agosto de 2025, la Secretaría de Gobierno del municipio de Villa del Rosal impuso a Teresa Galvis una multa de $6 millones por publicidad exterior no autorizada. La citación para la notificación personal se envió a un local que Teresa había entregado en 2023, a pesar de que en el expediente figuraban su dirección actual y su correo electrónico; como nadie acudió, la Secretaría remitió un aviso a esa misma dirección y dio por notificado el acto. Teresa se enteró de la multa el 9 de abril de 2026, cuando recibió el mandamiento de pago de un cobro coactivo; ese mismo día pidió por escrito copia íntegra de la resolución, que le entregaron el 13 de abril. Quiere demandar. El municipio afirma que el acto quedó en firme en agosto de 2025 y que el medio de control caducó en diciembre de ese año.",
+   "pregunta": "¿Desde cuándo se cuenta el término para que Teresa recurra y demande la Resolución 501?",
+   "pistas": [
+    "La firmeza de un acto y la caducidad suponen que el acto fue debidamente dado a conocer: revisa cómo debía hacerse la notificación.",
+    "Lee el artículo 72 del CPACA sobre los efectos de la notificación irregular y la notificación por conducta concluyente."
+   ],
+   "conceptos": [
+    "notificación",
+    "caducidad del medio",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Produce efectos la notificación por aviso remitida a una dirección que no era la registrada en el expediente, y desde cuándo corren los términos para recurrir y demandar?",
+    "normas": [
+     {
+      "norma": "CPACA, arts. 67 a 69",
+      "para_que": "Notificación personal, citación a la dirección o correo que figuren en el expediente y notificación por aviso."
+     },
+     {
+      "norma": "CPACA, art. 72",
+      "para_que": "Sin el lleno de los requisitos no se tiene por hecha la notificación ni produce efectos la decisión, salvo que el interesado revele que conoce el acto, consienta la decisión o interponga los recursos."
+     },
+     {
+      "norma": "CPACA, art. 87",
+      "para_que": "La firmeza del acto supone su notificación."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "La caducidad de la nulidad y restablecimiento se cuenta desde la notificación."
+     },
+     {
+      "norma": "Constitución Política, art. 29",
+      "para_que": "Debido proceso y derecho de defensa en las actuaciones administrativas."
+     }
+    ],
+    "analisis": "La citación debía enviarse a la dirección o al correo que figuraban en el expediente. La Secretaría los tenía y usó una dirección desactualizada; el aviso remitido al mismo lugar repite el defecto. La notificación fue irregular y, por tanto, no se tiene por hecha: el acto no quedó en firme ni empezó a correr la caducidad.\n\nLa notificación se entiende surtida por conducta concluyente cuando Teresa reveló conocer el acto. Desde entonces —abril de 2026— corren los diez días para los recursos y, si no hay recursos obligatorios o una vez decididos, los cuatro meses para demandar. Además, el acto no era ejecutable, lo que puede oponer en el cobro coactivo.",
+    "contraargumento": "El municipio dirá que cumplió el trámite de citación y aviso. La forma se cumplió, pero mal dirigida: la notificación es una garantía de defensa, no un rito, y la administración conocía la dirección correcta.",
+    "conclusion": "Los términos se cuentan desde abril de 2026, cuando Teresa quedó notificada por conducta concluyente. Puede recurrir y demandar, y oponer en el cobro coactivo que el acto no estaba ejecutoriado.",
+    "errores_comunes": [
+     "Dar por válida la notificación por aviso sin revisar a qué dirección se envió.",
+     "Contar la caducidad desde la fecha del acto o del aviso irregular.",
+     "Olvidar la notificación por conducta concluyente."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la Resolución 501 quedó notificada en agosto de 2025, como sostiene el municipio, o si los términos para recurrir y demandar solo corren desde que Teresa la conoció.\n\nLos artículos 67 a 69 del CPACA ordenan notificar personalmente los actos particulares, previa citación enviada a la dirección o al correo electrónico que figuren en el expediente, y solo permiten acudir al aviso cuando esa citación no logra su cometido. Además, el artículo 72 dispone que, sin el lleno de esos requisitos, no se tendrá por hecha la notificación ni producirá efectos legales la decisión, a menos que la parte interesada revele que conoce el acto, consienta la decisión o interponga los recursos.\n\nEn efecto, la Secretaría tenía en el expediente la dirección actual y el correo de Teresa; sin embargo, envió la citación y el aviso a un local que ella había entregado en 2023. Por consiguiente, la notificación fue irregular y no puede tenerse por surtida. De ahí que el acto no haya quedado en firme en 2025, puesto que el artículo 87 supone una notificación válida, y que tampoco haya empezado a correr la caducidad del artículo 164.\n\nAhora bien, el municipio alega que agotó la citación y el aviso. Ese argumento no prospera, porque la notificación no es un rito sino la garantía del derecho de defensa que protege el artículo 29 de la Constitución, y remitirla a una dirección equivocada, conociendo la correcta, la vacía de contenido.\n\nEn cuanto al momento, Teresa reveló que conocía el acto el 9 de abril de 2026, cuando pidió la copia, y la recibió el 13 de abril. Así pues, desde entonces corren los diez días para los recursos y, luego, los cuatro meses para demandar.\n\nEn conclusión, la acción no ha caducado. Además, Teresa puede oponer en el cobro coactivo que el acto no estaba ejecutoriado.",
+   "conectores_usados": [
+    "en primer lugar",
+    "además",
+    "en efecto",
+    "sin embargo",
+    "por consiguiente",
+    "de ahí que",
+    "puesto que",
+    "ahora bien",
+    "porque",
+    "así pues",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la citación y el aviso se hubieran enviado a la dirección correcta y Teresa simplemente no los hubiera atendido?",
+    "respuesta": "La notificación por aviso sería válida. El acto habría quedado en firme en 2025 y la caducidad de cuatro meses estaría vencida, de modo que ya no podría demandar."
+   },
+   "revision_humana": true
+  },
+  {
+   "id": "adm-13",
+   "area": "Administrativo",
+   "nivel": "avanzado",
+   "titulo": "El subsidio que el nuevo alcalde revocó",
+   "enunciado": "Mediante la Resolución 077 del 14 de marzo de 2025, el municipio de Monteluna adjudicó a Dora Pérez, madre cabeza de familia, un subsidio de mejoramiento de vivienda por $30 millones, que ella invirtió en materiales y mano de obra. Dora cumplía todos los requisitos y no aportó ningún documento falso. El 9 de febrero de 2026, la nueva administración expidió la Resolución 012, que revoca la adjudicación y le ordena reintegrar el dinero: sostiene que el comité que aprobó el subsidio sesionó sin quórum, por lo cual el acto es contrario a la ley. La Resolución 012 se le notificó sin haberla citado antes ni haberle pedido su consentimiento. El municipio afirma que la revocatoria directa procede de oficio y en cualquier tiempo cuando el acto se opone a la ley. Dora señala, por su parte, que el nuevo alcalde pertenece a un partido contrario al del anterior y que por eso la persigue.",
+   "pregunta": "¿Podía el municipio revocar unilateralmente el subsidio adjudicado a Dora y qué puede hacer ella?",
+   "pistas": [
+    "La revocatoria directa no funciona igual frente a actos generales y frente a actos que reconocieron un derecho a una persona.",
+    "Revisa el artículo 97 del CPACA: qué necesita la administración para revocar un acto particular favorable y qué debe hacer si no lo obtiene."
+   ],
+   "conceptos": [
+    "debido proceso",
+    "restablecimiento del derecho",
+    "derecho de defensa"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Puede la administración revocar de oficio, sin consentimiento del titular ni audiencia previa, un acto particular que reconoció un derecho, alegando su ilegalidad?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 93",
+      "para_que": "Causales de revocación directa, entre ellas la manifiesta oposición a la Constitución o a la ley."
+     },
+     {
+      "norma": "CPACA, art. 97",
+      "para_que": "Un acto que creó o modificó una situación jurídica particular o reconoció un derecho no puede revocarse sin el consentimiento previo, expreso y escrito del titular; si este lo niega, la autoridad debe demandar su propio acto. Si el acto se obtuvo por medios ilegales o fraudulentos, lo demanda sin conciliación previa y pide la suspensión provisional."
+     },
+     {
+      "norma": "Constitución Política, art. 29",
+      "para_que": "Debido proceso administrativo: audiencia y defensa antes de afectar un derecho."
+     },
+     {
+      "norma": "CPACA, arts. 138 y 164",
+      "para_que": "Medio de control y término de que dispone Dora contra la resolución revocatoria."
+     }
+    ],
+    "analisis": "La Resolución 077 reconoció un derecho de contenido particular. Aunque la administración crea que se expidió con un vicio, no puede revocarla por sí y ante sí: necesita el consentimiento previo, expreso y escrito de la titular. Si no lo obtiene, su camino es demandar su propio acto ante el juez. Aun en el trámite de revocación deben garantizarse la audiencia y la defensa.\n\nAquí no hubo consentimiento ni audiencia. Además, el supuesto vicio —la falta de quórum del comité— es ajeno a Dora, que actuó de buena fe y ya ejecutó el subsidio. La Resolución 012 infringe las normas en que debía fundarse y el debido proceso.",
+    "contraargumento": "El municipio invoca su deber de restablecer la legalidad. Ese deber existe, pero se ejerce por la vía que la ley señala: la demanda del propio acto, donde un juez decide si el vicio existió y qué consecuencias tiene frente a un tercero de buena fe.",
+    "conclusion": "El municipio no podía revocar unilateralmente el subsidio. Dora puede demandar la Resolución 012 en nulidad y restablecimiento del derecho dentro de los cuatro meses, previa conciliación si es exigible, y pedir su suspensión provisional.",
+    "errores_comunes": [
+     "Creer que la administración puede revocar de oficio cualquier acto que considere ilegal.",
+     "Olvidar el consentimiento previo, expreso y escrito del titular.",
+     "Tratar la revocatoria directa como un recurso que reabre términos."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el municipio podía dejar sin efectos, por decisión propia y sin oír a Dora, el acto que le adjudicó el subsidio, con el argumento de que fue expedido de manera irregular.\n\nEl artículo 93 del CPACA permite a las autoridades revocar sus actos cuando sea manifiesta su oposición a la Constitución o a la ley. Sin embargo, el artículo 97 establece un límite: salvo las excepciones legales, cuando un acto haya creado una situación jurídica de carácter particular o reconocido un derecho, no podrá ser revocado sin el consentimiento previo, expreso y escrito del respectivo titular. La misma norma agrega que, si el titular niega su consentimiento y la autoridad considera que el acto es ilegal, deberá demandarlo ante la jurisdicción.\n\nEn efecto, la Resolución 077 reconoció a Dora un derecho concreto, que ella ya ejecutó. El municipio no le pidió consentimiento ni la citó antes de decidir. Por consiguiente, la Resolución 012 desconoce el artículo 97 y, además, el debido proceso del artículo 29 de la Constitución, que exige audiencia y defensa antes de afectar un derecho.\n\nAhora bien, el municipio alega que debe restablecer la legalidad en cualquier tiempo. Ese deber no lo autoriza a hacerse justicia por su cuenta: la ley le señala el camino de demandar su propio acto, y solo cuando este se obtuvo por medios ilegales o fraudulentos lo releva de la conciliación y le permite pedir la suspensión provisional. Aquí, por el contrario, el supuesto vicio de quórum es ajeno a Dora, que obró de buena fe.\n\nPor otra parte, la filiación política del alcalde es irrelevante, puesto que no hay prueba de desviación de poder y el vicio de la revocatoria es otro.\n\nEn conclusión, Dora puede demandar la Resolución 012 en nulidad y restablecimiento del derecho dentro de los cuatro meses y pedir su suspensión provisional.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "en efecto",
+    "por consiguiente",
+    "además",
+    "ahora bien",
+    "por el contrario",
+    "por otra parte",
+    "puesto que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si Dora hubiera obtenido el subsidio con certificados falsos?",
+    "respuesta": "Tampoco procedería la revocatoria unilateral, pero el municipio podría demandar su propio acto sin conciliación previa y solicitar al juez la suspensión provisional, como lo prevé el art. 97 del CPACA para los actos obtenidos por medios ilegales o fraudulentos."
+   },
+   "distractor": "Que el nuevo alcalde sea de un partido contrario al anterior: sin prueba de desviación de poder, la filiación política no define la legalidad de la revocatoria.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-14",
+   "area": "Administrativo",
+   "nivel": "avanzado",
+   "titulo": "Quince meses de calle cerrada",
+   "enunciado": "Entre el 1 de febrero de 2024 y el 30 de abril de 2025, el municipio de Valle Claro construyó un paso deprimido frente al local donde Aníbal Cortés tiene un restaurante desde 2015. La obra era legal, contaba con todos los permisos y se ejecutó sin retrasos ni irregularidades. Durante esos quince meses, sin embargo, la calle estuvo cerrada con polisombra, sin paso vehicular ni peatonal frente al local; según certificación de su contador, las ventas cayeron un 85 %, Aníbal despidió a sus empleados y acumuló pérdidas por $180 millones. Los demás comerciantes del sector, ubicados sobre vías alternas, sufrieron afectaciones menores. El 12 de marzo de 2026, tras una conciliación fallida, Aníbal demandó en reparación directa. El municipio se opone: no hubo falla, la obra beneficia a toda la ciudad, incluido Aníbal, y todos deben soportar las molestias de las obras públicas. Agrega que él no renovó su matrícula mercantil en 2024.",
+   "pregunta": "¿Debe el municipio indemnizar a Aníbal aunque la obra haya sido legal y bien ejecutada?",
+   "pistas": [
+    "El artículo 90 de la Constitución no exige que la actuación del Estado sea ilícita: pregúntate qué hace antijurídico un daño.",
+    "Compara la carga que soportó Aníbal con la que soportaron los demás habitantes y comerciantes beneficiados por la obra."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "daño antijurídico",
+    "falla del servicio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Responde el Estado por los perjuicios que una obra pública lícita y bien ejecutada causa a un particular, cuando le impone una carga superior a la que soportan los demás?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 90",
+      "para_que": "Responsabilidad por daños antijurídicos imputables al Estado, sin que se requiera una conducta ilícita."
+     },
+     {
+      "norma": "Constitución Política, art. 13",
+      "para_que": "Igualdad frente a las cargas públicas, fundamento del título de daño especial."
+     },
+     {
+      "norma": "CPACA, art. 140",
+      "para_que": "Reparación directa, que procede también por daños derivados de trabajos públicos."
+     },
+     {
+      "norma": "CPACA, art. 164",
+      "para_que": "Caducidad de dos años."
+     }
+    ],
+    "analisis": "No hay falla del servicio: la obra fue legal y diligente. Pero la responsabilidad del Estado no se agota en la falla. La jurisprudencia contenciosa admite el daño especial cuando una actuación legítima, desplegada en beneficio general, impone a una persona un sacrificio anormal y singular que rompe la igualdad frente a las cargas públicas.\n\nLas molestias ordinarias de una obra —ruido, polvo, desvíos temporales— son cargas que todos deben soportar. El cierre total del acceso durante quince meses, con una caída del 85 % en las ventas, excede esa normalidad. Y es especial: los demás comerciantes del sector no sufrieron algo comparable. El daño es antijurídico e imputable al municipio.",
+    "contraargumento": "El municipio alega el beneficio general y que Aníbal también se beneficia. Precisamente porque la obra beneficia a todos, no es equitativo que uno solo asuma su costo. Un eventual mayor valor del local podría discutirse al tasar el perjuicio, pero no borra el lucro cesante ya sufrido.",
+    "conclusion": "El municipio debe indemnizar a Aníbal a título de daño especial, por los perjuicios que pruebe. La demanda es oportuna y la falta de renovación de la matrícula no impide la reparación.",
+    "errores_comunes": [
+     "Concluir que sin falla del servicio no hay responsabilidad del Estado.",
+     "Indemnizar cualquier molestia causada por una obra, sin exigir anormalidad y especialidad.",
+     "Negar el daño por incumplimientos formales del comerciante."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el municipio debe reparar las pérdidas de Aníbal, a pesar de que la obra que las causó fue legal, necesaria y bien ejecutada.\n\nEl artículo 90 de la Constitución hace responder al Estado por los daños antijurídicos que le sean imputables. La antijuridicidad se predica del daño y no de la conducta, es decir, lo decisivo es que la víctima no tenga el deber jurídico de soportarlo. Con apoyo en esa cláusula y en la igualdad del artículo 13, la jurisprudencia contenciosa ha reconocido el título de daño especial: procede cuando una actuación legítima, cumplida en beneficio de todos, impone a una persona una carga anormal y singular que rompe el equilibrio frente a las cargas públicas.\n\nEn efecto, no hubo falla del servicio, puesto que la obra contaba con permisos y se ejecutó sin irregularidades. Sin embargo, el cierre total de la calle durante quince meses dejó al restaurante sin acceso y redujo sus ventas en un 85 %. Esa afectación supera las molestias ordinarias de cualquier obra, como el ruido o los desvíos. Además, es especial, porque los otros comerciantes del sector sufrieron afectaciones menores. Por consiguiente, el daño es antijurídico.\n\nAhora bien, el municipio alega que la obra beneficia a toda la ciudad. Ese argumento se vuelve en su contra: si el beneficio es general, no es equitativo que su costo recaiga sobre uno solo. Si bien un mayor valor del local podría discutirse al tasar el perjuicio, no suprime el lucro cesante ya causado. Por otra parte, la falta de renovación de la matrícula mercantil es irrelevante, ya que no desvirtúa la existencia del negocio.\n\nEn conclusión, procede la reparación directa del artículo 140 del CPACA a título de daño especial. Finalmente, la demanda es oportuna, pues se presentó dentro de los dos años.",
+   "conectores_usados": [
+    "en primer lugar",
+    "a pesar de",
+    "es decir",
+    "en efecto",
+    "puesto que",
+    "sin embargo",
+    "además",
+    "porque",
+    "por consiguiente",
+    "ahora bien",
+    "si bien",
+    "por otra parte",
+    "ya que",
+    "en conclusión",
+    "finalmente"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el cierre hubiera durado tres semanas, con paso peatonal habilitado, y las ventas hubieran caído un 15 %?",
+    "respuesta": "Se trataría de una molestia ordinaria que todo vecino debe soportar por las obras públicas. No habría daño anormal ni especial y la demanda no prosperaría."
+   },
+   "distractor": "Que Aníbal no hubiera renovado la matrícula mercantil en 2024: es un incumplimiento formal que no desvirtúa la existencia del negocio ni del daño.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-15",
+   "area": "Administrativo",
+   "nivel": "avanzado",
+   "titulo": "Los títulos que cobró el demandado",
+   "enunciado": "En un proceso ejecutivo, el Juzgado Tercero Civil Municipal de Valle Claro ordenó el 10 de julio de 2023 entregar a Néstor Fajardo, ejecutante, títulos de depósito judicial por $48 millones. Por un error de la secretaría del despacho, la orden de pago se elaboró a nombre del demandado, quien cobró el dinero el 2 de agosto de 2023 y luego se insolventó. Néstor se enteró el 15 de noviembre de 2023, cuando fue a reclamar los títulos; el juzgado reconoció el error en un auto. El 20 de octubre de 2025, tras una conciliación fallida, Néstor demandó en reparación directa a la Nación, Rama Judicial. La entidad se defiende así: Néstor debió interponer recursos, como lo exige la ley para el error judicial; la acción caducó en agosto de 2025, dos años después del pago; el juez titular fue trasladado y ya no trabaja en ese despacho, y Néstor debe cobrarle al demandado que recibió el dinero.",
+   "pregunta": "¿Responde el Estado por la pérdida de los títulos de Néstor y fue oportuna su demanda?",
+   "pistas": [
+    "La Ley Estatutaria de la Administración de Justicia distingue varios títulos de responsabilidad: no todo daño causado en un juzgado es un error judicial.",
+    "Para la caducidad, fíjate en el momento en que Néstor tuvo conocimiento del daño."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "falla del servicio",
+    "caducidad del medio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Bajo qué título responde el Estado por un error secretarial en el pago de títulos judiciales, exige ese título la interposición de recursos y desde cuándo corre la caducidad?",
+    "normas": [
+     {
+      "norma": "Ley 270 de 1996, art. 65",
+      "para_que": "El Estado responde por los daños antijurídicos causados por el defectuoso funcionamiento de la administración de justicia, el error jurisdiccional y la privación injusta de la libertad."
+     },
+     {
+      "norma": "Ley 270 de 1996, arts. 66 y 67",
+      "para_que": "El error jurisdiccional es el cometido en una providencia; exige haber interpuesto los recursos y que la providencia esté en firme."
+     },
+     {
+      "norma": "Ley 270 de 1996, art. 69",
+      "para_que": "Defectuoso funcionamiento: daños causados en la función judicial fuera de los casos de error jurisdiccional y privación injusta."
+     },
+     {
+      "norma": "CPACA, arts. 140 y 164",
+      "para_que": "Reparación directa y caducidad de dos años desde la ocurrencia del hecho o desde que el demandante tuvo o debió tener conocimiento del daño."
+     },
+     {
+      "norma": "Constitución Política, art. 90",
+      "para_que": "Cláusula general de responsabilidad."
+     }
+    ],
+    "analisis": "El daño no proviene de una providencia: la orden del juez fue correcta. Proviene de una actuación material de la secretaría, que elaboró mal la orden de pago. Es un defectuoso funcionamiento de la administración de justicia, título residual que no exige haber interpuesto recursos; no había providencia que recurrir.\n\nLa caducidad se cuenta desde que Néstor conoció el daño, el 15 de noviembre de 2023, porque antes no tenía cómo saberlo. Los dos años vencían en noviembre de 2025; la demanda de octubre de 2025 es oportuna, aun sin contar la suspensión por la conciliación.\n\nLa posibilidad de perseguir al demandado, que está insolvente, no elimina el daño; el Estado, si paga, podrá subrogarse.",
+    "contraargumento": "La entidad intenta tratar el caso como error jurisdiccional para exigir recursos. Ese requisito tiene sentido frente a una decisión judicial equivocada, que puede corregirse por las vías del proceso; no frente a un yerro operativo del despacho.",
+    "conclusion": "El Estado responde por defectuoso funcionamiento de la administración de justicia. La demanda es oportuna y procede la indemnización de los $48 millones con su actualización.",
+    "errores_comunes": [
+     "Calificar como error judicial cualquier daño ocurrido en un despacho.",
+     "Contar la caducidad desde el hecho y no desde el conocimiento del daño, cuando este se conoce después.",
+     "Negar el daño porque existe un tercero a quien cobrar."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, hay dos problemas: bajo qué título responde el Estado por el pago equivocado de los títulos y si la demanda del 20 de octubre de 2025 se presentó en tiempo.\n\nEl artículo 65 de la Ley 270 de 1996 hace responder al Estado por los daños antijurídicos causados por el defectuoso funcionamiento de la administración de justicia, por el error jurisdiccional y por la privación injusta de la libertad. Los artículos 66 y 67 reservan el error jurisdiccional a las providencias contrarias a la ley y exigen, para reclamar, que el afectado haya interpuesto los recursos. En cambio, el artículo 69 consagra el defectuoso funcionamiento como título residual para los demás daños causados en la función judicial.\n\nEn efecto, la providencia del 10 de julio de 2023 fue correcta, puesto que ordenó entregar los títulos a Néstor. El daño provino de la secretaría, que elaboró la orden de pago a nombre del demandado, es decir, de una actuación material. Por consiguiente, se trata de un defectuoso funcionamiento y no de un error jurisdiccional; de ahí que la exigencia de recursos no prospere, porque no había providencia que recurrir.\n\nEn cuanto a la caducidad, el artículo 164 del CPACA concede dos años desde la ocurrencia del hecho o desde que el demandante tuvo o debió tener conocimiento del daño, si fue posterior. Néstor solo supo del pago el 15 de noviembre de 2023; por lo tanto, el término vencía en noviembre de 2025 y la demanda es oportuna.\n\nAhora bien, la entidad agrega que Néstor debe cobrarle al demandado. Sin embargo, este se insolventó, y la existencia de un tercero obligado no suprime el daño imputable al Estado. Por otra parte, el traslado del juez es irrelevante, ya que la demandada es la Nación.\n\nEn conclusión, procede la reparación directa del artículo 140 por los $48 millones.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en cambio",
+    "en efecto",
+    "puesto que",
+    "es decir",
+    "por consiguiente",
+    "de ahí que",
+    "porque",
+    "por lo tanto",
+    "ahora bien",
+    "sin embargo",
+    "por otra parte",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el daño hubiera provenido de una sentencia que negó el pago a Néstor con una interpretación abiertamente contraria a la ley?",
+    "respuesta": "Sería un error jurisdiccional. Néstor tendría que haber interpuesto los recursos procedentes y la providencia debería estar en firme, conforme al art. 67 de la Ley 270 de 1996, antes de reclamar la reparación."
+   },
+   "distractor": "El traslado del juez titular: la demandada es la Nación, no el funcionario, de modo que su ubicación actual no incide en la responsabilidad.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-16",
+   "area": "Administrativo",
+   "nivel": "avanzado",
+   "titulo": "La multa notificada tarde",
+   "enunciado": "El 10 de marzo de 2023, el Colegio Nuevo Horizonte Ltda., institución privada del municipio de Monteluna, cobró a los padres de familia, por una sola vez, una «cuota de modernización» no autorizada. La Secretaría de Educación municipal abrió un procedimiento sancionatorio en 2024, formuló cargos en 2025 y, mediante la Resolución 090 del 5 de marzo de 2026, impuso al colegio una multa de $40 millones. La resolución se notificó por aviso el 20 de abril de 2026, porque la citación para la notificación personal se envió con retraso. El colegio apeló y alegó que la facultad sancionatoria había caducado. La Secretaría responde que la resolución se expidió cinco días antes de cumplirse los tres años y que lo determinante es la fecha del acto, no la de su notificación. Añade que el colegio ya había sido sancionado en 2021 por un cobro similar, lo que demuestra su reincidencia.",
+   "pregunta": "¿Caducó la facultad sancionatoria de la Secretaría de Educación respecto del cobro del 10 de marzo de 2023?",
+   "pistas": [
+    "No confundas la caducidad del medio de control, que afecta al ciudadano, con la caducidad de la facultad de sancionar, que limita a la administración.",
+    "Lee con cuidado el artículo 52 del CPACA: qué debe ocurrir dentro de los tres años."
+   ],
+   "conceptos": [
+    "debido proceso",
+    "notificación",
+    "restablecimiento del derecho",
+    "recurso de apelación"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Basta que el acto sancionatorio se expida dentro de los tres años siguientes al hecho, o debe además notificarse dentro de ese término para que la administración conserve su competencia?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 52",
+      "para_que": "La facultad sancionatoria caduca a los tres años de ocurrido el hecho; dentro de ese término el acto que impone la sanción debe haber sido expedido y notificado. Los recursos se deciden en un término distinto, de un año."
+     },
+     {
+      "norma": "CPACA, art. 47",
+      "para_que": "El procedimiento sancionatorio general se aplica a falta de norma especial."
+     },
+     {
+      "norma": "CPACA, arts. 67 a 69",
+      "para_que": "Formas de notificación de los actos particulares."
+     },
+     {
+      "norma": "Constitución Política, art. 29",
+      "para_que": "Debido proceso: la potestad sancionatoria está sujeta a límites temporales."
+     },
+     {
+      "norma": "CPACA, arts. 137 y 138",
+      "para_que": "La falta de competencia temporal es causal de nulidad del acto sancionatorio."
+     }
+    ],
+    "analisis": "El hecho fue único y ocurrió el 10 de marzo de 2023. Los tres años vencían el 10 de marzo de 2026. La ley exige que dentro de ese plazo el acto sancionatorio haya sido expedido y también notificado. La Resolución 090 se expidió el 5 de marzo de 2026, pero se notificó el 20 de abril: fuera del término.\n\nLa administración perdió competencia para sancionar ese hecho. El retraso en la citación es imputable a ella. La apelación debe prosperar y, si no, el colegio puede demandar la nulidad de la sanción y el restablecimiento. Lo anterior supone que no exista una norma especial del sector educativo con un término diferente, lo que debe verificarse.",
+    "contraargumento": "La Secretaría sostiene que lo relevante es la fecha de expedición. El texto legal exige las dos cosas, y tiene sentido: un acto no notificado no produce efectos frente al sancionado, de modo que no puede entenderse ejercida la potestad en tiempo.",
+    "conclusion": "La facultad sancionatoria caducó, porque el acto no se notificó dentro de los tres años. La multa debe revocarse en la apelación o anularse judicialmente.",
+    "errores_comunes": [
+     "Dar por suficiente la expedición del acto dentro de los tres años.",
+     "Confundir este término con el de un año para decidir los recursos.",
+     "Contar el término desde la apertura de la investigación y no desde el hecho."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si la Secretaría de Educación conservaba competencia para sancionar al colegio cuando notificó la Resolución 090, el 20 de abril de 2026, por un cobro realizado el 10 de marzo de 2023.\n\nEl artículo 52 del CPACA dispone que, salvo lo dispuesto en leyes especiales, la facultad que tienen las autoridades para imponer sanciones caduca a los tres años de ocurrido el hecho, la conducta u omisión que pudiere ocasionarlas, término dentro del cual el acto administrativo que impone la sanción debe haber sido expedido y notificado. Se trata de un límite que integra el debido proceso del artículo 29 de la Constitución, porque impide que el investigado quede indefinidamente expuesto a la sanción.\n\nEn efecto, el cobro fue único y se hizo el 10 de marzo de 2023; por lo tanto, los tres años vencían el 10 de marzo de 2026. La resolución se expidió el 5 de marzo, dentro del plazo, pero solo se notificó el 20 de abril. Por consiguiente, faltó una de las dos condiciones que la norma exige de manera conjunta y la facultad sancionatoria caducó.\n\nAhora bien, la Secretaría sostiene que lo determinante es la fecha del acto. Ese argumento no prospera, puesto que la ley menciona expresamente la notificación, y un acto que el sancionado no conoce no le es oponible. Además, el retraso en la citación fue de la propia administración. Tampoco importa la sanción de 2021, ya que la reincidencia sirve para graduar la multa y no para ampliar el término.\n\nEn conclusión, la apelación debe prosperar y la multa ha de revocarse; de lo contrario, el colegio puede demandar su nulidad por falta de competencia temporal. Con todo, conviene verificar que no exista una norma especial del sector educativo con un término distinto.",
+   "conectores_usados": [
+    "en primer lugar",
+    "porque",
+    "en efecto",
+    "por lo tanto",
+    "por consiguiente",
+    "ahora bien",
+    "puesto que",
+    "además",
+    "ya que",
+    "en conclusión",
+    "con todo"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la Resolución 090 se hubiera notificado personalmente el 9 de marzo de 2026?",
+    "respuesta": "El acto habría sido expedido y notificado dentro de los tres años, de modo que la sanción sería oportuna. Los recursos se decidirían dentro del término distinto de un año que prevé el mismo art. 52 del CPACA."
+   },
+   "distractor": "La sanción impuesta al colegio en 2021: la reincidencia puede incidir en la graduación de una sanción, pero no amplía el término para imponerla.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-17",
+   "area": "Administrativo",
+   "nivel": "avanzado",
+   "titulo": "Sesenta días para no quebrar",
+   "enunciado": "Por la Resolución 215, notificada el 2 de marzo de 2026, la Secretaría de Salud del departamento de Los Andes ordenó el cierre definitivo del laboratorio clínico Bioanálisis del Norte S.A.S., con el argumento de que no tenía habilitado el servicio de toma de muestras. Durante la actuación, la sociedad aportó el certificado de habilitación de ese servicio, vigente y expedido por la misma Secretaría en 2024; la resolución no lo menciona. El laboratorio tiene catorce empleados y contratos con tres aseguradoras en salud que terminarán si no reabre en sesenta días; según certificación de su revisor fiscal, pierde $90 millones mensuales. El 20 de abril de 2026 demandó en nulidad y restablecimiento del derecho y pidió la suspensión provisional del acto. El departamento se opone: decretarla sería prejuzgar, el acto se presume legal y el laboratorio puede esperar la sentencia y cobrar los perjuicios. Añade que el funcionario que firmó la resolución fue retirado después por otros hechos.",
+   "pregunta": "¿Procede la suspensión provisional de la Resolución 215 mientras se decide el proceso?",
+   "pistas": [
+    "La presunción de legalidad no impide que el juez suspenda los efectos de un acto antes de la sentencia: revisa qué debe verificar para hacerlo.",
+    "Consulta los artículos 229 a 231 del CPACA y fíjate en el requisito adicional cuando se pide restablecimiento."
+   ],
+   "conceptos": [
+    "restablecimiento del derecho",
+    "debido proceso"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Se reúnen los requisitos para suspender provisionalmente un acto administrativo particular cuando la violación alegada surge de confrontarlo con una prueba documental y se acreditan sumariamente los perjuicios?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 238",
+      "para_que": "La jurisdicción contenciosa puede suspender provisionalmente los efectos de los actos administrativos."
+     },
+     {
+      "norma": "CPACA, art. 229",
+      "para_que": "Procedencia de las medidas cautelares en los procesos declarativos; la decisión sobre ellas no implica prejuzgamiento."
+     },
+     {
+      "norma": "CPACA, art. 230",
+      "para_que": "Entre las medidas posibles está la suspensión provisional de los efectos del acto."
+     },
+     {
+      "norma": "CPACA, art. 231",
+      "para_que": "La suspensión procede cuando la violación surge del análisis del acto y su confrontación con las normas invocadas o del estudio de las pruebas aportadas; si se pide restablecimiento, deben probarse al menos sumariamente los perjuicios."
+     },
+     {
+      "norma": "CPACA, art. 88",
+      "para_que": "Presunción de legalidad del acto mientras no sea anulado o suspendido."
+     }
+    ],
+    "analisis": "La resolución se funda en que el laboratorio no tenía habilitado un servicio. El certificado de la propia Secretaría, aportado en la actuación y con la solicitud, muestra lo contrario. La violación —falsa motivación y desconocimiento del derecho de defensa, pues la prueba no fue valorada— surge de la simple confrontación del acto con ese documento, sin necesidad de un debate probatorio complejo.\n\nComo se pide restablecimiento, hay que acreditar sumariamente los perjuicios: lo hace la certificación del revisor fiscal y la inminencia de la terminación de los contratos. Esperar la sentencia haría ilusorio el restablecimiento, porque la empresa habría desaparecido.",
+    "contraargumento": "El departamento invoca el prejuzgamiento y la presunción de legalidad. La ley dice expresamente que la medida no implica prejuzgar, y la presunción de legalidad rige justamente hasta que el acto es suspendido o anulado. Tendría razón si la ilegalidad dependiera de pruebas técnicas aún no practicadas.",
+    "conclusion": "Procede la suspensión provisional de la Resolución 215: la violación surge de la confrontación del acto con la prueba aportada y los perjuicios están sumariamente acreditados.",
+    "errores_comunes": [
+     "Negar la medida porque el acto se presume legal.",
+     "Olvidar la prueba sumaria de los perjuicios cuando se pide restablecimiento.",
+     "Creer que decretar la medida equivale a decidir el fondo."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es si el juez puede suspender los efectos de la Resolución 215 antes de dictar sentencia, pese a la presunción de legalidad que la ampara.\n\nEl artículo 238 de la Constitución faculta a la jurisdicción contenciosa para suspender provisionalmente los actos administrativos, y el artículo 229 del CPACA permite decretar medidas cautelares en los procesos declarativos, con la advertencia de que la decisión no implica prejuzgamiento. En cuanto a los requisitos, el artículo 231 exige que la violación de las normas invocadas surja del análisis del acto demandado y de su confrontación con ellas, o del estudio de las pruebas allegadas con la solicitud. Además, cuando se pretende el restablecimiento del derecho, deben probarse al menos sumariamente los perjuicios.\n\nEn efecto, la resolución ordenó el cierre porque el laboratorio no tendría habilitada la toma de muestras. Sin embargo, la sociedad aportó el certificado de habilitación vigente, expedido por la misma Secretaría en 2024, que el acto ni siquiera menciona. Por consiguiente, la falsa motivación aparece de la simple confrontación entre la resolución y ese documento, sin necesidad de un debate probatorio extenso. Asimismo, los perjuicios están acreditados sumariamente con la certificación del revisor fiscal y con el plazo de sesenta días de los contratos.\n\nAhora bien, el departamento alega que la medida supone prejuzgar y que el acto se presume legal. Ninguno de los dos argumentos prospera, porque la ley excluye expresamente el prejuzgamiento y la presunción del artículo 88 rige hasta que el acto es suspendido o anulado. Tampoco convence la idea de esperar la sentencia, ya que para entonces el laboratorio habría perdido sus contratos y el restablecimiento sería ilusorio. Por otra parte, el retiro del funcionario es irrelevante.\n\nEn conclusión, procede la suspensión provisional de la Resolución 215.",
+   "conectores_usados": [
+    "en primer lugar",
+    "pese a",
+    "además",
+    "en efecto",
+    "porque",
+    "sin embargo",
+    "por consiguiente",
+    "asimismo",
+    "ahora bien",
+    "ya que",
+    "por otra parte",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el laboratorio no tuviera el certificado y la legalidad del cierre dependiera de un dictamen técnico sobre sus equipos, aún no practicado?",
+    "respuesta": "La violación no surgiría de la confrontación inicial del acto con las normas o las pruebas aportadas. El juez negaría la medida cautelar, sin perjuicio de lo que se decida en la sentencia tras el debate probatorio."
+   },
+   "distractor": "El retiro posterior del funcionario que firmó la resolución: obedeció a otros hechos y no dice nada sobre la legalidad del acto demandado.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-18",
+   "area": "Administrativo",
+   "nivel": "experto",
+   "titulo": "Once contratos en el archivo",
+   "enunciado": "Entre el 1 de febrero de 2019 y el 31 de diciembre de 2023, Sandra Liliana Pabón trabajó como auxiliar de archivo en la alcaldía de Puerto Sereno mediante once contratos sucesivos de prestación de servicios, con interrupciones de pocos días cada enero. Cumplía el horario de la entidad, recibía órdenes de la jefe de archivo, usaba carné y correo institucionales y hacía lo mismo que las auxiliares de planta. El 10 de marzo de 2026 pidió por escrito el reconocimiento de la relación laboral y el pago de prestaciones. El municipio negó la petición con el Oficio 334, notificado el 15 de abril de 2026. Sandra demandó el 20 de julio de 2026. El municipio se defiende: la Ley 80 de 1993 dice que estos contratos no generan relación laboral; ella debió acudir a la reparación directa o al juez laboral; todo está prescrito salvo lo de los últimos tres años, y Sandra perdió en 2022 el concurso de méritos para ese mismo cargo.",
+   "pregunta": "¿Puede Sandra obtener el reconocimiento de sus prestaciones, por qué vía y con qué alcance?",
+   "pistas": [
+    "Identifica cuál es el acto que Sandra debe controvertir y ante qué jurisdicción, teniendo en cuenta que prestó servicios a una entidad pública.",
+    "Distingue entre el pago de prestaciones a título de restablecimiento y la adquisición de la calidad de empleada pública, y revisa desde cuándo se cuenta la prescripción según la jurisprudencia de unificación del Consejo de Estado."
+   ],
+   "conceptos": [
+    "restablecimiento del derecho",
+    "primacía de la realidad",
+    "subordinación",
+    "prescripción laboral"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Procede declarar la existencia de una relación laboral encubierta con una entidad pública, por qué medio de control, con qué efectos y cómo opera la prescripción?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 53",
+      "para_que": "Primacía de la realidad sobre las formalidades, aplicable también frente al Estado."
+     },
+     {
+      "norma": "Ley 80 de 1993, art. 32",
+      "para_que": "Los contratos de prestación de servicios no generan relación laboral ni prestaciones; se celebran por el término estrictamente indispensable. La regla cede cuando se prueba la subordinación."
+     },
+     {
+      "norma": "CPACA, arts. 138 y 164",
+      "para_que": "Nulidad y restablecimiento del derecho contra el acto que niega el reconocimiento, dentro de los cuatro meses."
+     },
+     {
+      "norma": "Constitución Política, arts. 122 y 125",
+      "para_que": "El acceso al empleo público exige nombramiento, posesión y, en los cargos de carrera, mérito."
+     },
+     {
+      "norma": "Jurisprudencia de unificación del Consejo de Estado sobre contrato realidad",
+      "para_que": "Término de tres años desde la terminación del vínculo para reclamar y tratamiento de los aportes a pensión; verificar las sentencias vigentes en la relatoría."
+     }
+    ],
+    "analisis": "La vía fue correcta: reclamó ante la entidad, obtuvo un acto que negó su derecho y lo demandó en nulidad y restablecimiento dentro de los cuatro meses. No procede la reparación directa, porque hay un acto, ni el juez laboral, porque la controversia es con una entidad pública sobre una relación de tipo legal y reglamentario.\n\nEn el fondo, la regla de la Ley 80 cede ante la prueba de la subordinación, que le corresponde a Sandra y que los hechos respaldan: horario, órdenes, funciones permanentes iguales a las de la planta. El restablecimiento consiste en el pago de prestaciones equivalentes; no la convierte en empleada pública ni le da derecho al reintegro.\n\nSobre la prescripción, el Consejo de Estado unificó que la reclamación debe presentarse dentro de los tres años siguientes a la terminación del vínculo; hecha en tiempo y sin solución de continuidad relevante entre contratos, cubre todo el periodo. Sandra reclamó a los dos años y dos meses.",
+    "contraargumento": "El municipio sostiene que solo se debe lo de los últimos tres años. Ese sería el resultado si los contratos estuvieran separados por interrupciones largas, pues cada vínculo prescribiría por separado; con pausas de pocos días la jurisprudencia entiende que hay unidad (verificar el umbral vigente).",
+    "conclusion": "Sandra puede obtener, por nulidad y restablecimiento del derecho, el pago de las prestaciones de todo el periodo y los aportes a pensión, sin adquirir la calidad de empleada pública.",
+    "errores_comunes": [
+     "Acudir a la reparación directa o al juez laboral.",
+     "Creer que la declaración del contrato realidad otorga el cargo.",
+     "Aplicar la prescripción año por año sin atender la regla de unificación."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso plantea tres cuestiones: si Sandra escogió la vía correcta, si puede desvirtuar la regla según la cual los contratos de prestación de servicios no generan relación laboral y qué alcance tienen el restablecimiento y la prescripción.\n\nEn cuanto a la vía, Sandra reclamó ante la entidad y esta respondió con un acto que negó su derecho. Por consiguiente, el medio procedente es la nulidad y restablecimiento del derecho del artículo 138 del CPACA, que ejerció dentro de los cuatro meses. No cabe la reparación directa, puesto que el perjuicio proviene de un acto, ni el juez laboral, ya que quien presta funciones permanentes de una entidad pública no es trabajador particular.\n\nAhora bien, el artículo 32 de la Ley 80 de 1993 dispone que estos contratos no generan relación laboral. Sin embargo, el artículo 53 de la Constitución hace prevalecer la realidad, y la jurisprudencia permite desvirtuar aquella regla si el contratista prueba la subordinación. En efecto, Sandra cumplía horario, recibía órdenes y desempeñó durante casi cinco años las mismas funciones de las auxiliares de planta.\n\nEl restablecimiento, no obstante, tiene un límite. Los artículos 122 y 125 de la Constitución exigen nombramiento, posesión y mérito para acceder al empleo público; de ahí que Sandra obtenga las prestaciones equivalentes, pero no la calidad de empleada ni el reintegro. Por la misma razón, haber perdido el concurso es irrelevante.\n\nPor último, el municipio alega prescripción. El Consejo de Estado unificó que la reclamación debe presentarse dentro de los tres años siguientes a la terminación del vínculo, y que, sin interrupciones relevantes entre contratos, cubre todo el periodo. Sandra reclamó dos años y dos meses después, de modo que la excepción no prospera. Ese criterio debe verificarse.\n\nEn conclusión, procede el pago de las prestaciones y de los aportes a pensión de todo el tiempo servido.",
+   "conectores_usados": [
+    "en primer lugar",
+    "por consiguiente",
+    "puesto que",
+    "ya que",
+    "ahora bien",
+    "sin embargo",
+    "en efecto",
+    "no obstante",
+    "de ahí que",
+    "por último",
+    "de modo que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el último contrato de Sandra hubiera terminado el 31 de diciembre de 2022?",
+    "respuesta": "La reclamación de marzo de 2026 se habría presentado más de tres años después de la terminación del vínculo. Las prestaciones estarían prescritas y solo subsistiría lo relativo a los aportes a pensión, según la jurisprudencia de unificación (verificar)."
+   },
+   "distractor": "Que Sandra perdiera el concurso de méritos de 2022: incide en el acceso al cargo, no en las prestaciones por el servicio que efectivamente prestó.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-19",
+   "area": "Administrativo",
+   "nivel": "experto",
+   "titulo": "La multa que perdió su fundamento",
+   "enunciado": "El Acuerdo 014 de 2022 del concejo de Villa del Rosal creó una «tasa de aprovechamiento del espacio aéreo» y facultó a la Secretaría de Hacienda para multar a quienes no la declararan. Con base en él, mediante la Resolución 620, notificada el 9 de octubre de 2023, se impuso a Antenas del Sur S.A.S. una multa de $85 millones. La sociedad no recurrió ni demandó; la multa quedó en firme y nunca fue pagada. El 14 de agosto de 2025 quedó ejecutoriada la sentencia del tribunal administrativo que, en un proceso de nulidad promovido por un ciudadano, anuló el Acuerdo 014 por falta de competencia del concejo. El 2 de marzo de 2026 el municipio libró mandamiento de pago en cobro coactivo. La sociedad se opone. El municipio replica que la Resolución 620 nunca fue anulada, que está en firme, que la acción contra ella caducó en febrero de 2024 y que la sociedad tiene utilidades millonarias.",
+   "pregunta": "¿Puede el municipio ejecutar la multa impuesta con fundamento en un acuerdo que fue anulado después?",
+   "pistas": [
+    "Distingue entre la validez de un acto, que solo el juez puede destruir, y su fuerza ejecutoria, que puede perderse por otras razones.",
+    "Revisa los artículos 91 y 92 del CPACA sobre la pérdida de ejecutoriedad y la forma de alegarla."
+   ],
+   "conceptos": [
+    "nulidad simple",
+    "restablecimiento del derecho",
+    "caducidad del medio"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Qué efecto tiene la anulación judicial de un acto general sobre un acto particular en firme, no demandado y aún no ejecutado, que se expidió con fundamento en aquel?",
+    "normas": [
+     {
+      "norma": "CPACA, art. 91",
+      "para_que": "Los actos en firme pierden obligatoriedad y no pueden ejecutarse, entre otros casos, cuando desaparecen sus fundamentos de hecho o de derecho."
+     },
+     {
+      "norma": "CPACA, art. 92",
+      "para_que": "Excepción de pérdida de ejecutoriedad: el interesado puede oponerse a la ejecución y la autoridad debe resolver; la decisión es impugnable judicialmente."
+     },
+     {
+      "norma": "CPACA, arts. 87 a 89",
+      "para_que": "Firmeza, presunción de legalidad y carácter ejecutorio de los actos administrativos."
+     },
+     {
+      "norma": "CPACA, arts. 137, 138 y 164",
+      "para_que": "Nulidad del acto general, nulidad y restablecimiento del particular y caducidad de cuatro meses."
+     }
+    ],
+    "analisis": "El municipio tiene razón en dos puntos: la sentencia que anuló el Acuerdo 014 no anuló la Resolución 620, y la sociedad ya no puede demandarla, porque la caducidad venció. La resolución sigue siendo un acto válido en apariencia.\n\nPero validez y ejecutoriedad son cosas distintas. La multa se impuso con fundamento exclusivo en el acuerdo. Anulado este, desapareció el fundamento de derecho del acto particular, que pierde su fuerza ejecutoria. Como la multa no se había pagado, la situación no estaba consolidada, y el municipio no puede ejecutarla.\n\nLa sociedad debe proponer la excepción de pérdida de ejecutoriedad y oponerla en el cobro coactivo.",
+    "contraargumento": "El municipio alegará la firmeza y la seguridad jurídica. Esos valores protegen las situaciones consolidadas —lo ya pagado no se devuelve por esta vía—, pero no autorizan a cobrar hoy una sanción cuyo sustento normativo fue expulsado del ordenamiento.",
+    "conclusion": "El municipio no puede ejecutar la multa: la Resolución 620 perdió fuerza ejecutoria por la desaparición de su fundamento de derecho. La sociedad debe alegar la excepción de pérdida de ejecutoriedad.",
+    "errores_comunes": [
+     "Creer que la nulidad del acto general anula automáticamente los actos particulares.",
+     "Concluir que, por estar en firme y caducada la acción, el acto puede ejecutarse.",
+     "Confundir la pérdida de ejecutoriedad con el derecho a que se devuelva lo ya pagado."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el problema jurídico es qué ocurre con una multa en firme, no demandada y no pagada, cuando el acto general que le servía de fundamento es anulado por el juez.\n\nLos artículos 87 a 89 del CPACA regulan la firmeza, la presunción de legalidad y el carácter ejecutorio de los actos administrativos. Sin embargo, el artículo 91 dispone que los actos en firme pierden obligatoriedad y, por lo tanto, no pueden ser ejecutados, entre otros casos, cuando desaparecen sus fundamentos de hecho o de derecho. A su vez, el artículo 92 permite al interesado oponerse a la ejecución alegando esa pérdida de fuerza ejecutoria.\n\nAhora bien, el municipio acierta en parte. La sentencia del tribunal resolvió una demanda de nulidad contra el Acuerdo 014 y no se pronunció sobre la Resolución 620; además, la sociedad dejó vencer los cuatro meses del artículo 164 para pedir su nulidad y el restablecimiento. Por consiguiente, la resolución no ha sido anulada ni puede serlo ya.\n\nNo obstante, de ahí no se sigue que pueda cobrarse. En efecto, la multa se impuso con apoyo exclusivo en la facultad que creó el acuerdo; anulado este, el acto particular quedó sin sustento normativo. Es decir, conserva su apariencia de validez, pero perdió su ejecutoriedad. Además, como la sociedad nunca pagó, no existe una situación consolidada que la seguridad jurídica deba proteger.\n\nPor otra parte, las utilidades de la sociedad son irrelevantes, puesto que la capacidad de pago no devuelve fuerza a un acto que la perdió.\n\nEn conclusión, el municipio no puede ejecutar la multa. De ahí que la sociedad deba proponer la excepción de pérdida de ejecutoriedad y oponerla en el cobro coactivo; si la administración la niega, esa decisión es demandable.",
+   "conectores_usados": [
+    "en primer lugar",
+    "sin embargo",
+    "por lo tanto",
+    "a su vez",
+    "ahora bien",
+    "además",
+    "por consiguiente",
+    "no obstante",
+    "en efecto",
+    "es decir",
+    "por otra parte",
+    "puesto que",
+    "en conclusión",
+    "de ahí que"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si la sociedad hubiera pagado la multa en 2023?",
+    "respuesta": "La situación estaría consolidada. La pérdida de ejecutoriedad opera hacia el futuro y no da derecho a la devolución; como la sociedad dejó caducar la nulidad y restablecimiento del derecho, no tendría vía para recuperar lo pagado."
+   },
+   "distractor": "Las utilidades millonarias de la sociedad: su capacidad de pago no incide en que el acto pueda o no ejecutarse.",
+   "revision_humana": true
+  },
+  {
+   "id": "adm-20",
+   "area": "Administrativo",
+   "nivel": "experto",
+   "titulo": "El hueco de la vía concesionada",
+   "enunciado": "El 20 de junio de 2024, a las nueve de la noche, Julián Ríos, de 34 años, cayó con su motocicleta en un hueco de cuarenta centímetros de profundidad, sin señalización ni iluminación, en una vía departamental que el departamento de Los Andes entregó en concesión a Vías del Sol S.A.S. Tres semanas antes, dos usuarios habían reportado el hueco por escrito a ambos. Según el informe de tránsito, Julián circulaba a 90 kilómetros por hora en un tramo limitado a 60; regresaba de una fiesta y la prueba de alcoholemia fue negativa. Quedó con una pérdida de capacidad laboral del 45 %. Dentro del término legal demandó en reparación directa al departamento y a la concesionaria. El departamento alega que trasladó por contrato el mantenimiento y sus riesgos al concesionario; la concesionaria, que es una sociedad privada y solo puede ser demandada ante la justicia civil; ambos invocan la culpa exclusiva de la víctima.",
+   "pregunta": "¿Quién responde por las lesiones de Julián, ante qué jurisdicción y con qué alcance?",
+   "pistas": [
+    "Cuando en la causación del daño intervienen una entidad pública y un particular, revisa lo que dispone el artículo 140 del CPACA sobre la sentencia.",
+    "Pregúntate si un contrato entre el departamento y el concesionario puede oponerse a la víctima, y si el exceso de velocidad fue la única causa del accidente."
+   ],
+   "conceptos": [
+    "reparación directa",
+    "falla del servicio",
+    "daño antijurídico"
+   ],
+   "solucion": {
+    "problema_juridico": "¿Responden la entidad titular de la vía y su concesionario privado por el daño causado por un hueco no señalizado, puede el juez administrativo juzgar a ambos y cómo incide el exceso de velocidad de la víctima?",
+    "normas": [
+     {
+      "norma": "Constitución Política, art. 90",
+      "para_que": "Responsabilidad del Estado por daños antijurídicos imputables."
+     },
+     {
+      "norma": "CPACA, art. 140",
+      "para_que": "Reparación directa; cuando en la causación del daño estén involucrados particulares y entidades públicas, la sentencia determina la proporción por la cual responde cada uno, según la influencia causal de su hecho u omisión."
+     },
+     {
+      "norma": "CPACA, art. 104",
+      "para_que": "Objeto de la jurisdicción de lo contencioso administrativo: controversias en que estén involucradas las entidades públicas."
+     },
+     {
+      "norma": "Código Civil, art. 2357",
+      "para_que": "Reducción de la indemnización cuando la víctima se expuso imprudentemente al daño, criterio que la jurisprudencia contenciosa aplica en la concurrencia de causas."
+     }
+    ],
+    "analisis": "Hay falla del servicio por omisión: la vía tenía un hueco profundo, sin señalizar ni iluminar, reportado tres semanas antes. El departamento sigue siendo el titular de la vía y garante de su seguridad; la concesión reparte obligaciones entre las partes del contrato, pero no es oponible a la víctima. La concesionaria, que tenía a su cargo el mantenimiento, también omitió actuar.\n\nEl juez administrativo puede juzgar a ambos: la ley prevé expresamente la concurrencia de entidades públicas y particulares en la causación del daño, y ordena fijar en la sentencia la proporción de cada uno.\n\nEl exceso de velocidad de Julián contribuyó al daño, pero no fue su causa exclusiva: un hueco de esa profundidad, de noche y sin aviso, era un peligro para cualquier conductor. Procede reducir la condena.",
+    "contraargumento": "El departamento invoca el traslado contractual de riesgos. Le sirve para llamar en garantía al concesionario o repetir contra él, no para exonerarse frente a la víctima. La culpa exclusiva exigiría que la conducta de Julián hubiera sido la causa única e irresistible, lo que el hueco no señalizado descarta.",
+    "conclusion": "Responden el departamento y la concesionaria ante la jurisdicción contenciosa, en la proporción que fije la sentencia. La indemnización se reduce por el exceso de velocidad de Julián.",
+    "errores_comunes": [
+     "Exonerar a la entidad pública porque entregó la vía en concesión.",
+     "Enviar al particular a la jurisdicción ordinaria y dividir el litigio.",
+     "Tratar cualquier infracción de tránsito de la víctima como culpa exclusiva."
+    ]
+   },
+   "respuesta_modelo": "En primer lugar, el caso exige resolver tres cuestiones: si el daño es imputable al departamento y a la concesionaria, si esta puede ser juzgada por el juez administrativo y qué efecto tiene el exceso de velocidad de Julián.\n\nEl artículo 90 de la Constitución hace responder al Estado por los daños antijurídicos imputables a la acción o la omisión de las autoridades. En efecto, la vía tenía un hueco de cuarenta centímetros, sin señalización ni iluminación, que había sido reportado por escrito tres semanas antes a los dos demandados. Por consiguiente, hay una falla del servicio por omisión del deber de mantener y señalizar la vía.\n\nAhora bien, el departamento alega que trasladó el mantenimiento al concesionario. Ese argumento no prospera, porque la entidad conserva la titularidad de la vía y el deber de vigilar que su contratista la mantenga segura; el reparto contractual de riesgos solo produce efectos entre las partes y le permite llamar en garantía o repetir, pero no oponerlo a la víctima.\n\nEn cuanto a la concesionaria, el artículo 140 del CPACA prevé que, cuando en la causación del daño estén involucrados particulares y entidades públicas, la sentencia determinará la proporción por la cual debe responder cada uno, según la influencia causal de su hecho u omisión. De ahí que el juez administrativo pueda juzgarla junto con el departamento.\n\nPor último, Julián circulaba a 90 kilómetros por hora donde el límite era 60. Esa imprudencia contribuyó al resultado; sin embargo, no fue su causa exclusiva, puesto que un hueco de esa profundidad, de noche y sin aviso, era un peligro para cualquier conductor. En cambio, que regresara de una fiesta es irrelevante, ya que la alcoholemia fue negativa.\n\nEn conclusión, responden ambos demandados en la proporción que fije la sentencia, con una condena reducida por la participación de la víctima.",
+   "conectores_usados": [
+    "en primer lugar",
+    "en efecto",
+    "por consiguiente",
+    "ahora bien",
+    "porque",
+    "de ahí que",
+    "por último",
+    "sin embargo",
+    "puesto que",
+    "en cambio",
+    "ya que",
+    "en conclusión"
+   ],
+   "variacion": {
+    "cambio": "¿Qué cambia si el hueco hubiera estado señalizado con vallas reflectivas e iluminación, y Julián las hubiera derribado al pasar a 120 kilómetros por hora?",
+    "respuesta": "Los demandados habrían cumplido su deber de señalización y el accidente sería atribuible exclusivamente a la conducta de la víctima. Operaría la exoneración total por culpa exclusiva de Julián."
+   },
+   "distractor": "Que Julián regresara de una fiesta: la alcoholemia fue negativa, de modo que ese dato no aporta nada a la causa del accidente.",
+   "revision_humana": true
+  }
+ ]
+}

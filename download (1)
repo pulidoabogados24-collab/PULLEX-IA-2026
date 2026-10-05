@@ -1,0 +1,11 @@
+tests/
+demo/
+docs/
+design/
+evaluacion/
+scripts/
+perfiles/REGISTRO.md
+__pycache__/
+*.db
+app_secret.key
+.claude/

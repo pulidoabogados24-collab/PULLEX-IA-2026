@@ -1,0 +1,846 @@
+{
+ "version": 1,
+ "revision_humana": true,
+ "aviso": "Escenarios ficticios de práctica escritos con criterio conservador. Pendientes de revisión por un docente o abogado (HUMAN REVIEW REQUIRED). Las referencias normativas están marcadas para verificar vigencia; no contienen números de sentencias.",
+ "escenarios": [
+  {
+   "id": "tutela-basico-1",
+   "tipo": "tutela",
+   "nivel": "basico",
+   "titulo": "El medicamento que la EPS no entrega",
+   "hechos": "Marta Lucía Ríos Peña tiene 58 años, vive en Bogotá y está afiliada al régimen subsidiado en la EPS Vida Plena S.A.S. (entidad ficticia). Vende arepas en la calle y no tiene otro ingreso.\n\nEl 4 de agosto de 2026 su reumatóloga tratante, adscrita a la red de la EPS, le diagnosticó artritis reumatoide activa y le formuló un medicamento biológico de aplicación mensual. El 20 de agosto de 2026 la EPS respondió por escrito: «el medicamento no se encuentra autorizado», sin más explicación. Una dosis cuesta más de tres millones de pesos.\n\nDesde entonces Marta Lucía tiene dolor e inflamación en las manos que no le dejan trabajar. Conserva la fórmula médica, la historia clínica y la respuesta de la EPS.",
+   "instruccion": "Redacta la acción de tutela que Marta Lucía presentará en nombre propio contra la EPS Vida Plena S.A.S. para que le entreguen el medicamento formulado.",
+   "puntos_clave": [
+    "Derecho fundamental a la salud (autónomo; Ley 1751 de 2015, verificar) y su relación con la orden del médico tratante",
+    "Procedencia: legitimación por activa (ella misma) y por pasiva (EPS); inmediatez (menos de dos meses); subsidiariedad: por qué otro mecanismo no es eficaz frente a su urgencia",
+    "Pretensión concreta: ordenar a la EPS entregar el medicamento en un plazo breve y garantizar la continuidad del tratamiento",
+    "Pruebas: fórmula, historia clínica, respuesta negativa; juramento de no haber presentado otra tutela"
+   ],
+   "conceptos": [
+    "Derecho fundamental a la salud",
+    "Subsidiariedad",
+    "Inmediatez",
+    "Requisitos de procedencia"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "tutela-intermedio-1",
+   "tipo": "tutela",
+   "nivel": "intermedio",
+   "titulo": "Despedida en embarazo",
+   "hechos": "Daniela Gómez Arias trabajaba como operaria en Confecciones Altamar Ltda. (empresa ficticia) de Pereira, con contrato a término fijo de un año que vencía el 31 de enero de 2027. El 3 de julio de 2026 entregó a su jefe inmediato la prueba de embarazo; él firmó el recibido en una copia.\n\nEl 31 de julio de 2026 la empresa le entregó una carta que daba por terminado el contrato «por reestructuración», sin pedir autorización a ningún inspector del trabajo. No le han pagado el salario de julio. Daniela es madre cabeza de familia de un niño de cuatro años y no tiene otro ingreso. Su controlador prenatal es la EPS a la que estaba afiliada por la empresa.",
+   "instruccion": "Redacta la acción de tutela de Daniela contra Confecciones Altamar Ltda. pidiendo el reintegro como mecanismo transitorio.",
+   "puntos_clave": [
+    "Tutela contra un particular: subordinación o indefensión de la trabajadora frente al empleador",
+    "Estabilidad laboral reforzada por maternidad y falta de autorización del inspector del trabajo",
+    "Subsidiariedad: existe el proceso ordinario laboral, pero la afectación al mínimo vital de una madre gestante configura perjuicio irremediable (mecanismo transitorio)",
+    "Pretensiones: reintegro, pago de salarios y afiliación a seguridad social; mención del plazo para iniciar el proceso ordinario si se concede como transitoria",
+    "Pruebas: copia con el recibido de la prueba de embarazo, carta de terminación, registro civil del hijo"
+   ],
+   "conceptos": [
+    "Estabilidad laboral reforzada",
+    "Subsidiariedad",
+    "Perjuicio irremediable",
+    "Mínimo vital"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "tutela-avanzado-1",
+   "tipo": "tutela",
+   "nivel": "avanzado",
+   "titulo": "Agente oficiosa por un adulto mayor",
+   "hechos": "Don Ernesto Pardo Ruiz, de 81 años, quedó en cama tras un accidente cerebrovascular en marzo de 2026 y vive en Tunja con su sobrina Rosa Elena Pardo, que no es su apoderada. Don Ernesto no puede hablar con claridad ni firmar.\n\nSu EPS, Salud Integral del Centro S.A. (ficticia), autorizó atención domiciliaria (enfermería y terapia física) que debía prestar Cuidar en Casa IPS (ficticia). Desde el 1 de junio de 2026 la IPS no envía a nadie, porque —según dice— la EPS le debe varios meses. Rosa Elena radicó un derecho de petición ante la EPS el 10 de julio de 2026; la EPS respondió que «la prestación es responsabilidad de la IPS».\n\nHace tres años don Ernesto tuvo un pleito con un vecino por los linderos de un lote en Sogamoso, que todavía no termina. Rosa Elena teme que se le formen escaras: ya tiene una lesión en la espalda según una nota de enfermería de mayo.",
+   "instruccion": "Redacta la acción de tutela que Rosa Elena presentará como agente oficiosa de don Ernesto contra la EPS, pidiendo además vincular a la IPS y una medida provisional.",
+   "puntos_clave": [
+    "Agencia oficiosa: manifestar que actúa como agente oficiosa y por qué el titular no puede promover su propia defensa",
+    "Legitimación por pasiva: la EPS responde por su red de prestadores; vinculación de la IPS",
+    "Sujeto de especial protección (adulto mayor en situación de discapacidad): subsidiariedad flexibilizada; inmediatez",
+    "Medida provisional por urgencia (riesgo de escaras) y pretensión de tratamiento integral justificada en el diagnóstico",
+    "Descartar el pleito de linderos: es un hecho distractor sin relación con la vulneración"
+   ],
+   "conceptos": [
+    "Legitimación por activa",
+    "Derecho fundamental a la salud",
+    "Subsidiariedad",
+    "Perjuicio irremediable"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "peticion-basico-1",
+   "tipo": "peticion",
+   "nivel": "basico",
+   "titulo": "La calle sin alumbrado",
+   "hechos": "Andrés Felipe Mora Quintero vive en la calle 12 con carrera 4 del barrio Los Almendros, en el municipio ficticio de San Isidro del Valle. Desde el 15 de mayo de 2026 las cuatro luminarias de la cuadra están apagadas. En julio hubo dos robos a vecinos en la noche.\n\nAndrés Felipe llamó dos veces a la línea de atención de la alcaldía y le dijeron que «ya estaba reportado». No tiene número de radicado. Tiene fotos de las luminarias apagadas tomadas el 1 de septiembre de 2026 y una lista con la firma de once vecinos que apoyan la solicitud.",
+   "instruccion": "Redacta el derecho de petición de Andrés Felipe a la Secretaría de Infraestructura del municipio pidiendo la reparación del alumbrado y un cronograma de la intervención.",
+   "puntos_clave": [
+    "Fundamento: art. 23 de la Constitución y Ley 1755 de 2015 (verificar vigencia)",
+    "Peticiones concretas y numeradas: reparar las luminarias, informar fecha estimada, informar número de radicado del reporte",
+    "Hechos con lugar exacto y fechas; anexos (fotos, lista de vecinos)",
+    "Dirección y correo para recibir respuesta; término de respuesta de la regla general (verificar)"
+   ],
+   "conceptos": [
+    "Derecho de petición"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "peticion-intermedio-1",
+   "tipo": "peticion",
+   "nivel": "intermedio",
+   "titulo": "Las semanas que no aparecen",
+   "hechos": "Gloria Inés Castaño, de 61 años, revisó su historia laboral en el fondo público de pensiones al que está afiliada (Fondo Nacional de Pensiones Públicas, entidad ficticia) y encontró que no aparecen las semanas que cotizó entre marzo de 1998 y diciembre de 2001, cuando trabajó en Textiles del Valle S.A. (empresa ficticia, liquidada en 2010).\n\nGloria conserva un certificado laboral firmado por la jefa de personal de la época y once desprendibles de nómina en los que aparece el descuento para pensión. Quiere saber cuántas semanas tiene en total y que le corrijan la historia laboral, porque piensa pedir su pensión el próximo año.",
+   "instruccion": "Redacta el derecho de petición de Gloria al fondo de pensiones para que corrija su historia laboral y le informe el total de semanas cotizadas.",
+   "puntos_clave": [
+    "Dos peticiones distintas (corrección de historia laboral e información): identificarlas por separado, porque pueden tener términos de respuesta distintos (verificar)",
+    "Hechos precisos: periodo, empleador, documentos que lo prueban",
+    "Anexos: certificado laboral y desprendibles",
+    "Pedir respuesta de fondo y, si la entidad no es competente para algo, que remita la solicitud a quien lo sea"
+   ],
+   "conceptos": [
+    "Derecho de petición"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "peticion-avanzado-1",
+   "tipo": "peticion",
+   "nivel": "avanzado",
+   "titulo": "La quebrada y la respuesta evasiva",
+   "hechos": "La Junta de Acción Comunal de la vereda El Retiro (ficticia), del municipio de La Esperanza, está preocupada porque desde enero de 2026 una piscícola desvía parte del caudal de la quebrada La Clara. La presidenta de la junta, Luz Dary Benavides, presentó el 2 de marzo de 2026 un derecho de petición a la Corporación Ambiental del Alto Magdalena (autoridad ambiental ficticia) para saber si la piscícola tiene concesión de aguas.\n\nLa corporación respondió el 25 de marzo: «su solicitud se está estudiando y se le informará oportunamente». No volvieron a escribir. En agosto, un funcionario le dijo en persona a Luz Dary que «el expediente es reservado». Algunos vecinos quieren incluir en la petición insultos contra el dueño de la piscícola.",
+   "instruccion": "Redacta un nuevo derecho de petición de la Junta, representada por su presidenta, que pida información precisa y copia del expediente, y deje claro por qué la respuesta anterior no fue de fondo.",
+   "puntos_clave": [
+    "Legitimación: la junta actúa por medio de su representante (con la prueba de su calidad)",
+    "Peticiones separadas: información sobre la concesión, copia del expediente, visita o actuaciones de control",
+    "La respuesta anterior no fue de fondo, clara ni congruente; si la entidad alega reserva, debe motivarla y señalar la norma (verificar)",
+    "Tono respetuoso: los insultos sobran y debilitan el escrito",
+    "Dirección de notificación y, si se quiere, anuncio prudente de las acciones posibles"
+   ],
+   "conceptos": [
+    "Derecho de petición",
+    "Debido proceso"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "demanda-basico-1",
+   "tipo": "demanda_verbal",
+   "nivel": "basico",
+   "titulo": "La obra abandonada",
+   "hechos": "Carlos Andrés Ruiz Peña, domiciliado en Bucaramanga, celebró el 15 de enero de 2026 un contrato escrito con Construcciones Horizonte S.A.S. (ficticia, también domiciliada en Bucaramanga) para construir el segundo piso de su casa por $140.000.000. La obra debía entregarse el 30 de junio de 2026.\n\nCarlos pagó $84.000.000 entre enero y marzo (tiene los comprobantes de transferencia). En abril la constructora retiró a los trabajadores; un ingeniero contratado por Carlos certificó el 10 de mayo que la obra está ejecutada en un 25 %. La constructora no responde las llamadas ni los correos. Carlos quiere que le devuelvan lo pagado de más y que le indemnicen.",
+   "instruccion": "Redacta la demanda verbal de Carlos Andrés contra Construcciones Horizonte S.A.S. para que se declare el incumplimiento, se resuelva el contrato y se le restituya lo pagado.",
+   "puntos_clave": [
+    "Pretensiones separadas: declarativa de incumplimiento, resolución (condición resolutoria tácita, Código Civil, verificar), restitución y perjuicios",
+    "Hechos numerados con fechas y montos; pruebas: contrato, comprobantes, certificación del ingeniero (o dictamen)",
+    "Juramento estimatorio discriminado si pide perjuicios",
+    "Cuantía y competencia (cuantía de las pretensiones y domicilio del demandado) y conciliación como requisito de procedibilidad (verificar si aplica)",
+    "Canal digital de notificación de las partes"
+   ],
+   "conceptos": [
+    "Responsabilidad contractual",
+    "Requisitos formales de la demanda",
+    "Competencia"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "demanda-intermedio-1",
+   "tipo": "demanda_verbal",
+   "nivel": "intermedio",
+   "titulo": "La ciclista y la camioneta de reparto",
+   "hechos": "Sofía Restrepo Gil, diseñadora independiente de Medellín, iba en bicicleta por la ciclorruta de la avenida 33 el 14 de marzo de 2026 cuando una camioneta de Distribuidora Andina S.A. (ficticia), conducida por su empleado Jaime Ortiz, giró sin detenerse y la golpeó. El informe de tránsito señala como hipótesis la imprudencia del conductor.\n\nSofía tuvo fractura de clavícula, 60 días de incapacidad y gastos médicos no cubiertos por $6.200.000. En los tres meses anteriores ganaba en promedio $7.500.000 mensuales (tiene facturas). La camioneta tenía póliza de responsabilidad civil con Seguros del Pacífico S.A. (ficticia). Sofía sufrió mucho por el dolor y la cirugía.",
+   "instruccion": "Redacta la demanda verbal de Sofía contra la empresa propietaria de la camioneta y su conductor, pidiendo la indemnización de perjuicios.",
+   "puntos_clave": [
+    "Responsabilidad por actividades peligrosas: régimen aplicable al conductor y a la empresa como guardiana (verificar el criterio vigente)",
+    "Pretensiones por daño emergente, lucro cesante y perjuicio moral; solidaridad de los demandados",
+    "Juramento estimatorio de los perjuicios patrimoniales (el moral no se estima bajo juramento, verificar)",
+    "Posibilidad de demandar directamente a la aseguradora (acción directa, Código de Comercio, verificar)",
+    "Pruebas: informe de tránsito, historia clínica, incapacidades, facturas, dictamen de medicina legal"
+   ],
+   "conceptos": [
+    "Responsabilidad extracontractual",
+    "Requisitos formales de la demanda",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "demanda-avanzado-1",
+   "tipo": "demanda_verbal",
+   "nivel": "avanzado",
+   "titulo": "La venta de la casa al hijo",
+   "hechos": "Don Julio César Prada vivió hasta su muerte (12 de enero de 2026) en una casa de Cali avaluada en $600.000.000. En abril de 2024 la vendió por escritura pública a su hijo Mauricio por $50.000.000, que según la escritura «se pagaron de contado». Don Julio siguió viviendo en la casa y pagando el impuesto predial; Mauricio vive en Bogotá y no tenía ingresos para pagar esa suma.\n\nInés y Pablo, los otros dos hijos, creen que la venta fue simulada para dejarlos sin herencia. La sucesión no se ha iniciado. Además discuten con Mauricio quién se queda con el carro de su padre. Inés y Pablo tienen los recibos del predial pagados por su padre y una carta en la que él decía «la casa sigue siendo mía».",
+   "instruccion": "Redacta la demanda verbal de Inés y Pablo, como herederos, para que se declare la simulación de la compraventa y el inmueble vuelva al patrimonio de su padre.",
+   "puntos_clave": [
+    "Legitimación como herederos (registros civiles) para demandar en favor de la sucesión",
+    "Pretensión principal de simulación absoluta y subsidiaria (simulación relativa); consecuenciales: cancelación de la escritura y su registro",
+    "Indicios de simulación: parentesco, precio irrisorio, falta de capacidad de pago, el vendedor conserva la posesión",
+    "Medida cautelar de inscripción de la demanda (verificar) y su efecto sobre la conciliación previa",
+    "Dejar fuera la disputa por el carro: no hace parte de esta pretensión"
+   ],
+   "conceptos": [
+    "Legitimación en la causa",
+    "Carga de la prueba",
+    "Pretensiones y peticiones",
+    "Competencia"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "contestacion-basico-1",
+   "tipo": "contestacion",
+   "nivel": "basico",
+   "titulo": "El carro con defectos",
+   "hechos": "Lina Marcela Torres vendió su carro usado a Ramiro Díaz el 10 de noviembre de 2025 por $45.000.000. Antes de la compra, el mecánico de confianza de Ramiro revisó el carro y firmó un peritaje sin observaciones graves. El contrato dice que el vehículo «se vende en el estado en que se encuentra».\n\nRamiro usó el carro ocho meses y recorrió 15.000 km. En agosto de 2026 demandó a Lina en proceso verbal: dice que la caja de cambios tenía un defecto oculto y pide la devolución del precio y $20.000.000 de perjuicios, que estimó bajo juramento sin explicar de dónde salen. Lina fue notificada el 8 de septiembre de 2026.",
+   "instruccion": "Redacta la contestación de la demanda en nombre de Lina Marcela.",
+   "puntos_clave": [
+    "Pronunciamiento expreso sobre cada pretensión y sobre cada hecho (admitido, negado, no le consta, con la razón)",
+    "Excepciones de mérito: conocimiento del estado del bien por el comprador; inexistencia de vicio oculto; término especial de la acción por vicios redhibitorios (Código Civil, verificar)",
+    "Objeción al juramento estimatorio, especificando la inexactitud",
+    "Pruebas: peritaje, contrato, testimonio del mecánico; término de traslado (verificar)"
+   ],
+   "conceptos": [
+    "Contestación y excepciones",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "contestacion-intermedio-1",
+   "tipo": "contestacion",
+   "nivel": "intermedio",
+   "titulo": "La humedad del apartamento 502",
+   "hechos": "El Edificio Mirador del Parque P.H. (ficticio), de Barranquilla, fue demandado por Patricia Lozano, propietaria del apartamento 502. Ella dice que una tubería común se rompió el 2 de febrero de 2026, que el agua dañó sus muebles y pisos, y pide $38.000.000 de perjuicios.\n\nLa administración contrató en diciembre de 2025 a Plomería Total S.A.S. (ficticia) para cambiar esa tubería, y el contrato tiene una garantía de un año. La copropiedad tiene, además, una póliza de áreas comunes con Seguros La Previsora del Sur (ficticia). En el acta de inspección del 3 de febrero se ve que el daño en el piso de Patricia era menor al que ella describe.",
+   "instruccion": "Redacta la contestación de la copropiedad y señala qué figura usarías, y en qué escrito, para vincular a la aseguradora y al contratista.",
+   "puntos_clave": [
+    "Pronunciamiento sobre pretensiones y hechos",
+    "Excepciones de mérito: hecho de un tercero (contratista), cuantía excesiva frente al acta de inspección",
+    "Objeción al juramento estimatorio",
+    "Llamamiento en garantía a la aseguradora y al contratista en escrito separado (verificar requisitos)",
+    "Pruebas: contrato con el plomero, póliza, acta de inspección"
+   ],
+   "conceptos": [
+    "Contestación y excepciones",
+    "Responsabilidad extracontractual",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "contestacion-avanzado-1",
+   "tipo": "contestacion",
+   "nivel": "avanzado",
+   "titulo": "El préstamo de la empresa",
+   "hechos": "Héctor Fabio Saldarriaga fue demandado en proceso verbal por Inversiones Robledo S.A.S. (ficticia), que le cobra $90.000.000 de un préstamo. El contrato de mutuo, firmado el 5 de mayo de 2025, dice que el deudor es Muebles Saldarriaga S.A.S. (ficticia) y Héctor firmó como su representante legal, no como persona natural.\n\nEl contrato tiene una cláusula que dice: «Toda controversia derivada de este contrato se resolverá por un tribunal de arbitramento». Además, la sociedad deudora hizo tres abonos que suman $30.000.000 (tiene los comprobantes). Héctor fue notificado personalmente el 15 de septiembre de 2026.",
+   "instruccion": "Redacta la contestación de Héctor Fabio y decide qué va como excepción previa (en escrito separado) y qué como excepción de mérito.",
+   "puntos_clave": [
+    "Excepción previa de cláusula compromisoria, en escrito separado (verificar)",
+    "Excepción de mérito: falta de legitimación en la causa por pasiva (firmó como representante de la sociedad)",
+    "Excepción subsidiaria de pago parcial con los comprobantes de abonos",
+    "Pronunciamiento ordenado sobre pretensiones y hechos; cálculo del término de traslado"
+   ],
+   "conceptos": [
+    "Contestación y excepciones",
+    "Legitimación en la causa"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "reposicion-basico-1",
+   "tipo": "reposicion",
+   "nivel": "basico",
+   "titulo": "El pagaré «a la vista»",
+   "hechos": "Ferretería La Tuerca S.A.S. (ficticia) presentó demanda ejecutiva contra Óscar Zapata con base en un pagaré por $32.000.000 que dice textualmente «pagadero a la vista». La ferretería presentó el pagaré para el pago el 1 de agosto de 2026 y tiene una constancia firmada por Óscar ese día.\n\nEl Juzgado Quinto Civil Municipal de Manizales negó el mandamiento de pago con auto del 21 de septiembre de 2026, notificado por estado el 22 de septiembre, porque «el título no contiene fecha de vencimiento».",
+   "instruccion": "Redacta el recurso de reposición (y, si procede, de apelación en subsidio) de la ferretería contra el auto que negó el mandamiento de pago.",
+   "puntos_clave": [
+    "Identificar el auto (fecha, decisión, notificación) e interponer expresamente el recurso",
+    "Sustentación: el vencimiento «a la vista» es una forma válida de vencimiento de los títulos valores (Código de Comercio, verificar)",
+    "Petición: revocar el auto y librar mandamiento de pago",
+    "Oportunidad: término corto desde la notificación por estado (verificar) y si procede la apelación en subsidio"
+   ],
+   "conceptos": [
+    "Títulos valores",
+    "Recursos judiciales",
+    "Sustentación de recursos"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "reposicion-intermedio-1",
+   "tipo": "reposicion",
+   "nivel": "intermedio",
+   "titulo": "El desistimiento tácito que no era",
+   "hechos": "En un proceso verbal del Juzgado Segundo Civil del Circuito de Neiva, el juez requirió el 1 de julio de 2026 al demandante para que, en treinta días, notificara al demandado so pena de desistimiento tácito.\n\nEl apoderado del demandante envió la notificación al correo del demandado el 25 de julio de 2026, obtuvo acuse de recibo y radicó un memorial con las constancias el 28 de julio. Sin embargo, el juzgado, con auto del 15 de septiembre de 2026 notificado por estado el 17 de septiembre, decretó el desistimiento tácito «por no haberse cumplido la carga impuesta». El memorial del 28 de julio no aparece en el expediente digital.",
+   "instruccion": "Redacta el recurso de reposición y en subsidio apelación contra el auto que decretó el desistimiento tácito.",
+   "puntos_clave": [
+    "Identificación del auto y de la carga impuesta",
+    "Sustentación con prueba: la carga se cumplió dentro del término (envío, acuse de recibo, memorial radicado con su constancia)",
+    "Anexar la constancia de radicación del memorial y del envío",
+    "Petición: revocar el auto y continuar el trámite; apelación en subsidio (verificar procedencia)"
+   ],
+   "conceptos": [
+    "Recursos judiciales",
+    "Notificación",
+    "Sustentación de recursos"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "reposicion-avanzado-1",
+   "tipo": "reposicion",
+   "nivel": "avanzado",
+   "titulo": "Las facturas sin aceptar",
+   "hechos": "Comercializadora del Norte S.A.S. (ficticia) demandó ejecutivamente a Ferretería El Tornillo S.A.S. (ficticia) con base en cinco facturas electrónicas por $48.000.000 en total. El juzgado libró mandamiento de pago el 3 de septiembre de 2026 y Ferretería El Tornillo fue notificada el 22 de septiembre.\n\nRevisando el expediente, la ferretería encuentra que en dos facturas no hay constancia de recibo de la mercancía ni de aceptación, y que una tercera factura ya la pagó en julio (tiene la transferencia). Las otras dos no le merecen reparos.",
+   "instruccion": "Redacta el recurso de reposición contra el mandamiento de pago, separando lo que se discute por esta vía de lo que debe proponerse como excepción de mérito.",
+   "puntos_clave": [
+    "Por reposición solo se discuten los requisitos formales del título (Código General del Proceso, verificar)",
+    "Falta de constancia de recibo y de aceptación en dos facturas: requisito formal de la factura como título valor (verificar el régimen de la factura electrónica)",
+    "El pago de la tercera factura no va en el recurso: es una excepción de mérito en la oportunidad correspondiente",
+    "Petición: revocar parcialmente el mandamiento respecto de las facturas sin requisitos"
+   ],
+   "conceptos": [
+    "Títulos valores",
+    "Recursos judiciales",
+    "Contestación y excepciones"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "apelacion-basico-1",
+   "tipo": "apelacion",
+   "nivel": "basico",
+   "titulo": "Los mensajes que el juez no valoró",
+   "hechos": "Natalia Cárdenas demandó a Óscar Villamil por el incumplimiento de un contrato verbal de diseño de una tienda en línea por $25.000.000. En el proceso aportó los mensajes de WhatsApp en los que Óscar aceptaba el precio y el plazo, y declaró como testigo la socia de Natalia.\n\nEl Juzgado Tercero Civil del Circuito de Ibagué dictó sentencia escrita el 23 de septiembre de 2026 (notificada el 24) y negó las pretensiones porque «no se probó la existencia del contrato, que no consta por escrito». La sentencia no menciona los mensajes ni el testimonio.",
+   "instruccion": "Redacta el escrito de apelación de Natalia contra la sentencia, con sus reparos concretos.",
+   "puntos_clave": [
+    "Interposición del recurso e identificación de la sentencia",
+    "Reparos concretos: omisión en la valoración de los mensajes de datos y del testimonio; el contrato no requería solemnidad",
+    "Sustentación breve de cada reparo y petición: revocar y acceder a las pretensiones",
+    "Oportunidad para formular reparos y luego sustentar ante el superior (verificar términos)"
+   ],
+   "conceptos": [
+    "Sustentación de recursos",
+    "Carga de la prueba",
+    "Recursos judiciales"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "apelacion-intermedio-1",
+   "tipo": "apelacion",
+   "nivel": "intermedio",
+   "titulo": "Solo contra la condena",
+   "hechos": "En un proceso de responsabilidad extracontractual, el Juzgado Primero Civil del Circuito de Pasto condenó a Transportes Galeras S.A. (ficticia) a pagar a la víctima de un accidente $40.000.000 de lucro cesante y $80.000.000 de perjuicio moral.\n\nLa empresa acepta que su conductor causó el accidente. Pero el lucro cesante se calculó con un ingreso mensual de $4.000.000 que la víctima solo afirmó en su declaración, sin ningún documento; y el perjuicio moral se fijó sin explicar los criterios, por una lesión que sanó sin secuelas en tres meses.",
+   "instruccion": "Redacta los reparos y la sustentación de la apelación de la empresa, limitada al monto de la condena.",
+   "puntos_clave": [
+    "Apelación limitada: el superior se pronuncia sobre los argumentos del apelante (verificar); no se discute la responsabilidad",
+    "Reparo 1: lucro cesante sin prueba del ingreso (carga de la prueba del demandante)",
+    "Reparo 2: perjuicio moral sin motivación ni parámetros de proporcionalidad frente a la lesión",
+    "Petición concreta: reducir o revocar cada rubro y en qué sentido"
+   ],
+   "conceptos": [
+    "Sustentación de recursos",
+    "Responsabilidad extracontractual",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "apelacion-avanzado-1",
+   "tipo": "apelacion",
+   "nivel": "avanzado",
+   "titulo": "El arrendatario que se volvió poseedor",
+   "hechos": "El Juzgado Civil del Circuito de Girardot declaró la pertenencia por prescripción adquisitiva extraordinaria de un local en favor de Wilson Díaz, en sentencia dictada en audiencia el 18 de septiembre de 2026. La apoderada de la propietaria, Blanca Nubia Rojas, formuló en la audiencia tres reparos breves.\n\nEn el expediente consta que Wilson entró al local en 2012 como arrendatario y pagó cánones hasta 2015. Desde 2016 dejó de pagar y dice que desde entonces es dueño, pero no hay ningún acto en el que lo haya manifestado a la propietaria. En 2019 Blanca Nubia le envió una carta pidiéndole la entrega. El juez también mencionó una deuda de Blanca Nubia con la DIAN, que no tiene relación con el proceso.",
+   "instruccion": "Redacta el escrito de sustentación del recurso de apelación de Blanca Nubia ante el tribunal, desarrollando los reparos formulados en la audiencia.",
+   "puntos_clave": [
+    "Mera tenencia frente a posesión: quien entra como arrendatario es tenedor",
+    "La interversión del título exige actos inequívocos y públicos de señor y dueño; dejar de pagar no basta",
+    "El tiempo de posesión no se cuenta desde 2012; con la interversión dudosa, no se completa el término legal (verificar)",
+    "Limitarse a desarrollar los reparos formulados; dejar fuera la deuda con la DIAN",
+    "Petición: revocar y negar la pertenencia"
+   ],
+   "conceptos": [
+    "Posesión",
+    "Prescripción adquisitiva",
+    "Sustentación de recursos"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "poder-basico-1",
+   "tipo": "poder",
+   "nivel": "basico",
+   "titulo": "Poder para cobrar una letra",
+   "hechos": "Laura Méndez Ocampo, cédula 52.000.111 (ficticia), domiciliada en Bogotá, tiene una letra de cambio por $25.000.000 firmada por Ricardo Acosta, que venció el 30 de junio de 2026 y no se ha pagado.\n\nLaura quiere que el abogado Juan Pablo Cárdenas, cédula 80.000.222 y tarjeta profesional 300.000 (datos ficticios), inicie el proceso ejecutivo. Quiere que el abogado pueda recibir el dinero y conciliar, pero no que pueda desistir del proceso sin consultarle. El correo del abogado inscrito en el registro de abogados es jpcardenas@correo.co.",
+   "instruccion": "Redacta el poder especial que Laura otorga al abogado Juan Pablo para el proceso ejecutivo contra Ricardo.",
+   "puntos_clave": [
+    "Destinatario: juez civil (reparto) del lugar",
+    "Asunto determinado: proceso ejecutivo contra Ricardo Acosta por la letra de cambio identificada",
+    "Facultades expresas: recibir y conciliar sí; desistir no",
+    "Correo del apoderado inscrito en el registro de abogados (Ley 2213 de 2022, verificar)",
+    "Aceptación del apoderado y forma de otorgamiento (presentación personal o mensaje de datos, verificar)"
+   ],
+   "conceptos": [
+    "Poder y derecho de postulación"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "poder-intermedio-1",
+   "tipo": "poder",
+   "nivel": "intermedio",
+   "titulo": "Poder de una sociedad por mensaje de datos",
+   "hechos": "Comercializadora Delta S.A.S. (ficticia), con domicilio en Cali, fue notificada el 20 de septiembre de 2026 de una demanda verbal que le presentó un proveedor por $70.000.000. Su gerente y representante legal es Paula Andrea Ríos.\n\nLa sociedad quiere que la abogada María Fernanda Gil (datos ficticios) conteste la demanda, proponga excepciones y llame en garantía a la aseguradora si hace falta. Puede conciliar, pero solo hasta $20.000.000. Paula Andrea enviará el poder desde el correo de notificaciones judiciales de la sociedad inscrito en el certificado de existencia y representación.",
+   "instruccion": "Redacta el poder especial que la sociedad otorga a su abogada, para presentarlo por mensaje de datos.",
+   "puntos_clave": [
+    "Identificación de la sociedad y de su representante legal; anexo del certificado de existencia y representación",
+    "Asunto determinado: radicado o identificación del proceso, juzgado, partes",
+    "Facultades: contestar, excepcionar, llamar en garantía; conciliar con el límite fijado",
+    "Envío desde el correo de notificaciones judiciales inscrito (Ley 2213 de 2022, verificar)",
+    "Correo de la apoderada y aceptación"
+   ],
+   "conceptos": [
+    "Poder y derecho de postulación",
+    "Contestación y excepciones"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "poder-avanzado-1",
+   "tipo": "poder",
+   "nivel": "avanzado",
+   "titulo": "Tres hermanos, una abogada y uno en el exterior",
+   "hechos": "Camilo, Diana y Esteban Herrera Lozano quieren iniciar el proceso de sucesión de su madre, fallecida en Armenia el 2 de febrero de 2026, que dejó un apartamento y una cuenta de ahorros. Contratarán a la abogada Sandra Milena Ospina.\n\nEsteban vive en Madrid (España) desde 2019. Diana teme que Camilo, que vivía con la madre, quiera quedarse con el apartamento. Todos quieren que la abogada pueda sustituir el poder si se enferma, pero no que reciba dinero a nombre de ellos.",
+   "instruccion": "Redacta un poder especial conjunto de los tres hermanos a la abogada para el proceso de sucesión, y agrega una nota sobre cómo debe otorgarlo Esteban desde el exterior.",
+   "puntos_clave": [
+    "Asunto determinado: proceso de sucesión de la causante identificada, juez competente (verificar factor por cuantía)",
+    "Identificación de cada poderdante y su calidad de heredero",
+    "Facultades: sustituir sí, recibir no; demás facultades de disposición solo si se dan expresamente",
+    "Nota sobre el otorgamiento en el exterior (consulado o documento apostillado, o mensaje de datos si procede; verificar)",
+    "Advertencia de posible conflicto de intereses entre herederos con un solo apoderado"
+   ],
+   "conceptos": [
+    "Poder y derecho de postulación"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "arrendamiento-basico-1",
+   "tipo": "arrendamiento",
+   "nivel": "basico",
+   "titulo": "Un apartamento en Laureles",
+   "hechos": "Héctor Salazar Mejía es dueño de un apartamento en el barrio Laureles de Medellín (calle 39 n.º 70-15, apartamento 301, datos ficticios). Lo arrendará a Camila Ortiz Restrepo para vivienda de ella y su hija, desde el 1 de noviembre de 2026, por doce meses.\n\nEl canon acordado es de $1.800.000 mensuales, pagaderos los primeros cinco días de cada mes por transferencia. Camila pagará los servicios públicos; Héctor, la cuota de administración. Héctor quiere que Camila le entregue en efectivo dos cánones como depósito «por si daña algo». Camila tiene una amiga dispuesta a firmar como codeudora.",
+   "instruccion": "Redacta el contrato de arrendamiento de vivienda urbana entre Héctor y Camila y resuelve qué hacer con el depósito que pide el arrendador.",
+   "puntos_clave": [
+    "Partes, inmueble e inventario anexo; destinación a vivienda",
+    "Canon, forma, lugar y fecha de pago; reajuste dentro del tope legal (Ley 820 de 2003, verificar)",
+    "Los depósitos en dinero están limitados o prohibidos en vivienda urbana (verificar): reemplazarlos por codeudor o póliza",
+    "Término, prórroga, preavisos y causales de terminación; servicios y administración",
+    "Firmas de las partes y del codeudor"
+   ],
+   "conceptos": [
+    "Arrendamiento de vivienda urbana"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "arrendamiento-intermedio-1",
+   "tipo": "arrendamiento",
+   "nivel": "intermedio",
+   "titulo": "Las cláusulas del arrendador",
+   "hechos": "Inmobiliaria Prado S.A.S. (ficticia) administra un apartamento en un conjunto de Villavicencio y lo arrendará a Jorge y Lucía Pinzón, una pareja con un perro, por un año desde el 1 de diciembre de 2026, con canon de $2.300.000.\n\nLa inmobiliaria propone estas cláusulas: (1) «el arrendatario renuncia a todo requerimiento para ser constituido en mora»; (2) cláusula penal de tres cánones por cualquier incumplimiento; (3) «prohibidas las visitas después de las 9 p. m.»; (4) «prohibidas las mascotas», aunque el reglamento del conjunto las permite con condiciones. Habrá un codeudor solidario.",
+   "instruccion": "Redacta el contrato e identifica, en una nota final, qué cláusulas propuestas por la inmobiliaria conviene eliminar o moderar y por qué.",
+   "puntos_clave": [
+    "Cláusulas esenciales completas (partes, objeto, canon, reajuste, término, servicios, terminación, garantías)",
+    "Cláusula penal proporcionada y su relación con la indemnización",
+    "Las cláusulas que restringen la intimidad o la vida familiar (visitas) son cuestionables; mascotas conforme al reglamento de propiedad horizontal",
+    "Renuncia a requerimientos: analizar su validez y alcance (verificar)",
+    "Codeudor solidario identificado"
+   ],
+   "conceptos": [
+    "Arrendamiento de vivienda urbana",
+    "Responsabilidad contractual"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "arrendamiento-avanzado-1",
+   "tipo": "arrendamiento",
+   "nivel": "avanzado",
+   "titulo": "Casa con taller y una habitación para subarrendar",
+   "hechos": "Arrendamientos del Sur S.A.S. (ficticia) arrendará por tres años, desde el 1 de enero de 2027, una casa en Pasto a la familia Erazo, que vivirá en ella y tendrá un pequeño taller de costura en la sala. El canon será de $2.800.000.\n\nLos Erazo quieren poder subarrendar una habitación a un estudiante. La arrendadora quiere poder terminar el contrato antes de los tres años si decide vender la casa, y que los Erazo paguen una indemnización si se van antes. Ambas partes quieren reglas claras para la entrega final del inmueble.",
+   "instruccion": "Redacta el contrato regulando la destinación mixta, el subarriendo, la terminación anticipada por cada parte y la entrega del inmueble.",
+   "puntos_clave": [
+    "Destinación: vivienda con actividad económica menor; consecuencias en el régimen aplicable (verificar)",
+    "Subarriendo o cesión solo con autorización expresa del arrendador (Ley 820 de 2003, verificar)",
+    "Terminación anticipada por cada parte con preavisos e indemnizaciones dentro de los límites legales (verificar)",
+    "Entrega: inventario, estado del inmueble, paz y salvos de servicios",
+    "Reajuste anual del canon dentro del tope legal"
+   ],
+   "conceptos": [
+    "Arrendamiento de vivienda urbana",
+    "Responsabilidad contractual"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "denuncia-basico-1",
+   "tipo": "denuncia",
+   "nivel": "basico",
+   "titulo": "El portátil que nunca llegó",
+   "hechos": "Juliana Vargas, estudiante de Cartagena, vio el 2 de septiembre de 2026 en un portal de compraventa un portátil usado por $2.300.000. El vendedor, que se presentó como «Andrés», le escribió desde el número 300 000 0000 (ficticio) y le pidió transferir el dinero a una cuenta de ahorros a nombre de una tercera persona.\n\nJuliana transfirió el 3 de septiembre. Andrés le dijo que el envío salía al día siguiente; desde el 5 de septiembre no contesta y la bloqueó. El anuncio desapareció. Juliana tiene las capturas de la conversación y del anuncio, y el comprobante de la transferencia con el número de cuenta.",
+   "instruccion": "Redacta la denuncia penal de Juliana ante la Fiscalía.",
+   "puntos_clave": [
+    "Relato cronológico: qué, cómo, cuándo, dónde y quién, sin calificar con certeza el delito",
+    "Datos conocidos del señalado: alias, número de teléfono, cuenta y titular",
+    "Elementos materiales probatorios: capturas, comprobante; conservar los originales",
+    "Manifestación bajo juramento; solicitud de ser reconocida como víctima",
+    "Advertir si el delito puede ser querellable y requerir conciliación previa (verificar)"
+   ],
+   "conceptos": [
+    "Denuncia y querella",
+    "Tipicidad"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "denuncia-intermedio-1",
+   "tipo": "denuncia",
+   "nivel": "intermedio",
+   "titulo": "Las amenazas del vecino",
+   "hechos": "Desde junio de 2026 Rubén Darío Cuéllar, vecino del apartamento 204 del edificio donde vive Martha Liliana Guzmán en Villavicencio, le envía audios de WhatsApp como este: «le voy a quemar ese carro para que aprenda». El problema empezó por el ruido de la mascota de Martha.\n\nEl 12 de septiembre de 2026 Martha encontró su carro en el parqueadero con las cuatro llantas pinchadas y la pintura rayada. La cámara del parqueadero grabó a un hombre parecido a Rubén a las 2:14 a. m., y el vigilante, Don Aurelio, dice que lo vio salir del parqueadero a esa hora. Martha tiene miedo por su hija.",
+   "instruccion": "Redacta la denuncia de Martha Liliana, decide qué conductas narrar y pide medidas de protección.",
+   "puntos_clave": [
+    "Separar los hechos: amenazas reiteradas y daño al vehículo, cada uno con su fecha",
+    "Elementos: audios y video (pedir la preservación del original de la cámara), testigo con sus datos",
+    "Describir las conductas sin calificarlas con certeza (amenazas, daño en bien ajeno: verificar si es querellable)",
+    "Solicitar medidas de protección para ella y su hija; datos del señalado"
+   ],
+   "conceptos": [
+    "Denuncia y querella",
+    "Tipicidad",
+    "Cadena de custodia"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "denuncia-avanzado-1",
+   "tipo": "denuncia",
+   "nivel": "avanzado",
+   "titulo": "Las transferencias del tesorero",
+   "hechos": "La revisora fiscal de Logística Express S.A.S. (ficticia), de Bogotá, encontró que entre enero y agosto de 2026 el tesorero, Fabián Ospina, hizo 23 transferencias por $95.000.000 en total a una cuenta a nombre de su cuñada, con soportes de «anticipos a proveedores» que no existen. El sistema contable guarda el registro de quién aprobó cada pago.\n\nEl representante legal, Germán Ruiz, presentará la denuncia. Además, la empresa ya inició un proceso disciplinario laboral contra Fabián y circula en la oficina un rumor anónimo de que otro empleado «también sabía».",
+   "instruccion": "Redacta la denuncia de la sociedad, presentada por su representante legal, con un anexo ordenado de elementos probatorios.",
+   "puntos_clave": [
+    "Legitimación: el representante legal denuncia en nombre de la sociedad (certificado de existencia y representación)",
+    "Relato preciso con un cuadro de fechas y montos; descripción prudente de la conducta (sin afirmar la responsabilidad)",
+    "Elementos: extractos, registros del sistema contable, informe de la revisora fiscal; preservación de la evidencia digital",
+    "Solicitudes: reconocimiento como víctima, actos urgentes, medidas sobre los bienes (verificar)",
+    "Dejar fuera el rumor anónimo; el proceso disciplinario laboral es otra vía"
+   ],
+   "conceptos": [
+    "Denuncia y querella",
+    "Tipicidad",
+    "Cadena de custodia"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "alegatos-basico-1",
+   "tipo": "alegatos",
+   "nivel": "basico",
+   "titulo": "¿Préstamo o regalo?",
+   "hechos": "Ana María Quintero demandó a Bruno Gaitán en proceso verbal para que le devuelva $70.000.000 que le transfirió el 10 de octubre de 2025. En el proceso quedaron probados: la transferencia bancaria; un mensaje de WhatsApp de Bruno del 2 de noviembre de 2025 que dice «tranquila, te pago en diciembre»; y el testimonio de la hermana de Ana María, que estuvo presente cuando Bruno pidió el préstamo.\n\nBruno dice que el dinero fue un regalo porque eran pareja. No aportó ninguna prueba de ello. La audiencia de instrucción y juzgamiento será el 20 de octubre de 2026.",
+   "instruccion": "Redacta el guion escrito de los alegatos de conclusión de Ana María para la audiencia.",
+   "puntos_clave": [
+    "Problema jurídico: ¿fue un mutuo (préstamo) o una donación?",
+    "Hechos probados con su prueba: transferencia, mensaje que reconoce la deuda, testimonio",
+    "Carga de la prueba: quien alega la donación debe probarla; donaciones de cierta cuantía exigen requisitos especiales (verificar)",
+    "Refutar la tesis del regalo y petición final concreta"
+   ],
+   "conceptos": [
+    "Carga de la prueba",
+    "Responsabilidad contractual"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "alegatos-intermedio-1",
+   "tipo": "alegatos",
+   "nivel": "intermedio",
+   "titulo": "La ciclista que cruzó en rojo",
+   "hechos": "En el proceso que una ciclista sigue contra Distribuidora Andina S.A. (ficticia) por un accidente, se practicaron estas pruebas: el informe de tránsito (hipótesis: giro imprudente del conductor); un video de una cámara de un local que muestra que la ciclista cruzó con el semáforo en rojo; y el testimonio del conductor.\n\nEl perito de la víctima calculó su lucro cesante con ingresos de $7.500.000 mensuales; la empresa no aportó dictamen propio. Eres el apoderado de la empresa.",
+   "instruccion": "Redacta los alegatos de conclusión de la empresa demandada para la audiencia de instrucción y juzgamiento.",
+   "puntos_clave": [
+    "Hecho exclusivo de la víctima como causa extraña, o subsidiariamente concurrencia de culpas con reducción de la indemnización (Código Civil, verificar)",
+    "Valoración comparada del informe de tránsito (hipótesis) y del video (registro directo)",
+    "Análisis del dictamen del lucro cesante: soportes del ingreso",
+    "Petición principal y subsidiaria"
+   ],
+   "conceptos": [
+    "Responsabilidad extracontractual",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "alegatos-avanzado-1",
+   "tipo": "alegatos",
+   "nivel": "avanzado",
+   "titulo": "Pertenencia con testigos enfrentados",
+   "hechos": "Eres apoderado de Gilberto Mancera, que demanda la pertenencia de un lote rural en Fusagasugá por prescripción extraordinaria. Declararon cuatro testigos: dos vecinos afirman que Gilberto cercó el lote, sembró café y paga los impuestos desde 2013; un tercer testigo, sobrino de Gilberto, dice lo mismo y la contraparte lo tachó por parentesco; el cuarto, empleado de la demandada, dice que Gilberto «cuidaba el lote por encargo».\n\nEl dictamen de la demandada concluye que el cultivo tiene menos de cinco años; el de Gilberto, que tiene más de diez. Hay recibos de impuesto predial pagados por Gilberto desde 2014.",
+   "instruccion": "Redacta los alegatos de conclusión de Gilberto, enfrentando la tacha del testigo y la contradicción entre los dictámenes.",
+   "puntos_clave": [
+    "Elementos de la posesión (actos de señor y dueño) y el tiempo exigido (verificar)",
+    "La tacha por parentesco no excluye el testimonio: se valora con más rigor junto con las demás pruebas",
+    "Contradicción de dictámenes: explicar por qué el propio es más sólido y apoyarlo en otras pruebas (recibos)",
+    "Desvirtuar la versión de la mera tenencia por encargo; petición final"
+   ],
+   "conceptos": [
+    "Posesión",
+    "Prescripción adquisitiva",
+    "Carga de la prueba"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "concepto-basico-1",
+   "tipo": "concepto",
+   "nivel": "basico",
+   "titulo": "El panadero «contratista»",
+   "hechos": "Wilmer Ospina trabaja desde febrero de 2024 en la Panadería La Espiga (ficticia) de Popayán. Firmó un «contrato de prestación de servicios» que se renueva cada seis meses. Cumple horario de 6 a. m. a 4 p. m. de lunes a sábado, usa uniforme, recibe órdenes del administrador y le pagan $1.600.000 al mes. Nunca le han pagado prima ni vacaciones, y él paga su propia seguridad social.\n\nWilmer acude al consultorio jurídico y pregunta: «¿tengo derechos como trabajador? ¿qué puedo reclamar y hasta cuándo?».",
+   "instruccion": "Redacta el concepto jurídico que el consultorio entregará a Wilmer, en lenguaje claro.",
+   "puntos_clave": [
+    "Problema jurídico: ¿existe un contrato de trabajo pese al nombre del contrato?",
+    "Elementos del contrato de trabajo y primacía de la realidad; presunción del contrato de trabajo (Código Sustantivo del Trabajo, verificar)",
+    "Consecuencias: prestaciones, vacaciones, aportes",
+    "Prescripción de los derechos laborales (verificar término) y recomendaciones: reunir pruebas, reclamación escrita, conciliación, demanda",
+    "Límites del concepto y documentos que debe reunir"
+   ],
+   "conceptos": [
+    "Primacía de la realidad",
+    "Elementos del contrato de trabajo",
+    "Prescripción laboral"
+   ],
+   "revision_humana": true,
+   "area": "Laboral"
+  },
+  {
+   "id": "concepto-intermedio-1",
+   "tipo": "concepto",
+   "nivel": "intermedio",
+   "titulo": "Seis años juntos y una casa a nombre de él",
+   "hechos": "Yaneth Rincón y Fernando Cruz convivieron en Montería desde abril de 2019 hasta marzo de 2026, cuando se separaron. No se casaron ni declararon la unión ante notario. En 2022 Fernando compró una casa a su nombre con un crédito que han pagado los dos (Yaneth tiene transferencias mensuales a la cuenta de él).\n\nYaneth pregunta en el consultorio si tiene derecho a parte de la casa y qué debe hacer. Ella dice que «hay tiempo», porque piensa esperar a que Fernando venda la casa.",
+   "instruccion": "Redacta el concepto jurídico dirigido a Yaneth sobre la unión marital, la sociedad patrimonial y los pasos a seguir.",
+   "puntos_clave": [
+    "Unión marital de hecho y presunción de sociedad patrimonial (requisito de tiempo, verificar)",
+    "Bienes adquiridos durante la unión y prueba de la convivencia",
+    "Vías para declararla (notaría, conciliación o juez de familia)",
+    "Advertencia urgente: término para pedir la disolución y liquidación después de la separación (verificar); posibles medidas cautelares sobre la casa",
+    "Recomendaciones concretas y límites del concepto"
+   ],
+   "conceptos": [
+    "Unión marital de hecho",
+    "Prescripción extintiva"
+   ],
+   "revision_humana": true,
+   "area": "Familia"
+  },
+  {
+   "id": "concepto-avanzado-1",
+   "tipo": "concepto",
+   "nivel": "avanzado",
+   "titulo": "La caída en el andén",
+   "hechos": "Rosalba Méndez, de 67 años, se cayó el 18 de marzo de 2025 en un andén roto frente a la plaza de mercado de Tuluá; el hueco no tenía señalización. Se fracturó la cadera, la operaron y quedó con limitación para caminar. Hay fotos del andén y una nota de un periódico local de febrero de 2025 que mostraba el mismo hueco.\n\nEn 2024 el municipio había contratado con una empresa privada el mantenimiento de esos andenes. Rosalba presentó un derecho de petición al municipio en julio de 2026 que no le han contestado. Hoy es 1 de octubre de 2026 y Rosalba pregunta si vale la pena reclamar y cuánto tiempo tiene.",
+   "instruccion": "Redacta el concepto jurídico sobre la viabilidad de reclamar al municipio, con la ruta y los términos.",
+   "puntos_clave": [
+    "Responsabilidad del Estado por daño antijurídico (art. 90 de la Constitución) y falla del servicio por omisión en el mantenimiento",
+    "Medio de control de reparación directa y su término de caducidad contado desde el hecho (verificar): calcular la fecha límite",
+    "Conciliación extrajudicial como requisito previo y su efecto sobre la caducidad (verificar)",
+    "Posible vinculación del contratista; pruebas a reunir (historia clínica, dictamen, fotos, nota de prensa)",
+    "El derecho de petición sin respuesta no suspende la caducidad: advertir el riesgo"
+   ],
+   "conceptos": [
+    "Reparación directa",
+    "Caducidad del medio de control"
+   ],
+   "revision_humana": true,
+   "area": "Administrativo"
+  },
+  {
+   "id": "conciliacion-basico-1",
+   "tipo": "conciliacion",
+   "nivel": "basico",
+   "titulo": "El hueco sin señalizar",
+   "hechos": "El 10 de junio de 2026, a las 8 p. m., Diego Alejandro Muñoz iba en su moto por la carrera 7 de Sogamoso cuando cayó en un hueco de un metro de ancho, sin señalización ni iluminación. Sufrió una fractura de muñeca (incapacidad de 35 días) y la moto quedó averiada.\n\nGastó $4.000.000 en atención médica no cubierta y $3.500.000 en la reparación de la moto (tiene facturas). Durante la incapacidad dejó de ganar $3.200.000 como domiciliario. La policía de tránsito levantó un informe que menciona el hueco. Diego es representado por la abogada Paola Rincón.",
+   "instruccion": "Redacta la solicitud de conciliación extrajudicial ante la Procuraduría, en nombre de Diego, contra el municipio de Sogamoso.",
+   "puntos_clave": [
+    "Medio de control que vendría (reparación directa) y su término de caducidad desde el hecho (verificar)",
+    "Hechos con fecha, hora y lugar; pretensiones con estimación razonada de la cuantía (daño emergente y lucro cesante)",
+    "Pruebas: informe de tránsito, historia clínica, facturas, fotos",
+    "Manifestación bajo juramento de no haber demandado por los mismos hechos; actuación por abogado",
+    "Fundamento: responsabilidad del Estado y Ley 2220 de 2022 (verificar vigencia)"
+   ],
+   "conceptos": [
+    "Reparación directa",
+    "Caducidad del medio de control"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "conciliacion-intermedio-1",
+   "tipo": "conciliacion",
+   "nivel": "intermedio",
+   "titulo": "El provisional retirado sin motivación",
+   "hechos": "Luis Fernando Ortega trabajaba desde 2021 como auxiliar administrativo en provisionalidad en la Gobernación del Alto Cauca (ficticia). Mediante resolución del 18 de agosto de 2026, notificada el 20 de agosto, la gobernación terminó su nombramiento sin indicar ningún motivo. La resolución decía que contra ella procedía el recurso de reposición; Luis no lo presentó.\n\nLuis gana $2.900.000 mensuales y quiere su reintegro y los salarios dejados de percibir. Su abogada debe presentar la solicitud de conciliación antes de demandar.",
+   "instruccion": "Redacta la solicitud de conciliación extrajudicial previa a la demanda de nulidad y restablecimiento del derecho.",
+   "puntos_clave": [
+    "Identificación del acto administrativo, su fecha de notificación y el medio de control (nulidad y restablecimiento del derecho)",
+    "Caducidad: término desde la notificación (verificar) y cómo la solicitud de conciliación la suspende; fecha límite",
+    "Recursos: si la reposición era obligatoria para acudir a la jurisdicción (verificar)",
+    "Pretensiones económicas conciliables y cuantía razonada (salarios y prestaciones)",
+    "Fundamento: el retiro de un provisional debe motivarse (verificar el criterio vigente)"
+   ],
+   "conceptos": [
+    "Nulidad y restablecimiento del derecho",
+    "Caducidad del medio de control",
+    "Recursos administrativos"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "conciliacion-avanzado-1",
+   "tipo": "conciliacion",
+   "nivel": "avanzado",
+   "titulo": "El contrato que nadie liquidó",
+   "hechos": "Ingeniería Vial del Oriente S.A.S. (ficticia) ejecutó para el municipio de Yopal un contrato de obra de mantenimiento de vías que terminó el 30 de abril de 2025, con acta de recibo final a satisfacción. El municipio no ha pagado el último acta de obra por $210.000.000 ni ha liquidado el contrato, ni de mutuo acuerdo ni unilateralmente.\n\nEl contrato no fija plazo de liquidación. La contratista también quiere el reconocimiento de mayores cantidades de obra por $45.000.000, aprobadas por la interventoría pero sin contrato adicional.",
+   "instruccion": "Redacta la solicitud de conciliación de la contratista, calculando con cuidado desde cuándo corre la caducidad del medio de control de controversias contractuales.",
+   "puntos_clave": [
+    "Medio de control de controversias contractuales; reglas de caducidad cuando el contrato requiere liquidación y no se liquidó (verificar plazos de liquidación y de caducidad)",
+    "Pretensiones separadas: pago del acta final, intereses, mayores cantidades de obra (y su riesgo por falta de contrato adicional)",
+    "Pruebas: contrato, acta de recibo, actas de obra, aprobaciones de la interventoría",
+    "Cuantía razonada y manifestación juramentada",
+    "Advertir que la fecha límite debe calcularse y verificarse antes de radicar"
+   ],
+   "conceptos": [
+    "Caducidad del medio de control",
+    "Responsabilidad contractual"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "desacato-basico-1",
+   "tipo": "desacato",
+   "nivel": "basico",
+   "titulo": "La EPS que no cumplió el fallo",
+   "hechos": "El Juzgado Doce Civil Municipal de Bogotá, en sentencia de tutela del 15 de septiembre de 2026 (radicado ficticio 11001400301220260045600), ordenó a la EPS Vida Plena S.A.S. entregar a Marta Lucía Ríos Peña el medicamento biológico formulado, dentro de las 48 horas siguientes a la notificación. La EPS fue notificada el 16 de septiembre.\n\nHoy, 1 de octubre de 2026, la EPS no ha entregado el medicamento. Marta Lucía llamó tres veces (tiene los números de radicado de las llamadas) y le dicen que «está en trámite». El gerente regional de la EPS en Bogotá es Mauricio Lemus (dato ficticio).",
+   "instruccion": "Redacta el incidente de desacato de Marta Lucía.",
+   "puntos_clave": [
+    "Identificación del fallo (juzgado, radicado, fecha) y transcripción de la orden",
+    "Hechos del incumplimiento con fechas y gestiones realizadas",
+    "Identificación del responsable del cumplimiento y de su superior",
+    "Fundamento: Decreto 2591 de 1991 (cumplimiento y desacato, verificar artículos)",
+    "Solicitud: requerir el cumplimiento, abrir el incidente y sancionar si persiste"
+   ],
+   "conceptos": [
+    "Cumplimiento del fallo y desacato"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "desacato-intermedio-1",
+   "tipo": "desacato",
+   "nivel": "intermedio",
+   "titulo": "Readmitido, pero sin apoyo",
+   "hechos": "El Juzgado Segundo Penal Municipal con Funciones de Conocimiento de Santa Marta, en fallo de tutela del 1 de agosto de 2026, ordenó al Colegio Nuevo Horizonte (privado, ficticio) readmitir a Samuel, un niño de diez años con trastorno del espectro autista, y construir con la familia, en quince días, un plan individual de ajustes razonables.\n\nEl colegio readmitió a Samuel el 5 de agosto. Pero a 1 de octubre no ha construido el plan: lo sientan solo al fondo del salón y la coordinadora dijo a la madre que «el plan no es prioridad». La madre tiene correos enviados al colegio pidiendo la reunión.",
+   "instruccion": "Redacta el incidente de desacato explicando por qué el cumplimiento es solo parcial.",
+   "puntos_clave": [
+    "La orden tenía dos partes: readmisión (cumplida) y plan de ajustes razonables (incumplida)",
+    "Hechos del incumplimiento parcial con fechas y pruebas (correos, respuesta de la coordinadora)",
+    "Responsable: rector o representante legal del colegio",
+    "Solicitud: cumplimiento inmediato del plan, apertura del incidente y, si persiste, sanción"
+   ],
+   "conceptos": [
+    "Cumplimiento del fallo y desacato",
+    "Interés superior del menor"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "desacato-avanzado-1",
+   "tipo": "desacato",
+   "nivel": "avanzado",
+   "titulo": "La respuesta que no responde",
+   "hechos": "Una tutela ordenó a la Secretaría de Movilidad de Cúcuta (fallo del 2 de septiembre de 2026) responder de fondo, en 48 horas, el derecho de petición de Jhon Fredy Ayala, que pidió la prescripción de unos comparendos de 2019. El 6 de septiembre la Secretaría le envió un oficio que dice: «su solicitud fue remitida al área competente y se le dará trámite».\n\nEl secretario de Movilidad que estaba en funciones cuando se notificó el fallo renunció el 15 de septiembre; hoy el cargo lo ocupa una nueva secretaria. La Secretaría alega que ya respondió y que hay «hecho superado».",
+   "instruccion": "Redacta el incidente de desacato demostrando que la respuesta no cumple la orden e identificando a la responsable actual.",
+   "puntos_clave": [
+    "Una respuesta de trámite no es una respuesta de fondo: la orden sigue incumplida, no hay hecho superado",
+    "Responsable actual del cumplimiento (la funcionaria en el cargo) y su superior; el desacato exige responsabilidad subjetiva (verificar)",
+    "Pedir, además de la sanción, el cumplimiento efectivo de la orden",
+    "Pruebas: fallo, oficio de respuesta, prueba del cambio de funcionario"
+   ],
+   "conceptos": [
+    "Cumplimiento del fallo y desacato",
+    "Derecho de petición"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "impulso-basico-1",
+   "tipo": "impulso",
+   "nivel": "basico",
+   "titulo": "La demanda que nadie admite",
+   "hechos": "El 3 de febrero de 2026 el abogado Ricardo Salcedo radicó por correo electrónico, en nombre de Clara Inés Valencia, una demanda verbal ante el Juzgado Primero Civil del Circuito de Valledupar (radicado ficticio 20001310300120260002100). Recibió acuse de recibo ese mismo día.\n\nA 1 de octubre de 2026 el juzgado no ha admitido, inadmitido ni rechazado la demanda. El abogado consultó el sistema de consulta de procesos: la última actuación es «al despacho» del 10 de febrero de 2026.",
+   "instruccion": "Redacta el memorial de impulso procesal pidiendo que el juzgado se pronuncie sobre la admisión de la demanda.",
+   "puntos_clave": [
+    "Referencia completa: juzgado, radicado, partes",
+    "Calidad de quien firma (apoderado reconocido o por reconocer)",
+    "Estado del proceso: fecha de radicación y última actuación",
+    "Solicitud concreta y respetuosa: pronunciarse sobre la admisión",
+    "Fundamento breve en los deberes del juez de dirigir el proceso con celeridad (verificar)"
+   ],
+   "conceptos": [
+    "Impulso procesal"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "impulso-intermedio-1",
+   "tipo": "impulso",
+   "nivel": "intermedio",
+   "titulo": "El embargo que sigue vigente",
+   "hechos": "En un proceso ejecutivo del Juzgado Cuarto Civil Municipal de Montería, el juez declaró terminado el proceso por pago total de la obligación mediante auto del 10 de julio de 2026, y ordenó levantar el embargo de la cuenta de ahorros del demandado, Álvaro Pérez, y entregarle los títulos judiciales que sobraran.\n\nA 1 de octubre de 2026 el juzgado no ha librado el oficio de desembargo al banco y la cuenta de Álvaro sigue embargada; tampoco le han entregado un título judicial de $1.200.000. Álvaro actúa por medio de su abogada.",
+   "instruccion": "Redacta el memorial pidiendo que se libre y envíe el oficio de desembargo y se entregue el título judicial.",
+   "puntos_clave": [
+    "Identificación del auto que terminó el proceso y de lo que ordenó",
+    "Lo pendiente, con fechas, y el perjuicio que causa (cuenta embargada)",
+    "Solicitudes concretas y separadas: librar y remitir el oficio; entregar el título",
+    "Tono respetuoso; dato de la cuenta para la entrega si corresponde"
+   ],
+   "conceptos": [
+    "Impulso procesal"
+   ],
+   "revision_humana": true
+  },
+  {
+   "id": "impulso-avanzado-1",
+   "tipo": "impulso",
+   "nivel": "avanzado",
+   "titulo": "La audiencia aplazada tres veces",
+   "hechos": "En un proceso verbal del Juzgado Segundo Civil del Circuito de Tunja, el auto admisorio se notificó al demandado el 15 de agosto de 2025. La audiencia inicial se ha aplazado tres veces por «agenda del despacho» (la última, el 22 de septiembre de 2026) y no hay nueva fecha.\n\nLa apoderada de la demandante quiere que se fije fecha pronto. Sabe que la ley fija una duración máxima del proceso en primera instancia y que su vencimiento puede tener consecuencias sobre la competencia del juez, pero su cliente no quiere que el proceso cambie de juez ni que se demore más.",
+   "instruccion": "Redacta el memorial que pida fijar fecha para la audiencia y deje constancia del término de duración del proceso, sin pedir todavía la pérdida de competencia.",
+   "puntos_clave": [
+    "Referencia y estado: fecha de notificación del auto admisorio y aplazamientos",
+    "Solicitud concreta: fijar fecha próxima para la audiencia",
+    "Constancia del término de duración del proceso (Código General del Proceso, verificar) sin pedir la pérdida de competencia: decisión estratégica",
+    "Tono respetuoso y preciso; mencionar, si acaso, la vigilancia judicial como alternativa, no como amenaza"
+   ],
+   "conceptos": [
+    "Impulso procesal",
+    "Competencia"
+   ],
+   "revision_humana": true
+  }
+ ]
+}
