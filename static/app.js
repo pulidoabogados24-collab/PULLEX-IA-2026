@@ -49,8 +49,8 @@ const CAPACIDADES=[
    d:'Identifica normas aplicables y contrasta líneas jurisprudenciales.',
    p:'Necesito investigar qué normas y jurisprudencia aplican a mi caso. Pregúntame primero de qué se trata.'},
   {ic:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
-   t:'Redacción de escritos',d:'Tutelas y derechos de petición con un formulario guiado y estructura procesal.',
-   abrir:'escrito'},
+   t:'Documentos y flujos',d:'Escritos de todas las áreas, flujos de varios pasos y un asistente que investiga, analiza y redacta.',
+   ir:'documentos'},
   {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
    t:'Análisis de casos',d:'Hechos, pretensiones, riesgos y estrategia.',
    p:'Quiero que analices mi caso. Pregúntame los hechos, qué pretendo lograr, y evalúa riesgos y estrategia.'},
@@ -61,18 +61,24 @@ const CAPACIDADES=[
 async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
   try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
-  aplicarPerfil();aplicarTema(PERFIL.preferencias.tema);
+  apIniciar();aplicarPerfil();
   $('modo').value=PERFIL.preferencias.modo||'auto';
   WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
 }
+function iniciales(n){return (n||'').trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'·'}
+function saludoHora(){const h=new Date().getHours();return h<5?'Buenas noches':h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches'}
 function aplicarPerfil(){
-  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').split(' ')[0];
+  $('h-nombre').textContent=(PERFIL.nombre||'estudiante').trim().split(/\s+/)[0];
+  $('h-saludo').textContent=saludoHora();$('pv-saludo').textContent=saludoHora()+'.';
+  try{const f=new Date().toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});$('h-fecha').textContent=f.charAt(0).toUpperCase()+f.slice(1)}catch(e){}
+  ['h-iniciales','cf-iniciales','pv-iniciales'].forEach(id=>{$(id).textContent=iniciales(PERFIL.nombre)});
   $('c-plan').textContent=PERFIL.plan_nombre;$('c-rest').textContent=PERFIL.restantes;
   $('cf-nombre').textContent=PERFIL.nombre;$('cf-email').textContent=PERFIL.email;
   $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   $('cf-modo').value=PERFIL.preferencias.modo||'auto';
+  if($('cf-escritura'))$('cf-escritura').value=PERFIL.preferencias.escritura||'auto';
   $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
-  $('cf-tema').classList.toggle('on',PERFIL.preferencias.tema==='claro');
+  sincronizarSwTema();
   $('cf-memoria').value=PERFIL.preferencias.memoria||'';
   $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
   pintarAreas();pintarPlanes();
@@ -84,15 +90,29 @@ function pintarAreas(){
     el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
 }
 function pintarPlanes(){
+  // Acceso por plan (static/planes.js): candados en la navegación y tabla comparativa.
+  if(typeof pintarTablaPlanes==='function'){pintarCandados();pintarTablaPlanes();return}
   const p=ESTADO.planes||{};const c=$('planes');c.innerHTML='';
   ['basico','pro','premium'].forEach(k=>{if(!p[k])return;const el=document.createElement('div');el.className='fila';
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
-      <div class="t" style="color:var(--oro);font-weight:800">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
+      <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
-function ver(v){['inicio','modular','chat','config'].forEach(x=>{
-  $('v-'+x).classList.toggle('on',x===v);$('n-'+x).classList.toggle('on',x===v)});
+function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde Ajustes y no tiene botón propio en la barra
+  // Función que el plan no incluye: se marca su pestaña y se muestra la pantalla de mejora (planes.js).
+  const bloq=typeof vistaBloqueada==='function'&&vistaBloqueada(v);
+  ['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
+  $('v-'+x).classList.toggle('on',x===v&&!bloq);$('n-'+x).classList.toggle('on',x===nav);
+  if(x===nav)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
+  const vp=$('v-perfiles');if(vp)vp.classList.toggle('on',v==='perfiles'&&!bloq);
+  if($('v-mejora'))$('v-mejora').classList.toggle('on',!!bloq);
+  const m=document.querySelector('main');if(m)m.scrollTop=0;
+  if(bloq){cerrarHistorial();pintarMejora(VISTA_FUNCION[v]);return}
   if(v==='chat')cargarConvs();else cerrarHistorial();
   if(v==='modular')mlInit();
+  if(v==='mapa')mapaInit();
+  if(v==='documentos'&&typeof docInit==='function')docInit();
+  if(v==='herramientas'&&typeof herrInit==='function')herrInit();
+  if(v==='perfiles'&&typeof perInit==='function')perInit();
   if(v==='inicio')cargarProgresoInicio();}
 
 async function cargarBoletin(forzar){
@@ -124,7 +144,9 @@ function esEscritorio(){return window.matchMedia('(min-width:760px)').matches}
 function toggleHistorial(){$('chat-lay').classList.toggle('hist-abierto')}
 function cerrarHistorial(){$('chat-lay').classList.remove('hist-abierto')}
 async function cargarConvs(){
-  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){}
+  const l=$('convs-lista');
+  if(!l.children.length){for(let i=0;i<4;i++){const k=el('div','skel');k.style.cssText='height:12px;margin:12px 10px;width:'+(80-i*12)+'%';l.appendChild(k)}}
+  try{CONVS=await api('/api/conversaciones');pintarConvs()}catch(e){if(l.querySelector('.skel'))l.textContent=''}
 }
 function pintarConvs(){
   const l=$('convs-lista');l.textContent='';
@@ -186,7 +208,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido)});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id})});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -211,7 +233,7 @@ function pintarAdj(){const c=$('adjfila');c.innerHTML='';
     e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
 function burbuja(rol,texto,adj){
   const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
-  b.innerHTML=`<div class="av">${rol==='user'?'Tú':'PX'}</div><div class="bd"><div class="md"></div></div>`;
+  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd"><div class="md"></div></div>`;
   b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
   if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
     adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
@@ -221,6 +243,56 @@ function burbuja(rol,texto,adj){
 }
 function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
 
+// Lee el stream SSE del chat y lo pinta en la burbuja ``bIA``. Lo usan «enviar» (respuesta nueva) y «continuarResp»
+// (completar una respuesta que quedó incompleta; ``base`` es el texto que ya estaba escrito).
+// Devuelve {buffer,fuentes,id,completo,incompleta,motivo,fin}. ``fin`` es false si el stream se cortó sin que el servidor
+// avisara que terminó: en ese caso NUNCA se da por completa la respuesta.
+async function transmitir(cuerpo,bIA,base){
+  const cont=bIA.querySelector('.md');cont.classList.add('cursor');
+  const res={buffer:base||'',fuentes:[],id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
+  let raf=null;
+  const render=()=>{cont.innerHTML=md(res.buffer);cont.classList.add('cursor');scroll();raf=null};
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(cuerpo)});
+    if(!r.ok){const d=await r.json().catch(()=>({}));res.estado=r.status;res.error=(typeof d.detail==='string'&&d.detail)||'No se pudo procesar.';
+      cont.classList.remove('cursor');return res}
+    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
+    while(true){const {value,done}=await rd.read();if(done)break;
+      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
+      for(const l of lineas){if(!l.startsWith('data: '))continue; // los comentarios «: latido» se ignoran
+        let ev;try{ev=JSON.parse(l.slice(6))}catch(e){continue}
+        if(ev.tipo==='texto'){res.buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='busqueda'){cont.innerHTML=md(res.buffer+'\n\n_Buscando en fuentes…_')}
+        else if(ev.tipo==='continuando'){bIA.classList.add('continuando')}
+        else if(ev.tipo==='reparando'){bIA.classList.add('reparando')}
+        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
+        else if(ev.tipo==='fuentes'){res.fuentes=Array.isArray(ev.fuentes)?ev.fuentes:[]}
+        else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){res.buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='incompleta'){res.incompleta=true;res.motivo=ev.motivo||'';if(ev.mensaje_id)res.id=ev.mensaje_id}
+        else if(ev.tipo==='fin'){res.fin=true;res.completo=!!ev.completo;if(ev.mensaje_id)res.id=ev.mensaje_id;if(!ev.completo)res.incompleta=true}
+      }
+    }
+  }catch(e){res.error='conexion'}
+  if(raf)cancelAnimationFrame(raf);
+  bIA.classList.remove('continuando','reparando');
+  cont.classList.remove('cursor');cont.innerHTML=md(res.buffer);
+  return res;
+}
+// Si el stream se cortó sin «fin», el servidor guarda lo generado como incompleto: se busca ese mensaje para poder continuarlo.
+async function recuperarIncompleta(cid){
+  try{await new Promise(r=>setTimeout(r,1200));
+    const msgs=await api('/api/conversaciones/'+cid+'/mensajes');const u=msgs[msgs.length-1];
+    if(u&&u.rol!=='user'&&u.incompleta)return {id:u.id,texto:u.contenido||''};
+  }catch(e){}
+  return null;
+}
+// Remata una burbuja de respuesta: acciones, aviso «Continuar» si quedó cortada y valoración.
+function cerrarResp(bIA,res,cid){
+  const tieneTexto=(res.buffer||'').trim().length>0;
+  if(!res.fin&&tieneTexto){res.incompleta=true;if(!res.motivo)res.motivo='interrumpida'}
+  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid});
+  scroll();
+}
 // opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
 async function enviar(opc){
   const texto=$('txt').value.trim();
@@ -232,39 +304,48 @@ async function enviar(opc){
   $('sugs').classList.add('hidden');
   const adjEnvio=ADJ.slice();
   burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
-  const bIA=burbuja('ia','');const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  let buffer='',raf=null;
-  const render=()=>{cont.innerHTML=md(buffer);cont.classList.add('cursor');scroll();raf=null};
-  try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},
-      body:JSON.stringify({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio})});
-    if(!r.ok){const d=await r.json().catch(()=>({}));cont.classList.remove('cursor');
-      cont.innerHTML=md('**Aviso:** '+(d.detail||'No se pudo procesar.'));
-      enviando=false;$('env').disabled=false;if(r.status===402||r.status===403)ver('config');return}
-    const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
-    while(true){const {value,done}=await rd.read();if(done)break;
-      resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
-      for(const l of lineas){if(!l.startsWith('data: '))continue;
-        const ev=JSON.parse(l.slice(6));
-        if(ev.tipo==='texto'){buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
-        else if(ev.tipo==='busqueda'){cont.innerHTML=md(buffer+'\n\n_Buscando en fuentes…_')}
-        else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
-      }
-    }
-  }catch(e){buffer+='\n\n**Aviso:** se interrumpió la conexión. Intenta de nuevo.';}
-  if(raf)cancelAnimationFrame(raf);
-  cont.classList.remove('cursor');cont.innerHTML=md(buffer);
-  if(buffer.trim())accionesResp(bIA,buffer);scroll();
+  const bIA=burbuja('ia','');
+  const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
+  if(res.estado!==200){
+    bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
+    enviando=false;$('env').disabled=false;if(res.estado===402||res.estado===403)ver('config');return}
+  if(res.error==='conexion'&&!res.fin){
+    const rec=await recuperarIncompleta(cid);
+    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
+    else if(!res.buffer.trim())res.buffer='**Aviso:** se interrumpió la conexión. Intenta de nuevo.';
+  }
+  cerrarResp(bIA,res,cid);
   enviando=false;$('env').disabled=false;
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
   cargarConvs();
 }
-function accionesResp(b,texto){
+// «Continuar»: el servidor retoma la respuesta guardada y la completa; no gasta una consulta.
+async function continuarResp(bIA,meta,textoActual){
+  if(enviando)return;
+  enviando=true;$('env').disabled=true;
+  quitarAcciones(bIA);
+  const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
+  if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
+    enviando=false;$('env').disabled=false;toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
+    const c=meta.cid;CONV=null;await abrirConv(c);return}
+  if(res.estado!==200){
+    toast(res.error);enviando=false;$('env').disabled=false;
+    accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
+  if(res.error==='conexion'&&!res.fin){
+    const rec=await recuperarIncompleta(meta.cid);
+    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}}
+  if(!res.id)res.id=meta.id;
+  cerrarResp(bIA,res,meta.cid);
+  enviando=false;$('env').disabled=false;
+}
+function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes').forEach(n=>n.remove())}
+function accionesResp(b,texto,fuentes,meta){
   const a=document.createElement('div');a.className='acc';
-  a.innerHTML='<button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> PDF</button>';
-  const [c,d,p]=a.querySelectorAll('button');
+  a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
+  const [c,d,p,r]=a.querySelectorAll('button');
+  r.onclick=()=>revisarEstilo(texto,b.querySelector('.bd'),r);
   c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
   d.onclick=()=>descargar('pullex-respuesta.txt',texto);
   p.onclick=imprimirPDF;
@@ -274,6 +355,114 @@ function accionesResp(b,texto){
   if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
+  pintarFuentes(b,fuentes);
+  if(meta&&meta.incompleta)avisoIncompleta(b,texto,meta);
+  if(meta&&meta.id)panelValorar(b,meta);
+}
+// Respuesta cortada: se dice con claridad y se ofrece «Continuar». Nunca se presenta como terminada.
+const MOTIVO_INC={limite:'La respuesta llegó al límite de longitud.',interrumpida:'La conexión se interrumpió mientras se escribía.',
+  pausa:'La respuesta se pausó antes de terminar.',contexto:'La conversación es demasiado larga para seguir.',rechazo:'La IA no pudo completar esta respuesta.'};
+function avisoIncompleta(b,texto,meta){
+  const d=el('div','aviso-inc');d.setAttribute('role','status');
+  d.appendChild(el('p',null,'Esta respuesta quedó incompleta. '+(MOTIVO_INC[meta.motivo]||'No llegó a terminar.')+' Puedes pedir que la complete desde donde se cortó.'));
+  const bt=el('button','btn-continuar','Continuar');bt.type='button';
+  bt.addEventListener('click',()=>continuarResp(b,meta,texto));
+  d.appendChild(bt);
+  b.querySelector('.bd').appendChild(d);
+}
+// 👍 / 👎 con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
+const MOTIVOS_FB=[['incompleta','Quedó incompleta'],['no_respondio','No respondió lo que pedí'],['error_juridico','Tiene un error jurídico'],['muy_larga','Es demasiado larga'],['otro','Otro motivo']];
+function panelValorar(b,meta){
+  const w=el('div','valorar');w.setAttribute('role','group');w.setAttribute('aria-label','¿Te sirvió esta respuesta?');
+  const bu=el('button','vl-btn','👍');bu.type='button';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
+  const bd=el('button','vl-btn','👎');bd.type='button';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
+  const estado=el('span','vl-estado');estado.setAttribute('aria-live','polite');
+  const caja=el('div','vl-motivos hidden');
+  const sel=new Set();
+  const chips=MOTIVOS_FB.map(([k,t])=>{const c=el('button','vl-chip',t);c.type='button';c.setAttribute('aria-pressed','false');
+    c.addEventListener('click',()=>{if(sel.has(k)){sel.delete(k);c.setAttribute('aria-pressed','false')}else{sel.add(k);c.setAttribute('aria-pressed','true')}});
+    caja.appendChild(c);return c});
+  const enviarFb=el('button','vl-enviar','Enviar');enviarFb.type='button';caja.appendChild(enviarFb);
+  async function mandar(valor){
+    try{await api('/api/feedback',{body:{mensaje:meta.id,valor,motivos:valor==='abajo'?[...sel]:[]}});
+      bu.setAttribute('aria-pressed',valor==='arriba'?'true':'false');bd.setAttribute('aria-pressed',valor==='abajo'?'true':'false');
+      estado.textContent='Gracias por tu opinión.';caja.classList.add('hidden');
+    }catch(e){estado.textContent=e.message||'No se pudo enviar tu opinión.'}
+  }
+  bu.addEventListener('click',()=>mandar('arriba'));
+  bd.addEventListener('click',()=>{caja.classList.toggle('hidden');estado.textContent='';
+    if(!caja.classList.contains('hidden'))chips[0].focus()});
+  enviarFb.addEventListener('click',()=>mandar('abajo'));
+  w.append(bu,bd,estado,caja);
+  b.querySelector('.bd').appendChild(w);
+}
+// ---- Revisar estilo: rasgos típicos del texto generado por IA (POST /api/estilo/revisar, no gasta consultas).
+// Lo usan el chat y la vista de documentos (documentos.js). Todo se pinta con textContent.
+async function revisarEstilo(texto,destino,boton){
+  if(!destino||!(texto||'').trim())return;
+  if(boton)boton.disabled=true;
+  try{
+    const r=await fetch('/api/estilo/revisar',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify({texto})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(typeof d.detail==='string'?d.detail:'No se pudo revisar el estilo.');
+    pintarEstilo(destino,d);
+  }catch(e){toast(e.message||'No se pudo revisar el estilo.')}
+  if(boton)boton.disabled=false;
+}
+// Pinta una revisión de estilo ya calculada (la de /api/estilo/revisar o la que acompaña una evaluación del Taller).
+function pintarEstilo(destino,d,opc){
+  const previo=destino.querySelector(':scope > .estilo-rev');if(previo)previo.remove();
+  const box=el('section','estilo-rev');box.setAttribute('aria-label','Revisión de estilo');box.setAttribute('tabindex','-1');
+  box.appendChild(el('h4',null,'Revisión de estilo'));box.appendChild(el('p',null,d.valoracion||''));
+  const rasgos=Array.isArray(d.rasgos)?d.rasgos:[];
+  if(rasgos.length){const ul=el('ul');
+    rasgos.forEach(x=>{const li=el('li');li.appendChild(el('b',null,(x.nombre||x.id)+(x.veces>1?' ('+x.veces+')':'')));
+      li.appendChild(document.createTextNode('. '+(x.explicacion||'')+' '+(x.sugerencia||'')));
+      if(Array.isArray(x.ejemplos)&&x.ejemplos.length)li.appendChild(el('span','er-ej','Ejemplo: «'+x.ejemplos[0]+'»'));
+      ul.appendChild(li)});
+    box.appendChild(ul)}
+  box.appendChild(el('p','er-nota',d.nota||'Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
+  destino.appendChild(box);
+  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  return box;
+}
+// ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
+// Todo con textContent (nada de innerHTML con datos del servidor) y el estado escrito en el chip,
+// no solo por color.
+const CHIP_FUENTE={VIGENTE_VERIFICADA:['vigente','Corpus · vigente'],PENDIENTE_VERIFICAR:['verificar','Corpus · verificar vigencia'],
+  DESACTUALIZADA:['verificar','Corpus · desactualizada'],DEROGADA:['derogada','Corpus · derogada']};
+function chipFuente(f){
+  if(f.origen==='web')return f.oficial?['web','Oficial · web']:['verificar','Web · no oficial'];
+  return CHIP_FUENTE[f.estado_vigencia]||CHIP_FUENTE.PENDIENTE_VERIFICAR;
+}
+function urlSegura(u){return typeof u==='string'&&/^https?:\/\//i.test(u)?u:null}
+function pintarFuentes(b,fuentes){
+  if(!Array.isArray(fuentes)||!fuentes.length)return;
+  const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
+  const d=el('details','fuentes');
+  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');d.appendChild(s);
+  const ul=el('ul','fuentes-lista');
+  lista.forEach(f=>{
+    const li=el('li','fuente');const [cls,txt]=chipFuente(f);
+    li.appendChild(el('span','fchip '+cls,txt));
+    const url=urlSegura(f.url);let tit;
+    if(url){tit=el('a','ftit',f.titulo||url);tit.href=url;tit.target='_blank';tit.rel='noopener noreferrer'}
+    else tit=el('span','ftit',f.titulo||'Documento del corpus');
+    li.appendChild(tit);
+    const meta=[];
+    if(f.ref)meta.push('['+f.ref+']');
+    if(f.origen==='corpus'&&f.tipo)meta.push(f.tipo);
+    if(f.ubicacion)meta.push(f.ubicacion);
+    if(f.fecha_archivo)meta.push('archivo del '+f.fecha_archivo);
+    if(f.origen==='web'&&url){try{meta.push(new URL(url).hostname.replace(/^www\./,''))}catch(e){}}
+    meta.push(f.citado?'citada en la respuesta':'consultada, no citada');
+    li.appendChild(el('span','fmeta',meta.join(' · ')));
+    ul.appendChild(li);
+  });
+  d.appendChild(ul);
+  if(lista.some(f=>f.origen==='corpus'&&f.estado_vigencia!=='VIGENTE_VERIFICADA'))
+    d.appendChild(el('p','fnota','«Verificar vigencia»: ese documento del corpus no ha sido confirmado en la fuente oficial en los últimos 12 meses. Confírmalo antes de citarlo.'));
+  b.querySelector('.bd').appendChild(d);
 }
 function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
@@ -290,9 +479,10 @@ function exportarExcel(){
 }
 
 async function guardarPrefs(){
+  // El tema ya no viaja aquí: lo maneja la apariencia (apCambiar), que distingue claro/oscuro/automático.
   const areas=[...document.querySelectorAll('#areas .area.on')].map(e=>e.textContent);
-  const body={areas,modo:$('cf-modo').value,tema:document.body.classList.contains('claro')?'claro':'oscuro',
-    web:$('cf-web').classList.contains('on')};
+  const body={areas,modo:$('cf-modo').value,web:$('cf-web').classList.contains('on')};
+  if($('cf-escritura'))body.escritura=$('cf-escritura').value;
   try{const d=await(await fetch('/api/preferencias',{method:'POST',
     headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
     PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
@@ -304,10 +494,10 @@ async function guardarMemoria(){
     PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
 }
 function togglePref(el){el.classList.toggle('on');guardarPrefs()}
-function toggleTema(el){el.classList.toggle('on');aplicarTema(el.classList.contains('on')?'claro':'oscuro');guardarPrefs()}
-function aplicarTema(t){document.body.classList.toggle('claro',t==='claro');
-  document.body.classList.toggle('oscuro',t!=='claro');
-  document.querySelector('meta[name=theme-color]').content=t==='claro'?'#eef3fb':'#0A1E3F'}
+function toggleTema(el){el.classList.toggle('on');apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
+// Compatibilidad: cambia claro/oscuro sin guardar (lo usan pruebas y código anterior).
+function aplicarTema(t){AP.datos={...(AP.datos||PXA.actual()),modo:t==='claro'?'claro':'oscuro'};PXA.aplicar(AP.datos);apRefrescar()}
+function sincronizarSwTema(){const s=$('cf-tema');if(s)s.classList.toggle('on',document.documentElement.getAttribute('data-esquema')!=='oscuro')}
 
 const ICONOS_TOOL={
   tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
@@ -336,9 +526,9 @@ const HERRAMIENTAS=[
 ];
 function abrirTools(){
   const g=$('tools-grid');g.innerHTML='';
-  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');
-    b.className='bsec';b.style.cssText='text-align:left;padding:12px;border-radius:11px;font-size:13px;line-height:1.3';
-    b.innerHTML=`<div style="color:var(--oro)">${icoTool(h.i)}</div><b style="color:var(--oro)">${h.t}</b>`;
+  HERRAMIENTAS.forEach(h=>{const b=document.createElement('button');b.type='button';
+    b.className='tool';
+    b.innerHTML=`<span class="ti">${icoTool(h.i)}</span>`;b.appendChild(document.createTextNode(h.t));
     b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
   $('m-tools').classList.remove('hidden');
 }
@@ -497,7 +687,7 @@ async function reenviarVerificacion(){
   }catch(e){toast('Error de conexión')}
   b.disabled=false;b.textContent=t0;
 }
-function salir(){TOKEN=null;PERFIL=null;CONV=null;location.reload()}
+function salir(){TOKEN=null;PERFIL=null;CONV=null;Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)});location.reload()}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
 
 // -------------------------------------------------------- instalar como app --
@@ -536,11 +726,11 @@ if(esIOS()&&!esStandalone())mostrarBotonInstalar();
 function abrirSelectorArchivo(){document.getElementById('file').click()}
 
 // =========================================================================================
-// PULLEX Academia — dos caminos en el inicio y Modular Lab
+// PULLEX Academia — dos caminos en el inicio y Laboratorio de casos
 // =========================================================================================
 const APRENDER=[
   {ic:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-   t:'Practicar un modular',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
+   t:'Resolver un caso',d:'Un caso tipo examen: respondes tú y PULLEX te evalúa con rúbrica.',ir:'modular'},
   {ic:'<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
    t:'Enséñame un tema',d:'Explicación por capas, con ejemplo, norma y el error más común.',
    p:'Quiero aprender este tema: ',estilo:'ensename'},
@@ -565,16 +755,22 @@ function pintarCapacidades(){
   const g=$('capgrid');g.innerHTML='';
   (CAMINO==='trabajar'?CAPACIDADES:APRENDER).forEach(c=>{
     const b=document.createElement('button');b.className='captarj';
-    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
+    b.innerHTML=`<div class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${c.ic}</svg></div>`;
     const t=document.createElement('b');t.textContent=c.t;const d=document.createElement('span');d.textContent=c.d;
     b.appendChild(t);b.appendChild(d);
+    const bloq=c.ir&&typeof vistaBloqueada==='function'&&vistaBloqueada(c.ir);
+    if(bloq){const tg=el('span','plan-tag');tg.appendChild(plIcono('candado'));
+      tg.appendChild(document.createTextNode('Plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir]))));b.appendChild(tg);
+      b.setAttribute('aria-label',c.t+'. Incluido en el plan '+plNombre(plRequerido(VISTA_FUNCION[c.ir])))}
+    const ir=el('span','ir',bloq?'Ver el plan':'Empezar');ir.insertAdjacentHTML('beforeend','<svg class="i xs" aria-hidden="true"><use href="#i-flecha"/></svg>');b.appendChild(ir);
     b.addEventListener('click',()=>{if(c.ir)ver(c.ir);else if(c.abrir==='escrito')abrirEscrito();else usarTool(c.p,c.estilo||'directo')});
     g.appendChild(b);
   });
 }
 async function cargarProgresoInicio(){
   const el=$('progreso-inicio');
-  if(CAMINO!=='aprender'){el.classList.add('hidden');return}
+  cargarTablero();
+  if(CAMINO!=='aprender'||(typeof tieneFuncion==='function'&&!tieneFuncion('academia'))){el.classList.add('hidden');return}
   try{
     const p=await api('/api/modular/progreso');
     if(!p.resueltos){el.classList.add('hidden');return}
@@ -592,13 +788,14 @@ async function api(url,opts){
   const o=opts||{};const h={...auth()};if(o.body)h['content-type']='application/json';
   const r=await fetch(url,{method:o.body?'POST':'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
   const d=await r.json().catch(()=>({}));
+  if(r.status===403&&typeof planInsuficiente==='function'&&planInsuficiente(d))throw new Error(d.detail);
   if(!r.ok)throw new Error(d.detail||'No se pudo completar la solicitud.');
   if(typeof d.restantes==='number'&&PERFIL){PERFIL.restantes=d.restantes;$('c-rest').textContent=d.restantes;
     PERFIL.usadas=PERFIL.limite-d.restantes;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite}
   return d;
 }
 
-// ------------------------------------------------------------------------ Modular Lab --
+// ------------------------------------------------------------------------ Laboratorio de casos --
 const ML={opciones:null,area:null,nivel:'basico',caso:null,pistas:0,evaluado:false,confirmarSol:false};
 async function mlInit(){
   if(!ML.opciones){
@@ -625,18 +822,35 @@ async function mlGenerar(variacionDe){
   }catch(e){toast(e.message)}
   if(listo)listo();
 }
+// Caso de repaso centrado en un concepto del mapa o del banco de errores.
+async function practicarConcepto(id,nombre,boton){
+  ver('modular');await mlInit();
+  const orig=boton?boton.textContent:'';if(boton){boton.disabled=true;boton.textContent='Generando…'}
+  toast('Preparando un caso para repasar «'+nombre+'»…');
+  const g=$('ml-generar');const listo=mlOcupado(g,'Generando caso…');
+  try{mlMostrarCaso(await api('/api/modular/caso',{body:{concepto_id:id}}))}catch(e){toast(e.message)}
+  listo();if(boton){boton.disabled=false;boton.textContent=orig}
+}
+async function mlAbrirCaso(id){
+  ver('modular');await mlInit();
+  try{mlMostrarCaso(await api('/api/modular/caso/'+encodeURIComponent(id)))}catch(e){toast(e.message)}
+}
+function explicarConcepto(nombre){
+  usarTool('Explícame el concepto «'+nombre+'» con un ejemplo sencillo y el error más común al aplicarlo en un caso.','ensename')}
+function examinarConcepto(nombre){usarTool('Examíname sobre el concepto «'+nombre+'».','examiname')}
 function mlMostrarCaso(c){
   ML.caso=c;ML.pistas=0;ML.evaluado=false;ML.confirmarSol=false;
   const nombreNivel=(ML.opciones&&ML.opciones.niveles.find(n=>n.id===c.nivel)||{}).nombre||c.nivel;
   const meta=$('ml-meta');meta.textContent='';
-  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']].forEach(([t,k])=>{
+  [[c.area,'tag oro'],[nombreNivel,'tag'],[c.padre_id?'Variación':'Caso nuevo','tag']]
+   .concat(c.foco?[['Repaso: '+c.foco,'tag oro']]:[]).forEach(([t,k])=>{
     const s=document.createElement('span');s.className=k;s.textContent=t;meta.appendChild(s)});
   $('ml-cambio').classList.toggle('hidden',!c.cambio);$('ml-cambio').textContent=c.cambio||'';
   $('ml-titulo').textContent=c.titulo;
   $('ml-enunciado').innerHTML=md(c.enunciado);
   $('ml-pregunta').textContent=c.pregunta;
   $('ml-pistas').textContent='';$('ml-resp').value='';mlContar();
-  $('ml-btn-pista').disabled=!c.n_pistas;$('ml-btn-pista').textContent='Necesito una pista';
+  $('ml-btn-pista').disabled=false;$('ml-btn-pista').textContent=c.n_pistas?'Necesito una pista':'Explícame el concepto';
   $('ml-btn-sol').textContent='Ver solución';
   ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
   $('ml-caso').classList.remove('hidden');
@@ -646,13 +860,25 @@ function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length
   $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
 async function mlPista(){
   if(!ML.caso)return;
+  if(ML.pistas>=(ML.caso.n_pistas||0))return mlExplicame();
   try{
     const p=await api('/api/modular/pista',{body:{caso_id:ML.caso.id,n:ML.pistas}});
     const d=document.createElement('div');d.className='pista';
     const b=document.createElement('b');b.textContent='Pista '+(p.n+1)+': ';d.appendChild(b);
     d.appendChild(document.createTextNode(p.pista));$('ml-pistas').appendChild(d);
     ML.pistas++;
-    if(!p.quedan){$('ml-btn-pista').disabled=true;$('ml-btn-pista').textContent='Sin más pistas'}
+    if(!p.quedan){$('ml-btn-pista').textContent='Explícame el concepto'}
+  }catch(e){toast(e.message)}
+}
+// Tercer escalón de ayuda (después de las pistas y antes de la solución): una explicación del
+// concepto en el chat, sin resolver el caso.
+async function mlExplicame(){
+  try{
+    const d=await api('/api/modular/conceptos?caso_id='+ML.caso.id);
+    if(!d.conceptos.length){toast('Este caso no tiene conceptos registrados.');return}
+    usarTool('Estoy resolviendo un caso de práctica y no quiero que me des la respuesta. Explícame '+
+      (d.conceptos.length>1?'estos conceptos: ':'este concepto: ')+d.conceptos.join(', ')+
+      '. Usa un ejemplo distinto a mi caso.','ensename');
   }catch(e){toast(e.message)}
 }
 async function mlEvaluar(){
@@ -696,6 +922,16 @@ function mlMostrarEval(ev){
   if(ev.contraargumento){const c=document.createElement('div');c.className='ev-contra';
     const b=document.createElement('b');b.textContent='Argumento contrario que no consideraste: ';
     c.appendChild(b);c.appendChild(document.createTextNode(ev.contraargumento));p.appendChild(c)}
+  if(ev.conocimiento&&ev.conocimiento.length){
+    const box=document.createElement('div');box.className='aprendido';
+    const h4=document.createElement('h4');h4.textContent='Tu mapa se actualizó';box.appendChild(h4);
+    const ul=document.createElement('ul');
+    const txt={fallo:'lo confundiste: vuelve a aparecer en tus repasos mañana',acierto:'bien aplicado: el próximo repaso se aleja',visto:'registrado en tu mapa'};
+    ev.conocimiento.forEach(c=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=c.nombre;
+      li.appendChild(b);li.appendChild(document.createTextNode(' — '+(txt[c.resultado]||'')));ul.appendChild(li)});
+    box.appendChild(ul);
+    const ir=document.createElement('button');ir.type='button';ir.textContent='Ver mi mapa';ir.addEventListener('click',()=>ver('mapa'));
+    box.appendChild(ir);p.appendChild(box)}
   const acc=document.createElement('div');acc.className='ml-acc';
   [['Ver solución','bsec','mlSolucion'],['¿Qué cambia si…? (variación)','bsec','mlVariacion'],['Nuevo caso','bpri','mlNuevo']]
     .forEach(([t,k,f])=>{const b=document.createElement('button');b.className=k;b.textContent=t;b.dataset.click=f;acc.appendChild(b)});
@@ -756,6 +992,318 @@ async function mlProgreso(){
     p.a_reforzar.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;
       b.addEventListener('click',()=>usarTool('Quiero entender bien este concepto porque me equivoco con él: '+t,'ensename'));o.appendChild(b)});
     c.appendChild(o)}
+}
+
+// ------------------------------------------------------------------ Academia: tablero --
+const NOMBRE_EST={dominado:'Dominado',en_progreso:'En progreso',debil:'Débil',sin_evaluar:'Sin evaluar'};
+const NOMBRE_NIVEL={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado',experto:'Experto'};
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function estadoChip(est){return el('span','est '+est,NOMBRE_EST[est]||est)}
+function boton(txt,cls,fn){const b=el('button',cls,txt);b.type='button';b.addEventListener('click',()=>fn(b));return b}
+async function cargarTablero(){
+  const t=$('tablero');
+  if(CAMINO!=='aprender'){t.classList.add('hidden');return}
+  if(typeof tieneFuncion==='function'&&!tieneFuncion('academia')){ // sin Academia: una invitación, sin llamar a la API
+    t.textContent='';const c=el('div','tcard mejora-tc');const k=el('div','k');k.appendChild(plIcono('candado'));
+    k.appendChild(document.createTextNode(' Laboratorio de casos · plan '+plNombre(plRequerido('academia'))));c.appendChild(k);
+    c.appendChild(el('div','v','Practica casos tipo examen y deja que PULLEX te evalúe'));
+    c.appendChild(el('div','s','Rúbrica, mapa de lo que dominas y repasos espaciados. Mientras tanto, «Enséñame», «Resuélvelo conmigo» y «Examíname» funcionan en Consultar.'));
+    c.appendChild(boton('Conocer el plan '+plNombre(plRequerido('academia')),'bsec',()=>ver('modular')));
+    t.appendChild(c);t.classList.remove('hidden');return}
+  if(!t.children.length){ // esqueleto mientras llega el tablero (clase distinta de .tcard a propósito)
+    for(let i=0;i<2;i++){const c=el('div','tcard-esq panel');c.style.cssText='margin:0;padding:16px 18px';
+      [40,85,60].forEach(w=>{const k=el('div','skel');k.style.width=w+'%';c.appendChild(k)});t.appendChild(c)}
+    t.classList.remove('hidden')}
+  let r;try{r=await api('/api/academia/resumen')}catch(e){t.textContent='';t.classList.add('hidden');return}
+  t.textContent='';
+  const card=(k,v,sub,acc,cls)=>{const c=el('div','tcard'+(cls?' '+cls:''));c.appendChild(el('div','k',k));
+    c.appendChild(el('div','v',v));if(sub)c.appendChild(el('div','s',sub));if(acc)c.appendChild(acc);t.appendChild(c)};
+  const rec=r.caso_recomendado;
+  if(rec){
+    const v=rec.concepto?rec.concepto+' · '+rec.area:rec.area;
+    card('Caso recomendado',v,rec.motivo+' Nivel sugerido: '+(NOMBRE_NIVEL[rec.nivel]||rec.nivel)+'.',
+      boton('Practicar ahora','bpri',b=>rec.concepto_id?practicarConcepto(rec.concepto_id,rec.concepto,b)
+        :(ver('modular'),mlInit().then(()=>mlElegir(rec.area,rec.nivel)))),'rec')}
+  if(r.continuar)card('Continuar estudiando',r.continuar.titulo,r.continuar.area+' · caso sin responder',
+    boton('Retomar caso','bsec',()=>mlAbrirCaso(r.continuar.caso_id)));
+  if(r.proximo_repaso&&(r.n_repasos_hoy>1||!rec||rec.concepto_id!==r.proximo_repaso.id)){const pr=r.proximo_repaso;
+    card('Próximo repaso',pr.nombre,pr.area+' · '+(r.n_repasos_hoy>1?r.n_repasos_hoy+' conceptos para hoy':'toca '+pr.proximo_texto),
+      boton('Ver repasos','bsec',()=>ver('mapa')))}
+  if(r.tema_debil&&(!rec||rec.concepto_id!==r.tema_debil.id))card('Tema débil',r.tema_debil.nombre,
+    'Lo has confundido '+r.tema_debil.fallos+(r.tema_debil.fallos===1?' vez':' veces')+'.',
+    boton('Explícamelo','bsec',()=>explicarConcepto(r.tema_debil.nombre)));
+  if(r.ultimo_modular)card('Último caso',r.ultimo_modular.titulo,r.ultimo_modular.area+' · '+r.ultimo_modular.puntaje+'/100',
+    boton('Mi mapa','bsec',()=>ver('mapa')));
+  t.classList.toggle('hidden',!t.children.length);
+}
+function mlElegir(area,nivel){
+  [['area',area,'ml-areas'],['nivel',nivel,'ml-niveles']].forEach(([k,v,id])=>{if(!v)return;ML[k]=v;
+    const items=k==='area'?ML.opciones.areas:ML.opciones.niveles.map(n=>n.id);
+    [...$(id).children].forEach((b,i)=>b.classList.toggle('on',items[i]===v))});
+  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'});
+  toast('Elegí '+area+(nivel?' · '+(NOMBRE_NIVEL[nivel]||nivel):'')+'. Pulsa «Generar caso».');
+}
+
+// ------------------------------------------------------------------ Academia: Mi mapa --
+const MAPA={datos:null,area:null,sel:null};
+async function mapaInit(){
+  let d,err,res;
+  try{[d,err,res]=await Promise.all([api('/api/academia/mapa'),api('/api/academia/errores'),api('/api/academia/resumen')])}
+  catch(e){toast(e.message);return}
+  MAPA.datos=d;
+  const rs=$('mapa-res');rs.textContent='';
+  ['dominado','en_progreso','debil','sin_evaluar'].forEach(k=>{const c=el('div');c.appendChild(el('b',null,d.resumen[k]));
+    c.appendChild(estadoChip(k));rs.appendChild(c)});
+  pintarRepasos(res);pintarErrores(err.errores);
+  if(!MAPA.area){const deb=d.areas.find(a=>a.resumen.debil);MAPA.area=(deb||d.areas[0]).area}
+  const ar=$('mapa-areas');ar.textContent='';
+  d.areas.forEach(a=>{const b=boton(a.area+(a.resumen.debil?' · '+a.resumen.debil+(a.resumen.debil===1?' débil':' débiles'):''),'',()=>{MAPA.area=a.area;MAPA.sel=null;pintarAreaMapa()});
+    b.setAttribute('role','tab');ar.appendChild(b)});
+  pintarAreaMapa();
+}
+function filaConcepto(c,extra,acciones){
+  const f=el('div','rep');const t=el('div','t');t.appendChild(el('b',null,c.nombre));
+  t.appendChild(el('span',null,extra));f.appendChild(t);
+  const a=el('div','racc');acciones.forEach(x=>a.appendChild(x));f.appendChild(a);return f;
+}
+function pintarRepasos(r){
+  const c=$('mapa-hoy-cuerpo');
+  if(!r.proximo_repaso){c.className='vacio';return}
+  c.className='rep-lista';c.textContent='';
+  const lista=r.repasos_hoy.length?r.repasos_hoy:[r.proximo_repaso];
+  if(!r.repasos_hoy.length)c.appendChild(el('div','vacio','Nada pendiente para hoy. Tu próximo repaso:'));
+  lista.forEach(x=>c.appendChild(filaConcepto(x,x.area+' · '+(x.proximo_texto==='hoy'?'toca hoy':'toca '+x.proximo_texto),
+    [estadoChip(x.estado),boton('Practicar','bpri',b=>practicarConcepto(x.id,x.nombre,b))])));
+}
+function pintarErrores(lista){
+  const c=$('mapa-err-cuerpo');
+  if(!lista.length){c.className='vacio';return}
+  c.className='rep-lista';c.textContent='';
+  lista.forEach(e=>{
+    const extra=e.area+' · lo confundiste '+e.frecuencia+(e.frecuencia===1?' vez':' veces')+(e.resuelto?' · superado':'');
+    const sev=el('span','sev '+e.severidad,e.resuelto?'superado':'severidad '+e.severidad);
+    const f=filaConcepto(e,extra,[sev,estadoChip(e.estado),
+      boton('Explícamelo','bsec',()=>explicarConcepto(e.nombre)),
+      boton('Practicar','bpri',b=>practicarConcepto(e.id,e.nombre,b))]);
+    if(e.resuelto)f.classList.add('superado');c.appendChild(f)});
+}
+function pintarAreaMapa(){
+  const a=MAPA.datos.areas.find(x=>x.area===MAPA.area);
+  [...$('mapa-areas').children].forEach((b,i)=>{const on=MAPA.datos.areas[i].area===a.area;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
+  const info=$('mapa-area-info');info.textContent='';
+  const partes=[['Dominados',a.resumen.dominado],['En progreso',a.resumen.en_progreso],['Débiles',a.resumen.debil]];
+  partes.forEach(([t,n],i)=>{info.appendChild(document.createTextNode((i?' · ':'')+t+': '));info.appendChild(el('b',null,n))});
+  info.appendChild(document.createTextNode(a.promedio!=null?' · Promedio en casos: ':' · Aún sin casos resueltos en esta área'));
+  if(a.promedio!=null){info.appendChild(el('b',null,a.promedio+'/100'))}
+  info.appendChild(document.createTextNode(' · Nivel sugerido: '));info.appendChild(el('b',null,NOMBRE_NIVEL[a.nivel_recomendado]));
+  const cont=$('mapa-temas');cont.textContent='';
+  a.temas.forEach(t=>{
+    const s=el('div','tema');s.appendChild(el('h4',null,t.tema));
+    const g=el('div','nodos');
+    t.conceptos.forEach(c=>{
+      const n=el('button','nodo '+c.estado);n.type='button';n.setAttribute('aria-expanded',MAPA.sel===c.id);
+      n.appendChild(el('span',null,c.nombre));n.appendChild(estadoChip(c.estado));
+      n.addEventListener('click',()=>{MAPA.sel=MAPA.sel===c.id?null:c.id;pintarAreaMapa()});
+      if(MAPA.sel===c.id)n.classList.add('sel');
+      g.appendChild(n);
+      if(MAPA.sel===c.id){
+        const d=el('div','nodo-det');d.appendChild(el('b',null,c.nombre));d.appendChild(el('p',null,c.desc));
+        const hist=c.aciertos||c.fallos?'Aciertos: '+c.aciertos+' · Errores: '+c.fallos+(c.proximo_texto?' · Próximo repaso: '+c.proximo_texto:''):'Aún no lo has practicado.';
+        d.appendChild(el('p',null,hist));
+        const acc=el('div','racc');
+        if(a.practicable)acc.appendChild(boton('Practicar este concepto','bpri',b=>practicarConcepto(c.id,c.nombre,b)));
+        acc.appendChild(boton('Explícamelo','bsec',()=>explicarConcepto(c.nombre)));
+        acc.appendChild(boton('Examíname','bsec',()=>examinarConcepto(c.nombre)));
+        d.appendChild(acc);g.appendChild(d);
+      }
+    });
+    s.appendChild(g);cont.appendChild(s);
+  });
+}
+
+// ------------------------------------------------------------- Apariencia (por usuario) --
+// El motor de color y los atributos de <html> están en static/apariencia.js (PXA), que corre antes de
+// pintar. Aquí: los controles de Ajustes → Apariencia, el guardado en la cuenta (con espera corta para
+// no enviar una petición por cada clic) y las imágenes (fondo del Inicio, foto de perfil, logo).
+const TEMAS_AP=[
+  {id:'pullex',n:'PULLEX',d:'Papel, tinta y bermellón',c:['#f7f5f0','#1b1a17','#b33a16'],o:['#141311','#eeebe4','#ee7a4f']},
+  {id:'notario',n:'Notario',d:'Marfil y tinta',c:['#fbf8f1','#1a1d24','#22385e'],o:['#101218','#ece8df','#a9bee3']},
+  {id:'bogota',n:'Bogotá',d:'Gris piedra y pizarra',c:['#efefec','#1c1f22','#2d5876'],o:['#151718','#e8eaeb','#8db7d6']},
+  {id:'caribe',n:'Caribe',d:'Arena y turquesa',c:['#f8f3e8','#1d2321','#0a7570'],o:['#0f1716','#eaf1ee','#3cc7bd']},
+  {id:'toga',n:'Toga',d:'Negro y vino',c:['#f5f4f2','#121212','#7b1e34'],o:['#0a0a0a','#f0edee','#d96f87']},
+  {id:'jardin',n:'Jardín',d:'Verde salvia',c:['#f2f4ef','#1a1f1b','#43654e'],o:['#121613','#e9eee9','#9bc4a5']}];
+const ACENTOS_AP=[['Bermellón','#b33a16'],['Tinta','#22385e'],['Cobalto','#2f54c9'],['Turquesa','#0a7570'],
+  ['Salvia','#43654e'],['Vino','#7b1e34'],['Ocre','#93600c'],['Grafito','#3d3c39']];
+const FUENTES_AP=[['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
+  ['clasica','Clásica','Source Serif','var(--serif-lectura)'],['moderna','Moderna','Inter','var(--sans)']];
+const IMGS_AP={fondo:['Fondo del Inicio','Una foto tuya, de tu ciudad o de tu oficina. Se ajusta a 1600 px.',350],
+  avatar:['Foto de perfil','Se recorta en cuadrado de 256 px.',120],logo:['Logo propio','Reemplaza el monograma en la cabecera. PNG con fondo transparente queda mejor.',120]};
+const AP={datos:null,pend:{},timer:null,urls:{fondo:null,avatar:null,logo:null},hecho:false};
+
+function apIniciar(){
+  const a=(PERFIL&&PERFIL.preferencias&&PERFIL.preferencias.apariencia)||{};
+  AP.datos=PXA.normalizar(a);PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);
+  construirApariencia();apRefrescar();cargarImagenesAp();
+}
+function apEstado(t,ok){const e=$('ap-estado');if(!e)return;e.textContent=t||'';e.classList.toggle('ok',!!ok)}
+// Aplica en vivo, guarda en este navegador (para pintar rápido la próxima vez) y en la cuenta.
+function apCambiar(c){
+  AP.datos={...(AP.datos||PXA.actual()),...c};PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);apRefrescar();
+  Object.assign(AP.pend,c);clearTimeout(AP.timer);apEstado('Guardando…');AP.timer=setTimeout(apGuardar,450);
+}
+async function apGuardar(){
+  const pend=AP.pend;AP.pend={};if(!Object.keys(pend).length)return;
+  try{const d=await api('/api/preferencias',{body:{apariencia:pend}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};apEstado('Guardado en tu cuenta',true)}
+  catch(e){apEstado('No se pudo guardar');toast(e.message)}
+}
+function boton2(cls,fn){const b=el('button',cls);b.type='button';b.addEventListener('click',()=>fn(b));return b}
+function icoUse(id,cls){return '<svg class="i '+(cls||'s')+'" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+function construirApariencia(){
+  const c=$('ap-controles');if(!c||AP.hecho)return;AP.hecho=true;c.textContent='';
+  const titulo=t=>c.appendChild(el('div','lb2',t));
+  const seg=(clave,ops)=>{const g=el('div','seg');g.setAttribute('role','radiogroup');g.dataset.clave=clave;
+    ops.forEach(([v,t,ic])=>{const b=boton2('',()=>apCambiar({[clave]:v}));b.dataset.v=v;b.setAttribute('role','radio');
+      if(ic)b.innerHTML=icoUse(ic,'xs');b.appendChild(document.createTextNode(t));g.appendChild(b)});return g};
+  titulo('Modo');
+  c.appendChild(seg('modo',[['claro','Claro','sol'],['oscuro','Oscuro','luna'],['auto','Automático','auto']]));
+  titulo('Tema');
+  const tg=el('div','temas');tg.id='ap-temas';
+  TEMAS_AP.forEach(t=>{const b=boton2('tema-op',()=>apCambiar({tema:t.id,acento:null}));b.dataset.v=t.id;
+    const m=el('span','mues');m.innerHTML='<i class="l1"></i><i class="l2"></i><i class="pt"></i>';b.appendChild(m);
+    const n=el('span','nom',t.n);n.appendChild(el('span',null,t.d));b.appendChild(n);tg.appendChild(b)});
+  c.appendChild(tg);
+  titulo('Color de acento');
+  const ac=el('div','acentos');ac.id='ap-acentos';
+  const delTema=boton2('acento-tema',()=>apCambiar({acento:null}));delTema.textContent='El del tema';delTema.dataset.v='';ac.appendChild(delTema);
+  ACENTOS_AP.forEach(([n,h])=>{const b=boton2('acento-op',()=>apCambiar({acento:h}));b.dataset.v=h;b.title=n;
+    b.setAttribute('aria-label','Acento '+n);b.style.background=h;ac.appendChild(b)});
+  const lib=el('label','acento-libre');lib.title='Elige cualquier color: PULLEX ajusta el contraste para que se lea bien';
+  lib.appendChild(document.createTextNode('Otro'));
+  const inp=document.createElement('input');inp.type='color';inp.id='ap-color';inp.value='#b33a16';inp.setAttribute('aria-label','Color de acento libre');
+  inp.addEventListener('input',()=>apCambiar({acento:inp.value.toLowerCase()}));lib.appendChild(inp);ac.appendChild(lib);
+  c.appendChild(ac);
+  titulo('Tipografía');
+  const fg=el('div','fuentes-op');fg.id='ap-fuentes';
+  FUENTES_AP.forEach(([v,n,d,f])=>{const b=boton2('fuente-op',()=>apCambiar({fuente:v}));b.dataset.v=v;
+    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':'560';b.appendChild(aa);
+    b.appendChild(el('span','n',n+' · '+d));fg.appendChild(b)});
+  c.appendChild(fg);
+  const g3=el('div','ap-grid3');
+  [['Tamaño del texto','tamano',[['normal','Normal'],['grande','Grande']]],
+   ['Densidad','densidad',[['comoda','Cómoda'],['compacta','Compacta']]],
+   ['Esquinas','radio',[['recto','Rectas'],['suave','Suaves'],['redondo','Redondas']]]].forEach(([t,k,ops])=>{
+    const w=el('div');w.appendChild(el('div','lb2',t));w.appendChild(seg(k,ops));g3.appendChild(w)});
+  c.appendChild(g3);
+  titulo('Imágenes');
+  Object.entries(IMGS_AP).forEach(([tipo,[n,d]])=>{
+    const f=el('div','img-fila');
+    const mini=el('span','mini'+(tipo==='avatar'?' red':tipo==='logo'?' logo':''));mini.id='ap-mini-'+tipo;
+    mini.innerHTML=icoUse('imagen','s');f.appendChild(mini);
+    const tx=el('div','tx');tx.appendChild(el('b',null,n));tx.appendChild(el('span',null,d));f.appendChild(tx);
+    const bt=el('div','bt');
+    const file=document.createElement('input');file.type='file';file.accept='image/png,image/jpeg,image/webp';file.className='hidden';
+    file.id='ap-file-'+tipo;file.addEventListener('change',()=>apSubir(tipo,file));
+    const sub=boton2('bsec',()=>file.click());sub.id='ap-subir-'+tipo;sub.innerHTML=icoUse('subir','xs');sub.appendChild(document.createTextNode('Subir'));
+    const qui=boton2('bghost',()=>apQuitar(tipo));qui.id='ap-quitar-'+tipo;qui.textContent='Quitar';
+    bt.appendChild(file);bt.appendChild(sub);bt.appendChild(qui);f.appendChild(bt);c.appendChild(f)});
+  const pie=el('div','ap-pie');
+  pie.appendChild(boton2('bsec',apRestablecer)).textContent='Restablecer apariencia';
+  pie.appendChild(el('p',null,'Los colores se ajustan solos para que el texto siempre se lea bien (contraste AA).'));
+  c.appendChild(pie);
+}
+// Marca la opción activa de cada control y pinta las muestras de tema según el modo actual.
+function apRefrescar(){
+  sincronizarSwTema();
+  const a=AP.datos||PXA.actual();const c=$('ap-controles');if(!c||!AP.hecho)return;
+  const oscuro=document.documentElement.getAttribute('data-esquema')==='oscuro';
+  c.querySelectorAll('.seg').forEach(g=>{[...g.children].forEach(b=>{const on=a[g.dataset.clave]===b.dataset.v;
+    b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on))})});
+  $('ap-temas').querySelectorAll('.tema-op').forEach((b,i)=>{const t=TEMAS_AP[i],k=oscuro?t.o:t.c;
+    b.classList.toggle('on',a.tema===t.id);b.setAttribute('aria-pressed',String(a.tema===t.id));
+    const m=b.querySelector('.mues');m.style.background=k[0];
+    m.querySelector('.l1').style.background=k[1];m.querySelector('.l2').style.background=k[1];m.querySelector('.pt').style.background=k[2]});
+  let libre=!!a.acento;
+  $('ap-acentos').querySelectorAll('.acento-op,.acento-tema').forEach(b=>{const on=(b.dataset.v||null)===a.acento;
+    if(on&&a.acento)libre=false;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+  const lib=$('ap-acentos').querySelector('.acento-libre');lib.classList.toggle('on',libre);
+  if(a.acento&&$('ap-color').value!==a.acento)$('ap-color').value=a.acento;
+  $('ap-fuentes').querySelectorAll('.fuente-op').forEach(b=>{const on=b.dataset.v===a.fuente;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+}
+
+// ---- imágenes: se ajustan en el navegador (canvas) y viajan como data URL JPEG/PNG; el servidor
+// vuelve a validar tipo real, peso y dimensiones. Se muestran como blob: (o data:) — CSP img-src lo permite.
+function bytesDataUrl(u){const b=(u.split(',')[1]||'');return Math.floor(b.length*3/4)}
+function cargarImagen(file){return new Promise((ok,mal)=>{const u=URL.createObjectURL(file);const im=new Image();
+  im.onload=()=>{ok(im);URL.revokeObjectURL(u)};
+  im.onerror=()=>{URL.revokeObjectURL(u);mal(new Error('No pudimos leer esa imagen. Prueba con un JPG o PNG.'))};im.src=u})}
+async function procesarImagen(file,tipo){
+  if(!/^image\/(png|jpeg|webp)$/i.test(file.type||''))throw new Error('Usa una imagen JPG, PNG o WebP.');
+  if(file.size>20*1024*1024)throw new Error('La imagen es muy grande (máximo 20 MB).');
+  const im=await cargarImagen(file),W=im.naturalWidth,H=im.naturalHeight;
+  if(!W||!H)throw new Error('No pudimos leer esa imagen.');
+  const tope=IMGS_AP[tipo][2]*1024,c=document.createElement('canvas'),x=c.getContext('2d');
+  const pintar=(w,h,sx,sy,sw,sh,fondo)=>{c.width=w;c.height=h;x.clearRect(0,0,w,h);
+    if(fondo){x.fillStyle=fondo;x.fillRect(0,0,w,h)}x.imageSmoothingQuality='high';x.drawImage(im,sx,sy,sw,sh,0,0,w,h)};
+  const jpeg=calidades=>{for(const q of calidades){const u=c.toDataURL('image/jpeg',q);if(bytesDataUrl(u)<=tope)return u}return null};
+  if(tipo==='avatar'){const l=Math.min(W,H);pintar(256,256,(W-l)/2,(H-l)/2,l,l,'#ffffff');
+    const u=jpeg([.86,.76,.66]);if(u)return u;throw new Error('No pudimos reducir la foto lo suficiente.')}
+  if(tipo==='logo'){const e=Math.min(1,512/W,128/H);const w=Math.max(1,Math.round(W*e)),h=Math.max(1,Math.round(H*e));
+    pintar(w,h,0,0,W,H,null);const u=c.toDataURL('image/png');if(bytesDataUrl(u)<=tope)return u;
+    pintar(w,h,0,0,W,H,'#ffffff');const j=jpeg([.9,.8]);if(j)return j;throw new Error('El logo pesa demasiado. Prueba con uno más sencillo.')}
+  let lado=1600;
+  for(let i=0;i<6;i++){const e=Math.min(1,lado/Math.max(W,H));pintar(Math.round(W*e),Math.round(H*e),0,0,W,H,'#ffffff');
+    const u=jpeg([.8,.72,.64,.56]);if(u)return u;lado=Math.round(lado*.82)}
+  throw new Error('No pudimos reducir la imagen lo suficiente. Prueba con otra.');
+}
+function ponerImagen(tipo,url){const v=AP.urls[tipo];if(v&&v!==url&&v.startsWith('blob:'))URL.revokeObjectURL(v);AP.urls[tipo]=url;pintarImagenes()}
+function pintarImagenes(){
+  const {fondo,avatar,logo}=AP.urls;
+  ['hero','pv-hero'].forEach(id=>{const h=$(id);if(!h)return;h.classList.toggle('con-fondo',!!fondo);
+    if(fondo)h.style.setProperty('--fondo-inicio','url("'+fondo+'")');else h.style.removeProperty('--fondo-inicio')});
+  [['h-avatar-img','h-iniciales'],['cf-avatar-img','cf-iniciales'],['pv-avatar-img','pv-iniciales']].forEach(([i,t])=>{
+    const im=$(i);if(avatar)im.src=avatar;else im.removeAttribute('src');im.classList.toggle('hidden',!avatar);$(t).classList.toggle('hidden',!!avatar)});
+  document.querySelector('.h-logo').classList.toggle('con-logo',!!logo);
+  [['h-logo-img','h-mono'],['pv-logo','pv-mono']].forEach(([i,m])=>{
+    const im=$(i);if(logo)im.src=logo;else im.removeAttribute('src');im.classList.toggle('hidden',!logo);$(m).classList.toggle('hidden',!!logo)});
+  Object.keys(IMGS_AP).forEach(tipo=>{const m=$('ap-mini-'+tipo);if(!m)return;const u=AP.urls[tipo];
+    if(u){m.textContent='';const im=document.createElement('img');im.alt='';im.src=u;m.appendChild(im)}else m.innerHTML=icoUse('imagen','s');
+    $('ap-quitar-'+tipo).classList.toggle('hidden',!u);
+    const s=$('ap-subir-'+tipo);s.lastChild.textContent=u?'Cambiar':'Subir'});
+}
+async function cargarImagenesAp(){
+  const v=(PERFIL.preferencias.apariencia&&PERFIL.preferencias.apariencia.imagenes)||{};
+  pintarImagenes();
+  await Promise.all(Object.keys(IMGS_AP).map(async tipo=>{
+    if(!v[tipo]){ponerImagen(tipo,null);return}
+    try{const r=await fetch('/api/apariencia/imagen/'+tipo,{headers:auth()});
+      if(r.ok)ponerImagen(tipo,URL.createObjectURL(await r.blob()))}catch(e){}
+  }));
+}
+async function apSubir(tipo,input){
+  const f=input.files&&input.files[0];input.value='';if(!f)return;
+  const b=$('ap-subir-'+tipo);b.disabled=true;apEstado('Ajustando la imagen…');
+  try{const url=await procesarImagen(f,tipo);
+    const d=await api('/api/preferencias',{body:{apariencia:{[tipo]:url}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};ponerImagen(tipo,url);
+    apEstado('Imagen guardada en tu cuenta',true);
+    if(tipo==='fondo')toast('Listo: así se verá tu Inicio.');
+  }catch(e){apEstado('');toast(e.message||'No se pudo usar esa imagen.')}
+  b.disabled=false;
+}
+async function apQuitar(tipo){
+  try{const d=await api('/api/preferencias',{body:{apariencia:{[tipo]:null}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};ponerImagen(tipo,null);apEstado('Imagen quitada',true)}
+  catch(e){toast(e.message)}
+}
+async function apRestablecer(){
+  if(!confirm('¿Volver a la apariencia original de PULLEX? También se quitan tu fondo, tu foto y tu logo.'))return;
+  clearTimeout(AP.timer);AP.pend={};
+  AP.datos={...PXA.DEFECTO};PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);apRefrescar();
+  try{const d=await api('/api/preferencias',{body:{apariencia:{...PXA.DEFECTO,fondo:null,avatar:null,logo:null}}});
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};
+    Object.keys(IMGS_AP).forEach(t=>ponerImagen(t,null));apEstado('Apariencia restablecida',true)}
+  catch(e){toast(e.message)}
 }
 
 // ---------------------------------------------------------------------------------------

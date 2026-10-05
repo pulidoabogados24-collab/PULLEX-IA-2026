@@ -1,60 +1,90 @@
 <!doctype html>
-<html lang="es-CO">
+<html lang="es-CO" data-tema="pullex" data-esquema="claro">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PULLEX IA — Administración</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f7f5f0">
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/tema.css">
+<script src="/static/apariencia.js"></script>
 <style>
-:root{--azul:#0A1E3F;--azul2:#0E2A57;--azul3:#12356e;--linea:#1c3f74;--oro:#FFC93C;--oro2:#FDB813;
-  --txt:#eaf0fb;--txt2:#a9bad6;--ok:#39d98a;--mal:#ff6b6b}
-*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--azul);color:var(--txt)}
-.tricolor{height:4px;background:linear-gradient(90deg,var(--oro) 0 33%,#0033a0 33% 66%,#ce1126 66% 100%)}
-header{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--azul2);border-bottom:1px solid var(--linea)}
-header b{color:var(--oro)}
-.wrap{max-width:1000px;margin:0 auto;padding:20px 16px}
-.card{background:var(--azul2);border:1px solid var(--linea);border-radius:16px;padding:22px;max-width:400px;margin:8vh auto}
-.inp{width:100%;padding:12px 13px;border-radius:11px;background:var(--azul);border:1px solid var(--linea);color:var(--txt);font-size:15px;outline:none;margin-top:6px}
-.btn{padding:12px 16px;border-radius:11px;background:linear-gradient(180deg,var(--oro),var(--oro2));color:#20170a;font-weight:800;border:0;cursor:pointer;font-size:14px}
-.msg{color:var(--mal);font-size:13px;min-height:16px;margin-top:8px}
-label{font-size:12px;color:var(--txt2)}
-.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.stat{background:var(--azul2);border:1px solid var(--linea);border-radius:14px;padding:14px 18px;flex:1;min-width:120px}
-.stat .n{font-size:24px;font-weight:800;color:var(--oro)}.stat .l{font-size:12px;color:var(--txt2)}
-table{width:100%;border-collapse:collapse;background:var(--azul2);border-radius:14px;overflow:hidden;font-size:13px}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--linea)}
-th{background:var(--azul3);font-size:12px;color:var(--txt2)}
-select,input.min{background:var(--azul);border:1px solid var(--linea);color:var(--txt);border-radius:8px;padding:6px 8px;font-size:12px}
-.pill{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700}
-.on-p{background:rgba(57,217,138,.15);color:var(--ok)}.off-p{background:rgba(255,107,107,.15);color:var(--mal)}
-.bx{padding:6px 11px;border-radius:8px;background:var(--oro);color:#20170a;font-weight:700;border:0;cursor:pointer;font-size:12px}
-.top{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.top button{padding:9px 13px;border-radius:10px;background:var(--azul2);border:1px solid var(--linea);color:var(--txt);cursor:pointer;font-size:13px}
+body{min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:12px 22px;background:var(--surface);border-bottom:1px solid var(--border)}
+header .marca{font-size:1.02rem}
+header .sep{color:var(--text-2);font-size:.875rem}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 48px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 26px;max-width:400px;margin:10vh auto;box-shadow:var(--shadow-lg)}
+.card h3{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);font-size:1.45rem;margin:0 0 4px}
+.card p{color:var(--text-2);font-size:.875rem;margin:0 0 6px}
+.card .btn{width:100%;margin-top:18px;padding:12px}
+.msg{color:var(--danger);font-size:.84rem;min-height:18px;margin-top:10px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.top h1{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);font-size:1.75rem;margin:0 auto 0 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.stat .n{font-size:1.65rem;font-family:var(--font-display);font-weight:var(--display-peso);font-variant-numeric:tabular-nums;color:var(--text)}
+.stat .l{font-size:.78rem;color:var(--text-2);margin-top:2px}
+.tabla{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;box-shadow:var(--shadow);margin-top:20px}
+table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:720px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+th{background:var(--surface-2);font-size:.72rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;font-weight:650}
+select,input.min{background:var(--surface);border:1px solid var(--border-strong);color:var(--text);border-radius:var(--radius-sm);padding:6px 8px;font-size:.8rem}
+.pill{padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:650}
+.on-p{background:color-mix(in oklab,var(--ok) 14%,var(--surface));color:var(--ok)}
+.off-p{background:color-mix(in oklab,var(--danger) 12%,var(--surface));color:var(--danger)}
+.bx{padding:6px 11px;border-radius:var(--radius-sm);background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer;font-size:.76rem;margin:2px 0;border:1px solid transparent}
+.bx.sec{background:var(--surface);color:var(--text);border-color:var(--border)}
+.bx.sec:hover{background:var(--surface-2)}
+.adm{font-size:.68rem;font-weight:650;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-text);background:var(--accent-soft);padding:1px 7px;border-radius:5px;margin-left:6px}
+.correo{color:var(--text-2);font-size:.76rem}
+.hidden{display:none}
+.motores{margin-top:28px}
+.mot-h{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);font-size:1.3rem;margin:18px 0 8px}
+.mot-p{color:var(--text-2);font-size:.875rem;line-height:1.55;margin:0 0 8px;max-width:90ch}
+.mot-adv{color:var(--text);border-left:3px solid var(--warn);padding-left:10px}
+.mot{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-top:12px;box-shadow:var(--shadow)}
+.mot-cab{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:6px}
+.mot-cab h3{margin:0;font-size:1rem}
+.mot-dl{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:6px 16px;margin:8px 0 0;font-size:.84rem;line-height:1.5}
+.mot-dl dt{font-weight:650}
+.mot-dl dd{margin:0;overflow-wrap:anywhere}
+.mot-ul{font-size:.84rem;color:var(--text-2);line-height:1.6}
+@media(max-width:620px){.mot-dl{grid-template-columns:1fr;gap:2px}.mot-dl dd{margin-bottom:6px}}
 </style>
 </head>
 <body>
-<div class="tricolor"></div>
-<header><b>PULLEX</b> IA · Panel de administración</header>
+<header><span class="mono" aria-hidden="true">P</span><span class="marca">PULLEX</span><span class="sep">· Panel de administración</span></header>
 
 <div id="login" class="card">
-  <h3 style="margin-top:0">Ingreso de administrador</h3>
-  <label>Correo</label><input id="e" class="inp" type="email">
-  <label>Contraseña</label><input id="c" class="inp" type="password">
+  <h3>Ingreso de administrador</h3>
+  <p>Solo para la cuenta que gestiona planes y estudiantes.</p>
+  <label class="lb" for="e">Correo</label><input id="e" class="inp" type="email" autocomplete="username">
+  <label class="lb" for="c">Contraseña</label><input id="c" class="inp" type="password" autocomplete="current-password">
   <div id="msg" class="msg"></div>
-  <button class="btn" style="width:100%;margin-top:12px" data-click="entrar">Ingresar</button>
+  <button class="btn" data-click="entrar">Ingresar</button>
 </div>
 
 <div id="panel" class="wrap" style="display:none">
   <div class="top">
-    <button data-click="cargar">↻ Refrescar</button>
-    <button data-click="regenBoletin">📅 Regenerar boletín</button>
-    <a href="/" style="margin-left:auto;color:var(--oro)">← Ir a la app</a>
+    <h1>Estudiantes y negocio</h1>
+    <button class="bsec" data-click="cargar">Refrescar</button>
+    <button class="bsec" data-click="regenBoletin">Regenerar boletín</button>
+    <button class="bsec" data-click="verMotores">Motores de IA</button>
+    <a class="bghost" href="/">Ir a la app</a>
   </div>
   <div class="stats" id="stats"></div>
   <div class="stats" id="negocio"></div>
-  <table>
-    <thead><tr><th>Estudiante</th><th>Plan</th><th>Uso</th><th>Estado</th><th>Acción</th></tr></thead>
-    <tbody id="tb"></tbody>
-  </table>
+  <div class="tabla">
+    <table>
+      <thead><tr><th>Estudiante</th><th>Plan</th><th>Uso</th><th>Estado</th><th>Acción</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+  <section id="motores" class="motores hidden" aria-label="Registro de motores de IA"></section>
 </div>
 
 <script src="/static/admin.js"></script>
