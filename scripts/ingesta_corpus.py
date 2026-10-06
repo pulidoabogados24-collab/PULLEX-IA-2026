@@ -34,6 +34,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -76,11 +77,41 @@ def _pdf_pdftotext(datos: bytes):
     return [(f"pág. {i}", t) for i, t in enumerate(paginas, 1)]
 
 
+_GLIFOS_ENTRE_CORCHETES = re.compile(r"\[\s*(?:/[A-Za-z0-9_.]+\s*)+\]")
+_LIGADURAS = (("/f_f_i", "ffi"), ("/f_f_l", "ffl"), ("/f_i", "fi"), ("/f_l", "fl"), ("/f_f", "ff"))
+_GLIFO_SUELTO = re.compile(r"^/[A-Za-z0-9_.]+$")
+_PUNTOS_GUIA = re.compile(r"\.{5,}")
+
+
+def limpiar_artefactos_pdf(texto: str) -> str:
+    """Quita lo que algunos PDF dejan en vez de letras cuando su tipografía no trae el mapa de
+    caracteres: nombres de glifos entre corchetes («[ /five.taboldstyle ]», típicos de la numeración
+    de página), ligaduras escritas como nombre («a/f_ianzamiento» → «afianzamiento») y las filas de
+    puntos de los índices. Si casi toda la página son nombres de glifos («/0 /1 /i255 …»), el texto
+    es ilegible y se devuelve vacío: es mejor no indexarla que indexar ruido."""
+    if not texto:
+        return ""
+    texto = _GLIFOS_ENTRE_CORCHETES.sub(" ", texto)
+    for glifo, letras in _LIGADURAS:
+        texto = texto.replace(glifo, letras)
+    palabras = texto.split()
+    if len(palabras) >= 20 and sum(1 for p in palabras if _GLIFO_SUELTO.match(p)) > len(palabras) / 2:
+        return ""
+    return _PUNTOS_GUIA.sub(" … ", texto)
+
+
 def extraer_pdf(datos: bytes):
     try:
-        return _pdf_pypdf(datos)
+        paginas = _pdf_pypdf(datos)
     except ImportError:
-        return _pdf_pdftotext(datos)
+        paginas = _pdf_pdftotext(datos)
+    except Exception:
+        # PDF dañado que pypdf no abre (por ejemplo, sin marca de fin de archivo): pdftotext suele
+        # leerlo. Si no está instalado, se conserva el error original para el reporte.
+        if not shutil.which("pdftotext"):
+            raise
+        paginas = _pdf_pdftotext(datos)
+    return [(ubicacion, limpiar_artefactos_pdf(texto)) for ubicacion, texto in paginas]
 
 
 def _docx_xml(datos: bytes):

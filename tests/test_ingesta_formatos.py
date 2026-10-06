@@ -130,3 +130,42 @@ def test_ingesta_privada_de_una_coleccion_de_terceros_no_llega_al_chat(tmp_path)
     db2 = str(tmp_path / "general.db")
     ing.main(["--carpeta", str(base), "--db", db2])                               # sin --privada sí es general
     assert len(fuentes.buscar(pregunta, ruta=db2)) == 1
+
+
+# --------------------------------------------------- artefactos de PDF sin mapa de caracteres --
+def test_pdf_quita_nombres_de_glifos_entre_corchetes_y_repara_ligaduras():
+    sucio = "[ /five.taboldstyle ] Presentación del código, para el a/f_ianzamiento y la e/f_icacia de los derechos"
+    limpio = ing.limpiar_artefactos_pdf(sucio)
+    assert "taboldstyle" not in limpio and "[" not in limpio
+    assert "afianzamiento" in limpio and "eficacia" in limpio
+    assert limpio.strip().startswith("Presentación")
+
+
+def test_pdf_ilegible_por_glifos_sueltos_queda_vacio_y_el_texto_normal_no_cambia():
+    ilegible = " ".join(["/0 /1 /2 /i255 /10 /7 /11 /12"] * 6)
+    assert ing.limpiar_artefactos_pdf(ilegible) == ""
+    normal = "Artículo 86. Toda persona tendrá acción de tutela para reclamar ante los jueces la protección inmediata."
+    assert ing.limpiar_artefactos_pdf(normal) == normal
+    assert ing.limpiar_artefactos_pdf("") == ""
+
+
+def test_pdf_resume_las_filas_de_puntos_de_los_indices():
+    limpio = ing.limpiar_artefactos_pdf("Artículo 136. Control inmediato de legalidad ..................................96")
+    assert "....." not in limpio and "Control inmediato de legalidad" in limpio and "96" in limpio
+
+
+def test_extraer_pdf_aplica_la_limpieza_a_cada_pagina(monkeypatch):
+    monkeypatch.setattr(ing, "_pdf_pypdf", lambda datos: [("pág. 1", "[ /one.taboldstyle ] Texto útil"), ("pág. 2", "")])
+    assert ing.extraer_pdf(b"%PDF") == [("pág. 1", "  Texto útil"), ("pág. 2", "")]
+
+
+def test_pdf_danado_usa_pdftotext_y_sin_el_conserva_el_error_original(monkeypatch):
+    def roto(datos):
+        raise ValueError("Stream has ended unexpectedly")
+    monkeypatch.setattr(ing, "_pdf_pypdf", roto)
+    monkeypatch.setattr(ing.shutil, "which", lambda nombre: "/usr/bin/pdftotext")
+    monkeypatch.setattr(ing, "_pdf_pdftotext", lambda datos: [("pág. 1", "LEY 685 DE 2001")])
+    assert ing.extraer_pdf(b"%PDF") == [("pág. 1", "LEY 685 DE 2001")]
+    monkeypatch.setattr(ing.shutil, "which", lambda nombre: None)
+    with pytest.raises(ValueError, match="Stream has ended"):
+        ing.extraer_pdf(b"%PDF")
