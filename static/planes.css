@@ -11,7 +11,7 @@ nav button.bloq{color:var(--text-2)}
 }
 
 /* ---- tarjetas del Inicio que llevan a una función de otro plan ---- */
-.captarj .plan-tag{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:.68rem;font-weight:650;
+.captarj .plan-tag{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:.75rem;font-weight:650;
   letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--surface-2);
   color:var(--text-2);border:1px solid var(--border)}
 .captarj .plan-tag .i{width:11px;height:11px}
@@ -37,7 +37,7 @@ nav button.bloq{color:var(--text-2)}
 .plan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;
   display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);position:relative}
 .plan-card.rec{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
-.plan-card .pc-sello{position:absolute;top:-10px;left:18px;font-size:.68rem;font-weight:700;letter-spacing:.06em;
+.plan-card .pc-sello{position:absolute;top:-10px;left:18px;font-size:.75rem;font-weight:700;letter-spacing:.06em;
   text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
 .plan-card .pc-nombre{font-weight:650;font-size:1rem;color:var(--text)}
 .plan-card .pc-precio{font-family:var(--font-display);font-size:1.9rem;line-height:1;color:var(--text);
@@ -67,7 +67,7 @@ nav button.bloq{color:var(--text-2)}
 .planes-tabla thead th{vertical-align:bottom}
 .planes-tabla .pt-nombre{display:block;font-weight:650;color:var(--text)}
 .planes-tabla .pt-precio{display:block;font-weight:500;color:var(--text-2);font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
-.planes-tabla .pt-tu{display:inline-block;margin-bottom:4px;font-size:.62rem;font-weight:700;letter-spacing:.06em;
+.planes-tabla .pt-tu{display:inline-block;margin-bottom:4px;font-size:.75rem;font-weight:700;letter-spacing:.06em;
   text-transform:uppercase;padding:2px 6px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
 .planes-tabla .actual{background:var(--accent-soft)}
 .planes-tabla .pt-f{display:block;font-weight:600;color:var(--text)}
@@ -83,7 +83,7 @@ nav button.bloq{color:var(--text-2)}
   .planes-tabla th,.planes-tabla td{padding:9px 3px}
   .planes-tabla .pt-d,.planes-tabla .pt-mes{display:none}
   .planes-tabla th:first-child,.planes-tabla td:first-child{width:31%}
-  .planes-tabla .pt-precio{font-size:.72rem}
+  .planes-tabla .pt-precio{font-size:.75rem}
   .planes-tabla .pt-nombre{font-size:.8rem}
-  .planes-tabla .pt-cta{padding:6px 4px;font-size:.72rem}
+  .planes-tabla .pt-cta{padding:6px 4px;font-size:.75rem}
 }

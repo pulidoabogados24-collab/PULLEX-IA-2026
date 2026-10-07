@@ -1,0 +1,13 @@
+tests/
+demo/
+docs/
+design/
+evaluacion/
+scripts/
+perfiles/REGISTRO.md
+__pycache__/
+*.db
+app_secret.key
+.claude/
+# El índice de fuentes (solo lectura) sí viaja con el despliegue
+!corpus/corpus.db

@@ -22,6 +22,8 @@
 ### D-002 · Modelo IA: Haiku 4.5 (vs Sonnet vs Opus)
 Haiku: 1/5 USD por M tokens → consulta ≈ 40–50 COP → margen sano con plan de $30.000.
 Sonnet/Opus quedan para plan Profesional (V3) donde el precio lo soporte.
+**Actualización oct-2026:** el modelo por defecto pasa a Sonnet 5.5 (precisión y fuentes verificables). El
+impacto en el margen del plan Básico está pendiente de decisión (docs/11, sección de costos).
 
 ### D-003 · Base de datos: SQLite (vs PostgreSQL)
 SQLite: cero configuración y suficiente en V1. **Deuda técnica aceptada y documentada:**

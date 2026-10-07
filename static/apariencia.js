@@ -7,11 +7,17 @@
 // =========================================================================================
 (function(){
 'use strict';
-var OPC={modo:['claro','oscuro','auto'],tema:['pullex','notario','bogota','caribe','toga','jardin'],
-  fuente:['editorial','clasica','moderna'],tamano:['normal','grande'],densidad:['comoda','compacta'],
-  radio:['recto','suave','redondo']};
-var DEFECTO={modo:'claro',tema:'pullex',acento:null,fuente:'editorial',tamano:'normal',densidad:'comoda',radio:'suave'};
-var CLAVE='pullex.apariencia.v1';
+var OPC={modo:['claro','oscuro','auto'],tema:['justicia','pullex','notario','bogota','caribe','toga','jardin'],
+  fuente:['syne','editorial','clasica','moderna'],tamano:['normal','grande'],densidad:['comoda','compacta'],
+  radio:['recto','suave','redondo'],movimiento:['completo','reducido']};
+// Por defecto: tema «Justicia × Inteligencia» en oscuro, con Syne + Plus Jakarta Sans (octubre de 2026).
+// «movimiento» (completo | reducido) se guarda solo en este navegador: el servidor aún no tiene ese campo. Con
+// «reducido», static/movimiento.css apaga todo movimiento no esencial, igual que «prefers-reduced-motion».
+var DEFECTO={modo:'oscuro',tema:'justicia',acento:null,fuente:'syne',tamano:'normal',densidad:'comoda',radio:'suave',movimiento:'completo'};
+// Lo que era el valor por defecto hasta octubre de 2026. Quien lo tenga guardado tal cual nunca eligió otra
+// apariencia: pasa al tema nuevo. Quien cambió cualquier opción conserva la suya (mismo criterio en app.py).
+var ANTERIOR={modo:'claro',tema:'pullex',acento:null,fuente:'editorial',tamano:'normal',densidad:'comoda',radio:'suave'};
+var CLAVE='pullex.apariencia.v2', CLAVE_V1='pullex.apariencia.v1';
 var RE_COLOR=/^#[0-9a-f]{6}$/i;
 var raiz=document.documentElement;
 var actual=null, oyente=null;
@@ -65,9 +71,10 @@ function aplicar(a){
   raiz.setAttribute('data-tema',a.tema);raiz.setAttribute('data-esquema',esq);
   raiz.setAttribute('data-fuente',a.fuente);raiz.setAttribute('data-tamano',a.tamano);
   raiz.setAttribute('data-densidad',a.densidad);raiz.setAttribute('data-radio',a.radio);
+  raiz.setAttribute('data-movimiento',a.movimiento);
   VARS_ACENTO.forEach(function(v){raiz.style.removeProperty(v)});
   if(a.acento){
-    var bg=leerToken('--bg')||'#f7f5f0',sf=leerToken('--surface')||'#ffffff';
+    var bg=leerToken('--bg')||'#101115',sf=leerToken('--surface')||'#17191e';
     if(rgb(bg)&&rgb(sf)){var d=derivar(a.acento,esq==='oscuro',bg,sf);
       raiz.style.setProperty('--accent',d.accent);raiz.style.setProperty('--accent-ink',d.ink);
       raiz.style.setProperty('--accent-soft',d.soft);raiz.style.setProperty('--accent-text',d.texto);}
@@ -84,9 +91,17 @@ function aplicar(a){
   }catch(e){}
   return a;
 }
-function leerLocal(){try{var t=localStorage.getItem(CLAVE);return t?normalizar(JSON.parse(t)):null}catch(e){return null}}
+function esAnterior(a){for(var k in ANTERIOR)if(a[k]!==ANTERIOR[k])return false;return true}
+function leerLocal(){
+  try{var t=localStorage.getItem(CLAVE);if(t)return normalizar(JSON.parse(t));
+    // Navegador que guardó su apariencia con la versión anterior: se conserva solo si era una elección propia.
+    var v=localStorage.getItem(CLAVE_V1);if(!v)return null;
+    var crudo=JSON.parse(v),a=normalizar(crudo),k;
+    for(k in ANTERIOR)if(k!=='acento'&&OPC[k].indexOf(crudo&&crudo[k])<0)a[k]=ANTERIOR[k];
+    return esAnterior(a)?null:a;
+  }catch(e){return null}}
 function guardarLocal(a){try{localStorage.setItem(CLAVE,JSON.stringify(normalizar(a)))}catch(e){}}
-function borrarLocal(){try{localStorage.removeItem(CLAVE)}catch(e){}}
+function borrarLocal(){try{localStorage.removeItem(CLAVE);localStorage.removeItem(CLAVE_V1)}catch(e){}}
 
 window.PXA={OPC:OPC,DEFECTO:DEFECTO,normalizar:normalizar,aplicar:aplicar,leerLocal:leerLocal,guardarLocal:guardarLocal,
   borrarLocal:borrarLocal,derivar:derivar,contraste:contraste,actual:function(){return actual||normalizar(DEFECTO)}};

@@ -1,0 +1,26 @@
+# Archivos que NO deben subirse
+.env
+*.db
+usuarios.json
+app_secret.key
+__pycache__/
+venv/
+bd_vectorial/
+pullex.db
+
+# Secretos y llaves: nunca al repositorio
+.env.*
+!.env.example
+*.key
+*.pem
+.pytest_cache/
+# Claude Code: solo se versionan las skills y los subagentes del proyecto (PUL-018).
+# Todo lo demás de .claude/ (worktrees, ajustes locales, memoria, datos de sesión) queda fuera.
+.claude/*
+!.claude/skills/
+!.claude/agents/
+
+# Motor de fuentes: el índice y la lista de exclusión son del operador (no se suben)
+corpus/*
+!corpus/corpus.db
+evaluacion/resultados/

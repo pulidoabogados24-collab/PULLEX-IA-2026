@@ -1,8 +1,0 @@
-{
- "esquema": "pullex-parametros/1",
- "actualizado": "2026-10-02",
- "nota": "Tabla de valores oficiales para las liquidaciones (salario mínimo, auxilio de transporte, interés bancario corriente, IPC). Solo se admite un valor comprobado en fuente oficial, con enlace y fecha de consulta. HOY ESTÁ VACÍA: mintrabajo.gov.co y suin-juriscol.gov.co no fueron accesibles desde el entorno de trabajo del 2026-10-02 y ningún valor se cargó de memoria. Mientras esté vacía, J06 exige que el usuario indique cada valor con su fuente.",
- "campos_de_cada_parametro": ["nombre", "valor", "unidad", "desde", "hasta", "norma", "enlace", "consultado"],
- "nombres_previstos": ["salario_minimo_mensual", "auxilio_transporte_mensual", "interes_bancario_corriente_ea", "ipc"],
- "parametros": []
-}

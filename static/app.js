@@ -5,10 +5,22 @@ if(LIBS_OK)marked.setOptions({breaks:true});
 const $=id=>document.getElementById(id);
 let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
 function auth(){return {'Authorization':'Bearer '+TOKEN}}
-function md(t){return LIBS_OK?DOMPurify.sanitize(marked.parse(t||'')):esc(t).replace(/\n/g,'<br>')}
+// Si el intérprete de markdown falla con un texto, se muestra como texto plano seguro: la respuesta no se pierde y
+// el envío no queda a medias por un error de pintado.
+function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
 function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+// Aviso breve. Entra y sale con su propia animación (static/movimiento.css); se retira por tiempo, nunca esperando a
+// un «animationend» que podría no llegar. Un aviso nuevo reemplaza al anterior en vez de encimarse.
+function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());
+  const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=m;
+  document.body.appendChild(t);
+  // Tiempo para leerlo: 1,5 s para verlo más 60 ms por carácter (unos 16 caracteres por segundo), entre 2,6 y 10 s.
+  // Los avisos de error del servidor pasan de 100 caracteres: con el tope anterior de 6 s no alcanzaban a leerse.
+  const visible=Math.min(10000,Math.max(2600,1500+String(m||'').length*60));
+  setTimeout(()=>{t.classList.add('sale');setTimeout(()=>t.remove(),180)},visible)}
+// Estado de trabajo REAL de la app, a la vista del CSS (static/movimiento.css): 'ingreso' | 'espera' | 'fuentes' |
+// 'escribe', o nada. Solo se enciende desde los puntos donde de verdad se espera al servidor o llega el stream.
+function trabajo(e){const r=document.documentElement;if(e){if(r.getAttribute('data-trabajo')!==e)r.setAttribute('data-trabajo',e)}else r.removeAttribute('data-trabajo')}
 
 let modoActual='ingresar';
 function modoAuth(m){modoActual=m;
@@ -34,15 +46,23 @@ async function enviarRecuperar(){
   $('rec-btn').disabled=false;$('rec-btn').textContent='Enviar enlace';
 }
 async function enviarAuth(){
+  const b=$('a-btn');if(b.disabled)return;
   const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
   const url=modoActual==='registrar'?'/api/registro':'/api/login';
   const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
+  // Mientras el servidor responde, el botón lo dice y no admite otro clic.
+  b.disabled=true;b.setAttribute('aria-busy','true');
+  b.textContent=modoActual==='registrar'?'Creando tu cuenta…':'Ingresando…';trabajo('ingreso');
+  let d=null;
   try{
     const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(cuerpo)});
-    const d=await r.json();
-    if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';return}
-    TOKEN=d.token;PERFIL=d.perfil;iniciar();
-  }catch(e){$('a-msg').textContent='Error de conexión'}
+    d=await r.json();
+    if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';d=null}
+  }catch(e){$('a-msg').textContent='Error de conexión';d=null}
+  // El rótulo sale del modo que está a la vista AHORA: si la persona cambió de pestaña mientras se esperaba, el botón
+  // no puede quedar diciendo «Ingresar» en el formulario de crear cuenta.
+  b.disabled=false;b.removeAttribute('aria-busy');b.textContent=modoActual==='registrar'?'Crear cuenta':'Ingresar';trabajo(null);
+  if(d){TOKEN=d.token;PERFIL=d.perfil;iniciar()}
 }
 const CAPACIDADES=[
   {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
@@ -97,13 +117,16 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
+let TURNO_VER=0;   // sube en cada cambio de sección; verNav() lo usa para no aplicar un cambio que ya quedó viejo
 function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde Ajustes y no tiene botón propio en la barra
+  TURNO_VER++;
   // Función que el plan no incluye: se marca su pestaña y se muestra la pantalla de mejora (planes.js).
   const bloq=typeof vistaBloqueada==='function'&&vistaBloqueada(v);
   ['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
   $('v-'+x).classList.toggle('on',x===v&&!bloq);$('n-'+x).classList.toggle('on',x===nav);
   if(x===nav)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
   const vp=$('v-perfiles');if(vp)vp.classList.toggle('on',v==='perfiles'&&!bloq);
+  pintarUbicacion(v,nav);
   if($('v-mejora'))$('v-mejora').classList.toggle('on',!!bloq);
   const m=document.querySelector('main');if(m)m.scrollTop=0;
   if(bloq){cerrarHistorial();pintarMejora(VISTA_FUNCION[v]);return}
@@ -115,6 +138,23 @@ function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde
   if(v==='perfiles'&&typeof perInit==='function')perInit();
   if(v==='inicio')cargarProgresoInicio();}
 
+// Miga «Espacio de trabajo / <sección>» (escritorio) y menú «Más» de la barra inferior (móvil): el nombre sale
+// del propio botón de la sección, para no repetir la lista en otro sitio.
+const NAV_MAS=['mapa','herramientas','config'];
+function pintarUbicacion(v,nav){
+  const b=$('n-'+nav),m=$('miga-seccion');
+  if(m&&b){const t=b.querySelector('.l-largo')||b.querySelector('span');m.textContent=v==='perfiles'?'Ajustes · Perfiles':(t?t.textContent:'')}
+  const mas=$('n-mas');if(mas)mas.classList.toggle('on',NAV_MAS.includes(nav));
+  cerrarMas();
+}
+function toggleMas(){const c=$('nav-mas'),b=$('n-mas');if(!c||!b)return;
+  const abierto=c.classList.toggle('abierto');b.setAttribute('aria-expanded',String(abierto));
+  if(abierto){const p=c.querySelector('button');if(p)p.focus()}}
+function cerrarMas(){const c=$('nav-mas'),b=$('n-mas');if(!c||!b||!c.classList.contains('abierto'))return false;
+  c.classList.remove('abierto');b.setAttribute('aria-expanded','false');return true}
+document.addEventListener('click',ev=>{if(!ev.target.closest('#n-mas,#nav-mas'))cerrarMas()});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&cerrarMas())$('n-mas').focus()});
+
 async function cargarBoletin(forzar){
   if(forzar)$('boletin').innerHTML='<div class="skel" style="width:90%"></div><div class="skel" style="width:75%"></div>';
   try{
@@ -125,7 +165,7 @@ async function cargarBoletin(forzar){
   }catch(e){$('boletin').textContent='No se pudo cargar el boletín.'}
 }
 
-function pintarWeb(){$('chip-web').classList.toggle('on',WEB)}
+function pintarWeb(){$('chip-web').classList.toggle('on',WEB);$('chip-web').setAttribute('aria-pressed',String(WEB))}
 function toggleWeb(){WEB=!WEB;pintarWeb()}
 function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
 function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
@@ -229,11 +269,13 @@ function icoAdj(tipo){return tipo==='image'
   :'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'}
 function pintarAdj(){const c=$('adjfila');c.innerHTML='';
   ADJ.forEach((a,i)=>{const e=document.createElement('div');e.className='ch';
-    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <b>✕</b>';
-    e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
-function burbuja(rol,texto,adj){
-  const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
-  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd"><div class="md"></div></div>`;
+    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <button type="button" class="adj-x" aria-label="Quitar adjunto"><svg class="i xs" aria-hidden="true"><use href="#i-x"/></svg></button>';
+    e.querySelector('.adj-x').setAttribute('aria-label','Quitar '+a.nombre);
+    e.querySelector('.adj-x').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
+// vivo=true: mensaje que nace ahora (lleva .nueva y su entrada propia); los del historial se pintan sin coreografía.
+function burbuja(rol,texto,adj,vivo){
+  const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia')+(vivo?' nueva':'');
+  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd">${rol==='user'?'':'<p class="quien"><b>PULLEX IA</b><span aria-hidden="true"> / Justicia × Inteligencia</span></p>'}<div class="md"></div></div>`;
   b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
   if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
     adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
@@ -242,7 +284,17 @@ function burbuja(rol,texto,adj){
   $('hilo').appendChild(b);scroll();return b;
 }
 function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
+// ¿La persona está leyendo el final? Si subió a releer, el texto que va llegando no la arrastra hacia abajo.
+function alFinal(){const h=$('hist');return h.scrollHeight-h.scrollTop-h.clientHeight<96}
 
+// Solo para pintar mientras llega el texto: una negrita a medio escribir («**Cuándo proc») se vería como asteriscos
+// crudos y después saltaría a negrita. Se cierra de forma provisional; el texto guardado y el pintado final no cambian.
+function mdParcial(t){
+  t=t.replace(/(^|\s)\*$/,'$1');                                    // llegó solo el primer asterisco de una apertura
+  const i=t.lastIndexOf('\n\n'),cola=i<0?t:t.slice(i);
+  if(((cola.match(/\*\*/g)||[]).length%2)===0)return t;
+  return /\*\*\s*$/.test(t)?t.replace(/\*\*\s*$/,''):t.replace(/\s+$/,'')+'**';
+}
 // Lee el stream SSE del chat y lo pinta en la burbuja ``bIA``. Lo usan «enviar» (respuesta nueva) y «continuarResp»
 // (completar una respuesta que quedó incompleta; ``base`` es el texto que ya estaba escrito).
 // Devuelve {buffer,fuentes,id,completo,incompleta,motivo,fin}. ``fin`` es false si el stream se cortó sin que el servidor
@@ -250,21 +302,31 @@ function scroll(){const h=$('hist');h.scrollTop=h.scrollHeight}
 async function transmitir(cuerpo,bIA,base){
   const cont=bIA.querySelector('.md');cont.classList.add('cursor');
   const res={buffer:base||'',fuentes:[],id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
-  let raf=null;
-  const render=()=>{cont.innerHTML=md(res.buffer);cont.classList.add('cursor');scroll();raf=null};
+  let raf=null,alto=0;
+  // El markdown a medio llegar puede encoger un instante (una tabla o una lista que aún no cierra): el bloque nunca
+  // baja de la altura que ya alcanzó, así lo que hay debajo no brinca. Y solo se sigue el final si ya se estaba ahí.
+  const pinta=html=>{const sigue=alFinal();cont.innerHTML=html;cont.classList.add('cursor');
+    alto=Math.max(alto,cont.offsetHeight);cont.style.minHeight=alto+'px';if(sigue)scroll()};
+  const render=()=>{pinta(md(mdParcial(res.buffer)));raf=null};
+  // Estado a la vista: sale de lo que de verdad está pasando (petición enviada, evento «busqueda», texto llegando).
+  const quien=bIA.querySelector('.quien');let rotulo=null;
+  const estado=(clave,txt)=>{trabajo(clave);if(!quien)return;
+    if(!rotulo){rotulo=el('span','estado-ia');rotulo.setAttribute('role','status');quien.appendChild(rotulo)}
+    if(rotulo.textContent!==txt)rotulo.textContent=txt};
+  estado('espera','Esperando la respuesta…');
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(cuerpo)});
     if(!r.ok){const d=await r.json().catch(()=>({}));res.estado=r.status;res.error=(typeof d.detail==='string'&&d.detail)||'No se pudo procesar.';
-      cont.classList.remove('cursor');return res}
+      cont.classList.remove('cursor');if(rotulo)rotulo.remove();trabajo(null);return res}
     const rd=r.body.getReader(),dec=new TextDecoder();let resto='';
     while(true){const {value,done}=await rd.read();if(done)break;
       resto+=dec.decode(value,{stream:true});const lineas=resto.split('\n\n');resto=lineas.pop();
       for(const l of lineas){if(!l.startsWith('data: '))continue; // los comentarios «: latido» se ignoran
         let ev;try{ev=JSON.parse(l.slice(6))}catch(e){continue}
-        if(ev.tipo==='texto'){res.buffer+=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
-        else if(ev.tipo==='busqueda'){cont.innerHTML=md(res.buffer+'\n\n_Buscando en fuentes…_')}
-        else if(ev.tipo==='continuando'){bIA.classList.add('continuando')}
-        else if(ev.tipo==='reparando'){bIA.classList.add('reparando')}
+        if(ev.tipo==='texto'){res.buffer+=ev.texto;estado('escribe','Escribiendo…');if(!raf)raf=requestAnimationFrame(render)}
+        else if(ev.tipo==='busqueda'){estado('fuentes','Buscando en fuentes…')}   // el aviso va en el rótulo de estado, no dentro del texto
+        else if(ev.tipo==='continuando'){bIA.classList.add('continuando');estado('escribe','Completando la respuesta…')}
+        else if(ev.tipo==='reparando'){bIA.classList.add('reparando');estado('escribe','Revisando que no falte nada…')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
         else if(ev.tipo==='fuentes'){res.fuentes=Array.isArray(ev.fuentes)?ev.fuentes:[]}
         else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){res.buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
@@ -275,7 +337,10 @@ async function transmitir(cuerpo,bIA,base){
   }catch(e){res.error='conexion'}
   if(raf)cancelAnimationFrame(raf);
   bIA.classList.remove('continuando','reparando');
-  cont.classList.remove('cursor');cont.innerHTML=md(res.buffer);
+  if(rotulo)rotulo.remove();trabajo(null);
+  const sigue=alFinal();
+  cont.classList.remove('cursor');cont.innerHTML=md(res.buffer);cont.style.minHeight='';
+  if(sigue)scroll();
   return res;
 }
 // Si el stream se cortó sin «fin», el servidor guarda lo generado como incompleto: se busca ese mensaje para poder continuarlo.
@@ -290,32 +355,47 @@ async function recuperarIncompleta(cid){
 function cerrarResp(bIA,res,cid){
   const tieneTexto=(res.buffer||'').trim().length>0;
   if(!res.fin&&tieneTexto){res.incompleta=true;if(!res.motivo)res.motivo='interrumpida'}
+  const sigue=alFinal();
   if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid});
-  scroll();
+  if(sigue)scroll();
 }
+// Envío en curso: el botón lo muestra (aro en vez de flecha) y lo dice a los lectores de pantalla.
+function ocupado(si){enviando=si;const b=$('env');b.disabled=si;b.classList.toggle('ocupado',si);
+  b.setAttribute('aria-label',si?'Enviando…':'Enviar');b.title=si?'Esperando la respuesta':'Enviar';
+  if(si){b.setAttribute('aria-busy','true');trabajo('espera')}else{b.removeAttribute('aria-busy');trabajo(null)}}
 // opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
+// El estado «ocupado» se suelta SIEMPRE, también si algo falla al pintar: de lo contrario el botón de enviar quedaría
+// girando y el chat no admitiría otro mensaje hasta recargar la página.
 async function enviar(opc){
   const texto=$('txt').value.trim();
   if((!texto&&!ADJ.length)||enviando)return;
   if(PERFIL.restantes<=0){toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
-  enviando=true;$('env').disabled=true;
-  if(!CONV)await nuevaConv();
-  const cid=CONV;
-  $('sugs').classList.add('hidden');
-  const adjEnvio=ADJ.slice();
-  burbuja('user',texto,adjEnvio);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
-  const bIA=burbuja('ia','');
-  const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
-  if(res.estado!==200){
-    bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
-    enviando=false;$('env').disabled=false;if(res.estado===402||res.estado===403)ver('config');return}
-  if(res.error==='conexion'&&!res.fin){
-    const rec=await recuperarIncompleta(cid);
-    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
-    else if(!res.buffer.trim())res.buffer='**Aviso:** se interrumpió la conexión. Intenta de nuevo.';
-  }
-  cerrarResp(bIA,res,cid);
-  enviando=false;$('env').disabled=false;
+  ocupado(true);
+  let suelto=false;const soltar=()=>{if(!suelto){suelto=true;ocupado(false)}};   // este envío suelta una sola vez, y solo lo suyo
+  let cid=null;
+  try{
+    if(!CONV)await nuevaConv();
+    cid=CONV;
+    $('sugs').classList.add('hidden');
+    const adjEnvio=ADJ.slice();
+    burbuja('user',texto,adjEnvio,true);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
+    const bIA=burbuja('ia','',null,true);
+    const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
+    if(res.estado!==200){
+      bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
+      soltar();if(res.estado===402||res.estado===403)ver('config');return}
+    if(res.error==='conexion'&&!res.fin){
+      const rec=await recuperarIncompleta(cid);
+      if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
+      if(!res.buffer.trim()){
+        // No llegó nada ni quedó nada guardado: es solo un aviso. No es una respuesta: no lleva «Copiar» ni
+        // «Continuar» (no hay de dónde continuar) y no se suma como consulta usada.
+        bIA.querySelector('.md').innerHTML=md('**Aviso:** se interrumpió la conexión. Intenta de nuevo.');
+        soltar();cargarConvs();return}
+      bIA.querySelector('.md').innerHTML=md(res.buffer);   // lo recuperado tiene que verse, no solo guardarse
+    }
+    cerrarResp(bIA,res,cid);
+  }finally{soltar()}
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
@@ -324,23 +404,25 @@ async function enviar(opc){
 // «Continuar»: el servidor retoma la respuesta guardada y la completa; no gasta una consulta.
 async function continuarResp(bIA,meta,textoActual){
   if(enviando)return;
-  enviando=true;$('env').disabled=true;
-  quitarAcciones(bIA);
-  const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
-  if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
-    enviando=false;$('env').disabled=false;toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
-    const c=meta.cid;CONV=null;await abrirConv(c);return}
-  if(res.estado!==200){
-    toast(res.error);enviando=false;$('env').disabled=false;
-    accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
-  if(res.error==='conexion'&&!res.fin){
-    const rec=await recuperarIncompleta(meta.cid);
-    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}}
-  if(!res.id)res.id=meta.id;
-  cerrarResp(bIA,res,meta.cid);
-  enviando=false;$('env').disabled=false;
+  ocupado(true);
+  let suelto=false;const soltar=()=>{if(!suelto){suelto=true;ocupado(false)}};   // este envío suelta una sola vez, y solo lo suyo
+  try{
+    quitarAcciones(bIA);
+    const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
+    if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
+      soltar();toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
+      const c=meta.cid;CONV=null;await abrirConv(c);return}
+    if(res.estado!==200){
+      toast(res.error);soltar();
+      accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
+    if(res.error==='conexion'&&!res.fin){
+      const rec=await recuperarIncompleta(meta.cid);
+      if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)}}
+    if(!res.id)res.id=meta.id;
+    cerrarResp(bIA,res,meta.cid);
+  }finally{soltar()}
 }
-function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes').forEach(n=>n.remove())}
+function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
 function accionesResp(b,texto,fuentes,meta){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
@@ -355,7 +437,7 @@ function accionesResp(b,texto,fuentes,meta){
   if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
     n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
     b.querySelector('.bd').appendChild(n);}
-  pintarFuentes(b,fuentes);
+  pintarFuentes(b,fuentes,{fichas:true});
   if(meta&&meta.incompleta)avisoIncompleta(b,texto,meta);
   if(meta&&meta.id)panelValorar(b,meta);
 }
@@ -370,12 +452,12 @@ function avisoIncompleta(b,texto,meta){
   d.appendChild(bt);
   b.querySelector('.bd').appendChild(d);
 }
-// 👍 / 👎 con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
+// Pulgar arriba / abajo con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
 const MOTIVOS_FB=[['incompleta','Quedó incompleta'],['no_respondio','No respondió lo que pedí'],['error_juridico','Tiene un error jurídico'],['muy_larga','Es demasiado larga'],['otro','Otro motivo']];
 function panelValorar(b,meta){
   const w=el('div','valorar');w.setAttribute('role','group');w.setAttribute('aria-label','¿Te sirvió esta respuesta?');
-  const bu=el('button','vl-btn','👍');bu.type='button';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
-  const bd=el('button','vl-btn','👎');bd.type='button';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
+  const bu=el('button','vl-btn');bu.innerHTML=icoUse('pulgar','s');bu.type='button';bu.title='Me sirvió';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
+  const bd=el('button','vl-btn');bd.innerHTML=icoUse('pulgar-abajo','s');bd.type='button';bd.title='Tuvo problemas';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
   const estado=el('span','vl-estado');estado.setAttribute('aria-live','polite');
   const caja=el('div','vl-motivos hidden');
   const sel=new Set();
@@ -436,19 +518,42 @@ function chipFuente(f){
   return CHIP_FUENTE[f.estado_vigencia]||CHIP_FUENTE.PENDIENTE_VERIFICAR;
 }
 function urlSegura(u){return typeof u==='string'&&/^https?:\/\//i.test(u)?u:null}
-function pintarFuentes(b,fuentes){
+function tituloFuente(f){
+  const url=urlSegura(f.url);
+  if(url){const a=el('a','ftit',f.titulo||url);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
+  return el('span','ftit',f.titulo||'Documento del corpus');
+}
+// opc.fichas: además del bloque plegable, las fuentes CITADAS se muestran como fichas a la vista (con su estado de
+// vigencia escrito). En una respuesta recién llegada se despliegan una a una (static/movimiento.css, .b.nueva).
+// En pantallas angostas las fichas van una debajo de otra: se muestran menos y el resto queda en la lista.
+function maxFichas(){try{return window.matchMedia('(max-width:560px)').matches?2:4}catch(e){return 4}}
+function pintarFuentes(b,fuentes,opc){
   if(!Array.isArray(fuentes)||!fuentes.length)return;
   const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
   const d=el('details','fuentes');
-  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');d.appendChild(s);
+  const citadas=opc&&opc.fichas?lista.filter(f=>f.citado):[];
+  if(citadas.length){const MAX_FICHAS=maxFichas();
+    const rot=citadas.length===1?'Fuente citada en esta respuesta':'Fuentes citadas en esta respuesta';
+    const tt=el('p','fichas-t',rot);tt.setAttribute('aria-hidden','true');b.querySelector('.bd').appendChild(tt);
+    const fs=el('ul','fichas');fs.setAttribute('aria-label',rot);
+    citadas.slice(0,MAX_FICHAS).forEach((f,i)=>{
+      const li=el('li','ficha');li.style.setProperty('--i',i);const [cls,txt]=chipFuente(f);
+      li.appendChild(el('span','fchip '+cls,txt));li.appendChild(tituloFuente(f));
+      const m=[];if(f.ref)m.push('['+f.ref+']');if(f.ubicacion)m.push(f.ubicacion);
+      if(m.length)li.appendChild(el('span','fmeta',m.join(' · ')));
+      fs.appendChild(li)});
+    if(citadas.length>MAX_FICHAS){const li=el('li');li.style.setProperty('--i',MAX_FICHAS);
+      li.appendChild(boton('y '+(citadas.length-MAX_FICHAS)+' más en la lista','fichas-mas',()=>{d.open=true;d.querySelector('summary').focus()}));
+      fs.appendChild(li)}
+    b.querySelector('.bd').appendChild(fs);
+  }
+  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');s.insertAdjacentHTML('afterbegin',icoUse('fuentes','s'));d.appendChild(s);
   const ul=el('ul','fuentes-lista');
-  lista.forEach(f=>{
-    const li=el('li','fuente');const [cls,txt]=chipFuente(f);
+  lista.forEach((f,i)=>{
+    const li=el('li','fuente');li.style.setProperty('--i',Math.min(i,8));const [cls,txt]=chipFuente(f);
     li.appendChild(el('span','fchip '+cls,txt));
-    const url=urlSegura(f.url);let tit;
-    if(url){tit=el('a','ftit',f.titulo||url);tit.href=url;tit.target='_blank';tit.rel='noopener noreferrer'}
-    else tit=el('span','ftit',f.titulo||'Documento del corpus');
-    li.appendChild(tit);
+    const url=urlSegura(f.url);
+    li.appendChild(tituloFuente(f));
     const meta=[];
     if(f.ref)meta.push('['+f.ref+']');
     if(f.origen==='corpus'&&f.tipo)meta.push(f.tipo);
@@ -775,12 +880,16 @@ async function cargarProgresoInicio(){
     const p=await api('/api/modular/progreso');
     if(!p.resueltos){el.classList.add('hidden');return}
     el.textContent='';
-    const item=(txt,val,cls)=>{const s=document.createElement('span');s.appendChild(document.createTextNode(txt+' '));
-      const b=document.createElement('b');b.textContent=val;if(cls)b.className=cls;s.appendChild(b);el.appendChild(s)};
+    // suf: la cifra llega contando hasta su valor real (static/movimiento.js); el texto final es el del servidor.
+    const cifras=[];
+    const item=(txt,val,cls,suf)=>{const s=document.createElement('span');s.appendChild(document.createTextNode(txt+' '));
+      const b=document.createElement('b');b.textContent=val+(suf||'');if(cls)b.className=cls;s.appendChild(b);el.appendChild(s);
+      if(typeof val==='number')cifras.push([b,val,suf||''])};
     item('Modulares resueltos',p.resueltos);
-    item('Promedio',p.promedio+'/100');
+    item('Promedio',p.promedio,null,'/100');
     if(p.a_reforzar&&p.a_reforzar.length)item('Refuerza',p.a_reforzar[0],'ref');
     el.classList.remove('hidden');
+    if(window.MV&&MV.contar)cifras.forEach(([b,val,suf])=>MV.contar(b,val,{sufijo:suf}));
   }catch(e){el.classList.add('hidden')}
 }
 
@@ -973,12 +1082,15 @@ async function mlProgreso(){
   c.className='';c.textContent='';
   const g=document.createElement('div');g.className='prog-grid';
   const varias=p.por_area.length>1;
-  [[p.resueltos,'casos evaluados'],[p.promedio+'/100','promedio general'],
+  const cifras=[];
+  [[p.resueltos,'casos evaluados'],[p.promedio+'/100','promedio general',p.promedio],
    [varias?p.por_area[0].area:(p.ultimos.length?p.ultimos[p.ultimos.length-1]+'/100':'—'),
-    varias?'área con menor promedio':'último caso']].forEach(([v,t])=>{
+    varias?'área con menor promedio':'último caso']].forEach(([v,t,num])=>{
     const d=document.createElement('div');d.className='prog-n';const b=document.createElement('b');b.textContent=v;
+    if(typeof v==='number')cifras.push([b,v,'']);else if(typeof num==='number')cifras.push([b,num,'/100']);
     const s=document.createElement('span');s.textContent=t;d.appendChild(b);d.appendChild(s);g.appendChild(d)});
   c.appendChild(g);
+  if(window.MV&&MV.contar)cifras.forEach(([b,v,suf])=>MV.contar(b,v,{sufijo:suf}));
   const rub=document.createElement('div');rub.className='rub';
   p.por_area.forEach(a=>{const f=document.createElement('div');f.className='r';
     const n=document.createElement('span');n.textContent=a.area+' ('+a.intentos+')';
@@ -1048,12 +1160,16 @@ function mlElegir(area,nivel){
 const MAPA={datos:null,area:null,sel:null};
 async function mapaInit(){
   let d,err,res;
+  const rs=$('mapa-res');
+  if(!rs.children.length){rs.setAttribute('aria-busy','true');      // primera carga: cuatro casillas en esqueleto
+    for(let i=0;i<4;i++){const c=el('div','esq');c.appendChild(el('span','skel'));c.appendChild(el('span','skel'));rs.appendChild(c)}}
   try{[d,err,res]=await Promise.all([api('/api/academia/mapa'),api('/api/academia/errores'),api('/api/academia/resumen')])}
-  catch(e){toast(e.message);return}
+  catch(e){rs.removeAttribute('aria-busy');rs.querySelectorAll('.esq').forEach(x=>x.remove());toast(e.message);return}
   MAPA.datos=d;
-  const rs=$('mapa-res');rs.textContent='';
-  ['dominado','en_progreso','debil','sin_evaluar'].forEach(k=>{const c=el('div');c.appendChild(el('b',null,d.resumen[k]));
-    c.appendChild(estadoChip(k));rs.appendChild(c)});
+  rs.removeAttribute('aria-busy');rs.textContent='';
+  ['dominado','en_progreso','debil','sin_evaluar'].forEach(k=>{const c=el('div');const b=el('b',null,d.resumen[k]);c.appendChild(b);
+    c.appendChild(estadoChip(k));rs.appendChild(c);
+    if(window.MV&&MV.contar&&typeof d.resumen[k]==='number')MV.contar(b,d.resumen[k])});
   pintarRepasos(res);pintarErrores(err.errores);
   if(!MAPA.area){const deb=d.areas.find(a=>a.resumen.debil);MAPA.area=(deb||d.areas[0]).area}
   const ar=$('mapa-areas');ar.textContent='';
@@ -1126,6 +1242,7 @@ function pintarAreaMapa(){
 // pintar. Aquí: los controles de Ajustes → Apariencia, el guardado en la cuenta (con espera corta para
 // no enviar una petición por cada clic) y las imágenes (fondo del Inicio, foto de perfil, logo).
 const TEMAS_AP=[
+  {id:'justicia',n:'Justicia × Inteligencia',d:'Grafito, lima y cian',c:['#f3f5f8','#101115','#101115'],o:['#101115','#f4f6f9','#d9ff68']},
   {id:'pullex',n:'PULLEX',d:'Papel, tinta y bermellón',c:['#f7f5f0','#1b1a17','#b33a16'],o:['#141311','#eeebe4','#ee7a4f']},
   {id:'notario',n:'Notario',d:'Marfil y tinta',c:['#fbf8f1','#1a1d24','#22385e'],o:['#101218','#ece8df','#a9bee3']},
   {id:'bogota',n:'Bogotá',d:'Gris piedra y pizarra',c:['#efefec','#1c1f22','#2d5876'],o:['#151718','#e8eaeb','#8db7d6']},
@@ -1134,7 +1251,7 @@ const TEMAS_AP=[
   {id:'jardin',n:'Jardín',d:'Verde salvia',c:['#f2f4ef','#1a1f1b','#43654e'],o:['#121613','#e9eee9','#9bc4a5']}];
 const ACENTOS_AP=[['Bermellón','#b33a16'],['Tinta','#22385e'],['Cobalto','#2f54c9'],['Turquesa','#0a7570'],
   ['Salvia','#43654e'],['Vino','#7b1e34'],['Ocre','#93600c'],['Grafito','#3d3c39']];
-const FUENTES_AP=[['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
+const FUENTES_AP=[['syne','Futurista','Syne + Plus Jakarta','var(--syne)'],['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
   ['clasica','Clásica','Source Serif','var(--serif-lectura)'],['moderna','Moderna','Inter','var(--sans)']];
 const IMGS_AP={fondo:['Fondo del Inicio','Una foto tuya, de tu ciudad o de tu oficina. Se ajusta a 1600 px.',350],
   avatar:['Foto de perfil','Se recorta en cuadrado de 256 px.',120],logo:['Logo propio','Reemplaza el monograma en la cabecera. PNG con fondo transparente queda mejor.',120]};
@@ -1142,14 +1259,19 @@ const AP={datos:null,pend:{},timer:null,urls:{fondo:null,avatar:null,logo:null},
 
 function apIniciar(){
   const a=(PERFIL&&PERFIL.preferencias&&PERFIL.preferencias.apariencia)||{};
-  AP.datos=PXA.normalizar(a);PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);
+  // «Movimiento» aún no viaja a la cuenta (el servidor no tiene ese campo): se conserva la elección de este navegador.
+  const local=PXA.leerLocal();
+  AP.datos=PXA.normalizar({...a,movimiento:a.movimiento||(local&&local.movimiento)});PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);
   construirApariencia();apRefrescar();cargarImagenesAp();
 }
 function apEstado(t,ok){const e=$('ap-estado');if(!e)return;e.textContent=t||'';e.classList.toggle('ok',!!ok)}
 // Aplica en vivo, guarda en este navegador (para pintar rápido la próxima vez) y en la cuenta.
 function apCambiar(c){
   AP.datos={...(AP.datos||PXA.actual()),...c};PXA.aplicar(AP.datos);PXA.guardarLocal(AP.datos);apRefrescar();
-  Object.assign(AP.pend,c);clearTimeout(AP.timer);apEstado('Guardando…');AP.timer=setTimeout(apGuardar,450);
+  // «Movimiento» se guarda solo en este navegador; no se anuncia como guardado en la cuenta porque no lo está.
+  const {movimiento,...deCuenta}=c;
+  if(!Object.keys(deCuenta).length){if(!Object.keys(AP.pend).length)apEstado('Guardado en este navegador',true);return}
+  Object.assign(AP.pend,deCuenta);clearTimeout(AP.timer);apEstado('Guardando…');AP.timer=setTimeout(apGuardar,450);
 }
 async function apGuardar(){
   const pend=AP.pend;AP.pend={};if(!Object.keys(pend).length)return;
@@ -1186,15 +1308,17 @@ function construirApariencia(){
   titulo('Tipografía');
   const fg=el('div','fuentes-op');fg.id='ap-fuentes';
   FUENTES_AP.forEach(([v,n,d,f])=>{const b=boton2('fuente-op',()=>apCambiar({fuente:v}));b.dataset.v=v;
-    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':'560';b.appendChild(aa);
+    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':v==='syne'?'600':'560';b.appendChild(aa);
     b.appendChild(el('span','n',n+' · '+d));fg.appendChild(b)});
   c.appendChild(fg);
   const g3=el('div','ap-grid3');
   [['Tamaño del texto','tamano',[['normal','Normal'],['grande','Grande']]],
    ['Densidad','densidad',[['comoda','Cómoda'],['compacta','Compacta']]],
-   ['Esquinas','radio',[['recto','Rectas'],['suave','Suaves'],['redondo','Redondas']]]].forEach(([t,k,ops])=>{
+   ['Esquinas','radio',[['recto','Rectas'],['suave','Suaves'],['redondo','Redondas']]],
+   ['Movimiento','movimiento',[['completo','Completo'],['reducido','Reducido']]]].forEach(([t,k,ops])=>{
     const w=el('div');w.appendChild(el('div','lb2',t));w.appendChild(seg(k,ops));g3.appendChild(w)});
   c.appendChild(g3);
+  const nm=el('p','vacio');nm.id='ap-mov-nota';nm.style.cssText='font-size:.8rem;margin:10px 0 0';c.appendChild(nm);
   titulo('Imágenes');
   Object.entries(IMGS_AP).forEach(([tipo,[n,d]])=>{
     const f=el('div','img-fila');
@@ -1229,6 +1353,11 @@ function apRefrescar(){
   const lib=$('ap-acentos').querySelector('.acento-libre');lib.classList.toggle('on',libre);
   if(a.acento&&$('ap-color').value!==a.acento)$('ap-color').value=a.acento;
   $('ap-fuentes').querySelectorAll('.fuente-op').forEach(b=>{const on=b.dataset.v===a.fuente;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+  const nm=$('ap-mov-nota');
+  if(nm){let sis=false;try{sis=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+    nm.textContent=sis?'Tu sistema pide menos movimiento y PULLEX lo respeta: las animaciones están apagadas aunque aquí diga «Completo».'
+      :a.movimiento==='reducido'?'Movimiento reducido: sin entradas animadas, sin paralaje y sin transiciones entre secciones. Esta opción se guarda en este navegador.'
+      :'Movimiento completo. Si te marea o te distrae, elige «Reducido»: todo aparece ya en su sitio. Esta opción se guarda en este navegador.'}
 }
 
 // ---- imágenes: se ajustan en el navegador (canvas) y viajan como data URL JPEG/PNG; el servidor
@@ -1310,7 +1439,7 @@ async function apRestablecer(){
 // Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
 // en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
 // en línea. Solo se ejecutan funciones de esta lista blanca.
-const ACCIONES={abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
@@ -1322,5 +1451,15 @@ function despachar(tipo,ev){
   if(('arg'+T) in el.dataset){const a=el.dataset['arg'+T];return fn(a==='true'?true:a==='false'?false:a)}
   return fn();
 }
+// Los clics de navegación pasan por la transición entre secciones (static/movimiento.js) cuando el navegador la
+// tiene. Las llamadas internas a ver() siguen siendo inmediatas: hay código que necesita la vista ya cambiada en la
+// línea siguiente (enfocar el cuadro de texto, desplazar hasta un panel).
+// La transición aplica el cambio un cuadro después del clic. Si entre tanto hubo otra navegación (otro clic o un
+// ver() interno), esa es la que vale: el cambio viejo se descarta en vez de pisarla.
+function verNav(v){const actual=$('v-'+v);
+  if(window.MV&&MV.transicion&&!(actual&&actual.classList.contains('on'))){
+    const turno=TURNO_VER;MV.transicion(()=>{if(turno===TURNO_VER)ver(v)})}
+  else ver(v)}
+ACCIONES.ver=verNav;
 ['click','change','input','keydown'].forEach(t=>document.addEventListener(t,ev=>despachar(t,ev)));
 

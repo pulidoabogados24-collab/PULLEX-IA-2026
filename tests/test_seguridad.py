@@ -268,6 +268,10 @@ def test_SEC_002_sin_menciones_de_universidades():
     for p in RAIZ.rglob("*"):
         if ".git" in p.parts or "tests" in p.parts or not p.is_file():
             continue
+        # corpus/ no es parte del repositorio (está en .gitignore): son las fuentes del operador, y el
+        # texto de una ley puede nombrar a una universidad. La regla es para lo que escribe el proyecto.
+        if p.relative_to(RAIZ).parts[0] in ("corpus", ".claude", "venv", "node_modules"):
+            continue  # .claude/ (copias de trabajo de agentes) y entornos tampoco son parte del repositorio
         if p.suffix not in (".py", ".html", ".md", ".yaml", ".json", ".webmanifest", ".js", ".txt"):
             continue
         assert not patron.search(p.read_text(encoding="utf-8", errors="ignore")), p

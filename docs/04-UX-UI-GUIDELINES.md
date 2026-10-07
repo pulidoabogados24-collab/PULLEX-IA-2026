@@ -11,12 +11,22 @@ Lawyer Experience).
 - ¿El usuario puede equivocarse sin miedo? (nunca se le regaña; la IA interpreta con buena fe)
 
 ## Sistema de diseño vigente
-- **Colores:** azul oscuro corporativo `#0A1E3F` (fondo), amarillo oro `#FFC93C`/`#FDB813`
-  (acción/acento), franja tricolor sutil como guiño colombiano. Tema claro opcional.
-- **Tipografía:** del sistema (Segoe UI/system-ui) — rápida y familiar.
-- **Layout:** 3 vistas (Inicio / Consultar / Configuración); una pregunta por pantalla.
-- **Chat:** burbujas con avatar, streaming fluido (render con requestAnimationFrame),
-  cursor animado, acciones por respuesta (Copiar / Descargar / PDF).
+Detalle completo, paleta, temas y ratios de contraste: `docs/12-DISENO-Y-APARIENCIA.md`.
+- **Dirección:** el tema por defecto es «Justicia × Inteligencia» (grafito, el retrato de la Justicia como
+  única idea fuerte de la pantalla, lima solo para la acción principal). Los otros seis temas son
+  editorial-jurídicos (papel, tinta y un solo acento). En todos: nada de estética genérica de "IA" (sin
+  degradados morados, manchas flotantes, vidrio esmerilado, robots ni emojis como íconos).
+- **Movimiento:** cinco duraciones y tres curvas con nombre (`--mv-*`); nada finge trabajo; todo se apaga
+  con movimiento reducido. Detalle en `docs/12-DISENO-Y-APARIENCIA.md`, «Movimiento».
+- **Tokens semánticos** en `static/tema.css` (`--bg`, `--surface`, `--text`, `--accent`…): toda vista
+  nueva usa SOLO tokens. Los nombres viejos (`--azul`, `--oro`…) quedan como alias.
+- **Tipografía:** Syne (títulos) + Plus Jakarta Sans (texto) en el tema por defecto; pares alternativos
+  Editorial (Fraunces + Inter), Clásica y Moderna. Todas autohospedadas.
+- **Oscuro por defecto**, con modo claro y automático; 7 temas; contraste AA medido con
+  `scripts/contraste_temas.py`.
+- **Layout:** 5 vistas (Inicio / Laboratorio de casos / Mi mapa / Consultar / Ajustes); en móvil, barra inferior.
+- **Cada usuario personaliza** colores, tema, tipografía, tamaño, densidad, esquinas e imágenes
+  (fondo del Inicio, foto, logo) en Ajustes → Apariencia; se guarda en su cuenta.
 
 ## Métricas LX que se optimizan
 Tiempo para: obtener una orientación, redactar un documento, entender una sentencia,
