@@ -33,8 +33,10 @@ def _guardar(cliente, token, apariencia):
 def test_apariencia_por_defecto_en_el_perfil(cliente):
     _, _, t = nuevo_usuario(cliente)
     a = cliente.get("/api/estado", headers=auth(t)).json()["perfil"]["preferencias"]["apariencia"]
-    assert a["tema"] == "pullex" and a["modo"] == "claro" and a["acento"] is None
+    # Por defecto: «Justicia × Inteligencia» en oscuro, con Syne + Plus Jakarta Sans.
+    assert a["tema"] == "justicia" and a["modo"] == "oscuro" and a["fuente"] == "syne" and a["acento"] is None
     assert a["imagenes"] == {"fondo": 0, "avatar": 0, "logo": 0}
+    assert a["elegida"] is False
 
 
 def test_guardar_apariencia_valida(cliente):
@@ -145,7 +147,7 @@ def test_aislamiento_entre_usuarios(cliente):
     assert _guardar(cliente, ta, {"tema": "toga", "acento": "#7b1e34",
                                   "avatar": _url("image/png", _png(64, 64))}).status_code == 200
     pb = cliente.get("/api/estado", headers=auth(tb)).json()["perfil"]["preferencias"]["apariencia"]
-    assert pb["tema"] == "pullex" and pb["acento"] is None and pb["imagenes"]["avatar"] == 0
+    assert pb["tema"] == "justicia" and pb["acento"] is None and pb["imagenes"]["avatar"] == 0
     assert cliente.get("/api/apariencia/imagen/avatar", headers=auth(tb)).status_code == 404
     assert cliente.get("/api/apariencia/imagen/avatar", headers=auth(ta)).status_code == 200
     # B guarda lo suyo y no toca lo de A
@@ -161,3 +163,91 @@ def test_interruptor_de_tema_sincroniza_el_modo(cliente):
     assert p["apariencia"]["modo"] == "oscuro"
     p = _guardar(cliente, t, {"modo": "auto"}).json()["preferencias"]
     assert p["apariencia"]["modo"] == "auto" and p["tema"] == "oscuro"
+
+
+# ---- cambio del tema por defecto (octubre de 2026): quién pasa al tema nuevo y quién conserva el suyo ----
+ANTERIOR = {"modo": "claro", "tema": "pullex", "acento": None, "fuente": "editorial", "tamano": "normal",
+            "densidad": "comoda", "radio": "suave", "imagenes": {"fondo": 0, "avatar": 0, "logo": 0}}
+
+
+def _poner_preferencias(modulo, email, prefs):
+    """Escribe las preferencias tal como las dejaba la versión anterior (sin pasar por la API)."""
+    import json
+    from contextlib import closing
+    with closing(modulo.db()) as con:
+        con.execute("UPDATE usuarios SET preferencias=? WHERE email=?", (json.dumps(prefs), email))
+        con.commit()
+
+
+def _apariencia(cliente, t):
+    return cliente.get("/api/estado", headers=auth(t)).json()["perfil"]["preferencias"]["apariencia"]
+
+
+def test_tema_nuevo_para_quien_tenia_guardado_el_valor_por_defecto_anterior(cliente, modulo):
+    """Guardar cualquier preferencia escribía la apariencia completa: tenerla guardada no es haberla elegido."""
+    email, _, t = nuevo_usuario(cliente)
+    _poner_preferencias(modulo, email, {"areas": ["Penal"], "camino": "trabajar", "apariencia": dict(ANTERIOR)})
+    a = _apariencia(cliente, t)
+    assert (a["tema"], a["modo"], a["fuente"]) == ("justicia", "oscuro", "syne")
+    # las demás preferencias no se tocan
+    prefs = cliente.get("/api/estado", headers=auth(t)).json()["perfil"]["preferencias"]
+    assert prefs["areas"] == ["Penal"] and prefs["camino"] == "trabajar"
+
+
+def test_quien_eligio_otra_apariencia_la_conserva(cliente, modulo):
+    for cambio in ({"tema": "caribe"}, {"modo": "oscuro"}, {"fuente": "clasica"}, {"acento": "#22385e"},
+                   {"radio": "recto"}, {"tamano": "grande"}, {"densidad": "compacta"}):
+        email, _, t = nuevo_usuario(cliente)
+        guardada = {**ANTERIOR, **cambio}
+        _poner_preferencias(modulo, email, {"apariencia": guardada})
+        a = _apariencia(cliente, t)
+        for k in ("modo", "tema", "acento", "fuente", "tamano", "densidad", "radio"):
+            assert a[k] == guardada[k], (cambio, k)
+
+
+def test_las_imagenes_se_conservan_al_pasar_al_tema_nuevo(cliente, modulo):
+    email, _, t = nuevo_usuario(cliente)
+    _poner_preferencias(modulo, email, {"apariencia": {**ANTERIOR, "imagenes": {"fondo": 0, "avatar": 1727000000000, "logo": 0}}})
+    a = _apariencia(cliente, t)
+    assert a["tema"] == "justicia" and a["imagenes"]["avatar"] == 1727000000000
+
+
+def test_volver_al_tema_anterior_a_proposito_se_respeta(cliente):
+    """Quien elige el tema PULLEX claro en Ajustes (lo que antes era el valor por defecto) lo conserva."""
+    _, _, t = nuevo_usuario(cliente)
+    r = _guardar(cliente, t, {"modo": "claro", "tema": "pullex", "fuente": "editorial"})
+    assert r.status_code == 200 and r.json()["preferencias"]["apariencia"]["elegida"] is True
+    a = _apariencia(cliente, t)
+    assert (a["tema"], a["modo"], a["fuente"], a["elegida"]) == ("pullex", "claro", "editorial", True)
+    # guardar otra preferencia (que reescribe la apariencia completa) no la devuelve al tema por defecto
+    assert cliente.post("/api/preferencias", headers=auth(t), json={"camino": "trabajar"}).status_code == 200
+    assert _apariencia(cliente, t)["tema"] == "pullex"
+
+
+def test_el_interruptor_rapido_de_modo_cuenta_como_eleccion(cliente):
+    _, _, t = nuevo_usuario(cliente)
+    r = cliente.post("/api/preferencias", headers=auth(t), json={"tema": "claro"})
+    a = r.json()["preferencias"]["apariencia"]
+    assert (a["tema"], a["modo"], a["elegida"]) == ("justicia", "claro", True)
+
+
+def test_guardar_otra_preferencia_no_marca_la_apariencia_como_elegida(cliente):
+    _, _, t = nuevo_usuario(cliente)
+    r = cliente.post("/api/preferencias", headers=auth(t), json={"camino": "trabajar"})
+    a = r.json()["preferencias"]["apariencia"]
+    assert a["elegida"] is False and a["tema"] == "justicia"
+    # subir una imagen tampoco es elegir tema
+    r = _guardar(cliente, t, {"avatar": _url("image/png", _png(64, 64))})
+    assert r.json()["preferencias"]["apariencia"]["elegida"] is False
+
+
+def test_el_cliente_no_puede_fijar_la_marca_elegida(cliente):
+    _, _, t = nuevo_usuario(cliente)
+    r = _guardar(cliente, t, {"elegida": True})
+    assert r.status_code == 200 and r.json()["preferencias"]["apariencia"]["elegida"] is False
+
+
+def test_tema_y_fuente_nuevos_en_la_lista_blanca(cliente):
+    _, _, t = nuevo_usuario(cliente)
+    a = _guardar(cliente, t, {"tema": "justicia", "fuente": "syne", "modo": "auto"}).json()["preferencias"]["apariencia"]
+    assert (a["tema"], a["fuente"], a["modo"]) == ("justicia", "syne", "auto")

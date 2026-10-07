@@ -74,7 +74,7 @@ textarea.tl-editor{width:100%;min-height:340px;font-family:var(--font-body);font
 .tl-lec.on .tl-lec-n{background:var(--accent);color:var(--accent-ink)}
 .tl-lec-t{display:grid;gap:1px;min-width:0}
 .tl-lec-t b{font-size:.87rem;font-weight:620;line-height:1.3}
-.tl-lec-t span{font-size:.74rem;color:var(--text-2);line-height:1.4}
+.tl-lec-t span{font-size:.75rem;color:var(--text-2);line-height:1.4}
 .tl-leccion{min-width:0}
 .panel h3.tl-lec-h{font-size:1.3rem;margin:.15em 0 .5em}
 .tl-intro{color:var(--text-2);line-height:1.6;margin:0 0 14px;font-size:.93rem}
@@ -98,7 +98,7 @@ textarea.tl-editor{width:100%;min-height:340px;font-family:var(--font-body);font
 .tl-practicar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;padding:12px 14px;
   border-radius:var(--radius-sm);background:var(--accent-soft)}
 .tl-practicar > div{flex:1 1 220px;display:grid;gap:2px}
-.tl-practicar b{font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
+.tl-practicar b{font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
 .tl-practicar span{font-size:.88rem;line-height:1.45}
 
 /* ejercicio: hechos relevantes y distractores; pregunta de control */
@@ -156,7 +156,7 @@ select.tl-hueco.mal{border-color:var(--danger)}
 .estilo-rev{margin:14px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2);
   font-size:.88rem;line-height:1.5}
 .estilo-rev:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.estilo-rev h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
+.estilo-rev h4{margin:0 0 6px;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
 .estilo-rev p{margin:0 0 8px}
 .estilo-rev ul{margin:0 0 8px;padding-left:18px;display:grid;gap:7px}
 .estilo-rev .er-ej{display:block;font-size:.8rem;color:var(--text-2);font-style:italic}

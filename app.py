@@ -215,15 +215,22 @@ PREFS_DEFECTO = {"areas": [], "modo": "auto", "tema": "oscuro", "web": True, "me
 # /api/estado: en las preferencias solo queda la versión de cada imagen.
 APARIENCIA_OPCIONES = {
     "modo": ("claro", "oscuro", "auto"),
-    "tema": ("pullex", "notario", "bogota", "caribe", "toga", "jardin"),
-    "fuente": ("editorial", "clasica", "moderna"),
+    "tema": ("justicia", "pullex", "notario", "bogota", "caribe", "toga", "jardin"),
+    "fuente": ("syne", "editorial", "clasica", "moderna"),
     "tamano": ("normal", "grande"),
     "densidad": ("comoda", "compacta"),
     "radio": ("recto", "suave", "redondo"),
 }
-APARIENCIA_DEFECTO = {"modo": "claro", "tema": "pullex", "acento": None, "fuente": "editorial",
+# Por defecto: tema «Justicia × Inteligencia» en oscuro, con Syne + Plus Jakarta Sans (octubre de 2026).
+APARIENCIA_DEFECTO = {"modo": "oscuro", "tema": "justicia", "acento": None, "fuente": "syne",
                       "tamano": "normal", "densidad": "comoda", "radio": "suave",
                       "imagenes": {"fondo": 0, "avatar": 0, "logo": 0}}
+# El valor por defecto anterior. Cada vez que se guarda CUALQUIER preferencia se escribe la apariencia
+# completa, así que muchas cuentas la tienen guardada sin haberla elegido. Regla: si lo guardado es
+# exactamente esto y no lleva la marca "elegida", la cuenta nunca eligió → recibe el tema nuevo. Desde este
+# cambio, toda elección hecha en Ajustes → Apariencia queda marcada y se respeta (incluido volver a este).
+APARIENCIA_ANTERIOR = {"modo": "claro", "tema": "pullex", "fuente": "editorial",
+                       "tamano": "normal", "densidad": "comoda", "radio": "suave"}
 # tipo de imagen → (bytes máximos ya decodificados, lado máximo en píxeles)
 APARIENCIA_IMAGENES = {"fondo": (350 * 1024, 1600), "avatar": (120 * 1024, 512),
                        "logo": (120 * 1024, 512)}
@@ -746,9 +753,15 @@ def preferencias_de(u):
 def _apariencia_completa(guardada) -> dict:
     """Apariencia con todos sus valores; lo guardado que no esté en la lista blanca se descarta."""
     g = guardada if isinstance(guardada, dict) else {}
-    a = {k: (g[k] if g.get(k) in v else APARIENCIA_DEFECTO[k]) for k, v in APARIENCIA_OPCIONES.items()}
     acento = g.get("acento")
-    a["acento"] = acento.lower() if isinstance(acento, str) and _RE_COLOR.match(acento) else None
+    acento = acento.lower() if isinstance(acento, str) and _RE_COLOR.match(acento) else None
+    elegida = g.get("elegida") is True
+    sin_elegir = (not elegida and acento is None
+                  and all(g.get(k, v) == v for k, v in APARIENCIA_ANTERIOR.items()))
+    op = {} if sin_elegir else g       # nunca eligió: opciones por defecto (las imágenes sí se conservan)
+    a = {k: (op[k] if op.get(k) in v else APARIENCIA_DEFECTO[k]) for k, v in APARIENCIA_OPCIONES.items()}
+    a["acento"] = acento
+    a["elegida"] = elegida
     imgs = g.get("imagenes") if isinstance(g.get("imagenes"), dict) else {}
     a["imagenes"] = {t: (int(imgs[t]) if isinstance(imgs.get(t), (int, float)) and imgs[t] > 0 else 0)
                      for t in APARIENCIA_IMAGENES}
@@ -813,7 +826,9 @@ def actualizar_apariencia(email: str, actual: dict, pedida) -> dict:
             if pedida[clave] not in opciones:
                 raise HTTPException(400, f"Valor no permitido en apariencia: {clave}.")
             nueva[clave] = pedida[clave]
+            nueva["elegida"] = True          # elección explícita del usuario: se respeta de aquí en adelante
     if "acento" in pedida:
+        nueva["elegida"] = True
         v = pedida["acento"]
         if v in (None, ""):
             nueva["acento"] = None
@@ -1289,6 +1304,7 @@ async def api_preferencias(request: Request):
     if datos.get("tema") in ("claro", "oscuro"):
         prefs["tema"] = datos["tema"]
         prefs["apariencia"]["modo"] = datos["tema"]  # el interruptor rápido de tema es el modo
+        prefs["apariencia"]["elegida"] = True
     if "apariencia" in datos:
         prefs["apariencia"] = actualizar_apariencia(u["email"], prefs["apariencia"], datos["apariencia"])
         if prefs["apariencia"]["modo"] in ("claro", "oscuro"):

@@ -1,0 +1,310 @@
+/* =========================================================================================
+   PULLEX IA — capa «Justicia × Inteligencia» (octubre de 2026).
+   Se enlaza al final de index.html, después del <style> de componentes y de escritura.css.
+
+   Qué contiene:
+     1. Accesibilidad común: foco visible, objetivos táctiles de 44 px, texto mínimo de 12 px.
+     2. Estructura: barra lateral en escritorio, barra superior con miga, menú «Más» en móvil.
+     3. Retrato de la Justicia (.retrato): panel a sangre con degradados; franja en pantallas angostas.
+     4. Portada / ingreso.
+     5. Consultar: estado inicial (titular, sugerencias), compositor, mensajes y fuentes.
+     6. Ajustes propios del tema «justicia» (brillos, bordes cian, héroe del Inicio).
+
+   Las secciones 1 a 5 sirven a TODOS los temas y usan solo tokens semánticos de tema.css. El retrato
+   es la excepción: es una pieza de marca siempre oscura (la imagen tiene fondo grafito), así que trae
+   sus propios colores y se ve igual sobre cualquier tema.
+   ========================================================================================= */
+
+/* ------------------------------------------------------------------ 1. accesibilidad común -- */
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+/* Dentro de contenedores que recortan (barra lateral, historial, fila de opciones) el anillo va por dentro. */
+nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus-visible,.chip select:focus-visible,
+.entrada textarea:focus-visible{outline-offset:-2px}
+.entrada textarea:focus-visible{outline:none}                 /* el foco lo muestra el borde del compositor */
+@media(pointer:coarse),(max-width:759px){
+  .btn,.bpri,.bsec,.bghost,.doc-btn,.herr-btn,.btn-continuar,.vl-enviar,.vl-chip,
+  .chip,.opc button,.area,.tabs button,.seg button,.caminos button,.doc-tab,.herr-tab,.per-tab,.tl-tabs button{min-height:44px}
+  .area,.chip{display:inline-flex;align-items:center}
+  .acc button,.vl-btn{min-height:44px;min-width:44px;justify-content:center}
+  .ic,#h-avatar,.conv-x{width:44px;height:44px}
+  .conv-t{min-height:44px}
+  .chip select{min-height:42px}
+}
+
+/* ------------------------------------------------------------------------- 2. estructura -- */
+:root{--lat:226px;--barra:72px}
+.marca-ia{color:var(--tono-3)}
+.miga{display:none;align-items:center;gap:10px;margin:0;min-width:0;font-size:.875rem;color:var(--text-2);white-space:nowrap}
+.miga-sep{color:var(--border-strong)}
+.miga-sec{color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis}
+#n-mas,#n-salir{display:none}
+.nav-mas{display:contents}
+
+/* Escritorio: la marca y la navegación forman la barra lateral; la cabecera queda como barra superior. */
+@media(min-width:1040px){
+  #app{padding-left:var(--lat)}
+  .cab{height:var(--barra);min-height:var(--barra);padding:0 28px;gap:16px;background:var(--bg)}
+  .h-logo{position:fixed;left:0;top:0;width:var(--lat);height:var(--barra);margin:0;padding:0 20px;gap:11px;
+    background:var(--bg);border-right:1px solid var(--border)}
+  .h-logo .marca{font-size:1.12rem}
+  nav{position:fixed;left:0;top:var(--barra);bottom:0;width:var(--lat);flex-direction:column;align-items:stretch;gap:2px;
+    padding:8px 12px 14px;background:var(--bg);border-right:1px solid var(--border);overflow:hidden auto}
+  nav button{min-height:44px;padding:0 12px;gap:12px;justify-content:flex-start;font-size:.9rem;font-weight:550;
+    border-radius:var(--radius-sm);flex:none}
+  nav button .i{width:18px;height:18px}
+  nav .l-largo{display:inline}
+  nav .l-corto{display:none}
+  nav button.on{background:var(--accent-soft);color:var(--text);font-weight:650}
+  nav button.on::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+  nav button .i.nav-candado{margin-left:auto}
+  #n-config{margin-top:auto}
+  .miga{display:flex}
+  .creditos .cp{display:inline}
+  .wrap{padding-top:calc(34px * var(--esp))}
+}
+@media(min-width:1040px) and (min-height:860px){:root{--barra:88px}}
+
+/* Escritorio con altura suficiente: el historial de Consultar baja a la barra lateral, entre las secciones y
+   Ajustes. La cuenta de 6 botones (44 px + 2 px de separación) corresponde a los que van antes de Ajustes en
+   <nav>; si se agrega o quita una sección hay que actualizarla. En ventanas bajas se queda como columna. */
+@media(min-width:1040px) and (min-height:640px){
+  .convs{position:fixed;left:0;z-index:32;width:var(--lat);top:calc(var(--barra) + 8px + 6 * 46px + 8px);bottom:66px;
+    padding:12px 12px 6px;background:var(--bg);border:0;border-right:1px solid var(--border);border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border)}
+  .convs .lb2{margin:14px 6px 6px}
+  /* Un ancestro con transform atraparía al historial fijo durante la animación de entrada. */
+  #v-chat.vista.on{animation-name:aparece}
+}
+
+/* Móvil: cuatro destinos y «Más» en la barra inferior (máximo cinco); los otros tres se despliegan encima. */
+@media(max-width:759px){
+  #n-mas,#n-salir{display:inline-flex}
+  #h-salir{display:none}                       /* en móvil «Salir» está dentro de «Más»: deja sitio a la marca */
+  .h-logo{gap:8px;margin-right:0}
+  .h-logo .mono{width:30px;height:30px;font-size:17px}
+  .h-logo .marca{font-size:.9rem;white-space:nowrap}
+  .h-acc{gap:6px}
+  nav button{min-height:52px}
+  .nav-mas{display:none;position:fixed;right:8px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:41;flex-direction:column;
+    gap:2px;min-width:216px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow-lg)}
+  .nav-mas.abierto{display:flex;animation:entra var(--t-media) var(--curva)}
+  .nav-mas button{flex-direction:row;justify-content:flex-start;gap:12px;min-height:48px;padding:0 14px;font-size:.95rem;
+    font-weight:550;border-radius:var(--radius-sm);letter-spacing:0}
+  .nav-mas button .i{width:20px;height:20px;padding:0;border-radius:0;background:none!important}
+  .nav-mas button.on{background:var(--accent-soft)!important}
+  .nav-mas .l-largo{display:inline}
+  .nav-mas .l-corto{display:none}
+  .nav-mas button .i.nav-candado{position:static;margin-left:auto;width:12px;height:12px;border:0}
+}
+
+/* ---------------------------------------------------------------- 3. retrato de la Justicia -- */
+.retrato{--r-bg:#101115;--r-fg:#f4f6f9;--r-fg2:#c9ced6;position:relative;overflow:hidden;isolation:isolate;min-width:0;
+  display:flex;flex-direction:column;justify-content:space-between;background:var(--r-bg);color:var(--r-fg);
+  container-type:inline-size;font-family:var(--font-ui)}
+.retrato picture{position:absolute;inset:0;z-index:-2}
+.retrato-img{display:block;width:100%;height:100%;object-fit:cover;object-position:46% center;
+  transition:transform 1.2s var(--curva)}
+.retrato:hover .retrato-img{transform:scale(1.035)}
+/* Degradado inferior hacia el fondo (opaco abajo, transparente al 46 %) y velo leve arriba para los rótulos. */
+.retrato::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.94) 14%,rgba(16,17,21,.62) 30%,rgba(16,17,21,0) 48%),
+    linear-gradient(to bottom,rgba(16,17,21,.72) 0%,rgba(16,17,21,0) 20%)}
+.retrato-sup{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:26px 28px 0}
+.lema{font-family:var(--syne);font-weight:700;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#f4f6f9;white-space:nowrap}
+.lema .x,.retrato-tit .x{color:var(--lima)}
+.lema .x{font-size:1.35em;line-height:0;vertical-align:-.06em;letter-spacing:.1em}
+.retrato .huella{width:26px;height:26px;color:var(--cian);stroke-width:1.5}
+.retrato-inf{padding:0 28px 26px}
+.retrato-eyebrow{margin:0 0 12px;font-size:.75rem;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:var(--cian)}
+.retrato-tit{margin:0 0 14px;font-family:var(--syne);font-weight:600;font-size:2.4rem;font-size:clamp(1.75rem,12.6cqw,4.0625rem);
+  line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.retrato-txt{margin:0;font-size:1rem;line-height:1.55;color:var(--r-fg2)}
+.retrato-pie{display:flex;justify-content:space-between;gap:14px;margin:22px 0 0;padding-top:14px;border-top:1px solid rgba(244,246,249,.18);
+  font-size:.75rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--r-fg2)}
+.retrato-pie span:last-child{white-space:nowrap}
+
+/* ------------------------------------------------------------------- 4. portada / ingreso -- */
+.auth-lay{min-height:100%;display:grid;grid-template-columns:minmax(340px,38%) minmax(0,1fr)}
+.auth-retrato{position:sticky;top:0;height:100vh;height:100dvh;border-right:1px solid rgba(244,246,249,.08)}
+.auth-der{width:100%;max-width:960px;margin:0 auto;padding:44px clamp(24px,4vw,56px);display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(330px,400px);grid-template-areas:"intro card" "ben ben";
+  column-gap:clamp(28px,4vw,52px);row-gap:34px;align-content:center;align-items:center}
+.auth-marca{margin-bottom:30px}
+.auth-intro .eyebrow{letter-spacing:.08em}
+.auth-intro h1{font-size:clamp(1.75rem,2.5vw,2.3rem);line-height:1.1;max-width:none;text-wrap:balance}
+.auth-lead{font-size:1rem}
+.auth-ben ul{margin:0;max-width:none;gap:20px 32px}
+.auth-pie{margin-top:24px}
+.auth-card{align-self:center}
+.auth-card h2{font-size:1.6rem}
+@media(max-width:1239px){
+  .auth-der{grid-template-columns:1fr;grid-template-areas:"intro" "card" "ben";max-width:600px;row-gap:28px;align-content:start}
+  .auth-card{max-width:none}
+}
+/* Pantallas angostas: el retrato pasa a ser una franja superior y el contenido va en una columna. */
+@media(max-width:899px){
+  .auth-lay{display:block}
+  .auth-retrato{position:relative;height:clamp(200px,27vh,300px);border-right:0}
+  .auth-retrato .retrato-img{object-position:50% 12%}
+  .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.82) 22%,rgba(16,17,21,0) 62%),
+    linear-gradient(to bottom,rgba(16,17,21,.7) 0%,rgba(16,17,21,0) 26%)}
+  .auth-retrato .retrato-sup{padding:16px 18px 0}
+  .auth-retrato .retrato-inf{padding:0 18px 16px}
+  .auth-retrato .retrato-eyebrow,.auth-retrato .retrato-txt,.auth-retrato .retrato-pie{display:none}
+  .auth-retrato .retrato-tit{margin:0;font-size:clamp(1.6rem,8cqw,2.25rem)}
+  /* El formulario sube: marca y titular, después el ingreso, y la explicación larga queda debajo. */
+  .auth-der{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:22px 18px 44px;max-width:520px}
+  .auth-intro{display:contents}
+  .auth-marca{margin-bottom:16px}
+  .auth-marca .mono.g{width:40px;height:40px;font-size:24px}
+  .auth-marca .marca{font-size:1.15rem}
+  .auth-intro .eyebrow{margin-bottom:10px}
+  .auth-intro h1{margin-bottom:22px;font-size:1.75rem}
+  .auth-card{order:2}
+  .auth-lead{order:3;margin-top:26px}
+  .auth-ben{order:4;margin-top:24px}
+  .auth-ben ul{grid-template-columns:1fr}
+}
+
+/* ------------------------------------------------------------------------- 5. Consultar -- */
+.chat-lay{--ancho-chat:780px}
+.hist{--hp-x:20px;--hp-y:22px;padding:var(--hp-y) var(--hp-x) 10px}
+.hilo,.opts,.adjfila,.entrada,.barra .aviso{max-width:var(--ancho-chat)}
+.retrato-chat{display:none}
+
+/* Estado inicial */
+#sugs{min-height:100%;display:flex;flex-direction:column;justify-content:center}
+.franja{position:relative;flex:none;height:168px;margin:calc(var(--hp-y) * -1) calc(var(--hp-x) * -1) 22px;overflow:hidden;background:#101115}
+.franja picture,.franja img{display:block;width:100%;height:100%}
+.franja img{object-fit:cover;object-position:50% 10%}
+.franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.7) 26%,rgba(16,17,21,0) 62%)}
+.franja .lema{position:absolute;left:var(--hp-x);bottom:14px;z-index:1}
+.sugs-cab{width:100%;max-width:var(--ancho-chat);margin:0 auto 22px;container-type:inline-size}
+.sugs-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 14px}
+.sugs-eyebrow .punto{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
+.sugs-cab h2{margin:0 0 12px;font-size:2.25rem;font-size:clamp(1.75rem,8.4cqw,3rem);line-height:1.12}
+.sugs-cab h2 span{display:block;color:var(--text-2)}
+.sugs-cab>p:last-child{margin:0;color:var(--text-2);font-size:1rem;line-height:1.55;max-width:52ch}
+.sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sugs button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:4px;align-content:start;align-items:center;
+  min-height:110px;padding:16px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text-2);box-shadow:var(--shadow);animation:entra .55s ease both;
+  transition:transform .25s var(--curva),border-color .25s ease,box-shadow .25s ease}
+.sugs button:nth-child(2){animation-delay:.05s}.sugs button:nth-child(3){animation-delay:.1s}.sugs button:nth-child(4){animation-delay:.15s}
+.sugs button:hover{transform:translateY(-3px);border-color:var(--accent-text);box-shadow:var(--shadow-lg)}
+.sugs button:active{transform:translateY(-1px)}
+.sugs button .i{width:22px;height:22px}
+.sugs button .i.t1{color:var(--tono-1)}.sugs button .i.t2{color:var(--tono-2)}.sugs button .i.t3{color:var(--tono-3)}
+.sugs button b{font-size:.95rem;font-weight:650;line-height:1.3;color:var(--text)}
+.sugs button span{grid-column:1/-1;font-size:.8125rem;line-height:1.5}
+@media(max-width:479px){
+  .sugs{grid-template-columns:1fr;gap:8px}
+  .sugs button{min-height:72px;padding:13px 14px}
+}
+@media(max-width:759px){
+  .hist{--hp-x:14px;--hp-y:16px}
+  .franja{height:150px}
+  .sugs-cab h2{font-size:clamp(1.75rem,9.6cqw,2.25rem)}
+}
+/* Pantallas anchas: retrato a la izquierda mientras no haya conversación abierta. Con :has(); un navegador que
+   no lo entienda sigue viendo la franja. */
+@media(min-width:1180px){
+  .chat-lay:has(#sugs:not(.hidden)) .retrato-chat{display:flex;flex:0 0 38%;border-right:1px solid rgba(244,246,249,.08)}
+  .chat-lay:has(#sugs:not(.hidden)) .franja{display:none}
+  .chat-lay:has(#sugs:not(.hidden)){--ancho-chat:720px}
+  .chat-lay:has(#sugs:not(.hidden)) .hist{--hp-x:36px}
+  .chat-lay:has(#sugs:not(.hidden)) .barra{padding-left:36px;padding-right:36px}
+  .chat-lay:has(#sugs:not(.hidden)) .entrada textarea{min-height:88px}
+}
+/* Sin conversación no hay nada que imprimir ni exportar. */
+.chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="imprimirPDF"],
+.chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="exportarExcel"]{display:none}
+@supports not selector(:has(*)){.retrato-chat{display:none!important}}
+
+/* Compositor */
+.barra{padding-top:8px}
+.opts{gap:6px;margin-bottom:10px}
+.chip{min-height:34px;padding:0 10px;border-radius:var(--radius-sm);font-family:var(--font-ui);font-size:.8125rem;font-weight:550;line-height:1.2}
+.chip select{font-size:.8125rem;min-height:32px;max-width:150px;text-overflow:ellipsis}
+.entrada{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"texto texto texto" "clip espacio enviar";
+  align-items:center;gap:6px 8px;padding:10px 10px 10px 12px;border-radius:var(--radius)}
+.entrada textarea{grid-area:texto;width:100%;min-height:52px;padding:6px 4px;font-size:1rem;line-height:1.5}
+.clip{grid-area:clip}
+.env{grid-area:enviar}
+.env,.clip{width:44px;height:44px;border-radius:var(--radius-sm)}
+.barra .aviso{font-size:.75rem;margin-top:10px}
+@media(max-width:560px){
+  .entrada textarea{min-height:44px}
+  .opts{margin-bottom:8px}
+}
+
+/* Mensajes */
+.b.ia .av{font-family:var(--font-marca)}
+.quien{margin:0 0 6px;font-size:.75rem;font-weight:650;letter-spacing:.11em;text-transform:uppercase;color:var(--text-2)}
+.quien b{color:var(--text);font-weight:700}
+.b.ia .md{font-size:1.0625rem;line-height:1.7}
+.b.user .md{font-size:1rem;line-height:1.55}
+@media(max-width:560px){.b.ia .md{font-size:1rem;line-height:1.65}}
+.acc{gap:4px;margin-top:12px}
+.acc button{min-height:34px;padding:0 10px;font-size:.8125rem;border-radius:var(--radius-sm)}
+.vl-btn{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;color:var(--text-2)}
+.vl-btn:hover,.vl-btn[aria-pressed="true"]{color:var(--text)}
+.btn-continuar,.vl-enviar{color:var(--accent-ink)}        /* antes blanco fijo: ilegible sobre un acento claro */
+.conv-conf .borrar,.doc-btn.peligro.pri{color:var(--bg)}  /* ídem sobre el rojo de cada tema */
+
+/* Fuentes consultadas: el estado de vigencia va escrito en el chip; el color solo acompaña. */
+.fuentes{margin-top:14px;border-radius:var(--radius);font-size:.8125rem}
+.fuentes>summary{display:flex;align-items:center;gap:9px;min-height:44px;padding:0 14px;list-style:none;color:var(--text)}
+.fuentes>summary::-webkit-details-marker{display:none}
+.fuentes>summary .i{color:var(--accent-text)}
+.fuentes>summary::after{content:"";width:7px;height:7px;margin-left:auto;border-right:1.75px solid currentColor;border-bottom:1.75px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);transition:transform var(--t-rapida) var(--curva);color:var(--text-2)}
+.fuentes[open]>summary::after{transform:rotate(225deg) translateY(-2px)}
+.fuentes-lista{padding:12px 14px;gap:12px}
+.fchip{font-size:.75rem;padding:2px 9px}
+.fuente .fmeta,.fnota{font-size:.75rem}
+.fnota{padding:0 14px 12px}
+
+/* ------------------------------------------------------- 6. ajustes del tema «justicia» -- */
+:root[data-tema="justicia"] .lb2{letter-spacing:.11em}
+:root[data-tema="justicia"] .b.ia .av{font-weight:800;padding-bottom:0}
+:root[data-tema="justicia"] .captarj:hover,:root[data-tema="justicia"] .tcard:hover,:root[data-tema="justicia"] .nodo:hover,
+:root[data-tema="justicia"] .doc-card:hover{border-color:var(--accent-text)}
+:root[data-tema="justicia"] .entrada{border-color:var(--border)}
+:root[data-tema="justicia"] .entrada:focus-within{border-color:var(--accent-text);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow-lg)}
+:root[data-tema="justicia"] .creditos .punto,:root[data-tema="justicia"] .sugs-eyebrow .punto{width:6px;height:6px;background:var(--tono-3)}
+:root[data-tema="justicia"][data-esquema="oscuro"] .bpri,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec),
+:root[data-tema="justicia"][data-esquema="oscuro"] .env{box-shadow:var(--brillo)}
+:root[data-tema="justicia"][data-esquema="oscuro"] .bpri:hover,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec):hover,
+:root[data-tema="justicia"][data-esquema="oscuro"] .env:hover{background:#e6ff94}
+:root[data-tema="justicia"][data-esquema="oscuro"] .sw::after{background:#f4f6f9}
+:root[data-tema="justicia"][data-esquema="oscuro"] .sw.on::after{background:#101115}
+/* Luz ambiente muy tenue detrás del contenido (solo en oscuro). */
+:root[data-tema="justicia"][data-esquema="oscuro"] main,:root[data-tema="justicia"][data-esquema="oscuro"] #auth{
+  background-image:radial-gradient(900px 520px at 100% 0%,rgba(104,228,244,.055),transparent 62%),
+    radial-gradient(760px 520px at 0% 100%,rgba(217,255,104,.035),transparent 60%)}
+:root[data-tema="justicia"][data-esquema="oscuro"] #auth{background-color:var(--bg)}
+
+/* Héroe del Inicio: tarjeta grafito con la Justicia al fondo (también en modo claro, donde re-define los tokens
+   para que todo lo que lleva dentro siga leyéndose). Si el usuario subió su propio fondo, manda el suyo. */
+:root[data-tema="justicia"] .hero:not(.con-fondo){--surface:#17191e;--surface-2:#24282f;--border:#2e3037;--border-strong:#6f7682;
+  --text:#f4f6f9;--text-2:#b4bac3;--accent:#d9ff68;--accent-ink:#101115;--accent-text:#68e4f4;--accent-soft:#1d2e34;
+  color:var(--text);background:#14161a;background-image:none;border-color:#2e3037;min-height:268px;display:flex;flex-direction:column;justify-content:center}
+:root[data-tema="justicia"] .hero:not(.con-fondo)::before{content:"";position:absolute;top:0;right:0;bottom:0;width:min(46%,400px);z-index:-1;
+  background:url("img/justicia.webp") 50% 11%/cover no-repeat;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 70%);mask-image:linear-gradient(to right,transparent 0%,#000 70%)}
+:root[data-tema="justicia"] .hero:not(.con-fondo)>*{max-width:min(100%,470px)}
+:root[data-tema="justicia"] .hero .sello{display:none}
+:root[data-tema="justicia"] .hero .claim{color:var(--lima)}
+:root[data-tema="justicia"] .hero.con-fondo .claim{color:#fff}
+@media(max-width:759px){
+  :root[data-tema="justicia"] .hero:not(.con-fondo){min-height:0}
+  :root[data-tema="justicia"] .hero:not(.con-fondo)::before{width:62%;opacity:.3}
+  :root[data-tema="justicia"] .hero:not(.con-fondo)>*{max-width:100%}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .retrato:hover .retrato-img,.sugs button:hover,.captarj:hover{transform:none}
+}
+@media print{.retrato,.franja,.miga,.nav-mas{display:none!important}}

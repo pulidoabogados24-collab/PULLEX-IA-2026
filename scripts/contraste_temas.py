@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 CSS = (Path(__file__).resolve().parent.parent / "static" / "tema.css").read_text(encoding="utf-8")
-TEMAS = ["pullex", "notario", "bogota", "caribe", "toga", "jardin"]
+TEMAS = ["justicia", "pullex", "notario", "bogota", "caribe", "toga", "jardin"]
 # (frente, fondo, mínimo, descripción)
 PARES = [
     ("text", "bg", 4.5, "texto / fondo"),

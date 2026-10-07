@@ -104,6 +104,7 @@ function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde
   $('v-'+x).classList.toggle('on',x===v&&!bloq);$('n-'+x).classList.toggle('on',x===nav);
   if(x===nav)$('n-'+x).setAttribute('aria-current','page');else $('n-'+x).removeAttribute('aria-current')});
   const vp=$('v-perfiles');if(vp)vp.classList.toggle('on',v==='perfiles'&&!bloq);
+  pintarUbicacion(v,nav);
   if($('v-mejora'))$('v-mejora').classList.toggle('on',!!bloq);
   const m=document.querySelector('main');if(m)m.scrollTop=0;
   if(bloq){cerrarHistorial();pintarMejora(VISTA_FUNCION[v]);return}
@@ -115,6 +116,23 @@ function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde
   if(v==='perfiles'&&typeof perInit==='function')perInit();
   if(v==='inicio')cargarProgresoInicio();}
 
+// Miga «Espacio de trabajo / <sección>» (escritorio) y menú «Más» de la barra inferior (móvil): el nombre sale
+// del propio botón de la sección, para no repetir la lista en otro sitio.
+const NAV_MAS=['mapa','herramientas','config'];
+function pintarUbicacion(v,nav){
+  const b=$('n-'+nav),m=$('miga-seccion');
+  if(m&&b){const t=b.querySelector('.l-largo')||b.querySelector('span');m.textContent=v==='perfiles'?'Ajustes · Perfiles':(t?t.textContent:'')}
+  const mas=$('n-mas');if(mas)mas.classList.toggle('on',NAV_MAS.includes(nav));
+  cerrarMas();
+}
+function toggleMas(){const c=$('nav-mas'),b=$('n-mas');if(!c||!b)return;
+  const abierto=c.classList.toggle('abierto');b.setAttribute('aria-expanded',String(abierto));
+  if(abierto){const p=c.querySelector('button');if(p)p.focus()}}
+function cerrarMas(){const c=$('nav-mas'),b=$('n-mas');if(!c||!b||!c.classList.contains('abierto'))return false;
+  c.classList.remove('abierto');b.setAttribute('aria-expanded','false');return true}
+document.addEventListener('click',ev=>{if(!ev.target.closest('#n-mas,#nav-mas'))cerrarMas()});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&cerrarMas())$('n-mas').focus()});
+
 async function cargarBoletin(forzar){
   if(forzar)$('boletin').innerHTML='<div class="skel" style="width:90%"></div><div class="skel" style="width:75%"></div>';
   try{
@@ -125,7 +143,7 @@ async function cargarBoletin(forzar){
   }catch(e){$('boletin').textContent='No se pudo cargar el boletín.'}
 }
 
-function pintarWeb(){$('chip-web').classList.toggle('on',WEB)}
+function pintarWeb(){$('chip-web').classList.toggle('on',WEB);$('chip-web').setAttribute('aria-pressed',String(WEB))}
 function toggleWeb(){WEB=!WEB;pintarWeb()}
 function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
 function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
@@ -229,11 +247,12 @@ function icoAdj(tipo){return tipo==='image'
   :'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'}
 function pintarAdj(){const c=$('adjfila');c.innerHTML='';
   ADJ.forEach((a,i)=>{const e=document.createElement('div');e.className='ch';
-    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <b>✕</b>';
-    e.querySelector('b').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
+    e.innerHTML=icoAdj(a.tipo)+esc(a.nombre)+' <button type="button" class="adj-x" aria-label="Quitar adjunto"><svg class="i xs" aria-hidden="true"><use href="#i-x"/></svg></button>';
+    e.querySelector('.adj-x').setAttribute('aria-label','Quitar '+a.nombre);
+    e.querySelector('.adj-x').onclick=()=>{ADJ.splice(i,1);pintarAdj()};c.appendChild(e)});}
 function burbuja(rol,texto,adj){
   const b=document.createElement('div');b.className='b '+(rol==='user'?'user':'ia');
-  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd"><div class="md"></div></div>`;
+  b.innerHTML=`<div class="av" aria-hidden="true">${rol==='user'?'Tú':'P'}</div><div class="bd">${rol==='user'?'':'<p class="quien"><b>PULLEX IA</b><span aria-hidden="true"> / Justicia × Inteligencia</span></p>'}<div class="md"></div></div>`;
   b.querySelector('.md').innerHTML=rol==='user'?esc(texto).replace(/\n/g,'<br>'):md(texto);
   if(adj&&adj.length){const d=document.createElement('div');d.className='adj';
     adj.forEach(a=>{const s=document.createElement('span');s.className='ch';
@@ -370,12 +389,12 @@ function avisoIncompleta(b,texto,meta){
   d.appendChild(bt);
   b.querySelector('.bd').appendChild(d);
 }
-// 👍 / 👎 con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
+// Pulgar arriba / abajo con motivos de una lista cerrada (POST /api/feedback). No se guarda texto libre.
 const MOTIVOS_FB=[['incompleta','Quedó incompleta'],['no_respondio','No respondió lo que pedí'],['error_juridico','Tiene un error jurídico'],['muy_larga','Es demasiado larga'],['otro','Otro motivo']];
 function panelValorar(b,meta){
   const w=el('div','valorar');w.setAttribute('role','group');w.setAttribute('aria-label','¿Te sirvió esta respuesta?');
-  const bu=el('button','vl-btn','👍');bu.type='button';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
-  const bd=el('button','vl-btn','👎');bd.type='button';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
+  const bu=el('button','vl-btn');bu.innerHTML=icoUse('pulgar','s');bu.type='button';bu.title='Me sirvió';bu.setAttribute('aria-label','La respuesta me sirvió');bu.setAttribute('aria-pressed','false');
+  const bd=el('button','vl-btn');bd.innerHTML=icoUse('pulgar-abajo','s');bd.type='button';bd.title='Tuvo problemas';bd.setAttribute('aria-label','La respuesta tuvo problemas');bd.setAttribute('aria-pressed','false');
   const estado=el('span','vl-estado');estado.setAttribute('aria-live','polite');
   const caja=el('div','vl-motivos hidden');
   const sel=new Set();
@@ -440,7 +459,7 @@ function pintarFuentes(b,fuentes){
   if(!Array.isArray(fuentes)||!fuentes.length)return;
   const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
   const d=el('details','fuentes');
-  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');d.appendChild(s);
+  const s=el('summary',null,'Fuentes consultadas ('+lista.length+')');s.insertAdjacentHTML('afterbegin',icoUse('fuentes','s'));d.appendChild(s);
   const ul=el('ul','fuentes-lista');
   lista.forEach(f=>{
     const li=el('li','fuente');const [cls,txt]=chipFuente(f);
@@ -1126,6 +1145,7 @@ function pintarAreaMapa(){
 // pintar. Aquí: los controles de Ajustes → Apariencia, el guardado en la cuenta (con espera corta para
 // no enviar una petición por cada clic) y las imágenes (fondo del Inicio, foto de perfil, logo).
 const TEMAS_AP=[
+  {id:'justicia',n:'Justicia × Inteligencia',d:'Grafito, lima y cian',c:['#f3f5f8','#101115','#101115'],o:['#101115','#f4f6f9','#d9ff68']},
   {id:'pullex',n:'PULLEX',d:'Papel, tinta y bermellón',c:['#f7f5f0','#1b1a17','#b33a16'],o:['#141311','#eeebe4','#ee7a4f']},
   {id:'notario',n:'Notario',d:'Marfil y tinta',c:['#fbf8f1','#1a1d24','#22385e'],o:['#101218','#ece8df','#a9bee3']},
   {id:'bogota',n:'Bogotá',d:'Gris piedra y pizarra',c:['#efefec','#1c1f22','#2d5876'],o:['#151718','#e8eaeb','#8db7d6']},
@@ -1134,7 +1154,7 @@ const TEMAS_AP=[
   {id:'jardin',n:'Jardín',d:'Verde salvia',c:['#f2f4ef','#1a1f1b','#43654e'],o:['#121613','#e9eee9','#9bc4a5']}];
 const ACENTOS_AP=[['Bermellón','#b33a16'],['Tinta','#22385e'],['Cobalto','#2f54c9'],['Turquesa','#0a7570'],
   ['Salvia','#43654e'],['Vino','#7b1e34'],['Ocre','#93600c'],['Grafito','#3d3c39']];
-const FUENTES_AP=[['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
+const FUENTES_AP=[['syne','Futurista','Syne + Plus Jakarta','var(--syne)'],['editorial','Editorial','Fraunces + Inter','var(--serif-editorial)'],
   ['clasica','Clásica','Source Serif','var(--serif-lectura)'],['moderna','Moderna','Inter','var(--sans)']];
 const IMGS_AP={fondo:['Fondo del Inicio','Una foto tuya, de tu ciudad o de tu oficina. Se ajusta a 1600 px.',350],
   avatar:['Foto de perfil','Se recorta en cuadrado de 256 px.',120],logo:['Logo propio','Reemplaza el monograma en la cabecera. PNG con fondo transparente queda mejor.',120]};
@@ -1186,7 +1206,7 @@ function construirApariencia(){
   titulo('Tipografía');
   const fg=el('div','fuentes-op');fg.id='ap-fuentes';
   FUENTES_AP.forEach(([v,n,d,f])=>{const b=boton2('fuente-op',()=>apCambiar({fuente:v}));b.dataset.v=v;
-    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':'560';b.appendChild(aa);
+    const aa=el('span','aa','Aa');aa.style.fontFamily=f;aa.style.fontWeight=v==='moderna'?'650':v==='syne'?'600':'560';b.appendChild(aa);
     b.appendChild(el('span','n',n+' · '+d));fg.appendChild(b)});
   c.appendChild(fg);
   const g3=el('div','ap-grid3');
@@ -1310,7 +1330,7 @@ async function apRestablecer(){
 // Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
 // en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
 // en línea. Solo se ejecutan funciones de esta lista blanca.
-const ACCIONES={abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
