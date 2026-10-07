@@ -48,7 +48,7 @@
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
   opacity:0;pointer-events:none;transition:opacity var(--mv-media) ease}
-:root[data-tema="justicia"] .h-logo .mono::before{border-radius:50%}
+:root[data-tema="justicia"] .h-logo .mono::before,:root[data-tema="justicia"] .b.ia .av::before{border-radius:50%}
 :root[data-trabajo] .h-logo .mono::before,.b.ia:has(.md.cursor) .av::before{opacity:1}
 :root[data-trabajo="fuentes"]{--aro:var(--tono-1)}
 :root[data-trabajo="escribe"]{--aro:var(--tono-3)}

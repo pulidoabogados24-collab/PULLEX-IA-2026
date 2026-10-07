@@ -221,6 +221,9 @@ a{color:var(--accent-text);text-underline-offset:.18em;text-decoration-thickness
    y para los demás temas; aquí se sustituye por la imagen. */
 :root[data-tema="justicia"] .mono{background:transparent url(/static/img/marca/emblema.webp) center/cover no-repeat;
   color:transparent;font-size:0;border-radius:50%;box-shadow:none}
+/* El avatar de las respuestas usa el mismo emblema, no la letra. */
+:root[data-tema="justicia"] .b.ia .av{background:transparent url(/static/img/marca/emblema.webp) center/cover no-repeat;
+  color:transparent;font-size:0;border-radius:50%;padding:0;width:32px;height:32px}
 :root[data-tema="justicia"][data-esquema="oscuro"] .marca-lex{color:var(--lima)}
 :root[data-tema="justicia"] .marca-ia{font-weight:400}
 :root[data-tema="justicia"][data-esquema="oscuro"] .marca-ia{color:var(--cian)}

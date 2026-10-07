@@ -1,5 +1,5 @@
 // Service worker mínimo de LEXCOL — permite instalar la app y cachea la "cara".
-const CACHE = "pullex-v7";
+const CACHE = "pullex-v8";
 const SHELL = ["/", "/static/index.html", "/static/app.js", "/static/tema.css", "/static/justicia.css", "/static/apariencia.js",
   "/static/movimiento.css", "/static/movimiento.js",
   "/static/fonts/inter-var.woff2", "/static/fonts/fraunces-var.woff2",
