@@ -100,6 +100,20 @@ def terminos(pg, nombre):
     sin_desborde(pg, nombre, "resultado de términos")
     pg.screenshot(path=f"{OUT}/{nombre}-terminos.png", full_page=True)
 
+    # 2b. Notificación en viernes (3 de julio de 2026): en el calendario solo ese día es «notif.»; el sábado y el
+    #     domingo que siguen se rotulan como lo que son, aunque todavía no haya empezado el conteo.
+    pg.fill("#herr-t-fecha_notificacion", "2026-07-03")
+    pg.click("#herr-t-calcular")
+    pg.wait_for_function("() => { const c = document.querySelector('#herr-t-cal .herr-dia:not(.hueco)');"
+                         " return c && c.getAttribute('aria-label').includes('3 de julio'); }")
+    rotulos = pg.evaluate("() => [...document.querySelectorAll('#herr-t-cal .herr-dia:not(.hueco)')].slice(0, 4)"
+                          ".map(e => (e.querySelector('.m, .n') || {}).textContent)")
+    ok(rotulos == ["notif.", "sáb", "dom", "1"], f"{nombre}: el calendario rotula cada día por su motivo {rotulos}")
+    ok(pg.locator("#herr-t-cal .herr-dia.inicio").count() == 1, f"{nombre}: un solo día con el estilo de notificación")
+    punteadas = pg.locator("#herr-t-cal .herr-dia:not(.hueco):not(.contado):not(.vence):not(.inicio)").count()
+    dicho = pg.inner_text("#herr-t-cal .herr-cal-res span b") if pg.locator("#herr-t-cal .herr-cal-res span b").count() else "0"
+    ok(str(punteadas) == dicho, f"{nombre}: el resumen cuenta los mismos días sin contar que dibuja el calendario ({dicho} / {punteadas})")
+
     # 3. Dato desconocido que cambia el resultado: dos escenarios, sin fecha definitiva.
     pg.select_option("#herr-t-regimen", "cgp")
     ok(pg.is_visible("#herr-t-vacancia_judicial"), f"{nombre}: en régimen judicial pregunta por la vacancia")

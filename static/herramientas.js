@@ -73,7 +73,8 @@ function herrInit(){
     [70,100,100].map(w=>hE('div',{class:'esq-fila','aria-hidden':'true'},hE('div',{class:'skel',style:'width:'+w*.4+'%'}),hE('div',{class:'skel',style:'width:'+w*.9+'%'}))));
   raiz.appendChild(estado);
   herrApi('/api/procedimientos').then(d=>{HERR.opc=d;HERR.listo=true;estado.remove();herrConstruir(raiz)})
-    .catch(e=>{estado.textContent=e.status===404?'Las herramientas de cálculo no están disponibles en esta versión.':
+    .catch(e=>{estado.removeAttribute('aria-label');      // ya no está cargando: que el lector de pantalla lea el motivo
+      estado.textContent=e.status===404?'Las herramientas de cálculo no están disponibles en esta versión.':
       'No se pudieron cargar las herramientas: '+e.message})
     .finally(()=>{HERR.cargando=false});
 }
@@ -195,8 +196,10 @@ function herrTextoTermino(r){
 // algo no cuadra con la fecha de vencimiento, no se dibuja nada (la tabla sigue siendo la referencia).
 const HERR_CAL_MAX=98;
 function hDia(iso){const [a,m,d]=iso.split('-').map(Number);return new Date(a,m-1,d)}
+// Rótulo corto de la casilla. Sale del motivo que dio el servidor: nunca se rotula un día por su posición.
 function herrMotivoCorto(m){const t=(m||'').toLowerCase();
-  return t.startsWith('domingo')?'dom':t.startsWith('sábado')?'sáb':t.startsWith('festivo')?'fest.':t.startsWith('vacancia')?'vac.':
+  return t.startsWith('día de la notificación')?'notif.':t.startsWith('envío')?'envío':t.startsWith('día hábil siguiente')?'aún no':
+    t.startsWith('domingo')?'dom':t.startsWith('sábado')?'sáb':t.startsWith('festivo')?'fest.':t.startsWith('vacancia')?'vac.':
     t.startsWith('suspensión')?'susp.':t.startsWith('día sin atención')?'cerr.':'—'}
 function herrCalendario(r){
   const cr=r.cronologia||[];
@@ -205,10 +208,14 @@ function herrCalendario(r){
   const contados=cr.filter(c=>c.cuenta!=null),ultimo=contados[contados.length-1];
   if(!ultimo||ultimo.fecha!==r.fecha_vencimiento||cr[cr.length-1]!==ultimo)return null;
   const primerContado=cr.indexOf(contados[0]);
-  // Lo que no contó, agrupado por motivo (el texto es el que dio el servidor, sin el detalle después de «:» o «(»).
+  // Lo que no contó desde que empezó a correr el término (r.inicio_computo), agrupado por motivo (el texto es el que
+  // dio el servidor, sin el detalle después de «:» o «(»). Es la misma cuenta que hace el servidor
+  // (dias_inhabiles_descontados): si no coincide, no se dibuja nada.
+  if(!r.inicio_computo)return null;
   const grupos={};let noCuentan=0;
-  cr.forEach((c,i)=>{if(c.cuenta!=null||i<primerContado)return;noCuentan++;
+  cr.forEach(c=>{if(c.cuenta!=null||c.fecha<r.inicio_computo)return;noCuentan++;
     const k=(c.motivo||'sin motivo indicado').split(/[:(]/)[0].trim();grupos[k]=(grupos[k]||0)+1});
+  if(typeof r.dias_inhabiles_descontados==='number'&&r.dias_inhabiles_descontados!==noCuentan)return null;
   const habiles=r.termino.tipo_dias==='habiles';
   const resumen=hE('p',{class:'herr-cal-res'},hE('b',{text:String(contados.length)}),' '+(contados.length===1?'día contado':'días contados')+
     (habiles?' (hábiles)':'')+' entre el '+hFecha(contados[0].fecha)+' y el '+hFecha(ultimo.fecha)+'. ',
@@ -217,21 +224,23 @@ function herrCalendario(r){
   const dias=hE('ol',{class:'herr-cal-dias'});
   const hueco=(hDia(cr[0].fecha).getDay()+6)%7;
   for(let i=0;i<hueco;i++)dias.appendChild(hE('li',{class:'herr-dia hueco','aria-hidden':'true'}));
-  cr.forEach((c,i)=>{const f=hDia(c.fecha),vence=c===ultimo,previo=i<primerContado;
+  // Solo el día de la notificación (o del envío del mensaje) lleva el estilo «inicio». Un sábado, domingo o festivo
+  // que caiga entre la notificación y el primer día contado se rotula como lo que es.
+  cr.forEach((c,i)=>{const f=hDia(c.fecha),vence=c===ultimo,previo=i<primerContado&&/^(día de la notificación|envío)/i.test(c.motivo||'');
     const largo=f.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
     const mes=(i===0||f.getDate()===1)?' '+f.toLocaleDateString('es-CO',{month:'short'}).replace('.',''):'';
     const li=hE('li',{class:'herr-dia'+(vence?' vence':c.cuenta!=null?' contado':previo?' inicio':''),style:'--i:'+i,title:largo+(c.motivo?' — '+c.motivo:''),
       'aria-label':largo+': '+(vence?'día '+c.cuenta+', vence el término':c.cuenta!=null?'día '+c.cuenta:'no cuenta'+(c.motivo?' ('+c.motivo+')':''))},
       hE('span',{class:'f','aria-hidden':'true',text:f.getDate()+mes}),
       c.cuenta!=null?hE('span',{class:'n','aria-hidden':'true',text:String(c.cuenta)}):
-        hE('span',{class:'m','aria-hidden':'true',text:previo?'notif.':herrMotivoCorto(c.motivo)}));
+        hE('span',{class:'m','aria-hidden':'true',text:herrMotivoCorto(c.motivo)}));
     dias.appendChild(li)});
   const paso=Math.max(12,Math.min(40,Math.round(900/cr.length)));
   return hE('section',{class:'herr-cal dibuja',id:'herr-t-cal',style:'--paso-dia:'+paso+'ms;--n:'+cr.length},
     hE('h4',{text:'Cómo se contó'}),resumen,
     hE('div',{class:'herr-cal-cab','aria-hidden':'true'},['L','M','M','J','V','S','D'].map(d=>hE('span',{text:d}))),dias,
     hE('ul',{class:'herr-cal-ley'},
-      hE('li',null,hE('i',{class:'inicio'}),'Notificación: no se cuenta'),hE('li',null,hE('i',{class:'contado'}),'Día que cuenta (con su número)'),
+      hE('li',null,hE('i',{class:'inicio'}),'Notificación o envío: no se cuenta'),hE('li',null,hE('i',{class:'contado'}),'Día que cuenta (con su número)'),
       hE('li',null,hE('i',null),'Día que no cuenta'),hE('li',null,hE('i',{class:'vence'}),'Vence')),
     hE('p',{class:'herr-cal-nota',text:'El calendario dibuja la misma cronología de la tabla de abajo. Pasa el cursor por un día para ver el motivo completo.'}));
 }

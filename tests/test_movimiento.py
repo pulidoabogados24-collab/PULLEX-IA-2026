@@ -163,3 +163,56 @@ def test_MOV_009_sin_librerias_ni_scripts_en_linea():
         fuente = leer(nombre)
         assert "http://" not in fuente and "https://" not in fuente, nombre
     assert "eval(" not in leer("movimiento.js") and "innerHTML" not in leer("movimiento.js")
+
+
+def test_MOV_011_al_navegar_gana_el_ultimo_cambio():
+    """La transición entre secciones aplica el cambio un cuadro después del clic. Si entre tanto hubo otra navegación
+    (otro clic, o un ver() interno), el cambio viejo no puede pisarla: se descarta."""
+    app = leer("app.js")
+    cuerpo_ver = app[app.index("function ver(v){"):app.index("function pintarUbicacion")]
+    assert "TURNO_VER++" in cuerpo_ver                       # todo cambio de sección cuenta, venga de donde venga
+    cuerpo_nav = app[app.index("function verNav(v){"):app.index("ACCIONES.ver=verNav")]
+    assert "const turno=TURNO_VER" in cuerpo_nav and "if(turno===TURNO_VER)ver(v)" in cuerpo_nav
+    assert "MV.transicion(()=>ver(v))" not in app            # nunca un cambio diferido sin comprobar el turno
+
+
+def test_MOV_012_el_interruptor_de_movimiento_vale_en_todas_las_paginas():
+    """admin.html y restablecer.html cargan tema.css y apariencia.js, pero no movimiento.css: la regla que apaga el
+    movimiento con Ajustes → Movimiento: reducido tiene que estar también en tema.css."""
+    tema = sin_comentarios(leer("tema.css"))
+    assert re.search(r':root\[data-movimiento="reducido"\] \*[^{]*\{[^}]*animation-duration:\.001ms!important[^}]*'
+                     r'transition-duration:\.001ms!important', tema)
+    assert "raiz.setAttribute('data-movimiento'" in leer("apariencia.js")
+    for pagina in ("admin.html", "restablecer.html"):
+        html = leer(pagina)
+        assert "/static/tema.css" in html and "/static/apariencia.js" in html, pagina
+
+
+def test_MOV_013_el_calendario_rotula_cada_dia_por_su_motivo():
+    """El calendario del término es un apoyo de un cálculo jurídico: el rótulo corto de cada casilla sale del motivo
+    que dio el servidor, no de la posición del día. Un sábado entre la notificación y el día 1 no es «notif.»."""
+    js = leer("herramientas.js")
+    assert "previo?'notif.'" not in js
+    assert "text:herrMotivoCorto(c.motivo)" in js
+    # El resumen cuenta lo que no contó desde el inicio del cómputo y lo contrasta con la cifra del servidor.
+    assert "c.fecha<r.inicio_computo" in js and "r.dias_inhabiles_descontados!==noCuentan)return null" in js
+    corto = js[js.index("function herrMotivoCorto"):js.index("function herrCalendario")]
+    servidor = (RAIZ / "procedimientos" / "j05_terminos.py").read_text(encoding="utf-8")
+    calendario = (RAIZ / "procedimientos" / "calendario.py").read_text(encoding="utf-8")
+    # Cada motivo que el servidor puede dar a un día no contado tiene su rótulo (si cambia el texto allá, se nota aquí).
+    for inicio_motivo, fuente in (("día de la notificación", servidor), ("envío", servidor), ("día hábil siguiente", servidor),
+                                  ("domingo", calendario), ("sábado", calendario), ("festivo", calendario),
+                                  ("vacancia", calendario), ("suspensión", calendario), ("día sin atención", calendario)):
+        assert "startsWith('" + inicio_motivo + "')" in corto, inicio_motivo
+        assert '"' + inicio_motivo in fuente, inicio_motivo
+
+
+def test_MOV_014_una_respuesta_cortada_se_pinta_con_lo_recuperado():
+    """Si la conexión se cae a mitad, lo que se recupera del servidor (o el aviso de conexión interrumpida) tiene que
+    quedar a la vista en la burbuja, no solo en la variable que usan «Copiar» y «Continuar»."""
+    app = leer("app.js")
+    enviar = app[app.index("async function enviar(opc){"):app.index("async function continuarResp")]
+    bloque = enviar[enviar.index("if(res.error==='conexion'&&!res.fin){"):enviar.index("cerrarResp(bIA,res,cid)")]
+    assert "se interrumpió la conexión" in bloque and "innerHTML=md(res.buffer)" in bloque
+    continuar = app[app.index("async function continuarResp"):app.index("function quitarAcciones")]
+    assert "res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)" in continuar

@@ -257,3 +257,8 @@ label.lb{display:block;font-size:.8125rem;color:var(--text);margin:14px 0 6px;fo
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
     transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
+/* Ajustes → Apariencia → Movimiento: reducido. apariencia.js pone data-movimiento en TODAS las páginas, pero
+   admin.html y restablecer.html cargan esta hoja y no movimiento.css: el interruptor también tiene que valer ahí. */
+:root[data-movimiento="reducido"] *,:root[data-movimiento="reducido"] *::before,:root[data-movimiento="reducido"] *::after{
+  animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;
+  transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}

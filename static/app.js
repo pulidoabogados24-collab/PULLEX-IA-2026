@@ -111,7 +111,9 @@ function pintarPlanes(){
     el.innerHTML=`<div><div class="t">${p[k].nombre}</div><div class="d">${p[k].limite} consultas/mes</div></div>
       <div class="t" style="color:var(--accent-text);font-weight:650;font-variant-numeric:tabular-nums">$${p[k].precio.toLocaleString('es-CO')}</div>`;c.appendChild(el)});
 }
+let TURNO_VER=0;   // sube en cada cambio de sección; verNav() lo usa para no aplicar un cambio que ya quedó viejo
 function ver(v){const nav=v==='perfiles'?'config':v;   // Perfiles se abre desde Ajustes y no tiene botón propio en la barra
+  TURNO_VER++;
   // Función que el plan no incluye: se marca su pestaña y se muestra la pantalla de mejora (planes.js).
   const bloq=typeof vistaBloqueada==='function'&&vistaBloqueada(v);
   ['inicio','modular','mapa','chat','documentos','herramientas','config'].forEach(x=>{
@@ -375,6 +377,7 @@ async function enviar(opc){
     const rec=await recuperarIncompleta(cid);
     if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
     else if(!res.buffer.trim())res.buffer='**Aviso:** se interrumpió la conexión. Intenta de nuevo.';
+    bIA.querySelector('.md').innerHTML=md(res.buffer);   // lo recuperado (o el aviso) tiene que verse, no solo guardarse
   }
   cerrarResp(bIA,res,cid);
   ocupado(false);
@@ -397,7 +400,7 @@ async function continuarResp(bIA,meta,textoActual){
     accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
   if(res.error==='conexion'&&!res.fin){
     const rec=await recuperarIncompleta(meta.cid);
-    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}}
+    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)}}
   if(!res.id)res.id=meta.id;
   cerrarResp(bIA,res,meta.cid);
   ocupado(false);
@@ -1434,8 +1437,12 @@ function despachar(tipo,ev){
 // Los clics de navegación pasan por la transición entre secciones (static/movimiento.js) cuando el navegador la
 // tiene. Las llamadas internas a ver() siguen siendo inmediatas: hay código que necesita la vista ya cambiada en la
 // línea siguiente (enfocar el cuadro de texto, desplazar hasta un panel).
+// La transición aplica el cambio un cuadro después del clic. Si entre tanto hubo otra navegación (otro clic o un
+// ver() interno), esa es la que vale: el cambio viejo se descarta en vez de pisarla.
 function verNav(v){const actual=$('v-'+v);
-  if(window.MV&&MV.transicion&&!(actual&&actual.classList.contains('on')))MV.transicion(()=>ver(v));else ver(v)}
+  if(window.MV&&MV.transicion&&!(actual&&actual.classList.contains('on'))){
+    const turno=TURNO_VER;MV.transicion(()=>{if(turno===TURNO_VER)ver(v)})}
+  else ver(v)}
 ACCIONES.ver=verNav;
 ['click','change','input','keydown'].forEach(t=>document.addEventListener(t,ev=>despachar(t,ev)));
 
