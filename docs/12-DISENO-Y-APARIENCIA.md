@@ -1,10 +1,17 @@
 # 12 — Diseño y apariencia personalizable
 
-Rediseño de octubre de 2026. Reemplaza el azul marino y dorado anteriores por una dirección
-**editorial-jurídica contemporánea**: papel cálido, tinta y un solo color de acento, tipografía con
-serifa para los títulos y una sans muy legible para el texto. Nada de estética "IA": sin degradados
-neón, brillos, robots, cerebros ni vidrio morado. El único guiño gráfico es el signo de párrafo **§**,
-que aparece grande y muy tenue en el ingreso y en el Inicio.
+La app tiene **un sistema de diseño y siete temas**. Desde octubre de 2026 el tema por defecto es
+**«Justicia × Inteligencia»**, la dirección que aprobó el dueño del producto: grafito, una imagen
+fuerte por pantalla (el retrato de la Justicia) y tres luces tomadas de esa misma imagen (lima, cian y
+rosa). Los otros seis temas conservan la dirección anterior, **editorial-jurídica**: papel cálido,
+tinta, un solo color de acento y títulos con serifa; en ellos el guiño gráfico sigue siendo el signo de
+párrafo **§**, grande y muy tenue en el Inicio.
+
+Lo que NO cambia con ningún tema: nada de estética genérica de «IA». Sin degradados morados o arcoíris,
+sin manchas de color flotando, sin vidrio esmerilado, sin robots ni cerebros, sin emojis como íconos,
+sin partículas ni fondos animados. El neón de «Justicia × Inteligencia» no es un adorno aplicado a la
+interfaz: es la luz que ya trae la imagen de la Justicia, y la interfaz solo la cita con avaricia (ver
+«Tema por defecto» y «Movimiento»).
 
 ## Dónde está cada cosa
 
@@ -12,6 +19,10 @@ que aparece grande y muy tenue en el ingreso y en el Inicio.
 |---|---|
 | `static/tema.css` | Fuentes (`@font-face`), **tokens semánticos**, los 6 temas en claro y oscuro, alias de los nombres viejos y primitivas comunes (botones, campos, monograma). Lo usan `index.html`, `admin.html` y `restablecer.html`. |
 | `static/apariencia.js` | Motor de apariencia. Se carga en `<head>` **antes de pintar**: lee la última apariencia de este navegador (`localStorage`) y pone los atributos `data-*` en `<html>`. También calcula los colores derivados de un acento libre. |
+| `static/justicia.css` | Capa «Justicia × Inteligencia»: barra lateral, barra superior con miga, retrato (`.retrato`), portada, estado inicial de Consultar y accesibilidad común (foco, objetivos táctiles de 44 px). Sirve a todos los temas. |
+| `static/movimiento.css` | Todo lo que se mueve: coreografías de entrada, estados de trabajo, microinteracciones y la transición entre secciones. Usa solo los tokens `--mv-*` de `tema.css`. |
+| `static/movimiento.js` | Lo que el CSS no puede hacer solo: partir el titular de la portada por líneas, paralaje del retrato, borde de luz de las tarjetas, indicador de la barra lateral, View Transitions y cifras que cuentan. Expone `window.MV`; la app funciona igual si no carga. |
+| `static/img/` | `justicia.webp`/`.jpg` (retrato), `justicia-luz.webp` (solo las vetas de neón del retrato, sobre transparente) y `marca/emblema.webp` (busto vendado). |
 | `static/index.html` | Componentes de la app (solo con tokens), sprite de íconos SVG propios y el marcado de todas las vistas. |
 | `static/app.js` | Sección **Ajustes → Apariencia**, guardado en la cuenta, procesamiento de imágenes con canvas. |
 | `static/fonts/` | Inter, Fraunces y Source Serif 4 (variables, subconjunto latino, licencia OFL incluida). |
@@ -37,7 +48,39 @@ de botón no llega a 4,5:1 como texto). Para un fondo de estado usa
 `--oro-d`, `--txt`, `--txt2`, `--ok`, `--mal`, `--radio`) siguen existiendo como alias de los nuevos,
 y `body.claro` / `body.oscuro` se siguen poniendo, para no romper código anterior.
 
-## Paleta por defecto (tema PULLEX)
+## Tema por defecto: «Justicia × Inteligencia»
+
+Es lo que ve quien nunca eligió otra apariencia (`data-tema="justicia"`, oscuro, par tipográfico `syne`).
+
+| Rol | Token | Valor (oscuro) |
+|---|---|---|
+| Fondo / tarjeta / relleno | `--bg` / `--surface` / `--surface-2` | `#101115` / `#17191e` / `#24282f` |
+| Texto / texto secundario | `--text` / `--text-2` | `#f4f6f9` / `#979da7` |
+| Acción principal (lima) | `--accent`, `--lima` | `#d9ff68`, con texto `#101115` |
+| Acento como texto y enlaces (cian) | `--accent-text`, `--cian` | `#68e4f4` |
+| Error y segunda luz (rosa) | `--danger`, `--rosa` | `#ff73b1` |
+
+- **Tipografía:** Syne (titulares, peso 600; marca 800) y Plus Jakarta Sans (texto), alojadas en
+  `static/fonts/`. Ningún texto por debajo de 12 px.
+- **El retrato** (`.retrato` en `justicia.css`): la estatua de la Justicia, vendada y con la balanza,
+  en mármol con vetas de luz cian y rosa. Es **la única idea fuerte de cada pantalla** donde aparece:
+  panel a sangre en la portada (izquierda) y en el estado inicial de Consultar (**derecha**, para que el
+  titular y las sugerencias queden donde empieza la lectura); franja superior en pantallas angostas; fondo
+  de la tarjeta de saludo en el Inicio. Siempre lleva el lema **JUSTICIA × INTELIGENCIA** (con el signo ×
+  en lima). Es una pieza de marca siempre oscura: trae sus propios colores y se ve igual sobre cualquier tema.
+- **El emblema:** el busto de la Justicia vendada dentro de un círculo (`static/img/marca/emblema.webp`),
+  junto a la palabra **PUL·LEX·IA** (LEX en lima, IA en cian). Reemplaza al monograma «P» solo en este
+  tema; los demás temas conservan el monograma con el acento del usuario.
+- **Nombre:** el producto y el asistente se llaman **PULLEX IA**. La figura de la Justicia no tiene nombre
+  propio en la interfaz: se presenta con el lema.
+- **Lima con avaricia:** solo para la acción principal de la pantalla (enviar, «Nueva consulta», ingresar),
+  el indicador de dónde estás y **un** acento (la segunda línea del titular de Consultar, el × del lema, el
+  día de vencimiento en el calendario de términos). El cian es el color de enlaces, rótulos y foco de
+  lectura; el rosa queda para errores y para una de las cuatro sugerencias.
+- **Estados sin depender del color:** todo estado va escrito («Corpus · verificar vigencia», «Buscando en
+  fuentes…», «Vence»), y el color solo acompaña.
+
+## Paleta del tema PULLEX (el anterior por defecto)
 
 | Token | Claro | Oscuro |
 |---|---|---|
@@ -94,10 +137,90 @@ se descarga si alguien elige «Clásica».
 
 ## Movimiento
 
-Transición de entrada en cada vista, aparición escalonada de tarjetas, entrada de cada mensaje del
-chat, indicador de escritura, barras de la rúbrica que crecen, micro-interacciones al pasar el
-cursor y al presionar, esqueletos de carga en boletín, tablero e historial. Todo se apaga con
-`prefers-reduced-motion: reduce` (regla global en `tema.css`).
+El movimiento es parte del sistema de diseño, no una capa de efectos. Vive en `static/movimiento.css`
+(y lo poco que necesita JavaScript, en `static/movimiento.js`).
+
+### Lenguaje: cinco duraciones y tres curvas (`tema.css`)
+
+| Token | Valor | Para qué |
+|---|---:|---|
+| `--mv-instante` | 90 ms | Respuesta al toque: presionar y soltar. |
+| `--mv-rapida` | 160 ms | Hover, foco, cambios de color. |
+| `--mv-media` | 260 ms | Entra una pieza: mensaje, ficha, aviso. |
+| `--mv-lenta` | 420 ms | Piezas grandes: titular, panel, indicador de navegación. |
+| `--mv-escena` | 700 ms | Una vez por pantalla: el revelado del retrato. |
+| `--mv-paso` | 60 ms | Separación entre piezas de una misma serie. |
+| `--mv-entra` | `cubic-bezier(.2,.8,.2,1)` | Llega y frena. Es la curva por omisión de las entradas. |
+| `--mv-sale` | `cubic-bezier(.55,0,.9,.4)` | Arranca y se va. Las salidas duran menos que las entradas. |
+| `--mv-enfasis` | `cubic-bezier(.34,1.4,.64,1)` | Rebote leve. Solo para lo que el usuario acaba de tocar o para la pieza que remata una serie. |
+
+Los nombres anteriores (`--t-rapida`, `--t-media`, `--curva`) siguen existiendo como alias. Los bucles
+(esqueleto de carga, cursor de escritura, respiración del retrato, aros de estado) tienen su propio
+periodo escrito en la regla, porque no son transiciones entre dos estados.
+
+**Regla de oro:** cada tipo de pieza entra a su manera. Un rótulo se desliza, un titular se descubre por
+líneas, un párrafo solo aparece, una tarjeta sube con un rebote leve, el compositor sube sin rebote, el
+retrato se revela desde su borde. Si todo entra con el mismo fundido hacia arriba, está mal.
+
+### Qué se mueve hoy
+
+- **Portada:** el retrato se revela (de izquierda a derecha; de arriba abajo en móvil), el × del lema da un
+  giro corto, el titular entra por líneas, la tarjeta de ingreso sube y las cuatro características esperan a
+  entrar en pantalla. El botón de ingreso dice «Ingresando…» mientras el servidor responde.
+- **Consultar, estado inicial:** rótulo → titular por líneas → bajada → sugerencias una a una →
+  compositor; el retrato se revela desde la derecha. La escena completa se ve **una vez por sesión**; las
+  siguientes visitas entran sin coreografía, para que volver a Consultar nunca haga esperar.
+- **Retrato:** las vetas de neón «respiran» muy despacio (7,5 s). No es un filtro: es una segunda imagen
+  con solo las vetas (`justicia-luz.webp`) a la que se le anima la opacidad. Con ratón, la figura y los
+  rótulos se separan unos píxeles según el puntero (paralaje de 2 a 6 px); en táctil no hay paralaje.
+- **Trabajo real:** mientras la app espera o recibe una respuesta, `app.js` pone `data-trabajo` en `<html>`
+  (`ingreso`, `espera`, `fuentes`, `escribe`) con los eventos reales del envío y del stream. Con eso laten
+  las vetas del retrato, aparece un aro en el emblema de la cabecera y en el avatar de la respuesta (arco
+  que gira al esperar o buscar en fuentes; aro completo al escribir), el punto de «consultas» suelta una
+  onda, el botón de enviar cambia la flecha por un aro y junto al nombre se lee el estado («Esperando la
+  respuesta…», «Buscando en fuentes…», «Escribiendo…»).
+- **Chat:** el mensaje propio sale del compositor; la respuesta solo aparece. El texto que llega no salta:
+  el bloque nunca encoge mientras se escribe, una negrita a medio llegar se cierra de forma provisional y
+  la conversación solo sigue el final si la persona ya estaba ahí (si subió a releer, no se la arrastra).
+  Al terminar, las fuentes citadas se despliegan una a una como fichas, encima del bloque «Fuentes
+  consultadas».
+- **Navegación:** un solo indicador se desliza por la barra lateral de un destino a otro. El cambio de
+  sección usa la View Transitions API (lo que se va sale rápido, lo que llega sube 10 px); donde no
+  existe, la sección cambia como siempre.
+- **Microinteracciones:** presionar encoge el control a 0,98 y soltar lo devuelve con un rebote leve; el
+  anillo de foco se asienta desde el borde; las tarjetas del Inicio y de Consultar llevan un borde de luz
+  que sigue al puntero (solo con ratón); las cifras de progreso y del mapa cuentan hasta su valor real; los
+  avisos entran con rebote leve y salen más rápido.
+- **Herramientas → Términos:** un calendario dibuja día por día cómo se contó el plazo (qué días contaron,
+  cuáles no y por qué) y remata en el vencimiento. Usa la misma cronología que la tabla.
+
+### Límites (no se negocian)
+
+1. **Nada finge trabajo.** Un indicador de estado solo existe si lo enciende un estado real de `app.js`.
+   No hay temporizadores que simulen «pensando», ni barras de progreso inventadas.
+2. **Solo `transform`, `opacity` y `clip-path`.** Nada cambia de tamaño ni empuja a sus vecinos; nada
+   provoca reflujo en bucle; no hay `will-change` permanente.
+3. **Movimiento reducido.** Con `prefers-reduced-motion: reduce`, o con **Ajustes → Apariencia →
+   Movimiento: Reducido**, todo el bloque de movimiento deja de existir: el contenido aparece ya en su
+   sitio, sin paralaje, sin transiciones entre secciones y con los estados de trabajo quietos (el aro se
+   ve, no gira; el texto de estado sigue ahí).
+4. **Nada parpadea** más de tres veces por segundo, y lo único que se mueve solo por más de cinco segundos
+   es opacidad (respiración del retrato) o un indicador de carga mientras hay una carga real.
+5. **El contenido no depende de JavaScript para verse.** Los estados ocultos de partida viven dentro de la
+   propia animación (`animation-fill-mode: backwards`). Si `movimiento.js` no carga, todo se ve igual; si
+   lo que no carga es `movimiento.css`, simplemente no hay coreografía.
+6. **Sin librerías.** CSS, Web Animations, View Transitions e IntersectionObserver del navegador. La CSP
+   no cambió.
+
+### Cómo agregar movimiento nuevo
+
+Usa un token de duración y una de las tres curvas; escribe la regla dentro del bloque
+`@media (prefers-reduced-motion:no-preference){ :root:not([data-movimiento="reducido"]){ … } }` de
+`movimiento.css`; define solo el fotograma `from` y usa `backwards`; y pregúntate qué explica ese
+movimiento. Si la respuesta es «nada, se ve bonito», no va.
+
+Además siguen existiendo los esqueletos de carga (boletín, tablero, historial y ahora Mi mapa y
+Herramientas), las barras de la rúbrica que crecen y el indicador de escritura.
 
 ## Navegación
 
@@ -116,10 +239,14 @@ toma el acento del tema del usuario. `favicon.png`, `apple-touch-icon.png`, `ico
 
 ## Personalización por usuario (Ajustes → Apariencia)
 
-Opciones: **modo** (claro / oscuro / automático según el sistema), **tema** (6), **acento** (8 + libre
-+ «el del tema»), **tipografía** (3 pares), **tamaño del texto** (normal / grande = 112,5 %),
+Opciones: **modo** (claro / oscuro / automático según el sistema), **tema** (7), **acento** (8 + libre
++ «el del tema»), **tipografía** (4 pares), **tamaño del texto** (normal / grande = 112,5 %),
 **densidad** (cómoda / compacta = espacios × 0,72), **esquinas** (rectas / suaves / redondas),
-**imágenes** (fondo del Inicio, foto de perfil, logo propio) y **Restablecer apariencia**.
+**movimiento** (completo / reducido), **imágenes** (fondo del Inicio, foto de perfil, logo propio) y
+**Restablecer apariencia**. «Movimiento» se guarda **solo en este navegador** (el servidor aún no tiene
+ese campo en `APARIENCIA_OPCIONES`); por eso la interfaz dice «Guardado en este navegador» y no «en tu
+cuenta». Para que viaje con la cuenta basta agregarlo a esa lista en `app.py` y quitar la excepción de
+`apCambiar` en `app.js`.
 Cada cambio se aplica al instante en toda la app (más una vista previa en escritorio) y se guarda
 con una espera de 450 ms para no enviar una petición por clic.
 

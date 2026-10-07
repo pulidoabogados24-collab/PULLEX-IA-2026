@@ -12,12 +12,18 @@ Lawyer Experience).
 
 ## Sistema de diseño vigente
 Detalle completo, paleta, temas y ratios de contraste: `docs/12-DISENO-Y-APARIENCIA.md`.
-- **Dirección:** editorial-jurídica contemporánea, premium y cálida. Papel, tinta y un solo acento
-  (bermellón en el tema por defecto). Nada de estética "IA" (sin neón, brillos, robots ni vidrio).
+- **Dirección:** el tema por defecto es «Justicia × Inteligencia» (grafito, el retrato de la Justicia como
+  única idea fuerte de la pantalla, lima solo para la acción principal). Los otros seis temas son
+  editorial-jurídicos (papel, tinta y un solo acento). En todos: nada de estética genérica de "IA" (sin
+  degradados morados, manchas flotantes, vidrio esmerilado, robots ni emojis como íconos).
+- **Movimiento:** cinco duraciones y tres curvas con nombre (`--mv-*`); nada finge trabajo; todo se apaga
+  con movimiento reducido. Detalle en `docs/12-DISENO-Y-APARIENCIA.md`, «Movimiento».
 - **Tokens semánticos** en `static/tema.css` (`--bg`, `--surface`, `--text`, `--accent`…): toda vista
   nueva usa SOLO tokens. Los nombres viejos (`--azul`, `--oro`…) quedan como alias.
-- **Tipografía:** Fraunces (títulos) + Inter (texto), autohospedadas; pares alternativos Clásica y Moderna.
-- **Claro por defecto**, oscuro elegante y automático; 6 temas curados; contraste AA verificado.
+- **Tipografía:** Syne (títulos) + Plus Jakarta Sans (texto) en el tema por defecto; pares alternativos
+  Editorial (Fraunces + Inter), Clásica y Moderna. Todas autohospedadas.
+- **Oscuro por defecto**, con modo claro y automático; 7 temas; contraste AA medido con
+  `scripts/contraste_temas.py`.
 - **Layout:** 5 vistas (Inicio / Laboratorio de casos / Mi mapa / Consultar / Ajustes); en móvil, barra inferior.
 - **Cada usuario personaliza** colores, tema, tipografía, tamaño, densidad, esquinas e imágenes
   (fondo del Inicio, foto, logo) en Ajustes → Apariencia; se guarda en su cuenta.
