@@ -1,6 +1,6 @@
 # PUL-019 · Despliegue en Vercel (preparación)
 
-Estado: DESPLEGADO EN VERCEL Y CARGANDO (5-oct-2026). Solo se comprobó que la página principal responde; ingreso, chat con modelo real y streaming siguen sin probar en Vercel.
+Estado: DESPLEGADO EN VERCEL Y CARGANDO (5-oct-2026) con el contenido de `main` de ese día. Rama `pul/publicar` preparada el 7-oct-2026 para el siguiente despliegue (ver al final). Solo se comprobó que la página principal responde; ingreso, chat con modelo real y streaming siguen sin probar en Vercel.
 
 Qué se hizo: `vercel.json` (FastAPI, `maxDuration` 300 s para el streaming del chat), `.vercelignore` (excluye pruebas, demo, docs) y `DB` configurable con `PULLEX_DB` en `app.py`.
 
@@ -51,3 +51,13 @@ Pendiente:
 - `main` sigue con los archivos sueltos en la raíz (no estorban, pero ensucian) y sin `.gitignore` ni `.vercelignore`; `static/` tiene 10 archivos sobrantes de la vista previa de marca.
 - La rama `pul/integracion` (79 commits locales) sigue sin subirse: falta acceso de escritura de la sesión al repositorio (PUL-009).
 - Los datos en Vercel son temporales (`/tmp`); base persistente pendiente (PUL-003).
+
+## Rama lista para publicar (7-oct-2026)
+
+- `pul/publicar` = `pul/integracion` + una unión con `main` (9e1f5c6) que conserva el árbol local tal cual. `main` puede avanzar a ella en línea recta, sin conflictos. Al avanzar desaparecen de `main` 236 rutas: 226 archivos sueltos o duplicados de la raíz y 10 de `static/brand-preview` y `static/brand-src`.
+- Comparación previa, archivo por archivo (385 en `main`): 119 idénticos en su ruta, 209 copias exactas de archivos que aquí ya están en su carpeta, 56 versiones anteriores de archivos de esta rama y 1 con contenido propio, `app.py`, que solo difiere en una línea en blanco al final. No había nada que rescatar de `main`.
+- `vercel.json`: el de esta rama es el de `main` más `corpus` en `includeFiles`. `requirements.txt` y `runtime.txt` son idénticos en los dos lados. `.vercelignore` y `.gitignore` no existían en `main`: empezarán a aplicarse.
+- Prueba local de arranque «como en Vercel» (árbol de `pul/publicar` menos lo que excluye `.vercelignore`, montado de solo lectura, `/tmp` vacío, `VERCEL=1`, sin claves de IA): `import app` funciona, la portada y los 28 archivos estáticos que la página y el service worker piden responden 200, el ingreso del administrador de prueba funciona, la base queda en `/tmp/pullex.db` y el índice de fuentes (`corpus/corpus.db`, abierto en solo lectura) responde búsquedas. **No sustituye la prueba en Vercel.**
+- Hallazgo de esa prueba: **la Biblioteca falla en disco de solo lectura.** `biblioteca/biblioteca.db` no se puede crear, el arranque lo registra como error y sigue, pero `/api/biblioteca/resumen` y `/api/biblioteca/buscar` responden 500. Pasa igual con el `biblioteca.py` que ya está en `main`. Con la variable `PULLEX_BIBLIOTECA_DB=/tmp/biblioteca.db` la misma prueba sincroniza los 8.269 registros al arrancar y esas rutas responden 200. Ponerla en Vercel es decisión del dueño; el catálogo se reconstruye en cada arranque en frío.
+- Sin probar en Vercel: ingreso real, chat con modelo real, streaming, y que `corpus/corpus.db` viaje de verdad con el despliegue.
+
