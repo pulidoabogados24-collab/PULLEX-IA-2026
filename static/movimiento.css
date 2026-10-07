@@ -1,0 +1,309 @@
+/* =========================================================================================
+   PULLEX IA — movimiento (octubre de 2026). Se enlaza al final, después de justicia.css.
+
+   Reglas de la casa (docs/12-DISENO-Y-APARIENCIA.md, «Movimiento»):
+     · Duraciones y curvas: SOLO los tokens --mv-* de static/tema.css. Entrar usa --mv-entra, irse usa --mv-sale
+       (y dura menos), y --mv-enfasis se reserva para lo que el usuario acaba de tocar o para la pieza que remata.
+     · Solo se animan transform, opacity y clip-path. Nada cambia de tamaño ni empuja a sus vecinos.
+     · Ningún contenido depende de JavaScript para verse: los estados ocultos de partida viven dentro de la
+       propia animación (animation-fill-mode: backwards). Si movimiento.js no carga, todo aparece igual.
+     · Un indicador de trabajo solo existe si lo enciende un estado real de app.js (data-trabajo en <html>,
+       .md.cursor en la burbuja, .ocupado en el botón de enviar). Aquí no hay temporizadores que finjan nada.
+
+   Estructura del archivo:
+     0. Apagado: «prefers-reduced-motion» y Ajustes → Apariencia → Movimiento: reducido.
+     1. Piezas quietas (se ven igual con o sin movimiento): aros de estado, fichas de fuentes, indicador de la
+        barra lateral, borde de luz, calendario del término, esqueletos.
+     2. Fotogramas (@keyframes).
+     3. Movimiento propiamente dicho, todo dentro de UN bloque que solo existe con movimiento completo.
+     4. Transición entre secciones (View Transitions API).
+   ========================================================================================= */
+
+/* ------------------------------------------------------------------------------ 0. apagado -- */
+/* El interruptor de Ajustes hace lo mismo que la preferencia del sistema (regla global de tema.css). */
+:root[data-movimiento="reducido"] *,:root[data-movimiento="reducido"] *::before,:root[data-movimiento="reducido"] *::after{
+  animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;
+  transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+@media (prefers-reduced-motion:reduce){
+  /* tema.css ya acorta duraciones; sin esto, una pieza con retardo quedaría oculta hasta que le toque. */
+  *,*::before,*::after{animation-delay:0s!important;transition-delay:0s!important}
+}
+
+/* ------------------------------------------------------------------------ 1. piezas quietas -- */
+
+/* 1.1 Respuesta al presionar: la misma en toda la app. */
+.btn:active,.bpri:active,.bsec:active,.bghost:active,.herr-btn:active,.doc-btn:active,.per-btn:active,button.chip:active,
+.tool:active,.btn-continuar:active,.vl-chip:active,.vl-enviar:active{transform:scale(.98)}
+.btn:disabled:active,.bpri:disabled:active,.bsec:disabled:active,.herr-btn:disabled:active,.doc-btn:disabled:active,.per-btn:disabled:active{transform:none}
+
+/* 1.2 Retrato: mientras la app hace un trabajo real, las vetas quedan más encendidas (aunque no haya movimiento). */
+:root[data-trabajo] .retrato-luz{opacity:.8}
+.retrato .x{display:inline-block}
+
+/* 1.3 Aro de estado en el emblema de la cabecera y en el avatar de la respuesta que se está escribiendo.
+       espera = arco tenue · fuentes = arco cian · escribe = aro completo en el color de acción. */
+.b.ia .av{position:relative}
+.h-logo .mono::before,.b.ia .av::before{content:"";position:absolute;inset:-5px;padding:1.5px;border-radius:calc(var(--radius-sm) + 5px);
+  background:conic-gradient(from 0deg,transparent 0 50%,var(--aro,var(--text-2)) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  opacity:0;pointer-events:none;transition:opacity var(--mv-media) ease}
+:root[data-tema="justicia"] .h-logo .mono::before{border-radius:50%}
+:root[data-trabajo] .h-logo .mono::before,.b.ia:has(.md.cursor) .av::before{opacity:1}
+:root[data-trabajo="fuentes"]{--aro:var(--tono-1)}
+:root[data-trabajo="escribe"]{--aro:var(--tono-3)}
+:root[data-trabajo="escribe"] .h-logo .mono::before,:root[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{background:var(--aro)}
+/* Punto de «consultas»: suelta una onda mientras hay trabajo en curso. */
+.creditos .punto{position:relative}
+.creditos .punto::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;opacity:0;pointer-events:none}
+/* Estado escrito junto al nombre (lo pone app.js con el evento real del servidor; nunca solo color). */
+.estado-ia{margin-left:10px;font-weight:600;letter-spacing:.02em;text-transform:none;color:var(--accent-text);white-space:nowrap}
+.estado-ia::before{content:"";display:inline-block;width:5px;height:5px;margin-right:7px;border-radius:50%;background:currentColor;vertical-align:.12em}
+@media(max-width:560px){.estado-ia{display:block;margin:4px 0 0}}
+
+/* 1.4 Botón de enviar ocupado: el ícono cede su lugar a un aro; el botón no se apaga del todo. */
+.env{position:relative}
+.env.ocupado:disabled{opacity:.9;cursor:progress}
+.env.ocupado svg{opacity:0}
+.env.ocupado::after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border-radius:50%;
+  border:2px solid currentColor;border-right-color:transparent}
+#a-btn[aria-busy="true"]{cursor:progress}
+
+/* 1.5 Fuentes citadas como fichas (encima del bloque plegable «Fuentes consultadas», que no cambia). */
+.fichas-t{margin:16px 0 8px;font-family:var(--font-ui);font-size:.75rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.fichas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:8px;font-family:var(--font-ui)}
+.ficha{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;padding:11px 12px 12px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);font-size:.8125rem;line-height:1.4}
+.ficha .ftit{color:var(--text);font-weight:600;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ficha a.ftit{color:var(--accent-text);text-decoration:underline;text-underline-offset:.18em}
+.ficha .fmeta{font-size:.75rem;color:var(--text-2)}
+.fichas-mas{align-self:center;justify-self:start;padding:6px 2px;font-size:.8125rem;font-weight:600;color:var(--accent-text);
+  text-decoration:underline;text-underline-offset:.2em;min-height:32px}
+.fichas+.fuentes{margin-top:10px}
+
+/* 1.6 Indicador de la barra lateral: una sola pieza que se desliza de un destino a otro. movimiento.js la crea y
+       pone .mv-nav en <nav>; sin ella, cada botón conserva su propio fondo y su raya (justicia.css). */
+.nav-ind{display:none}
+@media(min-width:1040px){
+  nav.mv-nav .nav-ind{display:block;position:absolute;left:12px;right:12px;top:0;height:44px;border-radius:var(--radius-sm);
+    background:var(--accent-soft);pointer-events:none;transform:translate3d(0,var(--ind-y,0px),0)}
+  nav.mv-nav .nav-ind::before{content:"";position:absolute;left:-12px;top:11px;bottom:11px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+  nav.mv-nav .nav-ind.oculto{opacity:0}
+  nav.mv-nav button.on,nav.mv-nav button.on:hover{background:transparent}
+  nav.mv-nav button.on::before{display:none}
+}
+
+/* 1.7 Borde de luz que sigue al puntero (solo con ratón; movimiento.js escribe --mx y --my en la tarjeta). */
+.captarj,.tcard{position:relative}
+.sugs button::before,.captarj::before,.tcard::before{content:"";position:absolute;inset:-1px;padding:1px;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),var(--tono-1),transparent 64%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  opacity:0;transition:opacity var(--mv-media) ease}
+@media(hover:hover) and (pointer:fine){
+  :root.mv-puntero .sugs button:hover::before,:root.mv-puntero .captarj:hover::before,:root.mv-puntero .tcard:hover::before{opacity:1}
+  /* con la luz encendida, el borde propio de la tarjeta se queda neutro: la luz es la que marca dónde está el puntero */
+  :root.mv-puntero .sugs button:hover,:root[data-tema="justicia"].mv-puntero .captarj:hover,:root[data-tema="justicia"].mv-puntero .tcard:hover{border-color:var(--border)}
+}
+
+/* 1.8 Calendario del término (Herramientas → Términos): un día por casilla, en columnas de lunes a domingo.
+       El día que cuenta lleva su número; el que no cuenta va en línea punteada con la razón al lado; el último
+       día contado es el vencimiento. Es un apoyo visual de la tabla «Cronología», que sigue debajo. */
+.herr-cal{margin:14px 0 2px}
+.herr-cal h4{margin:0 0 4px;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2)}
+.herr-cal-res{margin:0 0 12px;font-size:.86rem;line-height:1.5;color:var(--text)}
+.herr-cal-res b{font-weight:650;font-variant-numeric:tabular-nums}
+.herr-cal-cab,.herr-cal-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:462px;margin:0;padding:0;list-style:none}
+.herr-cal-cab{margin-bottom:4px;font-size:.75rem;font-weight:650;color:var(--text-2);text-align:center}
+.herr-dia{position:relative;min-width:0;height:50px;display:flex;flex-direction:column;justify-content:space-between;padding:6px 6px 5px;overflow:hidden;
+  border-radius:var(--radius-sm);border:1px dashed var(--border-strong);color:var(--text-2);font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+.herr-dia .f{font-size:.75rem}
+.herr-dia .n{align-self:flex-end;font-family:var(--font-display);font-weight:var(--display-peso);font-size:1.05rem;line-height:1.1;color:var(--text)}
+.herr-dia .m{align-self:flex-end;font-size:.75rem;font-weight:650;letter-spacing:.02em}
+.herr-dia.contado{border:1px solid var(--border);background:var(--surface-2);color:var(--text-2)}
+.herr-dia.inicio{border-style:solid;border-color:var(--accent-text);color:var(--accent-text)}
+.herr-dia.vence{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+.herr-dia.vence .n,.herr-dia.vence .m{color:var(--accent-ink)}
+/* el vencimiento no se distingue solo por color: lleva la esquina doblada (también en la leyenda) */
+.herr-dia.vence::after,.herr-cal-ley i.vence::after{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 13px 13px 0;
+  border-color:transparent var(--surface) transparent transparent}
+.herr-cal-ley i.vence{position:relative;overflow:hidden}
+.herr-cal-ley i.vence::after{border-width:0 6px 6px 0}
+.herr-dia.hueco{border:0;visibility:hidden}
+.herr-cal-ley{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 0;padding:0;list-style:none;font-size:.78rem;color:var(--text-2);line-height:1.4}
+.herr-cal-ley li{display:inline-flex;align-items:center;gap:7px}
+.herr-cal-ley i{width:14px;height:12px;border-radius:3px;flex:none;border:1px dashed var(--border-strong)}
+.herr-cal-ley i.contado{border:1px solid var(--border);background:var(--surface-2)}
+.herr-cal-ley i.inicio{border:1px solid var(--accent-text)}
+.herr-cal-ley i.vence{border:1px solid var(--accent);background:var(--accent)}
+.herr-cal-nota{margin:10px 0 0;font-size:.76rem;color:var(--text-2);line-height:1.5}
+@media print{.herr-cal{display:none}}
+
+/* 1.9 Esqueletos de listas (en vez de «Cargando…»). */
+.esq-fila{display:grid;gap:8px;padding:14px 16px;margin:0 0 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+.esq-fila .skel{margin:0}
+.mapa-res .esq{min-height:86px;justify-content:center}
+.mapa-res .esq .skel{display:block;margin:0;width:44%}
+.mapa-res .esq .skel+.skel{width:70%;height:10px}
+
+/* 1.10 Titular de la portada partido en palabras por movimiento.js (cada palabra sabe en qué línea quedó). */
+.mv-lineas .pal{display:inline-block}
+
+/* ------------------------------------------------------------------------- 2. fotogramas -- */
+/* Casi todos definen solo «from»: llegan al estado propio del elemento, sea el que sea. */
+@keyframes mv-aparece{from{opacity:0}}
+@keyframes mv-visible{to{opacity:1}}
+@keyframes mv-sube{from{opacity:0;transform:translate3d(0,16px,0)}}
+@keyframes mv-sube-corto{from{opacity:0;transform:translate3d(0,8px,0)}}
+@keyframes mv-desliza{from{opacity:0;transform:translate3d(-14px,0,0)}}
+@keyframes mv-brota{from{opacity:0;transform:scale(.4)}}
+@keyframes mv-ficha{from{opacity:0;transform:translate3d(0,14px,0) scale(.965)}}
+@keyframes mv-burbuja{from{opacity:0;transform:translate3d(0,10px,0) scale(.94)}}
+@keyframes mv-linea{from{clip-path:inset(0 0 100% 0);transform:translate3d(0,.45em,0)}to{clip-path:inset(-.1em -.1em -.25em -.1em)}}
+@keyframes mv-despliega{from{opacity:0;clip-path:inset(0 0 100% 0);transform:translate3d(0,-6px,0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes mv-revela-der{from{clip-path:inset(0 0 0 100%);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
+@keyframes mv-revela-izq{from{clip-path:inset(0 100% 0 0);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
+@keyframes mv-revela-arr{from{clip-path:inset(0 0 100% 0);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
+@keyframes mv-equis{from{opacity:0;transform:rotate(-135deg) scale(.3)}}
+@keyframes mv-respira{0%,100%{opacity:.14}50%{opacity:.58}}
+@keyframes mv-late{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes mv-gira{to{transform:rotate(1turn)}}
+@keyframes mv-aro-vivo{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes mv-onda{from{opacity:.75;transform:scale(1)}to{opacity:0;transform:scale(3.4)}}
+@keyframes mv-foco{from{outline-offset:0;outline-color:transparent}}
+@keyframes mv-toast-entra{from{opacity:0;transform:translate3d(-50%,16px,0) scale(.96)}}
+@keyframes mv-toast-sale{to{opacity:0;transform:translate3d(-50%,8px,0)}}
+@keyframes mv-dia{from{opacity:0;transform:scale(.7)}}
+@keyframes mv-vence{0%{opacity:0;transform:scale(.6)}60%{opacity:1;transform:scale(1.08)}100%{transform:none}}
+@keyframes mv-vt-sale{to{opacity:0;transform:translate3d(0,-6px,0)}}
+@keyframes mv-vt-entra{from{opacity:0;transform:translate3d(0,10px,0)}}
+
+/* ----------------------------------------------------------- 3. movimiento (modo completo) -- */
+@media (prefers-reduced-motion:no-preference){
+:root:not([data-movimiento="reducido"]){
+
+  /* 3.1 Presionar entra de inmediato; soltar vuelve con un rebote leve. */
+  & .btn,& .bpri,& .bsec,& .bghost{transition:transform var(--mv-rapida) var(--mv-enfasis),background-color var(--mv-rapida) ease,
+    border-color var(--mv-rapida) ease,box-shadow var(--mv-rapida) ease,color var(--mv-rapida) ease}
+  & .herr-btn,& .doc-btn,& .per-btn,& .btn-continuar{transition:transform var(--mv-rapida) var(--mv-enfasis),border-color var(--mv-rapida) ease,
+    background-color var(--mv-rapida) ease}
+  & .btn:active,& .bpri:active,& .bsec:active,& .bghost:active,& .herr-btn:active,& .doc-btn:active,& .per-btn:active,
+  & button.chip:active,& .tool:active,& .env:active,& .sugs button:active,& .captarj:active{transition-duration:var(--mv-instante)}
+
+  /* 3.2 Foco de teclado: el anillo se asienta desde el borde del control. */
+  & :focus-visible{animation:mv-foco var(--mv-rapida) var(--mv-entra)}
+
+  /* 3.3 Retrato de la Justicia. Las vetas respiran muy despacio (solo opacidad de la capa de luz) y laten más
+         vivas mientras la app trabaja de verdad. */
+  & .retrato-luz{animation:mv-respira 7.5s ease-in-out infinite}
+  &[data-trabajo] .retrato-luz{animation:mv-late 1.6s ease-in-out infinite}
+  /* Paralaje con el puntero: la figura y los rótulos se separan unos pocos píxeles. Solo ratón (.mv-par lo pone
+     movimiento.js cuando hay puntero fino). */
+  & .retrato.mv-par .retrato-fig{transform:translate3d(calc(var(--px,0) * -3px),calc(var(--py,0) * -2px),0) scale(1.025);
+    transition:transform var(--mv-lenta) var(--mv-entra)}
+  & .retrato.mv-par .retrato-sup,& .retrato.mv-par .retrato-inf{transform:translate3d(calc(var(--px,0) * 2.5px),calc(var(--py,0) * 1.5px),0);
+    transition:transform var(--mv-lenta) var(--mv-entra)}
+
+  /* 3.4 Estados de trabajo: el arco gira mientras se espera o se consultan fuentes; al escribir, el aro late. */
+  &[data-trabajo="espera"] .h-logo .mono::before{animation:mv-gira 2.2s linear infinite}
+  &[data-trabajo="fuentes"] .h-logo .mono::before{animation:mv-gira 1.1s linear infinite}
+  &[data-trabajo="ingreso"] .h-logo .mono::before{animation:mv-gira 2.2s linear infinite}
+  &[data-trabajo="escribe"] .h-logo .mono::before{animation:mv-aro-vivo 1.8s ease-in-out infinite}
+  &[data-trabajo="espera"] .b.ia:has(.md.cursor) .av::before{animation:mv-gira 2.2s linear infinite}
+  &[data-trabajo="fuentes"] .b.ia:has(.md.cursor) .av::before{animation:mv-gira 1.1s linear infinite}
+  &[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{animation:mv-aro-vivo 1.8s ease-in-out infinite}
+  &[data-trabajo] .creditos .punto::after{animation:mv-onda 1.6s var(--mv-entra) infinite}
+  & .env.ocupado::after{animation:mv-gira .8s linear infinite}
+  & .estado-ia{animation:mv-aparece var(--mv-media) ease}
+
+  /* 3.5 Consultar, estado inicial. La escena completa se ve una vez por sesión: cuando termina, movimiento.js
+         marca .mv-visto y las siguientes visitas entran sin coreografía (volver a Consultar no debe hacer esperar).
+         Orden: rótulo → titular por líneas → bajada → sugerencias una a una → compositor (que ya se puede usar
+         antes de un segundo). El retrato se revela aparte. */
+  & .chat-lay:not(.mv-visto) .sugs-eyebrow{animation:mv-desliza var(--mv-media) var(--mv-entra) backwards}
+  & .chat-lay:not(.mv-visto) .sugs-eyebrow .punto{animation:mv-brota var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 3) backwards}
+  & .chat-lay:not(.mv-visto) .sugs-cab h2 .ln{animation:mv-linea var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 1.5) backwards}
+  & .chat-lay:not(.mv-visto) .sugs-cab h2 .ln+.ln{animation-delay:calc(var(--mv-paso) * 3)}
+  & .chat-lay:not(.mv-visto) .sugs-cab>p:last-child{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 4.5) backwards}
+  & .chat-lay:not(.mv-visto) .sugs button{animation:mv-ficha var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 5.5) backwards}
+  & .chat-lay:not(.mv-visto) .sugs button:nth-child(2){animation-delay:calc(var(--mv-paso) * 6.5)}
+  & .chat-lay:not(.mv-visto) .sugs button:nth-child(3){animation-delay:calc(var(--mv-paso) * 7.5)}
+  & .chat-lay:not(.mv-visto) .sugs button:nth-child(4){animation-delay:calc(var(--mv-paso) * 8.5)}
+  & .chat-lay:not(.mv-visto):has(#sugs:not(.hidden)) .barra{animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 9) backwards}
+  & .chat-lay:not(.mv-visto) .franja{animation:mv-revela-arr var(--mv-escena) var(--mv-entra) backwards}
+  & .chat-lay:not(.mv-visto) .franja .lema{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .5) backwards}
+  /* Retrato a la derecha: se descubre desde el borde, la figura se asienta y después llegan los rótulos. */
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-fig{animation:mv-revela-der var(--mv-escena) var(--mv-entra) backwards}
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-sup{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .55) backwards}
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>*{animation:mv-sube-corto var(--mv-lenta) var(--mv-entra) calc(var(--mv-escena) * .6) backwards}
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(2){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso))}
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(3){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 2)}
+  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(4){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 3)}
+  & .chat-lay:not(.mv-visto) .x{animation:mv-equis var(--mv-lenta) var(--mv-enfasis) calc(var(--mv-escena) * .9) backwards}
+
+  /* 3.6 Chat. El mensaje propio sale del compositor (rebote leve, anclado abajo a la derecha). La respuesta solo
+         aparece: mientras llega el texto nada se desplaza. Al terminar, las fichas de fuentes se despliegan una a
+         una y las acciones entran sin empujar. Solo los mensajes nuevos (.nueva); el historial no baila. */
+  & .b.nueva.user{transform-origin:100% 100%;animation:mv-burbuja var(--mv-media) var(--mv-enfasis) backwards}
+  & .b.nueva.ia{animation:mv-aparece var(--mv-lenta) ease backwards}
+  & .b.nueva.ia .av{animation:mv-brota var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 2) backwards}
+  & .b.nueva .acc,& .b.nueva .fichas-t,& .b.nueva .fuentes,& .b.nueva .valorar,& .b.nueva .nota-ia,& .b.nueva .aviso-inc{animation:mv-aparece var(--mv-lenta) ease backwards}
+  & .b.nueva .ficha{animation:mv-despliega var(--mv-media) var(--mv-entra) calc(var(--mv-paso) * 1.5 * var(--i,0)) backwards}
+  & .b.nueva .fichas-mas{animation:mv-aparece var(--mv-media) ease calc(var(--mv-paso) * 1.5 * var(--i,0)) backwards}
+  /* Al abrir el bloque plegable, sus renglones también llegan en serie. */
+  & .fuentes[open] .fuente{animation:mv-sube-corto var(--mv-media) var(--mv-entra) calc(var(--mv-paso) * .7 * var(--i,0)) backwards}
+
+  /* 3.7 Portada. Cada pieza entra a su manera; el titular, por líneas (movimiento.js lo parte en palabras y mide en
+         qué línea cayó cada una; sin el script entra entero). Las cuatro características esperan a verse en pantalla. */
+  & .auth-intro,& .auth-ben,& .auth-card{animation:none}
+  & .auth-marca .marca{animation:mv-desliza var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 1) backwards}
+  & .auth-marca .mono{animation:mv-brota var(--mv-lenta) var(--mv-enfasis) backwards}
+  & .auth-intro .eyebrow{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 2) backwards}
+  & .auth-intro h1:not(.mv-lineas):not(.mv-prep){animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 3) backwards}
+  & .auth-intro h1.mv-prep{opacity:0;animation:mv-visible 1ms 1200ms forwards}     /* salvavidas: nunca se queda oculto */
+  & .auth-intro h1.mv-lineas .pal{animation:mv-linea var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 1.4 * var(--l,0)) backwards}
+  & .auth-lead{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 8) backwards}
+  & .auth-card{animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 4) backwards}
+  & .auth-ben li.mv-espera{opacity:0;animation:mv-visible 1ms 4s forwards}         /* salvavidas */
+  & .auth-ben li.mv-entro{animation:mv-desliza var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 1.5 * var(--i,0)) backwards}
+  & .auth-ben li.mv-entro .ico{animation:mv-brota var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 1.5 * var(--i,0) + var(--mv-paso) * 2) backwards}
+  & .auth-pie{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 10) backwards}
+  & .auth-retrato .retrato-fig{animation:mv-revela-izq var(--mv-escena) var(--mv-entra) backwards}
+  & .auth-retrato .retrato-sup{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .55) backwards}
+  & .auth-retrato .retrato-inf>*{animation:mv-sube-corto var(--mv-lenta) var(--mv-entra) calc(var(--mv-escena) * .6) backwards}
+  & .auth-retrato .retrato-inf>:nth-child(2){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso))}
+  & .auth-retrato .retrato-inf>:nth-child(3){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 2)}
+  & .auth-retrato .retrato-inf>:nth-child(4){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 3)}
+  /* El «×» del lema: un giro corto, una vez, cuando el retrato ya está a la vista. */
+  & .auth-retrato .x{animation:mv-equis var(--mv-lenta) var(--mv-enfasis) calc(var(--mv-escena) * .9) backwards}
+  @media(max-width:899px){
+    & .auth-retrato .retrato-fig{animation-name:mv-revela-arr}
+  }
+
+  /* 3.8 Navegación: el indicador se desliza al destino (la primera colocación es inmediata: .mv-listo llega después). */
+  & nav.mv-nav.mv-listo .nav-ind{transition:transform var(--mv-lenta) var(--mv-enfasis),opacity var(--mv-rapida) ease}
+
+  /* 3.9 Avisos: entran con un rebote leve y se van más rápido de lo que llegaron. */
+  & .toast{animation:mv-toast-entra var(--mv-media) var(--mv-enfasis)}
+  & .toast.sale{animation:mv-toast-sale var(--mv-rapida) var(--mv-sale) forwards}
+
+  /* 3.10 Calendario del término: los días se dibujan en orden y el vencimiento remata. --paso-dia lo calcula
+          herramientas.js para que la serie completa dure lo mismo con 5 días que con 60. */
+  & .herr-cal.dibuja .herr-dia{animation:mv-dia var(--mv-rapida) var(--mv-entra) calc(var(--paso-dia,24ms) * var(--i,0)) backwards}
+  & .herr-cal.dibuja .herr-dia.vence{animation:mv-vence var(--mv-lenta) var(--mv-entra) calc(var(--paso-dia,24ms) * var(--i,0) + var(--mv-paso)) backwards}
+  & .herr-cal.dibuja .herr-cal-ley{animation:mv-aparece var(--mv-lenta) ease calc(var(--paso-dia,24ms) * var(--n,0) + var(--mv-media)) backwards}
+}
+}
+
+/* ---------------------------------------------------- 4. transición entre secciones (VT) -- */
+/* movimiento.js pone .mv-vt en <html> solo mientras dura el cambio; entonces <main> viaja con nombre propio y lo
+   demás (barra lateral, cabecera) no se toca. Donde la API no existe, la sección cambia como siempre. */
+:root.mv-vt main{view-transition-name:vista}
+:root.mv-vt .vista.on{animation:none}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){display:none}
+::view-transition-group(vista){animation-duration:var(--mv-media)}
+/* Lo que se va sale primero y rápido; lo que llega empieza un instante después: así dos pantallas de texto casi no
+   se enciman. En total dura menos de un tercio de segundo y no bloquea más que eso. */
+::view-transition-old(vista){animation:mv-vt-sale var(--mv-instante) var(--mv-sale) both}
+::view-transition-new(vista){animation:mv-vt-entra var(--mv-media) var(--mv-entra) calc(var(--mv-instante) * .6) both}

@@ -9,9 +9,11 @@
 'use strict';
 var OPC={modo:['claro','oscuro','auto'],tema:['justicia','pullex','notario','bogota','caribe','toga','jardin'],
   fuente:['syne','editorial','clasica','moderna'],tamano:['normal','grande'],densidad:['comoda','compacta'],
-  radio:['recto','suave','redondo']};
+  radio:['recto','suave','redondo'],movimiento:['completo','reducido']};
 // Por defecto: tema «Justicia × Inteligencia» en oscuro, con Syne + Plus Jakarta Sans (octubre de 2026).
-var DEFECTO={modo:'oscuro',tema:'justicia',acento:null,fuente:'syne',tamano:'normal',densidad:'comoda',radio:'suave'};
+// «movimiento» (completo | reducido) se guarda solo en este navegador: el servidor aún no tiene ese campo. Con
+// «reducido», static/movimiento.css apaga todo movimiento no esencial, igual que «prefers-reduced-motion».
+var DEFECTO={modo:'oscuro',tema:'justicia',acento:null,fuente:'syne',tamano:'normal',densidad:'comoda',radio:'suave',movimiento:'completo'};
 // Lo que era el valor por defecto hasta octubre de 2026. Quien lo tenga guardado tal cual nunca eligió otra
 // apariencia: pasa al tema nuevo. Quien cambió cualquier opción conserva la suya (mismo criterio en app.py).
 var ANTERIOR={modo:'claro',tema:'pullex',acento:null,fuente:'editorial',tamano:'normal',densidad:'comoda',radio:'suave'};
@@ -69,6 +71,7 @@ function aplicar(a){
   raiz.setAttribute('data-tema',a.tema);raiz.setAttribute('data-esquema',esq);
   raiz.setAttribute('data-fuente',a.fuente);raiz.setAttribute('data-tamano',a.tamano);
   raiz.setAttribute('data-densidad',a.densidad);raiz.setAttribute('data-radio',a.radio);
+  raiz.setAttribute('data-movimiento',a.movimiento);
   VARS_ACENTO.forEach(function(v){raiz.style.removeProperty(v)});
   if(a.acento){
     var bg=leerToken('--bg')||'#101115',sf=leerToken('--surface')||'#17191e';

@@ -72,8 +72,10 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
     padding:12px 12px 6px;background:var(--bg);border:0;border-right:1px solid var(--border);border-top:1px solid var(--border);
     border-bottom:1px solid var(--border)}
   .convs .lb2{margin:14px 6px 6px}
-  /* Un ancestro con transform atraparía al historial fijo durante la animación de entrada. */
-  #v-chat.vista.on{animation-name:aparece}
+  /* La vista no se anima entera: un ancestro con transform atraparía al historial fijo, y uno con opacidad lo
+     dejaría un instante debajo de la barra lateral. Entran por separado la conversación y el historial. */
+  #v-chat.vista.on{animation:none}
+  #v-chat.vista.on #chat,#v-chat.vista.on .convs{animation:aparece var(--mv-media) var(--mv-entra)}
 }
 
 /* Móvil: cuatro destinos y «Más» en la barra inferior (máximo cinco); los otros tres se despliegan encima. */
@@ -88,7 +90,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .nav-mas{display:none;position:fixed;right:8px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:41;flex-direction:column;
     gap:2px;min-width:216px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
     box-shadow:var(--shadow-lg)}
-  .nav-mas.abierto{display:flex;animation:entra var(--t-media) var(--curva)}
+  .nav-mas.abierto{display:flex;animation:entra var(--mv-media) var(--mv-entra)}
   .nav-mas button{flex-direction:row;justify-content:flex-start;gap:12px;min-height:48px;padding:0 14px;font-size:.95rem;
     font-weight:550;border-radius:var(--radius-sm);letter-spacing:0}
   .nav-mas button .i{width:20px;height:20px;padding:0;border-radius:0;background:none!important}
@@ -102,10 +104,12 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .retrato{--r-bg:#101115;--r-fg:#f4f6f9;--r-fg2:#c9ced6;position:relative;overflow:hidden;isolation:isolate;min-width:0;
   display:flex;flex-direction:column;justify-content:space-between;background:var(--r-bg);color:var(--r-fg);
   container-type:inline-size;font-family:var(--font-ui)}
-.retrato picture{position:absolute;inset:0;z-index:-2}
-.retrato-img{display:block;width:100%;height:100%;object-fit:cover;object-position:46% center;
-  transition:transform 1.2s var(--curva)}
-.retrato:hover .retrato-img{transform:scale(1.035)}
+/* .retrato-fig agrupa la imagen y su capa de luz (.retrato-luz: las vetas de neón de la misma imagen, recortadas
+   sobre transparente) para que se muevan juntas. La luz se queda quieta y tenue aquí; respira en movimiento.css. */
+.retrato-fig{position:absolute;inset:0;z-index:-2}
+.retrato picture{position:absolute;inset:0}
+.retrato-img,.retrato-luz{display:block;width:100%;height:100%;object-fit:cover;object-position:46% center}
+.retrato-luz{position:absolute;inset:0;opacity:.3;pointer-events:none}
 /* Degradado inferior hacia el fondo (opaco abajo, transparente al 46 %) y velo leve arriba para los rótulos. */
 .retrato::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.94) 14%,rgba(16,17,21,.62) 30%,rgba(16,17,21,0) 48%),
@@ -146,7 +150,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 @media(max-width:899px){
   .auth-lay{display:block}
   .auth-retrato{position:relative;height:clamp(200px,27vh,300px);border-right:0}
-  .auth-retrato .retrato-img{object-position:50% 12%}
+  .auth-retrato .retrato-img,.auth-retrato .retrato-luz{object-position:50% 12%}
   .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.82) 22%,rgba(16,17,21,0) 62%),
     linear-gradient(to bottom,rgba(16,17,21,.7) 0%,rgba(16,17,21,0) 26%)}
   .auth-retrato .retrato-sup{padding:16px 18px 0}
@@ -178,20 +182,21 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .franja{position:relative;flex:none;height:168px;margin:calc(var(--hp-y) * -1) calc(var(--hp-x) * -1) 22px;overflow:hidden;background:#101115}
 .franja picture,.franja img{display:block;width:100%;height:100%}
 .franja img{object-fit:cover;object-position:50% 10%}
+.franja .retrato-luz{position:absolute;inset:0}
 .franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.7) 26%,rgba(16,17,21,0) 62%)}
 .franja .lema{position:absolute;left:var(--hp-x);bottom:14px;z-index:1}
 .sugs-cab{width:100%;max-width:var(--ancho-chat);margin:0 auto 22px;container-type:inline-size}
 .sugs-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 14px}
 .sugs-eyebrow .punto{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
 .sugs-cab h2{margin:0 0 12px;font-size:2.25rem;font-size:clamp(1.75rem,8.4cqw,3rem);line-height:1.12}
-.sugs-cab h2 span{display:block;color:var(--text-2)}
+.sugs-cab h2 .ln{display:block}
+.sugs-cab h2 .acento{color:var(--tono-3)}      /* lima en el tema «justicia» oscuro; el acento legible en los demás */
 .sugs-cab>p:last-child{margin:0;color:var(--text-2);font-size:1rem;line-height:1.55;max-width:52ch}
 .sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .sugs button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:4px;align-content:start;align-items:center;
   min-height:110px;padding:16px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  color:var(--text-2);box-shadow:var(--shadow);animation:entra .55s ease both;
-  transition:transform .25s var(--curva),border-color .25s ease,box-shadow .25s ease}
-.sugs button:nth-child(2){animation-delay:.05s}.sugs button:nth-child(3){animation-delay:.1s}.sugs button:nth-child(4){animation-delay:.15s}
+  color:var(--text-2);box-shadow:var(--shadow);position:relative;
+  transition:transform var(--mv-rapida) var(--mv-entra),border-color var(--mv-rapida) ease,box-shadow var(--mv-media) ease}
 .sugs button:hover{transform:translateY(-3px);border-color:var(--accent-text);box-shadow:var(--shadow-lg)}
 .sugs button:active{transform:translateY(-1px)}
 .sugs button .i{width:22px;height:22px}
@@ -207,10 +212,11 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .franja{height:150px}
   .sugs-cab h2{font-size:clamp(1.75rem,9.6cqw,2.25rem)}
 }
-/* Pantallas anchas: retrato a la izquierda mientras no haya conversación abierta. Con :has(); un navegador que
-   no lo entienda sigue viendo la franja. */
+/* Pantallas anchas: retrato a la DERECHA mientras no haya conversación abierta; el titular, las sugerencias y el
+   compositor quedan a la izquierda, que es donde empieza la lectura. Con :has(); un navegador que no lo entienda
+   sigue viendo la franja. */
 @media(min-width:1180px){
-  .chat-lay:has(#sugs:not(.hidden)) .retrato-chat{display:flex;flex:0 0 38%;border-right:1px solid rgba(244,246,249,.08)}
+  .chat-lay:has(#sugs:not(.hidden)) .retrato-chat{display:flex;flex:0 0 38%;order:2;border-left:1px solid rgba(244,246,249,.08)}
   .chat-lay:has(#sugs:not(.hidden)) .franja{display:none}
   .chat-lay:has(#sugs:not(.hidden)){--ancho-chat:720px}
   .chat-lay:has(#sugs:not(.hidden)) .hist{--hp-x:36px}
@@ -305,6 +311,6 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 }
 
 @media (prefers-reduced-motion:reduce){
-  .retrato:hover .retrato-img,.sugs button:hover,.captarj:hover{transform:none}
+  .sugs button:hover,.captarj:hover{transform:none}
 }
 @media print{.retrato,.franja,.miga,.nav-mas{display:none!important}}

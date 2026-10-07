@@ -51,7 +51,18 @@
   --display-tracking:-.015em;
   --radius:12px; --radius-sm:8px; --radius-lg:18px;
   --esp:1;                          /* densidad: multiplica los espacios de los componentes */
-  --t-rapida:.16s; --t-media:.28s; --curva:cubic-bezier(.2,.7,.2,1);
+  /* Lenguaje de movimiento (docs/12-DISENO-Y-APARIENCIA.md, «Movimiento»). Cinco duraciones y tres curvas con
+     nombre; todo lo que se mueve en la app sale de aquí. La coreografía vive en static/movimiento.css. */
+  --mv-instante:90ms;                      /* respuesta al toque: presionar y soltar */
+  --mv-rapida:160ms;                       /* hover, foco, cambios de color */
+  --mv-media:260ms;                        /* entra una pieza: mensaje, ficha, aviso */
+  --mv-lenta:420ms;                        /* piezas grandes: titular, panel, indicador de navegación */
+  --mv-escena:700ms;                       /* una vez por pantalla: el revelado del retrato */
+  --mv-paso:60ms;                          /* separación entre piezas de una misma serie */
+  --mv-entra:cubic-bezier(.2,.8,.2,1);     /* llega y frena */
+  --mv-sale:cubic-bezier(.55,0,.9,.4);     /* arranca y se va (las salidas duran menos que las entradas) */
+  --mv-enfasis:cubic-bezier(.34,1.4,.64,1);/* llega con un rebote leve: solo para lo que el usuario acaba de tocar */
+  --t-rapida:var(--mv-rapida); --t-media:var(--mv-media); --curva:var(--mv-entra);   /* nombres anteriores */
 }
 :root[data-fuente="clasica"]{--font-display:var(--serif-lectura);--font-body:var(--serif-lectura);--display-peso:620;--display-tracking:-.01em}
 :root[data-fuente="moderna"]{--font-display:var(--sans);--display-peso:680;--display-tracking:-.025em}
