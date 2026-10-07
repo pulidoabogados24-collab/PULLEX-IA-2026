@@ -68,7 +68,10 @@ function herrInit(){
   HERR.cargando=true;raiz.textContent='';
   raiz.appendChild(hE('div',{class:'cab-vista'},hE('p',{class:'eyebrow',text:'PULLEX Herramientas'}),hE('h2',{text:'Cálculos verificables'}),
     hE('p',{text:'Calculadoras deterministas: no usan IA ni gastan consultas. Cada resultado muestra la norma, los supuestos y lo que debe decidir un profesional.'})));
-  const estado=hE('p',{class:'herr-cargando',role:'status',text:'Cargando…'});raiz.appendChild(estado);
+  // Mientras llegan las opciones: esqueleto con la forma de lo que viene (pestañas y formulario), no un «Cargando…».
+  const estado=hE('div',{class:'herr-cargando',role:'status','aria-label':'Cargando las herramientas'},
+    [70,100,100].map(w=>hE('div',{class:'esq-fila','aria-hidden':'true'},hE('div',{class:'skel',style:'width:'+w*.4+'%'}),hE('div',{class:'skel',style:'width:'+w*.9+'%'}))));
+  raiz.appendChild(estado);
   herrApi('/api/procedimientos').then(d=>{HERR.opc=d;HERR.listo=true;estado.remove();herrConstruir(raiz)})
     .catch(e=>{estado.textContent=e.status===404?'Las herramientas de cálculo no están disponibles en esta versión.':
       'No se pudieron cargar las herramientas: '+e.message})
@@ -186,6 +189,52 @@ function herrTextoTermino(r){
   if(r.normas&&r.normas.length){l.push('','Normas:');r.normas.forEach(n=>l.push('- '+n.id+' v'+n.version+': '+n.norma+' ['+n.estado+']'+(n.enlace?' '+n.enlace:'')))}
   if(r.cronologia&&r.cronologia.length){l.push('','Cronología:');r.cronologia.forEach(c=>l.push(c.fecha+' '+c.dia+' — '+(c.cuenta!=null?'día '+c.cuenta:(c.motivo||''))))}
   l.push('','Huella del cálculo: '+r.huella,r.aviso||'');return l.join('\n')}
+// Calendario del término: un día por casilla, de lunes a domingo, con los MISMOS datos de la tabla «Cronología»
+// (r.cronologia, calculada por el servidor). Sirve para ver de un golpe por qué el plazo vence ese día: qué días
+// contaron, cuáles no y por qué. Solo se dibuja para términos en días con la cronología completa y consecutiva; si
+// algo no cuadra con la fecha de vencimiento, no se dibuja nada (la tabla sigue siendo la referencia).
+const HERR_CAL_MAX=98;
+function hDia(iso){const [a,m,d]=iso.split('-').map(Number);return new Date(a,m-1,d)}
+function herrMotivoCorto(m){const t=(m||'').toLowerCase();
+  return t.startsWith('domingo')?'dom':t.startsWith('sábado')?'sáb':t.startsWith('festivo')?'fest.':t.startsWith('vacancia')?'vac.':
+    t.startsWith('suspensión')?'susp.':t.startsWith('día sin atención')?'cerr.':'—'}
+function herrCalendario(r){
+  const cr=r.cronologia||[];
+  if(r.estado!=='CALCULADO'||!r.termino||r.termino.unidad!=='dias'||r.cronologia_recortada||cr.length<2||cr.length>HERR_CAL_MAX)return null;
+  for(let i=1;i<cr.length;i++){if(Math.round((hDia(cr[i].fecha)-hDia(cr[i-1].fecha))/864e5)!==1)return null}
+  const contados=cr.filter(c=>c.cuenta!=null),ultimo=contados[contados.length-1];
+  if(!ultimo||ultimo.fecha!==r.fecha_vencimiento||cr[cr.length-1]!==ultimo)return null;
+  const primerContado=cr.indexOf(contados[0]);
+  // Lo que no contó, agrupado por motivo (el texto es el que dio el servidor, sin el detalle después de «:» o «(»).
+  const grupos={};let noCuentan=0;
+  cr.forEach((c,i)=>{if(c.cuenta!=null||i<primerContado)return;noCuentan++;
+    const k=(c.motivo||'sin motivo indicado').split(/[:(]/)[0].trim();grupos[k]=(grupos[k]||0)+1});
+  const habiles=r.termino.tipo_dias==='habiles';
+  const resumen=hE('p',{class:'herr-cal-res'},hE('b',{text:String(contados.length)}),' '+(contados.length===1?'día contado':'días contados')+
+    (habiles?' (hábiles)':'')+' entre el '+hFecha(contados[0].fecha)+' y el '+hFecha(ultimo.fecha)+'. ',
+    noCuentan?hE('span',null,hE('b',{text:String(noCuentan)}),(noCuentan===1?' día del camino no contó: ':' días del camino no contaron: ')+
+      Object.entries(grupos).map(([k,n])=>k+' ('+n+')').join(', ')+'.'):'Todos los días del camino contaron.');
+  const dias=hE('ol',{class:'herr-cal-dias'});
+  const hueco=(hDia(cr[0].fecha).getDay()+6)%7;
+  for(let i=0;i<hueco;i++)dias.appendChild(hE('li',{class:'herr-dia hueco','aria-hidden':'true'}));
+  cr.forEach((c,i)=>{const f=hDia(c.fecha),vence=c===ultimo,previo=i<primerContado;
+    const largo=f.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+    const mes=(i===0||f.getDate()===1)?' '+f.toLocaleDateString('es-CO',{month:'short'}).replace('.',''):'';
+    const li=hE('li',{class:'herr-dia'+(vence?' vence':c.cuenta!=null?' contado':previo?' inicio':''),style:'--i:'+i,title:largo+(c.motivo?' — '+c.motivo:''),
+      'aria-label':largo+': '+(vence?'día '+c.cuenta+', vence el término':c.cuenta!=null?'día '+c.cuenta:'no cuenta'+(c.motivo?' ('+c.motivo+')':''))},
+      hE('span',{class:'f','aria-hidden':'true',text:f.getDate()+mes}),
+      c.cuenta!=null?hE('span',{class:'n','aria-hidden':'true',text:String(c.cuenta)}):
+        hE('span',{class:'m','aria-hidden':'true',text:previo?'notif.':herrMotivoCorto(c.motivo)}));
+    dias.appendChild(li)});
+  const paso=Math.max(12,Math.min(40,Math.round(900/cr.length)));
+  return hE('section',{class:'herr-cal dibuja',id:'herr-t-cal',style:'--paso-dia:'+paso+'ms;--n:'+cr.length},
+    hE('h4',{text:'Cómo se contó'}),resumen,
+    hE('div',{class:'herr-cal-cab','aria-hidden':'true'},['L','M','M','J','V','S','D'].map(d=>hE('span',{text:d}))),dias,
+    hE('ul',{class:'herr-cal-ley'},
+      hE('li',null,hE('i',{class:'inicio'}),'Notificación: no se cuenta'),hE('li',null,hE('i',{class:'contado'}),'Día que cuenta (con su número)'),
+      hE('li',null,hE('i',null),'Día que no cuenta'),hE('li',null,hE('i',{class:'vence'}),'Vence')),
+    hE('p',{class:'herr-cal-nota',text:'El calendario dibuja la misma cronología de la tabla de abajo. Pasa el cursor por un día para ver el motivo completo.'}));
+}
 function herrPintarTermino(r){
   const res=document.getElementById('herr-t-res');res.textContent='';
   const titulo=hE('h3',{class:'herr-h',tabindex:'-1',text:r.estado==='CALCULADO'?'Resultado':r.estado==='ABSTENCION'?'Sin fecha definitiva: faltan datos':'Datos contradictorios'});
@@ -193,7 +242,9 @@ function herrPintarTermino(r){
   if(r.estado==='CALCULADO'){
     caja.appendChild(hE('p',{class:'herr-fecha',id:'herr-t-vence',text:'Vence el '+r.fecha_vencimiento_texto}));
     caja.appendChild(hE('p',{class:'herr-meta',text:'Empieza a contarse el '+hFecha(r.inicio_computo)+'. '+
-      (r.termino&&r.termino.etiqueta?r.termino.etiqueta+'. ':'')+(r.termino?r.termino.cantidad+' '+(r.termino.unidad==='dias'?'días '+(r.termino.tipo_dias==='habiles'?'hábiles':'calendario'):r.termino.unidad==='meses'?'meses':'años'):'')}))}
+      (r.termino&&r.termino.etiqueta?r.termino.etiqueta+'. ':'')+(r.termino?r.termino.cantidad+' '+(r.termino.unidad==='dias'?'días '+(r.termino.tipo_dias==='habiles'?'hábiles':'calendario'):r.termino.unidad==='meses'?'meses':'años'):'')}));
+    let cal=null;try{cal=herrCalendario(r)}catch(e){cal=null}      // el dibujo es un apoyo: si falla, el resultado se muestra igual
+    if(cal)caja.appendChild(cal)}
   [hLista('Qué falta',r.faltantes,'falta'),hLista('Contradicciones en los datos',r.contradicciones,'falta')].forEach(x=>x&&caja.appendChild(x));
   if(r.escenarios&&r.escenarios.length){
     caja.appendChild(hE('section',{class:'herr-bloque'},hE('h4',{text:'Escenarios posibles'}),hE('ul',{id:'herr-t-escenarios'},r.escenarios.map(e=>hE('li',{text:
