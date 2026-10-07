@@ -103,6 +103,14 @@ ESPERA = {  # plan → (vistas con candado, n.º de botones «Mejorar» en Ajust
 }
 
 
+def ir(pg, vista):
+    """Clic en la navegación y espera a que la sección quede puesta: el cambio puede pasar por una transición
+    (View Transitions), que aplica el cambio un cuadro después del clic."""
+    pg.click(f"#n-{vista}")
+    pg.wait_for_function("v => document.getElementById('n-' + v).classList.contains('on')"
+                         " && !document.documentElement.classList.contains('mv-vt')", arg=vista)
+
+
 def revisar_plan(pg, nombre, plan):
     candados, n_mejorar = ESPERA[plan]
     tienen = {v for v in ("inicio", "modular", "mapa", "chat", "documentos", "config")
@@ -123,7 +131,7 @@ def revisar_plan(pg, nombre, plan):
     pg.click("#cam-aprender")
 
     for vista, funcion in (("modular", "academia"), ("documentos", "automatizador")):
-        pg.click(f"#n-{vista}")
+        ir(pg, vista)
         if vista in candados:
             pg.wait_for_selector("#v-mejora.on .plan-card")
             ok(pg.is_visible("#v-mejora") and not pg.is_visible(f"#v-{vista}"),

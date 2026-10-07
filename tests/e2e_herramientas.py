@@ -47,8 +47,17 @@ def etiquetas(pg, nombre, panel):
     ok(sin == [], f"{nombre}: todos los controles visibles de {panel} tienen <label for> {sin}")
 
 
+def ir(pg, vista):
+    """Abre una sección desde la navegación. En celular, Mi mapa, Herramientas y Ajustes están dentro de «Más»."""
+    if not pg.is_visible("#n-" + vista):
+        pg.click("#n-mas")
+    pg.click("#n-" + vista)
+    # El cambio de sección puede pasar por una transición (View Transitions): se espera a que la vista esté puesta.
+    pg.wait_for_selector("#v-" + vista + ".on, #v-mejora.on")
+
+
 def terminos(pg, nombre):
-    pg.click("#n-herramientas")
+    ir(pg, "herramientas")
     pg.wait_for_selector("#herr-t-regimen")
     ok(pg.is_visible("#v-herramientas") and pg.get_attribute("#n-herramientas", "aria-current") == "page",
        f"{nombre}: la vista Herramientas abre y el botón queda marcado")
@@ -211,16 +220,17 @@ with sync_playwright() as p:
         pg.click("#a-btn")
         pg.wait_for_function("() => PERFIL !== null")
         pg.wait_for_function("() => ESTADO !== null")
-        botones = pg.locator("nav button").count()
-        ancho_nav = pg.evaluate("() => [...document.querySelectorAll('nav button')].every(b => b.getBoundingClientRect().right <= window.innerWidth + 1 "
-                                "&& b.getBoundingClientRect().width >= 40)")
-        ok(botones == 7 and ancho_nav, f"{nombre}: la barra de navegación con 7 botones cabe en pantalla")
+        # Escritorio: barra lateral con las 7 secciones. Celular: 4 destinos y «Más» (el resto se despliega encima).
+        botones = pg.evaluate("() => [...document.querySelectorAll('nav button')].filter(b => b.offsetParent !== null).length")
+        ancho_nav = pg.evaluate("() => [...document.querySelectorAll('nav button')].filter(b => b.offsetParent !== null)"
+                                ".every(b => b.getBoundingClientRect().right <= window.innerWidth + 1 && b.getBoundingClientRect().width >= 40)")
+        ok(botones in (5, 7) and ancho_nav, f"{nombre}: la navegación visible ({botones} botones) cabe en pantalla")
         terminos(pg, nombre)
         liquidacion(pg, nombre)
         # Las demás vistas siguen funcionando al volver.
-        pg.click("#n-documentos")
+        ir(pg, "documentos")
         pg.wait_for_selector("#doc-grid .doc-card")
-        pg.click("#n-inicio")
+        ir(pg, "inicio")
         ok(pg.is_visible("#v-inicio") and not pg.is_visible("#v-herramientas"), f"{nombre}: cambiar de vista oculta Herramientas")
         csp = pg.evaluate("window.__csp")
         ok(csp == [], f"{nombre}: cero violaciones de CSP {csp}")

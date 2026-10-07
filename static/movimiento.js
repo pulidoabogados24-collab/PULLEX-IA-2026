@@ -8,7 +8,8 @@
 //   · Tarjetas: posición del puntero en --mx / --my para el borde de luz (solo ratón).
 //   · Barra lateral: crea el indicador activo y lo coloca sobre el destino actual.
 //   · Cambio de sección: View Transitions API si existe (MV.transicion); si no, el cambio es directo.
-//   · Cifras: MV.contar() las lleva hasta su valor REAL; el valor final siempre es el que dio el servidor.
+//   · Cifras de progreso: MV.contar() las lleva hasta su valor REAL; el valor final siempre es el que dio el servidor.
+//     El saldo de consultas de la cabecera no rueda: siempre muestra el número real y solo da un salto al cambiar.
 //   · Consultar: marca la escena de entrada como vista para que no se repita en cada visita.
 //
 // Qué NO hace: no inventa estados. «Esperando», «consultando fuentes» y «escribiendo» los pone app.js con los
@@ -182,18 +183,16 @@ function contar(el,n,opc){
   var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){io.disconnect();if(cuentas.get(el)===st)animar()}});
   io.observe(el);
 }
-// Contador de consultas de la cabecera: cuando una consulta se gasta (app.js escribe el valor nuevo), el número
-// rueda del anterior al nuevo.
+// Contador de consultas de la cabecera: el número SIEMPRE es el real (es el saldo del plan); cuando cambia, da un
+// pequeño salto para que se note que se gastó una consulta. No se hace rodar la cifra: mostraría valores intermedios.
 function vigilarConsultas(){
-  var el=document.getElementById('c-rest');if(!el||!cuentas||!('MutationObserver' in window))return;
+  var el=document.getElementById('c-rest');if(!el||!('MutationObserver' in window))return;
+  var antes=null;
   new MutationObserver(function(){
-    var txt=el.textContent.trim(),st=cuentas.get(el);
-    if(st&&st.escrito===txt)return;                                            // lo escribimos nosotros
-    if(!/^\d+$/.test(txt))return;                                              // «—» u otro texto: se deja tal cual
-    var n=parseInt(txt,10);
-    // El primer valor (al ingresar) se anota sin animar: la píldora no debe cambiar de ancho mientras cuenta.
-    if(!st||!isFinite(st.real)){cuentas.set(el,{real:n,escrito:txt,raf:0});return}
-    contar(el,n,{desde:st.real});
+    var txt=el.textContent.trim();if(txt===antes)return;
+    var primera=antes===null||!/^\d+$/.test(antes);antes=txt;
+    if(primera||!/^\d+$/.test(txt)||reducido())return;                          // al ingresar no hay nada que señalar
+    el.classList.remove('mv-tic');void el.offsetWidth;el.classList.add('mv-tic');
   }).observe(el,{childList:true,characterData:true,subtree:true});
 }
 

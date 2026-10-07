@@ -55,6 +55,7 @@
 :root[data-trabajo="escribe"] .h-logo .mono::before,:root[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{background:var(--aro)}
 /* Punto de «consultas»: suelta una onda mientras hay trabajo en curso. */
 .creditos .punto{position:relative}
+#c-rest{display:inline-block}
 .creditos .punto::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;opacity:0;pointer-events:none}
 /* Estado escrito junto al nombre (lo pone app.js con el evento real del servidor; nunca solo color). */
 .estado-ia{margin-left:10px;font-weight:600;letter-spacing:.02em;text-transform:none;color:var(--accent-text);white-space:nowrap}
@@ -172,6 +173,7 @@
 @keyframes mv-aro-vivo{0%,100%{opacity:1}50%{opacity:.45}}
 @keyframes mv-onda{from{opacity:.75;transform:scale(1)}to{opacity:0;transform:scale(3.4)}}
 @keyframes mv-foco{from{outline-offset:0;outline-color:transparent}}
+@keyframes mv-tic{from{opacity:.15;transform:translate3d(0,-7px,0)}}
 @keyframes mv-toast-entra{from{opacity:0;transform:translate3d(-50%,16px,0) scale(.96)}}
 @keyframes mv-toast-sale{to{opacity:0;transform:translate3d(-50%,8px,0)}}
 @keyframes mv-dia{from{opacity:0;transform:scale(.7)}}
@@ -218,6 +220,8 @@
   &[data-trabajo] .creditos .punto::after{animation:mv-onda var(--mv-pulso) var(--mv-entra) 3}
   & .env.ocupado::after{animation:mv-gira var(--mv-giro) linear 6,mv-aro-vivo var(--mv-pulso) ease-in-out calc(var(--mv-giro) * 6) infinite}
   & .estado-ia{animation:mv-aparece var(--mv-media) ease}
+  /* El saldo de consultas cae a su sitio cuando cambia (el número ya es el real desde el primer cuadro). */
+  & #c-rest.mv-tic{animation:mv-tic var(--mv-media) var(--mv-enfasis)}
 
   /* 3.5 Consultar, estado inicial. La escena completa se ve una vez por sesión: cuando termina, movimiento.js
          marca .mv-visto y las siguientes visitas entran sin coreografía (volver a Consultar no debe hacer esperar).

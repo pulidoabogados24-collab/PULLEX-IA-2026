@@ -191,6 +191,7 @@ def coordinador(pg, nombre):
     pg.click(".per-cab .per-volver")
     ok(pg.locator("#v-config.on").count() == 1 and pg.locator("#v-perfiles.on").count() == 0, f"{nombre}: «Volver a Ajustes» funciona")
     pg.click("#n-inicio")
+    pg.wait_for_selector("#v-inicio.on")     # el cambio de sección puede pasar por una transición (View Transitions)
     ok(pg.locator("#v-inicio.on").count() == 1 and pg.locator("#v-perfiles.on").count() == 0, f"{nombre}: al cambiar de sección Perfiles se oculta")
 
 

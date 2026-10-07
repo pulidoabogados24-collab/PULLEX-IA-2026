@@ -192,7 +192,8 @@ retrato se revela desde su borde. Si todo entra con el mismo fundido hacia arrib
   existe, la sección cambia como siempre.
 - **Microinteracciones:** presionar encoge el control a 0,98 y soltar lo devuelve con un rebote leve; el
   anillo de foco se asienta desde el borde; las tarjetas del Inicio y de Consultar llevan un borde de luz
-  que sigue al puntero (solo con ratón); las cifras de progreso y del mapa cuentan hasta su valor real; los
+  que sigue al puntero (solo con ratón); las cifras de progreso y del mapa cuentan hasta su valor real; el
+  saldo de consultas de la cabecera muestra siempre el número real y da un pequeño salto cuando cambia; los
   avisos entran con rebote leve y salen más rápido.
 - **Herramientas → Términos:** un calendario dibuja día por día cómo se contó el plazo (qué días contaron,
   cuáles no y por qué) y remata en el vencimiento. Usa la misma cronología que la tabla.
