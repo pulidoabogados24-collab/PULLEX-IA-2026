@@ -49,10 +49,15 @@
   mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
   opacity:0;pointer-events:none;transition:opacity var(--mv-media) ease}
 :root[data-tema="justicia"] .h-logo .mono::before,:root[data-tema="justicia"] .b.ia .av::before{border-radius:50%}
-:root[data-trabajo] .h-logo .mono::before,.b.ia:has(.md.cursor) .av::before{opacity:1}
+/* El aro de la cabecera y el del avatar van en reglas SEPARADAS: un navegador que no entiende :has() descarta la
+   regla entera donde aparece, y juntas se llevaría también el aro de la cabecera. Sin :has() el avatar no lleva aro;
+   el estado sigue escrito junto al nombre (.estado-ia). */
+:root[data-trabajo] .h-logo .mono::before{opacity:1}
+.b.ia:has(.md.cursor) .av::before{opacity:1}
 :root[data-trabajo="fuentes"]{--aro:var(--tono-1)}
 :root[data-trabajo="escribe"]{--aro:var(--tono-3)}
-:root[data-trabajo="escribe"] .h-logo .mono::before,:root[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{background:var(--aro)}
+:root[data-trabajo="escribe"] .h-logo .mono::before{background:var(--aro)}
+:root[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{background:var(--aro)}
 /* Punto de «consultas»: suelta una onda mientras hay trabajo en curso. */
 .creditos .punto{position:relative}
 #c-rest{display:inline-block}

@@ -1,7 +1,11 @@
 // Service worker mínimo de LEXCOL — permite instalar la app y cachea la "cara".
-const CACHE = "pullex-v8";
+const CACHE = "pullex-v9";
+// SHELL: todo lo que static/index.html enlaza de este mismo sitio (hojas y scripts) más fuentes e imágenes de la cara.
+// Si se agrega un <script> o un <link rel="stylesheet"> a la página, va aquí también (lo cuida tests/test_movimiento.py).
 const SHELL = ["/", "/static/index.html", "/static/app.js", "/static/tema.css", "/static/justicia.css", "/static/apariencia.js",
   "/static/movimiento.css", "/static/movimiento.js",
+  "/static/planes.css", "/static/escritura.css", "/static/calidad.css",
+  "/static/planes.js", "/static/documentos.js", "/static/herramientas.js", "/static/biblioteca.js", "/static/perfiles.js", "/static/taller.js",
   "/static/fonts/inter-var.woff2", "/static/fonts/fraunces-var.woff2",
   "/static/fonts/syne-var.woff2", "/static/fonts/plus-jakarta-sans-var.woff2",
   "/static/img/justicia.webp", "/static/img/justicia-luz.webp", "/static/img/marca/emblema.webp", "/static/icon-192.png", "/static/icon-512.png"];

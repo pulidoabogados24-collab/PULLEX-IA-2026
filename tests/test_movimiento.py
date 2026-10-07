@@ -216,3 +216,70 @@ def test_MOV_014_una_respuesta_cortada_se_pinta_con_lo_recuperado():
     assert "se interrumpió la conexión" in bloque and "innerHTML=md(res.buffer)" in bloque
     continuar = app[app.index("async function continuarResp"):app.index("function quitarAcciones")]
     assert "res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)" in continuar
+
+
+def test_MOV_015_el_cascaron_incluye_todo_lo_que_la_pagina_enlaza():
+    """Si la página enlaza una hoja o un script de este sitio que el service worker no guarda al instalarse, la
+    primera vez que se abra sin señal la app carga a medias (sin planes, documentos, herramientas…)."""
+    html, sw = leer("index.html"), leer("sw.js")
+    shell = set(re.findall(r'"(/static/[^"]+)"', sw))
+    enlazados = set(re.findall(r'<script src="(/static/[^"]+)"', html)) | set(re.findall(r'<link rel="stylesheet" href="(/static/[^"]+)"', html))
+    assert len(enlazados) >= 15
+    assert not (enlazados - shell), sorted(enlazados - shell)
+    assert int(re.search(r'const CACHE = "pullex-v(\d+)"', sw).group(1)) >= 9
+
+
+def test_MOV_016_el_envio_nunca_queda_ocupado_si_algo_falla():
+    """«Ocupado» (botón girando, chat que no admite otro mensaje) se suelta en un finally, y cada envío suelta solo lo
+    suyo. Un fallo del intérprete de markdown no tumba el pintado: la respuesta sale como texto plano seguro."""
+    app = leer("app.js")
+    for inicio, fin in (("async function enviar(opc){", "async function continuarResp"), ("async function continuarResp", "function quitarAcciones")):
+        cuerpo = app[app.index(inicio):app.index(fin)]
+        assert "ocupado(true);" in cuerpo and "}finally{soltar()}" in cuerpo, inicio
+        assert cuerpo.count("ocupado(false)") == 1 and "suelto=true;ocupado(false)" in cuerpo, inicio
+    linea_md = next(l for l in app.splitlines() if l.startswith("function md(t){"))
+    assert "try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}" in linea_md and "esc(t)" in linea_md
+    assert "DOMPurify.sanitize" in linea_md.split("catch")[0]            # lo que sale de marked siempre pasa por DOMPurify
+
+
+def test_MOV_017_un_aviso_de_conexion_no_se_presenta_como_respuesta():
+    """Si la conexión se cae sin que llegue ni quede guardado nada, se muestra el aviso y ya: sin «Copiar», sin
+    «Continuar» (no hay de dónde continuar) y sin sumar una consulta usada."""
+    app = leer("app.js")
+    enviar = app[app.index("async function enviar(opc){"):app.index("async function continuarResp")]
+    aviso = enviar[enviar.index("if(!res.buffer.trim()){"):enviar.index("cerrarResp(bIA,res,cid)")]
+    assert "se interrumpió la conexión" in aviso and "soltar();cargarConvs();return}" in aviso
+    assert enviar.index("cerrarResp(bIA,res,cid)") < enviar.index("PERFIL.usadas++")
+    assert "res.buffer='**Aviso:**" not in app                           # el aviso no se guarda como texto de la respuesta
+
+
+def test_MOV_018_los_avisos_duran_lo_que_toma_leerlos():
+    """Un aviso corto dura lo de siempre; uno largo (los errores del servidor pasan de 100 caracteres) dura más. Se
+    retira por tiempo, sin depender de que una animación termine."""
+    app = leer("app.js")
+    toast = app[app.index("function toast(m){"):app.index("function trabajo(e)")]
+    m = re.search(r"Math\.min\((\d+),Math\.max\((\d+),(\d+)\+String\(m\|\|''\)\.length\*(\d+)\)\)", toast)
+    tope, minimo, base, por_caracter = map(int, m.groups())
+    def dura(n):
+        return min(tope, max(minimo, base + n * por_caracter))
+    assert dura(8) >= 2600                                               # «Copiado»
+    assert dura(105) >= 105 / 17 * 1000                                  # error típico del servidor, a 17 caracteres por segundo
+    assert dura(150) >= 9000 and tope <= 10000
+    assert "animationend" not in toast.split("\n", 2)[2] and "setTimeout" in toast
+
+
+def test_MOV_019_el_boton_de_ingreso_dice_lo_del_modo_a_la_vista():
+    app = leer("app.js")
+    ingreso = app[app.index("async function enviarAuth(){"):app.index("const CAPACIDADES")]
+    assert "b.textContent=modoActual==='registrar'?'Crear cuenta':'Ingresar';trabajo(null)" in ingreso
+    assert "b.textContent=rotulo" not in ingreso
+
+
+def test_MOV_020_has_no_arrastra_reglas_que_no_lo_necesitan():
+    """Un navegador sin :has() descarta la regla completa. Fuera del bloque de movimiento completo (que ya exige un
+    navegador reciente), ninguna regla mezcla :has() con otro selector en la misma lista."""
+    css = sin_comentarios(leer("movimiento.css"))
+    quietas = css[:css.index("@media (prefers-reduced-motion:no-preference)")]
+    for selector in re.findall(r"([^{}]+)\{[^{}]*\}", quietas):
+        if ":has(" in selector:
+            assert "," not in re.sub(r"\([^()]*\)", "", selector), selector.strip()

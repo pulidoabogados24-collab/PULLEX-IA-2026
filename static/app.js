@@ -5,14 +5,18 @@ if(LIBS_OK)marked.setOptions({breaks:true});
 const $=id=>document.getElementById(id);
 let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
 function auth(){return {'Authorization':'Bearer '+TOKEN}}
-function md(t){return LIBS_OK?DOMPurify.sanitize(marked.parse(t||'')):esc(t).replace(/\n/g,'<br>')}
+// Si el intérprete de markdown falla con un texto, se muestra como texto plano seguro: la respuesta no se pierde y
+// el envío no queda a medias por un error de pintado.
+function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
 function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 // Aviso breve. Entra y sale con su propia animación (static/movimiento.css); se retira por tiempo, nunca esperando a
 // un «animationend» que podría no llegar. Un aviso nuevo reemplaza al anterior en vez de encimarse.
 function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());
   const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=m;
   document.body.appendChild(t);
-  const visible=Math.min(6000,Math.max(2600,1400+String(m||'').length*45));   // los avisos largos duran más
+  // Tiempo para leerlo: 1,5 s para verlo más 60 ms por carácter (unos 16 caracteres por segundo), entre 2,6 y 10 s.
+  // Los avisos de error del servidor pasan de 100 caracteres: con el tope anterior de 6 s no alcanzaban a leerse.
+  const visible=Math.min(10000,Math.max(2600,1500+String(m||'').length*60));
   setTimeout(()=>{t.classList.add('sale');setTimeout(()=>t.remove(),180)},visible)}
 // Estado de trabajo REAL de la app, a la vista del CSS (static/movimiento.css): 'ingreso' | 'espera' | 'fuentes' |
 // 'escribe', o nada. Solo se enciende desde los puntos donde de verdad se espera al servidor o llega el stream.
@@ -47,7 +51,7 @@ async function enviarAuth(){
   const url=modoActual==='registrar'?'/api/registro':'/api/login';
   const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
   // Mientras el servidor responde, el botón lo dice y no admite otro clic.
-  const rotulo=b.textContent;b.disabled=true;b.setAttribute('aria-busy','true');
+  b.disabled=true;b.setAttribute('aria-busy','true');
   b.textContent=modoActual==='registrar'?'Creando tu cuenta…':'Ingresando…';trabajo('ingreso');
   let d=null;
   try{
@@ -55,7 +59,9 @@ async function enviarAuth(){
     d=await r.json();
     if(!r.ok){$('a-msg').textContent=d.detail||'No se pudo';d=null}
   }catch(e){$('a-msg').textContent='Error de conexión';d=null}
-  b.disabled=false;b.removeAttribute('aria-busy');b.textContent=rotulo;trabajo(null);
+  // El rótulo sale del modo que está a la vista AHORA: si la persona cambió de pestaña mientras se esperaba, el botón
+  // no puede quedar diciendo «Ingresar» en el formulario de crear cuenta.
+  b.disabled=false;b.removeAttribute('aria-busy');b.textContent=modoActual==='registrar'?'Crear cuenta':'Ingresar';trabajo(null);
   if(d){TOKEN=d.token;PERFIL=d.perfil;iniciar()}
 }
 const CAPACIDADES=[
@@ -358,29 +364,38 @@ function ocupado(si){enviando=si;const b=$('env');b.disabled=si;b.classList.togg
   b.setAttribute('aria-label',si?'Enviando…':'Enviar');b.title=si?'Esperando la respuesta':'Enviar';
   if(si){b.setAttribute('aria-busy','true');trabajo('espera')}else{b.removeAttribute('aria-busy');trabajo(null)}}
 // opc.titulo (opcional): título para el historial, p. ej. el que pone el Document Studio.
+// El estado «ocupado» se suelta SIEMPRE, también si algo falla al pintar: de lo contrario el botón de enviar quedaría
+// girando y el chat no admitiría otro mensaje hasta recargar la página.
 async function enviar(opc){
   const texto=$('txt').value.trim();
   if((!texto&&!ADJ.length)||enviando)return;
   if(PERFIL.restantes<=0){toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
   ocupado(true);
-  if(!CONV)await nuevaConv();
-  const cid=CONV;
-  $('sugs').classList.add('hidden');
-  const adjEnvio=ADJ.slice();
-  burbuja('user',texto,adjEnvio,true);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
-  const bIA=burbuja('ia','',null,true);
-  const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
-  if(res.estado!==200){
-    bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
-    ocupado(false);if(res.estado===402||res.estado===403)ver('config');return}
-  if(res.error==='conexion'&&!res.fin){
-    const rec=await recuperarIncompleta(cid);
-    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
-    else if(!res.buffer.trim())res.buffer='**Aviso:** se interrumpió la conexión. Intenta de nuevo.';
-    bIA.querySelector('.md').innerHTML=md(res.buffer);   // lo recuperado (o el aviso) tiene que verse, no solo guardarse
-  }
-  cerrarResp(bIA,res,cid);
-  ocupado(false);
+  let suelto=false;const soltar=()=>{if(!suelto){suelto=true;ocupado(false)}};   // este envío suelta una sola vez, y solo lo suyo
+  let cid=null;
+  try{
+    if(!CONV)await nuevaConv();
+    cid=CONV;
+    $('sugs').classList.add('hidden');
+    const adjEnvio=ADJ.slice();
+    burbuja('user',texto,adjEnvio,true);$('txt').value='';autoAlto($('txt'));ADJ=[];pintarAdj();
+    const bIA=burbuja('ia','',null,true);
+    const res=await transmitir({conversacion:cid,mensaje:texto,web:WEB,modo:$('modo').value,estilo:$('estilo').value,adjuntos:adjEnvio},bIA,'');
+    if(res.estado!==200){
+      bIA.querySelector('.md').innerHTML=md('**Aviso:** '+res.error);
+      soltar();if(res.estado===402||res.estado===403)ver('config');return}
+    if(res.error==='conexion'&&!res.fin){
+      const rec=await recuperarIncompleta(cid);
+      if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id}
+      if(!res.buffer.trim()){
+        // No llegó nada ni quedó nada guardado: es solo un aviso. No es una respuesta: no lleva «Copiar» ni
+        // «Continuar» (no hay de dónde continuar) y no se suma como consulta usada.
+        bIA.querySelector('.md').innerHTML=md('**Aviso:** se interrumpió la conexión. Intenta de nuevo.');
+        soltar();cargarConvs();return}
+      bIA.querySelector('.md').innerHTML=md(res.buffer);   // lo recuperado tiene que verse, no solo guardarse
+    }
+    cerrarResp(bIA,res,cid);
+  }finally{soltar()}
   PERFIL.usadas++;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   // El servidor titula la conversación con el primer mensaje; se refresca la lista para verla.
   if(opc&&opc.titulo&&cid){try{await api('/api/conversaciones/'+cid+'/titulo',{body:{titulo:opc.titulo}})}catch(e){}}
@@ -390,20 +405,22 @@ async function enviar(opc){
 async function continuarResp(bIA,meta,textoActual){
   if(enviando)return;
   ocupado(true);
-  quitarAcciones(bIA);
-  const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
-  if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
-    ocupado(false);toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
-    const c=meta.cid;CONV=null;await abrirConv(c);return}
-  if(res.estado!==200){
-    toast(res.error);ocupado(false);
-    accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
-  if(res.error==='conexion'&&!res.fin){
-    const rec=await recuperarIncompleta(meta.cid);
-    if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)}}
-  if(!res.id)res.id=meta.id;
-  cerrarResp(bIA,res,meta.cid);
-  ocupado(false);
+  let suelto=false;const soltar=()=>{if(!suelto){suelto=true;ocupado(false)}};   // este envío suelta una sola vez, y solo lo suyo
+  try{
+    quitarAcciones(bIA);
+    const res=await transmitir({conversacion:meta.cid,continuar:true,web:WEB},bIA,textoActual);
+    if(res.estado===400){ // ya no había nada por continuar (se completó en otra pestaña, por ejemplo): se recarga lo guardado
+      soltar();toast('Esa respuesta ya estaba completa. Se recarga la conversación.');
+      const c=meta.cid;CONV=null;await abrirConv(c);return}
+    if(res.estado!==200){
+      toast(res.error);soltar();
+      accionesResp(bIA,textoActual,[],{id:meta.id,incompleta:true,motivo:meta.motivo,cid:meta.cid});return}
+    if(res.error==='conexion'&&!res.fin){
+      const rec=await recuperarIncompleta(meta.cid);
+      if(rec&&rec.texto.length>=res.buffer.length){res.buffer=rec.texto;res.id=rec.id;bIA.querySelector('.md').innerHTML=md(res.buffer)}}
+    if(!res.id)res.id=meta.id;
+    cerrarResp(bIA,res,meta.cid);
+  }finally{soltar()}
 }
 function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
 function accionesResp(b,texto,fuentes,meta){
