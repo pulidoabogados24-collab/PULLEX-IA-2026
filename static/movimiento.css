@@ -80,6 +80,7 @@
 .fichas-mas{align-self:center;justify-self:start;padding:6px 2px;font-size:.8125rem;font-weight:600;color:var(--accent-text);
   text-decoration:underline;text-underline-offset:.2em;min-height:32px}
 .fichas+.fuentes{margin-top:10px}
+@media(max-width:560px){.ficha{padding:10px 12px;gap:6px}}
 
 /* 1.6 Indicador de la barra lateral: una sola pieza que se desliza de un destino a otro. movimiento.js la crea y
        pone .mv-nav en <nav>; sin ella, cada botón conserva su propio fondo y su raya (justicia.css). */
@@ -168,7 +169,7 @@
 @keyframes mv-respira{0%,100%{opacity:.14}50%{opacity:.58}}
 @keyframes mv-late{0%,100%{opacity:.5}50%{opacity:1}}
 @keyframes mv-gira{to{transform:rotate(1turn)}}
-@keyframes mv-aro-vivo{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes mv-aro-vivo{0%,100%{opacity:1}50%{opacity:.45}}
 @keyframes mv-onda{from{opacity:.75;transform:scale(1)}to{opacity:0;transform:scale(3.4)}}
 @keyframes mv-foco{from{outline-offset:0;outline-color:transparent}}
 @keyframes mv-toast-entra{from{opacity:0;transform:translate3d(-50%,16px,0) scale(.96)}}
@@ -195,8 +196,8 @@
 
   /* 3.3 Retrato de la Justicia. Las vetas respiran muy despacio (solo opacidad de la capa de luz) y laten más
          vivas mientras la app trabaja de verdad. */
-  & .retrato-luz{animation:mv-respira 7.5s ease-in-out infinite}
-  &[data-trabajo] .retrato-luz{animation:mv-late 1.6s ease-in-out infinite}
+  & .retrato-luz{animation:mv-respira var(--mv-respira) ease-in-out infinite}
+  &[data-trabajo] .retrato-luz{animation:mv-late var(--mv-pulso) ease-in-out infinite}
   /* Paralaje con el puntero: la figura y los rótulos se separan unos pocos píxeles. Solo ratón (.mv-par lo pone
      movimiento.js cuando hay puntero fino). */
   & .retrato.mv-par .retrato-fig{transform:translate3d(calc(var(--px,0) * -3px),calc(var(--py,0) * -2px),0) scale(1.025);
@@ -204,16 +205,18 @@
   & .retrato.mv-par .retrato-sup,& .retrato.mv-par .retrato-inf{transform:translate3d(calc(var(--px,0) * 2.5px),calc(var(--py,0) * 1.5px),0);
     transition:transform var(--mv-lenta) var(--mv-entra)}
 
-  /* 3.4 Estados de trabajo: el arco gira mientras se espera o se consultan fuentes; al escribir, el aro late. */
-  &[data-trabajo="espera"] .h-logo .mono::before{animation:mv-gira 2.2s linear infinite}
-  &[data-trabajo="fuentes"] .h-logo .mono::before{animation:mv-gira 1.1s linear infinite}
-  &[data-trabajo="ingreso"] .h-logo .mono::before{animation:mv-gira 2.2s linear infinite}
-  &[data-trabajo="escribe"] .h-logo .mono::before{animation:mv-aro-vivo 1.8s ease-in-out infinite}
-  &[data-trabajo="espera"] .b.ia:has(.md.cursor) .av::before{animation:mv-gira 2.2s linear infinite}
-  &[data-trabajo="fuentes"] .b.ia:has(.md.cursor) .av::before{animation:mv-gira 1.1s linear infinite}
-  &[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{animation:mv-aro-vivo 1.8s ease-in-out infinite}
-  &[data-trabajo] .creditos .punto::after{animation:mv-onda 1.6s var(--mv-entra) infinite}
-  & .env.ocupado::after{animation:mv-gira .8s linear infinite}
+  /* 3.4 Estados de trabajo. Al esperar, el arco gira; al buscar en fuentes late rápido; al escribir, el aro
+         completo late despacio. Ningún giro dura más de cinco segundos seguidos: pasado ese tiempo el aro se
+         queda en su sitio y solo late (opacidad), que es lo único que puede seguir indefinidamente. */
+  &[data-trabajo="espera"] .h-logo .mono::before,&[data-trabajo="ingreso"] .h-logo .mono::before,
+  &[data-trabajo="espera"] .b.ia:has(.md.cursor) .av::before{
+    animation:mv-gira calc(var(--mv-giro) * 2.75) linear 2,mv-aro-vivo var(--mv-pulso) ease-in-out calc(var(--mv-giro) * 5.5) infinite}
+  &[data-trabajo="fuentes"] .h-logo .mono::before,&[data-trabajo="fuentes"] .b.ia:has(.md.cursor) .av::before{
+    animation:mv-aro-vivo calc(var(--mv-pulso) * .6) ease-in-out infinite}
+  &[data-trabajo="escribe"] .h-logo .mono::before,&[data-trabajo="escribe"] .b.ia:has(.md.cursor) .av::before{
+    animation:mv-aro-vivo var(--mv-pulso) ease-in-out infinite}
+  &[data-trabajo] .creditos .punto::after{animation:mv-onda var(--mv-pulso) var(--mv-entra) 3}
+  & .env.ocupado::after{animation:mv-gira var(--mv-giro) linear 6,mv-aro-vivo var(--mv-pulso) ease-in-out calc(var(--mv-giro) * 6) infinite}
   & .estado-ia{animation:mv-aparece var(--mv-media) ease}
 
   /* 3.5 Consultar, estado inicial. La escena completa se ve una vez por sesión: cuando termina, movimiento.js

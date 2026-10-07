@@ -150,13 +150,16 @@ El movimiento es parte del sistema de diseño, no una capa de efectos. Vive en `
 | `--mv-lenta` | 420 ms | Piezas grandes: titular, panel, indicador de navegación. |
 | `--mv-escena` | 700 ms | Una vez por pantalla: el revelado del retrato. |
 | `--mv-paso` | 60 ms | Separación entre piezas de una misma serie. |
+| `--mv-giro` / `--mv-pulso` / `--mv-respira` | 0,8 s / 1,6 s / 7,5 s | Periodos de los bucles: una vuelta del aro de carga, el latido de un indicador de trabajo y la respiración del retrato en reposo. |
 | `--mv-entra` | `cubic-bezier(.2,.8,.2,1)` | Llega y frena. Es la curva por omisión de las entradas. |
 | `--mv-sale` | `cubic-bezier(.55,0,.9,.4)` | Arranca y se va. Las salidas duran menos que las entradas. |
 | `--mv-enfasis` | `cubic-bezier(.34,1.4,.64,1)` | Rebote leve. Solo para lo que el usuario acaba de tocar o para la pieza que remata una serie. |
 
-Los nombres anteriores (`--t-rapida`, `--t-media`, `--curva`) siguen existiendo como alias. Los bucles
-(esqueleto de carga, cursor de escritura, respiración del retrato, aros de estado) tienen su propio
-periodo escrito en la regla, porque no son transiciones entre dos estados.
+Los nombres anteriores (`--t-rapida`, `--t-media`, `--curva`) siguen existiendo como alias. En
+`movimiento.css` las duraciones salen todas de estos tokens (lo comprueba `tests/test_movimiento.py`); las
+únicas cifras escritas a mano son los dos «salvavidas» que garantizan que nada se quede oculto y el paso
+del calendario de términos, que se calcula según cuántos días haya. Los dos bucles anteriores a este
+rediseño (brillo del esqueleto de carga y cursor de escritura, en `index.html`) conservan su periodo propio.
 
 **Regla de oro:** cada tipo de pieza entra a su manera. Un rótulo se desliza, un titular se descubre por
 líneas, un párrafo solo aparece, una tarjeta sube con un rebote leve, el compositor sube sin rebote, el
@@ -176,7 +179,7 @@ retrato se revela desde su borde. Si todo entra con el mismo fundido hacia arrib
 - **Trabajo real:** mientras la app espera o recibe una respuesta, `app.js` pone `data-trabajo` en `<html>`
   (`ingreso`, `espera`, `fuentes`, `escribe`) con los eventos reales del envío y del stream. Con eso laten
   las vetas del retrato, aparece un aro en el emblema de la cabecera y en el avatar de la respuesta (arco
-  que gira al esperar o buscar en fuentes; aro completo al escribir), el punto de «consultas» suelta una
+  que gira al esperar, arco cian que late al buscar en fuentes, aro completo al escribir), el punto de «consultas» suelta una
   onda, el botón de enviar cambia la flecha por un aro y junto al nombre se lee el estado («Esperando la
   respuesta…», «Buscando en fuentes…», «Escribiendo…»).
 - **Chat:** el mensaje propio sale del compositor; la respuesta solo aparece. El texto que llega no salta:
@@ -204,8 +207,9 @@ retrato se revela desde su borde. Si todo entra con el mismo fundido hacia arrib
    Movimiento: Reducido**, todo el bloque de movimiento deja de existir: el contenido aparece ya en su
    sitio, sin paralaje, sin transiciones entre secciones y con los estados de trabajo quietos (el aro se
    ve, no gira; el texto de estado sigue ahí).
-4. **Nada parpadea** más de tres veces por segundo, y lo único que se mueve solo por más de cinco segundos
-   es opacidad (respiración del retrato) o un indicador de carga mientras hay una carga real.
+4. **Nada parpadea** más de tres veces por segundo, y lo único que puede moverse solo por más de cinco
+   segundos es opacidad (la respiración del retrato, el latido de un aro). Un giro nunca pasa de cinco
+   segundos seguidos: el aro de carga da sus vueltas y, si la espera sigue, se queda quieto y late.
 5. **El contenido no depende de JavaScript para verse.** Los estados ocultos de partida viven dentro de la
    propia animación (`animation-fill-mode: backwards`). Si `movimiento.js` no carga, todo se ve igual; si
    lo que no carga es `movimiento.css`, simplemente no hay coreografía.

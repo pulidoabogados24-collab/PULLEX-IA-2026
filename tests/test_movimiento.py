@@ -22,7 +22,7 @@ def sin_comentarios(css):
 def test_MOV_001_tokens_de_movimiento_en_el_tema():
     tema = leer("tema.css")
     for token in ("--mv-instante", "--mv-rapida", "--mv-media", "--mv-lenta", "--mv-escena",
-                  "--mv-entra", "--mv-sale", "--mv-enfasis", "--mv-paso"):
+                  "--mv-entra", "--mv-sale", "--mv-enfasis", "--mv-paso", "--mv-giro", "--mv-pulso", "--mv-respira"):
         assert re.search(re.escape(token) + r":\s*[^;]+;", tema), token
     # Tres curvas DISTINTAS: una sola curva para todo es justo lo que se quiere evitar.
     curvas = {re.search(rf"--mv-{n}:\s*(cubic-bezier\([^)]*\))", tema).group(1) for n in ("entra", "sale", "enfasis")}
@@ -82,7 +82,7 @@ def test_MOV_005_duraciones_y_curvas_solo_con_tokens():
     css = sin_comentarios(leer("movimiento.css"))
     literales = []
     for decl in re.findall(r"(?:animation|transition)(?:-duration|-delay)?:([^;}]+)", css):
-        if "!important" in decl or "infinite" in decl:      # apagado global y bucles (periodo propio)
+        if "!important" in decl:                            # apagado global
             continue
         if "mv-visible" in decl:                             # salvavidas: garantiza que nada se quede oculto
             continue
@@ -91,6 +91,23 @@ def test_MOV_005_duraciones_y_curvas_solo_con_tokens():
             literales.append(decl.strip())
     assert not literales, literales
     assert "cubic-bezier" not in css                         # las curvas viven en tema.css
+
+
+def test_MOV_010_ningun_giro_dura_mas_de_cinco_segundos():
+    """Lo único que puede moverse indefinidamente es opacidad. Un giro (mv-gira) siempre lleva un número finito de
+    vueltas que, con los periodos de tema.css, suma menos de cinco segundos."""
+    tema, css = leer("tema.css"), sin_comentarios(leer("movimiento.css"))
+    giro = float(re.search(r"--mv-giro:\s*([\d.]+)s", tema).group(1))
+    usos = re.findall(r"mv-gira ([^,;}]+)", css)
+    assert usos
+    for uso in usos:
+        assert "infinite" not in uso, uso
+        factor = re.search(r"calc\(var\(--mv-giro\) \* ([\d.]+)\)", uso)
+        vueltas = int(re.search(r"linear (\d+)", uso).group(1))
+        assert giro * (float(factor.group(1)) if factor else 1) * vueltas < 5, uso
+    kf = dict(re.findall(r"@keyframes ([\w-]+)\{((?:[^{}]*\{[^{}]*\})*)", css))
+    for nombre in re.findall(r"animation:[^;}]*?(mv-[\w-]+)[^,;}]*infinite", css):
+        assert set(re.findall(r"([a-z-]+):", kf[nombre])) == {"opacity"}, nombre
 
 
 def test_MOV_006_solo_se_animan_propiedades_baratas():

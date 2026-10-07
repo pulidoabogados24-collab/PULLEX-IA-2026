@@ -59,6 +59,9 @@
   --mv-lenta:420ms;                        /* piezas grandes: titular, panel, indicador de navegación */
   --mv-escena:700ms;                       /* una vez por pantalla: el revelado del retrato */
   --mv-paso:60ms;                          /* separación entre piezas de una misma serie */
+  --mv-giro:.8s;                           /* bucles: una vuelta del aro de carga */
+  --mv-pulso:1.6s;                         /* bucles: latido de un indicador de trabajo */
+  --mv-respira:7.5s;                       /* bucles: respiración del retrato en reposo */
   --mv-entra:cubic-bezier(.2,.8,.2,1);     /* llega y frena */
   --mv-sale:cubic-bezier(.55,0,.9,.4);     /* arranca y se va (las salidas duran menos que las entradas) */
   --mv-enfasis:cubic-bezier(.34,1.4,.64,1);/* llega con un rebote leve: solo para lo que el usuario acaba de tocar */

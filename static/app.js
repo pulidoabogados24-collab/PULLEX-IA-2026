@@ -505,15 +505,17 @@ function tituloFuente(f){
 }
 // opc.fichas: además del bloque plegable, las fuentes CITADAS se muestran como fichas a la vista (con su estado de
 // vigencia escrito). En una respuesta recién llegada se despliegan una a una (static/movimiento.css, .b.nueva).
-const MAX_FICHAS=4;
+// En pantallas angostas las fichas van una debajo de otra: se muestran menos y el resto queda en la lista.
+function maxFichas(){try{return window.matchMedia('(max-width:560px)').matches?2:4}catch(e){return 4}}
 function pintarFuentes(b,fuentes,opc){
   if(!Array.isArray(fuentes)||!fuentes.length)return;
   const lista=fuentes.slice().sort((x,y)=>(y.citado?1:0)-(x.citado?1:0));
   const d=el('details','fuentes');
   const citadas=opc&&opc.fichas?lista.filter(f=>f.citado):[];
-  if(citadas.length){
-    b.querySelector('.bd').appendChild(el('p','fichas-t',citadas.length===1?'Fuente citada en esta respuesta':'Fuentes citadas en esta respuesta'));
-    const fs=el('ul','fichas');
+  if(citadas.length){const MAX_FICHAS=maxFichas();
+    const rot=citadas.length===1?'Fuente citada en esta respuesta':'Fuentes citadas en esta respuesta';
+    const tt=el('p','fichas-t',rot);tt.setAttribute('aria-hidden','true');b.querySelector('.bd').appendChild(tt);
+    const fs=el('ul','fichas');fs.setAttribute('aria-label',rot);
     citadas.slice(0,MAX_FICHAS).forEach((f,i)=>{
       const li=el('li','ficha');li.style.setProperty('--i',i);const [cls,txt]=chipFuente(f);
       li.appendChild(el('span','fchip '+cls,txt));li.appendChild(tituloFuente(f));

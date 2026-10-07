@@ -139,6 +139,8 @@ function indicador(){
   obs.observe(nav,{attributes:true,attributeFilter:['class'],subtree:true});
   obs.observe(app,{attributes:true,attributeFilter:['class']});
   if(mqLateral){var f=function(){colocar()};mqLateral.addEventListener?mqLateral.addEventListener('change',f):mqLateral.addListener(f)}
+  // «Ajustes» va pegado al pie de la barra: si cambia el alto de la ventana, cambia su sitio.
+  var pend=false;window.addEventListener('resize',function(){if(pend)return;pend=true;alCuadro(function(){pend=false;colocar()})});
   colocar();
 }
 
