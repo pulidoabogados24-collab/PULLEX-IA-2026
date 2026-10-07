@@ -1,9 +1,9 @@
 // Service worker mínimo de LEXCOL — permite instalar la app y cachea la "cara".
-const CACHE = "pullex-v5";
+const CACHE = "pullex-v6";
 const SHELL = ["/", "/static/index.html", "/static/app.js", "/static/tema.css", "/static/justicia.css", "/static/apariencia.js",
   "/static/fonts/inter-var.woff2", "/static/fonts/fraunces-var.woff2",
   "/static/fonts/syne-var.woff2", "/static/fonts/plus-jakarta-sans-var.woff2",
-  "/static/img/justicia.webp", "/static/icon-192.png", "/static/icon-512.png"];
+  "/static/img/justicia.webp", "/static/img/marca/emblema.webp", "/static/icon-192.png", "/static/icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

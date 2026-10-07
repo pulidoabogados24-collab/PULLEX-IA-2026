@@ -203,6 +203,13 @@ a{color:var(--accent-text);text-underline-offset:.18em;text-decoration-thickness
 .marca{font-family:var(--font-marca);font-weight:var(--marca-peso);letter-spacing:.06em;font-size:1.05rem;color:var(--text)}
 /* Tema «justicia»: marca en Syne 800, sin la raya de firma; rótulos en cian con más espaciado. */
 :root[data-tema="justicia"] .mono{font-weight:800;padding-bottom:0;border-radius:var(--radius-sm)}
+/* Emblema de la marca: el busto de la Justicia vendada. La letra queda para lectores de pantalla ocultos (aria-hidden)
+   y para los demás temas; aquí se sustituye por la imagen. */
+:root[data-tema="justicia"] .mono{background:transparent url(/static/img/marca/emblema.webp) center/cover no-repeat;
+  color:transparent;font-size:0;border-radius:50%;box-shadow:none}
+:root[data-tema="justicia"][data-esquema="oscuro"] .marca-lex{color:var(--lima)}
+:root[data-tema="justicia"] .marca-ia{font-weight:400}
+:root[data-tema="justicia"][data-esquema="oscuro"] .marca-ia{color:var(--cian)}
 :root[data-tema="justicia"] .mono::after{display:none}
 :root[data-tema="justicia"] .marca{letter-spacing:.02em}
 :root[data-tema="justicia"] .eyebrow{color:var(--accent-text);letter-spacing:.13em}
