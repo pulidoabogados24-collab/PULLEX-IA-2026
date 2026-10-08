@@ -110,23 +110,9 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .retrato picture{position:absolute;inset:0}
 .retrato-img,.retrato-luz{display:block;width:100%;height:100%;object-fit:cover;object-position:46% center}
 .retrato-luz{position:absolute;inset:0;opacity:.3;pointer-events:none}
-/* Degradado inferior hacia el fondo (opaco abajo, transparente al 46 %) y velo leve arriba para los rótulos. */
+/* La estatua va sola, sin rótulos encima: solo un velo leve abajo para fundirla con el fondo. */
 .retrato::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.94) 14%,rgba(16,17,21,.62) 30%,rgba(16,17,21,0) 48%),
-    linear-gradient(to bottom,rgba(16,17,21,.72) 0%,rgba(16,17,21,0) 20%)}
-.retrato-sup{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:26px 28px 0}
-.lema{font-family:var(--syne);font-weight:700;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#f4f6f9;white-space:nowrap}
-.lema .x,.retrato-tit .x{color:var(--lima)}
-.lema .x{font-size:1.35em;line-height:0;vertical-align:-.06em;letter-spacing:.1em}
-.retrato .huella{width:26px;height:26px;color:var(--cian);stroke-width:1.5}
-.retrato-inf{padding:0 28px 26px}
-.retrato-eyebrow{margin:0 0 12px;font-size:.75rem;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:var(--cian)}
-.retrato-tit{margin:0 0 14px;font-family:var(--syne);font-weight:600;font-size:2.4rem;font-size:clamp(1.75rem,12.6cqw,4.0625rem);
-  line-height:1;letter-spacing:-.03em;text-wrap:balance}
-.retrato-txt{margin:0;font-size:1rem;line-height:1.55;color:var(--r-fg2)}
-.retrato-pie{display:flex;justify-content:space-between;gap:14px;margin:22px 0 0;padding-top:14px;border-top:1px solid rgba(244,246,249,.18);
-  font-size:.75rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--r-fg2)}
-.retrato-pie span:last-child{white-space:nowrap}
+  background:linear-gradient(to top,rgba(16,17,21,.6) 0%,rgba(16,17,21,0) 26%)}
 
 /* ------------------------------------------------------------------- 4. portada / ingreso -- */
 .auth-lay{min-height:100%;display:grid;grid-template-columns:minmax(340px,38%) minmax(0,1fr)}
@@ -151,12 +137,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .auth-lay{display:block}
   .auth-retrato{position:relative;height:clamp(200px,27vh,300px);border-right:0}
   .auth-retrato .retrato-img,.auth-retrato .retrato-luz{object-position:50% 12%}
-  .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.82) 22%,rgba(16,17,21,0) 62%),
-    linear-gradient(to bottom,rgba(16,17,21,.7) 0%,rgba(16,17,21,0) 26%)}
-  .auth-retrato .retrato-sup{padding:16px 18px 0}
-  .auth-retrato .retrato-inf{padding:0 18px 16px}
-  .auth-retrato .retrato-eyebrow,.auth-retrato .retrato-txt,.auth-retrato .retrato-pie{display:none}
-  .auth-retrato .retrato-tit{margin:0;font-size:clamp(1.6rem,8cqw,2.25rem)}
+  .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.55) 22%,rgba(16,17,21,0) 50%)}
   /* El formulario sube: marca y titular, después el ingreso, y la explicación larga queda debajo. */
   .auth-der{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:22px 18px 44px;max-width:520px}
   .auth-intro{display:contents}
@@ -183,11 +164,8 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .franja picture,.franja img{display:block;width:100%;height:100%}
 .franja img{object-fit:cover;object-position:50% 10%}
 .franja .retrato-luz{position:absolute;inset:0}
-.franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.7) 26%,rgba(16,17,21,0) 62%)}
-.franja .lema{position:absolute;left:var(--hp-x);bottom:14px;z-index:1}
+.franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.45) 24%,rgba(16,17,21,0) 50%)}
 .sugs-cab{width:100%;max-width:var(--ancho-chat);margin:0 auto 22px;container-type:inline-size}
-.sugs-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 14px}
-.sugs-eyebrow .punto{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
 .sugs-cab h2{margin:0 0 12px;font-size:2.25rem;font-size:clamp(1.75rem,8.4cqw,3rem);line-height:1.12}
 .sugs-cab h2 .ln{display:block}
 .sugs-cab h2 .acento{color:var(--tono-3)}      /* lima en el tema «justicia» oscuro; el acento legible en los demás */
@@ -279,7 +257,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 :root[data-tema="justicia"] .doc-card:hover{border-color:var(--accent-text)}
 :root[data-tema="justicia"] .entrada{border-color:var(--border)}
 :root[data-tema="justicia"] .entrada:focus-within{border-color:var(--accent-text);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow-lg)}
-:root[data-tema="justicia"] .creditos .punto,:root[data-tema="justicia"] .sugs-eyebrow .punto{width:6px;height:6px;background:var(--tono-3)}
+:root[data-tema="justicia"] .creditos .punto{width:6px;height:6px;background:var(--tono-3)}
 :root[data-tema="justicia"][data-esquema="oscuro"] .bpri,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec),
 :root[data-tema="justicia"][data-esquema="oscuro"] .env{box-shadow:var(--brillo)}
 :root[data-tema="justicia"][data-esquema="oscuro"] .bpri:hover,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec):hover,

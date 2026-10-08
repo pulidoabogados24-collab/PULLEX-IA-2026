@@ -1085,7 +1085,6 @@ select.per-inp{appearance:auto}
   <symbol id="i-subir" viewBox="0 0 24 24"><path d="M12 15.5V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V15"/></symbol>
   <symbol id="i-perfiles" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.2"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1.2"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1.2"/><rect x="14" y="14" width="6.5" height="6.5" rx="1.2"/></symbol>
   <symbol id="i-objetivo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol>
-  <symbol id="i-huella" viewBox="0 0 24 24"><path d="M5.6 7.2A8.4 8.4 0 0 1 20.4 12.6c0 2.2-.25 4.2-.75 6"/><path d="M3.8 15.6c.3-1 .45-2 .45-3.1 0-1 .15-1.9.45-2.8"/><path d="M7.4 19.6c.9-2.1 1.35-4.5 1.35-7.2a3.25 3.25 0 0 1 6.5 0c0 1.1-.05 2.2-.15 3.2"/><path d="M12 12.4c0 3.3-.55 6.2-1.65 8.6"/><path d="M14.6 18.6c-.2.9-.5 1.8-.85 2.6"/><path d="M17.6 16.4a17 17 0 0 0 .15-4 5.8 5.8 0 0 0-9.4-4.6"/><path d="M6.3 12.2c0 2-.3 3.8-.9 5.4"/></symbol>
   <symbol id="i-maletin" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 12.5h17M12 11.3v2.4"/></symbol>
   <symbol id="i-puntos" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18.5" cy="12" r="1.3"/></symbol>
   <symbol id="i-pulgar" viewBox="0 0 24 24"><path d="M7.5 10.8v9.2H5.2a1.7 1.7 0 0 1-1.7-1.7v-5.8a1.7 1.7 0 0 1 1.7-1.7zM7.5 10.8l3.5-6.6a2.1 2.1 0 0 1 2.5 2.4l-.6 3.2h4.9a2 2 0 0 1 2 2.4l-1.2 5.7a2.6 2.6 0 0 1-2.5 2.1H7.5"/></symbol>
@@ -1094,7 +1093,7 @@ select.per-inp{appearance:auto}
 
 <div id="auth">
   <div class="auth-lay">
-    <!-- Retrato de la Justicia: panel a sangre en escritorio, franja superior en móvil (static/justicia.css). -->
+    <!-- Retrato de la Justicia: panel a sangre en escritorio, franja superior en móvil (static/justicia.css). Va sola, sin rótulos. -->
     <aside class="retrato auth-retrato" aria-label="Justicia × Inteligencia">
       <!-- .retrato-luz: solo las vetas de neón de la misma imagen, sobre transparente. Se anima su opacidad. -->
       <div class="retrato-fig">
@@ -1104,16 +1103,6 @@ select.per-inp{appearance:auto}
           alt="Estatua de la Justicia en mármol, con vetas de luz cian y rosa, sosteniendo la balanza">
       </picture>
       <img class="retrato-luz" src="/static/img/justicia-luz.webp" width="480" height="720" decoding="async" alt="" aria-hidden="true">
-      </div>
-      <div class="retrato-sup">
-        <span class="lema">Justicia <span class="x">×</span> Inteligencia</span>
-        <svg class="i huella" aria-hidden="true"><use href="#i-huella"/></svg>
-      </div>
-      <div class="retrato-inf">
-        <p class="retrato-eyebrow">Inteligencia jurídica / PULLEX IA</p>
-        <p class="retrato-tit">Justicia <span class="x">×</span> Inteligencia.</p>
-        <p class="retrato-txt">Soy PULLEX IA.<br>Tu criterio, mi inteligencia.</p>
-        <p class="retrato-pie"><span>Criterio humano. Inteligencia aumentada.</span><span>PULLEX / 2026</span></p>
       </div>
     </aside>
     <div class="auth-der">
@@ -1352,16 +1341,6 @@ select.per-inp{appearance:auto}
       </picture>
       <img class="retrato-luz" src="/static/img/justicia-luz.webp" width="480" height="720" decoding="async" alt="" aria-hidden="true">
       </div>
-      <div class="retrato-sup">
-        <span class="lema">Justicia <span class="x">×</span> Inteligencia</span>
-        <svg class="i huella" aria-hidden="true"><use href="#i-huella"/></svg>
-      </div>
-      <div class="retrato-inf">
-        <p class="retrato-eyebrow">Inteligencia jurídica / PULLEX IA</p>
-        <p class="retrato-tit">Justicia <span class="x">×</span> Inteligencia.</p>
-        <p class="retrato-txt">Soy PULLEX IA.<br>Tu criterio, mi inteligencia.</p>
-        <p class="retrato-pie"><span>Criterio humano. Inteligencia aumentada.</span><span>PULLEX / 2026</span></p>
-      </div>
       </aside>
       <div id="chat">
         <div class="hist" id="hist">
@@ -1374,10 +1353,8 @@ select.per-inp{appearance:auto}
                 <img src="/static/img/justicia.jpg" width="800" height="1200" alt="" loading="lazy" decoding="async">
               </picture>
               <img class="retrato-luz" src="/static/img/justicia-luz.webp" width="480" height="720" alt="" loading="lazy" decoding="async">
-              <span class="lema">Justicia <span class="x">×</span> Inteligencia</span>
             </div>
             <div class="sugs-cab">
-              <p class="eyebrow sugs-eyebrow"><span class="punto" aria-hidden="true"></span>Asistente jurídico · Derecho colombiano</p>
               <h2 class="display"><span class="ln">El futuro del Derecho</span> <span class="ln acento">comienza contigo.</span></h2>
               <p>Pregunta como hablas. Si es de Derecho, te digo de dónde sale cada cosa.</p>
             </div>

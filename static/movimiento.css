@@ -38,7 +38,6 @@
 
 /* 1.2 Retrato: mientras la app hace un trabajo real, las vetas quedan más encendidas (aunque no haya movimiento). */
 :root[data-trabajo] .retrato-luz{opacity:.8}
-.retrato .x{display:inline-block}
 
 /* 1.3 Aro de estado en el emblema de la cabecera y en el avatar de la respuesta que se está escribiendo.
        espera = arco tenue · fuentes = arco cian · escribe = aro completo en el color de acción. */
@@ -171,7 +170,6 @@
 @keyframes mv-revela-der{from{clip-path:inset(0 0 0 100%);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
 @keyframes mv-revela-izq{from{clip-path:inset(0 100% 0 0);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
 @keyframes mv-revela-arr{from{clip-path:inset(0 0 100% 0);transform:scale(1.07)}to{clip-path:inset(0 0 0 0)}}
-@keyframes mv-equis{from{opacity:0;transform:rotate(-135deg) scale(.3)}}
 @keyframes mv-respira{0%,100%{opacity:.14}50%{opacity:.58}}
 @keyframes mv-late{0%,100%{opacity:.5}50%{opacity:1}}
 @keyframes mv-gira{to{transform:rotate(1turn)}}
@@ -205,11 +203,9 @@
          vivas mientras la app trabaja de verdad. */
   & .retrato-luz{animation:mv-respira var(--mv-respira) ease-in-out infinite}
   &[data-trabajo] .retrato-luz{animation:mv-late var(--mv-pulso) ease-in-out infinite}
-  /* Paralaje con el puntero: la figura y los rótulos se separan unos pocos píxeles. Solo ratón (.mv-par lo pone
+  /* Paralaje con el puntero: la figura se desplaza unos pocos píxeles. Solo ratón (.mv-par lo pone
      movimiento.js cuando hay puntero fino). */
   & .retrato.mv-par .retrato-fig{transform:translate3d(calc(var(--px,0) * -3px),calc(var(--py,0) * -2px),0) scale(1.025);
-    transition:transform var(--mv-lenta) var(--mv-entra)}
-  & .retrato.mv-par .retrato-sup,& .retrato.mv-par .retrato-inf{transform:translate3d(calc(var(--px,0) * 2.5px),calc(var(--py,0) * 1.5px),0);
     transition:transform var(--mv-lenta) var(--mv-entra)}
 
   /* 3.4 Estados de trabajo. Al esperar, el arco gira; al buscar en fuentes late rápido; al escribir, el aro
@@ -243,15 +239,8 @@
   & .chat-lay:not(.mv-visto) .sugs button:nth-child(4){animation-delay:calc(var(--mv-paso) * 8.5)}
   & .chat-lay:not(.mv-visto):has(#sugs:not(.hidden)) .barra{animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 9) backwards}
   & .chat-lay:not(.mv-visto) .franja{animation:mv-revela-arr var(--mv-escena) var(--mv-entra) backwards}
-  & .chat-lay:not(.mv-visto) .franja .lema{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .5) backwards}
-  /* Retrato a la derecha: se descubre desde el borde, la figura se asienta y después llegan los rótulos. */
+  /* Retrato a la derecha: se descubre desde el borde y la figura se asienta. */
   & .chat-lay:not(.mv-visto) .retrato-chat .retrato-fig{animation:mv-revela-der var(--mv-escena) var(--mv-entra) backwards}
-  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-sup{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .55) backwards}
-  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>*{animation:mv-sube-corto var(--mv-lenta) var(--mv-entra) calc(var(--mv-escena) * .6) backwards}
-  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(2){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso))}
-  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(3){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 2)}
-  & .chat-lay:not(.mv-visto) .retrato-chat .retrato-inf>:nth-child(4){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 3)}
-  & .chat-lay:not(.mv-visto) .x{animation:mv-equis var(--mv-lenta) var(--mv-enfasis) calc(var(--mv-escena) * .9) backwards}
 
   /* 3.6 Chat. El mensaje propio sale del compositor (rebote leve, anclado abajo a la derecha). La respuesta solo
          aparece: mientras llega el texto nada se desplaza. Al terminar, las fichas de fuentes se despliegan una a
@@ -281,13 +270,6 @@
   & .auth-ben li.mv-entro .ico{animation:mv-brota var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 1.5 * var(--i,0) + var(--mv-paso) * 2) backwards}
   & .auth-pie{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 10) backwards}
   & .auth-retrato .retrato-fig{animation:mv-revela-izq var(--mv-escena) var(--mv-entra) backwards}
-  & .auth-retrato .retrato-sup{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-escena) * .55) backwards}
-  & .auth-retrato .retrato-inf>*{animation:mv-sube-corto var(--mv-lenta) var(--mv-entra) calc(var(--mv-escena) * .6) backwards}
-  & .auth-retrato .retrato-inf>:nth-child(2){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso))}
-  & .auth-retrato .retrato-inf>:nth-child(3){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 2)}
-  & .auth-retrato .retrato-inf>:nth-child(4){animation-delay:calc(var(--mv-escena) * .6 + var(--mv-paso) * 3)}
-  /* El «×» del lema: un giro corto, una vez, cuando el retrato ya está a la vista. */
-  & .auth-retrato .x{animation:mv-equis var(--mv-lenta) var(--mv-enfasis) calc(var(--mv-escena) * .9) backwards}
   @media(max-width:899px){
     & .auth-retrato .retrato-fig{animation-name:mv-revela-arr}
   }
