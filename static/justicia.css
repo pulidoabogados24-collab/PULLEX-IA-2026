@@ -159,7 +159,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .retrato-chat{display:none}
 
 /* Estado inicial */
-#sugs{min-height:100%;display:flex;flex-direction:column;justify-content:center}
+#sugs{min-height:100%;display:flex;flex-direction:column;justify-content:flex-start}
 .franja{position:relative;flex:none;height:168px;margin:calc(var(--hp-y) * -1) calc(var(--hp-x) * -1) 22px;overflow:hidden;background:#101115}
 .franja picture,.franja img{display:block;width:100%;height:100%}
 .franja img{object-fit:cover;object-position:50% 10%}
@@ -170,21 +170,17 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .sugs-cab h2 .ln{display:block}
 .sugs-cab h2 .acento{color:var(--tono-3)}      /* lima en el tema «justicia» oscuro; el acento legible en los demás */
 .sugs-cab>p:last-child{margin:0;color:var(--text-2);font-size:1rem;line-height:1.55;max-width:52ch}
-.sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.sugs button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:4px;align-content:start;align-items:center;
-  min-height:110px;padding:16px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  color:var(--text-2);box-shadow:var(--shadow);position:relative;
-  transition:transform var(--mv-rapida) var(--mv-entra),border-color var(--mv-rapida) ease,box-shadow var(--mv-media) ease}
-.sugs button:hover{transform:translateY(-3px);border-color:var(--accent-text);box-shadow:var(--shadow-lg)}
-.sugs button:active{transform:translateY(-1px)}
-.sugs button .i{width:22px;height:22px}
+.sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:flex;flex-wrap:wrap;gap:8px}
+/* Atajos: píldoras ligeras, solo el título. La frase completa va en el <span> oculto: es lo que se escribe al pulsar. */
+.sugs button{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 15px 0 12px;position:relative;
+  background:transparent;border:1px solid var(--border);border-radius:999px;color:var(--text);box-shadow:none;text-align:left;
+  transition:transform var(--mv-rapida) var(--mv-entra),border-color var(--mv-rapida) ease,background-color var(--mv-rapida) ease}
+.sugs button:hover{transform:translateY(-1px);background:var(--surface);border-color:var(--border-strong)}
+.sugs button:active{transform:none}
+.sugs button .i{width:16px;height:16px;flex:none}
 .sugs button .i.t1{color:var(--tono-1)}.sugs button .i.t2{color:var(--tono-2)}.sugs button .i.t3{color:var(--tono-3)}
-.sugs button b{font-size:.95rem;font-weight:650;line-height:1.3;color:var(--text)}
-.sugs button span{grid-column:1/-1;font-size:.8125rem;line-height:1.5}
-@media(max-width:479px){
-  .sugs{grid-template-columns:1fr;gap:8px}
-  .sugs button{min-height:72px;padding:13px 14px}
-}
+.sugs button b{font-size:.875rem;font-weight:550;line-height:1.2}
+.sugs button span{display:none}
 @media(max-width:759px){
   .hist{--hp-x:14px;--hp-y:16px}
   .franja{height:150px}
@@ -200,27 +196,47 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .chat-lay:has(#sugs:not(.hidden)) .hist{--hp-x:36px}
   .chat-lay:has(#sugs:not(.hidden)) .barra{padding-left:36px;padding-right:36px}
   .chat-lay:has(#sugs:not(.hidden)) .entrada textarea{min-height:88px}
+  /* Titular, caja de escritura y atajos forman un solo bloque centrado en la columna, en ese orden (se escribe
+     primero; los atajos quedan debajo, a mano). .hist, #sugs y .barra se «disuelven» para poder ordenar sus piezas. */
+  .chat-lay:has(#sugs:not(.hidden)) #chat{justify-content:center;overflow-y:auto;padding:28px 0}
+  .chat-lay:has(#sugs:not(.hidden)) :is(.hist,#sugs,.barra){display:contents}
+  .chat-lay:has(#sugs:not(.hidden)) #hilo{display:none}
+  .chat-lay:has(#sugs:not(.hidden)) :is(.sugs-cab,.adjfila,.entrada,.sugs,.barra .aviso){
+    width:calc(100% - 72px);max-width:var(--ancho-chat);margin-left:auto;margin-right:auto}
+  .chat-lay:has(#sugs:not(.hidden)) .sugs-cab{order:1;margin-bottom:28px}
+  .chat-lay:has(#sugs:not(.hidden)) .adjfila{order:2}
+  .chat-lay:has(#sugs:not(.hidden)) .entrada{order:3}
+  .chat-lay:has(#sugs:not(.hidden)) .sugs{order:4;margin-top:16px;margin-bottom:0}
+  .chat-lay:has(#sugs:not(.hidden)) .barra .aviso{order:5;margin-top:22px;text-align:left}
 }
 /* Sin conversación no hay nada que imprimir ni exportar. */
 .chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="imprimirPDF"],
 .chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="exportarExcel"]{display:none}
 @supports not selector(:has(*)){.retrato-chat{display:none!important}}
 
-/* Compositor */
+/* Compositor: una sola caja. Arriba se escribe; abajo, en una franja discreta, adjuntar, las opciones y enviar. */
 .barra{padding-top:8px}
-.opts{gap:6px;margin-bottom:10px}
 .chip{min-height:34px;padding:0 10px;border-radius:var(--radius-sm);font-family:var(--font-ui);font-size:.8125rem;font-weight:550;line-height:1.2}
 .chip select{font-size:.8125rem;min-height:32px;max-width:150px;text-overflow:ellipsis}
-.entrada{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"texto texto texto" "clip espacio enviar";
-  align-items:center;gap:6px 8px;padding:10px 10px 10px 12px;border-radius:var(--radius)}
-.entrada textarea{grid-area:texto;width:100%;min-height:52px;padding:6px 4px;font-size:1rem;line-height:1.5}
+.entrada{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"texto texto texto" "clip opciones enviar";
+  align-items:center;gap:6px 4px;padding:12px 10px 10px 12px;border-radius:calc(var(--radius) + 10px)}
+.entrada textarea{grid-area:texto;width:100%;min-height:52px;padding:4px 6px 2px;font-size:1rem;line-height:1.5}
 .clip{grid-area:clip}
 .env{grid-area:enviar}
-.env,.clip{width:44px;height:44px;border-radius:var(--radius-sm)}
+.env,.clip{width:40px;height:40px;border-radius:12px}
+.entrada .opts{grid-area:opciones;max-width:none;min-width:0;margin:0;gap:2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.entrada .opts::-webkit-scrollbar{display:none}
+.entrada .chip{flex:none;min-height:34px;padding:0 10px;border:0;border-radius:999px;background:transparent;color:var(--text-2)}
+.entrada .chip:hover{background:var(--surface-2);color:var(--text)}
+.entrada .chip.on{background:var(--accent-soft);color:var(--accent-text)}
+.entrada .chip select{max-width:160px}
+/* Herramientas, solo con su ícono dentro de la caja (el nombre va en aria-label y title). */
+.entrada .chip-icono{width:34px;padding:0;justify-content:center}
+.entrada .chip-icono .chip-txt{display:none}
+.entrada .chip-icono .i{width:16px;height:16px}
 .barra .aviso{font-size:.75rem;margin-top:10px}
 @media(max-width:560px){
   .entrada textarea{min-height:44px}
-  .opts{margin-bottom:8px}
 }
 
 /* Mensajes */

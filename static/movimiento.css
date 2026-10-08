@@ -228,8 +228,6 @@
          marca .mv-visto y las siguientes visitas entran sin coreografía (volver a Consultar no debe hacer esperar).
          Orden: rótulo → titular por líneas → bajada → sugerencias una a una → compositor (que ya se puede usar
          antes de un segundo). El retrato se revela aparte. */
-  & .chat-lay:not(.mv-visto) .sugs-eyebrow{animation:mv-desliza var(--mv-media) var(--mv-entra) backwards}
-  & .chat-lay:not(.mv-visto) .sugs-eyebrow .punto{animation:mv-brota var(--mv-media) var(--mv-enfasis) calc(var(--mv-paso) * 3) backwards}
   & .chat-lay:not(.mv-visto) .sugs-cab h2 .ln{animation:mv-linea var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 1.5) backwards}
   & .chat-lay:not(.mv-visto) .sugs-cab h2 .ln+.ln{animation-delay:calc(var(--mv-paso) * 3)}
   & .chat-lay:not(.mv-visto) .sugs-cab>p:last-child{animation:mv-aparece var(--mv-lenta) ease calc(var(--mv-paso) * 4.5) backwards}
@@ -237,7 +235,7 @@
   & .chat-lay:not(.mv-visto) .sugs button:nth-child(2){animation-delay:calc(var(--mv-paso) * 6.5)}
   & .chat-lay:not(.mv-visto) .sugs button:nth-child(3){animation-delay:calc(var(--mv-paso) * 7.5)}
   & .chat-lay:not(.mv-visto) .sugs button:nth-child(4){animation-delay:calc(var(--mv-paso) * 8.5)}
-  & .chat-lay:not(.mv-visto):has(#sugs:not(.hidden)) .barra{animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 9) backwards}
+  & .chat-lay:not(.mv-visto):has(#sugs:not(.hidden)) .entrada{animation:mv-sube var(--mv-lenta) var(--mv-entra) calc(var(--mv-paso) * 4) backwards}
   & .chat-lay:not(.mv-visto) .franja{animation:mv-revela-arr var(--mv-escena) var(--mv-entra) backwards}
   /* Retrato a la derecha: se descubre desde el borde y la figura se asienta. */
   & .chat-lay:not(.mv-visto) .retrato-chat .retrato-fig{animation:mv-revela-der var(--mv-escena) var(--mv-entra) backwards}

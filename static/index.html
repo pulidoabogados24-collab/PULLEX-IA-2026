@@ -1358,39 +1358,39 @@ select.per-inp{appearance:auto}
               <h2 class="display"><span class="ln">El futuro del Derecho</span> <span class="ln acento">comienza contigo.</span></h2>
               <p>Pregunta como hablas. Si es de Derecho, te digo de dónde sale cada cosa.</p>
             </div>
-            <div class="sugs">
-              <button data-click="sug" data-pasa-click="this"><svg class="i t1" aria-hidden="true"><use href="#i-balanza"/></svg><b>Prepara una acción de tutela</b><span>Necesito proteger mi derecho a la salud contra mi EPS.</span></button>
-              <button data-click="sug" data-pasa-click="this"><svg class="i t2" aria-hidden="true"><use href="#i-maletin"/></svg><b>Resuelve una duda laboral</b><span>Calcula las prestaciones de un contrato a término indefinido.</span></button>
-              <button data-click="sug" data-pasa-click="this"><svg class="i t3" aria-hidden="true"><use href="#i-fuentes"/></svg><b>Comprende una norma</b><span>Explícame con palabras sencillas qué dice una norma y cuándo se aplica.</span></button>
-              <button data-click="sug" data-pasa-click="this"><svg class="i t1" aria-hidden="true"><use href="#i-objetivo"/></svg><b>Analiza un caso jurídico</b><span>Quiero que analices mi caso: pregúntame los hechos y evalúa riesgos y estrategia.</span></button>
+            <div class="sugs" role="group" aria-label="Para empezar">
+              <button data-click="sug" data-pasa-click="this"><svg class="i t1" aria-hidden="true"><use href="#i-balanza"/></svg><b>Preparar una tutela</b><span>Necesito proteger mi derecho a la salud contra mi EPS.</span></button>
+              <button data-click="sug" data-pasa-click="this"><svg class="i t2" aria-hidden="true"><use href="#i-maletin"/></svg><b>Duda laboral</b><span>Calcula las prestaciones de un contrato a término indefinido.</span></button>
+              <button data-click="sug" data-pasa-click="this"><svg class="i t3" aria-hidden="true"><use href="#i-fuentes"/></svg><b>Explicar una norma</b><span>Explícame con palabras sencillas qué dice una norma y cuándo se aplica.</span></button>
+              <button data-click="sug" data-pasa-click="this"><svg class="i t1" aria-hidden="true"><use href="#i-objetivo"/></svg><b>Analizar mi caso</b><span>Quiero que analices mi caso: pregúntame los hechos y evalúa riesgos y estrategia.</span></button>
             </div>
           </div>
         </div>
         <div class="barra">
           <div class="adjfila" id="adjfila"></div>
-          <div class="opts">
-            <button type="button" class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" aria-controls="convs"><svg class="i xs" aria-hidden="true"><use href="#i-historial"/></svg> Historial</button>
-            <button type="button" class="chip on" id="chip-web" aria-pressed="true" data-click="toggleWeb"><svg class="i xs" aria-hidden="true"><use href="#i-web"/></svg> Buscar en internet</button>
-            <span class="chip"><select id="modo" aria-label="Registro de la respuesta">
-              <option value="auto">Modo automático</option>
-              <option value="profesional">Técnico (abogado)</option>
-              <option value="ciudadano">Sencillo (ciudadano)</option>
-            </select></span>
-            <span class="chip"><select id="estilo" aria-label="Forma de respuesta">
-              <option value="directo">Respuesta directa</option>
-              <option value="ensename">Enséñame</option>
-              <option value="conmigo">Resuélvelo conmigo</option>
-              <option value="examiname">Examíname</option>
-              <option value="auditar">Audita mi respuesta</option>
-            </select></span>
-            <button type="button" class="chip" data-click="abrirTools"><svg class="i xs" aria-hidden="true"><use href="#i-herramientas"/></svg> Herramientas</button>
-            <button type="button" class="chip" data-click="imprimirPDF"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg> PDF</button>
-            <button type="button" class="chip" data-click="exportarExcel"><svg class="i xs" aria-hidden="true"><use href="#i-tabla"/></svg> Excel</button>
-          </div>
           <div class="entrada">
             <input type="file" id="file" class="hidden" multiple accept="image/*,application/pdf" data-change="tomarArchivos" data-pasa-change="event">
-            <button class="clip" title="Adjuntar PDF, foto o documento" aria-label="Adjuntar archivo" data-click="abrirSelectorArchivo"><svg class="i" aria-hidden="true"><use href="#i-clip"/></svg></button>
             <textarea id="txt" rows="1" placeholder="Cuéntame tu caso. Pensemos juntos." aria-label="Tu consulta" data-input="autoAlto" data-pasa-input="this" data-keydown="teclas" data-pasa-keydown="event"></textarea>
+            <button class="clip" title="Adjuntar PDF, foto o documento" aria-label="Adjuntar archivo" data-click="abrirSelectorArchivo"><svg class="i" aria-hidden="true"><use href="#i-clip"/></svg></button>
+            <div class="opts">
+              <button type="button" class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" aria-controls="convs"><svg class="i xs" aria-hidden="true"><use href="#i-historial"/></svg> Historial</button>
+              <button type="button" class="chip on" id="chip-web" aria-pressed="true" data-click="toggleWeb"><svg class="i xs" aria-hidden="true"><use href="#i-web"/></svg> Buscar en internet</button>
+              <span class="chip"><select id="modo" aria-label="Registro de la respuesta">
+                <option value="auto">Modo automático</option>
+                <option value="profesional">Técnico (abogado)</option>
+                <option value="ciudadano">Sencillo (ciudadano)</option>
+              </select></span>
+              <span class="chip"><select id="estilo" aria-label="Forma de respuesta">
+                <option value="directo">Respuesta directa</option>
+                <option value="ensename">Enséñame</option>
+                <option value="conmigo">Resuélvelo conmigo</option>
+                <option value="examiname">Examíname</option>
+                <option value="auditar">Audita mi respuesta</option>
+              </select></span>
+              <button type="button" class="chip chip-icono" data-click="abrirTools" aria-label="Herramientas" title="Herramientas"><svg class="i xs" aria-hidden="true"><use href="#i-herramientas"/></svg><span class="chip-txt"> Herramientas</span></button>
+              <button type="button" class="chip" data-click="imprimirPDF"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg> PDF</button>
+              <button type="button" class="chip" data-click="exportarExcel"><svg class="i xs" aria-hidden="true"><use href="#i-tabla"/></svg> Excel</button>
+            </div>
             <button class="env" id="env" data-click="enviar" title="Enviar" aria-label="Enviar"><svg class="i" aria-hidden="true"><use href="#i-enviar"/></svg></button>
           </div>
           <p class="aviso">PULLEX IA puede equivocarse. En temas legales, verifica en la fuente oficial. No sustituye a un abogado.</p>
