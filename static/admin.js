@@ -61,6 +61,7 @@ async function cargarNegocio(){
       <div class="stat"><div class="n">${cop(m.margen_estimado)}</div><div class="l">Margen estimado</div></div>
       <div class="stat"><div class="n">${m.consultas_totales}</div><div class="l">Consultas usadas</div></div>`;
     pintarIA(m.ia);
+    pintarBase(m.base_datos);
   }catch(e){$('negocio').innerHTML=''}
 }
 // Motor de IA activo (proveedor y modelo). Con textContent: los nombres vienen de variables de entorno.
@@ -72,6 +73,19 @@ function pintarIA(ia){
   const l=document.createElement('div');l.className='l';
   l.textContent='Motor de IA activo · respaldo: '+(ia.respaldo?ia.respaldo.nombre+' · '+ia.respaldo.modelo+
     (ia.respaldo.configurado?'':' (sin clave: no se usará)'):'ninguno');
+  caja.appendChild(n);caja.appendChild(l);$('negocio').appendChild(caja);
+}
+// Base de datos en uso (motor, si responde y si conserva los datos). Con textContent: no lleva servidor ni credenciales.
+function pintarBase(b){
+  if(!b)return;
+  const bien=b.conecta&&b.persistente&&b.esquema_al_dia!==false;
+  const caja=document.createElement('div');caja.className='stat';caja.id='base-datos';
+  const n=document.createElement('div');n.className='n';n.style.fontSize='1rem';
+  n.textContent=b.nombre+' ';
+  const p=document.createElement('span');p.className='pill '+(bien?'on-p':'off-p');
+  p.textContent=!b.conecta?'No conecta':b.esquema_al_dia===false?'Faltan tablas':b.persistente?'Los datos se conservan':'Los datos NO se conservan';
+  n.appendChild(p);
+  const l=document.createElement('div');l.className='l';l.textContent='Base de datos · '+(b.detalle||'');
   caja.appendChild(n);caja.appendChild(l);$('negocio').appendChild(caja);
 }
 async function resetClave(email){

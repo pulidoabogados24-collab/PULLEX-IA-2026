@@ -1,4 +1,6 @@
 """Regresión funcional: lo que ya funcionaba debe seguir funcionando."""
+import pytest
+
 from conftest import auth, chat, login_admin, nuevo_usuario
 
 
@@ -96,6 +98,8 @@ def test_sesiones_abiertas_antes_de_la_actualizacion_siguen_validas(cliente, mod
     assert cliente.get("/api/estado", headers=auth(legado)).status_code == 200
 
 
+@pytest.mark.solo_sqlite("crea a mano un archivo pullex.db antiguo y revisa con PRAGMA que la app lo migre; en PostgreSQL "
+                         "no hay migración al arrancar: el esquema sale de datos/esquema_postgres.sql")
 def test_base_de_datos_anterior_se_migra_sola(tmp_path, monkeypatch):
     """Una pullex.db creada por la versión entregada (sin sesion_version) arranca y migra."""
     import importlib, sqlite3, sys

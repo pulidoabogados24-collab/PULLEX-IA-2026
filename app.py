@@ -44,6 +44,7 @@ import anthropic
 
 import academia
 import biblioteca
+import datos as base_datos      # «datos» a secas ya es el nombre local del cuerpo JSON en muchas rutas
 import documentos
 import estilo_redaccion as redaccion
 import fuentes
@@ -136,9 +137,10 @@ def ia_activa() -> dict:
                        "modelo": p.modelo, "configurado": p.configurado})
     return {"principal": salida[0], "respaldo": salida[1] if len(salida) > 1 else None}
 APP_SECRET_FILE = "/tmp/app_secret.key" if os.getenv("VERCEL") else "app_secret.key"
-# Ruta de la base SQLite. En Vercel el disco es de solo lectura salvo /tmp: define PULLEX_DB=/tmp/pullex.db
-# (los datos NO persisten entre arranques en frío; ver docs/coordinacion/PUL-019-vercel.md).
-# Si no se define PULLEX_DB y la app corre en Vercel (variable VERCEL=1), se usa /tmp automáticamente.
+# Base principal (docs/18-BASE-DE-DATOS.md). Si hay una URL de PostgreSQL (PULLEX_DATABASE_URL, POSTGRES_URL o
+# DATABASE_URL) la app guarda todo allí y DB no se usa. Si no la hay, DB es la ruta del archivo SQLite. En Vercel
+# el disco es de solo lectura salvo /tmp, así que sin PostgreSQL se usa /tmp/pullex.db y los datos NO se conservan
+# entre arranques en frío ni se comparten entre instancias: solo sirve para probar.
 DB = os.getenv("PULLEX_DB") or ("/tmp/pullex.db" if os.getenv("VERCEL") else "pullex.db")
 
 ADMIN_EMAIL = os.getenv("PULLEX_ADMIN_EMAIL", os.getenv("LEXCOL_ADMIN_EMAIL", "admin@pullex.co"))
@@ -438,6 +440,22 @@ async def _manejar_plan_insuficiente(request: Request, exc: PlanInsuficiente):
     return respuesta_plan_insuficiente(exc.funcion)
 
 
+# Base de datos no disponible (solo PostgreSQL: no conecta, se cayó a mitad o falta el esquema). Se responde 503 con
+# un mensaje claro en vez de un 500 sin explicación; el motivo va al registro sin URL ni credenciales (datos.py).
+MENSAJE_BASE_NO_DISPONIBLE = "La base de datos no responde en este momento. Intenta de nuevo en unos segundos."
+
+
+def respuesta_base_no_disponible(ruta: str, exc: Exception) -> JSONResponse:
+    log.error("503: base de datos no disponible ruta=%s motivo=%s", ruta, exc)
+    return JSONResponse(status_code=503, headers={"Retry-After": "5"},
+                        content={"detail": MENSAJE_BASE_NO_DISPONIBLE, "codigo": "base_no_disponible"})
+
+
+@app.exception_handler(base_datos.ErrorBase)
+async def _manejar_base_no_disponible(request: Request, exc: base_datos.ErrorBase):
+    return respuesta_base_no_disponible(request.url.path, exc)
+
+
 def funcion_de_ruta(ruta: str):
     for prefijo, funcion in PREFIJOS_FUNCION:
         if ruta == prefijo or ruta.startswith(prefijo + "/"):
@@ -455,6 +473,8 @@ async def control_plan(request: Request, call_next):
             u = usuario_actual(request)
         except HTTPException:
             u = None  # sin sesión válida: la propia ruta responde 401 como siempre
+        except base_datos.ErrorBase as e:
+            return respuesta_base_no_disponible(request.url.path, e)
         if u is not None:
             try:
                 exigir_funcion(u, funcion)
@@ -526,12 +546,22 @@ else:
         pass
 
 # ----------------------------------------------------------------------- db --
-def db():
-    con = sqlite3.connect(DB)
-    con.row_factory = sqlite3.Row
-    return con
+# La base principal vive en SQLite (archivo local: desarrollo y pruebas) o en PostgreSQL (producción). Lo decide
+# datos.py según las variables de entorno; el resto del código usa db() igual en los dos casos.
+_base = {"lista": False, "hilo": None}
+_base_cerrojo = threading.RLock()
 
-with closing(db()) as con:
+
+def db():
+    """Conexión a la base principal. Úsala siempre con ``with closing(db()) as con:``."""
+    if not _base["lista"] and _base["hilo"] != threading.get_ident():
+        preparar_base()         # arranque, o reintento si PostgreSQL no respondió al arrancar
+    return base_datos.conectar(DB)
+
+
+def _crear_tablas_sqlite(con):
+    """Crea y migra las tablas en SQLite. En PostgreSQL no se ejecuta: el esquema está en
+    datos/esquema_postgres.sql, que ya trae todas las columnas (tests/test_esquema_bd.py compara los dos)."""
     con.executescript("""
     CREATE TABLE IF NOT EXISTS usuarios(
         email TEXT PRIMARY KEY,
@@ -579,7 +609,6 @@ with closing(db()) as con:
     """)
     academia.crear_tabla(con)
     telemetria.crear_tabla(con)
-    telemetria.purgar(con, int(os.getenv("PULLEX_TELEMETRIA_DIAS", "180")))      # retención: sin texto sensible, pero no indefinida
     con.commit()
     # Migración suave: si la base ya existía sin la columna email_verificado, se agrega.
     # Cuentas ya existentes (creadas antes de este cambio) quedan como no verificadas —
@@ -624,6 +653,32 @@ with closing(db()) as con:
     CREATE INDEX IF NOT EXISTS ix_asist_usuario ON asistente_tareas(usuario);
     """)
     con.commit()
+
+
+def preparar_base():
+    """Deja la base lista: tablas, retención de la telemetría y cuenta de administrador.
+
+    SQLite: crea y migra las tablas aquí (las de perfiles y del taller las crean esos módulos al montarse).
+    PostgreSQL: comprueba con una consulta que el esquema esté al día y solo si no lo está aplica
+    datos/esquema_postgres.sql, que trae las tablas de todos los módulos. Si PostgreSQL no responde lanza datos.ErrorBase; la app queda
+    arriba respondiendo 503 y esto se reintenta en la siguiente petición que use la base."""
+    with _base_cerrojo:
+        if _base["lista"] or _base["hilo"] == threading.get_ident():
+            return
+        _base["hilo"] = threading.get_ident()
+        try:
+            if base_datos.es_postgres():
+                base_datos.asegurar_esquema()
+            else:
+                with closing(base_datos.conectar(DB)) as con:
+                    _crear_tablas_sqlite(con)
+            with closing(base_datos.conectar(DB)) as con:
+                # retención: la telemetría no guarda texto sensible, pero tampoco se conserva indefinidamente
+                telemetria.purgar(con, int(os.getenv("PULLEX_TELEMETRIA_DIAS", "180")))
+            _crear_admin_si_falta()
+            _base["lista"] = True
+        finally:
+            _base["hilo"] = None
 
 # -------------------------------------------------------------- utilidades --
 def _hash(clave: str, sal: bytes) -> str:
@@ -856,8 +911,9 @@ def actualizar_apariencia(email: str, actual: dict, pedida) -> dict:
                     con.execute("DELETE FROM apariencia_imagenes WHERE usuario=? AND tipo=?", (email, tipo))
                     imagenes[tipo] = 0
                 else:
-                    con.execute("INSERT OR REPLACE INTO apariencia_imagenes(usuario,tipo,mime,data,actualizado)"
-                                " VALUES(?,?,?,?,?)", (email, tipo, img[0], img[1], ahora))
+                    con.execute("INSERT INTO apariencia_imagenes(usuario,tipo,mime,data,actualizado) VALUES(?,?,?,?,?) "
+                                "ON CONFLICT(usuario,tipo) DO UPDATE SET mime=excluded.mime, data=excluded.data, "
+                                "actualizado=excluded.actualizado", (email, tipo, img[0], img[1], ahora))
                     imagenes[tipo] = int(ahora * 1000)
             con.commit()
     nueva["imagenes"] = imagenes
@@ -881,7 +937,9 @@ def reiniciar_periodo_si_aplica(u):
         u["periodo"] = hoy
     return u
 
-if ADMIN_EMAIL and not obtener_usuario(ADMIN_EMAIL):
+def _crear_admin_si_falta():
+    if not ADMIN_EMAIL or obtener_usuario(ADMIN_EMAIL):
+        return
     if not ADMIN_CLAVE:
         raise RuntimeError(
             "PULLEX_ADMIN_CLAVE no está definida. No se crea la cuenta admin con una clave "
@@ -889,11 +947,22 @@ if ADMIN_EMAIL and not obtener_usuario(ADMIN_EMAIL):
             "variable de entorno PULLEX_ADMIN_CLAVE con una contraseña fuerte y aleatoria antes "
             "de arrancar la aplicación."
         )
-    crear_usuario(ADMIN_EMAIL, "Administrador", ADMIN_CLAVE,
-                  plan="premium", activo=1, es_admin=1, email_verificado=1)
+    try:
+        crear_usuario(ADMIN_EMAIL, "Administrador", ADMIN_CLAVE,
+                      plan="premium", activo=1, es_admin=1, email_verificado=1)
+    except base_datos.errores_integridad():
+        pass    # otra instancia que arrancó a la vez la creó primero (PostgreSQL, varias instancias)
     # El admin se marca verificado de una vez: lo crea el propio operador con sus variables
     # de entorno al arrancar, no un desconocido registrándose — no aplica el mismo riesgo de
     # correo ajeno que justifica exigir verificación a los estudiantes.
+
+
+try:
+    preparar_base()
+except base_datos.ErrorBase as _e:
+    # Solo PostgreSQL. No se cae a SQLite (guardaría las cuentas en un archivo temporal sin avisar): la app
+    # arranca, responde 503 en lo que use la base y vuelve a intentarlo en la siguiente petición.
+    log.error("La base de datos PostgreSQL no quedó lista al arrancar (%s). La app sigue arriba en modo degradado.", _e)
 
 # -------------------------------------------------------------------- token --
 def emitir_token(email: str) -> str:
@@ -1095,8 +1164,8 @@ def obtener_boletin(forzar=False):
             return {"fecha": hoy, "contenido": f["contenido"]}
         texto = generar_boletin_texto()
         with closing(db()) as con:
-            con.execute("INSERT OR REPLACE INTO boletin(fecha,contenido,creado) VALUES(?,?,?)",
-                        (hoy, texto, time.time()))
+            con.execute("INSERT INTO boletin(fecha,contenido,creado) VALUES(?,?,?) ON CONFLICT(fecha) DO UPDATE SET "
+                        "contenido=excluded.contenido, creado=excluded.creado", (hoy, texto, time.time()))
             con.commit()
         return {"fecha": hoy, "contenido": texto}
 
@@ -1118,8 +1187,9 @@ def salud():
             con.execute("SELECT 1").fetchone()
     except Exception:
         ok_db = False
+    base = base_datos.estado(DB, probar=False)
     return {"servicio": "pullex-ia", "estado": "ok" if ok_db else "degradado",
-            "db": ok_db, "ia_configurada": ia_configurada(),
+            "db": ok_db, "db_motor": base["motor"], "db_persistente": base["persistente"], "ia_configurada": ia_configurada(),
             "modelo": cadena_ia()[0].modelo, "proveedor": cadena_ia()[0].nombre, "hora": datetime.now(timezone.utc).isoformat()}
 
 @app.get("/sw.js")
@@ -1148,7 +1218,12 @@ async def registro(request: Request):
         raise HTTPException(400, "La contraseña debe tener entre 8 y 256 caracteres")
     if obtener_usuario(email):
         raise HTTPException(409, "Ya existe una cuenta con ese correo")
-    crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0)
+    try:
+        crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0)
+    except base_datos.errores_integridad():
+        # Dos registros simultáneos con el mismo correo (doble clic, o dos instancias a la vez): el segundo choca
+        # con la llave primaria. Antes terminaba en un 500.
+        raise HTTPException(409, "Ya existe una cuenta con ese correo")
     _enviar_verificacion(email, nombre)
     return {"token": emitir_token(email), "perfil": perfil_publico(obtener_usuario(email))}
 
@@ -1374,7 +1449,7 @@ def consumir_consulta(u: dict) -> int:
 
 def reintegrar_consulta(email: str):
     with closing(db()) as con:
-        con.execute("UPDATE usuarios SET usadas=MAX(usadas-1,0) WHERE email=?", (email,))
+        con.execute("UPDATE usuarios SET usadas=CASE WHEN usadas>0 THEN usadas-1 ELSE 0 END WHERE email=?", (email,))
         con.commit()
 
 
@@ -2915,6 +2990,8 @@ def admin_metricas(request: Request):
         "margen_estimado": ingreso - costo_api,
         "planes": PLANES,
         "ia": ia_activa(),
+        # Qué base está en uso y si responde (sin servidor, usuario ni contraseña). El panel avisa si es temporal.
+        "base_datos": base_datos.estado(DB),
     }
 
 @app.post("/api/admin/reset-clave")

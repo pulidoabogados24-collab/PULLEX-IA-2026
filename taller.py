@@ -25,6 +25,7 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, Request
 
 import academia
+import datos as base_datos
 import documentos
 import estilo_redaccion
 
@@ -470,9 +471,10 @@ def crear_tablas(con):
 # --------------------------------------------------------------------------------------- rutas --
 def instalar(m) -> APIRouter:
     """Registra las rutas /api/taller/* en la app `m.app`. `m` es el módulo app (o un equivalente)."""
-    with closing(m.db()) as con:
-        crear_tablas(con)
-        con.commit()
+    if not base_datos.es_postgres():        # en PostgreSQL las tablas vienen de datos/esquema_postgres.sql
+        with closing(m.db()) as con:
+            crear_tablas(con)
+            con.commit()
     r = APIRouter(prefix="/api/taller")
 
     def _escenario_de(eid, email):
@@ -666,7 +668,7 @@ def instalar(m) -> APIRouter:
             return {"texto": texto + AVISO_MODELO_INCOMPLETO, "nuevo": True, "revision_humana": True, "incompleto": True}
         with closing(m.db()) as con:
             if fila["curado_id"]:
-                con.execute("INSERT OR IGNORE INTO taller_modelos(curado_id,texto,creado) VALUES(?,?,?)",
+                con.execute("INSERT INTO taller_modelos(curado_id,texto,creado) VALUES(?,?,?) ON CONFLICT(curado_id) DO NOTHING",
                             (fila["curado_id"], texto, time.time()))
             else:
                 d["modelo"] = texto

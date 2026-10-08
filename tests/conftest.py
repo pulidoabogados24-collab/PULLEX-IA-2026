@@ -4,18 +4,66 @@ app.py inicializa la base y la cuenta admin al importarse, con rutas relativas a
 actual. Por eso cada sesión de pruebas corre en un directorio temporal limpio (con un enlace a
 static/) y con variables de entorno de prueba — nunca toca pullex.db ni app_secret.key reales.
 El modelo de IA se reemplaza por un doble (FakeAnthropic): ninguna prueba llama a la API real.
+
+Base de datos: por defecto las pruebas usan SQLite. Si existe la variable PULLEX_PRUEBAS_PG_URL (un PostgreSQL de
+pruebas, nunca el de producción), toda la sesión corre contra PostgreSQL en un esquema temporal con nombre único,
+que se crea al empezar y se borra al terminar (docs/18-BASE-DE-DATOS.md). Las pruebas marcadas ``solo_sqlite``
+inspeccionan el archivo SQLite directamente y se saltan en ese modo.
 """
 import importlib
 import json
 import os
+import secrets
 import sys
 import time
 import types
+from contextlib import closing
 from pathlib import Path
 
 import pytest
 
 RAIZ = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(RAIZ))
+
+PG_URL = (os.getenv("PULLEX_PRUEBAS_PG_URL") or "").strip()
+EN_POSTGRES = bool(PG_URL)
+ESQUEMA_PRUEBAS = f"pullex_pruebas_{os.getpid()}_{secrets.token_hex(4)}" if EN_POSTGRES else ""
+_VARIABLES_URL = ("PULLEX_DATABASE_URL", "POSTGRES_URL", "DATABASE_URL")
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "solo_sqlite(motivo): la prueba inspecciona el archivo SQLite; se salta en PostgreSQL")
+    config.addinivalue_line("markers", "solo_postgres: la prueba necesita PULLEX_PRUEBAS_PG_URL; se salta en SQLite")
+    config.addinivalue_line("markers", "errores_sql_esperados: la prueba provoca errores de SQL a propósito")
+    # Las pruebas nunca heredan una base real del entorno ni de un .env: la URL solo sale de PULLEX_PRUEBAS_PG_URL.
+    # (Se dejan vacías, no se borran: load_dotenv no pisa una variable que ya existe.)
+    for nombre in _VARIABLES_URL:
+        os.environ[nombre] = ""
+    if EN_POSTGRES:
+        os.environ["PULLEX_DATABASE_URL"] = PG_URL
+        os.environ["PULLEX_DB_ESQUEMA"] = ESQUEMA_PRUEBAS
+
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        marca = item.get_closest_marker("solo_sqlite")
+        if marca and EN_POSTGRES:
+            motivo = marca.args[0] if marca.args else marca.kwargs.get("motivo", "inspecciona el archivo SQLite")
+            item.add_marker(pytest.mark.skip(reason="solo SQLite: " + motivo))
+        if item.get_closest_marker("solo_postgres") and not EN_POSTGRES:
+            item.add_marker(pytest.mark.skip(reason="solo PostgreSQL: define PULLEX_PRUEBAS_PG_URL"))
+
+
+def pytest_report_header(config):
+    return "base de datos de las pruebas: " + (f"PostgreSQL (esquema temporal {ESQUEMA_PRUEBAS})" if EN_POSTGRES else "SQLite")
+
+
+def borrar_esquema_de_pruebas(nombre: str):
+    """Borra un esquema temporal creado por las pruebas. Se niega con cualquier nombre que no sea de pruebas."""
+    assert nombre.startswith("pullex_pruebas_"), "solo se borran esquemas temporales de pruebas"
+    import psycopg
+    with closing(psycopg.connect(PG_URL, autocommit=True, connect_timeout=5)) as con:
+        con.execute(f'DROP SCHEMA IF EXISTS "{nombre}" CASCADE')
 
 ADMIN_EMAIL = "admin@pruebas.local"
 ADMIN_CLAVE = "Clave-Admin-De-Prueba-9f3!"
@@ -217,12 +265,31 @@ def modulo(tmp_path_factory):
         # las pruebas nunca leen el corpus real del operador (corpus/corpus.db en la carpeta del proyecto)
         "PULLEX_CORPUS_DB": str(trabajo / "corpus" / "corpus.db"),
     })
-    sys.path.insert(0, str(RAIZ))
     if "app" in sys.modules:
         del sys.modules["app"]
     m = importlib.import_module("app")
     m.anthropic.Anthropic = FakeAnthropic
-    return m
+    assert m.base_datos.motor() == ("postgres" if EN_POSTGRES else "sqlite")
+    yield m
+    if EN_POSTGRES:
+        m.base_datos.reiniciar()
+        borrar_esquema_de_pruebas(ESQUEMA_PRUEBAS)
+
+
+@pytest.fixture(autouse=True)
+def vigilar_errores_sql(request):
+    """En PostgreSQL, un error de SQL que el código haya tragado (``except Exception``) no debe pasar inadvertido:
+    si durante la prueba la capa de datos contó algún error y la prueba no lo esperaba, falla."""
+    if not EN_POSTGRES:
+        yield
+        return
+    import datos
+    antes = datos.estadisticas["errores_sql"]
+    yield
+    if request.node.get_closest_marker("errores_sql_esperados"):
+        return
+    nuevos = datos.estadisticas["errores_sql"] - antes
+    assert nuevos == 0, f"la capa de datos registró {nuevos} error(es) de SQL en PostgreSQL durante esta prueba"
 
 
 @pytest.fixture(autouse=True)

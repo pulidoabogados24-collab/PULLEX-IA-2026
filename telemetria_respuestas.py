@@ -1,13 +1,13 @@
 """Telemetría de calidad de las respuestas del chat (PUL-017, ítems 100 a 103 y 157 a 159 de la especificación).
 
-Guarda en SQLite SOLO etiquetas y conteos por respuesta: intención, profundidad, área, cuántas partes pidió la persona y
+Guarda en la base principal SOLO etiquetas y conteos por respuesta: intención, profundidad, área, cuántas partes pidió la persona y
 cuántas se cubrieron, cómo terminó la generación (fin, límite, interrumpida…), cuántas continuaciones hubo, duración y largo.
 NUNCA guarda el texto de la pregunta ni el de la respuesta, ni el correo: el usuario se identifica con un código
 irreversible (HMAC con el secreto de la aplicación) que solo sirve para contar usuarios distintos (Ley 1581 de 2012,
 principio de minimización). La valoración (👍/👎) guarda el motivo elegido de una lista cerrada, sin texto libre.
 
 Las filas se borran con la conversación a la que pertenecen (ver ``borrar_de_mensajes``) y por antigüedad (``purgar``).
-Sin dependencias de app.py: todas las funciones reciben la conexión SQLite.
+Sin dependencias de app.py: todas las funciones reciben la conexión (SQLite o PostgreSQL, ver datos.py).
 """
 import json
 import time
@@ -52,7 +52,10 @@ def registrar(con, mensaje_id, usuario_anonimo: str, datos: dict):
         elif isinstance(v, str):
             fila[k] = v[:40]
     cols = ["mensaje_id", "creada", "usuario"] + list(fila)
-    con.execute(f"INSERT OR REPLACE INTO calidad_respuestas({','.join(cols)}) VALUES({','.join('?' * len(cols))})",
+    # Reemplaza la fila anterior de esa respuesta, si la había (antes «INSERT OR REPLACE», que solo existe en SQLite:
+    # borrar y volver a insertar hace lo mismo en los dos motores, incluido dejar en blanco lo que no se envía).
+    con.execute("DELETE FROM calidad_respuestas WHERE mensaje_id=?", (mensaje_id,))
+    con.execute(f"INSERT INTO calidad_respuestas({','.join(cols)}) VALUES({','.join('?' * len(cols))})",
                 [mensaje_id, time.time(), usuario_anonimo] + list(fila.values()))
     con.commit()
 
@@ -120,9 +123,9 @@ def resumen(con, dias: int = 30) -> dict:
     """Métricas del tablero de calidad (ítems 157 a 159). ``tasa_pregunta_omitida`` es la métrica experimental
     «missed_question_rate»: partes pedidas sin cubrir sobre partes pedidas, según la comprobación léxica de ARGOS."""
     desde = time.time() - dias * 86400
-    filas = [dict(f) for f in con.execute("SELECT * FROM calidad_respuestas WHERE creada >= ? AND caracteres IS NOT NULL", (desde,))]
+    filas = [dict(f) for f in con.execute("SELECT * FROM calidad_respuestas WHERE creada >= ? AND caracteres IS NOT NULL ORDER BY id", (desde,))]
     valoradas = [dict(f) for f in con.execute(
-        "SELECT valoracion, motivos FROM calidad_respuestas WHERE valorada >= ?", (desde,))]
+        "SELECT valoracion, motivos FROM calidad_respuestas WHERE valorada >= ? ORDER BY id", (desde,))]
     n = len(filas)
 
     def tasa(cond):

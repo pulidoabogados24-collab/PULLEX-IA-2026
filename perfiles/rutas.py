@@ -21,6 +21,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 import coordinador
+import datos as base_datos
 import perfiles
 
 POR_PAGINA_MAX = 50
@@ -39,9 +40,10 @@ def _heno(p: dict) -> str:
 
 
 def montar(app, nucleo):
-    with closing(nucleo.db()) as con:
-        coordinador.crear_tablas(con)
-        con.commit()
+    if not base_datos.es_postgres():        # en PostgreSQL las tablas vienen de datos/esquema_postgres.sql
+        with closing(nucleo.db()) as con:
+            coordinador.crear_tablas(con)
+            con.commit()
     busqueda = {}
 
     def _error(e: coordinador.ErrorCoordinador):

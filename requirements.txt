@@ -11,6 +11,9 @@ openai==3.22.1
 python-dotenv==1.2.3
 # Exportación a Word del automatizador (GET /api/documentos/{id}/docx). Arrastra lxml.
 python-docx==1.2.0
+# Base principal en PostgreSQL (Supabase) para producción: datos.py y docs/18-BASE-DE-DATOS.md. Se importa solo si hay
+# una URL de PostgreSQL configurada; en local, con SQLite, la app arranca aunque no esté instalado. Probado 8-oct-2026.
+psycopg[binary]==3.3.6
 
 # Opcionales (solo si conectas el corpus vectorial de lexcol-rag):
 # chromadb>=0.5.0
