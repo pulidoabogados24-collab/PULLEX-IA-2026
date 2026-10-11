@@ -82,7 +82,7 @@ async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
   try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
   apIniciar();aplicarPerfil();
-  $('modo').value=PERFIL.preferencias.modo||'auto';
+  $('modo').value=PERFIL.preferencias.modo||'auto';pintarAjustesResp();
   WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
 }
 function iniciales(n){return (n||'').trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'·'}
@@ -167,6 +167,52 @@ async function cargarBoletin(forzar){
 
 function pintarWeb(){$('chip-web').classList.toggle('on',WEB);$('chip-web').setAttribute('aria-pressed',String(WEB))}
 function toggleWeb(){WEB=!WEB;pintarWeb()}
+
+// «Cómo te respondo»: un solo botón resume el lenguaje y la forma; al pulsarlo se abre un panel con las dos
+// opciones como radios nativos (teclado y lector de pantalla sin trabajo extra). Los <select> ocultos siguen
+// siendo la fuente del valor: el resto de la app los lee y escribe como antes; pintarAjustesResp() los refleja.
+const AJR_DESC={
+  modo:{auto:'Se adapta a cómo escribes',profesional:'Para abogados: normas, jurisprudencia y citas',ciudadano:'Lenguaje claro, sin tecnicismos'},
+  estilo:{directo:'La respuesta completa, al grano',ensename:'Idea central, ejemplo y norma, por capas',
+    conmigo:'Te guía con una pregunta a la vez',examiname:'Examen oral con calificación al final',auditar:'Califica tu respuesta con una rúbrica'}};
+const AJR_CORTO={directo:'Directa',ensename:'Enséñame',conmigo:'Conmigo',examiname:'Examen',auditar:'Auditoría'};
+function armarAjustesResp(){
+  ['modo','estilo'].forEach(k=>{const fs=$('ajr-g-'+k);if(fs.querySelector('label'))return;
+    [...$(k).options].forEach(o=>{
+      const l=document.createElement('label');l.className='ajr-op';
+      const r=document.createElement('input');r.type='radio';r.name='ajr-'+k;r.value=o.value;
+      r.addEventListener('change',()=>{$(k).value=o.value;$(k).dispatchEvent(new Event('change',{bubbles:true}));pintarAjustesResp()});
+      const t=document.createElement('span');t.className='ajr-txt';
+      const n=document.createElement('span');n.className='ajr-t';n.textContent=o.textContent;
+      const d=document.createElement('span');d.className='ajr-d';d.textContent=AJR_DESC[k][o.value]||'';
+      t.append(n,d);l.append(r,t);
+      l.insertAdjacentHTML('beforeend','<svg class="i xs ajr-ok" aria-hidden="true"><use href="#i-check"/></svg>');
+      fs.appendChild(l)})})}
+function pintarAjustesResp(){
+  const m=$('modo'),e=$('estilo');if(!m||!e)return;
+  $('ajr-modo').textContent=m.selectedOptions[0]?.textContent||'';
+  $('ajr-estilo').textContent=AJR_CORTO[e.value]||e.selectedOptions[0]?.textContent||'';
+  // Fuera de lo habitual (no automático o no directa), el botón se marca para que se note que algo cambió.
+  $('ajr-btn').classList.toggle('on',m.value!=='auto'||e.value!=='directo');
+  $('ajr-btn').setAttribute('aria-label','Cómo te respondo: '+(m.selectedOptions[0]?.textContent||'')+', '+(e.selectedOptions[0]?.textContent||''));
+  document.querySelectorAll('#ajr-panel input').forEach(r=>{r.checked=$(r.name.slice(4)).value===r.value})}
+function colocarAjustesResp(){
+  const p=$('ajr-panel'),b=$('ajr-btn').getBoundingClientRect(),m=12,w=Math.min(340,innerWidth-2*m);
+  p.style.width=w+'px';p.style.left=Math.max(m,Math.min(b.left,innerWidth-w-m))+'px';
+  const alto=p.offsetHeight,arriba=b.top-8-alto;
+  // Se abre hacia arriba (la caja suele estar abajo); si no cabe, hacia abajo.
+  if(arriba>=m||b.top>innerHeight-b.bottom){p.style.top=Math.max(m,arriba)+'px';p.dataset.lado='arriba'}
+  else{p.style.top=(b.bottom+8)+'px';p.dataset.lado='abajo'}}
+function abrirAjustesResp(){armarAjustesResp();pintarAjustesResp();const p=$('ajr-panel');p.hidden=false;colocarAjustesResp();
+  $('ajr-btn').setAttribute('aria-expanded','true');
+  (p.querySelector('input:checked')||p.querySelector('input')).focus({preventScroll:true})}
+function cerrarAjustesResp(foco){const p=$('ajr-panel');if(!p||p.hidden)return false;p.hidden=true;
+  $('ajr-btn').setAttribute('aria-expanded','false');if(foco)$('ajr-btn').focus();return true}
+function toggleAjustesResp(){$('ajr-panel').hidden?abrirAjustesResp():cerrarAjustesResp(true)}
+document.addEventListener('click',ev=>{if(!ev.target.closest('#ajr-panel,#ajr-btn'))cerrarAjustesResp(false)});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&cerrarAjustesResp(true))ev.stopPropagation()});
+document.addEventListener('focusin',ev=>{if(!ev.target.closest('#ajr-panel,#ajr-btn'))cerrarAjustesResp(false)});
+addEventListener('resize',()=>{if(!$('ajr-panel').hidden)colocarAjustesResp()});
 function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
 function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
 function sug(b){const s=b.querySelector('span');$('txt').value=s?s.textContent:b.textContent;autoAlto($('txt'));$('txt').focus()}
@@ -590,7 +636,7 @@ async function guardarPrefs(){
   if($('cf-escritura'))body.escritura=$('cf-escritura').value;
   try{const d=await(await fetch('/api/preferencias',{method:'POST',
     headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
-    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;pintarAjustesResp();
     WEB=d.preferencias.web;pintarWeb();}catch(e){}
 }
 async function guardarMemoria(){
@@ -638,7 +684,7 @@ function abrirTools(){
   $('m-tools').classList.remove('hidden');
 }
 function cerrarTools(){$('m-tools').classList.add('hidden')}
-function usarTool(p,estilo){$('estilo').value=estilo||'directo';cerrarTools();ver('chat');
+function usarTool(p,estilo){$('estilo').value=estilo||'directo';pintarAjustesResp();cerrarTools();ver('chat');
   // Cada herramienta es un asunto nuevo: se abre en una consulta nueva (la anterior queda en el historial).
   if($('hilo').children.length&&!enviando)nuevaConsulta();
   $('txt').value=p;autoAlto($('txt'));$('txt').focus();
@@ -762,7 +808,7 @@ function enviarEscrito(){
   if(PERFIL.restantes<=0){cerrarEscrito();toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
   const v=valoresEscrito(tipo);
   const titulo=tipo==='tutela'?'Tutela contra '+v.contra:'Petición a '+v.entidad;
-  cerrarEscrito();$('estilo').value='directo';ver('chat');
+  cerrarEscrito();$('estilo').value='directo';pintarAjustesResp();ver('chat');
   if(!nuevaConsulta())return;
   $('txt').value=textoEscrito(tipo,v);
   ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);el.value=c.opciones?c.opciones[0]:''});
@@ -1439,7 +1485,7 @@ async function apRestablecer(){
 // Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
 // en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
 // en línea. Solo se ejecutan funciones de esta lista blanca.
-const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,toggleAjustesResp,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;

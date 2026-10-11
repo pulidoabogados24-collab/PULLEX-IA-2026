@@ -1077,6 +1077,7 @@ select.per-inp{appearance:auto}
   <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.8"/><path d="M12 2.8v2M12 19.2v2M2.8 12h2M19.2 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M5.5 18.5l1.4-1.4M17.1 6.9l1.4-1.4"/></symbol>
   <symbol id="i-luna" viewBox="0 0 24 24"><path d="M19.5 14.6A7.8 7.8 0 0 1 9.4 4.5a7.8 7.8 0 1 0 10.1 10.1z"/></symbol>
   <symbol id="i-auto" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 17v3.5"/></symbol>
+  <symbol id="i-abajo" viewBox="0 0 24 24"><path d="M6.5 9.5 12 15l5.5-5.5"/></symbol>
   <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-escrito" viewBox="0 0 24 24"><path d="M14 3.5H6.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V9z"/><path d="M14 3.5V9h5.5M8.5 13h7M8.5 16.5h5"/></symbol>
   <symbol id="i-fuentes" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM13 4h5.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H13z"/><path d="M7 8h1.5M7 11h1.5M16 8h1.5M16 11h1.5"/></symbol>
@@ -1373,25 +1374,30 @@ select.per-inp{appearance:auto}
             <textarea id="txt" rows="1" placeholder="Cuéntame tu caso. Pensemos juntos." aria-label="Tu consulta" data-input="autoAlto" data-pasa-input="this" data-keydown="teclas" data-pasa-keydown="event"></textarea>
             <button class="clip" title="Adjuntar PDF, foto o documento" aria-label="Adjuntar archivo" data-click="abrirSelectorArchivo"><svg class="i" aria-hidden="true"><use href="#i-clip"/></svg></button>
             <div class="opts">
-              <button type="button" class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" aria-controls="convs"><svg class="i xs" aria-hidden="true"><use href="#i-historial"/></svg> Historial</button>
-              <button type="button" class="chip on" id="chip-web" aria-pressed="true" data-click="toggleWeb"><svg class="i xs" aria-hidden="true"><use href="#i-web"/></svg> Buscar en internet</button>
-              <span class="chip"><select id="modo" aria-label="Registro de la respuesta">
-                <option value="auto">Modo automático</option>
-                <option value="profesional">Técnico (abogado)</option>
-                <option value="ciudadano">Sencillo (ciudadano)</option>
-              </select></span>
-              <span class="chip"><select id="estilo" aria-label="Forma de respuesta">
-                <option value="directo">Respuesta directa</option>
-                <option value="ensename">Enséñame</option>
-                <option value="conmigo">Resuélvelo conmigo</option>
-                <option value="examiname">Examíname</option>
-                <option value="auditar">Audita mi respuesta</option>
-              </select></span>
+              <button type="button" class="chip chip-hist" id="chip-hist" data-click="toggleHistorial" aria-controls="convs" aria-label="Historial" title="Historial"><svg class="i xs" aria-hidden="true"><use href="#i-historial"/></svg><span class="chip-txt"> Historial</span></button>
+              <button type="button" class="chip chip-web on" id="chip-web" aria-pressed="true" data-click="toggleWeb" aria-label="Buscar en internet" title="Buscar en internet al responder"><svg class="i xs" aria-hidden="true"><use href="#i-web"/></svg><span class="chip-txt">Internet</span><i class="chip-luz" aria-hidden="true"></i></button>
+              <button type="button" class="chip ajr-btn" id="ajr-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="ajr-panel" data-click="toggleAjustesResp" title="Cómo te respondo"><svg class="i xs" aria-hidden="true"><use href="#i-preferencias"/></svg><span class="ajr-res" id="ajr-res"><span id="ajr-modo">Automático</span><span class="ajr-sep" aria-hidden="true">·</span><span id="ajr-estilo">Directa</span></span><svg class="i xs ajr-flecha" aria-hidden="true"><use href="#i-abajo"/></svg></button>
               <button type="button" class="chip chip-icono" data-click="abrirTools" aria-label="Herramientas" title="Herramientas"><svg class="i xs" aria-hidden="true"><use href="#i-herramientas"/></svg><span class="chip-txt"> Herramientas</span></button>
               <button type="button" class="chip" data-click="imprimirPDF"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg> PDF</button>
               <button type="button" class="chip" data-click="exportarExcel"><svg class="i xs" aria-hidden="true"><use href="#i-tabla"/></svg> Excel</button>
             </div>
+            <select id="modo" hidden aria-hidden="true" tabindex="-1">
+              <option value="auto">Automático</option>
+              <option value="profesional">Técnico</option>
+              <option value="ciudadano">Sencillo</option>
+            </select>
+            <select id="estilo" hidden aria-hidden="true" tabindex="-1">
+              <option value="directo">Directa</option>
+              <option value="ensename">Enséñame</option>
+              <option value="conmigo">Resuélvelo conmigo</option>
+              <option value="examiname">Examíname</option>
+              <option value="auditar">Audita mi respuesta</option>
+            </select>
             <button class="env" id="env" data-click="enviar" title="Enviar" aria-label="Enviar"><svg class="i" aria-hidden="true"><use href="#i-enviar"/></svg></button>
+          </div>
+          <div class="ajr-panel" id="ajr-panel" role="dialog" aria-label="Cómo te respondo" hidden>
+            <fieldset class="ajr-grupo" id="ajr-g-modo"><legend>Lenguaje</legend></fieldset>
+            <fieldset class="ajr-grupo" id="ajr-g-estilo"><legend>Forma de la respuesta</legend></fieldset>
           </div>
           <p class="aviso">PULLEX IA puede equivocarse. En temas legales, verifica en la fuente oficial. No sustituye a un abogado.</p>
         </div>
