@@ -105,3 +105,161 @@ def test_AUTH01_el_admin_no_puede_desactivarse_a_si_mismo(cliente, modulo):
     assert cliente.get("/api/admin/usuarios", headers=auth(admin)).status_code == 200
     # cambiar su propio plan sigue permitido
     assert cliente.post("/api/admin/actualizar", headers=auth(admin), json={"email": ADMIN_EMAIL, "plan": "premium"}).status_code == 200
+
+
+# ------------------------------------------------------------------------------------ AUTH-03 y AUTH-13 --
+import hashlib  # noqa: E402
+import threading  # noqa: E402
+import time  # noqa: E402
+
+
+def _en_paralelo(n, funcion):
+    """Lanza n hilos que arrancan a la vez (barrera) y devuelve los resultados en orden de hilo."""
+    barrera = threading.Barrier(n)
+    resultados = [None] * n
+
+    def hilo(i):
+        barrera.wait()
+        resultados[i] = funcion(i)
+
+    hilos = [threading.Thread(target=hilo, args=(i,)) for i in range(n)]
+    [h.start() for h in hilos]
+    [h.join(60) for h in hilos]
+    return resultados
+
+
+def _con_latencia(monkeypatch, modulo, segundos=0.03):
+    """Cada conexión nueva tarda un poco (como la red hasta PostgreSQL): agranda la ventana entre validar y marcar
+    el token si esos dos pasos van en conexiones distintas (el defecto de AUTH-03)."""
+    original = modulo.db
+
+    def db_lenta():
+        time.sleep(segundos)
+        return original()
+    monkeypatch.setattr(modulo, "db", db_lenta)
+
+
+def test_AUTH03_token_de_restablecimiento_se_usa_una_sola_vez_aunque_lleguen_a_la_vez(cliente, modulo, monkeypatch):
+    from fastapi.testclient import TestClient
+    email, _, _ = nuevo_usuario(cliente)
+    token = modulo.generar_token_accion(email, "restablecer_clave", 1)
+    _con_latencia(monkeypatch, modulo)
+
+    def intentar(i):
+        return TestClient(modulo.app).post("/api/restablecer-clave", json={"token": token, "clave": f"nueva-clave-{i:02d}"}).status_code
+    codigos = _en_paralelo(5, intentar)
+    monkeypatch.undo()
+    assert sorted(codigos) == [200, 400, 400, 400, 400], codigos
+    ganadora = codigos.index(200)
+    modulo._intentos.clear()                # el límite por IP de esta prueba no es lo que se mide
+    for i in range(5):
+        r = cliente.post("/api/login", json={"email": email, "clave": f"nueva-clave-{i:02d}"})
+        assert r.status_code == (200 if i == ganadora else 401), i
+
+
+def test_AUTH03_enlace_de_verificacion_se_usa_una_sola_vez_aunque_lleguen_a_la_vez(cliente, modulo, monkeypatch):
+    from fastapi.testclient import TestClient
+    email, _, _ = nuevo_usuario(cliente)
+    token = modulo.generar_token_accion(email, "verificar_correo", 24)
+    _con_latencia(monkeypatch, modulo)
+    textos = _en_paralelo(4, lambda i: TestClient(modulo.app).get(f"/verificar-correo?token={token}").text)
+    monkeypatch.undo()
+    assert sum("Correo verificado" in t for t in textos) == 1, textos
+    assert _usuario(modulo, email)["email_verificado"]
+
+
+def test_AUTH13_los_tokens_de_accion_se_guardan_como_huella(cliente, modulo):
+    email, _, _ = nuevo_usuario(cliente)
+    token = modulo.generar_token_accion(email, "restablecer_clave", 1)
+    huella = hashlib.sha256(token.encode()).hexdigest()
+    with closing(modulo.db()) as con:
+        assert con.execute("SELECT COUNT(*) c FROM tokens_accion WHERE token=?", (token,)).fetchone()["c"] == 0
+        assert con.execute("SELECT email FROM tokens_accion WHERE token=?", (huella,)).fetchone()["email"] == email
+    # quien lea la base (copia filtrada) y mande la huella como si fuera el enlace, no entra
+    assert cliente.post("/api/restablecer-clave", json={"token": huella, "clave": "clave-del-atacante"}).status_code == 400
+    assert cliente.post("/api/restablecer-clave", json={"token": token, "clave": "clave-legitima-1"}).status_code == 200
+
+
+def test_AUTH13_purga_los_tokens_vencidos_hace_mas_de_un_dia(cliente, modulo):
+    email, _, _ = nuevo_usuario(cliente)
+    ahora = time.time()
+    _sql(modulo, "INSERT INTO tokens_accion(token,email,tipo,creado,expira,usado) VALUES(?,?,?,?,?,0)",
+         ("viejo-" + email, email, "verificar_correo", ahora - 4 * 86400, ahora - 3 * 86400))
+    _sql(modulo, "INSERT INTO tokens_accion(token,email,tipo,creado,expira,usado) VALUES(?,?,?,?,?,0)",
+         ("reciente-" + email, email, "verificar_correo", ahora - 7200, ahora - 3600))
+    modulo.generar_token_accion(email, "verificar_correo", 24)
+    with closing(modulo.db()) as con:
+        quedan = {f["token"] for f in con.execute("SELECT token FROM tokens_accion WHERE email=?", (email,)).fetchall()}
+    assert "viejo-" + email not in quedan and "reciente-" + email in quedan
+
+
+def test_AUTH13_token_vencido_o_de_otro_tipo_no_sirve(cliente, modulo):
+    email, _, _ = nuevo_usuario(cliente)
+    token = modulo.generar_token_accion(email, "verificar_correo", 24)
+    assert cliente.post("/api/restablecer-clave", json={"token": token, "clave": "otra-clave-123"}).status_code == 400
+    vencido = modulo.generar_token_accion(email, "restablecer_clave", -1)
+    assert cliente.post("/api/restablecer-clave", json={"token": vencido, "clave": "otra-clave-123"}).status_code == 400
+    assert "Correo verificado" in cliente.get(f"/verificar-correo?token={token}").text
+
+
+# --------------------------------------------------------------------------------------------- AUTH-02 --
+def test_AUTH02_por_defecto_no_se_exige_verificar_el_correo(cliente, modulo, monkeypatch):
+    monkeypatch.delenv("PULLEX_EXIGIR_VERIFICACION", raising=False)
+    email, _, t = nuevo_usuario(cliente)
+    assert not _usuario(modulo, email)["email_verificado"]
+    r = cliente.post("/api/chat", headers=auth(t), json={"conversacion": _conv(cliente, t), "mensaje": "hola", "web": False})
+    assert r.status_code == 200
+
+
+def test_AUTH02_con_la_variable_las_consultas_exigen_correo_verificado(cliente, modulo, monkeypatch):
+    import pytest
+    from fastapi import HTTPException
+    monkeypatch.setenv("PULLEX_EXIGIR_VERIFICACION", "1")
+    email, _, t = nuevo_usuario(cliente)
+    cid = _conv(cliente, t)
+    r = cliente.post("/api/chat", headers=auth(t), json={"conversacion": cid, "mensaje": "hola", "web": False})
+    assert r.status_code == 403 and "Confirma tu correo" in r.json()["detail"]
+    assert cliente.post("/api/chat", headers=auth(t), json={"conversacion": cid, "continuar": True}).status_code == 403
+    u = _usuario(modulo, email)
+    with pytest.raises(HTTPException) as e:
+        modulo.consumir_consulta(u)
+    assert e.value.status_code == 403
+    with pytest.raises(HTTPException) as e:
+        modulo._verificar_cupo(u, 1)
+    assert e.value.status_code == 403
+    assert _usuario(modulo, email)["usadas"] == 0                     # no se cobró nada
+    # el resto de la app (sin costo) sigue disponible para que pueda pedir el enlace
+    assert cliente.get("/api/estado", headers=auth(t)).status_code == 200
+    # al verificar, puede consultar
+    token = modulo.generar_token_accion(email, "verificar_correo", 24)
+    assert "Correo verificado" in cliente.get(f"/verificar-correo?token={token}").text
+    r = cliente.post("/api/chat", headers=auth(t), json={"conversacion": cid, "mensaje": "hola", "web": False})
+    assert r.status_code == 200
+    # el administrador queda exento
+    admin = login_admin(cliente)
+    _sql(modulo, "UPDATE usuarios SET email_verificado=0 WHERE email=?", (ADMIN_EMAIL,))
+    try:
+        r = cliente.post("/api/chat", headers=auth(admin), json={"conversacion": _conv(cliente, admin), "mensaje": "hola", "web": False})
+        assert r.status_code == 200
+    finally:
+        _sql(modulo, "UPDATE usuarios SET email_verificado=1 WHERE email=?", (ADMIN_EMAIL,))
+
+
+def test_AUTH02_reenviar_verificacion_tiene_tope_por_cuenta(cliente, modulo, monkeypatch):
+    enviados = []
+    monkeypatch.setattr(modulo, "enviar_correo", lambda a, asunto, html: enviados.append(a) or True)
+    email, _, t = nuevo_usuario(cliente)
+    enviados.clear()
+    codigos = []
+    for _ in range(5):
+        modulo._intentos.clear()                       # como si cada intento llegara desde otra IP
+        codigos.append(cliente.post("/api/reenviar-verificacion", headers=auth(t)).status_code)
+    assert codigos == [200, 200, 200, 429, 429] and len(enviados) == 3
+
+
+def test_AUTH02_restablecer_la_clave_por_correo_verifica_el_correo(cliente, modulo):
+    email, _, _ = nuevo_usuario(cliente)
+    assert not _usuario(modulo, email)["email_verificado"]
+    token = modulo.generar_token_accion(email, "restablecer_clave", 1)
+    assert cliente.post("/api/restablecer-clave", json={"token": token, "clave": "nueva-clave-456"}).status_code == 200
+    assert _usuario(modulo, email)["email_verificado"]

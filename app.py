@@ -737,32 +737,53 @@ def _plantilla_correo(titulo: str, cuerpo_html: str, boton_texto: str, boton_url
 </div>"""
 
 # ------------------------------------------------------- tokens de un solo uso --
+# AUTH-13: en tokens_accion.token se guarda la huella SHA-256 del token, nunca el token: quien lea la base (una copia
+# filtrada, un respaldo) no puede usar los enlaces pendientes. El token completo solo viaja en el correo. Los enlaces
+# que estaban pendientes cuando se desplegó este cambio (guardados en claro) dejan de valer: la persona pide otro.
+PURGA_TOKENS_S = 86400      # los tokens vencidos hace más de un día se borran (al generar uno nuevo)
+
+
+def _huella_token(token: str) -> str:
+    return hashlib.sha256(str(token).encode("utf-8")).hexdigest()
+
+
 def generar_token_accion(email: str, tipo: str, horas_validez: float) -> str:
     """tipo: 'verificar_correo' | 'restablecer_clave'. El token es de un solo uso y expira."""
     token = secrets.token_urlsafe(32)
     ahora = time.time()
     with closing(db()) as con:
+        con.execute("DELETE FROM tokens_accion WHERE expira<?", (ahora - PURGA_TOKENS_S,))     # purga oportunista
         con.execute(
             "INSERT INTO tokens_accion(token,email,tipo,creado,expira,usado) VALUES(?,?,?,?,?,0)",
-            (token, normaliza_email(email), tipo, ahora, ahora + horas_validez * 3600))
+            (_huella_token(token), normaliza_email(email), tipo, ahora, ahora + horas_validez * 3600))
         con.commit()
     return token
 
-def validar_token_accion(token: str, tipo: str):
-    """Devuelve el email asociado si el token es válido (existe, tipo correcto, no usado,
-    no expirado); None en cualquier otro caso. No distingue el motivo del rechazo en la
-    respuesta pública — evita dar pistas útiles para adivinar tokens de otros usuarios."""
-    with closing(db()) as con:
-        f = con.execute(
-            "SELECT * FROM tokens_accion WHERE token=? AND tipo=?", (token, tipo)).fetchone()
-    if not f or f["usado"] or f["expira"] < time.time():
-        return None
-    return f["email"]
 
-def marcar_token_usado(token: str):
+def token_accion_vigente(token: str, tipo: str) -> bool:
+    """Revisión previa y barata (NO consume ni autoriza nada): evita calcular un PBKDF2 por cada token inventado."""
+    if not token:
+        return False
     with closing(db()) as con:
-        con.execute("UPDATE tokens_accion SET usado=1 WHERE token=?", (token,))
-        con.commit()
+        f = con.execute("SELECT 1 FROM tokens_accion WHERE token=? AND tipo=? AND usado=0 AND expira>?",
+                        (_huella_token(token), tipo, time.time())).fetchone()
+    return f is not None
+
+
+def consumir_token_accion(con, token: str, tipo: str):
+    """AUTH-03: valida y gasta el token en UNA sentencia condicional, dentro de la transacción de ``con``. Solo una
+    de varias peticiones simultáneas con el mismo token logra rowcount == 1 (en SQLite la escritura se serializa; en
+    PostgreSQL la fila queda bloqueada y la segunda reevalúa «usado=0» tras el COMMIT de la primera). Devuelve el
+    correo, o None si el token no existe, es de otro tipo, ya se usó o venció (sin decir cuál: no da pistas). El
+    llamador hace lo que el token autoriza en la MISMA transacción y luego confirma."""
+    if not token:
+        return None
+    huella = _huella_token(token)
+    cur = con.execute("UPDATE tokens_accion SET usado=1 WHERE token=? AND tipo=? AND usado=0 AND expira>?",
+                      (huella, tipo, time.time()))
+    if cur.rowcount != 1:
+        return None
+    return con.execute("SELECT email FROM tokens_accion WHERE token=?", (huella,)).fetchone()["email"]
 
 def periodo_actual() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m")
@@ -1248,16 +1269,28 @@ async def login(request: Request):
         return {"token": emitir_token(email), "perfil": perfil_publico(u)}
     raise HTTPException(401, "Correo o contraseña incorrectos")
 
-def _actualizar_clave(email: str, nueva_clave: str):
-    """Cambia la contraseña, invalida TODAS las sesiones anteriores (sesion_version+1) y
-    anula los enlaces de restablecimiento pendientes de esa cuenta."""
+def _sal_y_hash(clave: str) -> tuple:
+    """(sal en hex, hash) de una contraseña nueva. Se calcula FUERA de las transacciones: PBKDF2 tarda."""
     sal = secrets.token_bytes(16)
-    email = normaliza_email(email)
+    return sal.hex(), _hash(clave, sal)
+
+
+def _guardar_clave(con, email: str, sal_hex: str, hash_clave: str, verificar_correo: bool = False):
+    """Dentro de la transacción de ``con``: cambia la contraseña, invalida TODAS las sesiones anteriores
+    (sesion_version+1) y anula los enlaces de restablecimiento pendientes de esa cuenta. Con verificar_correo
+    (restablecer por correo, AUTH-02) además marca el correo como verificado: quien abrió el enlace controla el buzón."""
+    con.execute("UPDATE usuarios SET sal=?, hash=?, sesion_version=COALESCE(sesion_version,0)+1"
+                + (", email_verificado=1" if verificar_correo else "") + " WHERE email=?",
+                (sal_hex, hash_clave, normaliza_email(email)))
+    con.execute("UPDATE tokens_accion SET usado=1 WHERE email=? AND tipo='restablecer_clave'",
+                (normaliza_email(email),))
+
+
+def _actualizar_clave(email: str, nueva_clave: str):
+    """Cambia la contraseña (ver _guardar_clave) en su propia transacción."""
+    sal_hex, hash_clave = _sal_y_hash(nueva_clave)
     with closing(db()) as con:
-        con.execute("UPDATE usuarios SET sal=?, hash=?, sesion_version=COALESCE(sesion_version,0)+1 "
-                    "WHERE email=?", (sal.hex(), _hash(nueva_clave, sal), email))
-        con.execute("UPDATE tokens_accion SET usado=1 WHERE email=? AND tipo='restablecer_clave'",
-                    (email,))
+        _guardar_clave(con, email, sal_hex, hash_clave)
         con.commit()
 
 
@@ -1307,21 +1340,23 @@ async def api_reenviar_verificacion(request: Request):
     u = usuario_actual(request)
     if u["email_verificado"]:
         return {"ok": True, "mensaje": "Tu correo ya está verificado."}
+    # AUTH-02: máx. 3 correos por hora a una misma cuenta, aunque cambie de IP (no se usa PULLEX para bombardear buzones).
+    limitar_cuenta("reenviar:" + u["email"], tope=3, ventana=3600)
     _enviar_verificacion(u["email"], u["nombre"])
     return {"ok": True, "mensaje": "Te reenviamos el correo de verificación."}
 
 @app.get("/verificar-correo")
 async def verificar_correo(token: str = ""):
-    email = validar_token_accion(token, "verificar_correo")
+    with closing(db()) as con:      # AUTH-03: gastar el token y verificar el correo, en una sola transacción
+        email = consumir_token_accion(con, str(token)[:200], "verificar_correo")
+        if email:
+            con.execute("UPDATE usuarios SET email_verificado=1 WHERE email=?", (email,))
+        con.commit()
     if not email:
         cuerpo = ("<p>Este enlace no es válido o ya venció. Inicia sesión y pide reenviar "
                    "la verificación desde Configuración.</p>")
         icono, titulo = "✕", "Enlace no válido"
     else:
-        marcar_token_usado(token)
-        with closing(db()) as con:
-            con.execute("UPDATE usuarios SET email_verificado=1 WHERE email=?", (email,))
-            con.commit()
         cuerpo = "<p>Tu correo quedó confirmado. Ya puedes volver a la app.</p>"
         icono, titulo = "✓", "Correo verificado"
     return HTMLResponse(f"""<!doctype html><html lang="es"><head><meta charset="utf-8">
@@ -1370,11 +1405,19 @@ async def api_restablecer_clave(request: Request):
     nueva = str(datos.get("clave", "") or "")
     if len(nueva) < 8 or len(nueva) > MAX_CLAVE:
         raise HTTPException(400, "La contraseña debe tener entre 8 y 256 caracteres")
-    email = validar_token_accion(token, "restablecer_clave")
-    if not email:
-        raise HTTPException(400, "Este enlace no es válido o ya venció. Pide uno nuevo.")
-    marcar_token_usado(token)
-    _actualizar_clave(email, nueva)
+    invalido = HTTPException(400, "Este enlace no es válido o ya venció. Pide uno nuevo.")
+    if not token_accion_vigente(token, "restablecer_clave"):
+        raise invalido
+    sal_hex, hash_clave = _sal_y_hash(nueva)
+    # AUTH-03: gastar el token y cambiar la clave en la MISMA transacción. Si dos peticiones llegan con el mismo enlace,
+    # solo una cambia la clave; la otra recibe 400.
+    with closing(db()) as con:
+        email = consumir_token_accion(con, token, "restablecer_clave")
+        if not email:
+            con.rollback()
+            raise invalido
+        _guardar_clave(con, email, sal_hex, hash_clave, verificar_correo=True)
+        con.commit()
     return {"ok": True}
 
 @app.post("/api/preferencias")
@@ -1442,10 +1485,28 @@ def api_boletin(request: Request):
     return obtener_boletin()
 
 # ------------------------------------------------------------ consultas --
+# AUTH-02: con PULLEX_EXIGIR_VERIFICACION=1, lo que gasta consultas (chat, Academia, documentos, taller, biblioteca,
+# perfiles) exige el correo verificado. Por defecto NO se exige: la entrega real del correo (Resend) no está comprobada y
+# exigirlo dejaría a las personas sin poder usar la app. Se lee en cada llamada: cambiar la variable y reiniciar basta.
+MENSAJE_CORREO_SIN_VERIFICAR = ("Confirma tu correo para usar las consultas: abre el enlace que te enviamos o pide "
+                                "uno nuevo desde Ajustes.")
+
+
+def verificacion_exigida() -> bool:
+    return os.getenv("PULLEX_EXIGIR_VERIFICACION", "0").strip().lower() in ("1", "true", "si", "sí")
+
+
+def exigir_correo_verificado(u: dict):
+    """403 si la verificación está exigida y la cuenta no la tiene. El administrador queda exento."""
+    if verificacion_exigida() and not u.get("es_admin") and not u.get("email_verificado"):
+        raise HTTPException(403, MENSAJE_CORREO_SIN_VERIFICAR)
+
+
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""
     if not u["activo"]:
         raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)
     u = reiniciar_periodo_si_aplica(u)
     with closing(db()) as con:
         cur = con.execute("UPDATE usuarios SET usadas=usadas+1 WHERE email=? AND usadas<limite",
@@ -1780,6 +1841,7 @@ async def chat(request: Request):
     u = usuario_actual(request)
     if not u["activo"]:
         raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)         # también para «continuar»
     u = reiniciar_periodo_si_aplica(u)
 
     datos = await json_de(request)
@@ -2789,6 +2851,7 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
 def _verificar_cupo(u: dict, pasos: int):
     if not u["activo"]:
         raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)
     u = reiniciar_periodo_si_aplica(u)
     quedan = u["limite"] - u["usadas"]
     if quedan < pasos:
