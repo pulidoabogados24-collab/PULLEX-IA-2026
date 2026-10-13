@@ -600,12 +600,15 @@ def _crear_tablas_sqlite(con):
         evaluacion TEXT, puntaje INTEGER, creado REAL);
     CREATE INDEX IF NOT EXISTS ix_mcasos_usuario ON modular_casos(usuario);
     CREATE INDEX IF NOT EXISTS ix_mintentos_usuario ON modular_intentos(usuario);
+    CREATE INDEX IF NOT EXISTS ix_mintentos_caso ON modular_intentos(caso_id);
     CREATE INDEX IF NOT EXISTS ix_conv_usuario ON conversaciones(usuario);
     CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes(conv);
     CREATE INDEX IF NOT EXISTS ix_tokens_email ON tokens_accion(email, tipo);
     CREATE TABLE IF NOT EXISTS apariencia_imagenes(
         usuario TEXT NOT NULL, tipo TEXT NOT NULL, mime TEXT NOT NULL, data BLOB NOT NULL,
         actualizado REAL NOT NULL, PRIMARY KEY(usuario, tipo));
+    CREATE TABLE IF NOT EXISTS limites(
+        clave TEXT PRIMARY KEY, inicio REAL NOT NULL, n INTEGER NOT NULL);
     """)
     academia.crear_tabla(con)
     telemetria.crear_tabla(con)
@@ -639,6 +642,15 @@ def _crear_tablas_sqlite(con):
         con.commit()
     except sqlite3.OperationalError:
         pass
+    # Versión 2 del esquema (auditoría 2026-10-13; mismo cambio en datos/esquema_postgres.sql): consentimiento de la
+    # política de datos (IA-17) y número de continuaciones de una respuesta.
+    for tabla, columna in (("usuarios", "acepto_politica_version TEXT"), ("usuarios", "acepto_politica_en REAL"),
+                           ("mensajes", "continuaciones INTEGER DEFAULT 0")):
+        try:
+            con.execute(f"ALTER TABLE {tabla} ADD COLUMN {columna}")
+            con.commit()
+        except sqlite3.OperationalError:
+            pass    # la columna ya existe
     # Automatizador (documentos.py): documentos generados y planes del asistente, siempre con dueño.
     con.executescript("""
     CREATE TABLE IF NOT EXISTS documentos_generados(
@@ -1431,6 +1443,114 @@ def api_boletin(request: Request):
     usuario_actual(request)   # el boletín está cacheado: no gasta consultas del estudiante
     return obtener_boletin()
 
+
+# ----------------------------------------- derechos del titular (BD-05 / IA-18, Ley 1581 de 2012) --
+# Toda tabla de la base principal que guarde algo de una persona está aquí, con cómo se encuentran sus filas:
+# (tabla, condición WHERE, qué valores van en sus «?»). «email» es el correo, «anonimo» el código de la telemetría
+# (anonimo(email)) y «limite_*» las claves de límites de intentos que terminan en «:correo».
+# El orden importa: primero lo que se encuentra a través de otra tabla (mensajes por sus conversaciones, telemetría
+# por sus mensajes…) y «usuarios» al final. tests/test_seguridad_datos.py descubre las tablas de la base y falla si
+# aparece una nueva que no esté aquí ni en TABLAS_SIN_TITULAR.
+TABLAS_DEL_USUARIO = (
+    ("calidad_respuestas", "mensaje_id IN (SELECT m.id FROM mensajes m JOIN conversaciones c ON c.id=m.conv "
+                           "WHERE c.usuario=?)", ("email",)),
+    ("calidad_respuestas", "usuario=?", ("anonimo",)),
+    ("mensajes", "conv IN (SELECT id FROM conversaciones WHERE usuario=?)", ("email",)),
+    ("conversaciones", "usuario=?", ("email",)),
+    ("perfiles_ejecuciones_perfil", "ejecucion_id IN (SELECT id FROM perfiles_ejecuciones WHERE usuario=?)", ("email",)),
+    ("perfiles_ejecuciones", "usuario=?", ("email",)),
+    ("taller_intentos", "usuario=?", ("email",)),
+    ("taller_escenarios", "usuario=?", ("email",)),
+    ("modular_intentos", "usuario=?", ("email",)),
+    ("modular_casos", "usuario=?", ("email",)),
+    ("conocimiento", "usuario=?", ("email",)),
+    ("documentos_generados", "usuario=?", ("email",)),
+    ("asistente_tareas", "usuario=?", ("email",)),
+    ("apariencia_imagenes", "usuario=?", ("email",)),
+    ("tokens_accion", "email=?", ("email",)),
+    ("limites", "clave=? OR clave LIKE ? ESCAPE '!'", ("email", "limite_patron")),
+    ("usuarios", "email=?", ("email",)),
+)
+# Tablas sin datos de personas: control de versión, boletín diario y escritos modelo del taller (comunes a todos).
+TABLAS_SIN_TITULAR = ("esquema_version", "boletin", "taller_modelos")
+# Lo que nunca sale en la exportación: la sal y el hash de la contraseña y los tokens de un solo uso.
+COLUMNAS_NO_EXPORTABLES = {"usuarios": {"sal", "hash"}, "tokens_accion": {"token"}}
+
+
+def _parametros_titular(tipos: tuple, email: str) -> tuple:
+    patron = "%:" + email.replace("!", "!!").replace("%", "!%").replace("_", "!_")
+    valores = {"email": email, "anonimo": anonimo(email), "limite_patron": patron}
+    return tuple(valores[t] for t in tipos)
+
+
+def borrar_datos_del_usuario(email: str) -> dict:
+    """Borra TODO lo de esa persona en la base principal, en UNA transacción (o todo o nada). Devuelve las filas
+    borradas por tabla."""
+    email = normaliza_email(email)
+    borradas = {}
+    with closing(db()) as con:
+        for tabla, condicion, tipos in TABLAS_DEL_USUARIO:
+            cur = con.execute(f"DELETE FROM {tabla} WHERE {condicion}", _parametros_titular(tipos, email))
+            borradas[tabla] = borradas.get(tabla, 0) + max(cur.rowcount or 0, 0)
+        con.commit()
+    return borradas
+
+
+def _valor_exportable(v):
+    if isinstance(v, (bytes, bytearray, memoryview)):
+        return {"base64": base64.b64encode(bytes(v)).decode("ascii")}
+    return v
+
+
+def exportar_datos_del_usuario(email: str) -> dict:
+    """Todos los datos de esa persona en la base principal, tabla por tabla (sin la sal ni el hash de la contraseña
+    ni los tokens). Los binarios (imágenes de apariencia) van en base64."""
+    email = normaliza_email(email)
+    tablas = {}
+    with closing(db()) as con:
+        for tabla, condicion, tipos in TABLAS_DEL_USUARIO:
+            fuera = COLUMNAS_NO_EXPORTABLES.get(tabla, set())
+            filas = tablas.setdefault(tabla, [])
+            for f in con.execute(f"SELECT * FROM {tabla} WHERE {condicion}", _parametros_titular(tipos, email)):
+                fila = {k: _valor_exportable(f[k]) for k in f.keys() if k not in fuera}
+                if fila not in filas:            # calidad_respuestas aparece por dos caminos
+                    filas.append(fila)
+    return tablas
+
+
+@app.post("/api/cuenta/eliminar")
+async def cuenta_eliminar(request: Request):
+    """Elimina la cuenta propia y todos sus datos (derecho de supresión). Pide la contraseña actual."""
+    u = usuario_actual(request)
+    datos = await json_de(request)
+    email = normaliza_email(u["email"])
+    if email == normaliza_email(ADMIN_EMAIL):
+        raise HTTPException(400, "La cuenta del administrador principal no se puede eliminar desde la app.")
+    limitar_cuenta("eliminar:" + email, tope=5, ventana=900)
+    clave = datos.get("clave")
+    if not isinstance(clave, str) or len(clave) > MAX_CLAVE or not verificar_clave(email, clave):
+        raise HTTPException(403, "La contraseña no coincide.")
+    borradas = borrar_datos_del_usuario(email)
+    log.info("cuenta eliminada a petición de su titular: %s (%s filas)", _enmascarar(email), sum(borradas.values()))
+    return {"ok": True, "filas_borradas": borradas}
+
+
+@app.get("/api/cuenta/exportar")
+def cuenta_exportar(request: Request):
+    """Descarga en JSON de todos los datos propios (derecho de acceso)."""
+    u = usuario_actual(request)
+    email = normaliza_email(u["email"])
+    limitar_cuenta("exportar:" + email, tope=10, ventana=3600)
+    ahora = datetime.now(timezone.utc)
+    cuerpo = {"formato": "pullex-ia/exportacion-de-datos", "version": 1, "generado": ahora.isoformat(),
+              "titular": email,
+              "nota": ("Datos que PULLEX IA guarda de tu cuenta en su base principal. No incluye la contraseña (solo se "
+                       "guarda cifrada) ni los enlaces de un solo uso. Los binarios van en base64."),
+              "tablas": exportar_datos_del_usuario(email)}
+    nombre = f"pullex-ia-mis-datos-{ahora.strftime('%Y%m%d')}.json"
+    return Response(json.dumps(cuerpo, ensure_ascii=False, indent=1, default=str), media_type="application/json",
+                    headers={"Content-Disposition": f'attachment; filename="{nombre}"'})
+
 # ------------------------------------------------------------ consultas --
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""
@@ -1454,13 +1574,22 @@ def reintegrar_consulta(email: str):
 
 
 # ------------------------------------------------------ conversaciones --
+def id_o_404(valor, invalido: str, no_encontrado: str) -> int:
+    """Ayuda común de las rutas con {id} (BD-18): 400 si no es un número; 404, sin consultar la base, si está fuera
+    del rango de ids posibles (≤0 o mayor que 2^63−1)."""
+    try:
+        numero = base_datos.id_valido(valor)
+    except (TypeError, ValueError):
+        raise HTTPException(400, invalido)
+    if numero is None:
+        raise HTTPException(404, no_encontrado)
+    return numero
+
+
 def conversacion_de(cid, email: str) -> dict:
     """Autorización a nivel de recurso: la conversación debe existir Y pertenecer a quien
     la pide. Responde 404 (no 403) para no confirmar la existencia de IDs ajenos."""
-    try:
-        cid = int(cid)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Conversación inválida")
+    cid = id_o_404(cid, "Conversación inválida", "Conversación no encontrada")
     with closing(db()) as con:
         f = con.execute("SELECT id,usuario,titulo FROM conversaciones WHERE id=? AND usuario=?",
                         (cid, email)).fetchone()
@@ -1479,7 +1608,7 @@ def listar(request: Request):
         filas = con.execute(
             "SELECT c.id, c.titulo, MAX(m.creada) actualizada FROM conversaciones c "
             "JOIN mensajes m ON m.conv=c.id WHERE c.usuario=? "
-            "GROUP BY c.id ORDER BY actualizada DESC, c.id DESC",
+            "GROUP BY c.id ORDER BY actualizada DESC NULLS LAST, c.id DESC",
             (u["email"],)).fetchall()
     return [dict(f) for f in filas]
 
@@ -2049,10 +2178,7 @@ def _caso_publico(fila, datos: dict) -> dict:
 
 
 def _caso_de(caso_id, email: str):
-    try:
-        caso_id = int(caso_id)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Caso inválido")
+    caso_id = id_o_404(caso_id, "Caso inválido", "Caso no encontrado")
     with closing(db()) as con:
         f = con.execute("SELECT * FROM modular_casos WHERE id=? AND usuario=?", (caso_id, email)).fetchone()
     if not f:
@@ -2295,7 +2421,7 @@ def modular_progreso(request: Request):
     with closing(db()) as con:
         filas = con.execute(
             "SELECT c.area, i.puntaje, i.evaluacion, i.creado FROM modular_intentos i "
-            "JOIN modular_casos c ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado", (u["email"],)).fetchall()
+            "JOIN modular_casos c ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado NULLS FIRST, i.id", (u["email"],)).fetchall()
     por_area, debiles = {}, {}
     for f in filas:
         a = por_area.setdefault(f["area"], [])
@@ -2406,7 +2532,7 @@ def academia_errores(request: Request):
     ahora = time.time()
     with closing(db()) as con:
         filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 "
-                            "ORDER BY resuelto IS NOT NULL, fallos DESC, ultimo_fallo DESC LIMIT 50",
+                            "ORDER BY resuelto IS NOT NULL, fallos DESC NULLS LAST, ultimo_fallo DESC NULLS LAST LIMIT 50",
                             (u["email"],)).fetchall()
     return {"errores": [{**academia.fila_publica(f, ahora), "frecuencia": f["fallos"],
                          "severidad": academia.severidad(f), "primer_visto": f["primer_visto"],
@@ -2420,14 +2546,14 @@ def academia_resumen(request: Request):
     email, ahora = u["email"], time.time()
     fin_de_hoy = academia.fin_del_dia(ahora)
     with closing(db()) as con:
-        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? ORDER BY proximo", (email,)).fetchall()
+        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? ORDER BY proximo NULLS FIRST, concepto_id", (email,)).fetchall()
         pendiente = con.execute(
             "SELECT c.* FROM modular_casos c WHERE c.usuario=? AND NOT EXISTS "
-            "(SELECT 1 FROM modular_intentos i WHERE i.caso_id=c.id) ORDER BY c.creado DESC LIMIT 1",
+            "(SELECT 1 FROM modular_intentos i WHERE i.caso_id=c.id) ORDER BY c.creado DESC NULLS LAST, c.id DESC LIMIT 1",
             (email,)).fetchone()
         ultimo = con.execute(
             "SELECT c.area, c.datos, i.puntaje, i.creado FROM modular_intentos i JOIN modular_casos c "
-            "ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado DESC LIMIT 1", (email,)).fetchone()
+            "ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado DESC NULLS LAST, i.id DESC LIMIT 1", (email,)).fetchone()
         promedios = _promedios_por_area(con, email)
     estados = {"dominado": 0, "en_progreso": 0, "debil": 0}
     for f in filas:
@@ -2513,10 +2639,7 @@ def _guardar_documento(email, tipo, titulo, origen, campos, texto, verificar, ad
 
 
 def _documento_de(did, email: str) -> dict:
-    try:
-        did = int(did)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Documento inválido")
+    did = id_o_404(did, "Documento inválido", "Documento no encontrado")
     with closing(db()) as con:
         f = con.execute("SELECT * FROM documentos_generados WHERE id=? AND usuario=?", (did, email)).fetchone()
     if not f:
@@ -2632,7 +2755,7 @@ def documentos_mis(request: Request):
     u = usuario_actual(request)
     with closing(db()) as con:
         filas = con.execute("SELECT id,tipo,titulo,origen,creado,actualizado FROM documentos_generados "
-                            "WHERE usuario=? ORDER BY actualizado DESC, id DESC LIMIT 100", (u["email"],)).fetchall()
+                            "WHERE usuario=? ORDER BY actualizado DESC NULLS LAST, id DESC LIMIT 100", (u["email"],)).fetchall()
     salida = []
     for f in filas:
         t = documentos.INDICE.get(f["tipo"] or "")
@@ -2929,7 +3052,7 @@ def admin_usuarios(request: Request):
     admin_actual(request)
     with closing(db()) as con:
         filas = con.execute(
-            "SELECT email,nombre,plan,limite,usadas,activo,es_admin,creado FROM usuarios ORDER BY creado DESC"
+            "SELECT email,nombre,plan,limite,usadas,activo,es_admin,creado FROM usuarios ORDER BY creado DESC NULLS LAST, email"
         ).fetchall()
     return {"usuarios": [dict(f) for f in filas], "planes": PLANES}
 

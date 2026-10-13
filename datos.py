@@ -48,6 +48,15 @@ RUTA_SEGURIDAD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "datos
 TIEMPO_CONEXION_S = 5          # connect_timeout: una base que no responde no deja colgada la función
 MAX_LIBRES = 3                 # conexiones abiertas que se guardan para reutilizar (por proceso)
 MAX_INACTIVA_S = 300           # una conexión guardada más tiempo que esto se descarta sin probarla
+VARIABLE_MAX_CONEXIONES = "PULLEX_DB_MAX_CONEXIONES"
+MAX_ABIERTAS_POR_DEFECTO = 5   # tope de conexiones en uso a la vez por proceso (BD-08)
+VARIABLE_ESPERA = "PULLEX_DB_ESPERA_S"
+ESPERA_CUPO_S = 10.0           # cuánto espera una petición por una conexión del grupo antes de responder 503
+VARIABLE_TIMEOUT = "PULLEX_DB_TIMEOUT_MS"
+TIMEOUT_SENTENCIA_MS = 15000   # statement_timeout de cada transacción (BD-15); 0 = sin límite
+TIMEOUT_ESQUEMA_MS = 120000    # al aplicar el archivo de esquema (puede esperar el candado de otra instancia)
+VARIABLE_SSLROOTCERT = "PULLEX_DB_SSLROOTCERT"
+ID_MAXIMO = 2 ** 63 - 1        # BIGINT de PostgreSQL y INTEGER de SQLite
 _RE_IDENTIFICADOR = re.compile(r"^[a-z_][a-z0-9_]{0,62}$")
 _ESQUEMAS_PROHIBIDOS = ("public", "information_schema")
 _HOSTS_LOCALES = ("", "localhost", "127.0.0.1", "::1")
@@ -55,7 +64,8 @@ _SSL_EXIGENTES = ("require", "verify-ca", "verify-full")
 
 # Contadores del proceso (sin datos sensibles). Las pruebas los usan para detectar errores de SQL que
 # el código haya tragado con un ``except Exception``.
-estadisticas = {"conexiones_abiertas": 0, "reconexiones": 0, "errores_sql": 0, "esquema_aplicado": 0}
+estadisticas = {"conexiones_abiertas": 0, "reconexiones": 0, "errores_sql": 0, "esquema_aplicado": 0,
+                "esperas_agotadas": 0, "seguridad_fallida": 0}
 
 
 # ------------------------------------------------------------------------------------ errores --
@@ -172,7 +182,16 @@ def limpiar_url(url: str) -> dict:
         raise ErrorConfiguracion("La URL de PostgreSQL no se pudo interpretar. Revisa la variable de entorno "
                                  f"({' / '.join(VARIABLES_URL)}).") from None
     if not _es_local(str(params.get("host") or "")):
-        if str(params.get("sslmode") or "") not in _SSL_EXIGENTES:
+        raiz = (os.getenv(VARIABLE_SSLROOTCERT) or "").strip()
+        if raiz:
+            # BD-14: con el certificado raíz del proveedor (Supabase lo publica en el panel del proyecto) se verifica
+            # el certificado del servidor y su nombre. «require» cifra, pero no impide hablar con un impostor.
+            if not os.path.isfile(raiz):
+                raise ErrorConfiguracion(f"{VARIABLE_SSLROOTCERT} apunta a un archivo que no existe. Revisa la ruta del "
+                                         "certificado raíz (docs/18-BASE-DE-DATOS.md).")
+            params["sslmode"] = "verify-full"
+            params["sslrootcert"] = raiz
+        elif str(params.get("sslmode") or "") not in _SSL_EXIGENTES:
             params["sslmode"] = "require"
     params.setdefault("connect_timeout", TIEMPO_CONEXION_S)
     # Una conexión guardada puede quedar «muda» (sin RST) tras congelarse la instancia: sin este tope el
@@ -181,12 +200,43 @@ def limpiar_url(url: str) -> dict:
     return params
 
 
-class _Config:
-    __slots__ = ("firma", "params", "esquema", "variable", "inicio_tx")
+def _entero_de_entorno(nombre: str, defecto, minimo, maximo, tipo=int):
+    """Número de una variable de entorno dentro de [minimo, maximo]; si no es válido, el valor por defecto."""
+    texto = (os.getenv(nombre) or "").strip()
+    if not texto:
+        return defecto
+    try:
+        valor = tipo(texto)
+    except ValueError:
+        log.warning("%s no es un número válido; se usa %s.", nombre, defecto)
+        return defecto
+    return min(max(valor, minimo), maximo)
 
-    def __init__(self, firma, params, esq, variable):
+
+def timeout_sentencia_ms() -> int:
+    """statement_timeout de cada transacción en milisegundos (PULLEX_DB_TIMEOUT_MS; 0 = sin límite)."""
+    return _entero_de_entorno(VARIABLE_TIMEOUT, TIMEOUT_SENTENCIA_MS, 0, 3_600_000)
+
+
+def max_abiertas() -> int:
+    """Tope de conexiones en uso a la vez dentro del proceso (PULLEX_DB_MAX_CONEXIONES, por defecto 5)."""
+    return _entero_de_entorno(VARIABLE_MAX_CONEXIONES, MAX_ABIERTAS_POR_DEFECTO, 1, 100)
+
+
+def espera_cupo_s() -> float:
+    return _entero_de_entorno(VARIABLE_ESPERA, ESPERA_CUPO_S, 0.0, 120.0, tipo=float)
+
+
+class _Config:
+    __slots__ = ("firma", "params", "esquema", "variable", "inicio_tx", "timeout_ms")
+
+    def __init__(self, firma, params, esq, variable, timeout_ms=TIMEOUT_SENTENCIA_MS):
         self.firma, self.params, self.esquema, self.variable = firma, params, esq, variable
-        self.inicio_tx = f'BEGIN; SET LOCAL search_path TO "{esq}"'
+        self.timeout_ms = int(timeout_ms)
+        # Un solo viaje al servidor: abre la transacción, fija el esquema y el tope de duración de cada sentencia
+        # (SET LOCAL: vale solo para esta transacción y no deja estado en la conexión del pooler).
+        self.inicio_tx = (f'BEGIN; SET LOCAL search_path TO "{esq}"; '
+                          f"SET LOCAL statement_timeout = {self.timeout_ms}")
 
 
 _cerrojo = threading.RLock()
@@ -195,7 +245,8 @@ _grupo_actual = None
 
 
 def _firma():
-    return tuple(os.getenv(v) or "" for v in VARIABLES_URL) + (os.getenv(VARIABLE_ESQUEMA) or "",)
+    return tuple(os.getenv(v) or "" for v in VARIABLES_URL + (VARIABLE_ESQUEMA, VARIABLE_SSLROOTCERT, VARIABLE_TIMEOUT,
+                                                              VARIABLE_MAX_CONEXIONES, VARIABLE_ESPERA))
 
 
 def _config():
@@ -215,7 +266,7 @@ def _config():
         if variable is None:
             _config_actual = None
             return None
-        cfg = _Config(firma, limpiar_url(os.getenv(variable)), esquema(), variable)
+        cfg = _Config(firma, limpiar_url(os.getenv(variable)), esquema(), variable, timeout_sentencia_ms())
         _config_actual, _grupo_actual = cfg, _Grupo(cfg)
         return cfg
 
@@ -249,16 +300,39 @@ def _fin_de_literal(sql: str, i: int) -> int:
     return n
 
 
+_RE_DOLAR = re.compile(r"\$(?:[A-Za-z_][A-Za-z0-9_]*)?\$")
+_RE_FIN_JSONB = re.compile(r"jsonb\s*\)?\s*$", re.I)
+
+
+class SQLNoSoportado(ValueError):
+    """La sentencia usa sintaxis que la traducción ``?``→``%s`` no puede tratar sin riesgo (BD-11)."""
+
+
+def _rechazar(sql: str, que: str):
+    raise SQLNoSoportado(
+        f"datos.traducir: {que} no se admite en las consultas con marcadores «?». Escribe la cadena con comillas "
+        "simples normales (dobla la comilla para incluirla) y, para los operadores de jsonb ?, ?| y ?&, usa "
+        "jsonb_exists(), jsonb_exists_any() o jsonb_exists_all() (docs/18-BASE-DE-DATOS.md). Sentencia: "
+        + sql[:80])
+
+
 @functools.lru_cache(maxsize=1024)
 def traducir(sql: str) -> str:
     """SQL con marcadores ``?`` (sqlite3) → marcadores ``%s`` (psycopg).
 
     Los ``?`` dentro de cadenas literales, identificadores entre comillas o comentarios no se tocan.
     Los ``%`` literales se doblan (``%%``) estén donde estén, porque psycopg los interpreta en toda la
-    sentencia. No cambia nada más: las consultas se escriben de forma que valgan en los dos motores."""
+    sentencia. No cambia nada más: las consultas se escriben de forma que valgan en los dos motores.
+
+    Lanza ``SQLNoSoportado`` (un ``ValueError``) ante lo que el escáner no entiende y traduciría mal en silencio:
+    cadenas con dólar (``$$…$$``, ``$etiqueta$…$etiqueta$``), cadenas con escapes (``E'…'``) y los operadores de
+    jsonb ``?|``, ``?&`` y ``?`` (un ``?`` seguido de una cadena o precedido de un valor jsonb). Para jsonb usa
+    ``jsonb_exists(col, ?)``, ``jsonb_exists_any(col, ?)`` y ``jsonb_exists_all(col, ?)``. Los guiones que sí
+    necesitan esa sintaxis (datos/*.sql) se ejecutan sin pasar por aquí."""
     salida, i, n = [], 0, len(sql)
     while i < n:
         c = sql[i]
+        previo = sql[i - 1] if i else " "
         if c in ("'", '"'):
             j = _fin_de_literal(sql, i)
         elif c == "-" and sql.startswith("--", i):
@@ -267,7 +341,17 @@ def traducir(sql: str) -> str:
         elif c == "/" and sql.startswith("/*", i):
             j = sql.find("*/", i + 2)
             j = n if j < 0 else j + 2
+        elif c == "$" and not (previo.isalnum() or previo == "_") and _RE_DOLAR.match(sql, i):
+            _rechazar(sql, "una cadena con dólar ($$…$$)")
+        elif c in ("e", "E") and i + 1 < n and sql[i + 1] == "'" and not (previo.isalnum() or previo in "_$"):
+            _rechazar(sql, "una cadena con escapes (E'…')")
         else:
+            if c == "?":
+                siguiente = sql[i + 1] if i + 1 < n else ""
+                if (siguiente == "|" and sql[i + 2:i + 3] != "|") or (siguiente == "&" and sql[i + 2:i + 3] != "&"):
+                    _rechazar(sql, f"el operador de jsonb ?{siguiente}")
+                if sql[i + 1:].lstrip().startswith("'") or _RE_FIN_JSONB.search(sql, 0, i):
+                    _rechazar(sql, "el operador de jsonb ?")
             salida.append("%s" if c == "?" else "%%" if c == "%" else c)
             i += 1
             continue
@@ -520,12 +604,40 @@ def _cargadores():
 class _Grupo:
     """Grupo pequeño de conexiones abiertas para reutilizar dentro del proceso. Se guardan como máximo
     ``MAX_LIBRES``; si en un momento hacen falta más (peticiones simultáneas) se abren y, al devolverlas,
-    las que sobran se cierran. Nunca bloquea esperando una conexión."""
+    las que sobran se cierran.
+
+    Tope (BD-08): como mucho ``max_abiertas()`` conexiones en uso a la vez por proceso. Cada ``ConexionPG`` reserva
+    un cupo antes de tomar su conexión y lo suelta al cerrarse; si no hay cupo espera ``espera_cupo_s()`` segundos y
+    luego responde ``ErrorConexion`` (503). Como una conexión nueva solo se abre cuando no hay ninguna guardada, el
+    total de conexiones físicas abiertas (en uso + guardadas) tampoco pasa del tope."""
 
     def __init__(self, cfg):
         self.cfg = cfg
         self._libres = []            # [(conexión, momento en que se devolvió)], la más reciente al final
         self._cerrojo = threading.Lock()
+        self.max_abiertas = max_abiertas()
+        self.espera_s = espera_cupo_s()
+        self._cupo = threading.BoundedSemaphore(self.max_abiertas)
+        self._en_uso = 0
+
+    def reservar(self):
+        if not self._cupo.acquire(timeout=self.espera_s):
+            estadisticas["esperas_agotadas"] = estadisticas.get("esperas_agotadas", 0) + 1
+            log.error("Las %s conexiones a PostgreSQL de este proceso están ocupadas y ninguna se liberó en %.0f s: "
+                      "se responde 503 (sube %s si la base lo permite).", self.max_abiertas, self.espera_s,
+                      VARIABLE_MAX_CONEXIONES)
+            raise ErrorConexion("no quedó ninguna conexión libre en el grupo a tiempo")
+        with self._cerrojo:
+            self._en_uso += 1
+
+    def liberar(self):
+        with self._cerrojo:
+            self._en_uso -= 1
+        self._cupo.release()
+
+    def en_uso(self) -> int:
+        with self._cerrojo:
+            return self._en_uso
 
     def tomar(self):
         ahora = time.monotonic()
@@ -544,7 +656,9 @@ class _Grupo:
         return _abrir(self.cfg)
 
     def devolver(self, con):
-        if con is None or con.closed or con.broken:
+        # BD-09: solo vuelve al grupo una conexión sana y fuera de transacción (IDLE). Una que quedó «en transacción»,
+        # abortada o con un estado desconocido se cierra: la siguiente petición no debe heredar nada de esta.
+        if con is None or con.closed or con.broken or not _inactiva(con):
             _cerrar_en_silencio(con)
             return
         with self._cerrojo:
@@ -564,6 +678,15 @@ class _Grupo:
     def libres(self) -> int:
         with self._cerrojo:
             return len(self._libres)
+
+
+def _inactiva(con) -> bool:
+    """La conexión está fuera de toda transacción (TransactionStatus.IDLE)."""
+    try:
+        pg = _psycopg()
+        return con.info.transaction_status == pg.pq.TransactionStatus.IDLE
+    except Exception:       # noqa: BLE001 - ante la duda, no se reutiliza
+        return False
 
 
 def _cerrar_en_silencio(con):
@@ -588,11 +711,15 @@ class ConexionPG:
         self._en_tx = False
         self._abortada = False
         self._cerrada = False
+        self._reservada = False       # tiene un cupo del grupo (se suelta al cerrar)
 
     # -- transacciones --
-    def _empezar(self):
+    def _empezar(self, inicio: str = None):
         pg = _psycopg()
-        inicio = self._grupo.cfg.inicio_tx
+        inicio = inicio or self._grupo.cfg.inicio_tx
+        if not self._reservada:
+            self._grupo.reservar()
+            self._reservada = True
         if self._pg is None:
             self._pg = self._grupo.tomar()
         try:
@@ -655,8 +782,13 @@ class ConexionPG:
         finally:
             self._cerrada = True
             con, self._pg = self._pg, None
-            if con is not None:
-                self._grupo.devolver(con)
+            try:
+                if con is not None:
+                    self._grupo.devolver(con)
+            finally:
+                if self._reservada:
+                    self._reservada = False
+                    self._grupo.liberar()
 
     def __del__(self):
         try:
@@ -720,6 +852,14 @@ class ConexionPG:
         self.commit()
 
 
+def id_valido(valor):
+    """El id como entero si puede existir en la base (1 … 2^63−1, el rango de BIGINT y de INTEGER de SQLite); None si
+    no. BD-18: un id fuera de rango hacía fallar la consulta (OverflowError en SQLite, NumericValueOutOfRange en
+    PostgreSQL) y la ruta respondía 500 en vez de 404. Lanza ValueError/TypeError si ni siquiera es un número."""
+    numero = int(valor)
+    return numero if 0 < numero <= ID_MAXIMO else None
+
+
 def conectar(ruta_sqlite: str = "pullex.db"):
     """Una conexión a la base principal: PostgreSQL si está configurado; si no, el archivo SQLite."""
     cfg = _config()
@@ -733,13 +873,26 @@ def conectar(ruta_sqlite: str = "pullex.db"):
 # ------------------------------------------------------------------------- esquema (aplicación) --
 def asegurar_esquema() -> dict:
     """Solo PostgreSQL. Comprueba con UNA consulta si ``esquema_version`` está al día y, solo si no lo
-    está, aplica datos/esquema_postgres.sql (idempotente) dentro de una transacción con un candado, para
-    que dos instancias que arrancan a la vez no lo apliquen al mismo tiempo."""
+    está, aplica datos/esquema_postgres.sql (idempotente) y después datos/supabase_seguridad.sql dentro de una
+    transacción con un candado, para que dos instancias que arrancan a la vez no lo apliquen al mismo tiempo.
+
+    Los dos archivos se ejecutan tal cual (cursor crudo, sin ``traducir``): usan bloques ``DO $$ … $$``.
+    Cualquier error de PostgreSQL que no sea «la tabla no existe» termina en ``ErrorBase`` (503), nunca en un 500."""
     pg = _psycopg()
     cfg = _config()
     if cfg is None:
         return {"motor": "sqlite", "aplicado": False}
     esperada = version_del_archivo()
+
+    def fallo(con, e, que):
+        rota = con._pg is None or con._pg.closed or con._pg.broken
+        con.rollback()
+        if rota:
+            raise ErrorConexion(_motivo(e)) from None
+        codigo = getattr(e, "sqlstate", None) or type(e).__name__
+        log.error("No se pudo %s en PostgreSQL (%s). Si el usuario de la base no puede leer o crear las tablas, aplica "
+                  "datos/esquema_postgres.sql a mano con el usuario dueño (docs/18-BASE-DE-DATOS.md).", que, codigo)
+        raise ErrorEsquema(f"no se pudo {que} ({codigo})") from None
 
     def version_actual(con):
         try:
@@ -747,6 +900,8 @@ def asegurar_esquema() -> dict:
             return int(fila[0] or 0)
         except pg.errors.UndefinedTable:
             return None
+        except pg.Error as e:            # BD-10: sin permiso, tabla rara, tiempo agotado… → 503 con motivo, no 500
+            fallo(con, e, "leer la versión del esquema")
 
     with closing(conectar()) as con:
         con._empezar()
@@ -757,23 +912,51 @@ def asegurar_esquema() -> dict:
         log.info("El esquema «%s» de PostgreSQL está en la versión %s; se aplica datos/esquema_postgres.sql (versión %s).",
                  cfg.esquema, actual or 0, esperada)
         try:
-            con._empezar()
+            # Sin el tope corto de cada petición: el candado puede tener que esperar a otra instancia que lo aplica.
+            con._empezar(f'BEGIN; SET LOCAL search_path TO "{cfg.esquema}"; '
+                         f"SET LOCAL statement_timeout = {TIMEOUT_ESQUEMA_MS}")
             # Candado de transacción (se suelta solo al confirmar; no deja estado de sesión en el pooler). Si otra
             # instancia lo aplicó mientras esperábamos, volver a aplicarlo no cambia nada: el archivo es idempotente.
             con._pg.execute("SELECT pg_advisory_xact_lock(hashtext(%s))", ("pullex_ia.esquema." + cfg.esquema,))
             con._pg.execute(leer_esquema())
+            _aplicar_seguridad(con, cfg)
             con.commit()
         except pg.Error as e:
-            rota = con._pg is None or con._pg.closed or con._pg.broken
-            con.rollback()
-            if rota:
-                raise ErrorConexion(_motivo(e)) from None
-            codigo = getattr(e, "sqlstate", None) or type(e).__name__
-            log.error("No se pudo aplicar el esquema de PostgreSQL (%s). Si el usuario de la base no puede crear "
-                      "tablas, aplica datos/esquema_postgres.sql a mano (docs/18-BASE-DE-DATOS.md).", codigo)
-            raise ErrorEsquema(f"no se pudo aplicar el esquema ({codigo})") from None
+            fallo(con, e, "aplicar el esquema")
     estadisticas["esquema_aplicado"] += 1
     return {"motor": "postgres", "aplicado": True, "version": esperada}
+
+
+def _aplicar_seguridad(con, cfg):
+    """BD-12: datos/supabase_seguridad.sql (quita a anon, authenticated y service_role todo acceso al esquema y sus
+    privilegios por defecto). Va en un punto de guardado: si falla (p. ej. el usuario no es dueño del esquema) se
+    registra y se sigue, porque no aplicar una revocación no debe dejar la app sin base. estado() lo reporta."""
+    pg = _psycopg()
+    con._pg.execute("SAVEPOINT pullex_seguridad")
+    try:
+        con._pg.execute(leer_esquema(RUTA_SEGURIDAD))
+        con._pg.execute("RELEASE SAVEPOINT pullex_seguridad")
+    except pg.Error as e:
+        if con._pg.closed or con._pg.broken:
+            raise
+        con._pg.execute("ROLLBACK TO SAVEPOINT pullex_seguridad")
+        estadisticas["seguridad_fallida"] += 1
+        log.error("No se pudo aplicar datos/supabase_seguridad.sql en el esquema «%s» (%s). El esquema quedó aplicado; "
+                  "aplica ese archivo a mano con el usuario dueño (docs/18-BASE-DE-DATOS.md).", cfg.esquema,
+                  getattr(e, "sqlstate", None) or type(e).__name__)
+
+
+def aviso_de_dueno(pgcon):
+    """Texto de aviso si, para el usuario con que se conecta la app, la seguridad por filas está activa en
+    ``usuarios`` (es decir, no es el dueño de las tablas ni las salta): todas las consultas devolverían 0 filas sin
+    error. None si todo está bien o si la tabla no existe. ``pgcon`` es una conexión cruda con el search_path puesto."""
+    fila = pgcon.execute("SELECT CASE WHEN to_regclass('usuarios') IS NULL THEN NULL "
+                         "ELSE row_security_active('usuarios') END").fetchone()
+    if fila and fila[0]:
+        return ("El usuario de la base no es el dueño de las tablas: con la seguridad por filas activada (y sin "
+                "políticas) no ve ninguna fila y la app parecería vacía. Conéctate con el usuario dueño del esquema "
+                "(docs/18-BASE-DE-DATOS.md).")
+    return None
 
 
 # ---------------------------------------------------------------------------- estado (operador) --
@@ -804,17 +987,26 @@ def estado(ruta_sqlite: str = None, probar: bool = True) -> dict:
                     salida["esquema_al_dia"] = int(fila[0] or 0) >= version_del_archivo()
                 except (_psycopg().ProgrammingError, _psycopg().DataError):     # no existe la tabla o no hay permiso
                     salida["esquema_al_dia"] = False
+                    con.rollback()
+                    con._empezar()
+                aviso = aviso_de_dueno(con._pg)
+                if aviso:
+                    salida["aviso"] = aviso
         if not probar:
             salida["conecta"] = None
             salida["detalle"] = "Configurada (sin comprobar la conexión en esta consulta)."
             return salida
         salida["conecta"] = True
-        if salida["esquema_al_dia"] is False:
+        if salida.get("aviso"):
+            salida["detalle"] = "Conecta, pero " + salida["aviso"][0].lower() + salida["aviso"][1:]
+        elif salida["esquema_al_dia"] is False:
             salida["detalle"] = (f"Conecta, pero faltan las tablas en el esquema «{cfg.esquema}» o están desactualizadas. "
                                  "Aplica datos/esquema_postgres.sql (docs/18-BASE-DE-DATOS.md).")
         else:
             salida["detalle"] = (f"Conectada. Los datos se conservan entre despliegues (esquema «{cfg.esquema}»"
-                                 + (", conexión cifrada" if salida["tls"] else ", conexión local sin cifrar") + ").")
+                                 + ((", conexión cifrada y con el certificado del servidor verificado"
+                                     if cfg.params.get("sslmode") == "verify-full" else ", conexión cifrada")
+                                    if salida["tls"] else ", conexión local sin cifrar") + ").")
     except ErrorBase as e:
         salida["detalle"] = f"No conecta: {e}. La app responde 503 en lo que use la base hasta que vuelva."
     except Exception as e:      # noqa: BLE001 - el diagnóstico nunca tumba la pantalla que lo muestra

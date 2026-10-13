@@ -268,6 +268,7 @@ def montar(app, nucleo):
     @app.get("/api/coordinador/ejecuciones/{eid}")
     def coordinador_ejecucion(eid: int, request: Request):
         u = nucleo.usuario_actual(request)
+        eid = nucleo.id_o_404(eid, "Ejecución inválida", "Ejecución no encontrada")     # BD-18: fuera de rango → 404
         with closing(nucleo.db()) as con:
             e = coordinador.obtener_ejecucion(con, u["email"], eid)
         if not e:

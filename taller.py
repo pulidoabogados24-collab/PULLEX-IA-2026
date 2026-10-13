@@ -478,10 +478,7 @@ def instalar(m) -> APIRouter:
     r = APIRouter(prefix="/api/taller")
 
     def _escenario_de(eid, email):
-        try:
-            eid = int(eid)
-        except (TypeError, ValueError):
-            raise HTTPException(400, "Escenario inválido")
+        eid = m.id_o_404(eid, "Escenario inválido", "Escenario no encontrado")     # BD-18: fuera de rango → 404
         with closing(m.db()) as con:
             f = con.execute("SELECT * FROM taller_escenarios WHERE id=? AND usuario=?", (eid, email)).fetchone()
         if not f:
@@ -697,8 +694,8 @@ def instalar(m) -> APIRouter:
         u = m.usuario_actual(request)
         email = u["email"]
         with closing(m.db()) as con:
-            debiles = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 ORDER BY fallos DESC, "
-                                  "ultimo_fallo DESC, concepto_id", (email,)).fetchall()
+            debiles = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 ORDER BY fallos DESC NULLS LAST, "
+                                  "ultimo_fallo DESC NULLS LAST, concepto_id", (email,)).fetchall()
             ultimo = con.execute("SELECT e.tipo, e.nivel, i.puntaje FROM taller_intentos i JOIN taller_escenarios e "
                                  "ON e.id=i.escenario_id WHERE i.usuario=? ORDER BY i.id DESC LIMIT 1", (email,)).fetchone()
         for f in debiles:
