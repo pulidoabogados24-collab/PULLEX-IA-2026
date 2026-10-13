@@ -564,7 +564,8 @@ def formatear_para_modelo(frags: list, max_chars: int = 1500) -> str:
         if s.get("autoridad"):
             cab.append(f"autoridad: {_limpiar_meta(s['autoridad'])}")
         if s.get("fecha_archivo"):
-            cab.append(f"fecha del archivo: {str(s['fecha_archivo'])[:10]}")
+            # IA-12: es la fecha del archivo indexado, NO una fecha de vigencia ni de corte del texto.
+            cab.append(f"fecha del archivo: {str(s['fecha_archivo'])[:10]} (no es fecha de vigencia)")
         cab.append("vigencia: " + _LEYENDA_ESTADO.get(s["estado_vigencia"], s["estado_vigencia"]))
         if s.get("ubicacion"):
             cab.append(f"ubicación: {_limpiar_meta(s['ubicacion'])}")
@@ -621,7 +622,10 @@ def dominios_web():
 
 
 def es_oficial(url: str, dominios=None) -> bool:
-    dominios = dominios if dominios is not None else (dominios_web() or DOMINIOS_OFICIALES)
+    """¿La URL es de un dominio OFICIAL? Se calcula SIEMPRE contra DOMINIOS_OFICIALES (auditoría 2026-10-13, IA-11):
+    PULLEX_WEB_DOMINIOS puede ampliar dónde busca la herramienta web, pero ampliarla no vuelve oficial un dominio.
+    ``dominios`` se ignora; se conserva el parámetro para no romper llamadas antiguas."""
+    dominios = DOMINIOS_OFICIALES
     m = re.match(r"^https?://([^/:?#]+)", str(url or "").lower())
     if not m:
         return False
