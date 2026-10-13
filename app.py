@@ -44,6 +44,7 @@ import anthropic
 
 import academia
 import biblioteca
+import citas
 import datos as base_datos      # «datos» a secas ya es el nombre local del cuerpo JSON en muchas rutas
 import documentos
 import estilo_redaccion as redaccion
@@ -1535,9 +1536,12 @@ def mensajes(cid: int, request: Request):
         if f["rol"] == "assistant":
             m["incompleta"] = bool(f["incompleta"])
             try:
-                m["fuentes"] = json.loads(f["fuentes"]) if f["fuentes"] else []
+                guardadas = json.loads(f["fuentes"]) if f["fuentes"] else []
             except ValueError:
-                m["fuentes"] = []
+                guardadas = []
+            m["fuentes"], revision = separar_revision_citas(guardadas)
+            if revision is not None:
+                m["citas"] = revision
         salida.append(m)
     return salida
 
@@ -1568,6 +1572,42 @@ def bloque_corpus(texto: str):
 
 # Traducción de eventos del SDK de Anthropic (texto, búsqueda y citas): vive en proveedores.py.
 procesar_evento = proveedores.evento_anthropic
+
+
+# La revisión de citas (citas.revisar) se guarda con el mensaje dentro de la columna «fuentes» (JSON), como un elemento
+# más de la lista marcado con este origen: la tabla mensajes no tiene columna de metadatos y el esquema es del
+# responsable de datos. Al leer, separar_revision_citas la saca de la lista para que nunca se pinte como una fuente.
+ORIGEN_REVISION_CITAS = "revision_citas"
+
+
+def separar_revision_citas(lista) -> tuple:
+    """(fuentes sin la revisión, revisión o None)."""
+    if not isinstance(lista, list):
+        return [], None
+    revision = None
+    limpias = []
+    for f in lista:
+        if isinstance(f, dict) and f.get("origen") == ORIGEN_REVISION_CITAS:
+            revision = f.get("citas")
+        else:
+            limpias.append(f)
+    return limpias, revision
+
+
+def _texto_del_usuario(cid: int) -> str:
+    """Todo lo que la persona escribió en esta conversación: sus citas no se marcan como sospechosas."""
+    with closing(db()) as con:
+        filas = con.execute("SELECT contenido FROM mensajes WHERE conv=? AND rol=? ORDER BY id", (cid, "user")).fetchall()
+    return "\n".join(f["contenido"] or "" for f in filas)
+
+
+def revision_de_citas(cid: int, respuesta: str, frags: list) -> dict:
+    """Revisión de FORMA de las citas (citas.revisar). Nunca rompe la respuesta: si falla, se informa solo hay_citas."""
+    try:
+        return citas.revisar(respuesta, frags, _texto_del_usuario(cid))
+    except Exception:       # noqa: BLE001
+        log.exception("no se pudo revisar las citas")
+        return {"hay_citas": citas.hay_citas(respuesta), "huerfanas": [], "sospechosas": [], "mencionada_por_usuario": []}
 
 
 def fuentes_de_respuesta(frags: list, web: dict, respuesta: str) -> list:
@@ -1658,8 +1698,10 @@ def _flujo_chat(*, email: str, cid: int, contrato, mensajes_api: list, system: l
         return proveedores.stream_texto(cadena, system, msgs, max_tokens, herramientas, web)
 
     def fabrica():
+        # En una continuación pedida por la persona no se repara (IA-14): sería otra llamada completa sobre una respuesta
+        # que ya se está completando.
         return motor.generar(abrir, mensajes_api, estado, contrato, es_recuperable=proveedores.es_recuperable,
-                             previo=previo)
+                             previo=previo, reparar=not previo)
 
     def guardar(texto: str, incompleta: bool, lista: list) -> int:
         """Inserta la respuesta (o actualiza la que se está continuando). Devuelve el id del mensaje."""
@@ -1712,15 +1754,21 @@ def _flujo_chat(*, email: str, cid: int, contrato, mensajes_api: list, system: l
                 yield "data: " + json.dumps({"tipo": "pulido", "texto": respuesta}, ensure_ascii=False) + "\n\n"
         lista = [] if fallo else fuentes_de_respuesta(frags, web, respuesta)
         if previo and fuentes_previas:
+            previas, _ = separar_revision_citas(fuentes_previas)
             vistas = {f.get("url") or f.get("titulo") for f in lista}
-            lista = lista + [f for f in fuentes_previas if (f.get("url") or f.get("titulo")) not in vistas]
-        mid = guardar(respuesta, not completo and not fallo, lista)
+            lista = lista + [f for f in previas if (f.get("url") or f.get("titulo")) not in vistas]
+        # IA-01/IA-03: revisión de FORMA de las citas (no verifica existencia). Se emite antes de «fin» y se guarda.
+        revision = None if fallo else revision_de_citas(cid, respuesta, frags)
+        guardada = lista + ([{"origen": ORIGEN_REVISION_CITAS, "citas": revision}] if revision else [])
+        mid = guardar(respuesta, not completo and not fallo, guardada)
         estado_listo["guardado"] = True
         _registrar_calidad(email, mid, contrato, estado, respuesta, completo, t0, max_tokens, len(lista),
                            usar_web, info_ctx, continuada=bool(previo))
         if not completo and not fallo:
             yield _sse_dato({"tipo": "incompleta", "motivo": estado.parada or "desconocida", "mensaje_id": mid})
         yield "data: " + json.dumps({"tipo": "fuentes", "fuentes": lista}, ensure_ascii=False) + "\n\n"
+        if revision is not None:
+            yield "data: " + json.dumps({"tipo": "citas", "citas": revision}, ensure_ascii=False) + "\n\n"
         yield _sse_dato({"tipo": "fin", "mensaje_id": mid, "completo": bool(completo)})
     finally:
         if not estado_listo["guardado"]:
