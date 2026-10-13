@@ -325,7 +325,8 @@ def test_salud_y_panel_dicen_que_base_esta_en_uso(cliente, modulo):
     texto = json.dumps(b)
     for secreto in ("127.0.0.1", "54329", "pullex_pruebas:", "postgresql://", "password", "@"):
         assert secreto not in texto, secreto
-    assert set(b) <= {"motor", "nombre", "conecta", "persistente", "detalle", "variable", "esquema", "esquema_al_dia", "tls"}
+    assert set(b) <= {"motor", "nombre", "conecta", "persistente", "detalle", "variable", "esquema", "esquema_al_dia", "tls", "aviso"}
+    assert "aviso" not in b                                      # el usuario de las pruebas es dueño de las tablas
     u = nuevo_usuario(cliente)[2]
     assert cliente.get("/api/admin/metricas", headers=auth(u)).status_code == 403
 
@@ -461,21 +462,29 @@ def test_pg_las_conexiones_se_reutilizan_y_no_quedan_en_transaccion(modulo):
 
 @postgres
 def test_pg_el_grupo_guarda_pocas_conexiones_aunque_haya_muchas_a_la_vez(modulo):
-    barrera, errores = threading.Barrier(8), []
+    """8 peticiones a la vez: como mucho max_abiertas() (5) usan conexión al mismo tiempo (BD-08), las demás esperan su
+    turno sin error, y al terminar solo quedan guardadas MAX_LIBRES."""
+    errores, cerrojo, uso = [], threading.Lock(), {"ahora": 0, "maximo": 0}
 
     def trabajo():
         try:
             with closing(modulo.db()) as con:
                 con.execute("SELECT 1")
-                barrera.wait(timeout=10)                          # las 8 abiertas al mismo tiempo
+                with cerrojo:
+                    uso["ahora"] += 1
+                    uso["maximo"] = max(uso["maximo"], uso["ahora"])
+                time.sleep(0.3)
                 con.execute("SELECT COUNT(*) c FROM usuarios").fetchone()
+                with cerrojo:
+                    uso["ahora"] -= 1
         except Exception as e:      # noqa: BLE001
             errores.append(e)
     hilos = [threading.Thread(target=trabajo) for _ in range(8)]
     [h.start() for h in hilos]
     [h.join(timeout=30) for h in hilos]
     assert not errores, errores
-    assert datos._grupo_actual.libres() <= datos.MAX_LIBRES == 3
+    assert 2 <= uso["maximo"] <= datos.max_abiertas() == datos.MAX_ABIERTAS_POR_DEFECTO == 5
+    assert datos._grupo_actual.libres() <= datos.MAX_LIBRES == 3 and datos._grupo_actual.en_uso() == 0
     with _admin_pg() as admin:
         abiertas = admin.execute("SELECT count(*) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = current_database() "
                                  "AND state IS NOT NULL").fetchone()[0]
@@ -631,7 +640,7 @@ def test_pg_esquema_propio_y_esquema_inexistente_se_crea_al_arrancar(monkeypatch
         assert datos.estado()["esquema_al_dia"] is True
         with closing(datos.conectar()) as con:
             assert con.execute("SELECT COUNT(*) c FROM usuarios").fetchone()["c"] == 0
-            assert con.execute("SELECT COUNT(*) c FROM esquema_version").fetchone()["c"] == 1
+            assert con.execute("SELECT COUNT(*) c FROM esquema_version").fetchone()["c"] == datos.version_del_archivo()
         with _admin_pg() as admin:                               # nada en «public»
             assert admin.execute("SELECT to_regclass('public.usuarios') IS NULL AND to_regclass('public.esquema_version') IS NULL"
                                  ).fetchone()[0] is True
