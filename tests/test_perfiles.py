@@ -301,7 +301,8 @@ def test_verificador_de_citas_es_determinista():
              "El Decreto 1074 de 2015 (verificar vigencia) reglamenta.\n\n## No verificado\n- Ley 555 de 2019: falta la fuente.")
     citas = {c["cita"]: c for c in coordinador.verificar_citas(texto, material)}
     assert citas["Ley 1480 de 2011"]["en_material"] is True
-    assert citas["Ley 9999 de 2020"] == {"cita": "Ley 9999 de 2020", "tipo": "ley", "en_material": False, "advertida": False}
+    assert citas["Ley 9999 de 2020"] == {"cita": "Ley 9999 de 2020", "tipo": "ley", "en_material": False, "advertida": False,
+                                         "mencionada_por_usuario": False}
     assert citas["Decreto 1074 de 2015"]["advertida"] is True and citas["Decreto 1074 de 2015"]["en_material"] is False
     assert citas["Ley 555 de 2019"]["advertida"] is True
     assert coordinador.verificar_citas(texto, material) == coordinador.verificar_citas(texto, material)
