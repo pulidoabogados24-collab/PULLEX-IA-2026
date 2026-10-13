@@ -60,9 +60,9 @@ def _indices_sqlite(con) -> dict:
 def test_las_funciones_de_creacion_cubren_todos_los_modulos(sqlite_de_la_app):
     """Si aparece un módulo nuevo con tablas en la base principal, hay que sumarlo a esta prueba y al archivo."""
     tablas = set(_esquema_sqlite(sqlite_de_la_app))
-    assert len(tablas) == 17
+    assert len(tablas) == 18
     for modulo_tablas in ({"usuarios", "conversaciones", "mensajes", "boletin", "tokens_accion", "modular_casos",
-                           "modular_intentos", "apariencia_imagenes", "documentos_generados", "asistente_tareas"},
+                           "modular_intentos", "apariencia_imagenes", "documentos_generados", "asistente_tareas", "limites"},
                           {"conocimiento"}, {"calidad_respuestas"}, {"taller_escenarios", "taller_intentos", "taller_modelos"},
                           {"perfiles_ejecuciones", "perfiles_ejecuciones_perfil"}):
         assert modulo_tablas <= tablas
@@ -187,7 +187,8 @@ def test_pg_el_archivo_crea_lo_mismo_que_sqlite_y_es_idempotente(esquema_nuevo, 
     _aplicar(con, esquema, datos.RUTA_ESQUEMA)
     con.execute(f'INSERT INTO "{esquema}".usuarios(email, nombre) VALUES (%s, %s)', ("queda@pruebas.local", "No se borra"))
     _aplicar(con, esquema, datos.RUTA_ESQUEMA)                    # segunda vez: no falla ni cambia nada
-    assert con.execute(f'SELECT count(*) FROM "{esquema}".esquema_version').fetchone()[0] == 1
+    assert [v for (v,) in con.execute(f'SELECT version FROM "{esquema}".esquema_version ORDER BY version')] == \
+        list(range(1, datos.version_del_archivo() + 1))                 # una fila por versión, sin duplicar
     assert con.execute(f'SELECT nombre FROM "{esquema}".usuarios').fetchall() == [("No se borra",)]
 
     en_sqlite = _esquema_sqlite(sqlite_de_la_app)

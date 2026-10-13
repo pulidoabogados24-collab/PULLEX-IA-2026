@@ -600,12 +600,15 @@ def _crear_tablas_sqlite(con):
         evaluacion TEXT, puntaje INTEGER, creado REAL);
     CREATE INDEX IF NOT EXISTS ix_mcasos_usuario ON modular_casos(usuario);
     CREATE INDEX IF NOT EXISTS ix_mintentos_usuario ON modular_intentos(usuario);
+    CREATE INDEX IF NOT EXISTS ix_mintentos_caso ON modular_intentos(caso_id);
     CREATE INDEX IF NOT EXISTS ix_conv_usuario ON conversaciones(usuario);
     CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes(conv);
     CREATE INDEX IF NOT EXISTS ix_tokens_email ON tokens_accion(email, tipo);
     CREATE TABLE IF NOT EXISTS apariencia_imagenes(
         usuario TEXT NOT NULL, tipo TEXT NOT NULL, mime TEXT NOT NULL, data BLOB NOT NULL,
         actualizado REAL NOT NULL, PRIMARY KEY(usuario, tipo));
+    CREATE TABLE IF NOT EXISTS limites(
+        clave TEXT PRIMARY KEY, inicio REAL NOT NULL, n INTEGER NOT NULL);
     """)
     academia.crear_tabla(con)
     telemetria.crear_tabla(con)
@@ -639,6 +642,15 @@ def _crear_tablas_sqlite(con):
         con.commit()
     except sqlite3.OperationalError:
         pass
+    # Versión 2 del esquema (auditoría 2026-10-13; mismo cambio en datos/esquema_postgres.sql): consentimiento de la
+    # política de datos (IA-17) y número de continuaciones de una respuesta.
+    for tabla, columna in (("usuarios", "acepto_politica_version TEXT"), ("usuarios", "acepto_politica_en REAL"),
+                           ("mensajes", "continuaciones INTEGER DEFAULT 0")):
+        try:
+            con.execute(f"ALTER TABLE {tabla} ADD COLUMN {columna}")
+            con.commit()
+        except sqlite3.OperationalError:
+            pass    # la columna ya existe
     # Automatizador (documentos.py): documentos generados y planes del asistente, siempre con dueño.
     con.executescript("""
     CREATE TABLE IF NOT EXISTS documentos_generados(

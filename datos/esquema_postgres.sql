@@ -1,5 +1,5 @@
 -- PULLEX IA — esquema de la base principal en PostgreSQL (Supabase)
--- version: 1
+-- version: 2
 --
 -- Qué es: las tablas de la base principal (cuentas, conversaciones, Academia, documentos, taller, perfiles y
 -- telemetría), con los mismos nombres y columnas que crea la app en SQLite. tests/test_esquema_bd.py compara
@@ -65,7 +65,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email_verificado BIGINT DEFAULT 0,
     preferencias TEXT COLLATE "C" DEFAULT '{}',
     creado DOUBLE PRECISION,
-    sesion_version BIGINT DEFAULT 0
+    sesion_version BIGINT DEFAULT 0,
+    acepto_politica_version TEXT COLLATE "C",
+    acepto_politica_en DOUBLE PRECISION
 );
 CREATE TABLE IF NOT EXISTS tokens_accion (
     token TEXT COLLATE "C" PRIMARY KEY,
@@ -100,9 +102,17 @@ CREATE TABLE IF NOT EXISTS mensajes (
     contenido TEXT COLLATE "C",
     creada DOUBLE PRECISION,
     fuentes TEXT COLLATE "C",
-    incompleta BIGINT DEFAULT 0
+    incompleta BIGINT DEFAULT 0,
+    continuaciones BIGINT DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes (conv);
+-- Límites de intentos (inicio de sesión, recuperación de clave, borrado de cuenta…) compartidos entre instancias:
+-- una fila por clave con el inicio de la ventana y el número de intentos en ella (app.py).
+CREATE TABLE IF NOT EXISTS limites (
+    clave TEXT COLLATE "C" PRIMARY KEY,
+    inicio DOUBLE PRECISION NOT NULL,
+    n BIGINT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS boletin (
     fecha TEXT COLLATE "C" PRIMARY KEY,
     contenido TEXT COLLATE "C",
@@ -130,6 +140,10 @@ CREATE TABLE IF NOT EXISTS modular_intentos (
     creado DOUBLE PRECISION
 );
 CREATE INDEX IF NOT EXISTS ix_mintentos_usuario ON modular_intentos (usuario);
+-- Sin claves foráneas todavía (BD-13): agregarlas exige limpiar antes las filas huérfanas que ya existan y ordenar el
+-- borrado de cuenta (/api/cuenta/eliminar borra hijos antes que padres). Mientras tanto, índices en las columnas de
+-- enlace para que los JOIN y los borrados en cascada hechos por la app no recorran la tabla entera.
+CREATE INDEX IF NOT EXISTS ix_mintentos_caso ON modular_intentos (caso_id);
 CREATE TABLE IF NOT EXISTS conocimiento (
     usuario TEXT COLLATE "C" NOT NULL,
     concepto_id TEXT COLLATE "C" NOT NULL,
@@ -279,6 +293,10 @@ ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verificado BIGINT DEFAULT 0;
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS sesion_version BIGINT DEFAULT 0;
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
+-- Versión 2 (auditoría 2026-10-13): consentimiento de la política de datos y continuaciones de una respuesta.
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_version TEXT COLLATE "C";
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_en DOUBLE PRECISION;
+ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS continuaciones BIGINT DEFAULT 0;
 
 -- ---- Seguridad por filas: activada en todas las tablas, sin políticas ----
 ALTER TABLE esquema_version ENABLE ROW LEVEL SECURITY;
@@ -287,6 +305,7 @@ ALTER TABLE tokens_accion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE apariencia_imagenes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversaciones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mensajes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE limites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE boletin ENABLE ROW LEVEL SECURITY;
 ALTER TABLE modular_casos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE modular_intentos ENABLE ROW LEVEL SECURITY;
@@ -303,4 +322,8 @@ ALTER TABLE calidad_respuestas ENABLE ROW LEVEL SECURITY;
 -- ---- Versión aplicada ----
 INSERT INTO esquema_version (version, aplicada, nota)
 VALUES (1, extract(epoch FROM now()), 'Esquema inicial: las 17 tablas de la base principal')
+ON CONFLICT (version) DO NOTHING;
+INSERT INTO esquema_version (version, aplicada, nota)
+VALUES (2, extract(epoch FROM now()), 'Auditoría 2026-10-13: tabla limites, usuarios.acepto_politica_version y '
+        'acepto_politica_en, mensajes.continuaciones, índice ix_mintentos_caso; seguridad de Supabase aplicada por la app')
 ON CONFLICT (version) DO NOTHING;

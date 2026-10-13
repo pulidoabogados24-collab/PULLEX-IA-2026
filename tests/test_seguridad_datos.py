@@ -288,3 +288,10 @@ def test_pg_una_consulta_que_tarda_demasiado_se_corta(modulo, monkeypatch):
         datos._config()
     with _admin_pg() as admin:                                       # no queda puesto en la sesión
         assert admin.execute("SHOW statement_timeout").fetchone()[0] == "0"
+
+
+# ================================================= BD-13: índice de modular_intentos(caso_id), sin FK aún ==
+def test_indice_de_intentos_por_caso_y_sin_claves_foraneas_todavia(modulo):
+    assert datos.indices_del_archivo()["ix_mintentos_caso"] == "modular_intentos"
+    texto = re.sub(r"--[^\n]*", "", datos.leer_esquema())
+    assert "REFERENCES" not in texto.upper() and "FOREIGN KEY" not in texto.upper()
