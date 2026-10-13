@@ -1,5 +1,7 @@
 const params = new URLSearchParams(location.search);
 const token = params.get('token') || '';
+// F-15: el token de un solo uso no se queda en la barra de direcciones ni en el historial una vez leído.
+if (params.has('token')) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
 const $ = id => document.getElementById(id);
 
 if (!token) {

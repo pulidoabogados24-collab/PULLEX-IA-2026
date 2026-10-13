@@ -20,8 +20,11 @@ function tE(tag,attrs,...hijos){const e=document.createElement(tag);
   return e}
 function tBtn(txt,cls,fn,attrs){return tE('button',{type:'button',class:cls||'bsec',on:{click:fn},...(attrs||{})},txt)}
 function tParrafos(texto){return String(texto||'').split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean).map(p=>tE('p',null,p))}
-function tlLeer(id){try{const v=localStorage.getItem(TL_LS+id);return v?JSON.parse(v):null}catch(e){return null}}
-function tlEscribir(id,d){try{localStorage.setItem(TL_LS+id,JSON.stringify(d));return true}catch(e){return false}}
+// Borradores ligados a la cuenta (F-11): la clave lleva la huella del correo (huellaCuenta(), app.js), nunca el correo.
+// Sin sesión no se lee ni se guarda nada. Al «Salir» app.js borra todas las claves pullex.* de este navegador.
+function tlClave(id){const h=typeof huellaCuenta==='function'?huellaCuenta():null;return h?TL_LS+h+'.'+id:null}
+function tlLeer(id){const k=tlClave(id);if(!k)return null;try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function tlEscribir(id,d){const k=tlClave(id);if(!k)return false;try{localStorage.setItem(k,JSON.stringify(d));return true}catch(e){return false}}
 function tlHora(){try{return new Date().toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
 
 // ----------------------------------------------------------------------------- pestañas --

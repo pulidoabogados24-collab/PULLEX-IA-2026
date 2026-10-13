@@ -3,8 +3,13 @@
 const LIBS_OK=typeof marked!=='undefined'&&typeof DOMPurify!=='undefined';
 if(LIBS_OK)marked.setOptions({breaks:true});
 const $=id=>document.getElementById(id);
-let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
-function auth(){return {'Authorization':'Bearer '+TOKEN}}
+// Sesión (F-10): el token vive dentro de un cierre, no en una variable global que cualquier script o la consola lean
+// por su nombre. Los módulos piden la cabecera con auth() o usan api(); SESION.activa() dice si hay sesión.
+const SESION=(()=>{let t=null;return Object.freeze({
+  fijar(v){t=typeof v==='string'&&v?v:null},activa(){return t!==null},
+  cabecera(){return t?{'Authorization':'Bearer '+t}:{}},cerrar(){t=null}})})();
+let PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
+function auth(){return SESION.cabecera()}
 // HTML que llega del modelo o de documentos (Markdown): se sanea con una configuración estricta. Sin formularios,
 // controles, estilos, ids, nombres, clases ni data-*: así una respuesta manipulada (por un PDF adjunto o una página
 // web) no puede secuestrar $('txt') o $('cf-memoria') con un id repetido, ni accionar el despachador data-click, ni
@@ -122,7 +127,7 @@ async function enviarAuth(){
   // El rótulo sale del modo que está a la vista AHORA: si la persona cambió de pestaña mientras se esperaba, el botón
   // no puede quedar diciendo «Ingresar» en el formulario de crear cuenta.
   b.disabled=false;b.removeAttribute('aria-busy');b.textContent=modoActual==='registrar'?'Crear cuenta':'Ingresar';trabajo(null);
-  if(d){TOKEN=d.token;PERFIL=d.perfil;iniciar()}
+  if(d){SESION.fijar(d.token);PERFIL=d.perfil;iniciar()}
 }
 const CAPACIDADES=[
   {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
@@ -141,6 +146,7 @@ const CAPACIDADES=[
 async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
   try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
+  await prepararHuella(PERFIL&&PERFIL.email);
   apIniciar();aplicarPerfil();
   $('modo').value=PERFIL.preferencias.modo||'auto';pintarAjustesResp();
   WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
@@ -893,7 +899,7 @@ async function guardarClave(){
   const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
     body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
   const d=await r.json();if(!r.ok){$('k-msg').textContent=d.detail||'No se pudo';return}
-  if(d.token)TOKEN=d.token; // las demás sesiones quedaron cerradas; esta sigue con token nuevo
+  if(d.token)SESION.fijar(d.token); // las demás sesiones quedaron cerradas; esta sigue con token nuevo
   cerrarClave();toast('Contraseña actualizada. Se cerró la sesión en tus otros dispositivos.');
 }
 async function cerrarSesiones(){
@@ -910,7 +916,31 @@ async function reenviarVerificacion(){
   }catch(e){toast('Error de conexión')}
   b.disabled=false;b.textContent=t0;
 }
-function salir(){TOKEN=null;PERFIL=null;CONV=null;Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)});location.reload()}
+// ---- Estado local por cuenta (F-10, F-11). Lo que se guarda en este navegador para una cuenta (los borradores del
+// Taller) va bajo una huella del correo, nunca bajo el correo ni sin dueño; al salir se borra todo.
+let HUELLA=null;
+function huellaCuenta(){return HUELLA}
+async function prepararHuella(email){
+  HUELLA=null;if(!email)return;const t=String(email).trim().toLowerCase();
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('pullex:'+t));
+    HUELLA='h'+[...new Uint8Array(b)].slice(0,8).map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){let h=0x811c9dc5;for(const c of 'pullex:'+t){h^=c.codePointAt(0);h=Math.imul(h,0x01000193)>>>0}   // sin crypto.subtle (http)
+    HUELLA='h'+h.toString(16).padStart(8,'0')+'00000000'}
+  // Borradores antiguos sin dueño (antes de esta versión): no se puede saber de quién son, así que se descartan.
+  try{Object.keys(localStorage).filter(k=>k.startsWith('pullex.taller.borrador.')&&!/^pullex\.taller\.borrador\.h[0-9a-f]{16}\./.test(k))
+    .forEach(k=>localStorage.removeItem(k))}catch(e){}
+}
+// Borra todo lo que esta app guardó en el navegador: sesión, perfil, borradores, apariencia local, sessionStorage y
+// las cachés del service worker. Espera a las cachés como mucho 1,5 s para no dejar colgado el botón.
+async function limpiarEstadoLocal(){
+  SESION.cerrar();PERFIL=null;CONV=null;HUELLA=null;
+  try{Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)})}catch(e){}
+  try{Object.keys(localStorage).filter(k=>k.startsWith('pullex.')).forEach(k=>localStorage.removeItem(k))}catch(e){}
+  try{sessionStorage.clear()}catch(e){}
+  try{if(window.caches){const ks=await Promise.race([caches.keys(),new Promise(r=>setTimeout(()=>r([]),1500))]);
+    await Promise.race([Promise.all(ks.filter(k=>k.startsWith('pullex-')).map(k=>caches.delete(k))),new Promise(r=>setTimeout(r,1500))])}}catch(e){}
+}
+async function salir(){await limpiarEstadoLocal();location.reload()}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
 
 // -------------------------------------------------------- instalar como app --
