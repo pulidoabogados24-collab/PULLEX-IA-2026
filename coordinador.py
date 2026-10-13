@@ -366,7 +366,9 @@ def seleccionar(tarea, contexto=None) -> dict:
 # ======================================================================= herramientas ==
 def envolver(etiqueta: str, texto: str) -> str:
     """Entrega texto al modelo como DATOS. Neutraliza cualquier intento de cerrar la etiqueta desde dentro."""
-    limpio = re.sub(r"</?\s*datos\b[^>]*>", "[etiqueta eliminada]", str(texto or ""), flags=re.I)
+    # Sin caracteres de formato invisibles (Unicode Cf) y tolerante a «< /datos>», atributos y «<>» de ancho completo.
+    plano = "".join(ch for ch in str(texto or "") if unicodedata.category(ch) != "Cf")
+    limpio = re.sub(r"[<\uff1c\ufe64]\s*/?\s*datos\b[^>\uff1e\ufe65]*[>\uff1e\ufe65]", "[etiqueta eliminada]", plano, flags=re.I)
     return f'\n<datos tipo="{etiqueta}">\n{limpio}\n</datos>\n'
 
 
