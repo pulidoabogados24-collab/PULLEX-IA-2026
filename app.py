@@ -767,8 +767,27 @@ def preparar_base():
             _base["hilo"] = None
 
 # -------------------------------------------------------------- utilidades --
-def _hash(clave: str, sal: bytes) -> str:
-    return hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, 200_000).hex()
+# AUTH-11: PBKDF2-SHA256 con 600 000 iteraciones (recomendación de OWASP) para los hashes nuevos, guardados como
+# «p600000$<hex>». Los hashes anteriores (200 000 iteraciones, hex sin prefijo) se siguen verificando y se rehacen
+# con la política vigente la próxima vez que la persona ingresa con éxito (verificar_clave).
+ITERACIONES_PBKDF2 = 600_000
+ITERACIONES_PBKDF2_ANTIGUAS = 200_000
+_SAL_FICTICIA = secrets.token_bytes(16)     # AUTH-07: para gastar lo mismo cuando la cuenta no existe
+
+
+def _hash(clave: str, sal: bytes, iteraciones: int = None) -> str:
+    iteraciones = iteraciones or ITERACIONES_PBKDF2
+    return f"p{iteraciones}$" + hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, iteraciones).hex()
+
+
+def _partes_hash(guardado: str) -> tuple:
+    """(iteraciones, hex) de un hash guardado, en el formato nuevo («p<n>$<hex>») o en el anterior (solo hex)."""
+    guardado = guardado or ""
+    if guardado.startswith("p") and "$" in guardado:
+        n, _, resto = guardado[1:].partition("$")
+        if n.isdigit():
+            return int(n), resto
+    return ITERACIONES_PBKDF2_ANTIGUAS, guardado
 
 # ------------------------------------------------------------ correo saliente --
 def enviar_correo(destinatario: str, asunto: str, html: str) -> bool:
@@ -1029,8 +1048,24 @@ def actualizar_apariencia(email: str, actual: dict, pedida) -> dict:
 def verificar_clave(email, clave) -> bool:
     u = obtener_usuario(email)
     if not u:
+        # AUTH-07: el mismo PBKDF2 que con una cuenta real, para que el tiempo de respuesta no revele qué correos
+        # están registrados (antes: 2,7 ms sin cuenta frente a 131 ms con cuenta).
+        _hash(clave, _SAL_FICTICIA)
         return False
-    return hmac.compare_digest(u["hash"], _hash(clave, bytes.fromhex(u["sal"])))
+    iteraciones, esperado = _partes_hash(u["hash"])
+    sal = bytes.fromhex(u["sal"] or "")
+    calculado = hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, iteraciones).hex()
+    if not hmac.compare_digest(esperado, calculado):
+        return False
+    if iteraciones < ITERACIONES_PBKDF2 or not (u["hash"] or "").startswith("p"):
+        # AUTH-11: rehash transparente con la política vigente. Condicionado al hash leído: si la clave cambió en el
+        # entretanto, no se pisa. No toca sesion_version (las sesiones siguen abiertas).
+        sal_hex, hash_nuevo = _sal_y_hash(clave)
+        with closing(db()) as con:
+            con.execute("UPDATE usuarios SET sal=?, hash=? WHERE email=? AND hash=?",
+                        (sal_hex, hash_nuevo, u["email"], u["hash"]))
+            con.commit()
+    return True
 
 def reiniciar_periodo_si_aplica(u):
     if u["plan"] == "prueba":

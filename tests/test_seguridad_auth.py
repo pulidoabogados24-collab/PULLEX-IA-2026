@@ -419,3 +419,53 @@ def test_AUTH12_salud_sin_sesion_no_dice_modelo_ni_proveedor(cliente):
     assert set(s) == {"estado", "db", "db_motor", "db_persistente", "secreto_configurado", "ia_configurada"}
     assert s["secreto_configurado"] is True and s["estado"] == "ok"
     assert "claude" not in _json.dumps(s).lower() and "anthropic" not in _json.dumps(s).lower()
+
+
+# ------------------------------------------------------------------------------------- AUTH-07 y AUTH-11 --
+def _contar_pbkdf2(monkeypatch):
+    """Registra las iteraciones de cada PBKDF2 que calcula la app."""
+    llamadas = []
+    original = hashlib.pbkdf2_hmac
+
+    def contado(nombre, clave, sal, iteraciones, *a, **k):
+        llamadas.append(iteraciones)
+        return original(nombre, clave, sal, iteraciones, *a, **k)
+    monkeypatch.setattr(hashlib, "pbkdf2_hmac", contado)
+    return llamadas
+
+
+def test_AUTH07_login_con_cuenta_inexistente_cuesta_lo_mismo_que_con_una_real(cliente, modulo, monkeypatch):
+    email, _, _ = nuevo_usuario(cliente)
+    llamadas = _contar_pbkdf2(monkeypatch)
+    assert cliente.post("/api/login", json={"email": email, "clave": "clave-mala-1"}).status_code == 401
+    con_cuenta = list(llamadas)
+    llamadas.clear()
+    assert cliente.post("/api/login", json={"email": f"nadie_{time.time_ns()}@pruebas.local", "clave": "clave-mala-1"}).status_code == 401
+    assert con_cuenta == llamadas == [modulo.ITERACIONES_PBKDF2]
+
+
+def test_AUTH11_politica_de_600000_iteraciones_en_el_codigo():
+    fuente = (RAIZ / "app.py").read_text(encoding="utf-8")
+    assert "\nITERACIONES_PBKDF2 = 600_000" in fuente and "\nITERACIONES_PBKDF2_ANTIGUAS = 200_000" in fuente
+
+
+def test_AUTH11_hash_nuevo_con_prefijo_y_rehash_transparente_de_los_viejos(cliente, modulo, monkeypatch):
+    monkeypatch.setattr(modulo, "ITERACIONES_PBKDF2", 600_000)       # la política real (conftest la baja por velocidad)
+    t0 = time.perf_counter()
+    email, clave, t = nuevo_usuario(cliente)
+    print(f"\n[AUTH-11] registro con PBKDF2-SHA256 de 600 000 iteraciones: {(time.perf_counter() - t0) * 1000:.0f} ms")
+    assert _usuario(modulo, email)["hash"].startswith("p600000$")
+    # cuenta con el formato anterior (200 000 iteraciones, hex sin prefijo)
+    sal = bytes.fromhex(_usuario(modulo, email)["sal"])
+    viejo = hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, 200_000).hex()
+    _sql(modulo, "UPDATE usuarios SET hash=? WHERE email=?", (viejo, email))
+    version = _usuario(modulo, email)["sesion_version"]
+    assert cliente.post("/api/login", json={"email": email, "clave": "clave-mala-9"}).status_code == 401
+    assert _usuario(modulo, email)["hash"] == viejo                   # clave errada: no se toca
+    assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 200
+    nuevo = _usuario(modulo, email)
+    assert nuevo["hash"].startswith("p600000$") and nuevo["sesion_version"] == version
+    assert cliente.get("/api/estado", headers=auth(t)).status_code == 200          # el rehash no cierra sesiones
+    t0 = time.perf_counter()
+    assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 200
+    print(f"[AUTH-11] login verificando 600 000 iteraciones: {(time.perf_counter() - t0) * 1000:.0f} ms")
