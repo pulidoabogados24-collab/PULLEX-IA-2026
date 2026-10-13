@@ -369,11 +369,69 @@ def enrutar_agentes(texto: str) -> str:
     activos = [inst for claves, inst in AGENTES.values() if any(k in t for k in claves)]
     return ("\n\n" + "\n".join(activos[:3])) if activos else ""
 
-app = FastAPI(title="PULLEX IA")
+# AUTH-12: la documentación automática (/docs, /redoc, /openapi.json) listaba todas las rutas a cualquiera. Queda
+# apagada salvo PULLEX_DOCS=1 (para desarrollo local).
+DOCS_PUBLICOS = os.getenv("PULLEX_DOCS", "0").strip() == "1"
+app = FastAPI(title="PULLEX IA", docs_url="/docs" if DOCS_PUBLICOS else None,
+              redoc_url="/redoc" if DOCS_PUBLICOS else None, openapi_url="/openapi.json" if DOCS_PUBLICOS else None)
 
 # Tamaño máximo de una petición (adjuntos incluidos). Evita agotar memoria/costo con cuerpos
 # gigantes. 7 MB por archivo en el cliente ≈ 9,4 MB en base64; se deja margen para varios.
 MAX_CUERPO = int(os.getenv("PULLEX_MAX_CUERPO_BYTES", str(26 * 1024 * 1024)))
+RESPUESTA_413 = b'{"detail":"La solicitud es demasiado grande."}'
+
+
+class _CuerpoDemasiadoGrande(Exception):
+    pass
+
+
+class LimiteCuerpo:
+    """AUTH-05: middleware ASGI que cuenta los bytes REALES del cuerpo mientras la ruta los lee. El control por
+    Content-Length (en seguridad_http) no veía los cuerpos «chunked», que llegan sin esa cabecera: uno de 30 MB se
+    procesaba entero. Al pasar MAX_CUERPO se corta la lectura y se responde 413; si la ruta se tragó el error (p. ej.
+    json_de lo convierte en 400) esa respuesta se descarta y sale el 413. Va registrado por DENTRO de seguridad_http,
+    así el 413 también lleva la CSP y las demás cabeceras de seguridad."""
+
+    def __init__(self, app_asgi):
+        self.app = app_asgi
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        maximo = MAX_CUERPO
+        estado = {"leido": 0, "excedido": False, "iniciada": False}
+
+        async def recibir():
+            mensaje = await receive()
+            if mensaje["type"] == "http.request" and not estado["excedido"]:
+                estado["leido"] += len(mensaje.get("body") or b"")
+                if estado["leido"] > maximo:
+                    estado["excedido"] = True
+                    raise _CuerpoDemasiadoGrande()
+            return mensaje
+
+        async def enviar(mensaje):
+            if estado["excedido"]:
+                return                          # la respuesta de la ruta se descarta: sale el 413
+            if mensaje["type"] == "http.response.start":
+                estado["iniciada"] = True
+            await send(mensaje)
+
+        try:
+            await self.app(scope, recibir, enviar)
+        except Exception:
+            if not estado["excedido"]:
+                raise
+        if estado["excedido"] and not estado["iniciada"]:
+            await send({"type": "http.response.start", "status": 413,
+                        "headers": [(b"content-type", b"application/json"),
+                                    (b"content-length", str(len(RESPUESTA_413)).encode())]})
+            await send({"type": "http.response.body", "body": RESPUESTA_413})
+
+
+# Se registra antes que los middlewares de abajo: queda por dentro de ellos (Starlette envuelve en orden inverso).
+app.add_middleware(LimiteCuerpo)
 
 # CSP estricta para scripts (Fase 1b): solo archivos propios y cdnjs, sin JavaScript en línea
 # (los botones usan data-click + un despachador con lista blanca en static/app.js). Con esto
@@ -487,9 +545,9 @@ async def control_plan(request: Request, call_next):
 async def seguridad_http(request: Request, call_next):
     largo = request.headers.get("content-length")
     if largo and largo.isdigit() and int(largo) > MAX_CUERPO:
-        return Response('{"detail":"La solicitud es demasiado grande."}', status_code=413,
-                        media_type="application/json")
-    resp = await call_next(request)
+        resp = Response(RESPUESTA_413, status_code=413, media_type="application/json")
+    else:
+        resp = await call_next(request)
     h = resp.headers
     h.setdefault("Content-Security-Policy", CSP)
     h.setdefault("X-Content-Type-Options", "nosniff")
@@ -529,21 +587,45 @@ _RE_B64 = re.compile(r"^[A-Za-z0-9+/]*={0,2}$")
 
 # ------------------------------------------------------------------- secret --
 _env_secret = os.getenv("PULLEX_SECRET", os.getenv("LEXCOL_SECRET"))
+SECRETO_CONFIGURADO = bool(_env_secret)     # para /salud: solo si existe, nunca el valor
+
+
+def _secreto_de_archivo() -> bytes:
+    """Secreto local de desarrollo. Se crea con permisos 0600 y O_EXCL (si otro proceso lo creó a la vez, se lee
+    el suyo). Ese archivo JAMÁS debe empaquetarse ni subirse al repositorio: quien lo tenga puede firmar sesiones
+    de cualquier cuenta, admin incluida."""
+    try:
+        fd = os.open(APP_SECRET_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError:
+        try:
+            os.chmod(APP_SECRET_FILE, 0o600)       # archivos creados antes con 0644
+        except OSError:
+            pass
+        with open(APP_SECRET_FILE, "rb") as f:
+            return f.read()
+    except OSError:
+        return secrets.token_bytes(32)              # disco de solo lectura: secreto solo en memoria
+    nuevo = secrets.token_bytes(32)
+    with os.fdopen(fd, "wb") as f:
+        f.write(nuevo)
+    return nuevo
+
+
 if _env_secret:
     SECRET = hashlib.sha256(_env_secret.encode()).digest()
-elif os.path.exists(APP_SECRET_FILE):
-    SECRET = open(APP_SECRET_FILE, "rb").read()
+elif os.getenv("VERCEL") or os.getenv("RENDER"):
+    # AUTH-06: con varias instancias cada una inventaba su secreto en /tmp: sesiones que fallaban al azar (401) y
+    # morían en cada arranque en frío. En Vercel/Render la app se niega a arrancar sin el secreto.
+    raise RuntimeError("PULLEX_SECRET no está definida. Es obligatoria en Vercel y en Render: define una variable de "
+                       "entorno PULLEX_SECRET con un valor aleatorio largo (p. ej. python -c \"import secrets; "
+                       "print(secrets.token_urlsafe(48))\") y vuelve a desplegar.")
 else:
-    # Sin PULLEX_SECRET se usa un archivo local. Ese archivo JAMÁS debe empaquetarse ni subirse
-    # al repositorio: quien lo tenga puede firmar sesiones de cualquier cuenta, admin incluida.
-    log.warning("PULLEX_SECRET no definida: se usa/crea %s (solo para desarrollo local)",
-                APP_SECRET_FILE)
-    SECRET = secrets.token_bytes(32)
-    try:
-        with open(APP_SECRET_FILE, "wb") as f:
-            f.write(SECRET)
-    except OSError:
-        pass
+    if base_datos.es_postgres():
+        log.warning("PULLEX_SECRET no definida con base PostgreSQL compartida: cada máquina firmará sesiones con "
+                    "su propio secreto. Defínela antes de usar varias instancias.")
+    else:
+        log.warning("PULLEX_SECRET no definida: se usa/crea %s (solo para desarrollo local)", APP_SECRET_FILE)
+    SECRET = _secreto_de_archivo()
 
 # ----------------------------------------------------------------------- db --
 # La base principal vive en SQLite (archivo local: desarrollo y pruebas) o en PostgreSQL (producción). Lo decide
@@ -1282,9 +1364,10 @@ def salud():
     except Exception:
         ok_db = False
     base = base_datos.estado(DB, probar=False)
-    return {"servicio": "pullex-ia", "estado": "ok" if ok_db else "degradado",
-            "db": ok_db, "db_motor": base["motor"], "db_persistente": base["persistente"], "ia_configurada": ia_configurada(),
-            "modelo": cadena_ia()[0].modelo, "proveedor": cadena_ia()[0].nombre, "hora": datetime.now(timezone.utc).isoformat()}
+    # AUTH-12: es pública (sin sesión): no dice modelo ni proveedor. El administrador los ve en /api/admin/metricas.
+    return {"estado": "ok" if ok_db else "degradado", "db": ok_db, "db_motor": base["motor"],
+            "db_persistente": base["persistente"], "secreto_configurado": SECRETO_CONFIGURADO,
+            "ia_configurada": ia_configurada()}
 
 @app.get("/sw.js")
 def service_worker():

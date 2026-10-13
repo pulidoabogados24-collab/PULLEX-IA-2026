@@ -345,3 +345,77 @@ def test_AUTH04_si_la_base_falla_el_limite_sigue_en_memoria(modulo, monkeypatch)
     with pytest.raises(HTTPException) as e:
         modulo.limitar_cuenta(clave, 2, 60)
     assert e.value.status_code == 429
+
+
+# --------------------------------------------------------------------------------------------- AUTH-05 --
+def _trozos(total, trozo=64 * 1024):
+    yield b'{"email":"a@b.co","clave":"'
+    enviado = 0
+    while enviado < total:
+        yield b"A" * trozo
+        enviado += trozo
+    yield b'"}'
+
+
+def test_AUTH05_cuerpo_sin_content_length_que_supera_el_tope_da_413_con_cabeceras(cliente, modulo, monkeypatch):
+    monkeypatch.setattr(modulo, "MAX_CUERPO", 256 * 1024)
+    r = cliente.post("/api/login", content=_trozos(512 * 1024), headers={"Content-Type": "application/json"})
+    assert r.status_code == 413 and "demasiado grande" in r.json()["detail"]
+    assert r.headers.get("content-security-policy") and r.headers.get("x-frame-options") == "DENY"
+    # con Content-Length declarado, igual (ya funcionaba) y también con las cabeceras de seguridad
+    r = cliente.post("/api/login", content=b"{" + b" " * (300 * 1024) + b"}", headers={"Content-Type": "application/json"})
+    assert r.status_code == 413 and r.headers.get("content-security-policy")
+    # un cuerpo por trozos dentro del tope se procesa normal
+    r = cliente.post("/api/login", content=_trozos(10 * 1024), headers={"Content-Type": "application/json"})
+    assert r.status_code == 401
+
+
+# ------------------------------------------------------------------------------------- AUTH-06 y AUTH-12 --
+import json as _json  # noqa: E402
+import os  # noqa: E402
+import subprocess  # noqa: E402
+import sys  # noqa: E402
+
+from conftest import RAIZ  # noqa: E402
+
+
+def _arrancar_app(tmp_path, extra, guion_extra=""):
+    """Importa app.py en OTRO proceso (SQLite en tmp_path, sin secreto) y devuelve (proceso, json impreso o None)."""
+    entorno = {k: v for k, v in os.environ.items() if k not in ("PULLEX_SECRET", "LEXCOL_SECRET", "VERCEL", "RENDER",
+                                                               "PULLEX_DOCS", "PULLEX_PRUEBAS_PG_URL", "PULLEX_DB_ESQUEMA")}
+    entorno.update({"PULLEX_DATABASE_URL": "", "POSTGRES_URL": "", "DATABASE_URL": "", "PULLEX_DB": str(tmp_path / "p.db"),
+                    "PULLEX_BIBLIOTECA_DB": str(tmp_path / "b.db"), "PULLEX_CORPUS_DB": str(tmp_path / "c.db"),
+                    "PULLEX_LOG_LEVEL": "ERROR", **extra})
+    (tmp_path / "static").symlink_to(RAIZ / "static")
+    guion = (f"import sys, json, os\nsys.path.insert(0, {str(RAIZ)!r})\nimport app\n"
+             "from fastapi.testclient import TestClient\nc = TestClient(app.app)\n" + guion_extra)
+    r = subprocess.run([sys.executable, "-c", guion], cwd=tmp_path, env=entorno, capture_output=True, text=True, timeout=180)
+    lineas = r.stdout.strip().splitlines()
+    return r, (_json.loads(lineas[-1]) if r.returncode == 0 and lineas else None)
+
+
+def test_AUTH06_en_vercel_sin_PULLEX_SECRET_la_app_no_arranca(tmp_path):
+    r, _ = _arrancar_app(tmp_path, {"VERCEL": "1"})
+    assert r.returncode != 0 and "RuntimeError" in r.stderr and "PULLEX_SECRET" in r.stderr
+    assert not (tmp_path / "app_secret.key").exists()
+
+
+def test_AUTH06_secreto_local_con_permisos_0600_y_AUTH12_docs_solo_con_variable(tmp_path):
+    r, d = _arrancar_app(tmp_path, {"PULLEX_DOCS": "1"},
+                         "print(json.dumps({'secreto': c.get('/salud').json()['secreto_configurado'],\n"
+                         "                  'openapi': c.get('/openapi.json').status_code, 'docs': c.get('/docs').status_code,\n"
+                         "                  'modo': oct(os.stat(app.APP_SECRET_FILE).st_mode & 0o777)}))\n")
+    assert r.returncode == 0, r.stderr[-3000:]
+    assert d == {"secreto": False, "openapi": 200, "docs": 200, "modo": "0o600"}
+
+
+def test_AUTH12_docs_y_openapi_desactivados_por_defecto(cliente):
+    for ruta in ("/docs", "/redoc", "/openapi.json"):
+        assert cliente.get(ruta).status_code == 404, ruta
+
+
+def test_AUTH12_salud_sin_sesion_no_dice_modelo_ni_proveedor(cliente):
+    s = cliente.get("/salud").json()
+    assert set(s) == {"estado", "db", "db_motor", "db_persistente", "secreto_configurado", "ia_configurada"}
+    assert s["secreto_configurado"] is True and s["estado"] == "ok"
+    assert "claude" not in _json.dumps(s).lower() and "anthropic" not in _json.dumps(s).lower()

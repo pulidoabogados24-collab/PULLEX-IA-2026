@@ -251,4 +251,5 @@ def test_admin_ve_proveedor_y_modelo_activos(cliente, monkeypatch):
     assert m["ia"]["respaldo"] == {"proveedor": "openai", "nombre": "OpenAI (ChatGPT)", "modelo": "gpt-6.1-sol",
                                    "configurado": True}
     assert "sk-openai" not in json.dumps(m)                                  # nunca la clave
-    assert cliente.get("/salud").json()["proveedor"] == "anthropic"
+    # /salud es pública: desde AUTH-12 ya no dice proveedor ni modelo (el admin los ve aquí arriba, en métricas)
+    assert "proveedor" not in cliente.get("/salud").json() and "modelo" not in cliente.get("/salud").json()
