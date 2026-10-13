@@ -593,3 +593,119 @@ def test_indice_de_intentos_por_caso_y_sin_claves_foraneas_todavia(modulo):
     assert datos.indices_del_archivo()["ix_mintentos_caso"] == "modular_intentos"
     texto = re.sub(r"--[^\n]*", "", datos.leer_esquema())
     assert "REFERENCES" not in texto.upper() and "FOREIGN KEY" not in texto.upper()
+
+
+# =================================================== BD-01: copia de seguridad y restauración del esquema ==
+SCRIPTS = RAIZ / "scripts"
+
+
+def test_los_guiones_de_respaldo_son_validos_y_se_niegan_sin_datos_claros(tmp_path):
+    for guion in ("respaldar_bd.sh", "restaurar_bd.sh"):
+        ruta = SCRIPTS / guion
+        assert ruta.stat().st_mode & stat.S_IXUSR, guion
+        assert subprocess.run(["bash", "-n", str(ruta)], capture_output=True).returncode == 0, guion
+    entorno = {k: v for k, v in os.environ.items() if not k.startswith(("PULLEX_", "PG"))}
+    r = subprocess.run([str(SCRIPTS / "respaldar_bd.sh"), str(tmp_path)], env=entorno, capture_output=True, text=True)
+    assert r.returncode != 0 and "PULLEX_DATABASE_URL_DIRECTA" in r.stderr
+    r = subprocess.run([str(SCRIPTS / "respaldar_bd.sh"), str(tmp_path)], capture_output=True, text=True,
+                       env={**entorno, "PULLEX_DATABASE_URL_DIRECTA": "postgresql://u:secreta@pooler.ejemplo.com:6543/postgres"})
+    assert r.returncode != 0 and "6543" in r.stderr and "secreta" not in r.stderr
+    copia = tmp_path / "x.dump"
+    copia.write_bytes(b"no es una copia")
+    r = subprocess.run([str(SCRIPTS / "restaurar_bd.sh"), str(copia)], env=entorno, capture_output=True, text=True)
+    assert r.returncode == 2 and "destino" in r.stderr           # nunca toma la URL de la app por su cuenta
+    r = subprocess.run([str(SCRIPTS / "restaurar_bd.sh"), str(copia), "--destino-url", "postgresql://u:c@h:5432/d",
+                        "--esquema-destino", "public"], env=entorno, capture_output=True, text=True)
+    assert r.returncode == 2 and "public" in r.stderr
+
+
+def test_el_flujo_de_respaldo_esta_desactivado_y_con_permisos_minimos():
+    texto = (RAIZ / ".github" / "workflows" / "respaldo-bd.yml").read_text(encoding="utf-8")
+    activas = "\n".join(x for x in texto.splitlines() if not x.lstrip().startswith("#"))
+    assert "workflow_dispatch:" in activas and "schedule:" not in activas and "cron" not in activas
+    assert re.search(r"^permissions:\n  contents: read\s*$", activas, re.M)
+    assert "PULLEX_RESPALDO_EXIGIR_CIFRADO: \"1\"" in activas and "retention-days: 5" in activas
+    assert "*.gpg" in activas and ".dump\n" not in activas
+    for uso in re.findall(r"uses:\s*(\S+)", activas):
+        assert re.fullmatch(r"actions/[a-z-]+@(v\d+|[0-9a-f]{40})", uso), uso
+
+
+@pytest.fixture
+def herramientas_pg():
+    faltan = [h for h in ("pg_dump", "pg_restore", "psql") if not shutil.which(h)]
+    if faltan:
+        pytest.skip(f"no están instalados en este entorno: {', '.join(faltan)}")
+
+
+def _correr(args, **entorno):
+    base = {k: v for k, v in os.environ.items() if not k.startswith("PULLEX_")}
+    return subprocess.run([str(a) for a in args], env={**base, **entorno}, capture_output=True, text=True, timeout=120)
+
+
+def _conteos(admin, esquema) -> dict:
+    tablas = [t for (t,) in admin.execute("SELECT table_name FROM information_schema.tables WHERE table_schema=%s "
+                                          "ORDER BY 1", (esquema,))]
+    return {t: admin.execute(f'SELECT count(*) FROM "{esquema}"."{t}"').fetchone()[0] for t in tablas}
+
+
+@postgres
+@pytest.mark.parametrize("cifrado", [False, True])
+def test_pg_respaldar_borrar_y_restaurar_deja_los_mismos_datos(herramientas_pg, tmp_path, cifrado):
+    esquema = f"pullex_pruebas_resp_{time.time_ns() % 10**9}"
+    clave = {"PULLEX_RESPALDO_CLAVE": "frase-de-prueba-" + secrets.token_hex(8)} if cifrado else {}
+    with _admin_pg() as admin:
+        try:
+            admin.execute("BEGIN")
+            admin.execute(f'SET LOCAL search_path TO "{esquema}"')
+            admin.execute(open(datos.RUTA_ESQUEMA, encoding="utf-8").read())
+            admin.execute("COMMIT")
+            for i in range(3):
+                admin.execute(f'INSERT INTO "{esquema}".usuarios(email, nombre) VALUES (%s, %s)', (f"r{i}@x.co", "N"))
+                cid = admin.execute(f'INSERT INTO "{esquema}".conversaciones(usuario, titulo) VALUES (%s, %s) RETURNING id',
+                                    (f"r{i}@x.co", "t")).fetchone()[0]
+                admin.execute(f'INSERT INTO "{esquema}".mensajes(conv, rol, contenido) VALUES (%s, %s, %s)', (cid, "user", "¿?"))
+            admin.execute(f'INSERT INTO "{esquema}".apariencia_imagenes VALUES (%s, %s, %s, %s, %s)',
+                          ("r0@x.co", "avatar", "image/png", b"\x00\x01binario", 1.0))
+            original = _conteos(admin, esquema)
+
+            r = _correr([SCRIPTS / "respaldar_bd.sh", tmp_path / "copias"], PULLEX_DATABASE_URL_DIRECTA=PG_URL,
+                        PULLEX_DB_ESQUEMA=esquema, **clave)
+            assert r.returncode == 0, r.stderr
+            assert PG_URL not in r.stdout + r.stderr and (not cifrado or clave["PULLEX_RESPALDO_CLAVE"] not in r.stderr)
+            archivo = r.stdout.strip().splitlines()[-1]
+            assert archivo.endswith(".dump.gpg" if cifrado else ".dump")
+            assert os.stat(archivo).st_mode & 0o077 == 0                    # solo el dueño puede leerla
+            assert os.path.isfile(archivo + ".sha256")
+            if cifrado:
+                assert not list((tmp_path / "copias").glob("*.dump"))       # no queda la copia en claro
+                assert b"r0@x.co" not in open(archivo, "rb").read()
+
+            # con el esquema todavía en la base: se niega y no borra nada
+            r = _correr([SCRIPTS / "restaurar_bd.sh", archivo, "--destino-url", PG_URL, "--esquema", esquema,
+                         "--confirmar", esquema], **clave)
+            assert r.returncode == 3 and "--forzar" in r.stderr
+            assert _conteos(admin, esquema) == original
+            # confirmación equivocada: no hace nada
+            admin.execute(f'DROP SCHEMA "{esquema}" CASCADE')
+            r = _correr([SCRIPTS / "restaurar_bd.sh", archivo, "--destino-url", PG_URL, "--esquema", esquema,
+                         "--confirmar", "otro"], **clave)
+            assert r.returncode == 4
+            assert admin.execute("SELECT to_regnamespace(%s)", (esquema,)).fetchone()[0] is None
+            # restauración de verdad
+            r = _correr([SCRIPTS / "restaurar_bd.sh", archivo, "--destino-url", PG_URL, "--esquema", esquema,
+                         "--confirmar", esquema], **clave)
+            assert r.returncode == 0, r.stderr
+            assert _conteos(admin, esquema) == original
+            assert admin.execute(f'SELECT data FROM "{esquema}".apariencia_imagenes').fetchone()[0] == b"\x00\x01binario"
+            assert admin.execute(f"SELECT bool_and(relrowsecurity) FROM pg_class WHERE relnamespace = %s::regnamespace "
+                                 "AND relkind = 'r'", (esquema,)).fetchone()[0] is True
+            nuevo = admin.execute(f'INSERT INTO "{esquema}".conversaciones(usuario) VALUES (%s) RETURNING id', ("z",)).fetchone()[0]
+            assert nuevo > 3                                                # las secuencias siguen donde iban
+            # --forzar: reemplaza el esquema que existe (y solo con confirmación)
+            r = _correr([SCRIPTS / "restaurar_bd.sh", archivo, "--destino-url", PG_URL, "--esquema", esquema,
+                         "--confirmar", esquema, "--forzar"], **clave)
+            assert r.returncode == 0, r.stderr
+            assert _conteos(admin, esquema) == original
+        finally:
+            admin.execute("ROLLBACK") if admin.info.transaction_status else None
+            admin.execute(f'DROP SCHEMA IF EXISTS "{esquema}" CASCADE')

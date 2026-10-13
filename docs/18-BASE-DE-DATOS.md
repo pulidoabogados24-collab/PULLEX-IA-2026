@@ -1,6 +1,6 @@
 # 18 · Base de datos principal
 
-Actualizado el 8 de octubre de 2026.
+Actualizado el 13 de octubre de 2026 (correcciones de la auditoría: BD-01, BD-05 a BD-18).
 
 ## Qué resuelve
 
@@ -44,18 +44,40 @@ servidor: muchas instancias que abren y cierran conexiones.
 - El esquema se fija con `SET LOCAL search_path` al empezar cada transacción.
 - Los parámetros que libpq no entiende (`?workaround=supabase-pooler.vercel`, `pgbouncer=true`, `supa=…`) se
   descartan solos.
-- Si el servidor no es local, la conexión exige TLS (`sslmode=require` como mínimo).
+- Si el servidor no es local, la conexión exige TLS (`sslmode=require` como mínimo). Con
+  `PULLEX_DB_SSLROOTCERT=/ruta/al/certificado-raiz.crt` (el certificado raíz que Supabase publica en el panel
+  del proyecto, empaquetado con el despliegue) se usa `sslmode=verify-full`: además de cifrar, se verifica el
+  certificado y el nombre del servidor. Si la ruta no existe, la app responde 503 y lo dice en el registro.
+- Cada transacción lleva `SET LOCAL statement_timeout` (`PULLEX_DB_TIMEOUT_MS`, por defecto 15000; `0` sin
+  límite). Al aplicar el esquema el tope es de 120 s.
+- Grupo de conexiones: como mucho `PULLEX_DB_MAX_CONEXIONES` (por defecto 5) en uso a la vez por proceso. Si
+  están todas ocupadas, la petición espera hasta `PULLEX_DB_ESPERA_S` (por defecto 10 s) y luego responde 503.
+  Solo vuelve al grupo una conexión fuera de transacción (IDLE); las demás se cierran.
 
 La URL lleva la contraseña de la base: va **solo** como variable de entorno en Vercel, marcada como sensible.
 Nunca en el repositorio, en un documento ni en un mensaje.
 
 ## El esquema
 
-- `datos/esquema_postgres.sql`: las 17 tablas más `esquema_version`. Es idempotente.
-- `datos/supabase_seguridad.sql`: quita a los roles públicos de Supabase (`anon`, `authenticated`) todo
-  permiso sobre el esquema. Vuelve a aplicarlo cuando agregues tablas.
+- `datos/esquema_postgres.sql`: las 18 tablas más `esquema_version` (versión 2). Es idempotente.
+- `datos/supabase_seguridad.sql`: quita a los roles de la API de Supabase (`anon`, `authenticated` y
+  `service_role`) todo permiso sobre el esquema y los privilegios por defecto que el usuario que lo aplica les
+  daría sobre lo que cree después en él. **La app lo aplica sola**, en la misma transacción y justo después del
+  esquema, cada vez que sube la versión. Si falla (por ejemplo, porque el usuario no es dueño del esquema), el
+  esquema queda aplicado, se registra el error y hay que aplicarlo a mano. No toca los privilegios por defecto
+  globales: la base se comparte con otros productos.
 - Todas las tablas tienen seguridad por filas activada y sin políticas: solo las ve el dueño (el usuario con
-  que se conecta la app).
+  que se conecta la app). **Si la app se conecta con un usuario que no es el dueño, ve 0 filas sin ningún
+  error** (parecería que no hay cuentas). El panel de administración lo avisa (campo `aviso` de la ficha «Base
+  de datos»).
+- Sin claves foráneas todavía (BD-13). Agregarlas exige primero limpiar las filas huérfanas que ya existan y
+  coordinarlas con el borrado de cuenta (que borra hijos antes que padres). Mientras tanto hay índices en las
+  columnas de enlace (`ix_mintentos_caso`, `ix_mensajes_conv`…).
+
+Versión 2 (13 de octubre de 2026): tabla `limites` (límites de intentos compartidos entre instancias),
+`usuarios.acepto_politica_version` y `usuarios.acepto_politica_en` (aceptación de la política de datos),
+`mensajes.continuaciones` e índice `ix_mintentos_caso`. Al desplegarla, la primera instancia que arranca la
+aplica sola (`ALTER TABLE … ADD COLUMN IF NOT EXISTS`: no borra ni reescribe datos).
 - El esquema `pullex` **no** debe agregarse a los «esquemas expuestos» de la API de Supabase.
 
 La app comprueba con una consulta, al arrancar, si `esquema_version` está al día. Solo si no lo está aplica
@@ -87,8 +109,89 @@ COMMIT;
 - En PostgreSQL un error deja abortada la transacción. `commit()` sobre una transacción abortada lanza
   `ErrorTransaccion` en vez de perder los cambios en silencio.
 
+- Orden de los nulos: SQLite los pone primero en orden ascendente y al final en descendente; PostgreSQL al
+  revés. Las consultas que ordenan por columnas que pueden ser nulas lo dicen explícito (`NULLS FIRST` en
+  ascendente, `NULLS LAST` en descendente), igual en los dos motores.
+- Ids fuera de rango (≤ 0 o mayores que 2^63−1) en las rutas con `{id}`: 404 antes de consultar, en los dos
+  motores (antes SQLite respondía 500).
+
 Regla al escribir consultas nuevas: SQL que valga en los dos motores. Nada de `INSERT OR …`, `PRAGMA`,
-`rowid` ni funciones propias de SQLite en la base principal.
+`rowid` ni funciones propias de SQLite en la base principal. Para «insertar si no existe» usa
+`INSERT … ON CONFLICT (…) DO NOTHING` o `DO UPDATE`, nunca «SELECT y luego INSERT» (con dos peticiones a la
+vez, la segunda choca con la llave en PostgreSQL).
+
+`datos.traducir` rechaza (`ValueError`) lo que no sabe traducir sin riesgo: cadenas con dólar (`$$…$$`),
+cadenas con escapes (`E'…'`) y los operadores de jsonb `?`, `?|` y `?&`. Para jsonb usa
+`jsonb_exists(col, ?)`, `jsonb_exists_any(col, ?)` y `jsonb_exists_all(col, ?)`. Los archivos `datos/*.sql`
+sí usan `DO $$ … $$`: se ejecutan crudos, sin pasar por la traducción.
+
+## Derechos del titular: exportar y eliminar la cuenta
+
+- `GET /api/cuenta/exportar`: descarga en JSON todo lo que la base principal guarda de la cuenta (sin la sal ni
+  el hash de la contraseña ni los tokens de un solo uso).
+- `POST /api/cuenta/eliminar` con `{"clave": "…"}`: borra la cuenta y todos sus datos en una sola transacción.
+  La cuenta del administrador principal (`PULLEX_ADMIN_EMAIL`) no se puede borrar por esta vía.
+- La lista de tablas y cómo se encuentran las filas de una persona está en `app.py`, `TABLAS_DEL_USUARIO`.
+  **Si agregas una tabla con datos de personas, agrégala ahí** (o en `TABLAS_SIN_TITULAR` si no los tiene):
+  `tests/test_seguridad_datos.py` descubre las tablas de la base y falla si una no está en ninguna de las dos.
+- Lo que quede en las copias de seguridad se borra cuando esas copias vencen (ver abajo). Plazos de
+  conservación y lo que deba guardarse por obligación legal: **pendiente de revisión jurídica**.
+
+## Copias de seguridad y restauración
+
+El respaldo automático de Supabase es del proyecto entero: restaurarlo pisaría también los datos del otro
+producto que comparte la base. Por eso PULLEX IA respalda **solo su esquema** con `pg_dump`.
+
+**Qué conexión usar.** `PULLEX_DATABASE_URL_DIRECTA` = la conexión **directa** de Supabase (puerto 5432,
+usuario dueño del esquema), no la del pooler (6543): `pg_dump` necesita una sesión propia. El cliente
+(`pg_dump`/`pg_restore`) debe ser de la misma versión mayor que el servidor o posterior.
+
+**Copia diaria.**
+
+```bash
+export PULLEX_DATABASE_URL_DIRECTA='postgresql://…:5432/postgres'   # nunca en el repositorio
+export PULLEX_RESPALDO_CLAVE='frase larga y aleatoria'             # cifra la copia con gpg (AES-256)
+scripts/respaldar_bd.sh /ruta/privada/respaldos
+```
+
+Deja `pullex_pullex_AAAAMMDDTHHMMSSZ.dump.gpg` (formato custom de `pg_dump`, cifrado) y su `.sha256`, con
+permisos solo para el dueño (`umask 077`). Sin `PULLEX_RESPALDO_CLAVE` deja el `.dump` sin cifrar: úsalo solo
+en un equipo propio y cifrado.
+
+Automatizado: `.github/workflows/respaldo-bd.yml` hace la copia cifrada y la sube como artefacto de GitHub
+con 5 días de retención. **Está desactivado**: solo corre a mano. Para activarlo, crea los secretos
+`PULLEX_DATABASE_URL_DIRECTA` y `PULLEX_RESPALDO_CLAVE` en el repositorio y descomenta `schedule`. Pendiente
+antes de activarlo: fijar las acciones por SHA (está marcado con TODO en el archivo).
+
+**Dónde guardarla.** El artefacto de GitHub es de paso, no el archivo de respaldos. Guarda las copias cifradas
+fuera de Supabase y fuera de GitHub (por ejemplo, una carpeta privada de Google Drive o un almacenamiento de
+objetos con acceso restringido), con esta retención sugerida: diarias 7 días, semanales 4 semanas, mensuales
+6 meses (confirmar con la revisión jurídica). La frase de cifrado se guarda aparte (gestor de contraseñas del
+dueño): sin ella la copia no se puede restaurar, y con ella cualquiera puede leer las cuentas.
+
+**Restaurar.**
+
+```bash
+export PULLEX_RESPALDO_CLAVE='…'                        # si la copia está cifrada
+scripts/restaurar_bd.sh respaldos/pullex_pullex_….dump.gpg \
+    --destino-url 'postgresql://…:5432/postgres' --esquema pullex          # pregunta y exige escribir «pullex»
+```
+
+- La base de destino se pasa siempre explícita (`--destino-url` o `PULLEX_RESTAURAR_URL`); el script nunca
+  usa la URL de la app por su cuenta.
+- Si el esquema de destino ya existe, **se detiene sin borrar nada**. Para reemplazarlo hay que agregar
+  `--forzar` (y confirmar). Todo va en una sola transacción: si algo falla, la base queda como estaba.
+- `--esquema-destino otro_nombre` restaura con otro nombre (útil para revisar una copia junto a la de
+  producción en otra base). `--confirmar NOMBRE` confirma sin preguntar (para scripts).
+- Restaura con el usuario que se conecta como dueño y vuelve a aplicar `datos/supabase_seguridad.sql`.
+- Antes de restaurar en producción: detén el tráfico (modo mantenimiento o pausa en Vercel), haz una copia
+  del estado actual y restaura primero en una base de prueba para revisar los conteos.
+
+**Prueba trimestral.** Cada tres meses: descarga la última copia, restáurala en un PostgreSQL de prueba (nunca
+en producción) con `--esquema-destino pullex_prueba_restauracion`, compara el número de filas de `usuarios`,
+`conversaciones` y `mensajes` con producción y anota fecha y resultado en `docs/coordinacion/`.
+`tests/test_seguridad_datos.py` hace ese mismo recorrido (respaldar, borrar, restaurar y comparar conteos)
+contra el PostgreSQL de pruebas en cada corrida con `PULLEX_PRUEBAS_PG_URL`.
 
 ## Pruebas
 
@@ -102,7 +205,8 @@ Con `PULLEX_PRUEBAS_PG_URL` toda la sesión corre contra PostgreSQL en un esquem
 nunca el de producción. En ese modo, una prueba falla si la capa de datos registró un error de SQL que el
 código se haya tragado.
 
-Estado al 8 de octubre de 2026: 1033 pruebas pasan en SQLite y 1048 en PostgreSQL 16.
+Estado al 13 de octubre de 2026: 1060 pruebas pasan en SQLite (27 se saltan por ser solo de PostgreSQL) y
+1086 en PostgreSQL 16 (1 se salta).
 
 ## Cómo saber qué base está en uso
 
@@ -118,7 +222,8 @@ Estado al 8 de octubre de 2026: 1033 pruebas pasan en SQLite y 1048 en PostgreSQ
   base. Verifica los valores vigentes en la documentación de Supabase.
 - Hoy la base comparte proyecto con otro producto (esquema separado). Si crece, se muda con un volcado del
   esquema `pullex` a un proyecto propio y se cambia la URL.
-- Los límites de intentos de ingreso viven en memoria de cada instancia, no en la base.
+- Los límites de intentos de ingreso viven en memoria de cada instancia; la tabla `limites` (versión 2 del
+  esquema) existe para compartirlos entre instancias.
 - Protección de datos: la base queda fuera de Colombia. Revisa lo que exige la Ley 1581 de 2012 sobre
   transferencia internacional de datos personales y dilo en la política de tratamiento (verificar con la
   SIC la lista vigente de países con nivel adecuado).

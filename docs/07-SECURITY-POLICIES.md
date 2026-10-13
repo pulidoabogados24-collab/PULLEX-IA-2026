@@ -41,4 +41,4 @@ Security first: nunca sacrificar seguridad por velocidad. Menor privilegio. Dato
 - Cambiar `PULLEX_ADMIN_CLAVE` por una fuerte al primer despliegue.
 - Nunca compartir la clave `sk-ant-...`; si se filtra, revocarla en console.anthropic.com.
 - Revisar consumo en console.anthropic.com semanalmente (control de costos).
-- Backups: exportar usuarios/uso antes de cada cambio grande (V1: descargar pullex.db).
+- Copias de seguridad: copia diaria cifrada del esquema `pullex` con `scripts/respaldar_bd.sh` (conexión directa, puerto 5432) y siempre una copia manual antes de cada cambio grande; restauración con `scripts/restaurar_bd.sh` y prueba de restauración cada trimestre (docs/18-BASE-DE-DATOS.md, «Copias de seguridad y restauración»). La base ya no es un archivo `pullex.db`: no se descarga nada del servidor.
