@@ -179,7 +179,15 @@ with sync_playwright() as p:
     ok("CSV: fórmulas quedan como texto con apóstrofo", "'=HYPERLINK(" in csv and "'+1+1" in csv and "'@SUM(1)" in csv and "'-2+3" in csv)
     ok("CSV: números negativos y con moneda intactos", '"-1.000"' in csv and '"$ 2.000"' in csv and '"-$ 3.500,50"' in csv, csv[-120:])
 
-    viol = [v for v in pag.evaluate("window.__csp || []") if not v.startswith("script-src-attr")]
+    # F-07: aunque un <style> llegara a la página por otra vía, la CSP (style-src-elem) no lo aplica.
+    pag.evaluate("""() => { const s = document.createElement('style'); s.textContent = '#hilo{outline:7px dotted lime}';
+        document.head.appendChild(s); }""")
+    time.sleep(0.2)
+    ok("CSP: un <style> inyectado en la página no se aplica", pag.evaluate("getComputedStyle(document.getElementById('hilo')).outlineStyle") != "dotted")
+    # DOMPurify y marked analizan el <style> hostil en un documento aparte: el navegador lo bloquea y lo reporta
+    # (style-src-elem inline). Es el bloqueo esperado; cualquier otra violación es un error.
+    viol = [v for v in pag.evaluate("window.__csp || []")
+            if not v.startswith("script-src-attr") and v.strip() != "style-src-elem inline"]
     ok("sin violaciones de CSP inesperadas", not viol, "; ".join(viol)[:200])
     nav.close()
 
