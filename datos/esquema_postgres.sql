@@ -76,6 +76,12 @@ CREATE TABLE IF NOT EXISTS tokens_accion (
     usado BIGINT DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS ix_tokens_email ON tokens_accion (email, tipo);
+-- Límites por cuenta compartidos entre instancias (AUTH-04): clave → inicio del bloque y número de intentos.
+CREATE TABLE IF NOT EXISTS limites (
+    clave TEXT COLLATE "C" PRIMARY KEY,
+    inicio DOUBLE PRECISION NOT NULL,
+    n BIGINT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS apariencia_imagenes (
     usuario TEXT COLLATE "C" NOT NULL,
     tipo TEXT COLLATE "C" NOT NULL,
@@ -279,12 +285,15 @@ ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verificado BIGINT DEFAULT 0;
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS sesion_version BIGINT DEFAULT 0;
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
+-- Tablas nuevas después de la versión 1: las crea su CREATE TABLE IF NOT EXISTS de arriba al volver a aplicar el
+-- archivo (idempotente): limites (AUTH-04).
 
 -- ---- Seguridad por filas: activada en todas las tablas, sin políticas ----
 ALTER TABLE esquema_version ENABLE ROW LEVEL SECURITY;
 ALTER TABLE usuarios ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tokens_accion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE apariencia_imagenes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE limites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversaciones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mensajes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE boletin ENABLE ROW LEVEL SECURITY;

@@ -263,3 +263,85 @@ def test_AUTH02_restablecer_la_clave_por_correo_verifica_el_correo(cliente, modu
     token = modulo.generar_token_accion(email, "restablecer_clave", 1)
     assert cliente.post("/api/restablecer-clave", json={"token": token, "clave": "nueva-clave-456"}).status_code == 200
     assert _usuario(modulo, email)["email_verificado"]
+
+
+# --------------------------------------------------------------------------------------------- AUTH-04 --
+def _peticion(xff=None, cliente_ip="203.0.113.9"):
+    from starlette.requests import Request
+    cabeceras = [(b"x-forwarded-for", xff.encode())] if xff is not None else []
+    return Request({"type": "http", "method": "GET", "path": "/", "headers": cabeceras, "client": (cliente_ip, 1234)})
+
+
+def test_AUTH04_ip_de_solo_cree_al_ultimo_proxy_confiable(modulo, monkeypatch):
+    for n in ("VERCEL", "RENDER", "PULLEX_PROXIES_CONFIABLES"):
+        monkeypatch.delenv(n, raising=False)
+    # en local (sin proxy) la cabecera la escribe el cliente: no se le cree
+    assert modulo.ip_de(_peticion("1.1.1.1")) == "203.0.113.9"
+    monkeypatch.setenv("RENDER", "true")             # Render: un proxy que AGREGA la IP real al final
+    assert modulo.ip_de(_peticion("6.6.6.6, 198.51.100.7")) == "198.51.100.7"
+    monkeypatch.delenv("RENDER")
+    monkeypatch.setenv("VERCEL", "1")
+    assert modulo.ip_de(_peticion("198.51.100.8")) == "198.51.100.8"
+    assert modulo.ip_de(_peticion(None)) == "203.0.113.9"
+    monkeypatch.setenv("PULLEX_PROXIES_CONFIABLES", "2")
+    assert modulo.ip_de(_peticion("6.6.6.6, 198.51.100.7, 10.0.0.1")) == "198.51.100.7"
+    assert modulo.ip_de(_peticion("198.51.100.7")) == "198.51.100.7"         # menos saltos de los esperados
+    monkeypatch.setenv("PULLEX_PROXIES_CONFIABLES", "0")
+    assert modulo.ip_de(_peticion("6.6.6.6")) == "203.0.113.9"
+
+
+def test_AUTH04_rotar_x_forwarded_for_no_evade_el_limite_por_ip(cliente, monkeypatch):
+    for n in ("VERCEL", "RENDER", "PULLEX_PROXIES_CONFIABLES"):
+        monkeypatch.delenv(n, raising=False)
+    codigos = [cliente.post("/api/registro", headers={"X-Forwarded-For": f"10.0.{i // 250}.{i % 250}"},
+                            json={"email": f"rotar{i}_{time.time_ns()}@pruebas.local", "nombre": "Bot",
+                                  "clave": "clave-segura-123", "acepto_politica": True}).status_code for i in range(12)]
+    assert codigos[:8] == [200] * 8 and set(codigos[8:]) == {429}, codigos
+
+
+def test_AUTH04_podar_nunca_vacia_el_diccionario_y_conserva_a_los_bloqueados(modulo, monkeypatch):
+    monkeypatch.setattr(modulo, "_MAX_CLAVES_LIMITE", 50)
+    d = {}
+    ahora = time.time()
+    d["login:victima@x.co"] = [ahora - 30 + i for i in range(10)]          # la víctima: bloqueada, intentos algo viejos
+    for i in range(60):
+        d[f"login:relleno{i}@x.co"] = [ahora]                               # relleno del atacante, más reciente
+    modulo._podar(d, ahora, 900)
+    assert 0 < len(d) <= 50 and "login:victima@x.co" in d
+
+
+def test_AUTH04_el_correo_del_login_se_recorta_antes_de_usarlo_como_clave(cliente, modulo):
+    enorme = "a" * 100_000 + "@x.co"
+    assert cliente.post("/api/login", json={"email": enorme, "clave": "x"}).status_code == 401
+    claves = list(modulo._intentos_cuenta)
+    with closing(modulo.db()) as con:
+        claves += [f["clave"] for f in con.execute("SELECT clave FROM limites").fetchall()]
+    assert claves and max(len(c) for c in claves) <= 300
+
+
+def test_AUTH04_el_limite_por_cuenta_se_comparte_entre_instancias(cliente, modulo):
+    """Diez intentos fallidos contra una cuenta; luego «otra instancia» (memoria vacía) sigue bloqueando."""
+    email, clave, _ = nuevo_usuario(cliente)
+    for i in range(10):
+        modulo._intentos.clear()
+        assert cliente.post("/api/login", json={"email": email, "clave": f"mala-{i}"}).status_code == 401
+    modulo._intentos.clear()
+    modulo._intentos_cuenta.clear()                 # otra instancia de Vercel: no tiene nada en memoria
+    assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 429
+    with closing(modulo.db()) as con:
+        assert con.execute("SELECT n FROM limites WHERE clave=?", ("login:" + email,)).fetchone()["n"] >= 11
+
+
+def test_AUTH04_si_la_base_falla_el_limite_sigue_en_memoria(modulo, monkeypatch):
+    import pytest
+    from fastapi import HTTPException
+
+    def sin_base():
+        raise modulo.base_datos.ErrorConexion("simulado")
+    monkeypatch.setattr(modulo, "db", sin_base)
+    clave = f"prueba-memoria:{time.time_ns()}"
+    modulo.limitar_cuenta(clave, 2, 60)
+    modulo.limitar_cuenta(clave, 2, 60)
+    with pytest.raises(HTTPException) as e:
+        modulo.limitar_cuenta(clave, 2, 60)
+    assert e.value.status_code == 429

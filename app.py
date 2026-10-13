@@ -606,6 +606,10 @@ def _crear_tablas_sqlite(con):
     CREATE TABLE IF NOT EXISTS apariencia_imagenes(
         usuario TEXT NOT NULL, tipo TEXT NOT NULL, mime TEXT NOT NULL, data BLOB NOT NULL,
         actualizado REAL NOT NULL, PRIMARY KEY(usuario, tipo));
+    CREATE TABLE IF NOT EXISTS limites(
+        clave TEXT PRIMARY KEY,
+        inicio REAL NOT NULL,
+        n INTEGER NOT NULL);
     """)
     academia.crear_tabla(con)
     telemetria.crear_tabla(con)
@@ -1033,29 +1037,73 @@ _intentos_lock = threading.Lock()
 
 _intentos_cuenta = {}
 _MAX_CLAVES_LIMITE = 20000
+MAX_CLAVE_LIMITE = 300           # largo máximo de una clave de límite (en memoria y en la tabla limites)
+PURGA_LIMITES_S = 2 * 86400      # filas de limites sin uso en dos días se borran (de vez en cuando)
 
 
 def _podar(d: dict, ahora: float, ventana: int):
-    """Evita que rotar IPs falsas haga crecer la memoria sin límite."""
-    if len(d) > _MAX_CLAVES_LIMITE:
-        for k in [k for k, v in d.items() if not v or ahora - v[-1] > ventana]:
+    """Evita que rotar IPs o correos falsos haga crecer la memoria sin límite. AUTH-04: nunca se vacía el
+    diccionario entero (eso le reiniciaba el bloqueo a la víctima). Primero salen las claves cuya ventana ya pasó;
+    si aún sobran, las que tienen MENOS intentos y, entre ellas, las más antiguas: así una inundación de claves de
+    un solo intento no desplaza a una cuenta que está bloqueada."""
+    if len(d) <= _MAX_CLAVES_LIMITE:
+        return
+    for k in [k for k, v in d.items() if not v or ahora - v[-1] > ventana]:
+        d.pop(k, None)
+    sobran = len(d) - int(_MAX_CLAVES_LIMITE * 0.9)
+    if sobran > 0 and len(d) > _MAX_CLAVES_LIMITE:
+        for k in sorted(d, key=lambda k: (len(d[k]), d[k][-1]))[:sobran]:
             d.pop(k, None)
-        if len(d) > _MAX_CLAVES_LIMITE:
-            d.clear()
 
 
-def limitar_cuenta(clave: str, tope: int, ventana: int):
-    """Límite por CUENTA (no por IP). La IP de X-Forwarded-For la controla el cliente y se
-    puede rotar; el correo objetivo no. Frena fuerza bruta y bombardeo de correos a una
-    víctima aunque el atacante cambie de IP en cada intento."""
+def _limitar_cuenta_en_memoria(clave: str, tope: int, ventana: int):
     ahora = time.time()
     with _intentos_lock:
         _podar(_intentos_cuenta, ahora, ventana)
         reg = [t for t in _intentos_cuenta.get(clave, []) if ahora - t < ventana]
         if len(reg) >= tope:
-            raise HTTPException(429, "Demasiados intentos para esta cuenta. Espera unos minutos.")
+            raise HTTPException(429, MENSAJE_LIMITE_CUENTA)
         reg.append(ahora)
         _intentos_cuenta[clave] = reg
+
+
+MENSAJE_LIMITE_CUENTA = "Demasiados intentos para esta cuenta. Espera unos minutos."
+
+
+def _limitar_cuenta_en_base(clave: str, tope: int, ventana: int) -> bool:
+    """Cuenta el intento en la tabla limites (compartida por todas las instancias) y dice si está permitido.
+    Ventana por bloques: el bloque empieza con el primer intento y dura ``ventana`` segundos; al vencer, el
+    contador vuelve a 1. Una sola sentencia (INSERT … ON CONFLICT … DO UPDATE), válida en SQLite y PostgreSQL."""
+    ahora = time.time()
+    corte = ahora - ventana
+    with closing(db()) as con:
+        fila = con.execute(
+            "INSERT INTO limites(clave,inicio,n) VALUES(?,?,1) ON CONFLICT(clave) DO UPDATE SET "
+            "n=CASE WHEN limites.inicio<=? THEN 1 ELSE limites.n+1 END, "
+            "inicio=CASE WHEN limites.inicio<=? THEN excluded.inicio ELSE limites.inicio END RETURNING n",
+            (clave, ahora, corte, corte)).fetchone()
+        if secrets.randbelow(200) == 0:                    # purga oportunista, sin tarea programada
+            con.execute("DELETE FROM limites WHERE inicio<?", (ahora - PURGA_LIMITES_S,))
+        con.commit()
+    return int(fila["n"]) <= tope
+
+
+def limitar_cuenta(clave: str, tope: int, ventana: int):
+    """Límite por CUENTA (no por IP). La IP la puede rotar el atacante; el correo objetivo no. Frena fuerza bruta y
+    bombardeo de correos a una víctima aunque el atacante cambie de IP en cada intento.
+
+    AUTH-04: el conteo vive en la base (tabla limites), así vale para TODAS las instancias de Vercel y sobrevive a
+    los arranques en frío. Si la base falla, se cae al límite en memoria de esta instancia: un error de la base no
+    debe dejar a la persona por fuera."""
+    clave = str(clave)[:MAX_CLAVE_LIMITE]
+    try:
+        permitido = _limitar_cuenta_en_base(clave, tope, ventana)
+    except Exception as e:  # noqa: BLE001 — cualquier fallo de la base: límite en memoria
+        log.warning("límite por cuenta en memoria (la base no respondió: %s)", type(e).__name__)
+        _limitar_cuenta_en_memoria(clave, tope, ventana)
+        return
+    if not permitido:
+        raise HTTPException(429, MENSAJE_LIMITE_CUENTA)
 
 
 def limitar(ip: str, tope: int = 8, ventana: int = 300):
@@ -1068,9 +1116,27 @@ def limitar(ip: str, tope: int = 8, ventana: int = 300):
         reg.append(ahora)
         _intentos[ip] = reg
 
+def proxies_confiables() -> int:
+    """Cuántos proxies propios hay delante de la app (PULLEX_PROXIES_CONFIABLES). Por defecto 1 en Vercel o Render
+    (su borde escribe o agrega la IP real) y 0 en local, donde X-Forwarded-For la escribe el propio cliente."""
+    valor = os.getenv("PULLEX_PROXIES_CONFIABLES", "").strip()
+    if valor.isdigit():
+        return int(valor)
+    return 1 if (os.getenv("VERCEL") or os.getenv("RENDER")) else 0
+
+
 def ip_de(request: Request) -> str:
-    fwd = request.headers.get("x-forwarded-for", "")
-    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+    """AUTH-04: la IP del cliente según el ÚLTIMO proxy confiable. Cada proxy agrega al final de X-Forwarded-For la
+    dirección de quien se le conectó; lo que hay más a la izquierda lo pudo escribir el cliente (antes se tomaba el
+    primer valor: rotarlo saltaba el límite por IP). Con N proxies propios, la IP real es el N-ésimo desde el final."""
+    directa = request.client.host if request.client else "?"
+    n = proxies_confiables()
+    if n <= 0:
+        return directa
+    partes = [p.strip() for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]
+    if not partes:
+        return directa
+    return partes[-n] if len(partes) >= n else partes[0]
 
 def admin_actual(request: Request) -> dict:
     u = usuario_actual(request)
@@ -1259,7 +1325,8 @@ async def registro(request: Request):
 async def login(request: Request):
     limitar(ip_de(request))
     datos = await json_de(request)
-    email = normaliza_email(str(datos.get("email", datos.get("usuario", "")) or ""))
+    # AUTH-04: el correo se recorta antes de usarlo como clave del límite (un correo de 40 MB quedaba en memoria)
+    email = normaliza_email(str(datos.get("email", datos.get("usuario", "")) or ""))[:254]
     clave = str(datos.get("clave", "") or "")
     limitar_cuenta("login:" + email, tope=10, ventana=900)
     if len(clave) <= MAX_CLAVE and verificar_clave(email, clave):

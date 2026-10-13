@@ -298,6 +298,10 @@ def limpiar_limites(modulo):
         d = getattr(modulo, nombre, None)
         if isinstance(d, dict):
             d.clear()
+    # AUTH-04: los límites por cuenta viven en la tabla limites (compartida entre instancias): cada prueba empieza limpia
+    with closing(modulo.db()) as con:
+        con.execute("DELETE FROM limites")
+        con.commit()
     yield
 
 

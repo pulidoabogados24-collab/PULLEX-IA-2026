@@ -60,9 +60,10 @@ def _indices_sqlite(con) -> dict:
 def test_las_funciones_de_creacion_cubren_todos_los_modulos(sqlite_de_la_app):
     """Si aparece un módulo nuevo con tablas en la base principal, hay que sumarlo a esta prueba y al archivo."""
     tablas = set(_esquema_sqlite(sqlite_de_la_app))
-    assert len(tablas) == 17
+    assert len(tablas) == 18
     for modulo_tablas in ({"usuarios", "conversaciones", "mensajes", "boletin", "tokens_accion", "modular_casos",
-                           "modular_intentos", "apariencia_imagenes", "documentos_generados", "asistente_tareas"},
+                           "modular_intentos", "apariencia_imagenes", "documentos_generados", "asistente_tareas",
+                           "limites"},
                           {"conocimiento"}, {"calidad_respuestas"}, {"taller_escenarios", "taller_intentos", "taller_modelos"},
                           {"perfiles_ejecuciones", "perfiles_ejecuciones_perfil"}):
         assert modulo_tablas <= tablas
