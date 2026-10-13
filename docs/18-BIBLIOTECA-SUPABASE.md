@@ -5,16 +5,20 @@ Solo se usa el esquema `pullex`; las tablas de Umbral Licita no se modifican.
 
 ## Estado comprobado
 
-- `Pack Jurídico 2`: 11.102 archivos distintos visibles en 613 carpetas, unos
-  5,9 GB según los tamaños de Drive. Es **un mínimo**: tres carpetas llegaron
-  al tope de 1.000 elementos del listado. Se requiere paginación verificable
-  antes de declarar completo el inventario.
+- `Pack Jurídico 1`: 16.232 archivos distintos visibles en 959 carpetas,
+  12,79 GB según los tamaños de Drive. Tres carpetas llegaron al límite de
+  1.000 elementos.
+- `Pack Jurídico 2`: 11.102 archivos distintos visibles en 613 carpetas,
+  5,86 GB según los tamaños de Drive. Otras tres carpetas llegaron al límite.
+  Por tanto, **27.334 es un mínimo**, no el tamaño final comprobado de ambos
+  packs. Hace falta paginación verificable para las seis carpetas limitadas.
 - El listado privado se conserva fuera de Git. Puede contener nombres de
   clientes y otros datos personales. En el repositorio se publican solo el
   esquema, el importador y los resultados agregados.
-- `Pack Jurídico 1`: el inventario anterior del repositorio solo tiene 16
-  archivos. Sus 21 carpetas principales no prueban que el pack esté completo.
-- Los metadatos cargados en Supabase quedan `ENCONTRADO`, con sensibilidad y
+- El inventario anterior del repositorio solo tenía 16 archivos del Pack 1;
+  esta revisión encontró una colección mucho mayor.
+- La consulta de control en Supabase devolvió exactamente 16.232 fichas del
+  Pack 1 y 11.102 del Pack 2. Los metadatos quedan `ENCONTRADO`, con sensibilidad y
   vigencia pendientes y derechos por confirmar. **No equivalen a documentos
   descargados, textos extraídos, búsqueda funcional ni validación jurídica.**
 - La aplicación publicada sigue usando su catálogo SQLite; aún no consulta
