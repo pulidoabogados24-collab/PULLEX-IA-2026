@@ -92,11 +92,13 @@ def valorar(con, mensaje_id, usuario_anonimo: str, valor: str, motivos=()):
     if valor not in VALORES:
         raise ValueError("valoración inválida")
     lista = motivos_validos(motivos) if valor == "abajo" else []
-    cur = con.execute("UPDATE calidad_respuestas SET valoracion=?, motivos=?, valorada=? WHERE mensaje_id=?",
-                      (valor, json.dumps(lista), time.time(), mensaje_id))
-    if cur.rowcount != 1:
-        con.execute("INSERT INTO calidad_respuestas(mensaje_id, creada, usuario, valoracion, motivos, valorada) "
-                    "VALUES(?,?,?,?,?,?)", (mensaje_id, time.time(), usuario_anonimo, valor, json.dumps(lista), time.time()))
+    # BD-06: una sola sentencia (antes UPDATE y, si no había fila, INSERT: dos valoraciones a la vez chocaban con el
+    # UNIQUE de mensaje_id). Si la fila existe se actualiza solo la valoración; lo demás de la fila no se toca.
+    ahora = time.time()
+    con.execute("INSERT INTO calidad_respuestas(mensaje_id, creada, usuario, valoracion, motivos, valorada) "
+                "VALUES(?,?,?,?,?,?) ON CONFLICT(mensaje_id) DO UPDATE SET valoracion=excluded.valoracion, "
+                "motivos=excluded.motivos, valorada=excluded.valorada",
+                (mensaje_id, ahora, usuario_anonimo, valor, json.dumps(lista), ahora))
     con.commit()
     return lista
 

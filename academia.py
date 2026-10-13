@@ -325,11 +325,12 @@ def crear_tabla(con):
 
 
 def _actualizar(con, email, cid, nombre, area, resultado, ahora):
+    # BD-06: un solo INSERT … ON CONFLICT DO NOTHING en vez de «SELECT y, si no está, INSERT». Con dos evaluaciones a la
+    # vez, la segunda espera a la primera y no inserta nada (antes chocaba con la llave primaria: 500 en PostgreSQL).
+    con.execute("INSERT INTO conocimiento(usuario,concepto_id,nombre,area,caja,proximo,primer_visto,ultimo_visto) "
+                "VALUES(?,?,?,?,0,?,?,?) ON CONFLICT(usuario, concepto_id) DO NOTHING",
+                (email, cid, nombre[:80], area, ahora + DIA, ahora, ahora))
     f = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
-    if f is None:
-        con.execute("INSERT INTO conocimiento(usuario,concepto_id,nombre,area,caja,proximo,primer_visto,ultimo_visto) "
-                    "VALUES(?,?,?,?,0,?,?,?)", (email, cid, nombre[:80], area, ahora + DIA, ahora, ahora))
-        f = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
     if resultado == "fallo":
         con.execute("UPDATE conocimiento SET fallos=fallos+1, caja=1, proximo=?, ultimo_fallo=?, ultimo_visto=?, "
                     "resuelto=NULL WHERE usuario=? AND concepto_id=?",

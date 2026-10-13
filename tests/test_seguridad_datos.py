@@ -290,6 +290,96 @@ def test_pg_una_consulta_que_tarda_demasiado_se_corta(modulo, monkeypatch):
         assert admin.execute("SHOW statement_timeout").fetchone()[0] == "0"
 
 
+# ========================================================= BD-06: INSERT … ON CONFLICT en vez de SELECT+INSERT ==
+@postgres
+def test_pg_dos_evaluaciones_a_la_vez_no_chocan_en_conocimiento(modulo):
+    email, cid = f"carrera_{secrets.token_hex(4)}@pruebas.local", "concepto:carrera"
+    a, b = modulo.db(), modulo.db()
+    errores = []
+    try:
+        academia._actualizar(a, email, cid, "Concepto", "Civil", "fallo", time.time())     # A inserta, sin confirmar
+
+        def en_b():
+            try:
+                academia._actualizar(b, email, cid, "Concepto", "Civil", "acierto", time.time())
+                b.commit()
+            except Exception as e:      # noqa: BLE001
+                errores.append(e)
+        h = threading.Thread(target=en_b)
+        h.start()
+        time.sleep(0.8)                  # B espera el candado de la fila que insertó A
+        a.commit()
+        h.join(10)
+    finally:
+        a.close()
+        b.close()
+    assert not errores, errores
+    with closing(modulo.db()) as con:
+        f = con.execute("SELECT aciertos, fallos FROM conocimiento WHERE usuario=? AND concepto_id=?", (email, cid)).fetchone()
+        assert (f["aciertos"], f["fallos"]) == (1, 1)
+        con.execute("DELETE FROM conocimiento WHERE usuario=?", (email,))
+        con.commit()
+
+
+class _ConfirmaCuandoSeLeDiga:
+    """Envoltura de conexión cuyo commit() espera una señal: deja una transacción abierta a mitad de valorar()."""
+
+    def __init__(self, con, senal):
+        self._con, self._senal = con, senal
+
+    def execute(self, *a):
+        return self._con.execute(*a)
+
+    def commit(self):
+        self._senal.wait(10)
+        self._con.commit()
+
+
+@postgres
+def test_pg_dos_valoraciones_a_la_vez_de_la_misma_respuesta_no_chocan(modulo):
+    mid = 9_000_000_000 + secrets.randbelow(10**6)
+    senal, errores = threading.Event(), []
+    a, b = modulo.db(), modulo.db()
+    try:
+        ha = threading.Thread(target=lambda: telemetria.valorar(_ConfirmaCuandoSeLeDiga(a, senal), mid, "anon-a", "arriba"))
+        ha.start()
+        time.sleep(0.4)                  # A ya insertó y espera para confirmar
+
+        def en_b():
+            try:
+                telemetria.valorar(b, mid, "anon-b", "abajo", ["incompleta"])
+            except Exception as e:      # noqa: BLE001
+                errores.append(e)
+        hb = threading.Thread(target=en_b)
+        hb.start()
+        time.sleep(0.6)
+        senal.set()
+        ha.join(10)
+        hb.join(10)
+    finally:
+        a.close()
+        b.close()
+    assert not errores, errores
+    with closing(modulo.db()) as con:
+        filas = con.execute("SELECT valoracion, motivos FROM calidad_respuestas WHERE mensaje_id=?", (mid,)).fetchall()
+        assert [(f["valoracion"], json.loads(f["motivos"])) for f in filas] == [("abajo", ["incompleta"])]
+        con.execute("DELETE FROM calidad_respuestas WHERE mensaje_id=?", (mid,))
+        con.commit()
+
+
+def test_valorar_actualiza_sin_borrar_lo_demas_de_la_fila(modulo):
+    mid = 8_000_000_000 + secrets.randbelow(10**6)
+    with closing(modulo.db()) as con:
+        telemetria.registrar(con, mid, "anon", {"intencion": "consulta", "caracteres": 120})
+        telemetria.valorar(con, mid, "anon", "abajo", ["muy_larga", "inventado"])
+        telemetria.valorar(con, mid, "anon", "arriba")
+        f = con.execute("SELECT intencion, caracteres, valoracion, motivos FROM calidad_respuestas WHERE mensaje_id=?",
+                        (mid,)).fetchone()
+        assert (f["intencion"], f["caracteres"], f["valoracion"], json.loads(f["motivos"])) == ("consulta", 120, "arriba", [])
+        con.execute("DELETE FROM calidad_respuestas WHERE mensaje_id=?", (mid,))
+        con.commit()
+
+
 # ================================================= BD-13: índice de modular_intentos(caso_id), sin FK aún ==
 def test_indice_de_intentos_por_caso_y_sin_claves_foraneas_todavia(modulo):
     assert datos.indices_del_archivo()["ix_mintentos_caso"] == "modular_intentos"
