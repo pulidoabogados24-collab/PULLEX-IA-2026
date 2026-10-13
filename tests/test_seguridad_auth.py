@@ -520,3 +520,41 @@ def test_AUTH10_el_reinicio_mensual_no_borra_consumos_de_otra_peticion(cliente, 
     _sql(modulo, "UPDATE usuarios SET periodo='2000-01', usadas=5 WHERE email=?", (email,))
     assert modulo.reiniciar_periodo_si_aplica(_usuario(modulo, email))["usadas"] == 0
     assert _usuario(modulo, email)["usadas"] == 0
+
+
+# ---------------------------------------------------------------------------------------------- IA-17 --
+def test_IA17_el_registro_exige_aceptar_la_politica_y_la_guarda(cliente, modulo):
+    base = {"nombre": "Persona Prueba", "clave": "clave-segura-123"}
+    for extra in ({}, {"acepto_politica": False}, {"acepto_politica": "true"}, {"acepto_politica": 1}):
+        email = f"politica_{time.time_ns()}@pruebas.local"
+        r = cliente.post("/api/registro", json={"email": email, **base, **extra})
+        assert r.status_code == 400, extra
+        assert r.json()["detail"] == "Debes aceptar la política de tratamiento de datos para crear la cuenta."
+        assert _usuario(modulo, email) is None
+    email = f"politica_{time.time_ns()}@pruebas.local"
+    antes = time.time()
+    r = cliente.post("/api/registro", json={"email": email, **base, "acepto_politica": True})
+    assert r.status_code == 200, r.text
+    perfil = r.json()["perfil"]
+    assert perfil["politica_version"] == modulo.POLITICA_VERSION == "2026-10-13" and perfil["politica_vigente"] == "2026-10-13"
+    u = _usuario(modulo, email)
+    assert u["acepto_politica_version"] == "2026-10-13" and antes - 1 <= u["acepto_politica_en"] <= time.time() + 1
+    assert cliente.get("/api/estado", headers=auth(r.json()["token"])).json()["perfil"]["politica_version"] == "2026-10-13"
+
+
+def test_IA17_la_cuenta_admin_de_las_variables_queda_exenta(cliente, modulo):
+    admin = login_admin(cliente)
+    perfil = cliente.get("/api/estado", headers=auth(admin)).json()["perfil"]
+    assert perfil["politica_version"] is None and perfil["politica_vigente"] == modulo.POLITICA_VERSION
+    assert cliente.get("/api/admin/usuarios", headers=auth(admin)).status_code == 200
+
+
+def test_IA17_ruta_de_la_politica_de_datos(cliente, modulo, monkeypatch, tmp_path):
+    monkeypatch.setattr(modulo, "RUTA_POLITICA_DATOS", str(tmp_path / "no-existe.html"))
+    assert cliente.get("/politica-de-datos").status_code == 404
+    pagina = tmp_path / "politica-datos.html"
+    pagina.write_text("<!doctype html><title>Política</title><h1>Política de tratamiento de datos</h1>", encoding="utf-8")
+    monkeypatch.setattr(modulo, "RUTA_POLITICA_DATOS", str(pagina))
+    r = cliente.get("/politica-de-datos")
+    assert r.status_code == 200 and "Política de tratamiento de datos" in r.text
+    assert r.headers["content-type"].startswith("text/html") and r.headers.get("content-security-policy")

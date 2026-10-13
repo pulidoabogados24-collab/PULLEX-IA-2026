@@ -301,7 +301,8 @@ def test_registro_duplicado_simultaneo_responde_409_y_no_500(cliente, modulo, mo
     """Dos registros a la vez con el mismo correo: el segundo choca con la llave primaria en cualquiera de los motores."""
     email, clave, _ = nuevo_usuario(cliente)
     monkeypatch.setattr(modulo, "obtener_usuario", lambda e: None)       # como si el otro registro aún no se viera
-    r = cliente.post("/api/registro", json={"email": email, "nombre": "Otra Persona", "clave": "otra-clave-123"})
+    r = cliente.post("/api/registro", json={"email": email, "nombre": "Otra Persona", "clave": "otra-clave-123",
+                                                 "acepto_politica": True})
     assert r.status_code == 409 and "Ya existe" in r.json()["detail"]
     monkeypatch.undo()
     assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 200

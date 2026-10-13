@@ -154,6 +154,11 @@ ADMIN_CLAVE = os.getenv("PULLEX_ADMIN_CLAVE", os.getenv("LEXCOL_ADMIN_CLAVE", ""
 # Proveedor elegido por ser el estándar simple para un operador único: capa gratuita de
 # 3.000 correos/mes, API HTTP sin necesidad de manejar SMTP. Aislado en enviar_correo() para
 # poder cambiar de proveedor sin tocar el resto del código si más adelante conviene otro.
+# IA-17: versión vigente de la política de tratamiento de datos (Ley 1581 de 2012). Al crear la cuenta se guarda la
+# versión aceptada y la fecha. El TEXTO de la política (static/politica-datos.html) lo redacta y revisa un abogado.
+POLITICA_VERSION = "2026-10-13"
+RUTA_POLITICA_DATOS = os.path.join("static", "politica-datos.html")
+
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 EMAIL_FROM = os.getenv("PULLEX_EMAIL_FROM", "PULLEX IA <onboarding@resend.dev>")
 APP_URL = os.getenv("PULLEX_APP_URL", "http://localhost:8000")
@@ -725,6 +730,13 @@ def _crear_tablas_sqlite(con):
         con.commit()
     except sqlite3.OperationalError:
         pass
+    # IA-17: versión de la política de datos aceptada al registrarse y cuándo (epoch). Cuentas anteriores: NULL.
+    for columna, tipo in (("acepto_politica_version", "TEXT"), ("acepto_politica_en", "REAL")):
+        try:
+            con.execute(f"ALTER TABLE usuarios ADD COLUMN {columna} {tipo}")
+            con.commit()
+        except sqlite3.OperationalError:
+            pass
     # AUTH-08: cuántas veces se ha pedido «continuar» esta respuesta (tope MAX_CONTINUACIONES).
     try:
         con.execute("ALTER TABLE mensajes ADD COLUMN continuaciones INTEGER DEFAULT 0")
@@ -905,16 +917,21 @@ def fecha_hoy() -> str:
 def normaliza_email(email: str) -> str:
     return (email or "").strip().lower()
 
-def crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0):
+def crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0, politica_version=None):
+    """politica_version: la versión de la política de datos que la persona aceptó al registrarse (IA-17). None solo
+    para la cuenta admin que crea el operador con sus variables de entorno."""
     email = normaliza_email(email)
     sal = secrets.token_bytes(16)
     limite = PLANES.get(plan, PLANES["prueba"])["limite"]
+    ahora = time.time()
     with closing(db()) as con:
         con.execute(
-            """INSERT INTO usuarios(email,nombre,sal,hash,plan,limite,usadas,periodo,activo,es_admin,email_verificado,preferencias,creado)
-               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            """INSERT INTO usuarios(email,nombre,sal,hash,plan,limite,usadas,periodo,activo,es_admin,email_verificado,preferencias,creado,
+                                    acepto_politica_version,acepto_politica_en)
+               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (email, nombre.strip(), sal.hex(), _hash(clave, sal), plan, limite, 0,
-             periodo_actual(), activo, es_admin, email_verificado, json.dumps(PREFS_DEFECTO), time.time()))
+             periodo_actual(), activo, es_admin, email_verificado, json.dumps(PREFS_DEFECTO), ahora,
+             politica_version, ahora if politica_version else None))
         con.commit()
 
 def obtener_usuario(email):
@@ -1278,7 +1295,9 @@ def perfil_publico(u):
             "restantes": max(0, u["limite"] - u["usadas"]), "activo": bool(u["activo"]),
             "es_admin": bool(u["es_admin"]),
             "email_verificado": bool(u["email_verificado"]) if "email_verificado" in u.keys() else False,
-            "funciones": funciones_de(u), "preferencias": preferencias_de(u)}
+            "funciones": funciones_de(u), "preferencias": preferencias_de(u),
+            # IA-17: versión aceptada (None si nunca aceptó, p. ej. cuentas anteriores) y versión vigente
+            "politica_version": u.get("acepto_politica_version"), "politica_vigente": POLITICA_VERSION}
 
 # ----------------------------------------------------------- corpus opcional --
 def buscar_corpus(pregunta: str) -> str:
@@ -1414,6 +1433,15 @@ def salud():
             "db_persistente": base["persistente"], "secreto_configurado": SECRETO_CONFIGURADO,
             "ia_configurada": ia_configurada()}
 
+@app.get("/politica-de-datos", response_class=HTMLResponse)
+def politica_de_datos():
+    """IA-17: la política de tratamiento de datos (static/politica-datos.html, la mantiene el equipo de interfaz con
+    el texto revisado por un abogado). Si aún no existe, 404."""
+    if not os.path.isfile(RUTA_POLITICA_DATOS):
+        raise HTTPException(404, "La política de tratamiento de datos aún no está publicada.")
+    with open(RUTA_POLITICA_DATOS, encoding="utf-8") as f:
+        return f.read()
+
 @app.get("/sw.js")
 def service_worker():
     return Response(open(os.path.join("static", "sw.js"), encoding="utf-8").read(),
@@ -1438,10 +1466,13 @@ async def registro(request: Request):
         raise HTTPException(400, f"Escribe tu nombre (entre 2 y {MAX_NOMBRE} caracteres)")
     if len(clave) < 8 or len(clave) > MAX_CLAVE:
         raise HTTPException(400, "La contraseña debe tener entre 8 y 256 caracteres")
+    if datos.get("acepto_politica") is not True:      # IA-17: aceptación expresa (true en JSON, no "true" ni 1)
+        raise HTTPException(400, "Debes aceptar la política de tratamiento de datos para crear la cuenta.")
     if obtener_usuario(email):
         raise HTTPException(409, "Ya existe una cuenta con ese correo")
     try:
-        crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0)
+        crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0,
+                      politica_version=POLITICA_VERSION)
     except base_datos.errores_integridad():
         # Dos registros simultáneos con el mismo correo (doble clic, o dos instancias a la vez): el segundo choca
         # con la llave primaria. Antes terminaba en un 500.

@@ -65,7 +65,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email_verificado BIGINT DEFAULT 0,
     preferencias TEXT COLLATE "C" DEFAULT '{}',
     creado DOUBLE PRECISION,
-    sesion_version BIGINT DEFAULT 0
+    sesion_version BIGINT DEFAULT 0,
+    acepto_politica_version TEXT COLLATE "C",
+    acepto_politica_en DOUBLE PRECISION
 );
 CREATE TABLE IF NOT EXISTS tokens_accion (
     token TEXT COLLATE "C" PRIMARY KEY,
@@ -284,6 +286,8 @@ CREATE INDEX IF NOT EXISTS ix_calidad_creada ON calidad_respuestas (creada);
 -- solo actúan si la tabla existía de antes sin ellas.
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verificado BIGINT DEFAULT 0;
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS sesion_version BIGINT DEFAULT 0;
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_version TEXT COLLATE "C";
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_en DOUBLE PRECISION;
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS continuaciones BIGINT DEFAULT 0;
