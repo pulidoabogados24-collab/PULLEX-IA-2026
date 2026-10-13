@@ -4,12 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PULLEX IA — Asistente Jurídico Colombiano</title>
-<meta name="theme-color" content="#101115">
+<meta name="description" content="Asistente jurídico colombiano con IA para estudiantes de Derecho y abogados.">
+<!-- Color de la barra del sistema antes de que cargue la apariencia; apariencia.js lo ajusta al tema elegido. -->
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101115">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f5f8">
+<!-- Instalable como app: Android/Chrome lee el manifiesto; iPhone/iPad, estas etiquetas (iOS no usa beforeinstallprompt). -->
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="PULLEX IA">
+<meta name="application-name" content="PULLEX IA">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
 <link rel="icon" href="/static/favicon.png">
 <!-- Se precarga lo del tema por defecto (Justicia × Inteligencia): sus dos fuentes y la imagen de la portada.
      Las fuentes de los demás temas se descargan solo si el usuario los elige. -->
@@ -1055,6 +1061,7 @@ select.per-inp{appearance:auto}
   <symbol id="i-ajustes" viewBox="0 0 24 24"><path d="M4 7h9M17.5 7H20M4 17h3.5M12 17h8"/><circle cx="15.2" cy="7" r="2.2"/><circle cx="9.8" cy="17" r="2.2"/></symbol>
   <symbol id="i-salir" viewBox="0 0 24 24"><path d="M15 16.5l4.5-4.5L15 7.5M19.5 12H9.5M10 20.5H6a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2h4"/></symbol>
   <symbol id="i-instalar" viewBox="0 0 24 24"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4.5 16v2.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V16"/></symbol>
+  <symbol id="i-compartir" viewBox="0 0 24 24"><path d="M12 14.5V3.5M8 7.5l4-4 4 4M8.5 10.5H6.5a1.5 1.5 0 0 0-1.5 1.5v7a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5h-2"/></symbol>
   <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M17.5 6.5l-11 11M6.5 6.5l11 11"/></symbol>
   <symbol id="i-historial" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 4v4.5H8M12 7.5V12l3 2"/></symbol>
@@ -1137,13 +1144,19 @@ select.per-inp{appearance:auto}
       <input id="a-email" class="inp" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="username">
       <label class="lb" for="a-clave">Contraseña</label>
       <input id="a-clave" class="inp" type="password" placeholder="Mínimo 8 caracteres" autocomplete="current-password">
+      <div id="f-acepto" class="acepto hidden">
+        <input id="r-acepto" type="checkbox" aria-required="true">
+        <label for="r-acepto">He leído y acepto la <a href="/politica-de-datos" target="_blank" rel="noopener">Política de tratamiento de datos personales</a></label>
+      </div>
       <button id="a-btn" class="btn" data-click="enviarAuth">Ingresar</button>
       <div id="a-olvido" class="olvido">
         <a href="#" data-click="abrirRecuperar" data-prevenir-click>¿Olvidaste tu contraseña?</a>
       </div>
       <div id="a-msg" class="msg-e" role="alert"></div>
       <div class="nota">Información orientativa: no reemplaza a un abogado. Verifica toda norma en la fuente oficial.<br>
-        ¿Dudas o soporte? <a href="mailto:Pulidoabogados24@gmail.com">Pulidoabogados24@gmail.com</a></div>
+        ¿Dudas o soporte? <a href="mailto:Pulidoabogados24@gmail.com">Pulidoabogados24@gmail.com</a>
+        <span class="nota-enl"><a href="/politica-de-datos" target="_blank" rel="noopener">Política de tratamiento de datos personales</a>
+        <button type="button" class="enl-boton hidden" id="btn-instalar-auth" data-click="instalarApp"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Instalar app</button></span></div>
     </div>
     </div>
   </div>
@@ -1496,6 +1509,16 @@ select.per-inp{appearance:auto}
           </div>
         </div>
 
+        <div class="panel" id="panel-datos">
+          <h3><svg class="i" aria-hidden="true"><use href="#i-usuario"/></svg> Tus datos</h3>
+          <p class="vacio datos-d">Descarga una copia de la información de tu cuenta o elimina la cuenta. Lee cómo tratamos tus datos en la
+            <a href="/politica-de-datos" target="_blank" rel="noopener">Política de tratamiento de datos personales</a>.</p>
+          <div class="datos-acc">
+            <button class="btn sec" id="btn-exportar" data-click="exportarDatos" data-pasa-click="this"><svg class="i s" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar mis datos</button>
+            <button class="btn sec peligro" id="btn-eliminar" data-click="abrirEliminar">Eliminar mi cuenta</button>
+          </div>
+        </div>
+
         <div class="panel">
           <h3><svg class="i" aria-hidden="true"><use href="#i-plan"/></svg> Planes</h3>
           <div id="planes"></div>
@@ -1573,6 +1596,39 @@ select.per-inp{appearance:auto}
       <button class="btn" id="es-enviar" data-click="enviarEscrito">Redactar borrador</button>
     </div>
     <p class="es-nota">Usa una consulta. El resultado es un borrador generado por IA: revísalo, completa lo que esté entre corchetes y verifica la vigencia de las normas antes de presentarlo.</p>
+  </div>
+</div>
+
+<div id="m-eliminar" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="m-eli-t" aria-describedby="m-eli-d">
+  <div class="card">
+    <h3 id="m-eli-t">Eliminar mi cuenta</h3>
+    <p class="d0" id="m-eli-d">Se borrarán tu cuenta y la información asociada a ella en PULLEX: consultas, documentos, borradores y preferencias. No se puede deshacer. Si quieres conservar una copia, primero usa «Descargar mis datos».</p>
+    <label class="lb" for="el-clave">Tu contraseña</label>
+    <input id="el-clave" class="inp" type="password" autocomplete="current-password">
+    <label class="lb" for="el-conf">Escribe ELIMINAR para confirmar</label>
+    <input id="el-conf" class="inp" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="el-conf-d">
+    <p class="el-ayuda" id="el-conf-d">En mayúsculas, tal como aparece.</p>
+    <div id="el-msg" class="msg-e" role="alert"></div>
+    <button class="btn peligro" id="el-btn" data-click="eliminarCuenta">Eliminar mi cuenta</button>
+    <button class="btn sec" data-click="cerrarEliminar">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-instalar" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="m-ins-t">
+  <div class="card">
+    <h3 id="m-ins-t"><svg class="i" aria-hidden="true"><use href="#i-instalar"/></svg> Instalar PULLEX IA</h3>
+    <div id="mi-ios">
+      <p class="d0">En iPhone o iPad se instala desde Safari, en tres toques:</p>
+      <ol class="pasos-inst">
+        <li>Toca <b>Compartir</b> <svg class="i xs" aria-hidden="true"><use href="#i-compartir"/></svg> en la barra de Safari.</li>
+        <li>Elige <b>Agregar a pantalla de inicio</b>.</li>
+        <li>Toca <b>Agregar</b>. PULLEX IA queda con su ícono, como cualquier app.</li>
+      </ol>
+    </div>
+    <div id="mi-otro" class="hidden">
+      <p class="d0">Abre el menú de tu navegador y elige <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.</p>
+    </div>
+    <button class="btn" data-click="cerrarInstalar">Entendido</button>
   </div>
 </div>
 

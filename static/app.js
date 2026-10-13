@@ -76,7 +76,7 @@ function cerrarModal(id){
 }
 // Cierre propio de cada diálogo (limpia campos, etc.); si no tiene, Escape usa cerrarModal.
 function cierreModal(id){const n={'m-clave':'cerrarClave','m-recuperar':'cerrarRecuperar','m-tools':'cerrarTools',
-  'm-escrito':'cerrarEscrito','m-eliminar':'cerrarEliminar'}[id];return n&&typeof window[n]==='function'?window[n]:null}
+  'm-escrito':'cerrarEscrito','m-eliminar':'cerrarEliminar','m-instalar':'cerrarInstalar'}[id];return n&&typeof window[n]==='function'?window[n]:null}
 document.addEventListener('keydown',ev=>{
   const top=MODALES[MODALES.length-1];if(!top)return;
   if(ev.key==='Escape'){ev.preventDefault();ev.stopPropagation();const fn=cierreModal(top.m.id);fn?fn():cerrarModal(top.m.id);return}
@@ -90,7 +90,8 @@ document.addEventListener('keydown',ev=>{
 let modoActual='ingresar';
 function modoAuth(m){modoActual=m;
   $('t-ing').classList.toggle('on',m==='ingresar');$('t-reg').classList.toggle('on',m==='registrar');
-  $('f-reg').classList.toggle('hidden',m!=='registrar');
+  $('f-reg').classList.toggle('hidden',m!=='registrar');$('f-acepto').classList.toggle('hidden',m!=='registrar');
+  $('a-msg').classList.remove('ok');
   $('a-olvido').classList.toggle('hidden',m!=='ingresar');
   $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
 function abrirRecuperar(){$('rec-msg').className='msg-e';$('rec-msg').textContent='';
@@ -112,9 +113,15 @@ async function enviarRecuperar(){
 }
 async function enviarAuth(){
   const b=$('a-btn');if(b.disabled)return;
-  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
+  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';$('a-msg').classList.remove('ok');
+  // Registro: la aceptación de la Política de tratamiento de datos personales es obligatoria y viaja al servidor
+  // (IA-17). Sin la casilla marcada no se envía nada.
+  if(modoActual==='registrar'&&!$('r-acepto').checked){
+    $('a-msg').textContent='Para crear tu cuenta debes aceptar la Política de tratamiento de datos personales.';
+    $('r-acepto').setAttribute('aria-invalid','true');$('r-acepto').focus();return}
+  $('r-acepto').removeAttribute('aria-invalid');
   const url=modoActual==='registrar'?'/api/registro':'/api/login';
-  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
+  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave,acepto_politica:true}:{email,clave};
   // Mientras el servidor responde, el botón lo dice y no admite otro clic.
   b.disabled=true;b.setAttribute('aria-busy','true');
   b.textContent=modoActual==='registrar'?'Creando tu cuenta…':'Ingresando…';trabajo('ingreso');
@@ -961,40 +968,75 @@ async function limpiarEstadoLocal(){
     await Promise.race([Promise.all(ks.filter(k=>k.startsWith('pullex-')).map(k=>caches.delete(k))),new Promise(r=>setTimeout(r,1500))])}}catch(e){}
 }
 async function salir(){await limpiarEstadoLocal();location.reload()}
+
+// ---- Derechos del titular (IA-18): descargar los datos de la cuenta y eliminarla.
+async function exportarDatos(b){
+  b=b&&b.tagName?b:$('btn-exportar');const t0=b.innerHTML;b.disabled=true;b.textContent='Preparando tus datos…';
+  try{
+    const r=await fetch('/api/cuenta/exportar',{headers:auth()});
+    if(!r.ok){const d=await r.json().catch(()=>({}));
+      throw new Error(typeof d.detail==='string'&&d.detail?d.detail:'No se pudieron descargar tus datos. Intenta más tarde.')}
+    const u=URL.createObjectURL(new Blob([await r.blob()],{type:'application/json'}));
+    const a=document.createElement('a');a.href=u;a.download='pullex-mis-datos-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
+    toast('Listo: tus datos se descargaron en un archivo JSON.');
+  }catch(e){toast(e.message||'No se pudieron descargar tus datos.')}
+  b.disabled=false;b.innerHTML=t0;
+}
+function abrirEliminar(){$('el-clave').value='';$('el-conf').value='';$('el-msg').textContent='';abrirModal('m-eliminar')}
+function cerrarEliminar(){cerrarModal('m-eliminar');$('el-clave').value='';$('el-conf').value='';$('el-msg').textContent=''}
+const MSG_ELIMINAR={400:'Revisa los datos e inténtalo de nuevo.',401:'La contraseña no es correcta.',
+  429:'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.'};
+async function eliminarCuenta(){
+  const msg=$('el-msg'),b=$('el-btn'),clave=$('el-clave').value,conf=$('el-conf').value.trim();msg.textContent='';
+  if(!clave){msg.textContent='Escribe tu contraseña.';$('el-clave').focus();return}
+  if(conf!=='ELIMINAR'){msg.textContent='Para confirmar, escribe ELIMINAR en mayúsculas.';$('el-conf').focus();return}
+  if(b.disabled)return;b.disabled=true;b.textContent='Eliminando…';
+  try{
+    const r=await fetch('/api/cuenta/eliminar',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify({clave})});
+    const d=await r.json().catch(()=>({}));
+    if(r.ok&&d&&d.ok===true){
+      await limpiarEstadoLocal();
+      try{sessionStorage.setItem('pullex.aviso','cuenta-eliminada')}catch(e){}
+      location.replace('/');return}
+    msg.textContent=(typeof d.detail==='string'&&d.detail)||MSG_ELIMINAR[r.status]||'No se pudo eliminar la cuenta. Intenta más tarde.';
+  }catch(e){msg.textContent='Error de conexión. Intenta de nuevo.'}
+  b.disabled=false;b.textContent='Eliminar mi cuenta';
+}
+// Al marcar la casilla de la política se retira el aviso que pedía marcarla.
+$('r-acepto').addEventListener('change',e=>{if(e.target.checked){e.target.removeAttribute('aria-invalid');
+  if(/Política de tratamiento/.test($('a-msg').textContent))$('a-msg').textContent=''}});
+// Aviso en la portada después de eliminar la cuenta (se recarga la página para no dejar nada en memoria).
+(function avisoPortada(){let a=null;try{a=sessionStorage.getItem('pullex.aviso');sessionStorage.removeItem('pullex.aviso')}catch(e){}
+  if(a==='cuenta-eliminada'){const m=$('a-msg');m.classList.add('ok');
+    m.textContent='Tu cuenta fue eliminada. Gracias por haber usado PULLEX IA.'}})();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
 
 // -------------------------------------------------------- instalar como app --
+// Android/Chrome (y Edge en escritorio) avisan con «beforeinstallprompt» que la app se puede instalar: el botón usa ese
+// aviso. iPhone/iPad no tienen ese evento: el botón abre los pasos de Safari («Compartir → Agregar a pantalla de
+// inicio»). Si la app ya corre instalada (display-mode standalone o navigator.standalone), el botón no aparece.
 let DEFERRED_INSTALL=null;
-const esStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-function mostrarBotonInstalar(){
-  if(esStandalone())return; // ya está instalada, no mostrar nada
-  $('btn-instalar-ic').classList.remove('hidden');
-  $('btn-instalar-hero').classList.remove('hidden');
-}
-window.addEventListener('beforeinstallprompt',(e)=>{
-  e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar();
-});
-window.addEventListener('appinstalled',()=>{
-  DEFERRED_INSTALL=null;$('btn-instalar-ic').classList.add('hidden');$('btn-instalar-hero').classList.add('hidden');
-  toast('PULLEX IA instalada');
-});
+const BOTONES_INSTALAR=['btn-instalar-ic','btn-instalar-hero','btn-instalar-auth'];
+function esStandalone(){try{return window.matchMedia('(display-mode: standalone)').matches||
+  window.matchMedia('(display-mode: fullscreen)').matches||window.navigator.standalone===true}catch(e){return false}}
+// iPadOS 13+ se presenta como un Mac: se reconoce por la pantalla táctil.
+function esIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function botonesInstalar(ver){const si=!!ver&&!esStandalone();BOTONES_INSTALAR.forEach(id=>{const b=$(id);if(b)b.classList.toggle('hidden',!si)})}
+function mostrarBotonInstalar(){botonesInstalar(true)}
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar()});
+window.addEventListener('appinstalled',()=>{DEFERRED_INSTALL=null;botonesInstalar(false);toast('PULLEX IA quedó instalada')});
+try{window.matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(esStandalone())botonesInstalar(false)})}catch(e){}
 async function instalarApp(){
-  if(DEFERRED_INSTALL){
-    DEFERRED_INSTALL.prompt();
-    const r=await DEFERRED_INSTALL.userChoice;
-    if(r.outcome==='accepted')toast('Instalando…');
-    DEFERRED_INSTALL=null;
-    return;
-  }
-  if(esIOS()){
-    toast('En Safari: toca Compartir (□↑) y luego "Agregar a pantalla de inicio"');
-    return;
-  }
-  toast('Busca "Instalar app" en el menú de tu navegador');
+  if(DEFERRED_INSTALL){const ev=DEFERRED_INSTALL;DEFERRED_INSTALL=null;
+    try{await ev.prompt();const r=await ev.userChoice;
+      if(r&&r.outcome==='accepted'){botonesInstalar(false);toast('Instalando PULLEX IA…')}}catch(e){abrirInstrucciones()}
+    return}
+  abrirInstrucciones();
 }
-// Android/Chrome dispara beforeinstallprompt de forma asíncrona; en iOS nunca llega,
-// así que mostramos el botón igual (con instrucciones manuales) salvo que ya esté instalada.
+function abrirInstrucciones(){const ios=esIOS();$('mi-ios').classList.toggle('hidden',!ios);$('mi-otro').classList.toggle('hidden',ios);
+  abrirModal('m-instalar')}
+function cerrarInstalar(){cerrarModal('m-instalar')}
 if(esIOS()&&!esStandalone())mostrarBotonInstalar();
 function abrirSelectorArchivo(){document.getElementById('file').click()}
 
@@ -1607,7 +1649,7 @@ async function apRestablecer(){
 // Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
 // en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
 // en línea. Solo se ejecutan funciones de esta lista blanca.
-const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,toggleAjustesResp,tomarArchivos,ver};
+const ACCIONES={toggleMas,abrirEliminar,cerrarEliminar,eliminarCuenta,exportarDatos,cerrarInstalar,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,toggleAjustesResp,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
   // Nunca se actúa sobre contenido pintado desde Markdown (respuestas, boletín, documentos): ese HTML lo escribe un
