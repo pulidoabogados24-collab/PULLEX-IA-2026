@@ -1444,6 +1444,113 @@ def api_boletin(request: Request):
     return obtener_boletin()
 
 
+# ----------------------------------------- derechos del titular (BD-05 / IA-18, Ley 1581 de 2012) --
+# Toda tabla de la base principal que guarde algo de una persona está aquí, con cómo se encuentran sus filas:
+# (tabla, condición WHERE, qué valores van en sus «?»). «email» es el correo, «anonimo» el código de la telemetría
+# (anonimo(email)) y «limite_*» las claves de límites de intentos que terminan en «:correo».
+# El orden importa: primero lo que se encuentra a través de otra tabla (mensajes por sus conversaciones, telemetría
+# por sus mensajes…) y «usuarios» al final. tests/test_seguridad_datos.py descubre las tablas de la base y falla si
+# aparece una nueva que no esté aquí ni en TABLAS_SIN_TITULAR.
+TABLAS_DEL_USUARIO = (
+    ("calidad_respuestas", "mensaje_id IN (SELECT m.id FROM mensajes m JOIN conversaciones c ON c.id=m.conv "
+                           "WHERE c.usuario=?)", ("email",)),
+    ("calidad_respuestas", "usuario=?", ("anonimo",)),
+    ("mensajes", "conv IN (SELECT id FROM conversaciones WHERE usuario=?)", ("email",)),
+    ("conversaciones", "usuario=?", ("email",)),
+    ("perfiles_ejecuciones_perfil", "ejecucion_id IN (SELECT id FROM perfiles_ejecuciones WHERE usuario=?)", ("email",)),
+    ("perfiles_ejecuciones", "usuario=?", ("email",)),
+    ("taller_intentos", "usuario=?", ("email",)),
+    ("taller_escenarios", "usuario=?", ("email",)),
+    ("modular_intentos", "usuario=?", ("email",)),
+    ("modular_casos", "usuario=?", ("email",)),
+    ("conocimiento", "usuario=?", ("email",)),
+    ("documentos_generados", "usuario=?", ("email",)),
+    ("asistente_tareas", "usuario=?", ("email",)),
+    ("apariencia_imagenes", "usuario=?", ("email",)),
+    ("tokens_accion", "email=?", ("email",)),
+    ("limites", "clave=? OR clave LIKE ? ESCAPE '!'", ("email", "limite_patron")),
+    ("usuarios", "email=?", ("email",)),
+)
+# Tablas sin datos de personas: control de versión, boletín diario y escritos modelo del taller (comunes a todos).
+TABLAS_SIN_TITULAR = ("esquema_version", "boletin", "taller_modelos")
+# Lo que nunca sale en la exportación: la sal y el hash de la contraseña y los tokens de un solo uso.
+COLUMNAS_NO_EXPORTABLES = {"usuarios": {"sal", "hash"}, "tokens_accion": {"token"}}
+
+
+def _parametros_titular(tipos: tuple, email: str) -> tuple:
+    patron = "%:" + email.replace("!", "!!").replace("%", "!%").replace("_", "!_")
+    valores = {"email": email, "anonimo": anonimo(email), "limite_patron": patron}
+    return tuple(valores[t] for t in tipos)
+
+
+def borrar_datos_del_usuario(email: str) -> dict:
+    """Borra TODO lo de esa persona en la base principal, en UNA transacción (o todo o nada). Devuelve las filas
+    borradas por tabla."""
+    email = normaliza_email(email)
+    borradas = {}
+    with closing(db()) as con:
+        for tabla, condicion, tipos in TABLAS_DEL_USUARIO:
+            cur = con.execute(f"DELETE FROM {tabla} WHERE {condicion}", _parametros_titular(tipos, email))
+            borradas[tabla] = borradas.get(tabla, 0) + max(cur.rowcount or 0, 0)
+        con.commit()
+    return borradas
+
+
+def _valor_exportable(v):
+    if isinstance(v, (bytes, bytearray, memoryview)):
+        return {"base64": base64.b64encode(bytes(v)).decode("ascii")}
+    return v
+
+
+def exportar_datos_del_usuario(email: str) -> dict:
+    """Todos los datos de esa persona en la base principal, tabla por tabla (sin la sal ni el hash de la contraseña
+    ni los tokens). Los binarios (imágenes de apariencia) van en base64."""
+    email = normaliza_email(email)
+    tablas = {}
+    with closing(db()) as con:
+        for tabla, condicion, tipos in TABLAS_DEL_USUARIO:
+            fuera = COLUMNAS_NO_EXPORTABLES.get(tabla, set())
+            filas = tablas.setdefault(tabla, [])
+            for f in con.execute(f"SELECT * FROM {tabla} WHERE {condicion}", _parametros_titular(tipos, email)):
+                fila = {k: _valor_exportable(f[k]) for k in f.keys() if k not in fuera}
+                if fila not in filas:            # calidad_respuestas aparece por dos caminos
+                    filas.append(fila)
+    return tablas
+
+
+@app.post("/api/cuenta/eliminar")
+async def cuenta_eliminar(request: Request):
+    """Elimina la cuenta propia y todos sus datos (derecho de supresión). Pide la contraseña actual."""
+    u = usuario_actual(request)
+    datos = await json_de(request)
+    email = normaliza_email(u["email"])
+    if email == normaliza_email(ADMIN_EMAIL):
+        raise HTTPException(400, "La cuenta del administrador principal no se puede eliminar desde la app.")
+    limitar_cuenta("eliminar:" + email, tope=5, ventana=900)
+    clave = datos.get("clave")
+    if not isinstance(clave, str) or len(clave) > MAX_CLAVE or not verificar_clave(email, clave):
+        raise HTTPException(403, "La contraseña no coincide.")
+    borradas = borrar_datos_del_usuario(email)
+    log.info("cuenta eliminada a petición de su titular: %s (%s filas)", _enmascarar(email), sum(borradas.values()))
+    return {"ok": True, "filas_borradas": borradas}
+
+
+@app.get("/api/cuenta/exportar")
+def cuenta_exportar(request: Request):
+    """Descarga en JSON de todos los datos propios (derecho de acceso)."""
+    u = usuario_actual(request)
+    email = normaliza_email(u["email"])
+    limitar_cuenta("exportar:" + email, tope=10, ventana=3600)
+    ahora = datetime.now(timezone.utc)
+    cuerpo = {"formato": "pullex-ia/exportacion-de-datos", "version": 1, "generado": ahora.isoformat(),
+              "titular": email,
+              "nota": ("Datos que PULLEX IA guarda de tu cuenta en su base principal. No incluye la contraseña (solo se "
+                       "guarda cifrada) ni los enlaces de un solo uso. Los binarios van en base64."),
+              "tablas": exportar_datos_del_usuario(email)}
+    nombre = f"pullex-ia-mis-datos-{ahora.strftime('%Y%m%d')}.json"
+    return Response(json.dumps(cuerpo, ensure_ascii=False, indent=1, default=str), media_type="application/json",
+                    headers={"Content-Disposition": f'attachment; filename="{nombre}"'})
+
 # ------------------------------------------------------------ consultas --
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""

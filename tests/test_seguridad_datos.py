@@ -417,6 +417,177 @@ def test_id_valido():
         datos.id_valido("abc")
 
 
+# ===================================== BD-05 / IA-18: eliminar la cuenta y exportar los datos del titular ==
+def _tablas_de_la_base(con) -> list:
+    if datos.motor() == "postgres":
+        sql = ("SELECT table_name AS n FROM information_schema.tables WHERE table_schema = current_schema() "
+               "AND table_type = 'BASE TABLE'")
+    else:
+        sql = "SELECT name AS n FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+    return sorted(f["n"] for f in con.execute(sql))
+
+
+def _foto(modulo) -> dict:
+    with closing(modulo.db()) as con:
+        return {t: {tuple(f) for f in con.execute(f"SELECT * FROM {t}")} for t in _tablas_de_la_base(con)}
+
+
+def _insertar(con, tabla, **valores):
+    cols = list(valores)
+    return con.execute(f"INSERT INTO {tabla}({','.join(cols)}) VALUES({','.join('?' * len(cols))})",
+                       [valores[c] for c in cols]).lastrowid
+
+
+def _poblar(cliente, modulo, email, marca) -> tuple:
+    """Registra la cuenta (usuarios y tokens_accion por la ruta) y deja al menos una fila suya en cada tabla."""
+    clave = "clave-del-titular-123"
+    r = cliente.post("/api/registro", json={"email": email, "nombre": "Titular " + marca, "clave": clave})
+    assert r.status_code == 200, r.text
+    token = r.json()["token"]
+    cid = cliente.post("/api/conversaciones", headers=auth(token)).json()["id"]
+    anon, ahora = modulo.anonimo(email), time.time()
+    with closing(modulo.db()) as con:
+        _insertar(con, "mensajes", conv=cid, rol="user", contenido="pregunta " + marca, creada=ahora)
+        mid = _insertar(con, "mensajes", conv=cid, rol="assistant", contenido="respuesta " + marca, creada=ahora)
+        telemetria.registrar(con, mid, anon, {"intencion": "consulta", "caracteres": 10})
+        _insertar(con, "calidad_respuestas", mensaje_id=None, creada=ahora, usuario=anon, valoracion="arriba")
+        caso = _insertar(con, "modular_casos", usuario=email, area="Civil", nivel="basico", datos=json.dumps({"t": marca}),
+                         creado=ahora)
+        _insertar(con, "modular_intentos", caso_id=caso, usuario=email, respuesta="r " + marca, puntaje=50, creado=ahora)
+        academia._actualizar(con, email, "concepto:" + marca, "Concepto " + marca, "Civil", "fallo", ahora)
+        _insertar(con, "documentos_generados", usuario=email, tipo="tutela", titulo="Doc " + marca, texto="t", creado=ahora,
+                  actualizado=ahora)
+        _insertar(con, "asistente_tareas", usuario=email, tarea="tarea " + marca, plan="{}", estado="listo", creado=ahora)
+        esc = _insertar(con, "taller_escenarios", usuario=email, tipo="tutela", nivel="basico", datos="{}", creado=ahora)
+        _insertar(con, "taller_intentos", escenario_id=esc, usuario=email, texto="escrito " + marca, puntaje=70, creado=ahora)
+        eje = _insertar(con, "perfiles_ejecuciones", usuario=email, tarea="tarea " + marca, modo="m", simulada=1, estado="ok",
+                        perfiles="[]", fuentes="[]", herramientas="[]", resultado="r", comprobaciones="[]",
+                        discrepancias="[]", errores="[]", recursos="{}", creado=ahora)
+        _insertar(con, "perfiles_ejecuciones_perfil", ejecucion_id=eje, perfil_id="p1", simulada=1, estado="ejecutado",
+                  creado=ahora)
+        _insertar(con, "apariencia_imagenes", usuario=email, tipo="avatar", mime="image/png", data=b"\x89PNG" + marca.encode(),
+                  actualizado=ahora)
+        _insertar(con, "tokens_accion", token="tok-" + marca + secrets.token_hex(8), email=email, tipo="restablecer_clave",
+                  creado=ahora, expira=ahora + 3600)
+        _insertar(con, "limites", clave="login:" + email, inicio=ahora, n=2)
+        _insertar(con, "limites", clave=email, inicio=ahora, n=1)
+        con.commit()
+    return token, clave
+
+
+def _es_del_titular(v, email, anon) -> bool:
+    return isinstance(v, str) and (v == email or v == anon or v.endswith(":" + email))
+
+
+def test_eliminar_cuenta_borra_al_titular_de_todas_las_tablas_y_nada_mas(cliente, modulo):
+    marca = secrets.token_hex(4)
+    email = f"titular.{marca}@pruebas.local"
+    otro = "otro." + email                         # termina igual: el borrado no puede llevarse sus filas
+    antes = _foto(modulo)
+    token, clave = _poblar(cliente, modulo, email, marca)
+    con_titular = _foto(modulo)
+    token_otro, _ = _poblar(cliente, modulo, otro, "o" + marca)
+    con_ambos = _foto(modulo)
+
+    tablas = set(con_ambos)
+    cubiertas = {t for t, _, _ in modulo.TABLAS_DEL_USUARIO}
+    sin_cubrir = tablas - cubiertas - set(modulo.TABLAS_SIN_TITULAR)
+    assert not sin_cubrir, f"tablas nuevas sin regla de borrado/exportación en TABLAS_DEL_USUARIO: {sin_cubrir}"
+    assert cubiertas <= tablas
+    del_titular = {t: con_titular[t] - antes.get(t, set()) for t in tablas}
+    del_otro = {t: con_ambos[t] - con_titular[t] for t in tablas}
+    vacias = [t for t in cubiertas if not del_titular[t]]
+    assert not vacias, f"la prueba no creó filas del titular en {vacias}: agrégalas en _poblar"
+
+    # clave equivocada: 403 y no se borra nada
+    r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": "no-es-esta"})
+    assert r.status_code == 403
+    assert _foto(modulo) == con_ambos
+
+    r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": clave})
+    assert r.status_code == 200, r.text
+    assert r.json()["ok"] is True and r.json()["filas_borradas"]["usuarios"] == 1
+    despues = _foto(modulo)
+    anon = modulo.anonimo(email)
+    for t in tablas:
+        assert not (del_titular[t] & despues[t]), f"quedaron filas del titular en {t}"
+        assert del_otro[t] <= despues[t], f"se borraron filas de otra persona en {t}"
+        assert antes.get(t, set()) <= despues[t], f"se borraron filas ajenas (anteriores) en {t}"
+        for fila in despues[t]:
+            assert not any(_es_del_titular(v, email, anon) for v in fila), (t, fila)
+    # la sesión y el ingreso dejan de servir; la otra cuenta sigue
+    assert cliente.get("/api/estado", headers=auth(token)).status_code == 401
+    assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 401
+    assert cliente.get("/api/estado", headers=auth(token_otro)).status_code == 200
+
+
+def test_eliminar_cuenta_pide_sesion_clave_y_limita_intentos(cliente, modulo):
+    from conftest import nuevo_usuario
+    assert cliente.post("/api/cuenta/eliminar", json={"clave": "x"}).status_code == 401
+    email, clave, token = nuevo_usuario(cliente)
+    assert cliente.post("/api/cuenta/eliminar", headers=auth(token), content=b"[]").status_code == 400
+    assert cliente.post("/api/cuenta/eliminar", headers=auth(token), json={}).status_code == 403
+    assert cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": "x" * 5000}).status_code == 403
+    for _ in range(3):
+        assert cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": "mala"}).status_code == 403
+    r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": clave})
+    assert r.status_code == 429                    # 5 intentos por 15 minutos, aunque el sexto traiga la clave buena
+    assert modulo.obtener_usuario(email) is not None
+
+
+def test_el_admin_principal_no_se_elimina_por_esta_via(cliente, modulo):
+    token = login_admin(cliente)
+    r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": ADMIN_CLAVE})
+    assert r.status_code == 400 and "administrador" in r.json()["detail"]
+    assert modulo.obtener_usuario(ADMIN_EMAIL) is not None
+
+
+@pytest.mark.errores_sql_esperados          # la tabla inexistente es un error de SQL provocado a propósito
+def test_si_algo_falla_a_mitad_no_se_borra_nada(cliente, modulo, monkeypatch):
+    marca = secrets.token_hex(4)
+    email = f"atomico.{marca}@pruebas.local"
+    token, clave = _poblar(cliente, modulo, email, marca)
+    antes = _foto(modulo)
+    original = modulo.TABLAS_DEL_USUARIO
+    monkeypatch.setattr(modulo, "TABLAS_DEL_USUARIO",
+                        original[:-1] + (("tabla_que_no_existe", "usuario=?", ("email",)),) + original[-1:])
+    with pytest.raises(Exception):
+        cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": clave})
+    monkeypatch.undo()
+    assert _foto(modulo) == antes                    # una sola transacción: o todo o nada
+
+
+
+def test_exportar_entrega_todos_los_datos_propios_sin_secretos(cliente, modulo):
+    marca = secrets.token_hex(4)
+    email = f"exporta.{marca}@pruebas.local"
+    token, _ = _poblar(cliente, modulo, email, marca)
+    _poblar(cliente, modulo, "otro." + email, "AJENO" + marca)
+    assert cliente.get("/api/cuenta/exportar").status_code == 401
+    r = cliente.get("/api/cuenta/exportar", headers=auth(token))
+    assert r.status_code == 200
+    assert r.headers["content-type"].startswith("application/json")
+    assert re.fullmatch(r'attachment; filename="pullex-ia-mis-datos-\d{8}\.json"', r.headers["content-disposition"])
+    assert r.headers["cache-control"] == "no-store"
+    d = r.json()
+    assert d["titular"] == email and d["formato"] == "pullex-ia/exportacion-de-datos"
+    tablas = d["tablas"]
+    assert set(tablas) == {t for t, _, _ in modulo.TABLAS_DEL_USUARIO}
+    assert all(tablas[t] for t in tablas), [t for t in tablas if not tablas[t]]
+    assert len(tablas["calidad_respuestas"]) == 2 and len(tablas["mensajes"]) == 2
+    u = tablas["usuarios"][0]
+    assert u["email"] == email and "hash" not in u and "sal" not in u
+    assert all("token" not in f for f in tablas["tokens_accion"])
+    with closing(modulo.db()) as con:
+        secretos = [f["token"] for f in con.execute("SELECT token FROM tokens_accion WHERE email=?", (email,))]
+        fila = con.execute("SELECT sal, hash FROM usuarios WHERE email=?", (email,)).fetchone()
+    for s in secretos + [fila["sal"], fila["hash"]]:
+        assert s not in r.text
+    assert "AJENO" not in r.text                     # nada de la otra cuenta
+    img = tablas["apariencia_imagenes"][0]["data"]
+    assert base64.b64decode(img["base64"]) == b"\x89PNG" + marca.encode()
+
+
 # ================================================= BD-13: índice de modular_intentos(caso_id), sin FK aún ==
 def test_indice_de_intentos_por_caso_y_sin_claves_foraneas_todavia(modulo):
     assert datos.indices_del_archivo()["ix_mintentos_caso"] == "modular_intentos"
