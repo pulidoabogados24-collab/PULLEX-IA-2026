@@ -33,6 +33,54 @@ function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());
 // Estado de trabajo REAL de la app, a la vista del CSS (static/movimiento.css): 'ingreso' | 'espera' | 'fuentes' |
 // 'escribe', o nada. Solo se enciende desde los puntos donde de verdad se espera al servidor o llega el stream.
 function trabajo(e){const r=document.documentElement;if(e){if(r.getAttribute('data-trabajo')!==e)r.setAttribute('data-trabajo',e)}else r.removeAttribute('data-trabajo')}
+// Movimiento reducido: lo pide el sistema o lo eligió la persona en Ajustes → Apariencia (F-14). Todo desplazamiento
+// programado pasa por desplazar(): suave solo si se permite el movimiento.
+function movimientoReducido(){
+  try{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return true}catch(e){}
+  return document.documentElement.getAttribute('data-movimiento')==='reducido'}
+function desplazar(el,opc){if(!el||typeof el.scrollIntoView!=='function')return;
+  el.scrollIntoView({block:'start',...(opc||{}),behavior:movimientoReducido()?'auto':'smooth'})}
+
+// ---- Diálogos modales (F-05, WCAG 2.4.3 y 2.1.2). Una sola lógica para todo .modal: al abrir, el foco va al primer
+// control y el resto de la página queda inerte (ni clic, ni Tab, ni lector de pantalla); Tab y Mayús+Tab giran dentro
+// del diálogo; Escape lo cierra; al cerrar, el foco vuelve al botón que lo abrió.
+const MODALES=[];                 // pila de diálogos abiertos: el último es el activo
+const SEL_FOCO='a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+function enfocables(c){return [...c.querySelectorAll(SEL_FOCO)].filter(e=>!e.closest('.hidden,[hidden]')&&e.getClientRects().length)}
+function abrirModal(id,opc){
+  const m=$(id);if(!m)return;
+  if(!MODALES.some(x=>x.m===m)){
+    const disparador=(opc&&opc.disparador)||document.activeElement;
+    m.classList.remove('hidden');
+    const fondo=[...document.body.children].filter(e=>e!==m&&!e.inert&&e.tagName!=='SCRIPT');
+    fondo.forEach(e=>{e.inert=true});
+    MODALES.push({m,disparador,fondo});
+  }
+  const f=(opc&&opc.foco)||enfocables(m)[0];
+  if(f)f.focus({preventScroll:true});
+  else{const c=m.querySelector('.card')||m;c.setAttribute('tabindex','-1');c.focus({preventScroll:true})}
+}
+function cerrarModal(id){
+  const m=$(id);if(!m)return;m.classList.add('hidden');
+  const i=MODALES.findIndex(x=>x.m===m);if(i<0)return;
+  const [r]=MODALES.splice(i,1);
+  r.fondo.forEach(e=>{e.inert=false});
+  const d=r.disparador;
+  if(d&&d!==document.body&&d.isConnected&&typeof d.focus==='function'&&!d.closest('[inert]')&&d.getClientRects().length)
+    d.focus({preventScroll:true});
+}
+// Cierre propio de cada diálogo (limpia campos, etc.); si no tiene, Escape usa cerrarModal.
+function cierreModal(id){const n={'m-clave':'cerrarClave','m-recuperar':'cerrarRecuperar','m-tools':'cerrarTools',
+  'm-escrito':'cerrarEscrito','m-eliminar':'cerrarEliminar'}[id];return n&&typeof window[n]==='function'?window[n]:null}
+document.addEventListener('keydown',ev=>{
+  const top=MODALES[MODALES.length-1];if(!top)return;
+  if(ev.key==='Escape'){ev.preventDefault();ev.stopPropagation();const fn=cierreModal(top.m.id);fn?fn():cerrarModal(top.m.id);return}
+  if(ev.key!=='Tab')return;
+  const f=enfocables(top.m);if(!f.length){ev.preventDefault();return}
+  const i=f.indexOf(document.activeElement);
+  if(ev.shiftKey&&i<=0){ev.preventDefault();f[f.length-1].focus()}
+  else if(!ev.shiftKey&&(i<0||i===f.length-1)){ev.preventDefault();f[0].focus()}
+},true);
 
 let modoActual='ingresar';
 function modoAuth(m){modoActual=m;
@@ -40,9 +88,9 @@ function modoAuth(m){modoActual=m;
   $('f-reg').classList.toggle('hidden',m!=='registrar');
   $('a-olvido').classList.toggle('hidden',m!=='ingresar');
   $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
-function abrirRecuperar(){$('m-recuperar').classList.remove('hidden');$('rec-msg').className='msg-e';$('rec-msg').textContent='';
-  $('rec-email').value=$('a-email').value||'';}
-function cerrarRecuperar(){$('m-recuperar').classList.add('hidden')}
+function abrirRecuperar(){$('rec-msg').className='msg-e';$('rec-msg').textContent='';
+  $('rec-email').value=$('a-email').value||'';abrirModal('m-recuperar')}
+function cerrarRecuperar(){cerrarModal('m-recuperar')}
 async function enviarRecuperar(){
   const email=$('rec-email').value.trim();
   if(!email){$('rec-msg').className='msg-e';$('rec-msg').textContent='Escribe tu correo.';return}
@@ -563,7 +611,7 @@ function pintarEstilo(destino,d,opc){
     box.appendChild(ul)}
   box.appendChild(el('p','er-nota',d.nota||'Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
   destino.appendChild(box);
-  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});desplazar(box,{block:'nearest'})}
   return box;
 }
 // ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
@@ -702,9 +750,9 @@ function abrirTools(){
     b.className='tool';
     b.innerHTML=`<span class="ti">${icoTool(h.i)}</span>`;b.appendChild(document.createTextNode(h.t));
     b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
-  $('m-tools').classList.remove('hidden');
+  abrirModal('m-tools');
 }
-function cerrarTools(){$('m-tools').classList.add('hidden')}
+function cerrarTools(){cerrarModal('m-tools')}
 function usarTool(p,estilo){$('estilo').value=estilo||'directo';pintarAjustesResp();cerrarTools();ver('chat');
   // Cada herramienta es un asunto nuevo: se abre en una consulta nueva (la anterior queda en el historial).
   if($('hilo').children.length&&!enviando)nuevaConsulta();
@@ -776,10 +824,11 @@ function escritoTipo(t){
 }
 function abrirEscrito(tipo){
   construirEscrito();escritoTipo(typeof tipo==='string'?tipo:ES_TIPO);
-  $('m-escrito').classList.remove('hidden');$('m-escrito').querySelector('.card').scrollTop=0;
-  if(esEscritorio())esCampo(ES_TIPO,'nombre').focus();
+  $('m-escrito').querySelector('.card').scrollTop=0;
+  // En escritorio el foco va directo al primer dato; en el celular, al primer control (sin abrir el teclado).
+  abrirModal('m-escrito',{foco:esEscritorio()?esCampo(ES_TIPO,'nombre'):null});
 }
-function cerrarEscrito(){$('m-escrito').classList.add('hidden')}
+function cerrarEscrito(){cerrarModal('m-escrito')}
 function valoresEscrito(tipo){const v={};ESCRITOS[tipo].campos.forEach(c=>{v[c.id]=esCampo(tipo,c.id).value.trim()});return v}
 function validarEscrito(tipo){
   let primero=null;
@@ -835,9 +884,8 @@ function enviarEscrito(){
   ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);el.value=c.opciones?c.opciones[0]:''});
   enviar({titulo});
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('m-escrito').classList.contains('hidden'))cerrarEscrito()});
-function abrirClave(){$('m-clave').classList.remove('hidden');$('k-msg').textContent=''}
-function cerrarClave(){$('m-clave').classList.add('hidden');$('k-act').value='';$('k-new').value=''}
+function abrirClave(){$('k-msg').textContent='';abrirModal('m-clave')}
+function cerrarClave(){cerrarModal('m-clave');$('k-act').value='';$('k-new').value=''}
 async function guardarClave(){
   const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
     body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
@@ -1030,7 +1078,7 @@ function mlMostrarCaso(c){
   $('ml-btn-sol').textContent='Ver solución';
   ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
   $('ml-caso').classList.remove('hidden');
-  $('ml-caso').scrollIntoView({behavior:'smooth',block:'start'});
+  desplazar($('ml-caso'),{block:'start'});
 }
 function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length;
   $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
@@ -1115,7 +1163,7 @@ function mlMostrarEval(ev){
   const nota=document.createElement('p');nota.className='nota-ia';
   nota.textContent='Evaluación orientativa generada por IA para practicar. No reemplaza la calificación de un docente.';
   p.appendChild(nota);
-  p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+  p.classList.remove('hidden');desplazar(p,{block:'start'});
 }
 async function mlSolucion(){
   if(!ML.caso)return;
@@ -1137,12 +1185,12 @@ async function mlSolucion(){
     const nota=document.createElement('p');nota.className='nota-ia';
     nota.textContent='Solución generada por IA. Verifica la vigencia de cada norma en la fuente oficial antes de estudiarla como definitiva.';
     p.appendChild(nota);
-    p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+    p.classList.remove('hidden');desplazar(p,{block:'start'});
   }catch(e){toast(e.message)}
 }
 function mlVariacion(){if(ML.caso)mlGenerar(ML.caso.id)}
 function mlNuevo(){['ml-caso','ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));ML.caso=null;
-  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'})}
+  desplazar($('ml-config'),{block:'start'})}
 async function mlProgreso(){
   let p;try{p=await api('/api/modular/progreso')}catch(e){return}
   const c=$('ml-prog-cuerpo');if(!p.resueltos)return;
@@ -1219,7 +1267,7 @@ function mlElegir(area,nivel){
   [['area',area,'ml-areas'],['nivel',nivel,'ml-niveles']].forEach(([k,v,id])=>{if(!v)return;ML[k]=v;
     const items=k==='area'?ML.opciones.areas:ML.opciones.niveles.map(n=>n.id);
     [...$(id).children].forEach((b,i)=>b.classList.toggle('on',items[i]===v))});
-  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'});
+  desplazar($('ml-config'),{block:'start'});
   toast('Elegí '+area+(nivel?' · '+(NOMBRE_NIVEL[nivel]||nivel):'')+'. Pulsa «Generar caso».');
 }
 

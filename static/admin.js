@@ -144,7 +144,10 @@ async function verMotores(){
     t.appendChild(dl);c.appendChild(t)});
   c.appendChild(el('h3','mot-h','No configurados'));
   const ul=el('ul','mot-ul');(d.no_configurados||[]).forEach(x=>ul.appendChild(el('li',null,x.capacidad+' — '+x.estado+'. '+x.nota)));c.appendChild(ul);
-  c.scrollIntoView({behavior:'smooth',block:'start'});
+  // Movimiento reducido (sistema o Ajustes → Apariencia): sin desplazamiento animado.
+  let quieto=document.documentElement.getAttribute('data-movimiento')==='reducido';
+  try{quieto=quieto||window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+  c.scrollIntoView({behavior:quieto?'auto':'smooth',block:'start'});
 }
 
 // ---------------------------------------------------------------------------------------
