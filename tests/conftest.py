@@ -8,6 +8,7 @@ El modelo de IA se reemplaza por un doble (FakeAnthropic): ninguna prueba llama 
 import importlib
 import json
 import os
+import shutil
 import sys
 import time
 import types
@@ -205,7 +206,11 @@ class FakeAnthropic:
 @pytest.fixture(scope="session")
 def modulo(tmp_path_factory):
     trabajo = tmp_path_factory.mktemp("pullex")
-    (trabajo / "static").symlink_to(RAIZ / "static")
+    try:
+        (trabajo / "static").symlink_to(RAIZ / "static", target_is_directory=True)
+    except OSError:
+        # Windows sin Developer Mode no permite crear enlaces simbólicos.
+        shutil.copytree(RAIZ / "static", trabajo / "static")
     os.chdir(trabajo)
     os.environ.update({
         "ANTHROPIC_API_KEY": "sk-ant-prueba-no-real",

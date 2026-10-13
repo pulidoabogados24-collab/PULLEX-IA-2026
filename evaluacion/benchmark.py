@@ -23,6 +23,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 import time
@@ -128,7 +129,10 @@ class _ModeloSimulado:
 def _cargar_app(simulado: bool):
     """Importa app.py en un directorio temporal (como las pruebas): no toca pullex.db real."""
     trabajo = Path(tempfile.mkdtemp(prefix="pullex-bench-"))
-    (trabajo / "static").symlink_to(RAIZ / "static")
+    try:
+        (trabajo / "static").symlink_to(RAIZ / "static", target_is_directory=True)
+    except OSError:
+        shutil.copytree(RAIZ / "static", trabajo / "static")
     os.environ.setdefault("PULLEX_ADMIN_CLAVE", os.urandom(12).hex())
     os.environ.setdefault("PULLEX_SECRET", os.urandom(16).hex())
     if "PULLEX_CORPUS_DB" not in os.environ and (RAIZ / "corpus" / "corpus.db").exists():
