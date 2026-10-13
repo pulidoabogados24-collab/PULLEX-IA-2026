@@ -1463,22 +1463,22 @@ select.per-inp{appearance:auto}
         <div class="panel">
           <h3><svg class="i" aria-hidden="true"><use href="#i-preferencias"/></svg> Personalización</h3>
           <div>
-            <div class="t">Áreas de interés</div>
-            <div class="vacio" style="font-size:.8rem">La IA prioriza estas materias (máx. 6).</div>
-            <div class="areas" id="areas"></div>
+            <div class="t" id="areas-t">Áreas de interés</div>
+            <div class="vacio" style="font-size:.8rem" id="areas-d">La IA prioriza estas materias (máx. 6).</div>
+            <div class="areas" id="areas" role="group" aria-labelledby="areas-t" aria-describedby="areas-d"></div>
           </div>
-          <div class="fila" style="margin-top:8px"><div><div class="t">Modo por defecto</div><div class="d">Registro de las respuestas</div></div>
-            <select id="cf-modo" class="inp" data-change="guardarPrefs">
+          <div class="fila" style="margin-top:8px"><div><div class="t" id="cf-modo-t">Modo por defecto</div><div class="d" id="cf-modo-d">Registro de las respuestas</div></div>
+            <select id="cf-modo" class="inp" data-change="guardarPrefs" aria-labelledby="cf-modo-t" aria-describedby="cf-modo-d">
               <option value="auto">Automático</option><option value="profesional">Técnico</option><option value="ciudadano">Sencillo</option>
             </select></div>
-          <div class="fila"><div><div class="t">Escribe como</div><div class="d">La voz de las respuestas y de los escritos</div></div>
-            <select id="cf-escritura" class="inp" data-change="guardarPrefs" aria-label="Escribe como">
+          <div class="fila"><div><div class="t" id="cf-escritura-t">Escribe como</div><div class="d" id="cf-escritura-d">La voz de las respuestas y de los escritos</div></div>
+            <select id="cf-escritura" class="inp" data-change="guardarPrefs" aria-labelledby="cf-escritura-t" aria-describedby="cf-escritura-d">
               <option value="auto">Automático</option><option value="estudiante">Estudiante</option><option value="abogado">Abogado</option><option value="sencillo">Lenguaje sencillo</option>
             </select></div>
-          <div class="fila"><div><div class="t">Buscar en internet por defecto</div><div class="d">Verifica con fuentes actuales</div></div>
-            <div class="sw" id="cf-web" role="switch" data-click="togglePref" data-pasa-click="this"></div></div>
-          <div class="fila"><div><div class="t">Modo claro</div><div class="d">Cambio rápido entre claro y oscuro. Más opciones en Apariencia.</div></div>
-            <div class="sw" id="cf-tema" role="switch" data-click="toggleTema" data-pasa-click="this"></div></div>
+          <div class="fila"><div><div class="t" id="cf-web-t">Buscar en internet por defecto</div><div class="d" id="cf-web-d">Verifica con fuentes actuales</div></div>
+            <button type="button" class="sw" id="cf-web" role="switch" aria-checked="true" aria-labelledby="cf-web-t" aria-describedby="cf-web-d" data-click="togglePref" data-pasa-click="this"></button></div>
+          <div class="fila"><div><div class="t" id="cf-tema-t">Modo claro</div><div class="d" id="cf-tema-d">Cambio rápido entre claro y oscuro. Más opciones en Apariencia.</div></div>
+            <button type="button" class="sw" id="cf-tema" role="switch" aria-checked="false" aria-labelledby="cf-tema-t" aria-describedby="cf-tema-d" data-click="toggleTema" data-pasa-click="this"></button></div>
         </div>
 
         <div class="panel">

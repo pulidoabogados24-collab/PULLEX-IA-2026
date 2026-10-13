@@ -157,7 +157,7 @@ function aplicarPerfil(){
   $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   $('cf-modo').value=PERFIL.preferencias.modo||'auto';
   if($('cf-escritura'))$('cf-escritura').value=PERFIL.preferencias.escritura||'auto';
-  $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
+  fijarSw($('cf-web'),PERFIL.preferencias.web!==false);
   sincronizarSwTema();
   $('cf-memoria').value=PERFIL.preferencias.memoria||'';
   $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
@@ -165,9 +165,10 @@ function aplicarPerfil(){
 }
 function pintarAreas(){
   const cont=$('areas');cont.innerHTML='';const sel=PERFIL.preferencias.areas||[];
-  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('div');
-    el.className='area'+(sel.includes(a)?' on':'');el.textContent=a;
-    el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
+  // Botones de alternar (aria-pressed): se alcanzan con Tab y se activan con Enter o espacio (F-06).
+  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('button');el.type='button';
+    const on=sel.includes(a);el.className='area'+(on?' on':'');el.textContent=a;el.setAttribute('aria-pressed',String(on));
+    el.onclick=()=>{const v=el.classList.toggle('on');el.setAttribute('aria-pressed',String(v));guardarPrefs()};cont.appendChild(el)});
 }
 function pintarPlanes(){
   // Acceso por plan (static/planes.js): candados en la navegación y tabla comparativa.
@@ -713,11 +714,13 @@ async function guardarMemoria(){
     body:JSON.stringify({memoria:$('cf-memoria').value})});
     PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
 }
-function togglePref(el){el.classList.toggle('on');guardarPrefs()}
-function toggleTema(el){el.classList.toggle('on');apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
+// Interruptores de Ajustes: <button role="switch">; aria-checked siempre igual a la clase «on» (F-06).
+function fijarSw(el,on){if(!el)return;el.classList.toggle('on',!!on);el.setAttribute('aria-checked',String(!!on))}
+function togglePref(el){fijarSw(el,!el.classList.contains('on'));guardarPrefs()}
+function toggleTema(el){fijarSw(el,!el.classList.contains('on'));apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
 // Compatibilidad: cambia claro/oscuro sin guardar (lo usan pruebas y código anterior).
 function aplicarTema(t){AP.datos={...(AP.datos||PXA.actual()),modo:t==='claro'?'claro':'oscuro'};PXA.aplicar(AP.datos);apRefrescar()}
-function sincronizarSwTema(){const s=$('cf-tema');if(s)s.classList.toggle('on',document.documentElement.getAttribute('data-esquema')!=='oscuro')}
+function sincronizarSwTema(){fijarSw($('cf-tema'),document.documentElement.getAttribute('data-esquema')!=='oscuro')}
 
 const ICONOS_TOOL={
   tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
