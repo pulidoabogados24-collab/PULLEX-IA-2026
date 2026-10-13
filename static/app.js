@@ -361,7 +361,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id})});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id,citas:m.citas})});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -414,7 +414,7 @@ function mdParcial(t){
 // avisara que terminó: en ese caso NUNCA se da por completa la respuesta.
 async function transmitir(cuerpo,bIA,base){
   const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  const res={buffer:base||'',fuentes:[],id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
+  const res={buffer:base||'',fuentes:[],citas:null,id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
   let raf=null,alto=0;
   // El markdown a medio llegar puede encoger un instante (una tabla o una lista que aún no cierra): el bloque nunca
   // baja de la altura que ya alcanzó, así lo que hay debajo no brinca. Y solo se sigue el final si ya se estaba ahí.
@@ -442,6 +442,7 @@ async function transmitir(cuerpo,bIA,base){
         else if(ev.tipo==='reparando'){bIA.classList.add('reparando');estado('escribe','Revisando que no falte nada…')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
         else if(ev.tipo==='fuentes'){res.fuentes=Array.isArray(ev.fuentes)?ev.fuentes:[]}
+        else if(ev.tipo==='citas'){res.citas=ev.citas&&typeof ev.citas==='object'?ev.citas:null}
         else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){res.buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
         else if(ev.tipo==='incompleta'){res.incompleta=true;res.motivo=ev.motivo||'';if(ev.mensaje_id)res.id=ev.mensaje_id}
         else if(ev.tipo==='fin'){res.fin=true;res.completo=!!ev.completo;if(ev.mensaje_id)res.id=ev.mensaje_id;if(!ev.completo)res.incompleta=true}
@@ -469,7 +470,7 @@ function cerrarResp(bIA,res,cid){
   const tieneTexto=(res.buffer||'').trim().length>0;
   if(!res.fin&&tieneTexto){res.incompleta=true;if(!res.motivo)res.motivo='interrumpida'}
   const sigue=alFinal();
-  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid});
+  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid,citas:res.citas});
   if(sigue)scroll();
 }
 // Envío en curso: el botón lo muestra (aro en vez de flecha) y lo dice a los lectores de pantalla.
@@ -535,7 +536,7 @@ async function continuarResp(bIA,meta,textoActual){
     cerrarResp(bIA,res,meta.cid);
   }finally{soltar()}
 }
-function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
+function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.citas-rev,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
 function accionesResp(b,texto,fuentes,meta){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
@@ -544,15 +545,34 @@ function accionesResp(b,texto,fuentes,meta){
   c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
   d.onclick=()=>descargar('pullex-respuesta.txt',texto);
   p.onclick=imprimirPDF;
+  pintarCitas(b,meta&&meta.citas);   // justo bajo el texto: es lo primero que hay que ver antes de usar la respuesta
   b.querySelector('.bd').appendChild(a);
-  // "Confianza" y "Fuentes" las escribe el propio modelo: se rotulan como autoevaluación
-  // para que nadie las lea como una verificación hecha por PULLEX (hallazgo AI-2).
-  if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
-    n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
-    b.querySelector('.bd').appendChild(n);}
   pintarFuentes(b,fuentes,{fichas:true});
   if(meta&&meta.incompleta)avisoIncompleta(b,texto,meta);
   if(meta&&meta.id)panelValorar(b,meta);
+}
+// Revisión de citas (IA-01/IA-05). El servidor manda {hay_citas, huerfanas, sospechosas} en el evento «citas» del
+// stream (y lo guarda con el mensaje). Esa revisión mira la FORMA de las citas —marcas [F#] sin fuente, referencias
+// sospechosas—; no comprueba que la norma o la sentencia existan ni que estén vigentes. Por eso la nota sale siempre
+// que haya citas, y lo marcado se lista aparte como «Revisar». Todo se pinta con textContent.
+function pintarCitas(b,c){
+  if(!c||typeof c!=='object'||c.hay_citas!==true)return;
+  const huerfanas=(Array.isArray(c.huerfanas)?c.huerfanas:[]).filter(x=>typeof x==='string'&&x.trim());
+  const sospechosas=(Array.isArray(c.sospechosas)?c.sospechosas:[]).filter(x=>x&&typeof x.cita==='string'&&x.cita.trim());
+  const items=[...huerfanas.map(f=>({cita:'['+f.trim().replace(/^\[|\]$/g,'')+']',gravedad:'grave',
+      motivo:'Marca de fuente que no corresponde a ninguna de las fuentes consultadas.'})),
+    ...sospechosas.map(x=>({cita:x.cita.trim(),gravedad:x.gravedad==='grave'?'grave':'leve',motivo:typeof x.motivo==='string'?x.motivo:''}))];
+  const box=el('div','citas-rev'+(items.length?' con-alertas':''));box.setAttribute('role','note');box.setAttribute('aria-label','Revisión de citas');
+  const p=el('p','citas-t');p.appendChild(el('b',null,'Citas sin verificar:'));
+  p.appendChild(document.createTextNode(' confirma cada norma y sentencia en la fuente oficial antes de usarla.'));box.appendChild(p);
+  if(items.length){const ul=el('ul','citas-lista');ul.setAttribute('aria-label','Citas para revisar');
+    items.slice(0,8).forEach(x=>{const li=el('li','citas-it '+x.gravedad);
+      li.appendChild(el('span','citas-tag','Revisar'));
+      li.appendChild(el('span','citas-cita',x.cita.slice(0,160)));
+      if(x.motivo)li.appendChild(el('span','citas-motivo',x.motivo.slice(0,240)));ul.appendChild(li)});
+    if(items.length>8)ul.appendChild(el('li','citas-mas','y '+(items.length-8)+' más para revisar.'));
+    box.appendChild(ul)}
+  b.querySelector('.bd').appendChild(box);
 }
 // Respuesta cortada: se dice con claridad y se ofrece «Continuar». Nunca se presenta como terminada.
 const MOTIVO_INC={limite:'La respuesta llegó al límite de longitud.',interrumpida:'La conexión se interrumpió mientras se escribía.',
