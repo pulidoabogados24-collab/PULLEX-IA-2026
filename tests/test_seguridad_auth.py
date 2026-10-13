@@ -469,3 +469,54 @@ def test_AUTH11_hash_nuevo_con_prefijo_y_rehash_transparente_de_los_viejos(clien
     t0 = time.perf_counter()
     assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 200
     print(f"[AUTH-11] login verificando 600 000 iteraciones: {(time.perf_counter() - t0) * 1000:.0f} ms")
+
+
+# ------------------------------------------------------------------------------------ AUTH-08, 09 y 10 --
+def test_AUTH08_continuar_tiene_tope_de_tres_por_mensaje_aunque_no_quede_cupo(cliente, modulo):
+    email, _, t = nuevo_usuario(cliente)
+    cid = _conv(cliente, t)
+    assert cliente.post("/api/chat", headers=auth(t), json={"conversacion": cid, "mensaje": "hola", "web": False}).status_code == 200
+    with closing(modulo.db()) as con:
+        mid = con.execute("SELECT id FROM mensajes WHERE conv=? AND rol='assistant'", (cid,)).fetchone()["id"]
+    _sql(modulo, "UPDATE usuarios SET usadas=limite WHERE email=?", (email,))        # sin cupo (idor_cuota.py)
+    codigos = []
+    for _ in range(5):
+        _sql(modulo, "UPDATE mensajes SET incompleta=1 WHERE id=?", (mid,))
+        antes = len(FakeAnthropic.llamadas_stream)
+        r = cliente.post("/api/chat", headers=auth(t), json={"conversacion": cid, "continuar": True, "web": False})
+        codigos.append((r.status_code, len(FakeAnthropic.llamadas_stream) > antes))
+    assert codigos == [(200, True)] * 3 + [(429, False)] * 2, codigos
+    assert "máximo" in r.json()["detail"]
+    with closing(modulo.db()) as con:
+        assert con.execute("SELECT continuaciones FROM mensajes WHERE id=?", (mid,)).fetchone()["continuaciones"] == 3
+
+
+def test_AUTH09_escrito_modelo_del_taller_limitado_a_6_por_hora(cliente, modulo):
+    email, _, t = nuevo_usuario(cliente)
+    eid = cliente.post("/api/taller/escenario", headers=auth(t), json={"tipo": "tutela", "nivel": "basico", "fuente": "banco"}).json()["id"]
+    _sql(modulo, "INSERT INTO taller_intentos(escenario_id,usuario,texto,evaluacion,puntaje,creado) VALUES(?,?,?,?,?,0)",
+         (eid, email, "t", "{}", 50))
+    codigos, llamadas = [], []
+    for _ in range(8):
+        _sql(modulo, "DELETE FROM taller_modelos")              # sin caché: cada pedido iría al modelo
+        antes = len(FakeAnthropic.llamadas_taller)
+        codigos.append(cliente.post("/api/taller/modelo", headers=auth(t), json={"escenario_id": eid}).status_code)
+        llamadas.append(len(FakeAnthropic.llamadas_taller) - antes)
+    assert codigos == [200] * 6 + [429] * 2, codigos
+    assert llamadas[6:] == [0, 0] and all(n >= 1 for n in llamadas[:6])
+
+
+def test_AUTH10_el_reinicio_mensual_no_borra_consumos_de_otra_peticion(cliente, modulo):
+    email, _, _ = nuevo_usuario(cliente)
+    admin = login_admin(cliente)
+    assert cliente.post("/api/admin/actualizar", headers=auth(admin), json={"email": email, "plan": "basico"}).status_code == 200
+    _sql(modulo, "UPDATE usuarios SET periodo='2000-01', usadas=5 WHERE email=?", (email,))
+    vieja = _usuario(modulo, email)                              # lo que leyó una petición antes del cambio de mes
+    # otra petición simultánea ya reinició el mes y gastó 3 consultas
+    _sql(modulo, "UPDATE usuarios SET periodo=?, usadas=3 WHERE email=?", (modulo.periodo_actual(), email))
+    u = modulo.reiniciar_periodo_si_aplica(vieja)
+    assert _usuario(modulo, email)["usadas"] == 3 and u["usadas"] == 3 and u["periodo"] == modulo.periodo_actual()
+    # el reinicio normal sigue funcionando
+    _sql(modulo, "UPDATE usuarios SET periodo='2000-01', usadas=5 WHERE email=?", (email,))
+    assert modulo.reiniciar_periodo_si_aplica(_usuario(modulo, email))["usadas"] == 0
+    assert _usuario(modulo, email)["usadas"] == 0

@@ -106,7 +106,8 @@ CREATE TABLE IF NOT EXISTS mensajes (
     contenido TEXT COLLATE "C",
     creada DOUBLE PRECISION,
     fuentes TEXT COLLATE "C",
-    incompleta BIGINT DEFAULT 0
+    incompleta BIGINT DEFAULT 0,
+    continuaciones BIGINT DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS ix_mensajes_conv ON mensajes (conv);
 CREATE TABLE IF NOT EXISTS boletin (
@@ -285,6 +286,7 @@ ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verificado BIGINT DEFAULT 0;
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS sesion_version BIGINT DEFAULT 0;
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
+ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS continuaciones BIGINT DEFAULT 0;
 -- Tablas nuevas después de la versión 1: las crea su CREATE TABLE IF NOT EXISTS de arriba al volver a aplicar el
 -- archivo (idempotente): limites (AUTH-04).
 

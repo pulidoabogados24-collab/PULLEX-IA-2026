@@ -725,6 +725,12 @@ def _crear_tablas_sqlite(con):
         con.commit()
     except sqlite3.OperationalError:
         pass
+    # AUTH-08: cuántas veces se ha pedido «continuar» esta respuesta (tope MAX_CONTINUACIONES).
+    try:
+        con.execute("ALTER TABLE mensajes ADD COLUMN continuaciones INTEGER DEFAULT 0")
+        con.commit()
+    except sqlite3.OperationalError:
+        pass
     # Automatizador (documentos.py): documentos generados y planes del asistente, siempre con dueño.
     con.executescript("""
     CREATE TABLE IF NOT EXISTS documentos_generados(
@@ -1073,10 +1079,14 @@ def reiniciar_periodo_si_aplica(u):
     hoy = periodo_actual()
     if u["periodo"] != hoy:
         with closing(db()) as con:
-            con.execute("UPDATE usuarios SET usadas=0, periodo=? WHERE email=?", (hoy, u["email"]))
+            # AUTH-10: reinicio condicional. Si otra petición ya reinició el mes (y quizá ya gastó consultas), no se
+            # vuelve a poner en 0: se leen los valores vigentes.
+            con.execute("UPDATE usuarios SET usadas=0, periodo=? WHERE email=? AND (periodo IS NULL OR periodo<>?)",
+                        (hoy, u["email"], hoy))
+            f = con.execute("SELECT usadas, periodo FROM usuarios WHERE email=?", (u["email"],)).fetchone()
             con.commit()
-        u["usadas"] = 0
-        u["periodo"] = hoy
+        u["usadas"] = f["usadas"]
+        u["periodo"] = f["periodo"]
     return u
 
 def _crear_admin_si_falta():
@@ -2120,6 +2130,9 @@ async def chat(request: Request):
 CABECERAS_SSE = {"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"}
 
 
+MAX_CONTINUACIONES = 3
+
+
 def _chat_continuar(u: dict, datos: dict):
     """«Continuar» una respuesta que quedó incompleta (cortada por límite o por la conexión). No gasta consultas del plan."""
     limitar_cuenta("continuar:" + u["email"], 30, 600)
@@ -2139,6 +2152,15 @@ def _chat_continuar(u: dict, datos: dict):
     if not filas or filas[-1]["rol"] != "assistant" or not filas[-1]["incompleta"]:
         raise HTTPException(400, "No hay una respuesta incompleta para continuar. Vuelve a abrir la consulta.")
     ultima = filas[-1]
+    # AUTH-08: «continuar» no gasta consultas, así que tiene tope por mensaje (antes, con el cupo agotado se podía
+    # seguir llamando al modelo cortando la conexión una y otra vez). Se cuenta ANTES de llamar al modelo.
+    with closing(db()) as con:
+        cur = con.execute("UPDATE mensajes SET continuaciones=COALESCE(continuaciones,0)+1 "
+                          "WHERE id=? AND COALESCE(continuaciones,0)<?", (ultima["id"], MAX_CONTINUACIONES))
+        con.commit()
+    if cur.rowcount != 1:
+        raise HTTPException(429, f"Esta respuesta ya se continuó el máximo de veces ({MAX_CONTINUACIONES}). "
+                                 "Haz una consulta nueva para seguir.")
     usuarios = [f["contenido"] for f in filas if f["rol"] == "user"]
     pregunta = usuarios[-1] if usuarios else ""
     contrato = motor.clasificar(pregunta, historial_usuario=usuarios[:-1], n_adjuntos=0, estilo=estilo, modo=modo,
