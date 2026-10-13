@@ -198,13 +198,19 @@ def leyes_en_texto(texto: str):
 def _anclas_coherentes(pares) -> list:
     """Quita, de una en una, la observación con más contradicciones de orden (erratas de extracción) hasta que la
     numeración quede coherente: a mayor año, mayor número."""
-    ps = sorted(set(p for p in pares if p[1] >= ANIO_INICIO_NUMERACION_LEYES and p[0] > 0))
+    frecuencia = defaultdict(int)
+    for p in pares:
+        if p[1] >= ANIO_INICIO_NUMERACION_LEYES and p[0] > 0:
+            frecuencia[p] += 1
+    ps = sorted(frecuencia)
 
     def choques(p, lista):
-        return sum(1 for q in lista if (q[1] < p[1] and q[0] > p[0]) or (q[1] > p[1] and q[0] < p[0]))
+        # mismo número en dos años distintos también es una contradicción: una de las dos es errata
+        return sum(1 for q in lista if (q[1] < p[1] and q[0] >= p[0]) or (q[1] > p[1] and q[0] <= p[0]))
 
     while ps:
-        peor = max(ps, key=lambda p: choques(p, ps))
+        # la más contradictoria; a igualdad, la que menos veces aparece en el corpus
+        peor = max(ps, key=lambda p: (choques(p, ps), -frecuencia[p]))
         if not choques(peor, ps):
             break
         ps.remove(peor)
