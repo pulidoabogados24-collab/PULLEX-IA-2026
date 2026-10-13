@@ -986,6 +986,9 @@ def validar_token(token: str) -> str:
     except Exception:
         raise HTTPException(401, "Sesión inválida o expirada")
 
+MENSAJE_CUENTA_INACTIVA = "Tu cuenta está inactiva. Escríbele al administrador para activarla."
+
+
 def usuario_actual(request: Request) -> dict:
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
@@ -996,6 +999,10 @@ def usuario_actual(request: Request) -> dict:
         raise HTTPException(401, "Cuenta no encontrada")
     if version != int(u.get("sesion_version") or 0):
         raise HTTPException(401, "Sesión inválida o expirada")
+    # AUTH-01: una cuenta desactivada no usa NINGUNA ruta con sesión (antes solo el chat lo revisaba). admin_actual
+    # pasa por aquí, así que un administrador desactivado también pierde el panel.
+    if not u["activo"]:
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     return u
 
 # -------------------------------------------------- rate limiting (seguridad) --
@@ -1235,7 +1242,10 @@ async def login(request: Request):
     clave = str(datos.get("clave", "") or "")
     limitar_cuenta("login:" + email, tope=10, ventana=900)
     if len(clave) <= MAX_CLAVE and verificar_clave(email, clave):
-        return {"token": emitir_token(email), "perfil": perfil_publico(obtener_usuario(email))}
+        u = obtener_usuario(email)
+        if not u["activo"]:     # AUTH-01: solo tras la clave correcta, así el 403 no revela el estado a un tercero
+            raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+        return {"token": emitir_token(email), "perfil": perfil_publico(u)}
     raise HTTPException(401, "Correo o contraseña incorrectos")
 
 def _actualizar_clave(email: str, nueva_clave: str):
@@ -1435,7 +1445,7 @@ def api_boletin(request: Request):
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     u = reiniciar_periodo_si_aplica(u)
     with closing(db()) as con:
         cur = con.execute("UPDATE usuarios SET usadas=usadas+1 WHERE email=? AND usadas<limite",
@@ -1769,7 +1779,7 @@ def _registrar_calidad(email, mid, contrato, estado, respuesta, completo, t0, ma
 async def chat(request: Request):
     u = usuario_actual(request)
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     u = reiniciar_periodo_si_aplica(u)
 
     datos = await json_de(request)
@@ -2105,7 +2115,7 @@ def _caso_del_banco(u: dict, area: str, nivel: str, foco) -> dict:
     """Sirve un caso curado (por área y nivel, o por concepto del mapa). No llama al modelo ni
     descuenta consultas; lo guarda como caso propio del estudiante para pistas, solución y evaluación."""
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     concepto = foco["id"] if foco is not None and foco["id"] in academia.INDICE else None
     elegido, repetido = academia.elegir_del_banco(area, nivel, _banco_servidos(u["email"]), concepto_id=concepto)
     if elegido is None:
@@ -2778,7 +2788,7 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
 
 def _verificar_cupo(u: dict, pasos: int):
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     u = reiniciar_periodo_si_aplica(u)
     quedan = u["limite"] - u["usadas"]
     if quedan < pasos:
@@ -2935,7 +2945,7 @@ def admin_usuarios(request: Request):
 
 @app.post("/api/admin/actualizar")
 async def admin_actualizar(request: Request):
-    admin_actual(request)
+    admin = admin_actual(request)
     datos = await json_de(request)
     email = normaliza_email(str(datos.get("email", "") or ""))
     u = obtener_usuario(email)
@@ -2945,8 +2955,13 @@ async def admin_actualizar(request: Request):
     if plan not in PLANES:
         raise HTTPException(400, "Plan inválido")
     activo = 1 if datos.get("activo", u["activo"]) else 0
+    if email == admin["email"] and not activo:
+        raise HTTPException(400, "No puedes desactivar tu propia cuenta de administrador.")
     limite = PLANES[plan]["limite"]
     with closing(db()) as con:
+        if u["activo"] and not activo:
+            # AUTH-01: desactivar cierra todas sus sesiones (los tokens emitidos antes dejan de valer).
+            con.execute("UPDATE usuarios SET sesion_version=COALESCE(sesion_version,0)+1 WHERE email=?", (email,))
         if datos.get("reiniciar"):
             con.execute("UPDATE usuarios SET plan=?, limite=?, activo=?, usadas=0, periodo=? WHERE email=?",
                         (plan, limite, activo, periodo_actual(), email))
