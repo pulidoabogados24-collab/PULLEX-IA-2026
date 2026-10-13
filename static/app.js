@@ -5,9 +5,21 @@ if(LIBS_OK)marked.setOptions({breaks:true});
 const $=id=>document.getElementById(id);
 let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
 function auth(){return {'Authorization':'Bearer '+TOKEN}}
+// HTML que llega del modelo o de documentos (Markdown): se sanea con una configuración estricta. Sin formularios,
+// controles, estilos, ids, nombres, clases ni data-*: así una respuesta manipulada (por un PDF adjunto o una página
+// web) no puede secuestrar $('txt') o $('cf-memoria') con un id repetido, ni accionar el despachador data-click, ni
+// reestilizar la app con <style> (auditoría 2026-10-13, F-01/F-02/F-03). Ninguna regla de CSS ni código depende de
+// clases dentro del Markdown pintado (todo cuelga de .md), por eso también se quita class.
+const MD_CFG={ALLOW_DATA_ATTR:false,SANITIZE_NAMED_PROPS:true,
+  FORBID_TAGS:['style','form','input','textarea','select','button','option','dialog','template'],
+  FORBID_ATTR:['style','id','name','class','tabindex','autofocus']};
+// Los enlaces salen siempre en otra pestaña y sin pasar la página de origen ni el respaldo de la app.
+if(LIBS_OK)DOMPurify.addHook('afterSanitizeAttributes',n=>{
+  if(n.tagName==='A'&&n.hasAttribute('href')&&!/^#/.test(n.getAttribute('href'))){
+    n.setAttribute('target','_blank');n.setAttribute('rel','noopener noreferrer nofollow')}});
 // Si el intérprete de markdown falla con un texto, se muestra como texto plano seguro: la respuesta no se pierde y
 // el envío no queda a medias por un error de pintado.
-function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
+function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''),MD_CFG)}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
 function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 // Aviso breve. Entra y sale con su propia animación (static/movimiento.css); se retira por tiempo, nunca esperando a
 // un «animationend» que podría no llegar. Un aviso nuevo reemplaza al anterior en vez de encimarse.
@@ -618,12 +630,21 @@ function pintarFuentes(b,fuentes,opc){
 function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
 function imprimirPDF(){window.print()}
+// Celda de CSV a salvo de «inyección de fórmulas» (F-04): Excel ejecuta lo que empieza por = + - @, tabulador o
+// retorno de carro. Esas celdas van como texto (apóstrofo delante), salvo las que son solo una cifra: «-1.000»,
+// «+57», «$ 2.000» o «-$ 3.500,50» se exportan tal cual para poder sumarlas.
+const RE_CIFRA=/^[-+]?\s*\$?\s*\d[\d.,\s]*%?$/;
+function celdaCsv(t){
+  let v=String(t==null?'':t).trim();
+  if(/^[=+\-@\t\r]/.test(v)&&!RE_CIFRA.test(v))v="'"+v;
+  return '"'+v.replace(/"/g,'""')+'"';
+}
 function exportarExcel(){
   const tablas=$('hilo').querySelectorAll('.b.ia table');
   if(!tablas.length){toast('No hay tablas para exportar. Pide una liquidación o un cuadro.');return}
   const t=tablas[tablas.length-1];let csv=[];
   t.querySelectorAll('tr').forEach(tr=>{csv.push([...tr.querySelectorAll('th,td')]
-    .map(x=>'"'+x.textContent.replace(/"/g,'""')+'"').join(','))});
+    .map(x=>celdaCsv(x.textContent)).join(','))});
   const bl=new Blob(['﻿'+csv.join('\n')],{type:'text/csv;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download='pullex-liquidacion.csv';a.click();
   URL.revokeObjectURL(u);toast('Descargado (ábrelo en Excel)');
@@ -1488,6 +1509,9 @@ async function apRestablecer(){
 const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,toggleAjustesResp,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
+  // Nunca se actúa sobre contenido pintado desde Markdown (respuestas, boletín, documentos): ese HTML lo escribe un
+  // tercero. md() ya quita los data-*; esto es la segunda barrera por si algún día se pinta HTML por otra vía.
+  if(el.closest('.md'))return;
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
   const T=tipo[0].toUpperCase()+tipo.slice(1);
   if(('prevenir'+T) in el.dataset)ev.preventDefault();
