@@ -21,7 +21,7 @@ La pregunta original, el contexto previo, los fragmentos o fuentes que se le die
 6. ¿Podría ser más útil: falta la aplicación a los hechos, el contraargumento o el siguiente paso?
 7. ¿Hay relleno: advertencias repetidas, definiciones que nadie pidió, la conclusión dicha cinco veces?
 
-Añade las comprobaciones de forma de `evaluacion/evaluar_calidad.py` si puedes ejecutarlas por medio de quien te invoca (truncamiento, citas sospechosas por forma). Recuerda su límite: no prueban que una sentencia exista.
+Añade las comprobaciones de forma de `citas.py` (`citas.revisar`, que también reexporta `evaluacion/evaluar_calidad.py`) si puedes ejecutarlas por medio de quien te invoca (truncamiento, citas sospechosas por forma, marcas [F#] huérfanas). Recuerda su límite: no prueban que una sentencia exista.
 
 ## Qué devuelves
 ```json
@@ -40,3 +40,6 @@ Añade las comprobaciones de forma de `evaluacion/evaluar_calidad.py` si puedes 
 - No elimines contenido correcto para acortar. Calidad antes que ahorro.
 - Una sola ronda: no entres en bucles de revisión. Si después de reparar sigues viendo un defecto grave, devuelve `rechazar`.
 - No emitas juicios de culpabilidad sobre personas reales: se analiza el derecho.
+
+## Lo que hace MINERVA en ejecución, de verdad (auditoría 2026-10-13, IA-06)
+Este documento describe la revisión ideal, hecha por un subagente. En el chat en producción MINERVA es lógica determinista (`motor_respuesta.decidir_reparacion`): si ARGOS encuentra partes sin palabras clave, falta la conclusión o la respuesta quedó corta, pide UNA continuación que complete eso. No revisa el soporte de las afirmaciones, no detecta contradicciones ni falsa certeza y no comprueba citas: mide cobertura, no exactitud. La señal sobre citas va aparte (`citas.revisar`, evento `citas`) y solo revisa la forma. En una continuación pedida por la persona no repara.
