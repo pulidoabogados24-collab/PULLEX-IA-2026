@@ -380,6 +380,43 @@ def test_valorar_actualiza_sin_borrar_lo_demas_de_la_fila(modulo):
         con.commit()
 
 
+# ===================================================================== BD-18: ids fuera de rango → 404 ==
+def _rutas_con_id(app):
+    """Todas las rutas con un parámetro de ruta entero, sacadas del esquema OpenAPI de la app (incluye las de los
+    routers montados: taller, biblioteca…). Una ruta nueva con {id} queda cubierta sola."""
+    for ruta, metodos in app.openapi()["paths"].items():
+        for metodo, op in metodos.items():
+            enteros = [p["name"] for p in op.get("parameters", [])
+                       if p.get("in") == "path" and p.get("schema", {}).get("type") == "integer"]
+            if enteros:
+                yield metodo.upper(), ruta, enteros
+
+
+@pytest.mark.parametrize("valor", ["99999999999999999999999", str(2 ** 63), "0", "-3"])
+def test_ids_fuera_de_rango_responden_404_en_todas_las_rutas(cliente, modulo, valor):
+    token = login_admin(cliente)
+    rutas = list(_rutas_con_id(modulo.app))
+    assert {r for _, r, _ in rutas} >= {"/api/conversaciones/{cid}/mensajes", "/api/documentos/{did}", "/api/modular/caso/{caso_id}",
+                                        "/api/taller/escenario/{eid}", "/api/coordinador/ejecuciones/{eid}"}, rutas
+    for metodo, ruta, nombres in rutas:
+        url = ruta
+        for nombre in nombres:
+            url = url.replace("{" + nombre + "}", valor)
+        r = cliente.request(metodo, url, headers=auth(token), json={"titulo": "x", "texto": "x"})
+        assert r.status_code == 404, (metodo, url, r.status_code, r.text[:200])
+    for url in ("/api/modular/solucion?caso_id=", "/api/modular/conceptos?caso_id="):
+        assert cliente.get(url + valor, headers=auth(token)).status_code == 404
+    r = cliente.post("/api/chat", headers=auth(token), json={"conversacion": int(valor), "mensaje": "hola", "web": False})
+    assert r.status_code == 404
+
+
+def test_id_valido():
+    assert datos.id_valido("7") == 7 and datos.id_valido(2 ** 63 - 1) == 2 ** 63 - 1
+    assert datos.id_valido(2 ** 63) is None and datos.id_valido(0) is None and datos.id_valido("-1") is None
+    with pytest.raises(ValueError):
+        datos.id_valido("abc")
+
+
 # ================================================= BD-13: índice de modular_intentos(caso_id), sin FK aún ==
 def test_indice_de_intentos_por_caso_y_sin_claves_foraneas_todavia(modulo):
     assert datos.indices_del_archivo()["ix_mintentos_caso"] == "modular_intentos"

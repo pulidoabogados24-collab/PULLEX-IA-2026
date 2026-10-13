@@ -1443,6 +1443,7 @@ def api_boletin(request: Request):
     usuario_actual(request)   # el boletín está cacheado: no gasta consultas del estudiante
     return obtener_boletin()
 
+
 # ------------------------------------------------------------ consultas --
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""
@@ -1466,13 +1467,22 @@ def reintegrar_consulta(email: str):
 
 
 # ------------------------------------------------------ conversaciones --
+def id_o_404(valor, invalido: str, no_encontrado: str) -> int:
+    """Ayuda común de las rutas con {id} (BD-18): 400 si no es un número; 404, sin consultar la base, si está fuera
+    del rango de ids posibles (≤0 o mayor que 2^63−1)."""
+    try:
+        numero = base_datos.id_valido(valor)
+    except (TypeError, ValueError):
+        raise HTTPException(400, invalido)
+    if numero is None:
+        raise HTTPException(404, no_encontrado)
+    return numero
+
+
 def conversacion_de(cid, email: str) -> dict:
     """Autorización a nivel de recurso: la conversación debe existir Y pertenecer a quien
     la pide. Responde 404 (no 403) para no confirmar la existencia de IDs ajenos."""
-    try:
-        cid = int(cid)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Conversación inválida")
+    cid = id_o_404(cid, "Conversación inválida", "Conversación no encontrada")
     with closing(db()) as con:
         f = con.execute("SELECT id,usuario,titulo FROM conversaciones WHERE id=? AND usuario=?",
                         (cid, email)).fetchone()
@@ -1491,7 +1501,7 @@ def listar(request: Request):
         filas = con.execute(
             "SELECT c.id, c.titulo, MAX(m.creada) actualizada FROM conversaciones c "
             "JOIN mensajes m ON m.conv=c.id WHERE c.usuario=? "
-            "GROUP BY c.id ORDER BY actualizada DESC, c.id DESC",
+            "GROUP BY c.id ORDER BY actualizada DESC NULLS LAST, c.id DESC",
             (u["email"],)).fetchall()
     return [dict(f) for f in filas]
 
@@ -2061,10 +2071,7 @@ def _caso_publico(fila, datos: dict) -> dict:
 
 
 def _caso_de(caso_id, email: str):
-    try:
-        caso_id = int(caso_id)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Caso inválido")
+    caso_id = id_o_404(caso_id, "Caso inválido", "Caso no encontrado")
     with closing(db()) as con:
         f = con.execute("SELECT * FROM modular_casos WHERE id=? AND usuario=?", (caso_id, email)).fetchone()
     if not f:
@@ -2307,7 +2314,7 @@ def modular_progreso(request: Request):
     with closing(db()) as con:
         filas = con.execute(
             "SELECT c.area, i.puntaje, i.evaluacion, i.creado FROM modular_intentos i "
-            "JOIN modular_casos c ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado", (u["email"],)).fetchall()
+            "JOIN modular_casos c ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado NULLS FIRST, i.id", (u["email"],)).fetchall()
     por_area, debiles = {}, {}
     for f in filas:
         a = por_area.setdefault(f["area"], [])
@@ -2418,7 +2425,7 @@ def academia_errores(request: Request):
     ahora = time.time()
     with closing(db()) as con:
         filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 "
-                            "ORDER BY resuelto IS NOT NULL, fallos DESC, ultimo_fallo DESC LIMIT 50",
+                            "ORDER BY resuelto IS NOT NULL, fallos DESC NULLS LAST, ultimo_fallo DESC NULLS LAST LIMIT 50",
                             (u["email"],)).fetchall()
     return {"errores": [{**academia.fila_publica(f, ahora), "frecuencia": f["fallos"],
                          "severidad": academia.severidad(f), "primer_visto": f["primer_visto"],
@@ -2432,14 +2439,14 @@ def academia_resumen(request: Request):
     email, ahora = u["email"], time.time()
     fin_de_hoy = academia.fin_del_dia(ahora)
     with closing(db()) as con:
-        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? ORDER BY proximo", (email,)).fetchall()
+        filas = con.execute("SELECT * FROM conocimiento WHERE usuario=? ORDER BY proximo NULLS FIRST, concepto_id", (email,)).fetchall()
         pendiente = con.execute(
             "SELECT c.* FROM modular_casos c WHERE c.usuario=? AND NOT EXISTS "
-            "(SELECT 1 FROM modular_intentos i WHERE i.caso_id=c.id) ORDER BY c.creado DESC LIMIT 1",
+            "(SELECT 1 FROM modular_intentos i WHERE i.caso_id=c.id) ORDER BY c.creado DESC NULLS LAST, c.id DESC LIMIT 1",
             (email,)).fetchone()
         ultimo = con.execute(
             "SELECT c.area, c.datos, i.puntaje, i.creado FROM modular_intentos i JOIN modular_casos c "
-            "ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado DESC LIMIT 1", (email,)).fetchone()
+            "ON c.id=i.caso_id WHERE i.usuario=? ORDER BY i.creado DESC NULLS LAST, i.id DESC LIMIT 1", (email,)).fetchone()
         promedios = _promedios_por_area(con, email)
     estados = {"dominado": 0, "en_progreso": 0, "debil": 0}
     for f in filas:
@@ -2525,10 +2532,7 @@ def _guardar_documento(email, tipo, titulo, origen, campos, texto, verificar, ad
 
 
 def _documento_de(did, email: str) -> dict:
-    try:
-        did = int(did)
-    except (TypeError, ValueError):
-        raise HTTPException(400, "Documento inválido")
+    did = id_o_404(did, "Documento inválido", "Documento no encontrado")
     with closing(db()) as con:
         f = con.execute("SELECT * FROM documentos_generados WHERE id=? AND usuario=?", (did, email)).fetchone()
     if not f:
@@ -2644,7 +2648,7 @@ def documentos_mis(request: Request):
     u = usuario_actual(request)
     with closing(db()) as con:
         filas = con.execute("SELECT id,tipo,titulo,origen,creado,actualizado FROM documentos_generados "
-                            "WHERE usuario=? ORDER BY actualizado DESC, id DESC LIMIT 100", (u["email"],)).fetchall()
+                            "WHERE usuario=? ORDER BY actualizado DESC NULLS LAST, id DESC LIMIT 100", (u["email"],)).fetchall()
     salida = []
     for f in filas:
         t = documentos.INDICE.get(f["tipo"] or "")
@@ -2941,7 +2945,7 @@ def admin_usuarios(request: Request):
     admin_actual(request)
     with closing(db()) as con:
         filas = con.execute(
-            "SELECT email,nombre,plan,limite,usadas,activo,es_admin,creado FROM usuarios ORDER BY creado DESC"
+            "SELECT email,nombre,plan,limite,usadas,activo,es_admin,creado FROM usuarios ORDER BY creado DESC NULLS LAST, email"
         ).fetchall()
     return {"usuarios": [dict(f) for f in filas], "planes": PLANES}
 
