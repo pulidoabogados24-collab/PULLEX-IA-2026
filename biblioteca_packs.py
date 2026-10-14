@@ -82,12 +82,17 @@ def crear_router(*, admin_actual, limitar_cuenta=None):
         if not 1 <= pagina <= 1000 or not 1 <= por_pagina <= 50:
             raise HTTPException(400, "Paginación inválida")
         q = q.strip()[:150]
-        parametros = (coleccion, coleccion, q, q, q)
+        parametros = (coleccion, coleccion, q, q, q, q)
         where = """
             coleccion IN ('PACK JURIDICO 1','PACK JURIDICO 2')
             AND (%s = '' OR coleccion = %s)
             AND (%s = '' OR strpos(lower(nombre),lower(%s)) > 0
-                         OR strpos(lower(ruta),lower(%s)) > 0)
+                         OR strpos(lower(ruta),lower(%s)) > 0
+                         OR EXISTS (
+                             SELECT 1 FROM pullex.biblioteca_fragmentos f
+                             WHERE f.documento_id = pullex.biblioteca_documentos.id
+                               AND f.texto_busqueda @@ plainto_tsquery('spanish', %s)
+                         ))
         """
         cuentas = _leer(
             "SELECT count(*)::integer total FROM pullex.biblioteca_documentos WHERE " + where,
@@ -103,7 +108,7 @@ def crear_router(*, admin_actual, limitar_cuenta=None):
         return {
             "total": total, "pagina": pagina, "por_pagina": por_pagina,
             "paginas": max(1, (total + por_pagina - 1) // por_pagina),
-            "resultados": resultados, "busqueda": "metadatos",
+            "resultados": resultados, "busqueda": "titulo_ruta_y_fragmentos_indexados",
         }
 
     @router.get("/api/admin/biblioteca/packs/documento/{documento_id}")
