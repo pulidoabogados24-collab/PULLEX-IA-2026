@@ -4,6 +4,13 @@ on:
     branches: [main]
     paths:
       - biblioteca.py
+      - biblioteca_packs.py
+      - app.py
+      - static/biblioteca.js
+      - requirements.txt
+      - scripts/ingestar_contenidos_drive.py
+      - tests/test_biblioteca_packs.py
+      - tests/test_ingestar_contenidos_drive.py
       - tests/test_biblioteca_vercel.py
       - tests/test_biblioteca.py
       - tests/test_biblioteca_catalogo.py
@@ -17,7 +24,7 @@ permissions:
 
 jobs:
   biblioteca:
-    name: SQLite readonly y rutas privadas
+    name: Biblioteca SQLite y catálogo privado
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -32,4 +39,6 @@ jobs:
       - name: Dependencias de pruebas (sin secretos)
         run: python -m pip install -r requirements.txt pytest==9.1.1 httpx==0.28.1
       - name: Suite relevante
-        run: python -m pytest tests/test_biblioteca_vercel.py tests/test_biblioteca.py tests/test_biblioteca_catalogo.py tests/test_seguridad.py tests/test_regresion.py -q
+        run: python -m pytest tests/test_biblioteca_vercel.py tests/test_biblioteca_packs.py tests/test_ingestar_contenidos_drive.py tests/test_biblioteca.py tests/test_biblioteca_catalogo.py tests/test_seguridad.py tests/test_regresion.py -q
+      - name: Verificar sintaxis JavaScript
+        run: node --check static/biblioteca.js
