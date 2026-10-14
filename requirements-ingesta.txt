@@ -1,0 +1,2 @@
+# Solo para importar metadatos privados mediante conexión PostgreSQL del servidor.
+psycopg[binary]==3.3.6
