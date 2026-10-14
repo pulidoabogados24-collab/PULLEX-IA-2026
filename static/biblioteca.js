@@ -37,10 +37,7 @@ function bibMeta(m){
   if(m.tipo_escrito&&!BIB_SIN_VALOR.includes(m.tipo_escrito))partes.push(m.tipo_escrito);
   if(m.anio)partes.push(String(m.anio));
   return partes.join(' · ')}
-// Enlace al original: solo https de Drive/Docs (el servidor ya lo filtra; aquí se comprueba otra vez).
-function bibEnlaceDrive(url,texto){
-  if(typeof url!=='string'||!/^https:\/\/(drive|docs)\.google\.com\//.test(url))return null;
-  return dE('a',{class:'doc-btn bib-drive',href:url,target:'_blank',rel:'noopener noreferrer'},texto||'Abrir original en Drive')}
+// Los archivos se consultan en PULLEX; no se generan links externos.
 
 // --------------------------------------------------------------------------- arranque --
 function bibInit(){
@@ -229,8 +226,7 @@ async function bibAbrirFicha(id){
   const h=dE('h3',{class:'doc-h',tabindex:'-1',text:f.titulo});
   const avisos=dE('div',{class:'bib-avisos'},...(f.avisos||[]).map(a=>dE('p',{class:'doc-aviso bib-aviso bib-aviso-'+a.codigo,role:'note',text:a.texto})));
   const acciones=dE('div',{class:'doc-acc bib-acc'});
-  const drive=bibEnlaceDrive(f.enlace);
-  if(drive)acciones.appendChild(drive);else acciones.appendChild(dE('span',{class:'bib-nd',text:'Sin enlace al original.'}));
+  acciones.appendChild(dE('span',{class:'bib-nd',text:'Consulta interna · sin enlace externo.'}));
   const esEscrito=!['norma','jurisprudencia','doctrina','otro'].includes(f.clase);
   if(esEscrito)acciones.appendChild(dBtn('Crear copia de trabajo','pri',ev=>bibCopiar(f,ev.currentTarget),{id:'bib-copiar'}));
   const enComparar=BIB.comparar.some(x=>x.id===f.id);
