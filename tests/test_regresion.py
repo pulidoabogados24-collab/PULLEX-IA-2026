@@ -79,6 +79,33 @@ def test_admin_flujo_completo(cliente):
     assert cliente.post("/api/login", json={"email": email, "clave": temporal}).status_code == 200
 
 
+def test_desactivar_cuenta_revoca_acceso_y_bloquea_nuevo_login(cliente, modulo):
+    from contextlib import closing
+
+    email, clave, token = nuevo_usuario(cliente)
+    admin_token = login_admin(cliente)
+    assert cliente.get("/api/estado", headers=auth(token)).status_code == 200
+    assert cliente.post("/api/admin/actualizar", headers=auth(admin_token),
+                        json={"email": email, "activo": False}).status_code == 200
+    for ruta in ("/api/estado", "/api/conversaciones", "/api/boletin"):
+        assert cliente.get(ruta, headers=auth(token)).status_code in (401, 403)
+    assert cliente.post("/api/login", json={"email": email, "clave": clave}).status_code == 403
+    assert cliente.post("/api/login", json={"email": email, "clave": "incorrecta"}).status_code == 401
+
+    # Otra cuenta con permisos de administración tampoco debe conservarlos al desactivarse.
+    otro_email, otra_clave, otro_token = nuevo_usuario(cliente)
+    with closing(modulo.db()) as con:
+        con.execute("UPDATE usuarios SET es_admin=1 WHERE email=?", (otro_email,))
+        con.commit()
+    assert cliente.get("/api/admin/usuarios", headers=auth(otro_token)).status_code == 200
+    assert cliente.post("/api/admin/actualizar", headers=auth(admin_token),
+                        json={"email": otro_email, "activo": False}).status_code == 200
+    assert cliente.get("/api/admin/usuarios", headers=auth(otro_token)).status_code in (401, 403)
+    assert cliente.post("/api/login", json={"email": otro_email, "clave": otra_clave}).status_code == 403
+    assert cliente.post("/api/admin/actualizar", headers=auth(admin_token),
+                        json={"email": modulo.ADMIN_EMAIL, "activo": False}).status_code == 400
+
+
 def test_boletin(cliente):
     _, _, t = nuevo_usuario(cliente)
     r = cliente.get("/api/boletin", headers=auth(t))
@@ -106,7 +133,11 @@ def test_base_de_datos_anterior_se_migra_sola(tmp_path, monkeypatch):
         plan TEXT DEFAULT 'prueba', limite INTEGER DEFAULT 10, usadas INTEGER DEFAULT 0, periodo TEXT,
         activo INTEGER DEFAULT 1, es_admin INTEGER DEFAULT 0, preferencias TEXT DEFAULT '{}', creado REAL);""")
     con.commit(); con.close()
-    (tmp_path / "static").symlink_to(raiz / "static")
+    try:
+        (tmp_path / "static").symlink_to(raiz / "static", target_is_directory=True)
+    except OSError:
+        import shutil
+        shutil.copytree(raiz / "static", tmp_path / "static")
     monkeypatch.chdir(tmp_path)
     spec = importlib.util.spec_from_file_location("app_migracion", raiz / "app.py")
     m = importlib.util.module_from_spec(spec)

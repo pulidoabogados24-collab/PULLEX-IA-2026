@@ -927,6 +927,8 @@ def usuario_actual(request: Request) -> dict:
         raise HTTPException(401, "Cuenta no encontrada")
     if version != int(u.get("sesion_version") or 0):
         raise HTTPException(401, "Sesión inválida o expirada")
+    if not u["activo"]:
+        raise HTTPException(403, "La cuenta está inactiva")
     return u
 
 # -------------------------------------------------- rate limiting (seguridad) --
@@ -1160,7 +1162,10 @@ async def login(request: Request):
     clave = str(datos.get("clave", "") or "")
     limitar_cuenta("login:" + email, tope=10, ventana=900)
     if len(clave) <= MAX_CLAVE and verificar_clave(email, clave):
-        return {"token": emitir_token(email), "perfil": perfil_publico(obtener_usuario(email))}
+        u = obtener_usuario(email)
+        if not u["activo"]:
+            raise HTTPException(403, "La cuenta está inactiva")
+        return {"token": emitir_token(email), "perfil": perfil_publico(u)}
     raise HTTPException(401, "Correo o contraseña incorrectos")
 
 def _actualizar_clave(email: str, nueva_clave: str):
@@ -2860,7 +2865,7 @@ def admin_usuarios(request: Request):
 
 @app.post("/api/admin/actualizar")
 async def admin_actualizar(request: Request):
-    admin_actual(request)
+    admin = admin_actual(request)
     datos = await json_de(request)
     email = normaliza_email(str(datos.get("email", "") or ""))
     u = obtener_usuario(email)
@@ -2870,14 +2875,18 @@ async def admin_actualizar(request: Request):
     if plan not in PLANES:
         raise HTTPException(400, "Plan inválido")
     activo = 1 if datos.get("activo", u["activo"]) else 0
+    if email == admin["email"] and not activo:
+        raise HTTPException(400, "No puedes desactivar tu propia cuenta de administrador")
     limite = PLANES[plan]["limite"]
     with closing(db()) as con:
         if datos.get("reiniciar"):
-            con.execute("UPDATE usuarios SET plan=?, limite=?, activo=?, usadas=0, periodo=? WHERE email=?",
-                        (plan, limite, activo, periodo_actual(), email))
+            con.execute("UPDATE usuarios SET plan=?, limite=?, activo=?, usadas=0, periodo=?, "
+                        "sesion_version=COALESCE(sesion_version,0)+? WHERE email=?",
+                        (plan, limite, activo, periodo_actual(), int(bool(u["activo"]) and not activo), email))
         else:
-            con.execute("UPDATE usuarios SET plan=?, limite=?, activo=? WHERE email=?",
-                        (plan, limite, activo, email))
+            con.execute("UPDATE usuarios SET plan=?, limite=?, activo=?, "
+                        "sesion_version=COALESCE(sesion_version,0)+? WHERE email=?",
+                        (plan, limite, activo, int(bool(u["activo"]) and not activo), email))
         con.commit()
     return {"ok": True, "perfil": perfil_publico(obtener_usuario(email))}
 

@@ -7,7 +7,16 @@ let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=
 function auth(){return {'Authorization':'Bearer '+TOKEN}}
 // Si el intérprete de markdown falla con un texto, se muestra como texto plano seguro: la respuesta no se pierde y
 // el envío no queda a medias por un error de pintado.
-function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
+// El contenido del modelo, boletín o expediente puede ser hostil. Solo se permiten elementos de lectura;
+// ids, estilos y data-* podrían suplantar controles de la aplicación.
+const MD_CFG={
+  ALLOWED_TAGS:['p','br','strong','em','b','i','ul','ol','li','blockquote','pre','code','a',
+    'h1','h2','h3','h4','h5','h6','table','thead','tbody','tr','th','td','hr','del','s','sub','sup'],
+  ALLOWED_ATTR:['href','title','colspan','rowspan'],
+  ALLOW_DATA_ATTR:false,
+  SANITIZE_NAMED_PROPS:true
+};
+function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''),MD_CFG)}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
 function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 // Aviso breve. Entra y sale con su propia animación (static/movimiento.css); se retira por tiempo, nunca esperando a
 // un «animationend» que podría no llegar. Un aviso nuevo reemplaza al anterior en vez de encimarse.
@@ -1442,6 +1451,7 @@ async function apRestablecer(){
 const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
+  if(el.closest('.md'))return; // el contenido renderizado nunca puede ejecutar acciones de la app
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
   const T=tipo[0].toUpperCase()+tipo.slice(1);
   if(('prevenir'+T) in el.dataset)ev.preventDefault();
