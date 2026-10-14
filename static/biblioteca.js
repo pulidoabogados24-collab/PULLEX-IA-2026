@@ -72,6 +72,7 @@ function bibPintarResumen(r){
   if(notas.length)c.appendChild(dE('details',{class:'doc-det bib-cob',open:!r.modelos},dE('summary',{text:'Qué cubre hoy la biblioteca y qué falta'}),
     dE('ul',{class:'doc-lista'},...notas.map(n=>dE('li',{text:n})))));
   if(r.es_admin)c.appendChild(dE('div',{class:'doc-acc'},dBtn('Ver inventario completo (auditoría)','sec',bibAuditoria,{id:'bib-auditoria'})));
+  if(r.es_admin)bibPacksMontar(c);
 }
 
 // --------------------------------------------------------------------------- buscador --
@@ -363,4 +364,82 @@ async function bibAuditoria(){
       dE('span',{class:'bib-meta',text:'acceso '+e.acceso+' · '+e.sensibilidad+(e.retirado?' · retirado':'')})),dE('b',{text:e.titulo}),
       dE('p',{class:'bib-ruta',text:(e.motivo||e.retiro_motivo||'Sin motivo registrado')+' · Carpeta: '+e.ruta})))):dE('p',{class:'doc-vacio',text:'Nada oculto en esta página.'})));
   docSubir();h.focus();
+}
+
+
+// -------------------------------------------------------------- Packs en PostgreSQL --
+// Acceso únicamente para administradores activos. No se construyen enlaces a Drive.
+const BIB_PACKS={pagina:1,limite:20,init:false};
+
+function bibPacksMontar(contenedor){
+  if(BIB_PACKS.init)return; BIB_PACKS.init=true;
+  const caja=dE('section',{class:'doc-bloque',id:'bib-packs', 'aria-label':'Packs jurídicos privados'},
+    dE('h3',{class:'doc-h',text:'Packs Jurídicos 1 y 2 · consulta dentro de PULLEX'}),
+    dE('p',{class:'doc-aviso',text:'Vista privada para administración. Los archivos sin texto indexado solo se pueden buscar por nombre y carpeta. No se proporcionan enlaces a Google Drive.'}),
+    dE('p',{id:'bib-packs-resumen',class:'doc-desc',text:'Pulsa cargar para consultar Supabase.'}),
+    dE('div',{class:'doc-acc'},dBtn('Cargar biblioteca privada','sec',bibPacksIniciar)),
+    dE('div',{id:'bib-packs-herramientas'}),
+    dE('div',{id:'bib-packs-resultados','aria-live':'polite'}));
+  contenedor.appendChild(caja);
+}
+
+async function bibPacksIniciar(){
+  const estado=bibZona('bib-packs-resumen');
+  try{
+    const r=await docApi('/api/admin/biblioteca/packs/resumen');
+    estado.textContent=bibNumero(r.total)+' documentos inventariados · '+r.colecciones.map(c=>c.nombre+': '+bibNumero(c.total)+' (texto indexado: '+bibNumero(c.indexados)+')').join(' · ')+'.';
+    const t=bibZona('bib-packs-herramientas');t.textContent='';
+    const q=dE('input',{type:'search',id:'bib-packs-q',class:'doc-inp',maxlength:150,placeholder:'Buscar títulos o carpetas'});
+    const f=dE('select',{id:'bib-packs-coleccion',class:'doc-inp'},
+      dE('option',{value:'',text:'Ambos packs'}),
+      ...r.colecciones.map(c=>dE('option',{value:c.nombre,text:c.nombre})));
+    t.appendChild(dE('form',{class:'bib-form',on:{submit:e=>{e.preventDefault();BIB_PACKS.pagina=1;bibPacksBuscar()}}},
+      q,f,dBtn('Buscar en PULLEX','pri',()=>{BIB_PACKS.pagina=1;bibPacksBuscar()})));
+    await bibPacksBuscar();
+  }catch(e){estado.textContent='No se pudo abrir la biblioteca privada: '+e.message}
+}
+
+async function bibPacksBuscar(){
+  const zona=bibZona('bib-packs-resultados');if(!zona)return;
+  const q=bibZona('bib-packs-q'),c=bibZona('bib-packs-coleccion');
+  if(!q||!c)return;
+  const p=new URLSearchParams({q:q.value,coleccion:c.value,pagina:String(BIB_PACKS.pagina),por_pagina:String(BIB_PACKS.limite)});
+  zona.textContent='Consultando catálogo privado…';
+  try{
+    const r=await docApi('/api/admin/biblioteca/packs/buscar?'+p.toString());
+    zona.textContent='';
+    zona.appendChild(dE('p',{class:'doc-desc',text:bibNumero(r.total)+' coincidencias · página '+r.pagina+' de '+r.paginas}));
+    const lista=dE('ul',{class:'bib-resultados'});
+    (r.resultados||[]).forEach(m=>{
+      const nombre=dE('button',{type:'button',class:'bib-titulo',on:{click:()=>bibPacksAbrir(m.id)}},m.nombre);
+      lista.appendChild(dE('li',{class:'bib-item'},nombre,
+        dE('p',{class:'bib-ruta',text:m.coleccion+' · '+m.ruta}),
+        bibChip(m.estado_procesamiento||'ENCONTRADO')));
+    });
+    zona.appendChild(lista);
+    if(r.pagina>1)zona.appendChild(dBtn('← Anteriores','sec',()=>{BIB_PACKS.pagina--;bibPacksBuscar()}));
+    if(r.pagina<r.paginas)zona.appendChild(dBtn('Siguientes →','sec',()=>{BIB_PACKS.pagina++;bibPacksBuscar()}));
+  }catch(e){zona.textContent='Error de consulta privada: '+e.message}
+}
+
+async function bibPacksAbrir(id){
+  const zona=bibZona('bib-packs-resultados');if(!zona)return;
+  zona.textContent='Consultando contenido disponible…';
+  try{
+    const d=await docApi('/api/admin/biblioteca/packs/documento/'+encodeURIComponent(id));
+    zona.textContent='';
+    zona.appendChild(dBtn('← Volver a resultados','sec',bibPacksBuscar));
+    zona.appendChild(dE('h4',{class:'doc-h',text:d.nombre}));
+    zona.appendChild(dE('p',{class:'doc-aviso',text:d.nota}));
+    if(!(d.fragmentos||[]).length){
+      zona.appendChild(dE('p',{class:'doc-desc',text:'El archivo está inventariado, pero su texto aún no está extraído e indexado. No se mostrará contenido inventado.'}));
+      return;
+    }
+    d.fragmentos.forEach(f=>{
+      zona.appendChild(dE('section',{class:'doc-bloque'},
+        dE('h5',{text:f.ubicacion||'Sección '+(f.ordinal+1)}),
+        dE('p',{class:'doc-desc',text:f.contenido})));
+    });
+    if(!d.completo)zona.appendChild(dE('p',{class:'doc-aviso',text:'Vista parcial: algunos fragmentos pueden faltar.'}));
+  }catch(e){zona.textContent='No se pudo consultar el documento: '+e.message}
 }
