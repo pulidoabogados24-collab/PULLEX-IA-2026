@@ -147,7 +147,17 @@ CREATE TABLE IF NOT EXISTS biblioteca_sincronizaciones(
 
 # ------------------------------------------------------------------------------- rutas --
 def ruta_db() -> str:
-    return os.getenv("PULLEX_BIBLIOTECA_DB", os.path.join("biblioteca", "biblioteca.db"))
+    """Usa el volumen temporal escribible en Vercel si no hay ruta explícita.
+
+    /tmp no persiste entre invocaciones ni se comparte entre instancias: solo
+    es una mitigación hasta migrar el catálogo a almacenamiento persistente.
+    """
+    configurada = os.getenv("PULLEX_BIBLIOTECA_DB")
+    if configurada:
+        return configurada
+    if os.getenv("VERCEL"):
+        return "/tmp/biblioteca.db"
+    return os.path.join("biblioteca", "biblioteca.db")
 
 
 def ruta_inventario() -> str:
