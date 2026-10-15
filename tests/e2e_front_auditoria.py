@@ -349,8 +349,8 @@ with sync_playwright() as p:
             pag.wait_for_timeout(600)
             ok("F-15: el formulario sigue enviando el token leído", envios and json.loads(envios[0]).get("token") == "abc")
         if ruta.startswith("/static/politica"):
-            ok("política: página propia con <main id=politica> y el marcador",
-               pag.locator("main#politica").count() == 1 and "El texto de la política se carga aquí" in pag.inner_text("main#politica"))
+            ok("política: página propia con <main id=politica> y su texto",
+               pag.locator("main#politica").count() == 1 and "Tus derechos" in pag.inner_text("main#politica"))
             ancho = pag.evaluate("document.querySelector('main#politica').getBoundingClientRect().width")
             ok("política: ancho de lectura cómodo (≤ 760 px en 1440)", 400 < ancho <= 760, str(ancho))
     viol = pag.evaluate("window.__csp || []")
