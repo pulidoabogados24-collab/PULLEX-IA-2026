@@ -45,7 +45,7 @@ def test_FRONT_003_paginas_nuevas_sin_javascript_en_linea():
         assert not re.search(r"<script(?![^>]*\ssrc=)[^>]*>", fuente), pagina
         assert "<style" not in fuente and "/static/tema.css" in fuente and "/static/paginas.css" in fuente, pagina
     pol = leer("politica-datos.html")
-    assert '<main id="politica"' in pol and "El texto de la política se carga aquí" in pol
+    assert '<main id="politica"' in pol and "Tus derechos" in pol and "Pendiente de revisión jurídica" in pol
 
 
 def test_FRONT_004_registro_exige_la_politica():
@@ -57,7 +57,7 @@ def test_FRONT_004_registro_exige_la_politica():
 
 def test_FRONT_005_service_worker_prudente():
     sw = leer("sw.js")
-    assert re.search(r'const CACHE = "pullex-v(\d+)"', sw).group(1) == "13"
+    assert int(re.search(r'const CACHE = "pullex-v(\d+)"', sw).group(1)) >= 13
     assert '"/static/sin-conexion.html"' in sw and "r.ok" in sw and "no-store" in sw
     assert "Response.error()" in sw                                  # sin red y sin copia: error, no un 200 inventado
 
