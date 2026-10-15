@@ -386,7 +386,7 @@ with sync_playwright() as p:
     cache = pag.evaluate("""async () => { const o = {}; for (const k of await caches.keys()) { const c = await caches.open(k);
         o[k] = (await c.keys()).map(r => new URL(r.url).pathname); } return o; }""")
     entradas = [x for v in cache.values() for x in v]
-    ok("F-09: caché pullex-v13", list(cache) == ["pullex-v13"], str(list(cache)))
+    ok("F-09: caché pullex-v14", list(cache) == ["pullex-v14"], str(list(cache)))
     ok("F-09: solo se guarda la cara de la app (/, /static/, manifiesto)",
        entradas and all(x == "/" or x.startswith("/static/") or x == "/manifest.webmanifest" for x in entradas),
        str([x for x in entradas if not (x == "/" or x.startswith("/static/"))]))
