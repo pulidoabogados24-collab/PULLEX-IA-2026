@@ -2832,6 +2832,11 @@ app.include_router(biblioteca.crear_router(
     guardar_documento=_guardar_documento, envolver_como_datos=envolver_como_datos,
     ia_configurada=lambda: bool(ANTHROPIC_API_KEY), nuevo_error_id=_nuevo_error_id, log=log,
     limitar_cuenta=limitar_cuenta))
+# Catálogo privado de los dos Packs Jurídicos (servidor y administradores activos).
+# No expone enlaces a Drive; mientras no se comprueben derechos no se abre a usuarios.
+import biblioteca_packs  # noqa: E402
+app.include_router(biblioteca_packs.crear_router(
+    admin_actual=admin_actual, limitar_cuenta=limitar_cuenta))
 # ------------------------------------------- PROCEDIMIENTOS J01–J09 y REGISTRO DE REGLAS --
 # Cálculos y validaciones deterministas (términos, liquidaciones, clasificación, verificación de escritos):
 # no llaman al modelo ni descuentan consultas. Las rutas viven en procedimientos/rutas.py.

@@ -182,10 +182,8 @@ def fichas(pg, nombre):
     ok(not faltan and f.locator(".bib-rel h4").inner_text().lower() == "versiones relacionadas", f"{nombre}: ficha completa {faltan or ''}")
     ok("MOD-000005" in f.inner_text() and "Pedir al juez de tutela" in f.inner_text() and "2026-06-20" in f.inner_text(),
        f"{nombre}: ID, finalidad y fecha de revisión visibles")
-    enlace = f.locator("a.bib-drive")
-    ok(enlace.count() == 1 and enlace.get_attribute("href").startswith("https://drive.google.com/file/d/DEMO-TUT-SALUD")
-       and enlace.get_attribute("target") == "_blank" and enlace.get_attribute("rel") == "noopener noreferrer"
-       and enlace.inner_text() == "Abrir original en Drive", f"{nombre}: «Abrir original en Drive» con rel=noopener noreferrer")
+    ok(f.locator("a.bib-drive").count() == 0,
+       f"{nombre}: ningún enlace externo desde la ficha de PULLEX")
     ok("Ejemplo de la demostración" in f.locator(".bib-previa-t").inner_text(), f"{nombre}: vista previa del texto extraído")
     ok(len(f.locator(".bib-previa-t").inner_text()) <= 620, f"{nombre}: la vista previa es corta")
     ok("Artículo 86" in f.inner_text() or "artículo 86" in f.inner_text(), f"{nombre}: fuentes citadas detectadas, marcadas como no verificadas")

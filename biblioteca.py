@@ -1530,7 +1530,7 @@ def resumen_publico(f, admin: bool = False) -> dict:
         "validacion_juridica": f["validacion_juridica"], "validacion_texto": VALIDACION_TEXTO[f["validacion_juridica"]],
         "historico": es_historico(f["modificado"]), "incompleto": (not con_texto) or bool(sin_clasificar),
         "derechos": f["derechos"], "derechos_texto": DERECHOS_TEXTO[f["derechos"]],
-        "acceso": f["acceso"], "enlace": enlace_seguro(f["enlace"]),
+        "acceso": f["acceso"], "enlace": None,
     }
 
 
@@ -1787,7 +1787,7 @@ def ficha(con, f, admin: bool = False) -> dict:
         previa = {"disponible": False, "texto": "", "motivo": "Sin vista previa: aún no extraído."}
     elif not puede_ver_texto(f, admin):
         previa = {"disponible": False, "texto": "", "motivo":
-                  "Sin vista previa: es material de un tercero y la redistribución está por confirmar. Ábrelo en Drive."}
+                  "Sin vista previa: es material de un tercero y la redistribución está por confirmar. Consulta el contenido autorizado directamente en PULLEX."}
     else:
         previa = {"disponible": True, "texto": vista_previa(texto), "motivo": None}
     gen = _generador(f["tipo_escrito"]) if f["clase"] not in CLASES_SIN_ESCRITO else None
@@ -1812,7 +1812,7 @@ def ficha(con, f, admin: bool = False) -> dict:
                     "motivo": extraccion.get("motivo_no_apto") or extraccion.get("no_procesable") or extraccion.get("error")}
     return {
         **resumen_publico(f, admin),
-        "drive_id": f["drive_id"], "finalidad": f["finalidad"],
+        "finalidad": f["finalidad"],
         "finalidad_nota": None if (not f["finalidad"] or "finalidad" in _lista(f["curados"])) else
         "Descripción general del tipo de escrito; no describe el contenido de este archivo.",
         "supuestos_uso": _lista(f["supuestos_uso"]),
@@ -1879,7 +1879,7 @@ def copiable(f) -> bool:
 def copia_de_trabajo(con, f, admin: bool = False) -> dict:
     """Contenido de la copia de trabajo (no escribe nada en la biblioteca: el original no cambia)."""
     cid, titulo = f["catalogo_id"], _RE_EXT.sub("", f["titulo"]).strip()
-    enlace = enlace_seguro(f["enlace"])
+    enlace = None  # No incluir URL de Drive en copias generadas desde PULLEX.
     fila_texto = con.execute("SELECT texto, origen FROM biblioteca_textos WHERE modelo_id=?", (f["id"],)).fetchone()
     texto = fila_texto["texto"] if fila_texto else None
     con_texto = texto is not None and puede_ver_texto(f, admin)
@@ -1901,7 +1901,7 @@ def copia_de_trabajo(con, f, admin: bool = False) -> dict:
         cuerpo = (f"> **COPIA DE TRABAJO** del {origen_linea}. El original no se modifica.\n>\n"
                   f"> Este borrador NO trae el texto del modelo porque {motivo}: solo tiene la estructura típica de "
                   f"«{tipo}» y los campos por completar. "
-                  "Abre el original en Drive para ver su contenido.\n\n"
+                  "El texto aún no está disponible para consulta dentro de PULLEX.\n\n"
                   f"# {titulo}\n\n## Estructura sugerida\n\n" + "\n".join(f"{i}. {s}" for i, s in enumerate(estructura, 1)) +
                   "\n\n## Datos por completar\n\n" +
                   ("\n".join(f"- [COMPLETAR: {d.get('etiqueta')}]" for d in datos) or "- [COMPLETAR: datos del caso]"))
