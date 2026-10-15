@@ -21,3 +21,21 @@
 .vl-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);font-weight:650}
 .vl-enviar{font-size:.78rem;font-weight:650;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;min-height:32px}
 @media(max-width:560px){.btn-continuar{width:100%}}
+
+/* Revisión de citas bajo la respuesta (IA-01/IA-05): siempre que la respuesta cita normas o sentencias. Sobria: borde
+   de advertencia, sin íconos; lo marcado por el servidor va como «Revisar» (grave en rojo, leve en ámbar). */
+.citas-rev{margin:14px 0 0;padding:10px 14px;border:1px solid var(--border);border-left:3px solid var(--warn);
+  border-radius:var(--radius);background:var(--surface-2)}
+.citas-rev.con-alertas{border-left-color:var(--danger)}
+.citas-t{margin:0;font-size:.86rem;line-height:1.55;color:var(--text)}
+.citas-t b{font-weight:650}
+.citas-lista{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--border);display:grid;gap:8px}
+.citas-it{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:.84rem;line-height:1.45}
+.citas-tag{flex:none;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 8px;
+  border-radius:999px;border:1px solid currentColor}
+.citas-it.grave .citas-tag{color:var(--danger)}
+.citas-it.leve .citas-tag{color:var(--warn)}
+.citas-cita{font-weight:620;color:var(--text);overflow-wrap:anywhere}
+.citas-motivo{flex-basis:100%;color:var(--text-2);font-size:.8rem}
+.citas-mas{font-size:.8rem;color:var(--text-2)}
+@media print{.citas-rev{break-inside:avoid;background:none}}

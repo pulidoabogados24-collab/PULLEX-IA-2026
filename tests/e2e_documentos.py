@@ -210,7 +210,7 @@ with sync_playwright() as p:
         pg.goto(BASE + "/")
         pg.click("#t-reg"); pg.fill("#r-nombre", "Valentina Ríos")
         pg.fill("#a-email", f"d{nombre}{int(time.time() * 1000)}@demo.local"); pg.fill("#a-clave", "clave-demo-123")
-        pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
+        pg.check("#r-acepto"); pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
         # El inicio «Estoy trabajando» lleva a la nueva vista (se espera a que iniciar() termine de pintar).
         pg.wait_for_function("() => ESTADO !== null && document.querySelectorAll('#capgrid .captarj').length > 0")
         pg.click("#cam-trabajar")

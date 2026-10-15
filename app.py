@@ -448,17 +448,45 @@ class LimiteCuerpo:
 # Se registra antes que los middlewares de abajo: queda por dentro de ellos (Starlette envuelve en orden inverso).
 app.add_middleware(LimiteCuerpo)
 
-# CSP estricta para scripts (Fase 1b): solo archivos propios y cdnjs, sin JavaScript en línea
+# CSP estricta para scripts (Fase 1b): solo archivos propios y los DOS archivos exactos de cdnjs que carga
+# static/index.html (marked y DOMPurify, con versión; auditoría 2026-10-13, F-07), sin JavaScript en línea
 # (los botones usan data-click + un despachador con lista blanca en static/app.js). Con esto
 # un XSS inyectado como <script> o como atributo onerror/onclick NO se ejecuta aunque llegue
-# al HTML. style-src conserva 'unsafe-inline' (estilos en atributos style=; riesgo bajo).
+# al HTML. Estilos: las hojas propias y los bloques <style> de las páginas (por su huella sha256, calculada al
+# arrancar desde los archivos, así editar el CSS no rompe la política) en style-src-elem; un <style> inyectado
+# no aplica. Los atributos style= siguen permitidos (style-src-attr). style-src queda de respaldo para navegadores
+# sin las directivas -elem/-attr.
 # Además bloquea: <object>/<embed>, <base> malicioso, formularios hacia terceros, que otro
 # sitio meta la app en un iframe (clickjacking) y fetch/XHR a dominios externos.
+SCRIPTS_CDN = (
+    "https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js",
+)
+PAGINAS_CON_ESTILO = ("index.html", "admin.html", "restablecer.html", "politica-datos.html")
+
+
+def huellas_estilos(carpeta: str = None) -> list:
+    """Huellas CSP ('sha256-…') de cada bloque <style> de las páginas propias, tal como lo lee el navegador."""
+    carpeta = carpeta or os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+    huellas = set()
+    for pagina in PAGINAS_CON_ESTILO:
+        try:
+            with open(os.path.join(carpeta, pagina), encoding="utf-8") as f:
+                fuente = f.read().replace("\r\n", "\n")
+        except OSError:
+            continue
+        for bloque in re.findall(r"<style[^>]*>(.*?)</style>", fuente, re.S | re.I):
+            huellas.add("'sha256-" + base64.b64encode(hashlib.sha256(bloque.encode("utf-8")).digest()).decode() + "'")
+    return sorted(huellas)
+
+
 CSP = "; ".join([
     "default-src 'self'",
-    "script-src 'self' https://cdnjs.cloudflare.com",
+    "script-src 'self' " + " ".join(SCRIPTS_CDN),
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
+    "style-src-elem 'self' " + " ".join(huellas_estilos()),
+    "style-src-attr 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     "connect-src 'self'",

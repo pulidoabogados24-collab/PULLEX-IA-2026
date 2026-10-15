@@ -347,3 +347,51 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .sugs button:hover,.captarj:hover{transform:none}
 }
 @media print{.retrato,.franja,.miga,.nav-mas{display:none!important}}
+
+/* ----------------------------------------------- accesibilidad: auditoría 2026-10-13 (F-06, F-12) -- */
+/* Interruptores y áreas de Ajustes ahora son <button>: sin relleno del navegador, mismo aspecto que antes. */
+button.sw{padding:0;appearance:none;-webkit-appearance:none}
+button.area{font:inherit;font-size:.84rem;cursor:pointer}
+/* Objetivos táctiles del compositor: 44 px en pantallas táctiles o angostas. La fila de opciones ya se desplaza
+   de lado, así que los chips más altos no rompen la caja; la lista de reglas de arriba (.entrada .chip, 34 px)
+   tiene más especificidad que la regla general de la sección 1, por eso se repite aquí. */
+@media(pointer:coarse),(max-width:759px){
+  .entrada .chip{min-height:44px}
+  .entrada .chip-hist,.entrada .chip-icono{width:44px;min-width:44px}
+  .env,.clip{width:44px;height:44px}
+  .sw{position:relative}
+  .sw::before{content:"";position:absolute;inset:-10px -2px}   /* área de toque de 44 px sin cambiar el dibujo */
+}
+
+/* ------------------------------------------- datos personales (IA-17, IA-18) e instalación como app -- */
+.acepto{display:flex;align-items:flex-start;gap:10px;margin-top:16px;text-align:left;font-size:.84rem;line-height:1.5;color:var(--text-2)}
+.acepto input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--accent);cursor:pointer}
+.acepto label{cursor:pointer}
+.acepto input[aria-invalid="true"]{outline:2px solid var(--danger);outline-offset:2px}
+.msg-e.ok{color:var(--ok)}
+.nota-enl{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;margin-top:8px}
+.enl-boton{display:inline-flex;align-items:center;gap:6px;color:var(--accent-text);font-size:inherit;padding:0;min-height:32px;text-decoration:underline;
+  text-underline-offset:.18em;text-decoration-thickness:1px}
+.datos-d{font-size:.84rem;margin:0 0 12px;line-height:1.55}
+.datos-acc{display:flex;gap:8px;flex-wrap:wrap}
+.btn.peligro{color:var(--danger);border-color:color-mix(in oklab,var(--danger) 55%,var(--border))}
+/* Texto en el color de fondo: oscuro sobre el rojo claro del modo oscuro y claro sobre el rojo oscuro del modo claro
+   (blanco fijo no alcanza el contraste AA sobre el rosa del tema oscuro). */
+.btn.peligro:not(.sec),:root[data-tema="justicia"][data-esquema="oscuro"] .btn.peligro:not(.sec){background:var(--danger);color:var(--bg);border-color:var(--danger);box-shadow:none}
+.btn.peligro:not(.sec):hover{filter:brightness(1.08);background:var(--danger)}
+.el-ayuda{font-size:.78rem;color:var(--text-2);margin:4px 0 0}
+.pasos-inst{margin:8px 0 4px;padding-left:1.3em;font-size:.92rem;line-height:1.6}
+.pasos-inst li{margin:4px 0}
+.pasos-inst .i{vertical-align:-3px;color:var(--accent-text)}
+@media(pointer:coarse),(max-width:759px){.enl-boton{min-height:44px}.acepto input{width:24px;height:24px}}
+/* App instalada (pantalla completa en iPhone/Android): márgenes seguros a los lados en horizontal; arriba y abajo ya
+   los cuidan la cabecera (padding-top) y la barra inferior (padding-bottom) con env(safe-area-inset-*). */
+@media(display-mode:standalone){
+  .cab{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+  #auth{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .barra{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+}
+@media(display-mode:standalone) and (max-width:759px){
+  .cab{padding-top:max(8px,env(safe-area-inset-top));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+  nav{padding-left:max(4px,env(safe-area-inset-left));padding-right:max(4px,env(safe-area-inset-right))}
+}
