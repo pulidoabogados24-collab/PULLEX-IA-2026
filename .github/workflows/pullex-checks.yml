@@ -1,0 +1,56 @@
+name: PULLEX | Checks seguros
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Python syntax
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          errors=[]
+          for p in Path('.').rglob('*.py'):
+              if any(s in p.parts for s in ('.git','.venv','venv','node_modules')):
+                  continue
+              try: ast.parse(p.read_text(encoding='utf-8'),filename=str(p))
+              except (SyntaxError,UnicodeError) as exc: errors.append(f'{p}: {exc}')
+          if errors: raise SystemExit('\n'.join(errors))
+          print('Python syntax OK')
+          PY
+      - name: JS syntax (Node)
+        run: |
+          find static -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
+      - name: Trackable secrets / private files
+        run: |
+          python - <<'PY'
+          import subprocess
+          from pathlib import PurePosixPath
+          tracked=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          blocked=[]
+          for name in tracked:
+              if not name: continue
+              f=PurePosixPath(name).name
+              if (f=='.env' or f.startswith('.env.') and f!='.env.example'
+                  or f=='app_secret.key' or f.endswith(('.pem','.p12','.pfx'))
+                  or f in ('pullex.db','usuarios.json')):
+                  blocked.append(name)
+          if blocked: raise SystemExit('Tracked sensitive paths detected: '+', '.join(blocked))
+          print('No restricted tracked file names')
+          PY
