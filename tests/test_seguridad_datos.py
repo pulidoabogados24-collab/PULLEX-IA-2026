@@ -427,6 +427,11 @@ def _tablas_de_la_base(con) -> list:
     return sorted(f["n"] for f in con.execute(sql))
 
 
+def _sin_limites(foto):
+    """La tabla limites cuenta cada intento (AUTH-04): se compara aparte del resto de la foto."""
+    return {t: v for t, v in foto.items() if t != "limites"}
+
+
 def _foto(modulo) -> dict:
     with closing(modulo.db()) as con:
         return {t: {tuple(f) for f in con.execute(f"SELECT * FROM {t}")} for t in _tablas_de_la_base(con)}
@@ -502,7 +507,8 @@ def test_eliminar_cuenta_borra_al_titular_de_todas_las_tablas_y_nada_mas(cliente
     # clave equivocada: 403 y no se borra nada
     r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": "no-es-esta"})
     assert r.status_code == 403
-    assert _foto(modulo) == con_ambos
+    # limites cuenta el intento fallido (AUTH-04, persistente): es lo único que debe cambiar.
+    assert _sin_limites(_foto(modulo)) == _sin_limites(con_ambos)
 
     r = cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": clave})
     assert r.status_code == 200, r.text
@@ -554,7 +560,7 @@ def test_si_algo_falla_a_mitad_no_se_borra_nada(cliente, modulo, monkeypatch):
     with pytest.raises(Exception):
         cliente.post("/api/cuenta/eliminar", headers=auth(token), json={"clave": clave})
     monkeypatch.undo()
-    assert _foto(modulo) == antes                    # una sola transacción: o todo o nada
+    assert _sin_limites(_foto(modulo)) == _sin_limites(antes)   # una sola transacción: o todo o nada (limites aparte)
 
 
 
