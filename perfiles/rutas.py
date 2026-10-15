@@ -171,7 +171,9 @@ def montar(app, nucleo):
             _error(e)
 
     def _llamar_modelo(sistema, mensaje, max_tokens, tiempo_max_s, herramienta_web):
-        cliente = nucleo.anthropic.Anthropic(api_key=nucleo.ANTHROPIC_API_KEY)
+        # IA-15: reintentos explícitos (el tiempo máximo lo fija el presupuesto del perfil en la llamada).
+        cliente = nucleo.anthropic.Anthropic(api_key=nucleo.ANTHROPIC_API_KEY,
+                                             max_retries=nucleo.proveedores.REINTENTOS_LLAMADA)
         extra = {"tools": [herramienta_web]} if herramienta_web else {}
         r = cliente.messages.create(model=nucleo.MODELO, max_tokens=nucleo._max_tokens(max_tokens), system=sistema,
                                     messages=[{"role": "user", "content": mensaje}], timeout=float(tiempo_max_s),

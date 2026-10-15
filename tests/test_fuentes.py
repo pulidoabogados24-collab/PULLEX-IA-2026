@@ -269,7 +269,7 @@ def test_chat_entrega_fragmentos_numerados_como_datos(cliente, corpus):
     assert "PENDIENTE_VERIFICAR" in sistema[ini:fin] and "fecha del archivo: 2024-02-10" in sistema[ini:fin]
     assert sistema.index("(pendiente de verificación)", fin) > fin  # reglas de cita fuera de los datos
     eventos = _sse(r.text)
-    assert [e["tipo"] for e in eventos][-2:] == ["fuentes", "fin"]
+    assert [e["tipo"] for e in eventos][-3:] == ["fuentes", "citas", "fin"]  # citas: revisión de forma (IA-01)
     fu = next(e for e in eventos if e["tipo"] == "fuentes")["fuentes"]
     assert fu[0]["origen"] == "corpus" and fu[0]["titulo"] == "Ley 1755 de 2015"
     assert fu[0]["estado_vigencia"] == "PENDIENTE_VERIFICAR" and fu[0]["ubicacion"] == "pág. 1"

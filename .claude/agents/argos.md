@@ -18,7 +18,7 @@ La consulta original (y el contexto previo si es un seguimiento), el contrato de
    import sys; sys.path.insert(0, "evaluacion")
    import evaluar_calidad as ec
    print(ec.detectar_truncamiento(RESPUESTA, STOP_REASON))
-   print(ec.citas_sospechosas(RESPUESTA, permitidas=CONSULTA))
+   print(ec.citas_sospechosas(RESPUESTA, permitidas=CONSULTA))   # = citas.citas_sospechosas
    print(ec.apertura_directa(RESPUESTA, CONSULTA))
    print(ec.advertencias(RESPUESTA), ec.preguntas_en_respuesta(RESPUESTA))
    PY
@@ -40,3 +40,6 @@ La consulta original (y el contexto previo si es un seguimiento), el contrato de
 - Una palabra clave presente no prueba que la parte esté bien respondida; lee la frase.
 - No juzgues la corrección jurídica; eso es de Minerva y, al final, de un abogado. Si algo te parece dudoso, anótalo en `citas_a_revisar`.
 - Solo informas. Reescribir lo hace quien responde.
+
+## Lo que esto NO mide (auditoría 2026-10-13, IA-06)
+La cobertura no es exactitud. En ejecución, ARGOS (`motor_respuesta.verificar_cobertura`) cuenta palabras clave por parte: una respuesta con una sentencia inventada puede sacar 100 y una honesta sin número de sentencia puede quedar «parcial». La señal sobre citas va aparte: `citas.revisar` (revisión de FORMA: año imposible, artículo fuera del código en el corpus, marcas [F#] sin fragmento, radicados y ponentes que la persona no dio), que el chat envía como evento `citas`. Ninguna de las dos prueba que una norma o sentencia exista o esté vigente.

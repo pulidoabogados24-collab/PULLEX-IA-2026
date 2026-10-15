@@ -18,6 +18,14 @@ hilos) para que se puedan probar sin red. app.py y proveedores.py lo usan en el 
 * MINERVA (``decidir_reparacion`` y ``instruccion_reparacion``): cuando ARGOS encuentra partes sin
   contestar en una consulta que lo amerita, prepara UN solo intento de reparación (nunca un bucle).
 
+ARGOS y MINERVA miden COBERTURA, no EXACTITUD (auditoría 2026-10-13, IA-06). Una respuesta con una sentencia
+inventada puede obtener puntaje 100 y una honesta que dice «no tengo certeza del número» puede quedar «parcial»:
+el puntaje NO dice nada sobre si las normas o sentencias citadas existen. La señal sobre citas va aparte, en
+``citas.revisar`` (revisión de forma: año imposible, artículo fuera del código del corpus, marcas [F#] sin
+fragmento…), que el chat emite como evento ``citas``; tampoco esa señal prueba existencia ni vigencia. MINERVA no
+repara en una continuación pedida por la persona (``reparar=False``) y los adjuntos no se reenvían en las
+continuaciones automáticas (``sin_adjuntos``).
+
 Además: presupuesto de tokens según la profundidad, unión de continuaciones sin duplicar texto,
 recorte del historial sin perder la pregunta ni los hechos, y un envoltorio de latido (heartbeat)
 para que ningún intermediario cierre un stream silencioso.
@@ -704,7 +712,8 @@ def _cubre(parte: dict, resp_norm: str, resp_raiz: set, resp_crudo: str) -> bool
 
 def verificar_cobertura(c: Contrato, respuesta: str, parada: str = "") -> Informe:
     """ARGOS: ¿se contestó lo pedido y la respuesta está terminada? ``parada``: motivo normalizado que informó
-    el proveedor ('' si no lo informó)."""
+    el proveedor ('' si no lo informó). Mide cobertura por palabras, NO exactitud: no mira si las citas existen
+    (eso es ``citas.revisar``, y solo por forma)."""
     r = respuesta or ""
     inf = Informe(parada=parada or "", palabras=len(r.split()))
     resp_norm = norm(r)
@@ -1045,7 +1054,10 @@ def generar(abrir, mensajes: list, estado: EstadoGeneracion, c: Contrato, *, max
         es_continuacion = intento > 0 or bool(previo)
         unidor = UnidorContinuacion(previo) if es_continuacion and previo else None
         parada, bloques_asistente, fallo = "", None, None
-        msgs = _mensajes_continuacion(base, previo, estado.bloques_asistente) if es_continuacion else base
+        # IA-13: los adjuntos (PDF, imágenes) solo viajan en la primera llamada; en las continuaciones se reemplazan
+        # por una nota, para no reenviar hasta 35 MB por cada tramo.
+        msgs = (_mensajes_continuacion(sin_adjuntos(base), previo, estado.bloques_asistente) if es_continuacion
+                else base)
         estado.bloques_asistente = None
         try:
             for ev in abrir(msgs):
@@ -1127,6 +1139,33 @@ def generar(abrir, mensajes: list, estado: EstadoGeneracion, c: Contrato, *, max
             estado.error = e            # la reparación es opcional: lo ya escrito se conserva
         estado.reparada = True
         estado.informe = verificar_cobertura(c, estado.texto, estado.parada)
+
+
+NOTA_ADJUNTOS_CONTINUACION = (
+    "[adjuntos ya analizados en la respuesta anterior: en esta continuación ya no los tienes a la vista. No afirmes "
+    "nada del contenido de esos archivos que no esté ya en tu respuesta; si hace falta volver a revisarlos, dilo para "
+    "que la persona los adjunte en una nueva consulta]")
+
+
+def sin_adjuntos(mensajes: list) -> list:
+    """Copia de ``mensajes`` donde los bloques de imagen y documento se sustituyen por NOTA_ADJUNTOS_CONTINUACION
+    (una vez por mensaje). Los mensajes sin adjuntos quedan iguales."""
+    salida = []
+    for m in mensajes:
+        c = m.get("content")
+        if not isinstance(c, list) or not any(isinstance(b, dict) and b.get("type") in ("image", "document") for b in c):
+            salida.append(m)
+            continue
+        bloques, nota = [], False
+        for b in c:
+            if isinstance(b, dict) and b.get("type") in ("image", "document"):
+                if not nota:
+                    bloques.append({"type": "text", "text": NOTA_ADJUNTOS_CONTINUACION})
+                    nota = True
+            else:
+                bloques.append(b)
+        salida.append({**m, "content": bloques})
+    return salida
 
 
 def _mensajes_continuacion(base: list, previo: str, bloques_asistente) -> list:
