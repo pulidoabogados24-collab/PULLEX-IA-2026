@@ -155,7 +155,8 @@ def test_WEB_002_correo_escapa_nombre_del_registrante(cliente, modulo, monkeypat
     # sin espacios: el saludo del correo toma solo la primera palabra del nombre
     carga = '<b>Premio</b><a\thref="https://phishing.example">clic</a>'
     email = "html-inyeccion@pruebas.local"
-    r = cliente.post("/api/registro", json={"email": email, "nombre": carga, "clave": "clave-segura-1"})
+    r = cliente.post("/api/registro", json={"email": email, "nombre": carga, "clave": "clave-segura-1",
+                                            "acepto_politica": True})
     assert r.status_code in (200, 400)
     if enviados:
         assert "<b>Premio</b>" not in enviados[0]
@@ -212,7 +213,7 @@ def test_INPUT_001_cuerpo_mal_formado_da_400_no_500(cliente):
 
 def test_INPUT_002_limites_de_longitud_en_registro(cliente):
     r = cliente.post("/api/registro", json={"email": "largo@pruebas.local",
-                                             "nombre": "x" * 5000, "clave": "clave-segura-1"})
+                                             "nombre": "x" * 5000, "clave": "clave-segura-1", "acepto_politica": True})
     assert r.status_code == 400
 
 

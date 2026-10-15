@@ -298,6 +298,10 @@ def limpiar_limites(modulo):
         d = getattr(modulo, nombre, None)
         if isinstance(d, dict):
             d.clear()
+    # AUTH-04: los límites por cuenta viven en la tabla limites (compartida entre instancias): cada prueba empieza limpia
+    with closing(modulo.db()) as con:
+        con.execute("DELETE FROM limites")
+        con.commit()
     yield
 
 
@@ -313,7 +317,7 @@ _contador = {"n": 0}
 def nuevo_usuario(cliente, nombre="Estudiante Prueba", clave="clave-segura-123"):
     _contador["n"] += 1
     email = f"u{_contador['n']}_{os.getpid()}@pruebas.local"
-    r = cliente.post("/api/registro", json={"email": email, "nombre": nombre, "clave": clave})
+    r = cliente.post("/api/registro", json={"email": email, "nombre": nombre, "clave": clave, "acepto_politica": True})
     assert r.status_code == 200, r.text
     return email, clave, r.json()["token"]
 

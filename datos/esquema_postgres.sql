@@ -291,11 +291,12 @@ CREATE INDEX IF NOT EXISTS ix_calidad_creada ON calidad_respuestas (creada);
 -- solo actúan si la tabla existía de antes sin ellas.
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verificado BIGINT DEFAULT 0;
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS sesion_version BIGINT DEFAULT 0;
-ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
-ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
--- Versión 2 (auditoría 2026-10-13): consentimiento de la política de datos y continuaciones de una respuesta.
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_version TEXT COLLATE "C";
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acepto_politica_en DOUBLE PRECISION;
+ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS fuentes TEXT COLLATE "C";
+ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS incompleta BIGINT DEFAULT 0;
+-- Versión 2 (auditoría 2026-10-13): continuaciones de una respuesta (AUTH-08). La tabla limites (AUTH-04) la crea
+-- su CREATE TABLE IF NOT EXISTS de arriba al volver a aplicar el archivo (idempotente).
 ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS continuaciones BIGINT DEFAULT 0;
 
 -- ---- Seguridad por filas: activada en todas las tablas, sin políticas ----
@@ -303,9 +304,9 @@ ALTER TABLE esquema_version ENABLE ROW LEVEL SECURITY;
 ALTER TABLE usuarios ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tokens_accion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE apariencia_imagenes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE limites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversaciones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mensajes ENABLE ROW LEVEL SECURITY;
-ALTER TABLE limites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE boletin ENABLE ROW LEVEL SECURITY;
 ALTER TABLE modular_casos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE modular_intentos ENABLE ROW LEVEL SECURITY;

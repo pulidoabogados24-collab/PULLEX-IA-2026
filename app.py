@@ -154,6 +154,11 @@ ADMIN_CLAVE = os.getenv("PULLEX_ADMIN_CLAVE", os.getenv("LEXCOL_ADMIN_CLAVE", ""
 # Proveedor elegido por ser el estándar simple para un operador único: capa gratuita de
 # 3.000 correos/mes, API HTTP sin necesidad de manejar SMTP. Aislado en enviar_correo() para
 # poder cambiar de proveedor sin tocar el resto del código si más adelante conviene otro.
+# IA-17: versión vigente de la política de tratamiento de datos (Ley 1581 de 2012). Al crear la cuenta se guarda la
+# versión aceptada y la fecha. El TEXTO de la política (static/politica-datos.html) lo redacta y revisa un abogado.
+POLITICA_VERSION = "2026-10-13"
+RUTA_POLITICA_DATOS = os.path.join("static", "politica-datos.html")
+
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 EMAIL_FROM = os.getenv("PULLEX_EMAIL_FROM", "PULLEX IA <onboarding@resend.dev>")
 APP_URL = os.getenv("PULLEX_APP_URL", "http://localhost:8000")
@@ -369,11 +374,69 @@ def enrutar_agentes(texto: str) -> str:
     activos = [inst for claves, inst in AGENTES.values() if any(k in t for k in claves)]
     return ("\n\n" + "\n".join(activos[:3])) if activos else ""
 
-app = FastAPI(title="PULLEX IA")
+# AUTH-12: la documentación automática (/docs, /redoc, /openapi.json) listaba todas las rutas a cualquiera. Queda
+# apagada salvo PULLEX_DOCS=1 (para desarrollo local).
+DOCS_PUBLICOS = os.getenv("PULLEX_DOCS", "0").strip() == "1"
+app = FastAPI(title="PULLEX IA", docs_url="/docs" if DOCS_PUBLICOS else None,
+              redoc_url="/redoc" if DOCS_PUBLICOS else None, openapi_url="/openapi.json" if DOCS_PUBLICOS else None)
 
 # Tamaño máximo de una petición (adjuntos incluidos). Evita agotar memoria/costo con cuerpos
 # gigantes. 7 MB por archivo en el cliente ≈ 9,4 MB en base64; se deja margen para varios.
 MAX_CUERPO = int(os.getenv("PULLEX_MAX_CUERPO_BYTES", str(26 * 1024 * 1024)))
+RESPUESTA_413 = b'{"detail":"La solicitud es demasiado grande."}'
+
+
+class _CuerpoDemasiadoGrande(Exception):
+    pass
+
+
+class LimiteCuerpo:
+    """AUTH-05: middleware ASGI que cuenta los bytes REALES del cuerpo mientras la ruta los lee. El control por
+    Content-Length (en seguridad_http) no veía los cuerpos «chunked», que llegan sin esa cabecera: uno de 30 MB se
+    procesaba entero. Al pasar MAX_CUERPO se corta la lectura y se responde 413; si la ruta se tragó el error (p. ej.
+    json_de lo convierte en 400) esa respuesta se descarta y sale el 413. Va registrado por DENTRO de seguridad_http,
+    así el 413 también lleva la CSP y las demás cabeceras de seguridad."""
+
+    def __init__(self, app_asgi):
+        self.app = app_asgi
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        maximo = MAX_CUERPO
+        estado = {"leido": 0, "excedido": False, "iniciada": False}
+
+        async def recibir():
+            mensaje = await receive()
+            if mensaje["type"] == "http.request" and not estado["excedido"]:
+                estado["leido"] += len(mensaje.get("body") or b"")
+                if estado["leido"] > maximo:
+                    estado["excedido"] = True
+                    raise _CuerpoDemasiadoGrande()
+            return mensaje
+
+        async def enviar(mensaje):
+            if estado["excedido"]:
+                return                          # la respuesta de la ruta se descarta: sale el 413
+            if mensaje["type"] == "http.response.start":
+                estado["iniciada"] = True
+            await send(mensaje)
+
+        try:
+            await self.app(scope, recibir, enviar)
+        except Exception:
+            if not estado["excedido"]:
+                raise
+        if estado["excedido"] and not estado["iniciada"]:
+            await send({"type": "http.response.start", "status": 413,
+                        "headers": [(b"content-type", b"application/json"),
+                                    (b"content-length", str(len(RESPUESTA_413)).encode())]})
+            await send({"type": "http.response.body", "body": RESPUESTA_413})
+
+
+# Se registra antes que los middlewares de abajo: queda por dentro de ellos (Starlette envuelve en orden inverso).
+app.add_middleware(LimiteCuerpo)
 
 # CSP estricta para scripts (Fase 1b): solo archivos propios y cdnjs, sin JavaScript en línea
 # (los botones usan data-click + un despachador con lista blanca en static/app.js). Con esto
@@ -487,9 +550,9 @@ async def control_plan(request: Request, call_next):
 async def seguridad_http(request: Request, call_next):
     largo = request.headers.get("content-length")
     if largo and largo.isdigit() and int(largo) > MAX_CUERPO:
-        return Response('{"detail":"La solicitud es demasiado grande."}', status_code=413,
-                        media_type="application/json")
-    resp = await call_next(request)
+        resp = Response(RESPUESTA_413, status_code=413, media_type="application/json")
+    else:
+        resp = await call_next(request)
     h = resp.headers
     h.setdefault("Content-Security-Policy", CSP)
     h.setdefault("X-Content-Type-Options", "nosniff")
@@ -529,21 +592,45 @@ _RE_B64 = re.compile(r"^[A-Za-z0-9+/]*={0,2}$")
 
 # ------------------------------------------------------------------- secret --
 _env_secret = os.getenv("PULLEX_SECRET", os.getenv("LEXCOL_SECRET"))
+SECRETO_CONFIGURADO = bool(_env_secret)     # para /salud: solo si existe, nunca el valor
+
+
+def _secreto_de_archivo() -> bytes:
+    """Secreto local de desarrollo. Se crea con permisos 0600 y O_EXCL (si otro proceso lo creó a la vez, se lee
+    el suyo). Ese archivo JAMÁS debe empaquetarse ni subirse al repositorio: quien lo tenga puede firmar sesiones
+    de cualquier cuenta, admin incluida."""
+    try:
+        fd = os.open(APP_SECRET_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError:
+        try:
+            os.chmod(APP_SECRET_FILE, 0o600)       # archivos creados antes con 0644
+        except OSError:
+            pass
+        with open(APP_SECRET_FILE, "rb") as f:
+            return f.read()
+    except OSError:
+        return secrets.token_bytes(32)              # disco de solo lectura: secreto solo en memoria
+    nuevo = secrets.token_bytes(32)
+    with os.fdopen(fd, "wb") as f:
+        f.write(nuevo)
+    return nuevo
+
+
 if _env_secret:
     SECRET = hashlib.sha256(_env_secret.encode()).digest()
-elif os.path.exists(APP_SECRET_FILE):
-    SECRET = open(APP_SECRET_FILE, "rb").read()
+elif os.getenv("VERCEL") or os.getenv("RENDER"):
+    # AUTH-06: con varias instancias cada una inventaba su secreto en /tmp: sesiones que fallaban al azar (401) y
+    # morían en cada arranque en frío. En Vercel/Render la app se niega a arrancar sin el secreto.
+    raise RuntimeError("PULLEX_SECRET no está definida. Es obligatoria en Vercel y en Render: define una variable de "
+                       "entorno PULLEX_SECRET con un valor aleatorio largo (p. ej. python -c \"import secrets; "
+                       "print(secrets.token_urlsafe(48))\") y vuelve a desplegar.")
 else:
-    # Sin PULLEX_SECRET se usa un archivo local. Ese archivo JAMÁS debe empaquetarse ni subirse
-    # al repositorio: quien lo tenga puede firmar sesiones de cualquier cuenta, admin incluida.
-    log.warning("PULLEX_SECRET no definida: se usa/crea %s (solo para desarrollo local)",
-                APP_SECRET_FILE)
-    SECRET = secrets.token_bytes(32)
-    try:
-        with open(APP_SECRET_FILE, "wb") as f:
-            f.write(SECRET)
-    except OSError:
-        pass
+    if base_datos.es_postgres():
+        log.warning("PULLEX_SECRET no definida con base PostgreSQL compartida: cada máquina firmará sesiones con "
+                    "su propio secreto. Defínela antes de usar varias instancias.")
+    else:
+        log.warning("PULLEX_SECRET no definida: se usa/crea %s (solo para desarrollo local)", APP_SECRET_FILE)
+    SECRET = _secreto_de_archivo()
 
 # ----------------------------------------------------------------------- db --
 # La base principal vive en SQLite (archivo local: desarrollo y pruebas) o en PostgreSQL (producción). Lo decide
@@ -693,8 +780,27 @@ def preparar_base():
             _base["hilo"] = None
 
 # -------------------------------------------------------------- utilidades --
-def _hash(clave: str, sal: bytes) -> str:
-    return hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, 200_000).hex()
+# AUTH-11: PBKDF2-SHA256 con 600 000 iteraciones (recomendación de OWASP) para los hashes nuevos, guardados como
+# «p600000$<hex>». Los hashes anteriores (200 000 iteraciones, hex sin prefijo) se siguen verificando y se rehacen
+# con la política vigente la próxima vez que la persona ingresa con éxito (verificar_clave).
+ITERACIONES_PBKDF2 = 600_000
+ITERACIONES_PBKDF2_ANTIGUAS = 200_000
+_SAL_FICTICIA = secrets.token_bytes(16)     # AUTH-07: para gastar lo mismo cuando la cuenta no existe
+
+
+def _hash(clave: str, sal: bytes, iteraciones: int = None) -> str:
+    iteraciones = iteraciones or ITERACIONES_PBKDF2
+    return f"p{iteraciones}$" + hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, iteraciones).hex()
+
+
+def _partes_hash(guardado: str) -> tuple:
+    """(iteraciones, hex) de un hash guardado, en el formato nuevo («p<n>$<hex>») o en el anterior (solo hex)."""
+    guardado = guardado or ""
+    if guardado.startswith("p") and "$" in guardado:
+        n, _, resto = guardado[1:].partition("$")
+        if n.isdigit():
+            return int(n), resto
+    return ITERACIONES_PBKDF2_ANTIGUAS, guardado
 
 # ------------------------------------------------------------ correo saliente --
 def enviar_correo(destinatario: str, asunto: str, html: str) -> bool:
@@ -749,32 +855,53 @@ def _plantilla_correo(titulo: str, cuerpo_html: str, boton_texto: str, boton_url
 </div>"""
 
 # ------------------------------------------------------- tokens de un solo uso --
+# AUTH-13: en tokens_accion.token se guarda la huella SHA-256 del token, nunca el token: quien lea la base (una copia
+# filtrada, un respaldo) no puede usar los enlaces pendientes. El token completo solo viaja en el correo. Los enlaces
+# que estaban pendientes cuando se desplegó este cambio (guardados en claro) dejan de valer: la persona pide otro.
+PURGA_TOKENS_S = 86400      # los tokens vencidos hace más de un día se borran (al generar uno nuevo)
+
+
+def _huella_token(token: str) -> str:
+    return hashlib.sha256(str(token).encode("utf-8")).hexdigest()
+
+
 def generar_token_accion(email: str, tipo: str, horas_validez: float) -> str:
     """tipo: 'verificar_correo' | 'restablecer_clave'. El token es de un solo uso y expira."""
     token = secrets.token_urlsafe(32)
     ahora = time.time()
     with closing(db()) as con:
+        con.execute("DELETE FROM tokens_accion WHERE expira<?", (ahora - PURGA_TOKENS_S,))     # purga oportunista
         con.execute(
             "INSERT INTO tokens_accion(token,email,tipo,creado,expira,usado) VALUES(?,?,?,?,?,0)",
-            (token, normaliza_email(email), tipo, ahora, ahora + horas_validez * 3600))
+            (_huella_token(token), normaliza_email(email), tipo, ahora, ahora + horas_validez * 3600))
         con.commit()
     return token
 
-def validar_token_accion(token: str, tipo: str):
-    """Devuelve el email asociado si el token es válido (existe, tipo correcto, no usado,
-    no expirado); None en cualquier otro caso. No distingue el motivo del rechazo en la
-    respuesta pública — evita dar pistas útiles para adivinar tokens de otros usuarios."""
-    with closing(db()) as con:
-        f = con.execute(
-            "SELECT * FROM tokens_accion WHERE token=? AND tipo=?", (token, tipo)).fetchone()
-    if not f or f["usado"] or f["expira"] < time.time():
-        return None
-    return f["email"]
 
-def marcar_token_usado(token: str):
+def token_accion_vigente(token: str, tipo: str) -> bool:
+    """Revisión previa y barata (NO consume ni autoriza nada): evita calcular un PBKDF2 por cada token inventado."""
+    if not token:
+        return False
     with closing(db()) as con:
-        con.execute("UPDATE tokens_accion SET usado=1 WHERE token=?", (token,))
-        con.commit()
+        f = con.execute("SELECT 1 FROM tokens_accion WHERE token=? AND tipo=? AND usado=0 AND expira>?",
+                        (_huella_token(token), tipo, time.time())).fetchone()
+    return f is not None
+
+
+def consumir_token_accion(con, token: str, tipo: str):
+    """AUTH-03: valida y gasta el token en UNA sentencia condicional, dentro de la transacción de ``con``. Solo una
+    de varias peticiones simultáneas con el mismo token logra rowcount == 1 (en SQLite la escritura se serializa; en
+    PostgreSQL la fila queda bloqueada y la segunda reevalúa «usado=0» tras el COMMIT de la primera). Devuelve el
+    correo, o None si el token no existe, es de otro tipo, ya se usó o venció (sin decir cuál: no da pistas). El
+    llamador hace lo que el token autoriza en la MISMA transacción y luego confirma."""
+    if not token:
+        return None
+    huella = _huella_token(token)
+    cur = con.execute("UPDATE tokens_accion SET usado=1 WHERE token=? AND tipo=? AND usado=0 AND expira>?",
+                      (huella, tipo, time.time()))
+    if cur.rowcount != 1:
+        return None
+    return con.execute("SELECT email FROM tokens_accion WHERE token=?", (huella,)).fetchone()["email"]
 
 def periodo_actual() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m")
@@ -785,16 +912,21 @@ def fecha_hoy() -> str:
 def normaliza_email(email: str) -> str:
     return (email or "").strip().lower()
 
-def crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0):
+def crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0, politica_version=None):
+    """politica_version: la versión de la política de datos que la persona aceptó al registrarse (IA-17). None solo
+    para la cuenta admin que crea el operador con sus variables de entorno."""
     email = normaliza_email(email)
     sal = secrets.token_bytes(16)
     limite = PLANES.get(plan, PLANES["prueba"])["limite"]
+    ahora = time.time()
     with closing(db()) as con:
         con.execute(
-            """INSERT INTO usuarios(email,nombre,sal,hash,plan,limite,usadas,periodo,activo,es_admin,email_verificado,preferencias,creado)
-               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            """INSERT INTO usuarios(email,nombre,sal,hash,plan,limite,usadas,periodo,activo,es_admin,email_verificado,preferencias,creado,
+                                    acepto_politica_version,acepto_politica_en)
+               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (email, nombre.strip(), sal.hex(), _hash(clave, sal), plan, limite, 0,
-             periodo_actual(), activo, es_admin, email_verificado, json.dumps(PREFS_DEFECTO), time.time()))
+             periodo_actual(), activo, es_admin, email_verificado, json.dumps(PREFS_DEFECTO), ahora,
+             politica_version, ahora if politica_version else None))
         con.commit()
 
 def obtener_usuario(email):
@@ -934,8 +1066,24 @@ def actualizar_apariencia(email: str, actual: dict, pedida) -> dict:
 def verificar_clave(email, clave) -> bool:
     u = obtener_usuario(email)
     if not u:
+        # AUTH-07: el mismo PBKDF2 que con una cuenta real, para que el tiempo de respuesta no revele qué correos
+        # están registrados (antes: 2,7 ms sin cuenta frente a 131 ms con cuenta).
+        _hash(clave, _SAL_FICTICIA)
         return False
-    return hmac.compare_digest(u["hash"], _hash(clave, bytes.fromhex(u["sal"])))
+    iteraciones, esperado = _partes_hash(u["hash"])
+    sal = bytes.fromhex(u["sal"] or "")
+    calculado = hashlib.pbkdf2_hmac("sha256", clave.encode(), sal, iteraciones).hex()
+    if not hmac.compare_digest(esperado, calculado):
+        return False
+    if iteraciones < ITERACIONES_PBKDF2 or not (u["hash"] or "").startswith("p"):
+        # AUTH-11: rehash transparente con la política vigente. Condicionado al hash leído: si la clave cambió en el
+        # entretanto, no se pisa. No toca sesion_version (las sesiones siguen abiertas).
+        sal_hex, hash_nuevo = _sal_y_hash(clave)
+        with closing(db()) as con:
+            con.execute("UPDATE usuarios SET sal=?, hash=? WHERE email=? AND hash=?",
+                        (sal_hex, hash_nuevo, u["email"], u["hash"]))
+            con.commit()
+    return True
 
 def reiniciar_periodo_si_aplica(u):
     if u["plan"] == "prueba":
@@ -943,10 +1091,14 @@ def reiniciar_periodo_si_aplica(u):
     hoy = periodo_actual()
     if u["periodo"] != hoy:
         with closing(db()) as con:
-            con.execute("UPDATE usuarios SET usadas=0, periodo=? WHERE email=?", (hoy, u["email"]))
+            # AUTH-10: reinicio condicional. Si otra petición ya reinició el mes (y quizá ya gastó consultas), no se
+            # vuelve a poner en 0: se leen los valores vigentes.
+            con.execute("UPDATE usuarios SET usadas=0, periodo=? WHERE email=? AND (periodo IS NULL OR periodo<>?)",
+                        (hoy, u["email"], hoy))
+            f = con.execute("SELECT usadas, periodo FROM usuarios WHERE email=?", (u["email"],)).fetchone()
             con.commit()
-        u["usadas"] = 0
-        u["periodo"] = hoy
+        u["usadas"] = f["usadas"]
+        u["periodo"] = f["periodo"]
     return u
 
 def _crear_admin_si_falta():
@@ -998,6 +1150,9 @@ def validar_token(token: str) -> str:
     except Exception:
         raise HTTPException(401, "Sesión inválida o expirada")
 
+MENSAJE_CUENTA_INACTIVA = "Tu cuenta está inactiva. Escríbele al administrador para activarla."
+
+
 def usuario_actual(request: Request) -> dict:
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
@@ -1008,6 +1163,10 @@ def usuario_actual(request: Request) -> dict:
         raise HTTPException(401, "Cuenta no encontrada")
     if version != int(u.get("sesion_version") or 0):
         raise HTTPException(401, "Sesión inválida o expirada")
+    # AUTH-01: una cuenta desactivada no usa NINGUNA ruta con sesión (antes solo el chat lo revisaba). admin_actual
+    # pasa por aquí, así que un administrador desactivado también pierde el panel.
+    if not u["activo"]:
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     return u
 
 # -------------------------------------------------- rate limiting (seguridad) --
@@ -1017,29 +1176,73 @@ _intentos_lock = threading.Lock()
 
 _intentos_cuenta = {}
 _MAX_CLAVES_LIMITE = 20000
+MAX_CLAVE_LIMITE = 300           # largo máximo de una clave de límite (en memoria y en la tabla limites)
+PURGA_LIMITES_S = 2 * 86400      # filas de limites sin uso en dos días se borran (de vez en cuando)
 
 
 def _podar(d: dict, ahora: float, ventana: int):
-    """Evita que rotar IPs falsas haga crecer la memoria sin límite."""
-    if len(d) > _MAX_CLAVES_LIMITE:
-        for k in [k for k, v in d.items() if not v or ahora - v[-1] > ventana]:
+    """Evita que rotar IPs o correos falsos haga crecer la memoria sin límite. AUTH-04: nunca se vacía el
+    diccionario entero (eso le reiniciaba el bloqueo a la víctima). Primero salen las claves cuya ventana ya pasó;
+    si aún sobran, las que tienen MENOS intentos y, entre ellas, las más antiguas: así una inundación de claves de
+    un solo intento no desplaza a una cuenta que está bloqueada."""
+    if len(d) <= _MAX_CLAVES_LIMITE:
+        return
+    for k in [k for k, v in d.items() if not v or ahora - v[-1] > ventana]:
+        d.pop(k, None)
+    sobran = len(d) - int(_MAX_CLAVES_LIMITE * 0.9)
+    if sobran > 0 and len(d) > _MAX_CLAVES_LIMITE:
+        for k in sorted(d, key=lambda k: (len(d[k]), d[k][-1]))[:sobran]:
             d.pop(k, None)
-        if len(d) > _MAX_CLAVES_LIMITE:
-            d.clear()
 
 
-def limitar_cuenta(clave: str, tope: int, ventana: int):
-    """Límite por CUENTA (no por IP). La IP de X-Forwarded-For la controla el cliente y se
-    puede rotar; el correo objetivo no. Frena fuerza bruta y bombardeo de correos a una
-    víctima aunque el atacante cambie de IP en cada intento."""
+def _limitar_cuenta_en_memoria(clave: str, tope: int, ventana: int):
     ahora = time.time()
     with _intentos_lock:
         _podar(_intentos_cuenta, ahora, ventana)
         reg = [t for t in _intentos_cuenta.get(clave, []) if ahora - t < ventana]
         if len(reg) >= tope:
-            raise HTTPException(429, "Demasiados intentos para esta cuenta. Espera unos minutos.")
+            raise HTTPException(429, MENSAJE_LIMITE_CUENTA)
         reg.append(ahora)
         _intentos_cuenta[clave] = reg
+
+
+MENSAJE_LIMITE_CUENTA = "Demasiados intentos para esta cuenta. Espera unos minutos."
+
+
+def _limitar_cuenta_en_base(clave: str, tope: int, ventana: int) -> bool:
+    """Cuenta el intento en la tabla limites (compartida por todas las instancias) y dice si está permitido.
+    Ventana por bloques: el bloque empieza con el primer intento y dura ``ventana`` segundos; al vencer, el
+    contador vuelve a 1. Una sola sentencia (INSERT … ON CONFLICT … DO UPDATE), válida en SQLite y PostgreSQL."""
+    ahora = time.time()
+    corte = ahora - ventana
+    with closing(db()) as con:
+        fila = con.execute(
+            "INSERT INTO limites(clave,inicio,n) VALUES(?,?,1) ON CONFLICT(clave) DO UPDATE SET "
+            "n=CASE WHEN limites.inicio<=? THEN 1 ELSE limites.n+1 END, "
+            "inicio=CASE WHEN limites.inicio<=? THEN excluded.inicio ELSE limites.inicio END RETURNING n",
+            (clave, ahora, corte, corte)).fetchone()
+        if secrets.randbelow(200) == 0:                    # purga oportunista, sin tarea programada
+            con.execute("DELETE FROM limites WHERE inicio<?", (ahora - PURGA_LIMITES_S,))
+        con.commit()
+    return int(fila["n"]) <= tope
+
+
+def limitar_cuenta(clave: str, tope: int, ventana: int):
+    """Límite por CUENTA (no por IP). La IP la puede rotar el atacante; el correo objetivo no. Frena fuerza bruta y
+    bombardeo de correos a una víctima aunque el atacante cambie de IP en cada intento.
+
+    AUTH-04: el conteo vive en la base (tabla limites), así vale para TODAS las instancias de Vercel y sobrevive a
+    los arranques en frío. Si la base falla, se cae al límite en memoria de esta instancia: un error de la base no
+    debe dejar a la persona por fuera."""
+    clave = str(clave)[:MAX_CLAVE_LIMITE]
+    try:
+        permitido = _limitar_cuenta_en_base(clave, tope, ventana)
+    except Exception as e:  # noqa: BLE001 — cualquier fallo de la base: límite en memoria
+        log.warning("límite por cuenta en memoria (la base no respondió: %s)", type(e).__name__)
+        _limitar_cuenta_en_memoria(clave, tope, ventana)
+        return
+    if not permitido:
+        raise HTTPException(429, MENSAJE_LIMITE_CUENTA)
 
 
 def limitar(ip: str, tope: int = 8, ventana: int = 300):
@@ -1052,9 +1255,27 @@ def limitar(ip: str, tope: int = 8, ventana: int = 300):
         reg.append(ahora)
         _intentos[ip] = reg
 
+def proxies_confiables() -> int:
+    """Cuántos proxies propios hay delante de la app (PULLEX_PROXIES_CONFIABLES). Por defecto 1 en Vercel o Render
+    (su borde escribe o agrega la IP real) y 0 en local, donde X-Forwarded-For la escribe el propio cliente."""
+    valor = os.getenv("PULLEX_PROXIES_CONFIABLES", "").strip()
+    if valor.isdigit():
+        return int(valor)
+    return 1 if (os.getenv("VERCEL") or os.getenv("RENDER")) else 0
+
+
 def ip_de(request: Request) -> str:
-    fwd = request.headers.get("x-forwarded-for", "")
-    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+    """AUTH-04: la IP del cliente según el ÚLTIMO proxy confiable. Cada proxy agrega al final de X-Forwarded-For la
+    dirección de quien se le conectó; lo que hay más a la izquierda lo pudo escribir el cliente (antes se tomaba el
+    primer valor: rotarlo saltaba el límite por IP). Con N proxies propios, la IP real es el N-ésimo desde el final."""
+    directa = request.client.host if request.client else "?"
+    n = proxies_confiables()
+    if n <= 0:
+        return directa
+    partes = [p.strip() for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]
+    if not partes:
+        return directa
+    return partes[-n] if len(partes) >= n else partes[0]
 
 def admin_actual(request: Request) -> dict:
     u = usuario_actual(request)
@@ -1069,7 +1290,9 @@ def perfil_publico(u):
             "restantes": max(0, u["limite"] - u["usadas"]), "activo": bool(u["activo"]),
             "es_admin": bool(u["es_admin"]),
             "email_verificado": bool(u["email_verificado"]) if "email_verificado" in u.keys() else False,
-            "funciones": funciones_de(u), "preferencias": preferencias_de(u)}
+            "funciones": funciones_de(u), "preferencias": preferencias_de(u),
+            # IA-17: versión aceptada (None si nunca aceptó, p. ej. cuentas anteriores) y versión vigente
+            "politica_version": u.get("acepto_politica_version"), "politica_vigente": POLITICA_VERSION}
 
 # ----------------------------------------------------------- corpus opcional --
 def buscar_corpus(pregunta: str) -> str:
@@ -1200,9 +1423,19 @@ def salud():
     except Exception:
         ok_db = False
     base = base_datos.estado(DB, probar=False)
-    return {"servicio": "pullex-ia", "estado": "ok" if ok_db else "degradado",
-            "db": ok_db, "db_motor": base["motor"], "db_persistente": base["persistente"], "ia_configurada": ia_configurada(),
-            "modelo": cadena_ia()[0].modelo, "proveedor": cadena_ia()[0].nombre, "hora": datetime.now(timezone.utc).isoformat()}
+    # AUTH-12: es pública (sin sesión): no dice modelo ni proveedor. El administrador los ve en /api/admin/metricas.
+    return {"estado": "ok" if ok_db else "degradado", "db": ok_db, "db_motor": base["motor"],
+            "db_persistente": base["persistente"], "secreto_configurado": SECRETO_CONFIGURADO,
+            "ia_configurada": ia_configurada()}
+
+@app.get("/politica-de-datos", response_class=HTMLResponse)
+def politica_de_datos():
+    """IA-17: la política de tratamiento de datos (static/politica-datos.html, la mantiene el equipo de interfaz con
+    el texto revisado por un abogado). Si aún no existe, 404."""
+    if not os.path.isfile(RUTA_POLITICA_DATOS):
+        raise HTTPException(404, "La política de tratamiento de datos aún no está publicada.")
+    with open(RUTA_POLITICA_DATOS, encoding="utf-8") as f:
+        return f.read()
 
 @app.get("/sw.js")
 def service_worker():
@@ -1228,10 +1461,13 @@ async def registro(request: Request):
         raise HTTPException(400, f"Escribe tu nombre (entre 2 y {MAX_NOMBRE} caracteres)")
     if len(clave) < 8 or len(clave) > MAX_CLAVE:
         raise HTTPException(400, "La contraseña debe tener entre 8 y 256 caracteres")
+    if datos.get("acepto_politica") is not True:      # IA-17: aceptación expresa (true en JSON, no "true" ni 1)
+        raise HTTPException(400, "Debes aceptar la política de tratamiento de datos para crear la cuenta.")
     if obtener_usuario(email):
         raise HTTPException(409, "Ya existe una cuenta con ese correo")
     try:
-        crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0)
+        crear_usuario(email, nombre, clave, plan="prueba", activo=1, es_admin=0, email_verificado=0,
+                      politica_version=POLITICA_VERSION)
     except base_datos.errores_integridad():
         # Dos registros simultáneos con el mismo correo (doble clic, o dos instancias a la vez): el segundo choca
         # con la llave primaria. Antes terminaba en un 500.
@@ -1243,23 +1479,39 @@ async def registro(request: Request):
 async def login(request: Request):
     limitar(ip_de(request))
     datos = await json_de(request)
-    email = normaliza_email(str(datos.get("email", datos.get("usuario", "")) or ""))
+    # AUTH-04: el correo se recorta antes de usarlo como clave del límite (un correo de 40 MB quedaba en memoria)
+    email = normaliza_email(str(datos.get("email", datos.get("usuario", "")) or ""))[:254]
     clave = str(datos.get("clave", "") or "")
     limitar_cuenta("login:" + email, tope=10, ventana=900)
     if len(clave) <= MAX_CLAVE and verificar_clave(email, clave):
-        return {"token": emitir_token(email), "perfil": perfil_publico(obtener_usuario(email))}
+        u = obtener_usuario(email)
+        if not u["activo"]:     # AUTH-01: solo tras la clave correcta, así el 403 no revela el estado a un tercero
+            raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+        return {"token": emitir_token(email), "perfil": perfil_publico(u)}
     raise HTTPException(401, "Correo o contraseña incorrectos")
 
-def _actualizar_clave(email: str, nueva_clave: str):
-    """Cambia la contraseña, invalida TODAS las sesiones anteriores (sesion_version+1) y
-    anula los enlaces de restablecimiento pendientes de esa cuenta."""
+def _sal_y_hash(clave: str) -> tuple:
+    """(sal en hex, hash) de una contraseña nueva. Se calcula FUERA de las transacciones: PBKDF2 tarda."""
     sal = secrets.token_bytes(16)
-    email = normaliza_email(email)
+    return sal.hex(), _hash(clave, sal)
+
+
+def _guardar_clave(con, email: str, sal_hex: str, hash_clave: str, verificar_correo: bool = False):
+    """Dentro de la transacción de ``con``: cambia la contraseña, invalida TODAS las sesiones anteriores
+    (sesion_version+1) y anula los enlaces de restablecimiento pendientes de esa cuenta. Con verificar_correo
+    (restablecer por correo, AUTH-02) además marca el correo como verificado: quien abrió el enlace controla el buzón."""
+    con.execute("UPDATE usuarios SET sal=?, hash=?, sesion_version=COALESCE(sesion_version,0)+1"
+                + (", email_verificado=1" if verificar_correo else "") + " WHERE email=?",
+                (sal_hex, hash_clave, normaliza_email(email)))
+    con.execute("UPDATE tokens_accion SET usado=1 WHERE email=? AND tipo='restablecer_clave'",
+                (normaliza_email(email),))
+
+
+def _actualizar_clave(email: str, nueva_clave: str):
+    """Cambia la contraseña (ver _guardar_clave) en su propia transacción."""
+    sal_hex, hash_clave = _sal_y_hash(nueva_clave)
     with closing(db()) as con:
-        con.execute("UPDATE usuarios SET sal=?, hash=?, sesion_version=COALESCE(sesion_version,0)+1 "
-                    "WHERE email=?", (sal.hex(), _hash(nueva_clave, sal), email))
-        con.execute("UPDATE tokens_accion SET usado=1 WHERE email=? AND tipo='restablecer_clave'",
-                    (email,))
+        _guardar_clave(con, email, sal_hex, hash_clave)
         con.commit()
 
 
@@ -1309,21 +1561,23 @@ async def api_reenviar_verificacion(request: Request):
     u = usuario_actual(request)
     if u["email_verificado"]:
         return {"ok": True, "mensaje": "Tu correo ya está verificado."}
+    # AUTH-02: máx. 3 correos por hora a una misma cuenta, aunque cambie de IP (no se usa PULLEX para bombardear buzones).
+    limitar_cuenta("reenviar:" + u["email"], tope=3, ventana=3600)
     _enviar_verificacion(u["email"], u["nombre"])
     return {"ok": True, "mensaje": "Te reenviamos el correo de verificación."}
 
 @app.get("/verificar-correo")
 async def verificar_correo(token: str = ""):
-    email = validar_token_accion(token, "verificar_correo")
+    with closing(db()) as con:      # AUTH-03: gastar el token y verificar el correo, en una sola transacción
+        email = consumir_token_accion(con, str(token)[:200], "verificar_correo")
+        if email:
+            con.execute("UPDATE usuarios SET email_verificado=1 WHERE email=?", (email,))
+        con.commit()
     if not email:
         cuerpo = ("<p>Este enlace no es válido o ya venció. Inicia sesión y pide reenviar "
                    "la verificación desde Configuración.</p>")
         icono, titulo = "✕", "Enlace no válido"
     else:
-        marcar_token_usado(token)
-        with closing(db()) as con:
-            con.execute("UPDATE usuarios SET email_verificado=1 WHERE email=?", (email,))
-            con.commit()
         cuerpo = "<p>Tu correo quedó confirmado. Ya puedes volver a la app.</p>"
         icono, titulo = "✓", "Correo verificado"
     return HTMLResponse(f"""<!doctype html><html lang="es"><head><meta charset="utf-8">
@@ -1372,11 +1626,19 @@ async def api_restablecer_clave(request: Request):
     nueva = str(datos.get("clave", "") or "")
     if len(nueva) < 8 or len(nueva) > MAX_CLAVE:
         raise HTTPException(400, "La contraseña debe tener entre 8 y 256 caracteres")
-    email = validar_token_accion(token, "restablecer_clave")
-    if not email:
-        raise HTTPException(400, "Este enlace no es válido o ya venció. Pide uno nuevo.")
-    marcar_token_usado(token)
-    _actualizar_clave(email, nueva)
+    invalido = HTTPException(400, "Este enlace no es válido o ya venció. Pide uno nuevo.")
+    if not token_accion_vigente(token, "restablecer_clave"):
+        raise invalido
+    sal_hex, hash_clave = _sal_y_hash(nueva)
+    # AUTH-03: gastar el token y cambiar la clave en la MISMA transacción. Si dos peticiones llegan con el mismo enlace,
+    # solo una cambia la clave; la otra recibe 400.
+    with closing(db()) as con:
+        email = consumir_token_accion(con, token, "restablecer_clave")
+        if not email:
+            con.rollback()
+            raise invalido
+        _guardar_clave(con, email, sal_hex, hash_clave, verificar_correo=True)
+        con.commit()
     return {"ok": True}
 
 @app.post("/api/preferencias")
@@ -1552,10 +1814,28 @@ def cuenta_exportar(request: Request):
                     headers={"Content-Disposition": f'attachment; filename="{nombre}"'})
 
 # ------------------------------------------------------------ consultas --
+# AUTH-02: con PULLEX_EXIGIR_VERIFICACION=1, lo que gasta consultas (chat, Academia, documentos, taller, biblioteca,
+# perfiles) exige el correo verificado. Por defecto NO se exige: la entrega real del correo (Resend) no está comprobada y
+# exigirlo dejaría a las personas sin poder usar la app. Se lee en cada llamada: cambiar la variable y reiniciar basta.
+MENSAJE_CORREO_SIN_VERIFICAR = ("Confirma tu correo para usar las consultas: abre el enlace que te enviamos o pide "
+                                "uno nuevo desde Ajustes.")
+
+
+def verificacion_exigida() -> bool:
+    return os.getenv("PULLEX_EXIGIR_VERIFICACION", "0").strip().lower() in ("1", "true", "si", "sí")
+
+
+def exigir_correo_verificado(u: dict):
+    """403 si la verificación está exigida y la cuenta no la tiene. El administrador queda exento."""
+    if verificacion_exigida() and not u.get("es_admin") and not u.get("email_verificado"):
+        raise HTTPException(403, MENSAJE_CORREO_SIN_VERIFICAR)
+
+
 def consumir_consulta(u: dict) -> int:
     """Descuenta una consulta del plan de forma atómica; 402 si no quedan. Devuelve restantes."""
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)
     u = reiniciar_periodo_si_aplica(u)
     with closing(db()) as con:
         cur = con.execute("UPDATE usuarios SET usadas=usadas+1 WHERE email=? AND usadas<limite",
@@ -1898,7 +2178,8 @@ def _registrar_calidad(email, mid, contrato, estado, respuesta, completo, t0, ma
 async def chat(request: Request):
     u = usuario_actual(request)
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)         # también para «continuar»
     u = reiniciar_periodo_si_aplica(u)
 
     datos = await json_de(request)
@@ -1992,6 +2273,9 @@ async def chat(request: Request):
 CABECERAS_SSE = {"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"}
 
 
+MAX_CONTINUACIONES = 3
+
+
 def _chat_continuar(u: dict, datos: dict):
     """«Continuar» una respuesta que quedó incompleta (cortada por límite o por la conexión). No gasta consultas del plan."""
     limitar_cuenta("continuar:" + u["email"], 30, 600)
@@ -2011,6 +2295,15 @@ def _chat_continuar(u: dict, datos: dict):
     if not filas or filas[-1]["rol"] != "assistant" or not filas[-1]["incompleta"]:
         raise HTTPException(400, "No hay una respuesta incompleta para continuar. Vuelve a abrir la consulta.")
     ultima = filas[-1]
+    # AUTH-08: «continuar» no gasta consultas, así que tiene tope por mensaje (antes, con el cupo agotado se podía
+    # seguir llamando al modelo cortando la conexión una y otra vez). Se cuenta ANTES de llamar al modelo.
+    with closing(db()) as con:
+        cur = con.execute("UPDATE mensajes SET continuaciones=COALESCE(continuaciones,0)+1 "
+                          "WHERE id=? AND COALESCE(continuaciones,0)<?", (ultima["id"], MAX_CONTINUACIONES))
+        con.commit()
+    if cur.rowcount != 1:
+        raise HTTPException(429, f"Esta respuesta ya se continuó el máximo de veces ({MAX_CONTINUACIONES}). "
+                                 "Haz una consulta nueva para seguir.")
     usuarios = [f["contenido"] for f in filas if f["rol"] == "user"]
     pregunta = usuarios[-1] if usuarios else ""
     contrato = motor.clasificar(pregunta, historial_usuario=usuarios[:-1], n_adjuntos=0, estilo=estilo, modo=modo,
@@ -2231,7 +2524,7 @@ def _caso_del_banco(u: dict, area: str, nivel: str, foco) -> dict:
     """Sirve un caso curado (por área y nivel, o por concepto del mapa). No llama al modelo ni
     descuenta consultas; lo guarda como caso propio del estudiante para pistas, solución y evaluación."""
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
     concepto = foco["id"] if foco is not None and foco["id"] in academia.INDICE else None
     elegido, repetido = academia.elegir_del_banco(area, nivel, _banco_servidos(u["email"]), concepto_id=concepto)
     if elegido is None:
@@ -2901,7 +3194,8 @@ def _ejecutar_pasos(email: str, nombre: str, pasos: list, datos_texto: str, cons
 
 def _verificar_cupo(u: dict, pasos: int):
     if not u["activo"]:
-        raise HTTPException(403, "Tu cuenta está inactiva. Escríbele al administrador para activarla.")
+        raise HTTPException(403, MENSAJE_CUENTA_INACTIVA)
+    exigir_correo_verificado(u)
     u = reiniciar_periodo_si_aplica(u)
     quedan = u["limite"] - u["usadas"]
     if quedan < pasos:
@@ -3058,7 +3352,7 @@ def admin_usuarios(request: Request):
 
 @app.post("/api/admin/actualizar")
 async def admin_actualizar(request: Request):
-    admin_actual(request)
+    admin = admin_actual(request)
     datos = await json_de(request)
     email = normaliza_email(str(datos.get("email", "") or ""))
     u = obtener_usuario(email)
@@ -3068,8 +3362,13 @@ async def admin_actualizar(request: Request):
     if plan not in PLANES:
         raise HTTPException(400, "Plan inválido")
     activo = 1 if datos.get("activo", u["activo"]) else 0
+    if email == admin["email"] and not activo:
+        raise HTTPException(400, "No puedes desactivar tu propia cuenta de administrador.")
     limite = PLANES[plan]["limite"]
     with closing(db()) as con:
+        if u["activo"] and not activo:
+            # AUTH-01: desactivar cierra todas sus sesiones (los tokens emitidos antes dejan de valer).
+            con.execute("UPDATE usuarios SET sesion_version=COALESCE(sesion_version,0)+1 WHERE email=?", (email,))
         if datos.get("reiniciar"):
             con.execute("UPDATE usuarios SET plan=?, limite=?, activo=?, usadas=0, periodo=? WHERE email=?",
                         (plan, limite, activo, periodo_actual(), email))

@@ -638,6 +638,8 @@ def instalar(m) -> APIRouter:
             cache = _modelo_cache(m, fila["curado_id"])
             if cache:
                 return {"texto": cache, "nuevo": False, "revision_humana": True}
+        # AUTH-09: generarlo no cobra consulta, así que se limita por cuenta (lo ya guardado se sirve sin límite).
+        m.limitar_cuenta("taller-modelo:" + u["email"], 6, 3600)
         if not m.ia_configurada():
             raise HTTPException(503, "El motor de IA no está configurado en el servidor")
         tipo = TIPOS_INDICE[fila["tipo"]]

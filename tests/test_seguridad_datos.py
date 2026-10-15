@@ -441,7 +441,7 @@ def _insertar(con, tabla, **valores):
 def _poblar(cliente, modulo, email, marca) -> tuple:
     """Registra la cuenta (usuarios y tokens_accion por la ruta) y deja al menos una fila suya en cada tabla."""
     clave = "clave-del-titular-123"
-    r = cliente.post("/api/registro", json={"email": email, "nombre": "Titular " + marca, "clave": clave})
+    r = cliente.post("/api/registro", json={"email": email, "nombre": "Titular " + marca, "clave": clave, "acepto_politica": True})
     assert r.status_code == 200, r.text
     token = r.json()["token"]
     cid = cliente.post("/api/conversaciones", headers=auth(token)).json()["id"]
