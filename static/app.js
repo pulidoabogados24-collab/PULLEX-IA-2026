@@ -152,7 +152,12 @@ const CAPACIDADES=[
 ];
 async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
-  try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
+  let rEst=null;
+  try{rEst=await fetch('/api/estado',{headers:auth()});ESTADO=await rEst.json();PERFIL=ESTADO.perfil;}catch(e){}
+  // Sesión vencida, cerrada o cuenta inactiva: vuelve al ingreso con el motivo, sin dejar la app a medio pintar.
+  if(!rEst||!rEst.ok||!PERFIL){const motivo=(ESTADO&&ESTADO.detail)||'Tu sesión terminó. Ingresa de nuevo.';
+    await limpiarEstadoLocal();$('app').classList.add('hidden');$('auth').classList.remove('hidden');
+    const m=$('a-msg');if(m){m.textContent=motivo;m.classList.remove('hidden')}return}
   await prepararHuella(PERFIL&&PERFIL.email);
   apIniciar();aplicarPerfil();
   $('modo').value=PERFIL.preferencias.modo||'auto';pintarAjustesResp();

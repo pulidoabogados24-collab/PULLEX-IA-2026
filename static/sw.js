@@ -1,5 +1,5 @@
 // Service worker de PULLEX IA — permite instalar la app (Android, iPhone/iPad, escritorio) y abrir la «cara» sin señal.
-const CACHE = "pullex-v13";
+const CACHE = "pullex-v14";
 // Página que se muestra cuando se navega sin conexión (static/sin-conexion.html): no depende de la API ni de cdnjs.
 const SIN_CONEXION = "/static/sin-conexion.html";
 // SHELL: todo lo que static/index.html enlaza de este mismo sitio (hojas y scripts) más fuentes e imágenes de la cara.
