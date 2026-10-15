@@ -571,10 +571,10 @@ def test_BIB_050_ficha_completa(bib, cliente, usuario):
     f = cliente.get("/api/biblioteca/modelo/" + bib.ids["PRUEBA-D1"], headers=usuario).json()
     esperados = {"id", "titulo", "finalidad", "area", "tipo_escrito", "tramite", "autoridad", "anio", "ruta", "supuestos_uso", "limites",
                  "datos_requeridos", "anexos", "fuentes_citadas", "fecha_revision", "enlace", "versiones_relacionadas", "estado_procesamiento",
-                 "validacion_juridica", "sensibilidad", "derechos", "drive_id", "vista_previa", "avisos"}
+                 "validacion_juridica", "sensibilidad", "derechos", "vista_previa", "avisos"}
     assert esperados <= set(f)
-    assert f["id"] == bib.ids["PRUEBA-D1"] and f["drive_id"] == "PRUEBA-D1"
-    assert f["enlace"] == "https://drive.google.com/file/d/PRUEBA-D1/view?usp=drivesdk"
+    assert f["id"] == bib.ids["PRUEBA-D1"] and "drive_id" not in f
+    assert f["enlace"] is None  # No exponer navegación al origen desde PULLEX
     assert (f["validacion_juridica"], f["fecha_revision"], f["revisor"]) == ("validado", "2026-06-01", "Revisión de prueba")
     assert f["finalidad"].startswith("Pedir al juez de familia") and f["finalidad_nota"] is None      # la redactó una persona
     assert f["supuestos_uso"] == ["El obligado no cubre los gastos del menor."] and f["anexos"] == ["Registro civil de nacimiento"]
@@ -682,7 +682,7 @@ def test_BIB_070_la_copia_de_trabajo_no_altera_el_original(bib, modulo, cliente,
     r = cliente.post(f"/api/biblioteca/modelo/{cid}/copia", headers=usuario)
     assert r.status_code == 200, r.text
     c = r.json()
-    assert c["con_texto"] is True and c["biblioteca_id"] == cid and c["enlace_original"].endswith("PRUEBA-D1/view?usp=drivesdk")
+    assert c["con_texto"] is True and c["biblioteca_id"] == cid and c["enlace_original"] is None
     doc = cliente.get(f"/api/documentos/{c['id']}", headers=usuario).json()
     assert doc["origen"] == "biblioteca" and doc["tipo"] == "biblioteca:" + cid and doc["titulo"] == "Copia de trabajo — Demanda de alimentos"
     assert doc["texto"].startswith("> **COPIA DE TRABAJO** del modelo " + cid) and "JUEZ DE FAMILIA (REPARTO)" in doc["texto"]
