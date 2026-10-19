@@ -110,23 +110,9 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .retrato picture{position:absolute;inset:0}
 .retrato-img,.retrato-luz{display:block;width:100%;height:100%;object-fit:cover;object-position:46% center}
 .retrato-luz{position:absolute;inset:0;opacity:.3;pointer-events:none}
-/* Degradado inferior hacia el fondo (opaco abajo, transparente al 46 %) y velo leve arriba para los rótulos. */
+/* La estatua va sola, sin rótulos encima: solo un velo leve abajo para fundirla con el fondo. */
 .retrato::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.94) 14%,rgba(16,17,21,.62) 30%,rgba(16,17,21,0) 48%),
-    linear-gradient(to bottom,rgba(16,17,21,.72) 0%,rgba(16,17,21,0) 20%)}
-.retrato-sup{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:26px 28px 0}
-.lema{font-family:var(--syne);font-weight:700;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#f4f6f9;white-space:nowrap}
-.lema .x,.retrato-tit .x{color:var(--lima)}
-.lema .x{font-size:1.35em;line-height:0;vertical-align:-.06em;letter-spacing:.1em}
-.retrato .huella{width:26px;height:26px;color:var(--cian);stroke-width:1.5}
-.retrato-inf{padding:0 28px 26px}
-.retrato-eyebrow{margin:0 0 12px;font-size:.75rem;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:var(--cian)}
-.retrato-tit{margin:0 0 14px;font-family:var(--syne);font-weight:600;font-size:2.4rem;font-size:clamp(1.75rem,12.6cqw,4.0625rem);
-  line-height:1;letter-spacing:-.03em;text-wrap:balance}
-.retrato-txt{margin:0;font-size:1rem;line-height:1.55;color:var(--r-fg2)}
-.retrato-pie{display:flex;justify-content:space-between;gap:14px;margin:22px 0 0;padding-top:14px;border-top:1px solid rgba(244,246,249,.18);
-  font-size:.75rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--r-fg2)}
-.retrato-pie span:last-child{white-space:nowrap}
+  background:linear-gradient(to top,rgba(16,17,21,.6) 0%,rgba(16,17,21,0) 26%)}
 
 /* ------------------------------------------------------------------- 4. portada / ingreso -- */
 .auth-lay{min-height:100%;display:grid;grid-template-columns:minmax(340px,38%) minmax(0,1fr)}
@@ -151,12 +137,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .auth-lay{display:block}
   .auth-retrato{position:relative;height:clamp(200px,27vh,300px);border-right:0}
   .auth-retrato .retrato-img,.auth-retrato .retrato-luz{object-position:50% 12%}
-  .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.82) 22%,rgba(16,17,21,0) 62%),
-    linear-gradient(to bottom,rgba(16,17,21,.7) 0%,rgba(16,17,21,0) 26%)}
-  .auth-retrato .retrato-sup{padding:16px 18px 0}
-  .auth-retrato .retrato-inf{padding:0 18px 16px}
-  .auth-retrato .retrato-eyebrow,.auth-retrato .retrato-txt,.auth-retrato .retrato-pie{display:none}
-  .auth-retrato .retrato-tit{margin:0;font-size:clamp(1.6rem,8cqw,2.25rem)}
+  .auth-retrato::after{background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.55) 22%,rgba(16,17,21,0) 50%)}
   /* El formulario sube: marca y titular, después el ingreso, y la explicación larga queda debajo. */
   .auth-der{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:22px 18px 44px;max-width:520px}
   .auth-intro{display:contents}
@@ -178,35 +159,28 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 .retrato-chat{display:none}
 
 /* Estado inicial */
-#sugs{min-height:100%;display:flex;flex-direction:column;justify-content:center}
+#sugs{min-height:100%;display:flex;flex-direction:column;justify-content:flex-start}
 .franja{position:relative;flex:none;height:168px;margin:calc(var(--hp-y) * -1) calc(var(--hp-x) * -1) 22px;overflow:hidden;background:#101115}
 .franja picture,.franja img{display:block;width:100%;height:100%}
 .franja img{object-fit:cover;object-position:50% 10%}
 .franja .retrato-luz{position:absolute;inset:0}
-.franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.7) 26%,rgba(16,17,21,0) 62%)}
-.franja .lema{position:absolute;left:var(--hp-x);bottom:14px;z-index:1}
+.franja::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#101115 0%,rgba(16,17,21,.45) 24%,rgba(16,17,21,0) 50%)}
 .sugs-cab{width:100%;max-width:var(--ancho-chat);margin:0 auto 22px;container-type:inline-size}
-.sugs-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 14px}
-.sugs-eyebrow .punto{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
 .sugs-cab h2{margin:0 0 12px;font-size:2.25rem;font-size:clamp(1.75rem,8.4cqw,3rem);line-height:1.12}
 .sugs-cab h2 .ln{display:block}
 .sugs-cab h2 .acento{color:var(--tono-3)}      /* lima en el tema «justicia» oscuro; el acento legible en los demás */
 .sugs-cab>p:last-child{margin:0;color:var(--text-2);font-size:1rem;line-height:1.55;max-width:52ch}
-.sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.sugs button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:4px;align-content:start;align-items:center;
-  min-height:110px;padding:16px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  color:var(--text-2);box-shadow:var(--shadow);position:relative;
-  transition:transform var(--mv-rapida) var(--mv-entra),border-color var(--mv-rapida) ease,box-shadow var(--mv-media) ease}
-.sugs button:hover{transform:translateY(-3px);border-color:var(--accent-text);box-shadow:var(--shadow-lg)}
-.sugs button:active{transform:translateY(-1px)}
-.sugs button .i{width:22px;height:22px}
+.sugs{width:100%;max-width:var(--ancho-chat);margin:0 auto 8px;display:flex;flex-wrap:wrap;gap:8px}
+/* Atajos: píldoras ligeras, solo el título. La frase completa va en el <span> oculto: es lo que se escribe al pulsar. */
+.sugs button{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 15px 0 12px;position:relative;
+  background:transparent;border:1px solid var(--border);border-radius:999px;color:var(--text);box-shadow:none;text-align:left;
+  transition:transform var(--mv-rapida) var(--mv-entra),border-color var(--mv-rapida) ease,background-color var(--mv-rapida) ease}
+.sugs button:hover{transform:translateY(-1px);background:var(--surface);border-color:var(--border-strong)}
+.sugs button:active{transform:none}
+.sugs button .i{width:16px;height:16px;flex:none}
 .sugs button .i.t1{color:var(--tono-1)}.sugs button .i.t2{color:var(--tono-2)}.sugs button .i.t3{color:var(--tono-3)}
-.sugs button b{font-size:.95rem;font-weight:650;line-height:1.3;color:var(--text)}
-.sugs button span{grid-column:1/-1;font-size:.8125rem;line-height:1.5}
-@media(max-width:479px){
-  .sugs{grid-template-columns:1fr;gap:8px}
-  .sugs button{min-height:72px;padding:13px 14px}
-}
+.sugs button b{font-size:.875rem;font-weight:550;line-height:1.2}
+.sugs button span{display:none}
 @media(max-width:759px){
   .hist{--hp-x:14px;--hp-y:16px}
   .franja{height:150px}
@@ -222,27 +196,86 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .chat-lay:has(#sugs:not(.hidden)) .hist{--hp-x:36px}
   .chat-lay:has(#sugs:not(.hidden)) .barra{padding-left:36px;padding-right:36px}
   .chat-lay:has(#sugs:not(.hidden)) .entrada textarea{min-height:88px}
+  /* Titular, caja de escritura y atajos forman un solo bloque centrado en la columna, en ese orden (se escribe
+     primero; los atajos quedan debajo, a mano). .hist, #sugs y .barra se «disuelven» para poder ordenar sus piezas. */
+  .chat-lay:has(#sugs:not(.hidden)) #chat{justify-content:center;overflow-y:auto;padding:28px 0}
+  .chat-lay:has(#sugs:not(.hidden)) :is(.hist,#sugs,.barra){display:contents}
+  .chat-lay:has(#sugs:not(.hidden)) #hilo{display:none}
+  .chat-lay:has(#sugs:not(.hidden)) :is(.sugs-cab,.adjfila,.entrada,.sugs,.barra .aviso){
+    width:calc(100% - 72px);max-width:var(--ancho-chat);margin-left:auto;margin-right:auto}
+  .chat-lay:has(#sugs:not(.hidden)) .sugs-cab{order:1;margin-bottom:28px}
+  .chat-lay:has(#sugs:not(.hidden)) .adjfila{order:2}
+  .chat-lay:has(#sugs:not(.hidden)) .entrada{order:3}
+  .chat-lay:has(#sugs:not(.hidden)) .sugs{order:4;margin-top:16px;margin-bottom:0}
+  .chat-lay:has(#sugs:not(.hidden)) .barra .aviso{order:5;margin-top:22px;text-align:left}
 }
 /* Sin conversación no hay nada que imprimir ni exportar. */
 .chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="imprimirPDF"],
 .chat-lay:has(#sugs:not(.hidden)) .opts .chip[data-click="exportarExcel"]{display:none}
 @supports not selector(:has(*)){.retrato-chat{display:none!important}}
 
-/* Compositor */
+/* Compositor: una sola caja. Arriba se escribe; abajo, en una franja discreta, adjuntar, las opciones y enviar. */
 .barra{padding-top:8px}
-.opts{gap:6px;margin-bottom:10px}
 .chip{min-height:34px;padding:0 10px;border-radius:var(--radius-sm);font-family:var(--font-ui);font-size:.8125rem;font-weight:550;line-height:1.2}
 .chip select{font-size:.8125rem;min-height:32px;max-width:150px;text-overflow:ellipsis}
-.entrada{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"texto texto texto" "clip espacio enviar";
-  align-items:center;gap:6px 8px;padding:10px 10px 10px 12px;border-radius:var(--radius)}
-.entrada textarea{grid-area:texto;width:100%;min-height:52px;padding:6px 4px;font-size:1rem;line-height:1.5}
+.entrada{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"texto texto texto" "clip opciones enviar";
+  align-items:center;gap:6px 4px;padding:12px 10px 10px 12px;border-radius:calc(var(--radius) + 10px)}
+.entrada textarea{grid-area:texto;width:100%;min-height:52px;padding:4px 6px 2px;font-size:1rem;line-height:1.5}
 .clip{grid-area:clip}
 .env{grid-area:enviar}
-.env,.clip{width:44px;height:44px;border-radius:var(--radius-sm)}
+.env,.clip{width:40px;height:40px;border-radius:12px}
+.entrada .opts{grid-area:opciones;max-width:none;min-width:0;margin:0;gap:2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.entrada .opts::-webkit-scrollbar{display:none}
+.entrada .chip{flex:none;min-height:34px;padding:0 10px;border:0;border-radius:999px;background:transparent;color:var(--text-2)}
+@media(hover:hover){.entrada .chip:hover{background:var(--surface-2);color:var(--text)}}
+.entrada .chip.on{background:var(--accent-soft);color:var(--accent-text)}
+.entrada .chip .i{opacity:.85}
+.entrada .chip.on .i{opacity:1}
+/* Internet: interruptor con luz de estado (encendida = busca en la web). */
+.chip-web{gap:7px}
+.chip-luz{width:7px;height:7px;flex:none;border-radius:50%;border:1.5px solid currentColor;opacity:.55;
+  transition:background-color var(--mv-rapida,.15s) ease,box-shadow var(--mv-rapida,.15s) ease,opacity var(--mv-rapida,.15s) ease}
+.chip-web.on .chip-luz{background:var(--accent);border-color:var(--accent);opacity:1;box-shadow:0 0 0 3px var(--accent-soft),0 0 10px var(--accent)}
+/* «Cómo te respondo»: un botón que resume las dos elecciones y abre el panel. */
+.ajr-btn{gap:7px}
+.ajr-res{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.ajr-sep{opacity:.45}
+.ajr-flecha{width:13px!important;height:13px!important;opacity:.6;transition:transform var(--mv-rapida,.15s) var(--mv-entra,ease)}
+.ajr-btn[aria-expanded="true"]{background:var(--surface-2);color:var(--text)}
+.ajr-btn[aria-expanded="true"] .ajr-flecha{transform:rotate(180deg)}
+@media(max-width:560px){.entrada .chip-hist{width:34px;padding:0;justify-content:center}.entrada .chip-hist .chip-txt{display:none}}
+@media(max-width:430px){.ajr-sep,#ajr-estilo,.chip-web .chip-txt{display:none}.entrada .opts{gap:0}.entrada .chip{padding:0 9px}}
+.ajr-panel{position:fixed;z-index:60;padding:6px;background:var(--surface);border:1px solid var(--border);
+  border-radius:calc(var(--radius) + 8px);box-shadow:var(--shadow-lg);max-height:calc(100dvh - 24px);overflow-y:auto;
+  transform-origin:24px 100%;animation:ajr-entra var(--mv-media,.22s) var(--mv-entra,cubic-bezier(.2,.8,.2,1))}
+.ajr-panel[data-lado="abajo"]{transform-origin:24px 0}
+@keyframes ajr-entra{from{opacity:0;transform:translateY(6px) scale(.98)}}
+.ajr-panel[data-lado="abajo"]{animation-name:ajr-entra-abajo}
+@keyframes ajr-entra-abajo{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+@media(prefers-reduced-motion:reduce){.ajr-panel{animation:none}.ajr-flecha,.chip-luz{transition:none}}
+.ajr-grupo{margin:0;padding:4px 0;border:0;min-width:0}
+.ajr-grupo+.ajr-grupo{border-top:1px solid var(--border);padding-top:6px;margin-top:2px}
+.ajr-grupo legend{float:left;width:100%;padding:8px 10px 4px;font-family:var(--font-ui);font-size:.6875rem;font-weight:650;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-2)}
+.ajr-op{clear:both;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;min-height:48px;
+  padding:7px 10px;border-radius:calc(var(--radius) + 2px);cursor:pointer;transition:background-color var(--mv-rapida,.15s) ease}
+@media(hover:hover){.ajr-op:hover{background:var(--surface-2)}}
+.ajr-op input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.ajr-op:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:-2px}
+.ajr-op:has(input:checked){background:var(--accent-soft)}
+.ajr-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.ajr-t{font-family:var(--font-ui);font-size:.875rem;font-weight:600;color:var(--text)}
+.ajr-d{font-size:.75rem;line-height:1.35;color:var(--text-2)}
+.ajr-ok{width:16px!important;height:16px!important;color:var(--accent-text);opacity:0;transform:scale(.6);
+  transition:opacity var(--mv-rapida,.15s) ease,transform var(--mv-rapida,.15s) var(--mv-enfasis,ease)}
+.ajr-op:has(input:checked) .ajr-ok{opacity:1;transform:none}
+/* Herramientas, solo con su ícono dentro de la caja (el nombre va en aria-label y title). */
+.entrada .chip-icono{width:34px;padding:0;justify-content:center}
+.entrada .chip-icono .chip-txt{display:none}
+.entrada .chip-icono .i{width:16px;height:16px}
 .barra .aviso{font-size:.75rem;margin-top:10px}
 @media(max-width:560px){
   .entrada textarea{min-height:44px}
-  .opts{margin-bottom:8px}
 }
 
 /* Mensajes */
@@ -279,7 +312,7 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
 :root[data-tema="justicia"] .doc-card:hover{border-color:var(--accent-text)}
 :root[data-tema="justicia"] .entrada{border-color:var(--border)}
 :root[data-tema="justicia"] .entrada:focus-within{border-color:var(--accent-text);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow-lg)}
-:root[data-tema="justicia"] .creditos .punto,:root[data-tema="justicia"] .sugs-eyebrow .punto{width:6px;height:6px;background:var(--tono-3)}
+:root[data-tema="justicia"] .creditos .punto{width:6px;height:6px;background:var(--tono-3)}
 :root[data-tema="justicia"][data-esquema="oscuro"] .bpri,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec),
 :root[data-tema="justicia"][data-esquema="oscuro"] .env{box-shadow:var(--brillo)}
 :root[data-tema="justicia"][data-esquema="oscuro"] .bpri:hover,:root[data-tema="justicia"][data-esquema="oscuro"] .btn:not(.sec):hover,
@@ -314,3 +347,51 @@ nav button:focus-visible,.conv-t:focus-visible,.conv-x:focus-visible,.chip:focus
   .sugs button:hover,.captarj:hover{transform:none}
 }
 @media print{.retrato,.franja,.miga,.nav-mas{display:none!important}}
+
+/* ----------------------------------------------- accesibilidad: auditoría 2026-10-13 (F-06, F-12) -- */
+/* Interruptores y áreas de Ajustes ahora son <button>: sin relleno del navegador, mismo aspecto que antes. */
+button.sw{padding:0;appearance:none;-webkit-appearance:none}
+button.area{font:inherit;font-size:.84rem;cursor:pointer}
+/* Objetivos táctiles del compositor: 44 px en pantallas táctiles o angostas. La fila de opciones ya se desplaza
+   de lado, así que los chips más altos no rompen la caja; la lista de reglas de arriba (.entrada .chip, 34 px)
+   tiene más especificidad que la regla general de la sección 1, por eso se repite aquí. */
+@media(pointer:coarse),(max-width:759px){
+  .entrada .chip{min-height:44px}
+  .entrada .chip-hist,.entrada .chip-icono{width:44px;min-width:44px}
+  .env,.clip{width:44px;height:44px}
+  .sw{position:relative}
+  .sw::before{content:"";position:absolute;inset:-10px -2px}   /* área de toque de 44 px sin cambiar el dibujo */
+}
+
+/* ------------------------------------------- datos personales (IA-17, IA-18) e instalación como app -- */
+.acepto{display:flex;align-items:flex-start;gap:10px;margin-top:16px;text-align:left;font-size:.84rem;line-height:1.5;color:var(--text-2)}
+.acepto input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--accent);cursor:pointer}
+.acepto label{cursor:pointer}
+.acepto input[aria-invalid="true"]{outline:2px solid var(--danger);outline-offset:2px}
+.msg-e.ok{color:var(--ok)}
+.nota-enl{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;margin-top:8px}
+.enl-boton{display:inline-flex;align-items:center;gap:6px;color:var(--accent-text);font-size:inherit;padding:0;min-height:32px;text-decoration:underline;
+  text-underline-offset:.18em;text-decoration-thickness:1px}
+.datos-d{font-size:.84rem;margin:0 0 12px;line-height:1.55}
+.datos-acc{display:flex;gap:8px;flex-wrap:wrap}
+.btn.peligro{color:var(--danger);border-color:color-mix(in oklab,var(--danger) 55%,var(--border))}
+/* Texto en el color de fondo: oscuro sobre el rojo claro del modo oscuro y claro sobre el rojo oscuro del modo claro
+   (blanco fijo no alcanza el contraste AA sobre el rosa del tema oscuro). */
+.btn.peligro:not(.sec),:root[data-tema="justicia"][data-esquema="oscuro"] .btn.peligro:not(.sec){background:var(--danger);color:var(--bg);border-color:var(--danger);box-shadow:none}
+.btn.peligro:not(.sec):hover{filter:brightness(1.08);background:var(--danger)}
+.el-ayuda{font-size:.78rem;color:var(--text-2);margin:4px 0 0}
+.pasos-inst{margin:8px 0 4px;padding-left:1.3em;font-size:.92rem;line-height:1.6}
+.pasos-inst li{margin:4px 0}
+.pasos-inst .i{vertical-align:-3px;color:var(--accent-text)}
+@media(pointer:coarse),(max-width:759px){.enl-boton{min-height:44px}.acepto input{width:24px;height:24px}}
+/* App instalada (pantalla completa en iPhone/Android): márgenes seguros a los lados en horizontal; arriba y abajo ya
+   los cuidan la cabecera (padding-top) y la barra inferior (padding-bottom) con env(safe-area-inset-*). */
+@media(display-mode:standalone){
+  .cab{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+  #auth{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .barra{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+}
+@media(display-mode:standalone) and (max-width:759px){
+  .cab{padding-top:max(8px,env(safe-area-inset-top));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+  nav{padding-left:max(4px,env(safe-area-inset-left));padding-right:max(4px,env(safe-area-inset-right))}
+}

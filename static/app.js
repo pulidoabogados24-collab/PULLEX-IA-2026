@@ -3,11 +3,28 @@
 const LIBS_OK=typeof marked!=='undefined'&&typeof DOMPurify!=='undefined';
 if(LIBS_OK)marked.setOptions({breaks:true});
 const $=id=>document.getElementById(id);
-let TOKEN=null, PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
-function auth(){return {'Authorization':'Bearer '+TOKEN}}
+// Sesión (F-10): el token vive dentro de un cierre, no en una variable global que cualquier script o la consola lean
+// por su nombre. Los módulos piden la cabecera con auth() o usan api(); SESION.activa() dice si hay sesión.
+const SESION=(()=>{let t=null;return Object.freeze({
+  fijar(v){t=typeof v==='string'&&v?v:null},activa(){return t!==null},
+  cabecera(){return t?{'Authorization':'Bearer '+t}:{}},cerrar(){t=null}})})();
+let PERFIL=null, CONV=null, ESTADO=null, ADJ=[], WEB=true, enviando=false;
+function auth(){return SESION.cabecera()}
+// HTML que llega del modelo o de documentos (Markdown): se sanea con una configuración estricta. Sin formularios,
+// controles, estilos, ids, nombres, clases ni data-*: así una respuesta manipulada (por un PDF adjunto o una página
+// web) no puede secuestrar $('txt') o $('cf-memoria') con un id repetido, ni accionar el despachador data-click, ni
+// reestilizar la app con <style> (auditoría 2026-10-13, F-01/F-02/F-03). Ninguna regla de CSS ni código depende de
+// clases dentro del Markdown pintado (todo cuelga de .md), por eso también se quita class.
+const MD_CFG={ALLOW_DATA_ATTR:false,SANITIZE_NAMED_PROPS:true,
+  FORBID_TAGS:['style','form','input','textarea','select','button','option','dialog','template'],
+  FORBID_ATTR:['style','id','name','class','tabindex','autofocus']};
+// Los enlaces salen siempre en otra pestaña y sin pasar la página de origen ni el respaldo de la app.
+if(LIBS_OK)DOMPurify.addHook('afterSanitizeAttributes',n=>{
+  if(n.tagName==='A'&&n.hasAttribute('href')&&!/^#/.test(n.getAttribute('href'))){
+    n.setAttribute('target','_blank');n.setAttribute('rel','noopener noreferrer nofollow')}});
 // Si el intérprete de markdown falla con un texto, se muestra como texto plano seguro: la respuesta no se pierde y
 // el envío no queda a medias por un error de pintado.
-function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
+function md(t){if(LIBS_OK){try{return DOMPurify.sanitize(marked.parse(t||''),MD_CFG)}catch(e){}}return esc(t).replace(/\n/g,'<br>')}
 function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 // Aviso breve. Entra y sale con su propia animación (static/movimiento.css); se retira por tiempo, nunca esperando a
 // un «animationend» que podría no llegar. Un aviso nuevo reemplaza al anterior en vez de encimarse.
@@ -21,16 +38,65 @@ function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());
 // Estado de trabajo REAL de la app, a la vista del CSS (static/movimiento.css): 'ingreso' | 'espera' | 'fuentes' |
 // 'escribe', o nada. Solo se enciende desde los puntos donde de verdad se espera al servidor o llega el stream.
 function trabajo(e){const r=document.documentElement;if(e){if(r.getAttribute('data-trabajo')!==e)r.setAttribute('data-trabajo',e)}else r.removeAttribute('data-trabajo')}
+// Movimiento reducido: lo pide el sistema o lo eligió la persona en Ajustes → Apariencia (F-14). Todo desplazamiento
+// programado pasa por desplazar(): suave solo si se permite el movimiento.
+function movimientoReducido(){
+  try{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return true}catch(e){}
+  return document.documentElement.getAttribute('data-movimiento')==='reducido'}
+function desplazar(el,opc){if(!el||typeof el.scrollIntoView!=='function')return;
+  el.scrollIntoView({block:'start',...(opc||{}),behavior:movimientoReducido()?'auto':'smooth'})}
+
+// ---- Diálogos modales (F-05, WCAG 2.4.3 y 2.1.2). Una sola lógica para todo .modal: al abrir, el foco va al primer
+// control y el resto de la página queda inerte (ni clic, ni Tab, ni lector de pantalla); Tab y Mayús+Tab giran dentro
+// del diálogo; Escape lo cierra; al cerrar, el foco vuelve al botón que lo abrió.
+const MODALES=[];                 // pila de diálogos abiertos: el último es el activo
+const SEL_FOCO='a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+function enfocables(c){return [...c.querySelectorAll(SEL_FOCO)].filter(e=>!e.closest('.hidden,[hidden]')&&e.getClientRects().length)}
+function abrirModal(id,opc){
+  const m=$(id);if(!m)return;
+  if(!MODALES.some(x=>x.m===m)){
+    const disparador=(opc&&opc.disparador)||document.activeElement;
+    m.classList.remove('hidden');
+    const fondo=[...document.body.children].filter(e=>e!==m&&!e.inert&&e.tagName!=='SCRIPT');
+    fondo.forEach(e=>{e.inert=true});
+    MODALES.push({m,disparador,fondo});
+  }
+  const f=(opc&&opc.foco)||enfocables(m)[0];
+  if(f)f.focus({preventScroll:true});
+  else{const c=m.querySelector('.card')||m;c.setAttribute('tabindex','-1');c.focus({preventScroll:true})}
+}
+function cerrarModal(id){
+  const m=$(id);if(!m)return;m.classList.add('hidden');
+  const i=MODALES.findIndex(x=>x.m===m);if(i<0)return;
+  const [r]=MODALES.splice(i,1);
+  r.fondo.forEach(e=>{e.inert=false});
+  const d=r.disparador;
+  if(d&&d!==document.body&&d.isConnected&&typeof d.focus==='function'&&!d.closest('[inert]')&&d.getClientRects().length)
+    d.focus({preventScroll:true});
+}
+// Cierre propio de cada diálogo (limpia campos, etc.); si no tiene, Escape usa cerrarModal.
+function cierreModal(id){const n={'m-clave':'cerrarClave','m-recuperar':'cerrarRecuperar','m-tools':'cerrarTools',
+  'm-escrito':'cerrarEscrito','m-eliminar':'cerrarEliminar','m-instalar':'cerrarInstalar'}[id];return n&&typeof window[n]==='function'?window[n]:null}
+document.addEventListener('keydown',ev=>{
+  const top=MODALES[MODALES.length-1];if(!top)return;
+  if(ev.key==='Escape'){ev.preventDefault();ev.stopPropagation();const fn=cierreModal(top.m.id);fn?fn():cerrarModal(top.m.id);return}
+  if(ev.key!=='Tab')return;
+  const f=enfocables(top.m);if(!f.length){ev.preventDefault();return}
+  const i=f.indexOf(document.activeElement);
+  if(ev.shiftKey&&i<=0){ev.preventDefault();f[f.length-1].focus()}
+  else if(!ev.shiftKey&&(i<0||i===f.length-1)){ev.preventDefault();f[0].focus()}
+},true);
 
 let modoActual='ingresar';
 function modoAuth(m){modoActual=m;
   $('t-ing').classList.toggle('on',m==='ingresar');$('t-reg').classList.toggle('on',m==='registrar');
-  $('f-reg').classList.toggle('hidden',m!=='registrar');
+  $('f-reg').classList.toggle('hidden',m!=='registrar');$('f-acepto').classList.toggle('hidden',m!=='registrar');
+  $('a-msg').classList.remove('ok');
   $('a-olvido').classList.toggle('hidden',m!=='ingresar');
   $('a-btn').textContent=m==='registrar'?'Crear cuenta':'Ingresar';$('a-msg').textContent=''}
-function abrirRecuperar(){$('m-recuperar').classList.remove('hidden');$('rec-msg').className='msg-e';$('rec-msg').textContent='';
-  $('rec-email').value=$('a-email').value||'';}
-function cerrarRecuperar(){$('m-recuperar').classList.add('hidden')}
+function abrirRecuperar(){$('rec-msg').className='msg-e';$('rec-msg').textContent='';
+  $('rec-email').value=$('a-email').value||'';abrirModal('m-recuperar')}
+function cerrarRecuperar(){cerrarModal('m-recuperar')}
 async function enviarRecuperar(){
   const email=$('rec-email').value.trim();
   if(!email){$('rec-msg').className='msg-e';$('rec-msg').textContent='Escribe tu correo.';return}
@@ -47,9 +113,15 @@ async function enviarRecuperar(){
 }
 async function enviarAuth(){
   const b=$('a-btn');if(b.disabled)return;
-  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';
+  const email=$('a-email').value.trim(), clave=$('a-clave').value;$('a-msg').textContent='';$('a-msg').classList.remove('ok');
+  // Registro: la aceptación de la Política de tratamiento de datos personales es obligatoria y viaja al servidor
+  // (IA-17). Sin la casilla marcada no se envía nada.
+  if(modoActual==='registrar'&&!$('r-acepto').checked){
+    $('a-msg').textContent='Para crear tu cuenta debes aceptar la Política de tratamiento de datos personales.';
+    $('r-acepto').setAttribute('aria-invalid','true');$('r-acepto').focus();return}
+  $('r-acepto').removeAttribute('aria-invalid');
   const url=modoActual==='registrar'?'/api/registro':'/api/login';
-  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave}:{email,clave};
+  const cuerpo=modoActual==='registrar'?{nombre:$('r-nombre').value,email,clave,acepto_politica:true}:{email,clave};
   // Mientras el servidor responde, el botón lo dice y no admite otro clic.
   b.disabled=true;b.setAttribute('aria-busy','true');
   b.textContent=modoActual==='registrar'?'Creando tu cuenta…':'Ingresando…';trabajo('ingreso');
@@ -62,7 +134,7 @@ async function enviarAuth(){
   // El rótulo sale del modo que está a la vista AHORA: si la persona cambió de pestaña mientras se esperaba, el botón
   // no puede quedar diciendo «Ingresar» en el formulario de crear cuenta.
   b.disabled=false;b.removeAttribute('aria-busy');b.textContent=modoActual==='registrar'?'Crear cuenta':'Ingresar';trabajo(null);
-  if(d){TOKEN=d.token;PERFIL=d.perfil;iniciar()}
+  if(d){SESION.fijar(d.token);PERFIL=d.perfil;iniciar()}
 }
 const CAPACIDADES=[
   {ic:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',t:'Investigación normativa',
@@ -80,9 +152,15 @@ const CAPACIDADES=[
 ];
 async function iniciar(){
   $('auth').classList.add('hidden');$('app').classList.remove('hidden');
-  try{ESTADO=await(await fetch('/api/estado',{headers:auth()})).json();PERFIL=ESTADO.perfil;}catch(e){}
+  let rEst=null;
+  try{rEst=await fetch('/api/estado',{headers:auth()});ESTADO=await rEst.json();PERFIL=ESTADO.perfil;}catch(e){}
+  // Sesión vencida, cerrada o cuenta inactiva: vuelve al ingreso con el motivo, sin dejar la app a medio pintar.
+  if(!rEst||!rEst.ok||!PERFIL){const motivo=(ESTADO&&ESTADO.detail)||'Tu sesión terminó. Ingresa de nuevo.';
+    await limpiarEstadoLocal();$('app').classList.add('hidden');$('auth').classList.remove('hidden');
+    const m=$('a-msg');if(m){m.textContent=motivo;m.classList.remove('hidden')}return}
+  await prepararHuella(PERFIL&&PERFIL.email);
   apIniciar();aplicarPerfil();
-  $('modo').value=PERFIL.preferencias.modo||'auto';
+  $('modo').value=PERFIL.preferencias.modo||'auto';pintarAjustesResp();
   WEB=PERFIL.preferencias.web!==false;pintarWeb();cargarBoletin(false);elegirCamino(PERFIL.preferencias.camino||'aprender');
 }
 function iniciales(n){return (n||'').trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'·'}
@@ -97,7 +175,7 @@ function aplicarPerfil(){
   $('cf-plan').textContent=PERFIL.plan_nombre;$('cf-uso').textContent=PERFIL.usadas+' / '+PERFIL.limite;
   $('cf-modo').value=PERFIL.preferencias.modo||'auto';
   if($('cf-escritura'))$('cf-escritura').value=PERFIL.preferencias.escritura||'auto';
-  $('cf-web').classList.toggle('on',PERFIL.preferencias.web!==false);
+  fijarSw($('cf-web'),PERFIL.preferencias.web!==false);
   sincronizarSwTema();
   $('cf-memoria').value=PERFIL.preferencias.memoria||'';
   $('banner-verif').classList.toggle('hidden',PERFIL.email_verificado!==false);
@@ -105,9 +183,10 @@ function aplicarPerfil(){
 }
 function pintarAreas(){
   const cont=$('areas');cont.innerHTML='';const sel=PERFIL.preferencias.areas||[];
-  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('div');
-    el.className='area'+(sel.includes(a)?' on':'');el.textContent=a;
-    el.onclick=()=>{el.classList.toggle('on');guardarPrefs()};cont.appendChild(el)});
+  // Botones de alternar (aria-pressed): se alcanzan con Tab y se activan con Enter o espacio (F-06).
+  (ESTADO.areas||[]).forEach(a=>{const el=document.createElement('button');el.type='button';
+    const on=sel.includes(a);el.className='area'+(on?' on':'');el.textContent=a;el.setAttribute('aria-pressed',String(on));
+    el.onclick=()=>{const v=el.classList.toggle('on');el.setAttribute('aria-pressed',String(v));guardarPrefs()};cont.appendChild(el)});
 }
 function pintarPlanes(){
   // Acceso por plan (static/planes.js): candados en la navegación y tabla comparativa.
@@ -167,6 +246,52 @@ async function cargarBoletin(forzar){
 
 function pintarWeb(){$('chip-web').classList.toggle('on',WEB);$('chip-web').setAttribute('aria-pressed',String(WEB))}
 function toggleWeb(){WEB=!WEB;pintarWeb()}
+
+// «Cómo te respondo»: un solo botón resume el lenguaje y la forma; al pulsarlo se abre un panel con las dos
+// opciones como radios nativos (teclado y lector de pantalla sin trabajo extra). Los <select> ocultos siguen
+// siendo la fuente del valor: el resto de la app los lee y escribe como antes; pintarAjustesResp() los refleja.
+const AJR_DESC={
+  modo:{auto:'Se adapta a cómo escribes',profesional:'Para abogados: normas, jurisprudencia y citas',ciudadano:'Lenguaje claro, sin tecnicismos'},
+  estilo:{directo:'La respuesta completa, al grano',ensename:'Idea central, ejemplo y norma, por capas',
+    conmigo:'Te guía con una pregunta a la vez',examiname:'Examen oral con calificación al final',auditar:'Califica tu respuesta con una rúbrica'}};
+const AJR_CORTO={directo:'Directa',ensename:'Enséñame',conmigo:'Conmigo',examiname:'Examen',auditar:'Auditoría'};
+function armarAjustesResp(){
+  ['modo','estilo'].forEach(k=>{const fs=$('ajr-g-'+k);if(fs.querySelector('label'))return;
+    [...$(k).options].forEach(o=>{
+      const l=document.createElement('label');l.className='ajr-op';
+      const r=document.createElement('input');r.type='radio';r.name='ajr-'+k;r.value=o.value;
+      r.addEventListener('change',()=>{$(k).value=o.value;$(k).dispatchEvent(new Event('change',{bubbles:true}));pintarAjustesResp()});
+      const t=document.createElement('span');t.className='ajr-txt';
+      const n=document.createElement('span');n.className='ajr-t';n.textContent=o.textContent;
+      const d=document.createElement('span');d.className='ajr-d';d.textContent=AJR_DESC[k][o.value]||'';
+      t.append(n,d);l.append(r,t);
+      l.insertAdjacentHTML('beforeend','<svg class="i xs ajr-ok" aria-hidden="true"><use href="#i-check"/></svg>');
+      fs.appendChild(l)})})}
+function pintarAjustesResp(){
+  const m=$('modo'),e=$('estilo');if(!m||!e)return;
+  $('ajr-modo').textContent=m.selectedOptions[0]?.textContent||'';
+  $('ajr-estilo').textContent=AJR_CORTO[e.value]||e.selectedOptions[0]?.textContent||'';
+  // Fuera de lo habitual (no automático o no directa), el botón se marca para que se note que algo cambió.
+  $('ajr-btn').classList.toggle('on',m.value!=='auto'||e.value!=='directo');
+  $('ajr-btn').setAttribute('aria-label','Cómo te respondo: '+(m.selectedOptions[0]?.textContent||'')+', '+(e.selectedOptions[0]?.textContent||''));
+  document.querySelectorAll('#ajr-panel input').forEach(r=>{r.checked=$(r.name.slice(4)).value===r.value})}
+function colocarAjustesResp(){
+  const p=$('ajr-panel'),b=$('ajr-btn').getBoundingClientRect(),m=12,w=Math.min(340,innerWidth-2*m);
+  p.style.width=w+'px';p.style.left=Math.max(m,Math.min(b.left,innerWidth-w-m))+'px';
+  const alto=p.offsetHeight,arriba=b.top-8-alto;
+  // Se abre hacia arriba (la caja suele estar abajo); si no cabe, hacia abajo.
+  if(arriba>=m||b.top>innerHeight-b.bottom){p.style.top=Math.max(m,arriba)+'px';p.dataset.lado='arriba'}
+  else{p.style.top=(b.bottom+8)+'px';p.dataset.lado='abajo'}}
+function abrirAjustesResp(){armarAjustesResp();pintarAjustesResp();const p=$('ajr-panel');p.hidden=false;colocarAjustesResp();
+  $('ajr-btn').setAttribute('aria-expanded','true');
+  (p.querySelector('input:checked')||p.querySelector('input')).focus({preventScroll:true})}
+function cerrarAjustesResp(foco){const p=$('ajr-panel');if(!p||p.hidden)return false;p.hidden=true;
+  $('ajr-btn').setAttribute('aria-expanded','false');if(foco)$('ajr-btn').focus();return true}
+function toggleAjustesResp(){$('ajr-panel').hidden?abrirAjustesResp():cerrarAjustesResp(true)}
+document.addEventListener('click',ev=>{if(!ev.target.closest('#ajr-panel,#ajr-btn'))cerrarAjustesResp(false)});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&cerrarAjustesResp(true))ev.stopPropagation()});
+document.addEventListener('focusin',ev=>{if(!ev.target.closest('#ajr-panel,#ajr-btn'))cerrarAjustesResp(false)});
+addEventListener('resize',()=>{if(!$('ajr-panel').hidden)colocarAjustesResp()});
 function autoAlto(t){t.style.height='auto';t.style.height=Math.min(t.scrollHeight,150)+'px'}
 function teclas(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar()}}
 function sug(b){const s=b.querySelector('span');$('txt').value=s?s.textContent:b.textContent;autoAlto($('txt'));$('txt').focus()}
@@ -248,7 +373,7 @@ async function abrirConv(id){
     if(turno!==CARGA_CONV)return; // el usuario ya abrió otra
     $('hilo').innerHTML='';
     msgs.forEach(m=>{const b=burbuja(m.rol==='user'?'user':'ia',m.contenido);
-      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id})});
+      if(m.rol!=='user'&&(m.contenido||'').trim())accionesResp(b,m.contenido,m.fuentes,{id:m.id,incompleta:!!m.incompleta,motivo:'',cid:id,citas:m.citas})});
     if(!msgs.length)$('sugs').classList.remove('hidden');
   }catch(e){
     if(turno!==CARGA_CONV)return;
@@ -301,7 +426,7 @@ function mdParcial(t){
 // avisara que terminó: en ese caso NUNCA se da por completa la respuesta.
 async function transmitir(cuerpo,bIA,base){
   const cont=bIA.querySelector('.md');cont.classList.add('cursor');
-  const res={buffer:base||'',fuentes:[],id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
+  const res={buffer:base||'',fuentes:[],citas:null,id:null,completo:false,incompleta:false,motivo:'',fin:false,estado:200,error:''};
   let raf=null,alto=0;
   // El markdown a medio llegar puede encoger un instante (una tabla o una lista que aún no cierra): el bloque nunca
   // baja de la altura que ya alcanzó, así lo que hay debajo no brinca. Y solo se sigue el final si ya se estaba ahí.
@@ -329,6 +454,7 @@ async function transmitir(cuerpo,bIA,base){
         else if(ev.tipo==='reparando'){bIA.classList.add('reparando');estado('escribe','Revisando que no falte nada…')}
         else if(ev.tipo==='restantes'){PERFIL.restantes=ev.restantes;$('c-rest').textContent=ev.restantes}
         else if(ev.tipo==='fuentes'){res.fuentes=Array.isArray(ev.fuentes)?ev.fuentes:[]}
+        else if(ev.tipo==='citas'){res.citas=ev.citas&&typeof ev.citas==='object'?ev.citas:null}
         else if(ev.tipo==='pulido'&&typeof ev.texto==='string'){res.buffer=ev.texto;if(!raf)raf=requestAnimationFrame(render)}
         else if(ev.tipo==='incompleta'){res.incompleta=true;res.motivo=ev.motivo||'';if(ev.mensaje_id)res.id=ev.mensaje_id}
         else if(ev.tipo==='fin'){res.fin=true;res.completo=!!ev.completo;if(ev.mensaje_id)res.id=ev.mensaje_id;if(!ev.completo)res.incompleta=true}
@@ -356,7 +482,7 @@ function cerrarResp(bIA,res,cid){
   const tieneTexto=(res.buffer||'').trim().length>0;
   if(!res.fin&&tieneTexto){res.incompleta=true;if(!res.motivo)res.motivo='interrumpida'}
   const sigue=alFinal();
-  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid});
+  if(tieneTexto)accionesResp(bIA,res.buffer,res.fuentes,{id:res.id,incompleta:res.incompleta,motivo:res.motivo,cid,citas:res.citas});
   if(sigue)scroll();
 }
 // Envío en curso: el botón lo muestra (aro en vez de flecha) y lo dice a los lectores de pantalla.
@@ -422,7 +548,7 @@ async function continuarResp(bIA,meta,textoActual){
     cerrarResp(bIA,res,meta.cid);
   }finally{soltar()}
 }
-function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
+function quitarAcciones(b){b.querySelectorAll('.acc,.aviso-inc,.valorar,.nota-ia,.citas-rev,.fuentes,.fichas,.fichas-t').forEach(n=>n.remove())}
 function accionesResp(b,texto,fuentes,meta){
   const a=document.createElement('div');a.className='acc';
   a.innerHTML='<button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-instalar"/></svg>Descargar</button><button type="button"><svg class="i xs" aria-hidden="true"><use href="#i-imprimir"/></svg>PDF</button><button type="button" class="b-estilo"><svg class="i xs" aria-hidden="true"><use href="#i-escrito"/></svg>Revisar estilo</button>';
@@ -431,15 +557,34 @@ function accionesResp(b,texto,fuentes,meta){
   c.onclick=()=>{navigator.clipboard.writeText(texto);toast('Copiado')};
   d.onclick=()=>descargar('pullex-respuesta.txt',texto);
   p.onclick=imprimirPDF;
+  pintarCitas(b,meta&&meta.citas);   // justo bajo el texto: es lo primero que hay que ver antes de usar la respuesta
   b.querySelector('.bd').appendChild(a);
-  // "Confianza" y "Fuentes" las escribe el propio modelo: se rotulan como autoevaluación
-  // para que nadie las lea como una verificación hecha por PULLEX (hallazgo AI-2).
-  if(/\*\*\s*Confianza/i.test(texto)){const n=document.createElement('p');n.className='nota-ia';
-    n.textContent='La confianza y las fuentes de arriba las indica la IA sobre su propia respuesta; PULLEX todavía no las verifica automáticamente. Confírmalas en la fuente oficial antes de citarlas en un escrito.';
-    b.querySelector('.bd').appendChild(n);}
   pintarFuentes(b,fuentes,{fichas:true});
   if(meta&&meta.incompleta)avisoIncompleta(b,texto,meta);
   if(meta&&meta.id)panelValorar(b,meta);
+}
+// Revisión de citas (IA-01/IA-05). El servidor manda {hay_citas, huerfanas, sospechosas} en el evento «citas» del
+// stream (y lo guarda con el mensaje). Esa revisión mira la FORMA de las citas —marcas [F#] sin fuente, referencias
+// sospechosas—; no comprueba que la norma o la sentencia existan ni que estén vigentes. Por eso la nota sale siempre
+// que haya citas, y lo marcado se lista aparte como «Revisar». Todo se pinta con textContent.
+function pintarCitas(b,c){
+  if(!c||typeof c!=='object'||c.hay_citas!==true)return;
+  const huerfanas=(Array.isArray(c.huerfanas)?c.huerfanas:[]).filter(x=>typeof x==='string'&&x.trim());
+  const sospechosas=(Array.isArray(c.sospechosas)?c.sospechosas:[]).filter(x=>x&&typeof x.cita==='string'&&x.cita.trim());
+  const items=[...huerfanas.map(f=>({cita:'['+f.trim().replace(/^\[|\]$/g,'')+']',gravedad:'grave',
+      motivo:'Marca de fuente que no corresponde a ninguna de las fuentes consultadas.'})),
+    ...sospechosas.map(x=>({cita:x.cita.trim(),gravedad:x.gravedad==='grave'?'grave':'leve',motivo:typeof x.motivo==='string'?x.motivo:''}))];
+  const box=el('div','citas-rev'+(items.length?' con-alertas':''));box.setAttribute('role','note');box.setAttribute('aria-label','Revisión de citas');
+  const p=el('p','citas-t');p.appendChild(el('b',null,'Citas sin verificar:'));
+  p.appendChild(document.createTextNode(' confirma cada norma y sentencia en la fuente oficial antes de usarla.'));box.appendChild(p);
+  if(items.length){const ul=el('ul','citas-lista');ul.setAttribute('aria-label','Citas para revisar');
+    items.slice(0,8).forEach(x=>{const li=el('li','citas-it '+x.gravedad);
+      li.appendChild(el('span','citas-tag','Revisar'));
+      li.appendChild(el('span','citas-cita',x.cita.slice(0,160)));
+      if(x.motivo)li.appendChild(el('span','citas-motivo',x.motivo.slice(0,240)));ul.appendChild(li)});
+    if(items.length>8)ul.appendChild(el('li','citas-mas','y '+(items.length-8)+' más para revisar.'));
+    box.appendChild(ul)}
+  b.querySelector('.bd').appendChild(box);
 }
 // Respuesta cortada: se dice con claridad y se ofrece «Continuar». Nunca se presenta como terminada.
 const MOTIVO_INC={limite:'La respuesta llegó al límite de longitud.',interrumpida:'La conexión se interrumpió mientras se escribía.',
@@ -505,7 +650,7 @@ function pintarEstilo(destino,d,opc){
     box.appendChild(ul)}
   box.appendChild(el('p','er-nota',d.nota||'Es una ayuda de estilo, no una prueba de que un texto lo escribió una IA.'));
   destino.appendChild(box);
-  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  if(!(opc&&opc.sinFoco)){box.focus({preventScroll:true});desplazar(box,{block:'nearest'})}
   return box;
 }
 // ---- Fuentes consultadas: corpus propio [F#] y páginas oficiales citadas por la búsqueda web.
@@ -572,12 +717,21 @@ function pintarFuentes(b,fuentes,opc){
 function descargar(n,t){const bl=new Blob([t],{type:'text/plain;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
 function imprimirPDF(){window.print()}
+// Celda de CSV a salvo de «inyección de fórmulas» (F-04): Excel ejecuta lo que empieza por = + - @, tabulador o
+// retorno de carro. Esas celdas van como texto (apóstrofo delante), salvo las que son solo una cifra: «-1.000»,
+// «+57», «$ 2.000» o «-$ 3.500,50» se exportan tal cual para poder sumarlas.
+const RE_CIFRA=/^[-+]?\s*\$?\s*\d[\d.,\s]*%?$/;
+function celdaCsv(t){
+  let v=String(t==null?'':t).trim();
+  if(/^[=+\-@\t\r]/.test(v)&&!RE_CIFRA.test(v))v="'"+v;
+  return '"'+v.replace(/"/g,'""')+'"';
+}
 function exportarExcel(){
   const tablas=$('hilo').querySelectorAll('.b.ia table');
   if(!tablas.length){toast('No hay tablas para exportar. Pide una liquidación o un cuadro.');return}
   const t=tablas[tablas.length-1];let csv=[];
   t.querySelectorAll('tr').forEach(tr=>{csv.push([...tr.querySelectorAll('th,td')]
-    .map(x=>'"'+x.textContent.replace(/"/g,'""')+'"').join(','))});
+    .map(x=>celdaCsv(x.textContent)).join(','))});
   const bl=new Blob(['﻿'+csv.join('\n')],{type:'text/csv;charset=utf-8'});
   const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download='pullex-liquidacion.csv';a.click();
   URL.revokeObjectURL(u);toast('Descargado (ábrelo en Excel)');
@@ -590,7 +744,7 @@ async function guardarPrefs(){
   if($('cf-escritura'))body.escritura=$('cf-escritura').value;
   try{const d=await(await fetch('/api/preferencias',{method:'POST',
     headers:{...auth(),'content-type':'application/json'},body:JSON.stringify(body)})).json();
-    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;
+    PERFIL.preferencias={...PERFIL.preferencias,...d.preferencias};$('modo').value=d.preferencias.modo;pintarAjustesResp();
     WEB=d.preferencias.web;pintarWeb();}catch(e){}
 }
 async function guardarMemoria(){
@@ -598,11 +752,13 @@ async function guardarMemoria(){
     body:JSON.stringify({memoria:$('cf-memoria').value})});
     PERFIL.preferencias.memoria=$('cf-memoria').value;toast('Memoria guardada');}catch(e){}
 }
-function togglePref(el){el.classList.toggle('on');guardarPrefs()}
-function toggleTema(el){el.classList.toggle('on');apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
+// Interruptores de Ajustes: <button role="switch">; aria-checked siempre igual a la clase «on» (F-06).
+function fijarSw(el,on){if(!el)return;el.classList.toggle('on',!!on);el.setAttribute('aria-checked',String(!!on))}
+function togglePref(el){fijarSw(el,!el.classList.contains('on'));guardarPrefs()}
+function toggleTema(el){fijarSw(el,!el.classList.contains('on'));apCambiar({modo:el.classList.contains('on')?'claro':'oscuro'})}
 // Compatibilidad: cambia claro/oscuro sin guardar (lo usan pruebas y código anterior).
 function aplicarTema(t){AP.datos={...(AP.datos||PXA.actual()),modo:t==='claro'?'claro':'oscuro'};PXA.aplicar(AP.datos);apRefrescar()}
-function sincronizarSwTema(){const s=$('cf-tema');if(s)s.classList.toggle('on',document.documentElement.getAttribute('data-esquema')!=='oscuro')}
+function sincronizarSwTema(){fijarSw($('cf-tema'),document.documentElement.getAttribute('data-esquema')!=='oscuro')}
 
 const ICONOS_TOOL={
   tutela:'<path d="M12 3v18M7 21h10M12 3l-6 3M12 3l6 3M6 6l-3 6a3 3 0 0 0 6 0L6 6zM18 6l-3 6a3 3 0 0 0 6 0l-3-6z"/>',
@@ -635,10 +791,10 @@ function abrirTools(){
     b.className='tool';
     b.innerHTML=`<span class="ti">${icoTool(h.i)}</span>`;b.appendChild(document.createTextNode(h.t));
     b.onclick=()=>{if(h.i==='tutela'||h.i==='peticion'){cerrarTools();abrirEscrito(h.i)}else usarTool(h.p)};g.appendChild(b);});
-  $('m-tools').classList.remove('hidden');
+  abrirModal('m-tools');
 }
-function cerrarTools(){$('m-tools').classList.add('hidden')}
-function usarTool(p,estilo){$('estilo').value=estilo||'directo';cerrarTools();ver('chat');
+function cerrarTools(){cerrarModal('m-tools')}
+function usarTool(p,estilo){$('estilo').value=estilo||'directo';pintarAjustesResp();cerrarTools();ver('chat');
   // Cada herramienta es un asunto nuevo: se abre en una consulta nueva (la anterior queda en el historial).
   if($('hilo').children.length&&!enviando)nuevaConsulta();
   $('txt').value=p;autoAlto($('txt'));$('txt').focus();
@@ -709,10 +865,11 @@ function escritoTipo(t){
 }
 function abrirEscrito(tipo){
   construirEscrito();escritoTipo(typeof tipo==='string'?tipo:ES_TIPO);
-  $('m-escrito').classList.remove('hidden');$('m-escrito').querySelector('.card').scrollTop=0;
-  if(esEscritorio())esCampo(ES_TIPO,'nombre').focus();
+  $('m-escrito').querySelector('.card').scrollTop=0;
+  // En escritorio el foco va directo al primer dato; en el celular, al primer control (sin abrir el teclado).
+  abrirModal('m-escrito',{foco:esEscritorio()?esCampo(ES_TIPO,'nombre'):null});
 }
-function cerrarEscrito(){$('m-escrito').classList.add('hidden')}
+function cerrarEscrito(){cerrarModal('m-escrito')}
 function valoresEscrito(tipo){const v={};ESCRITOS[tipo].campos.forEach(c=>{v[c.id]=esCampo(tipo,c.id).value.trim()});return v}
 function validarEscrito(tipo){
   let primero=null;
@@ -762,20 +919,19 @@ function enviarEscrito(){
   if(PERFIL.restantes<=0){cerrarEscrito();toast('Se agotaron tus consultas. Actualiza tu plan.');ver('config');return}
   const v=valoresEscrito(tipo);
   const titulo=tipo==='tutela'?'Tutela contra '+v.contra:'Petición a '+v.entidad;
-  cerrarEscrito();$('estilo').value='directo';ver('chat');
+  cerrarEscrito();$('estilo').value='directo';pintarAjustesResp();ver('chat');
   if(!nuevaConsulta())return;
   $('txt').value=textoEscrito(tipo,v);
   ESCRITOS[tipo].campos.forEach(c=>{const el=esCampo(tipo,c.id);el.value=c.opciones?c.opciones[0]:''});
   enviar({titulo});
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('m-escrito').classList.contains('hidden'))cerrarEscrito()});
-function abrirClave(){$('m-clave').classList.remove('hidden');$('k-msg').textContent=''}
-function cerrarClave(){$('m-clave').classList.add('hidden');$('k-act').value='';$('k-new').value=''}
+function abrirClave(){$('k-msg').textContent='';abrirModal('m-clave')}
+function cerrarClave(){cerrarModal('m-clave');$('k-act').value='';$('k-new').value=''}
 async function guardarClave(){
   const r=await fetch('/api/cambiar-clave',{method:'POST',headers:{...auth(),'content-type':'application/json'},
     body:JSON.stringify({actual:$('k-act').value,nueva:$('k-new').value})});
   const d=await r.json();if(!r.ok){$('k-msg').textContent=d.detail||'No se pudo';return}
-  if(d.token)TOKEN=d.token; // las demás sesiones quedaron cerradas; esta sigue con token nuevo
+  if(d.token)SESION.fijar(d.token); // las demás sesiones quedaron cerradas; esta sigue con token nuevo
   cerrarClave();toast('Contraseña actualizada. Se cerró la sesión en tus otros dispositivos.');
 }
 async function cerrarSesiones(){
@@ -792,41 +948,100 @@ async function reenviarVerificacion(){
   }catch(e){toast('Error de conexión')}
   b.disabled=false;b.textContent=t0;
 }
-function salir(){TOKEN=null;PERFIL=null;CONV=null;Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)});location.reload()}
+// ---- Estado local por cuenta (F-10, F-11). Lo que se guarda en este navegador para una cuenta (los borradores del
+// Taller) va bajo una huella del correo, nunca bajo el correo ni sin dueño; al salir se borra todo.
+let HUELLA=null;
+function huellaCuenta(){return HUELLA}
+async function prepararHuella(email){
+  HUELLA=null;if(!email)return;const t=String(email).trim().toLowerCase();
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('pullex:'+t));
+    HUELLA='h'+[...new Uint8Array(b)].slice(0,8).map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){let h=0x811c9dc5;for(const c of 'pullex:'+t){h^=c.codePointAt(0);h=Math.imul(h,0x01000193)>>>0}   // sin crypto.subtle (http)
+    HUELLA='h'+h.toString(16).padStart(8,'0')+'00000000'}
+  // Borradores antiguos sin dueño (antes de esta versión): no se puede saber de quién son, así que se descartan.
+  try{Object.keys(localStorage).filter(k=>k.startsWith('pullex.taller.borrador.')&&!/^pullex\.taller\.borrador\.h[0-9a-f]{16}\./.test(k))
+    .forEach(k=>localStorage.removeItem(k))}catch(e){}
+}
+// Borra todo lo que esta app guardó en el navegador: sesión, perfil, borradores, apariencia local, sessionStorage y
+// las cachés del service worker. Espera a las cachés como mucho 1,5 s para no dejar colgado el botón.
+async function limpiarEstadoLocal(){
+  SESION.cerrar();PERFIL=null;CONV=null;HUELLA=null;
+  try{Object.values(AP.urls).forEach(u=>{if(u&&u.startsWith('blob:'))URL.revokeObjectURL(u)})}catch(e){}
+  try{Object.keys(localStorage).filter(k=>k.startsWith('pullex.')).forEach(k=>localStorage.removeItem(k))}catch(e){}
+  try{sessionStorage.clear()}catch(e){}
+  try{if(window.caches){const ks=await Promise.race([caches.keys(),new Promise(r=>setTimeout(()=>r([]),1500))]);
+    await Promise.race([Promise.all(ks.filter(k=>k.startsWith('pullex-')).map(k=>caches.delete(k))),new Promise(r=>setTimeout(r,1500))])}}catch(e){}
+}
+async function salir(){await limpiarEstadoLocal();location.reload()}
+
+// ---- Derechos del titular (IA-18): descargar los datos de la cuenta y eliminarla.
+async function exportarDatos(b){
+  b=b&&b.tagName?b:$('btn-exportar');const t0=b.innerHTML;b.disabled=true;b.textContent='Preparando tus datos…';
+  try{
+    const r=await fetch('/api/cuenta/exportar',{headers:auth()});
+    if(!r.ok){const d=await r.json().catch(()=>({}));
+      throw new Error(typeof d.detail==='string'&&d.detail?d.detail:'No se pudieron descargar tus datos. Intenta más tarde.')}
+    const u=URL.createObjectURL(new Blob([await r.blob()],{type:'application/json'}));
+    const a=document.createElement('a');a.href=u;a.download='pullex-mis-datos-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
+    toast('Listo: tus datos se descargaron en un archivo JSON.');
+  }catch(e){toast(e.message||'No se pudieron descargar tus datos.')}
+  b.disabled=false;b.innerHTML=t0;
+}
+function abrirEliminar(){$('el-clave').value='';$('el-conf').value='';$('el-msg').textContent='';abrirModal('m-eliminar')}
+function cerrarEliminar(){cerrarModal('m-eliminar');$('el-clave').value='';$('el-conf').value='';$('el-msg').textContent=''}
+const MSG_ELIMINAR={400:'Revisa los datos e inténtalo de nuevo.',401:'La contraseña no es correcta.',
+  429:'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.'};
+async function eliminarCuenta(){
+  const msg=$('el-msg'),b=$('el-btn'),clave=$('el-clave').value,conf=$('el-conf').value.trim();msg.textContent='';
+  if(!clave){msg.textContent='Escribe tu contraseña.';$('el-clave').focus();return}
+  if(conf!=='ELIMINAR'){msg.textContent='Para confirmar, escribe ELIMINAR en mayúsculas.';$('el-conf').focus();return}
+  if(b.disabled)return;b.disabled=true;b.textContent='Eliminando…';
+  try{
+    const r=await fetch('/api/cuenta/eliminar',{method:'POST',headers:{...auth(),'content-type':'application/json'},body:JSON.stringify({clave})});
+    const d=await r.json().catch(()=>({}));
+    if(r.ok&&d&&d.ok===true){
+      await limpiarEstadoLocal();
+      try{sessionStorage.setItem('pullex.aviso','cuenta-eliminada')}catch(e){}
+      location.replace('/');return}
+    msg.textContent=(typeof d.detail==='string'&&d.detail)||MSG_ELIMINAR[r.status]||'No se pudo eliminar la cuenta. Intenta más tarde.';
+  }catch(e){msg.textContent='Error de conexión. Intenta de nuevo.'}
+  b.disabled=false;b.textContent='Eliminar mi cuenta';
+}
+// Al marcar la casilla de la política se retira el aviso que pedía marcarla.
+$('r-acepto').addEventListener('change',e=>{if(e.target.checked){e.target.removeAttribute('aria-invalid');
+  if(/Política de tratamiento/.test($('a-msg').textContent))$('a-msg').textContent=''}});
+// Aviso en la portada después de eliminar la cuenta (se recarga la página para no dejar nada en memoria).
+(function avisoPortada(){let a=null;try{a=sessionStorage.getItem('pullex.aviso');sessionStorage.removeItem('pullex.aviso')}catch(e){}
+  if(a==='cuenta-eliminada'){const m=$('a-msg');m.classList.add('ok');
+    m.textContent='Tu cuenta fue eliminada. Gracias por haber usado PULLEX IA.'}})();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
 
 // -------------------------------------------------------- instalar como app --
+// Android/Chrome (y Edge en escritorio) avisan con «beforeinstallprompt» que la app se puede instalar: el botón usa ese
+// aviso. iPhone/iPad no tienen ese evento: el botón abre los pasos de Safari («Compartir → Agregar a pantalla de
+// inicio»). Si la app ya corre instalada (display-mode standalone o navigator.standalone), el botón no aparece.
 let DEFERRED_INSTALL=null;
-const esStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-function mostrarBotonInstalar(){
-  if(esStandalone())return; // ya está instalada, no mostrar nada
-  $('btn-instalar-ic').classList.remove('hidden');
-  $('btn-instalar-hero').classList.remove('hidden');
-}
-window.addEventListener('beforeinstallprompt',(e)=>{
-  e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar();
-});
-window.addEventListener('appinstalled',()=>{
-  DEFERRED_INSTALL=null;$('btn-instalar-ic').classList.add('hidden');$('btn-instalar-hero').classList.add('hidden');
-  toast('PULLEX IA instalada');
-});
+const BOTONES_INSTALAR=['btn-instalar-ic','btn-instalar-hero','btn-instalar-auth'];
+function esStandalone(){try{return window.matchMedia('(display-mode: standalone)').matches||
+  window.matchMedia('(display-mode: fullscreen)').matches||window.navigator.standalone===true}catch(e){return false}}
+// iPadOS 13+ se presenta como un Mac: se reconoce por la pantalla táctil.
+function esIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function botonesInstalar(ver){const si=!!ver&&!esStandalone();BOTONES_INSTALAR.forEach(id=>{const b=$(id);if(b)b.classList.toggle('hidden',!si)})}
+function mostrarBotonInstalar(){botonesInstalar(true)}
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();DEFERRED_INSTALL=e;mostrarBotonInstalar()});
+window.addEventListener('appinstalled',()=>{DEFERRED_INSTALL=null;botonesInstalar(false);toast('PULLEX IA quedó instalada')});
+try{window.matchMedia('(display-mode: standalone)').addEventListener('change',()=>{if(esStandalone())botonesInstalar(false)})}catch(e){}
 async function instalarApp(){
-  if(DEFERRED_INSTALL){
-    DEFERRED_INSTALL.prompt();
-    const r=await DEFERRED_INSTALL.userChoice;
-    if(r.outcome==='accepted')toast('Instalando…');
-    DEFERRED_INSTALL=null;
-    return;
-  }
-  if(esIOS()){
-    toast('En Safari: toca Compartir (□↑) y luego "Agregar a pantalla de inicio"');
-    return;
-  }
-  toast('Busca "Instalar app" en el menú de tu navegador');
+  if(DEFERRED_INSTALL){const ev=DEFERRED_INSTALL;DEFERRED_INSTALL=null;
+    try{await ev.prompt();const r=await ev.userChoice;
+      if(r&&r.outcome==='accepted'){botonesInstalar(false);toast('Instalando PULLEX IA…')}}catch(e){abrirInstrucciones()}
+    return}
+  abrirInstrucciones();
 }
-// Android/Chrome dispara beforeinstallprompt de forma asíncrona; en iOS nunca llega,
-// así que mostramos el botón igual (con instrucciones manuales) salvo que ya esté instalada.
+function abrirInstrucciones(){const ios=esIOS();$('mi-ios').classList.toggle('hidden',!ios);$('mi-otro').classList.toggle('hidden',ios);
+  abrirModal('m-instalar')}
+function cerrarInstalar(){cerrarModal('m-instalar')}
 if(esIOS()&&!esStandalone())mostrarBotonInstalar();
 function abrirSelectorArchivo(){document.getElementById('file').click()}
 
@@ -963,7 +1178,7 @@ function mlMostrarCaso(c){
   $('ml-btn-sol').textContent='Ver solución';
   ['ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));
   $('ml-caso').classList.remove('hidden');
-  $('ml-caso').scrollIntoView({behavior:'smooth',block:'start'});
+  desplazar($('ml-caso'),{block:'start'});
 }
 function mlContar(){const n=($('ml-resp').value.trim().match(/\S+/g)||[]).length;
   $('ml-cuenta').textContent=n+(n===1?' palabra':' palabras')}
@@ -1048,7 +1263,7 @@ function mlMostrarEval(ev){
   const nota=document.createElement('p');nota.className='nota-ia';
   nota.textContent='Evaluación orientativa generada por IA para practicar. No reemplaza la calificación de un docente.';
   p.appendChild(nota);
-  p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+  p.classList.remove('hidden');desplazar(p,{block:'start'});
 }
 async function mlSolucion(){
   if(!ML.caso)return;
@@ -1070,12 +1285,12 @@ async function mlSolucion(){
     const nota=document.createElement('p');nota.className='nota-ia';
     nota.textContent='Solución generada por IA. Verifica la vigencia de cada norma en la fuente oficial antes de estudiarla como definitiva.';
     p.appendChild(nota);
-    p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+    p.classList.remove('hidden');desplazar(p,{block:'start'});
   }catch(e){toast(e.message)}
 }
 function mlVariacion(){if(ML.caso)mlGenerar(ML.caso.id)}
 function mlNuevo(){['ml-caso','ml-eval','ml-sol'].forEach(id=>$(id).classList.add('hidden'));ML.caso=null;
-  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'})}
+  desplazar($('ml-config'),{block:'start'})}
 async function mlProgreso(){
   let p;try{p=await api('/api/modular/progreso')}catch(e){return}
   const c=$('ml-prog-cuerpo');if(!p.resueltos)return;
@@ -1152,7 +1367,7 @@ function mlElegir(area,nivel){
   [['area',area,'ml-areas'],['nivel',nivel,'ml-niveles']].forEach(([k,v,id])=>{if(!v)return;ML[k]=v;
     const items=k==='area'?ML.opciones.areas:ML.opciones.niveles.map(n=>n.id);
     [...$(id).children].forEach((b,i)=>b.classList.toggle('on',items[i]===v))});
-  $('ml-config').scrollIntoView({behavior:'smooth',block:'start'});
+  desplazar($('ml-config'),{block:'start'});
   toast('Elegí '+area+(nivel?' · '+(NOMBRE_NIVEL[nivel]||nivel):'')+'. Pulsa «Generar caso».');
 }
 
@@ -1439,9 +1654,12 @@ async function apRestablecer(){
 // Despachador de eventos (Fase 1b de seguridad). Los botones declaran data-click="funcion"
 // en vez de onclick="...": así la política de seguridad (CSP) puede prohibir todo JavaScript
 // en línea. Solo se ejecutan funciones de esta lista blanca.
-const ACCIONES={toggleMas,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,tomarArchivos,ver};
+const ACCIONES={toggleMas,abrirEliminar,cerrarEliminar,eliminarCuenta,exportarDatos,cerrarInstalar,abrirClave,abrirEscrito,abrirRecuperar,abrirSelectorArchivo,abrirTools,autoAlto,cargarBoletin,cerrarClave,cerrarEscrito,cerrarRecuperar,cerrarSesiones,cerrarTools,elegirCamino,enviar,enviarAuth,enviarEscrito,enviarRecuperar,escritoTipo,exportarExcel,guardarClave,guardarMemoria,guardarPrefs,imprimirPDF,instalarApp,mlContar,mlEvaluar,mlGenerar,mlNuevo,mlPista,mlSolucion,mlVariacion,modoAuth,nuevaConsulta,reenviarVerificacion,salir,sug,teclas,toggleHistorial,togglePref,toggleTema,toggleWeb,toggleAjustesResp,tomarArchivos,ver};
 function despachar(tipo,ev){
   const el=ev.target.closest&&ev.target.closest('[data-'+tipo+']');if(!el)return;
+  // Nunca se actúa sobre contenido pintado desde Markdown (respuestas, boletín, documentos): ese HTML lo escribe un
+  // tercero. md() ya quita los data-*; esto es la segunda barrera por si algún día se pinta HTML por otra vía.
+  if(el.closest('.md'))return;
   const fn=ACCIONES[el.dataset[tipo]];if(!fn)return;
   const T=tipo[0].toUpperCase()+tipo.slice(1);
   if(('prevenir'+T) in el.dataset)ev.preventDefault();

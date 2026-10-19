@@ -53,7 +53,7 @@ ADMIN_TOKEN = api("/api/login", {"email": ADMIN[0], "clave": ADMIN[1]})["token"]
 
 def cuenta(etiqueta):
     email = f"resp-{etiqueta}-{SELLO}@demo.local"
-    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123"})
+    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123", "acepto_politica": True})
     api("/api/admin/actualizar", {"email": email, "plan": "premium", "activo": True}, ADMIN_TOKEN)
     return email, api("/api/login", {"email": email, "clave": "clave-demo-123"})["token"]
 

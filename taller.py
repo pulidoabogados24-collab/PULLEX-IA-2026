@@ -25,6 +25,7 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, Request
 
 import academia
+import datos as base_datos
 import documentos
 import estilo_redaccion
 
@@ -470,16 +471,14 @@ def crear_tablas(con):
 # --------------------------------------------------------------------------------------- rutas --
 def instalar(m) -> APIRouter:
     """Registra las rutas /api/taller/* en la app `m.app`. `m` es el módulo app (o un equivalente)."""
-    with closing(m.db()) as con:
-        crear_tablas(con)
-        con.commit()
+    if not base_datos.es_postgres():        # en PostgreSQL las tablas vienen de datos/esquema_postgres.sql
+        with closing(m.db()) as con:
+            crear_tablas(con)
+            con.commit()
     r = APIRouter(prefix="/api/taller")
 
     def _escenario_de(eid, email):
-        try:
-            eid = int(eid)
-        except (TypeError, ValueError):
-            raise HTTPException(400, "Escenario inválido")
+        eid = m.id_o_404(eid, "Escenario inválido", "Escenario no encontrado")     # BD-18: fuera de rango → 404
         with closing(m.db()) as con:
             f = con.execute("SELECT * FROM taller_escenarios WHERE id=? AND usuario=?", (eid, email)).fetchone()
         if not f:
@@ -639,6 +638,8 @@ def instalar(m) -> APIRouter:
             cache = _modelo_cache(m, fila["curado_id"])
             if cache:
                 return {"texto": cache, "nuevo": False, "revision_humana": True}
+        # AUTH-09: generarlo no cobra consulta, así que se limita por cuenta (lo ya guardado se sirve sin límite).
+        m.limitar_cuenta("taller-modelo:" + u["email"], 6, 3600)
         if not m.ia_configurada():
             raise HTTPException(503, "El motor de IA no está configurado en el servidor")
         tipo = TIPOS_INDICE[fila["tipo"]]
@@ -666,7 +667,7 @@ def instalar(m) -> APIRouter:
             return {"texto": texto + AVISO_MODELO_INCOMPLETO, "nuevo": True, "revision_humana": True, "incompleto": True}
         with closing(m.db()) as con:
             if fila["curado_id"]:
-                con.execute("INSERT OR IGNORE INTO taller_modelos(curado_id,texto,creado) VALUES(?,?,?)",
+                con.execute("INSERT INTO taller_modelos(curado_id,texto,creado) VALUES(?,?,?) ON CONFLICT(curado_id) DO NOTHING",
                             (fila["curado_id"], texto, time.time()))
             else:
                 d["modelo"] = texto
@@ -695,8 +696,8 @@ def instalar(m) -> APIRouter:
         u = m.usuario_actual(request)
         email = u["email"]
         with closing(m.db()) as con:
-            debiles = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 ORDER BY fallos DESC, "
-                                  "ultimo_fallo DESC, concepto_id", (email,)).fetchall()
+            debiles = con.execute("SELECT * FROM conocimiento WHERE usuario=? AND fallos>0 ORDER BY fallos DESC NULLS LAST, "
+                                  "ultimo_fallo DESC NULLS LAST, concepto_id", (email,)).fetchall()
             ultimo = con.execute("SELECT e.tipo, e.nivel, i.puntaje FROM taller_intentos i JOIN taller_escenarios e "
                                  "ON e.id=i.escenario_id WHERE i.usuario=? ORDER BY i.id DESC LIMIT 1", (email,)).fetchone()
         for f in debiles:

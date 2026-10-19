@@ -27,7 +27,7 @@ with sync_playwright() as p:
         pg.goto(BASE + "/")
         pg.click("#t-reg"); pg.fill("#r-nombre", "Valentina Ríos")
         pg.fill("#a-email", f"{nombre}{int(time.time()*1000)}@demo.local"); pg.fill("#a-clave", "clave-demo-123")
-        pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
+        pg.check("#r-acepto"); pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
         pg.wait_for_selector("#tablero .tcard")
         ok(pg.locator("#tablero .tcard.rec").count() == 1, f"{nombre}: tablero muestra caso recomendado a usuario nuevo")
         pg.screenshot(path=f"{OUT}/{nombre}-1-inicio-nuevo.png")
@@ -67,6 +67,8 @@ with sync_playwright() as p:
         pg.wait_for_selector("#v-modular.on #ml-caso:not(.hidden)")
         ok("repaso:" in pg.inner_text("#ml-meta").lower(), f"{nombre}: «Retomar caso» reabre el caso pendiente")
         # explicame del mapa abre el chat en modo enséñame
+        if not pg.is_visible("#n-mapa"):          # en el celular «Mi mapa» está dentro del menú «Más»
+            pg.click("#n-mas")
         pg.click("#n-mapa"); pg.wait_for_selector("#mapa-err-cuerpo .rep")
         pg.locator("#mapa-err-cuerpo button", has_text="Explícamelo").first.click()
         pg.wait_for_selector("#v-chat.on")

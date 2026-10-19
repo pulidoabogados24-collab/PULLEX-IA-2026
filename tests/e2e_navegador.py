@@ -49,7 +49,7 @@ with sync_playwright() as p:
     pag.fill("#r-nombre", CARGA)
     pag.fill("#a-email", email)
     pag.fill("#a-clave", "clave-e2e-segura-1")
-    pag.click("#a-btn")
+    pag.check("#r-acepto"); pag.click("#a-btn")
     pag.wait_for_function("() => PERFIL !== null", timeout=10000)
     ok("registro por la interfaz", pag.evaluate("PERFIL.email") == email)
     ok("banner de verificación visible", pag.is_visible("#banner-verif"))
@@ -70,9 +70,12 @@ with sync_playwright() as p:
     ok("Enter envía y el chat responde (modelo real o modo degradado)",
        any(len(b) > 20 for b in burbujas), (burbujas[-1][:80] if burbujas else "sin burbujas"))
     ok("sin XSS en la app del estudiante", pag.evaluate("window.__xss") is None)
-    n = pag.evaluate("""() => { const t='Respuesta de prueba.\\n\\n---\\n**Confianza:** Alta — por prueba.';
-        const b=burbuja('ia',t); accionesResp(b,t); return b.querySelectorAll('.nota-ia').length; }""")
-    ok("respuesta con 'Confianza' lleva el rótulo de autoevaluación", n == 1)
+    # Revisión de citas (IA-01/IA-05): la nota sale cuando el servidor dice que hay citas, no por lo que escriba el modelo.
+    n = pag.evaluate("""() => { const t='Según el artículo 86 de la Constitución.';
+        const b=burbuja('ia',t); accionesResp(b,t,[],{citas:{hay_citas:true,huerfanas:[],sospechosas:[]}});
+        const c=burbuja('ia','Hola.'); accionesResp(c,'Hola.',[],{citas:{hay_citas:false}});
+        return [b.querySelectorAll('.citas-rev').length, c.querySelectorAll('.citas-rev').length]; }""")
+    ok("respuesta con citas lleva la nota «Citas sin verificar» (y sin citas, no)", n == [1, 0], str(n))
 
     # configuración: tema (pasa this) y modal de clave
     pag.click("#n-config")

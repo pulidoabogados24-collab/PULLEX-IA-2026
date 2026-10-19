@@ -77,7 +77,7 @@ def api(ruta, cuerpo=None, token=None):
 
 def cuenta(plan):
     email = f"taller-{plan}-{SELLO}-{_ip['n']}@demo.local"
-    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123"})
+    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123", "acepto_politica": True})
     if plan != "prueba":
         token = api("/api/login", {"email": ADMIN[0], "clave": ADMIN[1]})["token"]
         api("/api/admin/actualizar", {"email": email, "plan": plan, "activo": True}, token)

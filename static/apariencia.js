@@ -81,8 +81,9 @@ function aplicar(a){
   }
   // Compatibilidad: código viejo (y pruebas) miran body.claro / body.oscuro.
   if(document.body){document.body.classList.toggle('claro',esq==='claro');document.body.classList.toggle('oscuro',esq==='oscuro')}
-  var meta=document.querySelector('meta[name=theme-color]');
-  if(meta){var c=leerToken('--bg');if(c)meta.setAttribute('content',c)}
+  // Hay una etiqueta por esquema del sistema (claro/oscuro); con la apariencia ya aplicada, todas llevan el fondo real.
+  var c=leerToken('--bg');
+  if(c)Array.prototype.forEach.call(document.querySelectorAll('meta[name=theme-color]'),function(m){m.setAttribute('content',c)});
   // "Automático" sigue al sistema también si cambia con la página abierta.
   try{
     var mq=window.matchMedia('(prefers-color-scheme: dark)');

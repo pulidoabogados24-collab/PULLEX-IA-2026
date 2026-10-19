@@ -231,7 +231,7 @@ with sync_playwright() as p:
         pg.fill("#r-nombre", "Valentina Ríos")
         pg.fill("#a-email", f"h{nombre}{int(time.time() * 1000)}@demo.local")
         pg.fill("#a-clave", "clave-demo-123")
-        pg.click("#a-btn")
+        pg.check("#r-acepto"); pg.click("#a-btn")
         pg.wait_for_function("() => PERFIL !== null")
         pg.wait_for_function("() => ESTADO !== null")
         # Escritorio: barra lateral con las 7 secciones. Celular: 4 destinos y «Más» (el resto se despliega encima).

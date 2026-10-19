@@ -1,0 +1,5 @@
+# Worker privado de ingesta; nunca instalar credenciales en frontend/GitHub.
+-r requirements.txt
+google-api-python-client>=2.0,<3.0
+google-auth>=2.0,<3.0
+pypdf>=6.0,<7.0
