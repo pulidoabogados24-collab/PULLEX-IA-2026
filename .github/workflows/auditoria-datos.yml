@@ -14,17 +14,23 @@ concurrency:
 
 jobs:
   datos:
-    name: Datos (${{ matrix.motor }})
+    name: Datos (${{ matrix.motor }}, PG ${{ matrix.pg }})
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
-        motor: [sqlite, postgres]
+        include:
+          - motor: sqlite
+            pg: 16
+          - motor: postgres
+            pg: 16
+          - motor: postgres
+            pg: 17
     # Servicio desechable, sin datos ni credenciales de produccion.
     services:
       postgres:
-        image: postgres:16
+        image: postgres:${{ matrix.pg }}
         env:
           POSTGRES_USER: pullex_test
           POSTGRES_PASSWORD: solo-ci-desechable
@@ -49,8 +55,10 @@ jobs:
         run: |
           python -m pip install -r requirements.lock pytest==9.1.1 httpx==0.28.1
           sudo apt-get update -qq
-          sudo apt-get install -y -qq postgresql-client-16 gnupg
-          echo "/usr/lib/postgresql/16/bin" >> "$GITHUB_PATH"
+          sudo apt-get install -y -qq postgresql-common gnupg
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-${{ matrix.pg }}
+          echo "/usr/lib/postgresql/${{ matrix.pg }}/bin" >> "$GITHUB_PATH"
       - name: Suite completa de pruebas unitarias y de API
         run: python -m pytest tests -q --junitxml=resultados/suite.xml
       - name: Restauracion real en PostgreSQL desechable (clara y cifrada)
@@ -67,7 +75,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: auditoria-${{ matrix.motor }}-${{ github.run_id }}
+          name: auditoria-${{ matrix.motor }}-pg${{ matrix.pg }}-${{ github.run_id }}
           path: resultados/*.xml
           if-no-files-found: error
           retention-days: 14
