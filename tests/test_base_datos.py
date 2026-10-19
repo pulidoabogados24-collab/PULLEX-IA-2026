@@ -19,7 +19,7 @@ from contextlib import closing
 import pytest
 
 import datos
-from conftest import ADMIN_CLAVE, ADMIN_EMAIL, EN_POSTGRES, PG_URL, RAIZ, auth, borrar_esquema_de_pruebas, nuevo_usuario
+from conftest import ADMIN_CLAVE, ADMIN_EMAIL, EN_POSTGRES, PG_URL, RAIZ, auth, borrar_esquema_de_pruebas, nuevo_usuario, preparar_static
 
 postgres = pytest.mark.solo_postgres
 URL_REMOTA = "postgres://usuario.proyecto:Cl4ve-Secreta@aws-0-us-east-1.pooler.ejemplo.com:6543/postgres"
@@ -190,7 +190,7 @@ def test_en_modo_sqlite_la_app_arranca_sin_psycopg(tmp_path):
         "with closing(app.db()) as con:\n"
         "    n = con.execute('SELECT COUNT(*) c FROM usuarios').fetchone()['c']\n"
         "print('OK', app.base_datos.motor(), n, type(con).__module__, app.salud()['db_motor'])\n")
-    (tmp_path / "static").symlink_to(RAIZ / "static")
+    preparar_static(tmp_path)
     entorno = {**os.environ, "PULLEX_DATABASE_URL": "", "POSTGRES_URL": "", "DATABASE_URL": "", "PULLEX_DB": "",
                "PULLEX_BIBLIOTECA_DB": str(tmp_path / "b.db"), "PULLEX_CORPUS_DB": str(tmp_path / "c.db")}
     entorno.pop("VERCEL", None)
@@ -617,7 +617,7 @@ def test_pg_la_cuenta_sigue_existiendo_despues_de_un_reinicio(cliente, modulo, t
         "                  'convs': [x['id'] for x in convs.json()], 'mensajes': len(msjs.json()),\n"
         "                  'motor': app.base_datos.motor(), 'aplico_esquema': app.base_datos.estadisticas['esquema_aplicado'],\n"
         "                  'salud': c.get('/salud').json()['db']}))\n")
-    (tmp_path / "static").symlink_to(RAIZ / "static")
+    preparar_static(tmp_path)
     entorno = {**os.environ, "PULLEX_BIBLIOTECA_DB": str(tmp_path / "b.db"), "PULLEX_CORPUS_DB": str(tmp_path / "c.db")}
     r = subprocess.run([sys.executable, "-c", guion], cwd=tmp_path, env=entorno, capture_output=True, text=True, timeout=180)
     assert r.returncode == 0, r.stderr[-3000:]

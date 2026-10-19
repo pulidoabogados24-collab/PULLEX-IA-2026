@@ -160,8 +160,9 @@ en un equipo propio y cifrado.
 
 Automatizado: `.github/workflows/respaldo-bd.yml` hace la copia cifrada y la sube como artefacto de GitHub
 con 5 días de retención. **Está desactivado**: solo corre a mano. Para activarlo, crea los secretos
-`PULLEX_DATABASE_URL_DIRECTA` y `PULLEX_RESPALDO_CLAVE` en el repositorio y descomenta `schedule`. Pendiente
-antes de activarlo: fijar las acciones por SHA (está marcado con TODO en el archivo).
+`PULLEX_DATABASE_URL_DIRECTA` y `PULLEX_RESPALDO_CLAVE` en el repositorio. Las acciones están fijadas por SHA.
+Antes de descomentar `schedule`, verificar configuración, custodia de claves, destino externo y restauración
+de una copia representativa. Una prueba con datos sintéticos no acredita recuperar la última copia operativa.
 
 **Dónde guardarla.** El artefacto de GitHub es de paso, no el archivo de respaldos. Guarda las copias cifradas
 fuera de Supabase y fuera de GitHub (por ejemplo, una carpeta privada de Google Drive o un almacenamiento de
@@ -205,8 +206,14 @@ Con `PULLEX_PRUEBAS_PG_URL` toda la sesión corre contra PostgreSQL en un esquem
 nunca el de producción. En ese modo, una prueba falla si la capa de datos registró un error de SQL que el
 código se haya tragado.
 
-Estado al 13 de octubre de 2026: 1060 pruebas pasan en SQLite (27 se saltan por ser solo de PostgreSQL) y
-1086 en PostgreSQL 16 (1 se salta).
+Los conteos históricos de 1060 pruebas SQLite y 1086 PostgreSQL no tienen aquí un informe reproducible
+vinculado a commit, entorno y fecha; no deben usarse como evidencia de aprobación. El PR #8 informó una
+ejecución parcial en Windows y declaró pendientes PostgreSQL y restauración reales.
+
+El flujo `auditoria-datos.yml` ejecuta las suites SQLite y PostgreSQL 16 sobre un servicio desechable,
+sin secretos operativos, y conserva informes JUnit. Además exige que las dos variantes de restauración
+(clara y cifrada) se ejecuten sin omisiones. Consultar la ejecución del commit revisado: añadir el flujo
+no equivale a haber superado las pruebas. Estos resultados no certifican el pooler de Supabase ni Vercel.
 
 ## Cómo saber qué base está en uso
 
@@ -216,7 +223,7 @@ Estado al 13 de octubre de 2026: 1060 pruebas pasan en SQLite (27 se saltan por 
 
 ## Límites conocidos
 
-- Probado contra PostgreSQL 16 local. **No se ha probado todavía contra el pooler real de Supabase** desde
+- PostgreSQL 16 se valida mediante el flujo aislado descrito arriba. **No se ha probado todavía contra el pooler real de Supabase** desde
   Vercel: es lo primero que hay que comprobar al publicar.
 - El plan gratuito de Supabase pausa un proyecto tras un periodo sin actividad y limita el tamaño de la
   base. Verifica los valores vigentes en la documentación de Supabase.

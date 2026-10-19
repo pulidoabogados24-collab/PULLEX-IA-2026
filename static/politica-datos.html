@@ -29,9 +29,9 @@
 
   <h2>2. Qué datos tratamos</h2>
   <ul>
-    <li><strong>Datos de tu cuenta:</strong> nombre, correo electrónico y tu contraseña, que se guarda transformada (cifrado de un solo sentido); nadie, ni siquiera el administrador, puede leerla.</li>
+    <li><strong>Datos de tu cuenta:</strong> nombre, correo electrónico y un derivado de tu contraseña con sal; la aplicación no guarda la contraseña en texto claro.</li>
     <li><strong>Lo que escribes y generas:</strong> tus consultas, las respuestas, los documentos que generas con el automatizador, tu progreso en la Academia y el Taller, tus preferencias y la «memoria» que tú mismo guardes en Ajustes.</li>
-    <li><strong>Archivos que adjuntas en una consulta:</strong> se usan para responder esa consulta; PULLEX IA guarda su nombre, no su contenido.</li>
+    <li><strong>Archivos que adjuntas en una consulta:</strong> se envían al proveedor de IA para responderla. El historial guarda el nombre del adjunto; las respuestas y documentos guardados pueden contener información extraída de él. La conservación por el proveedor debe contrastarse con el contrato y la configuración del servicio.</li>
     <li><strong>Datos técnicos:</strong> registros de seguridad (intentos de ingreso, errores) y métricas de calidad de las respuestas que no guardan el texto de tus consultas.</li>
   </ul>
   <p>Te pedimos no incluir en tus consultas datos sensibles ni datos de terceros que no necesites para tu pregunta. Si consultas un caso de otra persona, eres responsable de contar con su autorización o de anonimizar la información.</p>
@@ -47,14 +47,14 @@
   <p>No vendemos tus datos ni los usamos para publicidad de terceros.</p>
 
   <h2>4. Quién más los procesa</h2>
-  <p>Para prestar el servicio, algunos proveedores procesan datos por cuenta nuestra. Varios están fuera de Colombia, principalmente en Estados Unidos:</p>
+  <p>El código contempla los siguientes proveedores. <strong>Pendiente de revisión jurídica y operativa:</strong> confirmar cuáles están habilitados, su entidad contractual, los países de tratamiento, los subencargados y la conservación antes de publicar esta política.</p>
   <ul>
     <li><strong>Anthropic</strong> (modelo de inteligencia artificial): recibe el texto de tus consultas y los archivos que adjuntas para generar la respuesta.</li>
     <li><strong>OpenAI</strong> (modelo de respaldo): solo si el modelo principal no está disponible, recibe la misma información.</li>
     <li><strong>Supabase</strong> (base de datos) y <strong>Vercel</strong> (alojamiento de la aplicación): almacenan y procesan los datos de tu cuenta y tu historial.</li>
     <li><strong>Resend</strong> (envío de correos): recibe tu correo electrónico y el contenido del mensaje que se te envía.</li>
   </ul>
-  <p>Al aceptar esta política autorizas expresamente la transmisión de tus datos a estos proveedores para las finalidades descritas. <strong>[Pendiente de revisión jurídica: fundamento y requisitos de la transferencia o transmisión internacional según la Ley 1581 de 2012 y las instrucciones vigentes de la Superintendencia de Industria y Comercio.]</strong></p>
+  <p>La circulación internacional debe clasificarse para cada proveedor: hay transmisión si trata los datos por cuenta del responsable y transferencia si el receptor actúa como responsable. La aceptación de esta política no sustituye la verificación de contratos, finalidades y del mecanismo jurídico aplicable. <strong>[Pendiente de revisión jurídica: documentar esa clasificación y sus garantías antes de habilitar el tratamiento.]</strong></p>
 
   <h2>5. Tus derechos</h2>
   <p>Como titular puedes:</p>
@@ -72,19 +72,21 @@
     <li><strong>Desde la app:</strong> en Ajustes › Tus datos puedes descargar una copia de todos tus datos y eliminar tu cuenta con todo su contenido.</li>
     <li><strong>Por correo:</strong> escribe a <a href="mailto:Pulidoabogados24@gmail.com">Pulidoabogados24@gmail.com</a> desde el correo de tu cuenta, indicando qué solicitas.</li>
   </ul>
-  <p>Atenderemos consultas y reclamos dentro de los términos que fija la ley. <strong>[Pendiente de revisión jurídica: términos aplicables a consultas y reclamos.]</strong></p>
+  <p>Para consultas, el plazo general es de 10 días hábiles desde su recepción; si se requiere ampliación, se informarán las razones y la nueva fecha, con un máximo adicional de 5 días hábiles. Para reclamos, el plazo es de 15 días hábiles desde el día siguiente a su recepción; la ampliación motivada no excederá 8 días hábiles adicionales.</p>
+  <p>El reclamo debe identificar al titular y explicar los hechos, con dirección de respuesta y soportes pertinentes. Si está incompleto, se requerirá subsanación dentro de 5 días; tras 2 meses sin subsanar se entenderá desistido. Si corresponde a otro competente, se trasladará en 2 días hábiles y se informará al interesado. Recibido completo, se incorporará la anotación «reclamo en trámite» en hasta 2 días hábiles. Se comprobará la identidad de forma proporcional. <strong>Pendiente de revisión jurídica:</strong> validar este procedimiento y sus excepciones conforme a los artículos 14 y 15 de la Ley 1581 de 2012.</p>
 
   <h2>7. Cuánto tiempo los conservamos</h2>
-  <p>Mientras tu cuenta esté activa. Si la eliminas, borramos de inmediato tus datos de la base principal. Las copias de seguridad cifradas se conservan como máximo <strong>[plazo]</strong> y luego se destruyen. Los registros de seguridad se conservan <strong>[plazo]</strong>.</p>
+  <p>La cuenta y su historial se conservan durante la prestación del servicio, sujetos a los plazos y excepciones que apruebe el responsable. La función de eliminación busca borrar transaccionalmente los datos asociados en la base principal; deben verificarse su alcance, los terceros y las excepciones de conservación antes de prometer una eliminación completa.</p>
+  <p><strong>[Pendiente de aprobación: calendario por categoría, plazo de respaldos, plazo de registros de seguridad, excepciones y procedimiento para que una restauración no reactive datos cuya supresión ya fue atendida.]</strong> Los 5 días de retención del artefacto temporal de GitHub no fijan la retención de todas las copias ni la de los proveedores.</p>
 
   <h2>8. Cómo los protegemos</h2>
-  <p>Conexiones cifradas, contraseñas transformadas con un algoritmo de un solo sentido, sesiones firmadas que caducan, controles de acceso para que cada persona vea solo lo suyo, límites contra intentos abusivos y copias de seguridad cifradas.</p>
+  <p>El código incluye derivación de contraseñas con sal, sesiones firmadas con caducidad, controles de acceso y límites contra abuso. Su funcionamiento en el despliegue debe verificarse. El respaldo programado sigue pendiente de activación y validación operativa; no se presenta aquí como una protección ya acreditada. <strong>Pendiente de revisión jurídica y de seguridad:</strong> confirmar las medidas efectivas, responsables de incidentes y canales de atención.</p>
 
   <h2>9. Menores de edad</h2>
   <p>PULLEX IA está dirigida a personas mayores de 18 años. No recolectamos a sabiendas datos de menores de edad.</p>
 
   <h2>10. Cambios a esta política</h2>
-  <p>Si cambiamos esta política de forma importante, te lo avisaremos en la app y te pediremos aceptar la nueva versión. Versión vigente: 2026-10-13.</p>
+  <p>Los cambios relevantes se comunicarán antes de aplicarse y, cuando proceda, se solicitará una nueva autorización. Versión de trabajo: 2026-10-13, revisada el 18 de octubre de 2026; no constituye aprobación jurídica ni fecha de entrada en vigor. <strong>[Pendiente: aprobación, fecha de vigencia y verificación del mecanismo de notificación y nueva aceptación.]</strong></p>
 </main>
 <p class="pg-pie">¿Preguntas sobre tus datos? Escríbenos a <a href="mailto:Pulidoabogados24@gmail.com">Pulidoabogados24@gmail.com</a>.</p>
 </body>

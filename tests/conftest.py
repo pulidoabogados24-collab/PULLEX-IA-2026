@@ -14,6 +14,7 @@ import importlib
 import json
 import os
 import secrets
+import shutil
 import sys
 import time
 import types
@@ -250,10 +251,22 @@ class FakeAnthropic:
         return types.SimpleNamespace(content=[_Bloque("Boletín de prueba")])
 
 
+def preparar_static(trabajo, origen=None):
+    origen = origen or RAIZ / "static"
+    try:
+        (trabajo / "static").symlink_to(origen, target_is_directory=True)
+    except OSError as exc:
+        # Windows sin privilegio de enlaces simbolicos: usar una copia aislada.
+        # Otros errores de E/S deben seguir fallando, sin ocultarlos.
+        if os.name != "nt" or getattr(exc, "winerror", None) != 1314:
+            raise
+        shutil.copytree(origen, trabajo / "static")
+
+
 @pytest.fixture(scope="session")
 def modulo(tmp_path_factory):
     trabajo = tmp_path_factory.mktemp("pullex")
-    (trabajo / "static").symlink_to(RAIZ / "static")
+    preparar_static(trabajo)
     os.chdir(trabajo)
     os.environ.update({
         "ANTHROPIC_API_KEY": "sk-ant-prueba-no-real",

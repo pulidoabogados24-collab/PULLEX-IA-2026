@@ -6,7 +6,7 @@ de pul/base-datos (64d8322), donde fallan, y pasan con las correcciones de la ra
 """
 from contextlib import closing
 
-from conftest import ADMIN_EMAIL, FakeAnthropic, auth, login_admin, nuevo_usuario
+from conftest import ADMIN_EMAIL, FakeAnthropic, auth, login_admin, nuevo_usuario, preparar_static
 
 MENSAJE_INACTIVA = "Tu cuenta está inactiva"
 
@@ -386,7 +386,7 @@ def _arrancar_app(tmp_path, extra, guion_extra=""):
     entorno.update({"PULLEX_DATABASE_URL": "", "POSTGRES_URL": "", "DATABASE_URL": "", "PULLEX_DB": str(tmp_path / "p.db"),
                     "PULLEX_BIBLIOTECA_DB": str(tmp_path / "b.db"), "PULLEX_CORPUS_DB": str(tmp_path / "c.db"),
                     "PULLEX_LOG_LEVEL": "ERROR", **extra})
-    (tmp_path / "static").symlink_to(RAIZ / "static")
+    preparar_static(tmp_path)
     guion = (f"import sys, json, os\nsys.path.insert(0, {str(RAIZ)!r})\nimport app\n"
              "from fastapi.testclient import TestClient\nc = TestClient(app.app)\n" + guion_extra)
     r = subprocess.run([sys.executable, "-c", guion], cwd=tmp_path, env=entorno, capture_output=True, text=True, timeout=180)

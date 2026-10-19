@@ -1,7 +1,7 @@
 """Regresión funcional: lo que ya funcionaba debe seguir funcionando."""
 import pytest
 
-from conftest import auth, chat, login_admin, nuevo_usuario
+from conftest import auth, chat, login_admin, nuevo_usuario, preparar_static
 
 
 def test_salud(cliente):
@@ -110,7 +110,7 @@ def test_base_de_datos_anterior_se_migra_sola(tmp_path, monkeypatch):
         plan TEXT DEFAULT 'prueba', limite INTEGER DEFAULT 10, usadas INTEGER DEFAULT 0, periodo TEXT,
         activo INTEGER DEFAULT 1, es_admin INTEGER DEFAULT 0, preferencias TEXT DEFAULT '{}', creado REAL);""")
     con.commit(); con.close()
-    (tmp_path / "static").symlink_to(raiz / "static")
+    preparar_static(tmp_path, raiz / "static")
     monkeypatch.chdir(tmp_path)
     spec = importlib.util.spec_from_file_location("app_migracion", raiz / "app.py")
     m = importlib.util.module_from_spec(spec)
