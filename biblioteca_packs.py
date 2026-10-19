@@ -10,7 +10,7 @@ import os
 from contextlib import closing
 
 from fastapi import APIRouter, HTTPException, Request
-from datos import ErrorConfiguracion, limpiar_url
+from datos import ErrorConfiguracion, id_valido, limpiar_url
 
 LOG = logging.getLogger(__name__)
 COLECCIONES = ("PACK JURIDICO 1", "PACK JURIDICO 2")
@@ -117,7 +117,7 @@ def crear_router(*, admin_actual, limitar_cuenta=None):
     @router.get("/api/admin/biblioteca/packs/documento/{documento_id}")
     def documento(documento_id: int, request: Request):
         proteger(request)
-        if documento_id < 1:
+        if id_valido(documento_id) is None:
             raise HTTPException(404, "Documento no encontrado")
         encontrados = _leer("""
             SELECT id, coleccion, nombre, estado_procesamiento, vigencia
