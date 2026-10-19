@@ -650,3 +650,48 @@ def test_pg_esquema_propio_y_esquema_inexistente_se_crea_al_arrancar(monkeypatch
         borrar_esquema_de_pruebas(nombre)
         monkeypatch.undo()
         datos._config()
+
+
+@postgres
+def test_pg_migracion_v1_v2_conserva_datos_y_no_inventa_consentimiento(monkeypatch):
+    """Parte del SQL histórico v1 (434c77b), sin usar la base operativa ni copiar expedientes."""
+    nombre = f"pullex_pruebas_migracion_{time.time_ns() % 10**9}"
+    otro = nombre + "_otro"
+    monkeypatch.setenv("PULLEX_DB_ESQUEMA", nombre)
+    try:
+        with _admin_pg() as admin:
+            admin.execute("BEGIN")
+            admin.execute(f'SET LOCAL search_path TO "{nombre}"')
+            admin.execute((RAIZ / "tests/fixtures/esquema_postgres_v1.sql").read_text(encoding="utf-8-sig"))
+            admin.execute("COMMIT")
+            assert admin.execute(f'SELECT max(version) FROM "{nombre}".esquema_version').fetchone()[0] == 1
+            admin.execute(f'INSERT INTO "{nombre}".usuarios(email,nombre) VALUES (%s,%s)',
+                          ("historico@pruebas.local", "Titular sintetico"))
+            cid = admin.execute(f'INSERT INTO "{nombre}".conversaciones(usuario,titulo) VALUES (%s,%s) RETURNING id',
+                                ("historico@pruebas.local", "Conversacion anterior")).fetchone()[0]
+            admin.execute(f'INSERT INTO "{nombre}".mensajes(conv,rol,contenido) VALUES (%s,%s,%s)',
+                          (cid, "user", "Contenido sintetico anterior"))
+            # Los packs comparten esquema, y otro producto puede compartir el proyecto.
+            admin.execute(f'CREATE TABLE "{nombre}".biblioteca_documentos (id bigint PRIMARY KEY, marca text)')
+            admin.execute(f'INSERT INTO "{nombre}".biblioteca_documentos VALUES (1, %s)', ("pack-sintetico",))
+            admin.execute(f'CREATE SCHEMA "{otro}"')
+            admin.execute(f'CREATE TABLE "{otro}".testigo (marca text)')
+            admin.execute(f'INSERT INTO "{otro}".testigo VALUES (%s)', ("otro-producto-sintetico",))
+
+        assert datos.asegurar_esquema()["aplicado"] is True
+        assert datos.asegurar_esquema()["aplicado"] is False
+        with _admin_pg() as admin:
+            assert admin.execute(f'SELECT max(version) FROM "{nombre}".esquema_version').fetchone()[0] == 2
+            u = admin.execute(f'SELECT nombre,acepto_politica_version,acepto_politica_en FROM "{nombre}".usuarios').fetchone()
+            assert u == ("Titular sintetico", None, None)
+            assert admin.execute(f'SELECT contenido,continuaciones FROM "{nombre}".mensajes').fetchone() == \
+                ("Contenido sintetico anterior", 0)
+            assert admin.execute("SELECT to_regclass(%s) IS NOT NULL", (f"{nombre}.limites",)).fetchone()[0]
+            assert admin.execute(f'SELECT marca FROM "{nombre}".biblioteca_documentos').fetchone()[0] == "pack-sintetico"
+            assert admin.execute(f'SELECT marca FROM "{otro}".testigo').fetchone()[0] == "otro-producto-sintetico"
+    finally:
+        datos.reiniciar()
+        borrar_esquema_de_pruebas(nombre)
+        borrar_esquema_de_pruebas(otro)
+        monkeypatch.undo()
+        datos._config()
