@@ -51,7 +51,7 @@ def entrar(pg, nombre):
     pg.fill("#r-nombre", "Persona " + nombre)
     pg.fill("#a-email", f"p{nombre}{int(time.time() * 1000)}@demo.local")
     pg.fill("#a-clave", "clave-demo-123")
-    pg.click("#a-btn")
+    pg.check("#r-acepto"); pg.click("#a-btn")
     pg.wait_for_selector("#app:not(.hidden)")
 
 

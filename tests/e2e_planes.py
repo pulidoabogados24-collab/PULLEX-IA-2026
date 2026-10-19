@@ -57,7 +57,7 @@ ADMIN_TOKEN = api("/api/login", {"email": ADMIN[0], "clave": ADMIN[1]})["token"]
 
 def cuenta(plan):
     email = f"plan-{plan}-{SELLO}-{_ip['n']}@demo.local"
-    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123"})
+    api("/api/registro", {"email": email, "nombre": "Valentina Ríos", "clave": "clave-demo-123", "acepto_politica": True})
     if plan != "prueba":
         api("/api/admin/actualizar", {"email": email, "plan": plan, "activo": True}, ADMIN_TOKEN)
     return email

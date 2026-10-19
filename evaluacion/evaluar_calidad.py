@@ -35,6 +35,8 @@ from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
+if str(RAIZ) not in sys.path:          # citas.py vive en la raíz (también al ejecutar este archivo como script)
+    sys.path.insert(0, str(RAIZ))
 CASOS = RAIZ / "evaluacion" / "calidad_respuesta.jsonl"
 
 AVISO_REVISION = ("AVISO: los casos y las pistas de esta evaluación son borradores sin revisión de un abogado "
@@ -52,7 +54,6 @@ GRAVEDADES = ("critica", "mayor", "menor")
 MOTIVOS_DE_CORTE = ("max_tokens", "length", "model_context_window_exceeded", "incomplete", "max_output_tokens")
 
 ANIO_ACTUAL = date.today().year
-ANIO_PRIMERA_SENTENCIA_CC = 1992
 
 
 # ------------------------------------------------------------------------------------ texto básico --
@@ -211,133 +212,10 @@ def continuacion_duplicada(parcial: str, continuacion: str, minimo_palabras: int
 
 
 # ----------------------------------------------------------------------------------- citas jurídicas --
-# Topes GENEROSOS por texto legal: no son el número exacto de artículos, solo sirven para marcar lo absurdo
-# (por ejemplo «artículo 9999 del Código Penal»). Revisar con un abogado antes de endurecerlos.
-_TOPE_ARTICULOS = (
-    (r"constituci[oó]n", 380, "Constitución Política"),
-    (r"c[oó]digo penal|ley 599", 700, "Código Penal"),
-    (r"c[oó]digo de procedimiento penal|ley 906", 800, "Código de Procedimiento Penal"),
-    (r"c[oó]digo general del proceso|\bcgp\b|ley 1564", 800, "Código General del Proceso"),
-    (r"c[oó]digo sustantivo del trabajo|\bcst\b", 600, "Código Sustantivo del Trabajo"),
-    (r"c[oó]digo civil|ley 57", 3000, "Código Civil"),
-    (r"c[oó]digo de comercio", 3000, "Código de Comercio"),
-    (r"cpaca|ley 1437", 450, "CPACA"),
-    (r"decreto 2591", 62, "Decreto 2591 de 1991"),
-)
-_RE_SENTENCIA = re.compile(
-    r"\b(?:sentencia\s+)?(?P<tipo>SU|C|T)\s?-\s?(?P<num>\d{1,6})(?P<resto>(?:\s*(?:de|del|/)\s*(?:a[ñn]o\s+)?(?P<anio>\d{4}|\d{2}))?)",
-    re.I)
-_TOPE_SENTENCIA = {"C": 1500, "T": 2000, "SU": 1500}
-_RE_ARTICULO = re.compile(r"\b(?:art[íi]culo|art\.)\s*(?P<num>\d{1,6})(?P<letra>[A-Za-z]?)\b(?P<cola>[^.;,\n]{0,60})", re.I)
-_RE_LEY = re.compile(r"\bLey\s+(?P<num>\d{1,4})\s+de\s+(?P<anio>\d{4})\b")
-_RE_DECRETO = re.compile(r"\bDecreto(?:\s+Ley|\s+Legislativo)?\s+(?P<num>\d{1,5})\s+de\s+(?P<anio>\d{4})\b", re.I)
-_RE_RADICADO = re.compile(r"\b\d{5}-?\d{2}-?\d{2}-?\d{3}-?\d{4}-?\d{5}-?\d{2}\b|\b(?:radicado|rad\.?)\s*(?:n[.º°o]*\s*)?[\dA-Z][\dA-Z\-./]{6,}", re.I)
-_RE_PONENTE = re.compile(r"\b(?:M\.\s?P\.|magistrad[oa]\s+ponente)\s*:?\s*(?:Dr\.?|Dra\.?)?\s*[A-ZÁÉÍÓÚ][\wáéíóúñ]+", re.I)
-_RE_CITA_TEXTUAL_INVERSA = re.compile(
-    r"(?:dijo|dice|señal[oó]|afirm[oó]|sostuvo|indic[oó]|expres[oó]|consider[oó])\s+(?:la corte|el consejo de estado|la sala|el tribunal)[^.\n]{0,40}?[:,]?\s*[«\"“]([^»\"”]{60,})[»\"”]",
-    re.I)
-_RE_CITA_TEXTUAL = re.compile(
-    r"(?:la corte|el consejo de estado|la sala|el tribunal|la sentencia)[^.\n]{0,80}?(?:dijo|dice|señal[oó]|afirm[oó]|sostuvo|indic[oó]|expres[oó]|consider[oó])[^.\n]{0,40}?[:,]?\s*[«\"“]([^»\"”]{60,})[»\"”]",
-    re.I)
-
-
-def _anio_completo(a: str) -> int:
-    n = int(a)
-    if n < 100:
-        return 1900 + n if n >= 90 else 2000 + n
-    return n
-
-
-def _extraer_citas(texto: str) -> list:
-    """Lista de dicts {"cita", "tipo", ...} con lo que parece una cita jurídica del texto."""
-    citas = []
-    for m in _RE_SENTENCIA.finditer(texto or ""):
-        anio = _anio_completo(m.group("anio")) if m.group("anio") else None
-        citas.append({"tipo": "sentencia", "cita": m.group(0).strip(), "alta": m.group("tipo").upper(),
-                      "numero": int(m.group("num")), "anio": anio})
-    for m in _RE_ARTICULO.finditer(texto or ""):
-        citas.append({"tipo": "articulo", "cita": (m.group(0).split("\n")[0]).strip(), "numero": int(m.group("num")),
-                      "cola": m.group("cola") or ""})
-    for m in _RE_LEY.finditer(texto or ""):
-        citas.append({"tipo": "ley", "cita": m.group(0), "numero": int(m.group("num")), "anio": int(m.group("anio"))})
-    for m in _RE_DECRETO.finditer(texto or ""):
-        citas.append({"tipo": "decreto", "cita": m.group(0), "numero": int(m.group("num")), "anio": int(m.group("anio"))})
-    for m in _RE_RADICADO.finditer(texto or ""):
-        citas.append({"tipo": "radicado", "cita": m.group(0).strip()})
-    for m in _RE_PONENTE.finditer(texto or ""):
-        citas.append({"tipo": "ponente", "cita": m.group(0).strip()})
-    for rx in (_RE_CITA_TEXTUAL, _RE_CITA_TEXTUAL_INVERSA):
-        for m in rx.finditer(texto or ""):
-            citas.append({"tipo": "cita_textual", "cita": m.group(1)[:80] + "…"})
-    return citas
-
-
-def _tope_de_articulo(cola: str):
-    c = normalizar(cola)
-    for patron, tope, nombre in _TOPE_ARTICULOS:
-        if re.search(patron, c):
-            return tope, nombre
-    if re.search(r"\bc\.?\s?p\.?\b", c):  # «C.P.» es a la vez Constitución y Código Penal: se usa el tope mayor
-        return 700, "C.P. (Constitución o Código Penal)"
-    return None, None
-
-
-def citas_sospechosas(texto: str, permitidas: str = "") -> list:
-    """Revisa por FORMA las citas jurídicas del texto. `permitidas` es el texto que la persona ya dio (consulta,
-    documento adjunto): lo que ya estaba ahí no se marca. Cada hallazgo: {"cita", "tipo", "motivo",
-    "severidad"} con severidad «grave» (formato o número imposible) o «aviso» (hay que verificarlo en la fuente
-    oficial: radicado, ponente, cita textual, sentencia sin año). NO comprueba que la sentencia exista."""
-    previas = normalizar(permitidas)
-    hallazgos = []
-
-    def anotar(c, motivo, severidad):
-        hallazgos.append({"cita": c["cita"], "tipo": c["tipo"], "motivo": motivo, "severidad": severidad})
-
-    for c in _extraer_citas(texto):
-        if previas and normalizar(c["cita"]) in previas:
-            continue
-        t = c["tipo"]
-        if t == "sentencia":
-            tope = _TOPE_SENTENCIA.get(c["alta"], 2000)
-            if c["numero"] == 0 or c["numero"] > tope:
-                anotar(c, f"número improbable para una sentencia {c['alta']} (más de {tope} o cero)", "grave")
-            elif c["anio"] is None:
-                anotar(c, "sentencia sin año: no se puede ubicar en la relatoría", "aviso")
-            elif c["anio"] < ANIO_PRIMERA_SENTENCIA_CC or c["anio"] > ANIO_ACTUAL:
-                anotar(c, f"año {c['anio']} fuera del rango posible de la Corte Constitucional "
-                          f"({ANIO_PRIMERA_SENTENCIA_CC}-{ANIO_ACTUAL})", "grave")
-        elif t == "articulo":
-            tope, nombre = _tope_de_articulo(c["cola"])
-            if c["numero"] == 0:
-                anotar(c, "artículo cero no existe", "grave")
-            elif tope and c["numero"] > tope:
-                anotar(c, f"número muy por encima de los artículos de {nombre} (tope orientativo {tope})", "grave")
-        elif t == "ley":
-            n, a = c["numero"], c["anio"]
-            if a > ANIO_ACTUAL or a < 1800:
-                anotar(c, f"año {a} imposible", "grave")
-            elif n == 0 or n > 3000:
-                anotar(c, "número de ley improbable", "grave")
-            elif a >= 2006 and n < 1000:
-                anotar(c, "número de ley incoherente con el año (desde 2006 las leyes pasan de 1000)", "grave")
-            elif 1992 <= a <= 2004 and n >= 1000:
-                anotar(c, "número de ley incoherente con el año (hasta 2004 no llegaban a 1000)", "grave")
-            elif a <= 2018 and n >= 2000:
-                anotar(c, "número de ley incoherente con el año (las leyes 2000 en adelante son de 2019 o después)", "grave")
-        elif t == "decreto":
-            if c["anio"] > ANIO_ACTUAL or c["anio"] < 1800:
-                anotar(c, f"año {c['anio']} imposible", "grave")
-            elif c["numero"] == 0:
-                anotar(c, "decreto número cero", "grave")
-        elif t == "radicado":
-            anotar(c, "radicado que la persona no dio: verificar en la Rama Judicial; un radicado no se debe inventar",
-                   "aviso")
-        elif t == "ponente":
-            anotar(c, "magistrado ponente: verificar en la relatoría; un ponente no se debe inventar", "aviso")
-        elif t == "cita_textual":
-            anotar(c, "cita textual atribuida a una providencia: verificar la literalidad en la fuente oficial",
-                   "aviso")
-    return hallazgos
+# La revisión de forma de las citas vive en citas.py (raíz del repo) y la comparten el chat y este evaluador
+# (auditoría 2026-10-13, IA-07). Aquí se conserva la API: citas_sospechosas(texto, permitidas) con severidad
+# «grave» o «aviso». NO comprueba que una sentencia exista.
+from citas import ANIO_PRIMERA_SENTENCIA_CC, citas_sospechosas, extraer_citas as _extraer_citas  # noqa: E402,F401
 
 
 # ------------------------------------------------------------------------- forma de la respuesta --

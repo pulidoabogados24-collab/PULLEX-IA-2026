@@ -11,6 +11,7 @@ administrador y no afirma costos sin fuente."""
 import copy
 import hashlib
 import json
+import os
 import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone
@@ -861,6 +862,23 @@ def test_BIB_101_un_costo_comprobado_sin_fuente_no_pasa(tmp_path):
     # sin clave en el entorno, el motor aparece como no configurado (no se presenta como disponible)
     r = motores.registro({"api": False, "modelo": "x", "modelo_boletin": "x"})
     assert r["motores"][0]["disponibilidad"] == {"configurado": False, "detalle": "No configurado: falta ANTHROPIC_API_KEY."}
+
+
+def test_en_vercel_el_catalogo_se_escribe_en_tmp(monkeypatch, tmp_path):
+    """En Vercel solo se puede escribir en /tmp: sin PULLEX_BIBLIOTECA_DB la Biblioteca respondía 500 porque intentaba
+    crear biblioteca/biblioteca.db en un disco de solo lectura. Mismo criterio que la base principal (app.DB)."""
+    monkeypatch.delenv("PULLEX_BIBLIOTECA_DB", raising=False)
+    monkeypatch.delenv("VERCEL", raising=False)
+    assert biblioteca.ruta_db() == os.path.join("biblioteca", "biblioteca.db")          # fuera de Vercel, como siempre
+    monkeypatch.setenv("VERCEL", "1")
+    assert biblioteca.ruta_db() == "/tmp/biblioteca.db"
+    monkeypatch.setenv("PULLEX_BIBLIOTECA_DB", "")                                      # vacía cuenta como no definida
+    assert biblioteca.ruta_db() == "/tmp/biblioteca.db"
+    monkeypatch.setenv("PULLEX_BIBLIOTECA_DB", str(tmp_path / "elegida.db"))           # la variable manda siempre
+    assert biblioteca.ruta_db() == str(tmp_path / "elegida.db")
+    with closing(biblioteca.conexion()) as con:                                         # y es la que se abre de verdad
+        assert con.execute("SELECT COUNT(*) FROM biblioteca_modelos").fetchone()[0] == 0
+    assert (tmp_path / "elegida.db").is_file()
 
 
 def test_BIB_102_la_app_arranca_aunque_no_haya_inventario(modulo, cliente, usuario, tmp_path, monkeypatch):

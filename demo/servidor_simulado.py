@@ -22,6 +22,9 @@ os.environ.setdefault("ANTHROPIC_API_KEY", "simulado")
 os.environ.setdefault("PULLEX_ADMIN_EMAIL", "admin@demo.local")
 os.environ.setdefault("PULLEX_ADMIN_CLAVE", "demo-admin-clave-larga")
 os.environ.setdefault("PULLEX_SECRET", "solo-para-la-demo-local")
+# Las pruebas de navegador (tests/e2e_*.py) simulan varios visitantes con X-Forwarded-For distintas. En local la app no
+# le cree a esa cabecera (AUTH-04) salvo que se declare un proxy delante: solo para esta demostración local.
+os.environ.setdefault("PULLEX_PROXIES_CONFIABLES", "1")
 sys.path.insert(0, str(RAIZ))
 # Biblioteca de DEMOSTRACIÓN (demo/biblioteca_demo.json): catálogo ficticio servido por las rutas reales
 # /api/biblioteca/*. Se monta ANTES de importar la aplicación para que su arranque no cargue el inventario real.

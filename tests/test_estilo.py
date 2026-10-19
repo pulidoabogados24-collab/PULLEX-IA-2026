@@ -303,7 +303,7 @@ def test_chat_pule_lo_que_guarda_y_avisa_al_cliente(cliente):
     finally:
         FakeAnthropic.eventos_final = []
     ev = _sse(r.text)
-    assert [e["tipo"] for e in ev][-3:] == ["pulido", "fuentes", "fin"]
+    assert [e["tipo"] for e in ev][-4:] == ["pulido", "fuentes", "citas", "fin"]  # citas: revisión de forma (IA-01)
     pulido = next(e for e in ev if e["tipo"] == "pulido")["texto"]
     assert "😊" not in pulido and "Espero" not in pulido and pulido.startswith("ECO:")
     guardado = cliente.get(f"/api/conversaciones/{cid}/mensajes", headers=auth(t)).json()[-1]["contenido"]

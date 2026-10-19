@@ -1,0 +1,62 @@
+# PULLEX IA — copia de seguridad diaria del esquema «pullex» (BD-01, docs/18-BASE-DE-DATOS.md).
+#
+# DESACTIVADO POR DEFECTO: solo corre a mano («Run workflow»). Para que corra a diario, descomenta «schedule» cuando
+# estén definidos los secretos del repositorio:
+#   PULLEX_DATABASE_URL_DIRECTA  conexión DIRECTA a Supabase (puerto 5432, no el pooler 6543), usuario dueño del esquema
+#   PULLEX_RESPALDO_CLAVE        frase larga y aleatoria para cifrar la copia (guárdala también fuera de GitHub:
+#                                sin ella la copia no se puede restaurar)
+# La copia sale SIEMPRE cifrada (PULLEX_RESPALDO_EXIGIR_CIFRADO=1) y se sube como artefacto con retención corta: el
+# artefacto es una copia de paso, no el archivo de respaldos. Descárgala y guárdala donde dice docs/18.
+name: Respaldo de la base (esquema pullex)
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "17 7 * * *"     # todos los días a las 07:17 UTC (02:17 en Colombia)
+
+permissions:
+  contents: read
+
+concurrency:
+  group: respaldo-bd
+  cancel-in-progress: false
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # pg_dump debe ser de la misma versión mayor que el servidor de Supabase, o posterior. Ajusta si el proyecto
+      # usa otra versión (Supabase: Settings → Infrastructure).
+      PG_CLIENTE: "17"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Instalar el cliente de PostgreSQL
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common gnupg
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq "postgresql-client-${PG_CLIENTE}"
+          echo "/usr/lib/postgresql/${PG_CLIENTE}/bin" >> "$GITHUB_PATH"
+
+      - name: Copia cifrada del esquema
+        env:
+          PULLEX_DATABASE_URL_DIRECTA: ${{ secrets.PULLEX_DATABASE_URL_DIRECTA }}
+          PULLEX_RESPALDO_CLAVE: ${{ secrets.PULLEX_RESPALDO_CLAVE }}
+          PULLEX_RESPALDO_EXIGIR_CIFRADO: "1"
+          PULLEX_DB_ESQUEMA: pullex
+        run: |
+          pg_dump --version
+          scripts/respaldar_bd.sh "$RUNNER_TEMP/respaldo"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: respaldo-pullex-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/respaldo/*.gpg
+            ${{ runner.temp }}/respaldo/*.sha256
+          if-no-files-found: error
+          retention-days: 5

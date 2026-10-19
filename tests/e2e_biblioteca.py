@@ -341,7 +341,7 @@ def registrar(pg, nombre):
     pg.fill("#r-nombre", "Valentina Ríos")
     pg.fill("#a-email", f"b{nombre}{int(time.time() * 1000)}@demo.local")
     pg.fill("#a-clave", "clave-demo-123")
-    pg.click("#a-btn")
+    pg.check("#r-acepto"); pg.click("#a-btn")
     pg.wait_for_function("() => PERFIL !== null")
     pg.wait_for_function("() => ESTADO !== null")
 

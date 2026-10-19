@@ -238,7 +238,8 @@ def test_MOV_016_el_envio_nunca_queda_ocupado_si_algo_falla():
         assert "ocupado(true);" in cuerpo and "}finally{soltar()}" in cuerpo, inicio
         assert cuerpo.count("ocupado(false)") == 1 and "suelto=true;ocupado(false)" in cuerpo, inicio
     linea_md = next(l for l in app.splitlines() if l.startswith("function md(t){"))
-    assert "try{return DOMPurify.sanitize(marked.parse(t||''))}catch(e){}" in linea_md and "esc(t)" in linea_md
+    # Con la configuración estricta MD_CFG (auditoría 2026-10-13, F-01): sin formularios, estilos, ids ni data-*.
+    assert "try{return DOMPurify.sanitize(marked.parse(t||''),MD_CFG)}catch(e){}" in linea_md and "esc(t)" in linea_md
     assert "DOMPurify.sanitize" in linea_md.split("catch")[0]            # lo que sale de marked siempre pasa por DOMPurify
 
 
