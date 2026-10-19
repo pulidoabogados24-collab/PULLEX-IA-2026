@@ -147,11 +147,17 @@ CREATE TABLE IF NOT EXISTS biblioteca_sincronizaciones(
 
 # ------------------------------------------------------------------------------- rutas --
 def ruta_db() -> str:
-    """Archivo SQLite del catálogo. En Vercel el disco es de solo lectura salvo /tmp: si no se define
-    PULLEX_BIBLIOTECA_DB y la app corre allí (variable VERCEL), se usa /tmp/biblioteca.db, igual que hace la base
-    principal en app.py. El catálogo no guarda nada irrecuperable: se reconstruye del inventario al arrancar."""
-    return os.getenv("PULLEX_BIBLIOTECA_DB") or (
-        os.path.join("/tmp", "biblioteca.db") if os.getenv("VERCEL") else os.path.join("biblioteca", "biblioteca.db"))
+    """Usa el volumen temporal escribible en Vercel si no hay ruta explícita.
+
+    /tmp no persiste entre invocaciones ni se comparte entre instancias: solo
+    es una mitigación hasta migrar el catálogo a almacenamiento persistente.
+    """
+    configurada = os.getenv("PULLEX_BIBLIOTECA_DB")
+    if configurada:
+        return configurada
+    if os.getenv("VERCEL"):
+        return "/tmp/biblioteca.db"
+    return os.path.join("biblioteca", "biblioteca.db")
 
 
 def ruta_inventario() -> str:
