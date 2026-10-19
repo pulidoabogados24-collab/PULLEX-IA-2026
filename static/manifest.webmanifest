@@ -1,17 +1,66 @@
 {
-  "name": "PULLEX IA — Asistente Jurídico",
+  "id": "/",
+  "name": "PULLEX IA",
   "short_name": "PULLEX IA",
-  "description": "Asistente jurídico colombiano con IA para estudiantes de Derecho.",
+  "description": "Asistente jurídico colombiano con IA para estudiantes de Derecho y abogados.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
   "background_color": "#101115",
   "theme_color": "#101115",
   "lang": "es-CO",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity",
+    "business"
+  ],
+  "prefer_related_applications": false,
   "icons": [
-    { "src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/static/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/static/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/img/capturas/portada-estrecha.webp",
+      "sizes": "390x844",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Portada de PULLEX IA en el celular"
+    },
+    {
+      "src": "/static/img/capturas/portada-ancha.webp",
+      "sizes": "1280x800",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Portada de PULLEX IA en el computador"
+    }
   ]
 }

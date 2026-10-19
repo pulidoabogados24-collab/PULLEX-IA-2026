@@ -116,7 +116,7 @@ function perMatriz(){
 function perFiltrarCelda(area,funcion){
   PER.f.area=area;PER.f.funcion=funcion;PER.f.sub='';PER.f.estado='';PER.f.q='';PER.f.pagina=1;
   pId('per-q').value='';pId('per-f-area').value=area;perLlenarSubs();pId('per-f-funcion').value=funcion;pId('per-f-estado').value='';
-  perBuscar().then(()=>{const n=pId('per-n');if(n)n.scrollIntoView({block:'start',behavior:'smooth'})});
+  perBuscar().then(()=>{const n=pId('per-n');if(n)desplazar(n,{block:'start'})});
 }
 function perFiltros(){
   const m=PER.meta;
@@ -291,7 +291,7 @@ async function perEjecutar(){
   PER.ocupado=true;boton.disabled=true;boton.textContent='Ejecutando en secuencia…';caja.textContent='';
   caja.appendChild(pE('p',{class:'per-nota',role:'status',text:'Los perfiles se ejecutan uno después de otro. Puede tardar hasta un par de minutos.'}));
   try{const r=await pApi('/api/coordinador/ejecutar',{tarea,contexto:perContexto(),material:pId('per-material').value,web:pId('per-web').checked});
-    caja.textContent='';perPintarResumen(caja,r);boton.textContent='Ejecutado';caja.scrollIntoView({block:'start',behavior:'smooth'})}
+    caja.textContent='';perPintarResumen(caja,r);boton.textContent='Ejecutado';desplazar(caja,{block:'start'})}
   catch(e){caja.textContent='';caja.appendChild(pE('p',{class:'per-error',role:'alert',text:e.message}));
     if(e.datos&&e.datos.plan){PER.plan=e.datos.plan;perPintarPlan(e.datos.plan)}else{boton.disabled=false;boton.textContent='Reintentar'}}
   PER.ocupado=false;
@@ -337,7 +337,7 @@ async function perEjecucionesVista(){
   let d;try{d=await pApi('/api/coordinador/ejecuciones')}catch(e){lista.appendChild(pE('p',{class:'per-vacio',text:e.message}));return}
   if(!d.ejecuciones.length){lista.appendChild(pE('p',{class:'per-vacio',text:'Aún no has ejecutado ninguna tarea con el coordinador.'}));return}
   lista.appendChild(pE('ul',{class:'per-items'},d.ejecuciones.map(e=>pE('li',null,pE('button',{type:'button',class:'per-item','data-ejecucion':e.id,
-    on:{click:async()=>{try{const r=await pApi('/api/coordinador/ejecuciones/'+e.id);abierta.textContent='';perPintarResumen(abierta,r);abierta.scrollIntoView({block:'start',behavior:'smooth'})}catch(x){toast(x.message)}}}},
+    on:{click:async()=>{try{const r=await pApi('/api/coordinador/ejecuciones/'+e.id);abierta.textContent='';perPintarResumen(abierta,r);desplazar(abierta,{block:'start'})}catch(x){toast(x.message)}}}},
     pE('span',{class:'per-item-cab'},pE('code',{text:'n.º '+e.id}),pE('span',{class:'per-tag',text:PER_EJEC[e.estado]||e.estado}),e.simulada?pE('span',{class:'per-tag prop',text:'Simulada'}):null),
     pE('b',{text:e.tarea}),pE('span',{class:'per-item-p',text:pFecha(e.creado)+' · '+e.perfiles_ids.join(', ')}))))));
 }

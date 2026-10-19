@@ -1,5 +1,6 @@
 """PULLEX Academia: Mapa del Derecho, banco de errores, repasos espaciados y casos enfocados."""
 import sqlite3
+from contextlib import closing
 
 import academia
 from conftest import FakeAnthropic, auth, nuevo_usuario
@@ -80,9 +81,9 @@ def test_concepto_desconocido_no_llega_al_modelo_ni_gasta(cliente):
 
 def test_concepto_libre_de_otro_usuario_no_es_accesible(cliente, modulo):
     email_a, _, ta = nuevo_usuario(cliente)
-    with sqlite3.connect(modulo.DB) as con:
-        con.row_factory = sqlite3.Row
+    with closing(modulo.db()) as con:       # la conexión de la app: vale para SQLite y para PostgreSQL
         academia.registrar_resultado(con, email_a, "Penal", [], ["concepto rarísimo del caso"], 30)
+        con.commit()
     libre = academia.id_libre("concepto rarísimo del caso")
     assert _caso(cliente, ta, concepto_id=libre).status_code == 200   # el dueño sí
     _, _, tb = nuevo_usuario(cliente)

@@ -366,7 +366,9 @@ def seleccionar(tarea, contexto=None) -> dict:
 # ======================================================================= herramientas ==
 def envolver(etiqueta: str, texto: str) -> str:
     """Entrega texto al modelo como DATOS. Neutraliza cualquier intento de cerrar la etiqueta desde dentro."""
-    limpio = re.sub(r"</?\s*datos\b[^>]*>", "[etiqueta eliminada]", str(texto or ""), flags=re.I)
+    # Sin caracteres de formato invisibles (Unicode Cf) y tolerante a «< /datos>», atributos y «<>» de ancho completo.
+    plano = "".join(ch for ch in str(texto or "") if unicodedata.category(ch) != "Cf")
+    limpio = re.sub(r"[<\uff1c\ufe64]\s*/?\s*datos\b[^>\uff1e\ufe65]*[>\uff1e\ufe65]", "[etiqueta eliminada]", plano, flags=re.I)
     return f'\n<datos tipo="{etiqueta}">\n{limpio}\n</datos>\n'
 
 
@@ -510,13 +512,18 @@ def _citas_en(texto: str) -> dict:
     return hallazgos
 
 
-def verificar_citas(texto: str, material: str) -> list:
+def verificar_citas(texto: str, material: str, aportado_usuario: str = "") -> list:
     """Verificador determinista de citas. Para cada norma o providencia con número citada en `texto` indica:
-    - `en_material`: si la misma cita figura en el material que el perfil tuvo a la vista;
+    - `en_material`: si la misma cita figura en el material que trajeron las HERRAMIENTAS (corpus, catálogo,
+      repositorio, títulos de resultados web oficiales). La tarea del usuario y las salidas de otros perfiles NO
+      cuentan (auditoría 2026-10-13, IA-04: así una cita inventada no se «lava» repitiéndola);
+    - `mencionada_por_usuario`: si la persona la escribió en la tarea o en su material (`aportado_usuario`): se
+      informa, pero no respalda nada;
     - `advertida`: si el texto la acompaña de «verificar vigencia» en el mismo renglón o la deja en la sección
       «No verificado».
     Solo comprueba que la cita EXISTA en el material: no comprueba su vigencia ni que respalde la afirmación."""
     disponibles = set(_citas_en(material or ""))
+    del_usuario = set(_citas_en(aportado_usuario or ""))
     seccion_nv = _norm(secciones_de(texto).get("no verificado", ""))
     renglones = texto.splitlines()
     salida = []
@@ -525,7 +532,8 @@ def verificar_citas(texto: str, material: str) -> list:
         advertida = nucleo in seccion_nv or any(
             nucleo in _norm(r) and ("verificar vigencia" in _norm(r) or "no verificad" in _norm(r)
                                     or "pendiente de verific" in _norm(r)) for r in renglones)
-        salida.append({"cita": cita, "tipo": clave[0], "en_material": clave in disponibles, "advertida": advertida})
+        salida.append({"cita": cita, "tipo": clave[0], "en_material": clave in disponibles, "advertida": advertida,
+                       "mencionada_por_usuario": clave in del_usuario})
     return salida
 
 
@@ -557,7 +565,7 @@ def sentido_de(texto: str):
     return valor if valor in SENTIDOS else None
 
 
-def comprobar_salida(perfil: dict, texto: str, material: str, duracion_s: float) -> list:
+def comprobar_salida(perfil: dict, texto: str, material: str, duracion_s: float, aportado_usuario: str = "") -> list:
     """Comprobaciones deterministas sobre la salida de un perfil. No miden calidad jurídica ni técnica: miden que
     la salida cumpla el contrato (secciones, «No verificado», citas con soporte o advertencia, presupuesto)."""
     secciones = secciones_de(texto)
@@ -570,12 +578,16 @@ def comprobar_salida(perfil: dict, texto: str, material: str, duracion_s: float)
     nv = "no verificado" in secciones
     c.append({"id": "no_verificado", "nombre": "Declara lo «No verificado»", "resultado": "pasa" if nv else "falla",
               "detalle": "La sección existe." if nv else "No hay sección «No verificado»."})
-    citas = verificar_citas(texto, material)
-    sueltas = [x["cita"] for x in citas if not x["en_material"] and not x["advertida"]]
+    citas = verificar_citas(texto, material, aportado_usuario)
+    # Una cita que solo viene del usuario no está respaldada: si el perfil la repite sin advertencia, falla igual.
+    sueltas = [x["cita"] + (" (mencionada por el usuario)" if x["mencionada_por_usuario"] else "")
+               for x in citas if not x["en_material"] and not x["advertida"]]
+    mencionadas = sum(1 for x in citas if x["mencionada_por_usuario"])
     c.append({"id": "citas", "nombre": "Cada cita figura en el material o lleva advertencia",
               "resultado": "falla" if sueltas else "pasa",
               "detalle": ("Sin soporte ni advertencia: " + "; ".join(sueltas[:8])) if sueltas else
-              f"{len(citas)} citas revisadas; {sum(1 for x in citas if x['en_material'])} figuran en el material."})
+              f"{len(citas)} citas revisadas; {sum(1 for x in citas if x['en_material'])} figuran en el material"
+              + (f"; {mencionadas} mencionadas por el usuario." if mencionadas else ".")})
     if perfil["emite_posicion"]:
         s = sentido_de(texto)
         c.append({"id": "sentido", "nombre": "Cierra con un sentido declarado", "resultado": "pasa" if s else "falla",
@@ -791,15 +803,19 @@ def ejecutar(plan: dict, entorno: Entorno, material_usuario: str = "") -> dict:
         for f in (r.get("fuentes_web") or [])[:8]:
             if isinstance(f, dict) and re.match(r"^https?://", str(f.get("url") or "")):
                 lista_fuentes.append({"origen": "web", "titulo": str(f.get("titulo") or f["url"])[:200], "url": f["url"],
-                                      "oficial": fuentes.es_oficial(f["url"], (herramienta_web or {}).get("allowed_domains"))})
-        # El material contra el que se contrastan las citas: lo que el perfil tuvo a la vista.
-        material = "\n".join([tarea, material_usuario] + [b for _, b in bloques] + [t for _, t in previos]
-                             + [str(f.get("titulo") or "") for f in lista_fuentes])
-        comprobaciones = comprobar_salida(perfil, texto, material, duracion)
+                                      "oficial": fuentes.es_oficial(f["url"])})
+        # El material contra el que se contrastan las citas: SOLO lo que trajeron las herramientas (corpus, catálogo,
+        # repositorio y resultados web de dominios oficiales). La tarea y el material del usuario se informan aparte
+        # («mencionada por el usuario») y las salidas de otros perfiles no cuentan (IA-04: lavado de citas).
+        material = "\n".join([b for _, b in bloques]
+                             + [str(f.get("titulo") or "") for f in lista_fuentes
+                                if f.get("origen") != "web" or f.get("oficial")])
+        aportado = "\n".join([tarea, material_usuario])
+        comprobaciones = comprobar_salida(perfil, texto, material, duracion, aportado)
         documento_id = None
         for reg_h in usadas:
             if reg_h["id"] == "verificador_citas":
-                citas = verificar_citas(texto, material)
+                citas = verificar_citas(texto, material, aportado)
                 reg_h.update(usada=True, resultado=f"{len(citas)} citas revisadas; "
                              f"{sum(1 for x in citas if not x['en_material'] and not x['advertida'])} sin soporte ni advertencia")
             elif reg_h["id"] == "exportar_word":

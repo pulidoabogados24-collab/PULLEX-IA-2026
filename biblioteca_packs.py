@@ -10,6 +10,7 @@ import os
 from contextlib import closing
 
 from fastapi import APIRouter, HTTPException, Request
+from datos import ErrorConfiguracion, limpiar_url
 
 LOG = logging.getLogger(__name__)
 COLECCIONES = ("PACK JURIDICO 1", "PACK JURIDICO 2")
@@ -29,14 +30,16 @@ def _leer(sql, params=()):
     except ImportError:
         raise HTTPException(503, "El lector privado aún no está instalado") from None
     try:
-        with closing(psycopg.connect(conninfo, connect_timeout=5, row_factory=dict_row)) as con:
+        parametros = limpiar_url(conninfo)  # TLS obligatorio fuera del servidor local, igual que la base principal.
+        parametros["connect_timeout"] = 5
+        with closing(psycopg.connect(**parametros, row_factory=dict_row)) as con:
             with con.transaction():
                 with con.cursor() as cur:
                     cur.execute("SET TRANSACTION READ ONLY")
                     cur.execute("SET LOCAL statement_timeout = '8s'")
                     cur.execute(sql, params)
                     return cur.fetchall()
-    except psycopg.Error:
+    except (psycopg.Error, ErrorConfiguracion):
         LOG.warning("Fallo de consulta del catálogo privado")
         raise HTTPException(503, "Catálogo temporalmente no disponible") from None
 
@@ -88,11 +91,11 @@ def crear_router(*, admin_actual, limitar_cuenta=None):
             AND (%s = '' OR coleccion = %s)
             AND (%s = '' OR strpos(lower(nombre),lower(%s)) > 0
                          OR strpos(lower(ruta),lower(%s)) > 0
-                         OR EXISTS (
+                         OR (estado_procesamiento = 'INDEXADO' AND EXISTS (
                              SELECT 1 FROM pullex.biblioteca_fragmentos f
                              WHERE f.documento_id = pullex.biblioteca_documentos.id
                                AND f.texto_busqueda @@ plainto_tsquery('spanish', %s)
-                         ))
+                         )))
         """
         cuentas = _leer(
             "SELECT count(*)::integer total FROM pullex.biblioteca_documentos WHERE " + where,

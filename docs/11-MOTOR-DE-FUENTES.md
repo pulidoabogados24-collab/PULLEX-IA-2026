@@ -17,7 +17,9 @@ Cada respuesta del chat ahora:
    el modelo debe advertirlo.
 4. **Busca en la web solo en sitios oficiales** (cortes, Senado, SUIN-Juriscol, Función Pública, ministerios,
    superintendencias…), con el filtro `allowed_domains` de la herramienta `web_search` de Anthropic. El boletín
-   diario sigue sin restricción.
+   diario usa siempre la lista oficial (`fuentes.DOMINIOS_OFICIALES`) y rotula cada enlace como «fuente oficial»
+   o «fuente no oficial: verifícala». Una fuente web es «oficial» solo si su dominio está en esa lista, aunque
+   `PULLEX_WEB_DOMINIOS` amplíe dónde se busca (auditoría 2026-10-13, IA-10 e IA-11).
 5. **Muestra debajo de cada respuesta un bloque plegable "Fuentes consultadas"** con chips:
    `Oficial · web`, `Corpus · vigente`, `Corpus · verificar vigencia` (y `Corpus · desactualizada`/`derogada`).
    El estado está escrito en el chip, no solo en el color. Indica si cada fuente fue citada en la respuesta.
@@ -213,3 +215,33 @@ clave: revisa las fallas a mano. **NOT VERIFIED**: el benchmark nunca se ha corr
 - Derechos de autor: normas y sentencias oficiales son de libre uso, pero la **doctrina** (libros, artículos)
   puede tener derechos de autor; mostrar fragmentos a usuarios que pagan requiere revisión. **HUMAN REVIEW REQUIRED.**
 - Costos: estimaciones, no mediciones.
+
+## Revisión de citas en el chat (auditoría 2026-10-13: IA-01, IA-03, IA-07)
+
+Después de cada respuesta, `citas.revisar` hace una revisión de **forma** y el chat la envía en el evento SSE
+`{"tipo":"citas","citas":{"hay_citas","huerfanas","sospechosas","mencionada_por_usuario"}}`, antes de `fin`. Se guarda
+con el mensaje (dentro de la columna JSON `fuentes`, como un elemento con `origen: "revision_citas"` que
+`GET /api/conversaciones/{id}/mensajes` devuelve aparte en el campo `citas`). Las reglas y sus límites están
+documentados al inicio de `citas.py`. **No es una verificación**: no comprueba que una norma o sentencia exista ni
+que esté vigente; la interfaz no debe rotular nada como «verificado» con base en ella.
+
+Límites del corpus que usa la revisión (derivados del propio texto, ver `citas.limites_corpus`):
+- último artículo de cada código cuya numeración en el corpus es fiable (Código de Comercio no: casi no trae
+  encabezados de artículo);
+- leyes «número + año» citadas dentro de los códigos (de 1992 a 2021 en el corpus actual), para detectar números
+  incoherentes con el año.
+
+## Pendientes que requieren corpus nuevo (IA-02 e IA-12)
+
+- **IA-02 — el corpus no respalda jurisprudencia.** `corpus.db` tiene 11 códigos, **0 sentencias**, 0 documentos
+  con vigencia verificada, sin URL oficial ni fecha de corte. Buscar «T-760 de 2008» devuelve fragmentos de otros
+  textos por coincidencia de palabras. Mientras no se carguen sentencias desde las relatorías oficiales, ninguna
+  «verificación» de jurisprudencia contra el corpus es posible y la revisión de citas no puede saber si una
+  sentencia con número y año plausibles (p. ej. «SU-1234 de 2015») existe.
+- **IA-12 — «fecha del archivo» no es fecha de vigencia.** `fecha_archivo` es la fecha del archivo indexado (en el
+  corpus actual, la de la extracción: 2026-10-06), no la fecha de corte del texto ni de su última reforma. Al
+  modelo se le entrega como «fecha del archivo: … (no es fecha de vigencia)» y la interfaz la muestra como
+  «archivo del …». Falta, por documento: URL oficial, fecha de corte del texto y verificación humana
+  (`scripts/ingesta_corpus.py --verificar ID`). **HUMAN REVIEW REQUIRED.**
+- Con leyes recientes en el corpus (posteriores a 2021), la regla de numeración consecutiva de `citas.py` marcaría
+  como grave, sin cambiar código, casos que hoy solo salen como leves (p. ej. «Ley 2999 de 2023»).

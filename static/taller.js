@@ -20,8 +20,11 @@ function tE(tag,attrs,...hijos){const e=document.createElement(tag);
   return e}
 function tBtn(txt,cls,fn,attrs){return tE('button',{type:'button',class:cls||'bsec',on:{click:fn},...(attrs||{})},txt)}
 function tParrafos(texto){return String(texto||'').split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean).map(p=>tE('p',null,p))}
-function tlLeer(id){try{const v=localStorage.getItem(TL_LS+id);return v?JSON.parse(v):null}catch(e){return null}}
-function tlEscribir(id,d){try{localStorage.setItem(TL_LS+id,JSON.stringify(d));return true}catch(e){return false}}
+// Borradores ligados a la cuenta (F-11): la clave lleva la huella del correo (huellaCuenta(), app.js), nunca el correo.
+// Sin sesión no se lee ni se guarda nada. Al «Salir» app.js borra todas las claves pullex.* de este navegador.
+function tlClave(id){const h=typeof huellaCuenta==='function'?huellaCuenta():null;return h?TL_LS+h+'.'+id:null}
+function tlLeer(id){const k=tlClave(id);if(!k)return null;try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function tlEscribir(id,d){const k=tlClave(id);if(!k)return false;try{localStorage.setItem(k,JSON.stringify(d));return true}catch(e){return false}}
 function tlHora(){try{return new Date().toLocaleTimeString('es-CO',{hour:'numeric',minute:'2-digit'})}catch(e){return ''}}
 
 // ----------------------------------------------------------------------------- pestañas --
@@ -109,7 +112,7 @@ async function tlAbrir(id){
   try{tlMostrarEscenario(await api('/api/taller/escenario/'+encodeURIComponent(id)))}catch(e){toast(e.message)}
 }
 function tlNuevo(){['tl-esc','tl-eval','tl-modelo'].forEach(i=>{const p=document.getElementById(i);if(p)p.classList.add('hidden')});
-  TL.esc=null;const c=document.getElementById('tl-config');if(c)c.scrollIntoView({behavior:'smooth',block:'start'})}
+  TL.esc=null;const c=document.getElementById('tl-config');if(c)desplazar(c,{block:'start'})}
 
 // ------------------------------------------------------------------------ Taller: escenario --
 function tlMostrarEscenario(e){
@@ -152,7 +155,7 @@ function tlMostrarEscenario(e){
   ['tl-eval','tl-modelo'].forEach(i=>document.getElementById(i).classList.add('hidden'));
   p.classList.remove('hidden');
   if(e.ultima_evaluacion)tlMostrarEval(e.ultima_evaluacion,true);
-  p.scrollIntoView({behavior:'smooth',block:'start'});
+  desplazar(p,{block:'start'});
   const t=document.getElementById('tl-titulo');if(t)t.focus({preventScroll:true});
 }
 function tlEstadoModelo(){
@@ -224,18 +227,18 @@ function tlMostrarEval(ev,previa){
     const ul=tE('ul');ev.conocimiento.forEach(c=>ul.appendChild(tE('li',null,tE('b',null,c.nombre),' — '+(txt[c.resultado]||''))));
     p.appendChild(tE('div',{class:'aprendido'},tE('h4',null,'Tu mapa se actualizó'),ul,tE('button',{type:'button',on:{click:()=>ver('mapa')}},'Ver mi mapa')))}
   p.appendChild(tE('div',{class:'ml-acc'},tBtn('Ver escrito modelo','bsec',()=>tlModelo()),
-    tBtn('Corregir y volver a evaluar','bsec',()=>{const t=document.getElementById('tl-texto');if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.focus({preventScroll:true})}}),
+    tBtn('Corregir y volver a evaluar','bsec',()=>{const t=document.getElementById('tl-texto');if(t){desplazar(t,{block:'center'});t.focus({preventScroll:true})}}),
     tBtn('Otro escenario','bpri',()=>tlNuevo())));
   p.appendChild(tE('p',{class:'nota-ia',text:'Evaluación orientativa generada por IA para practicar. No reemplaza la corrección de un docente; verifica cada norma en la fuente oficial.'}));
   p.classList.remove('hidden');
-  if(!previa){p.scrollIntoView({behavior:'smooth',block:'start'});const h=document.getElementById('tl-eval-h');if(h)h.focus({preventScroll:true})}
+  if(!previa){desplazar(p,{block:'start'});const h=document.getElementById('tl-eval-h');if(h)h.focus({preventScroll:true})}
 }
 async function tlModelo(){
   if(!TL.esc)return;
   if(!TL.esc.modelo_disponible){toast('Primero redacta tu versión y evalúala: el escrito modelo se abre después de intentarlo.');return}
   const p=document.getElementById('tl-modelo');p.textContent='';
   p.appendChild(tE('h3',{text:'Escrito modelo'}));p.appendChild(tE('div',{class:'skel'}));p.appendChild(tE('div',{class:'skel'}));
-  p.classList.remove('hidden');p.scrollIntoView({behavior:'smooth',block:'start'});
+  p.classList.remove('hidden');desplazar(p,{block:'start'});
   try{const d=await api('/api/taller/modelo',{body:{escenario_id:TL.esc.id}});
     p.textContent='';
     p.appendChild(tE('h3',{tabindex:'-1',id:'tl-modelo-h',text:'Escrito modelo'}));
@@ -407,7 +410,7 @@ function tlLeccion(id,mover){
   p.appendChild(tE('p',{class:'eyebrow',text:'Lección '+l.n+' de '+TL_LECCIONES.length+' · '+l.min}));
   p.appendChild(tE('h3',{class:'tl-lec-h',id:'tl-lec-h',tabindex:'-1',text:l.t}));
   ({metodo:tlLecMetodo,hechos:tlLecHechos,conectores:tlLecConectores,estructura:tlLecEstructura,errores:tlLecErrores})[id](p);
-  if(mover&&window.matchMedia('(max-width:759px)').matches){p.scrollIntoView({behavior:'smooth',block:'start'})}
+  if(mover&&window.matchMedia('(max-width:759px)').matches){desplazar(p,{block:'start'})}
   if(mover){const h=document.getElementById('tl-lec-h');if(h)h.focus({preventScroll:true})}
 }
 function tlPracticar(p,texto,fn){

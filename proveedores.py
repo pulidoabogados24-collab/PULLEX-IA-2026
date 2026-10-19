@@ -48,6 +48,16 @@ ETIQUETAS = {"anthropic": "Anthropic (Claude)", "openai": "OpenAI (ChatGPT)"}
 OPENAI_MODELO_DEFECTO = "gpt-6.1-sol"
 # Errores HTTP que justifican intentar el respaldo: saturación (429, 529) y fallas del servidor (5xx).
 ESTADOS_RECUPERABLES = {408, 409, 429, 500, 502, 503, 504, 529}
+# IA-15: llamadas SIN streaming (Laboratorio, Taller, Academia, documentos, boletín): tiempo máximo y reintentos
+# explícitos en vez de los valores por defecto del SDK (10 minutos y 2 reintentos). Con 90 s y 1 reintento, una
+# llamada atascada no deja colgada la función más de ~3 minutos. Ajustables por entorno.
+TIEMPO_LLAMADA_S = float(os.getenv("PULLEX_TIEMPO_LLAMADA_S", "90"))
+REINTENTOS_LLAMADA = int(os.getenv("PULLEX_REINTENTOS_LLAMADA", "1"))
+
+
+def cliente_anthropic(api_key: str):
+    """Cliente de Anthropic para llamadas sin streaming, con tiempo máximo y reintentos explícitos."""
+    return anthropic.Anthropic(api_key=api_key, timeout=TIEMPO_LLAMADA_S, max_retries=REINTENTOS_LLAMADA)
 
 
 class ErrorProveedor(Exception):
@@ -189,7 +199,7 @@ class AnthropicProveedor:
 
     def crear(self, system, messages, max_tokens: int) -> tuple:
         """Una llamada sin streaming: (texto, motivo de parada normalizado)."""
-        cliente = anthropic.Anthropic(api_key=self.api_key)
+        cliente = cliente_anthropic(self.api_key)
         r = cliente.messages.create(model=self.modelo, max_tokens=max_tokens, system=system,
                                     messages=messages, **self.opciones)
         texto = "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
@@ -321,7 +331,7 @@ class OpenAIProveedor:
 
     def crear(self, system, messages, max_tokens: int) -> tuple:
         """Una llamada sin streaming: (texto, motivo de parada normalizado)."""
-        cliente = _openai().OpenAI(api_key=self.api_key)
+        cliente = _openai().OpenAI(api_key=self.api_key, timeout=TIEMPO_LLAMADA_S, max_retries=REINTENTOS_LLAMADA)
         r = cliente.responses.create(input=mensajes_openai(messages), **self._base(system, max_tokens))
         razon = str(_campo(_campo(r, "incomplete_details"), "reason") or "")
         if _campo(r, "status") == "incomplete" or razon:

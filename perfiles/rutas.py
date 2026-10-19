@@ -21,6 +21,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 import coordinador
+import datos as base_datos
 import perfiles
 
 POR_PAGINA_MAX = 50
@@ -39,9 +40,10 @@ def _heno(p: dict) -> str:
 
 
 def montar(app, nucleo):
-    with closing(nucleo.db()) as con:
-        coordinador.crear_tablas(con)
-        con.commit()
+    if not base_datos.es_postgres():        # en PostgreSQL las tablas vienen de datos/esquema_postgres.sql
+        with closing(nucleo.db()) as con:
+            coordinador.crear_tablas(con)
+            con.commit()
     busqueda = {}
 
     def _error(e: coordinador.ErrorCoordinador):
@@ -169,7 +171,9 @@ def montar(app, nucleo):
             _error(e)
 
     def _llamar_modelo(sistema, mensaje, max_tokens, tiempo_max_s, herramienta_web):
-        cliente = nucleo.anthropic.Anthropic(api_key=nucleo.ANTHROPIC_API_KEY)
+        # IA-15: reintentos explícitos (el tiempo máximo lo fija el presupuesto del perfil en la llamada).
+        cliente = nucleo.anthropic.Anthropic(api_key=nucleo.ANTHROPIC_API_KEY,
+                                             max_retries=nucleo.proveedores.REINTENTOS_LLAMADA)
         extra = {"tools": [herramienta_web]} if herramienta_web else {}
         r = cliente.messages.create(model=nucleo.MODELO, max_tokens=nucleo._max_tokens(max_tokens), system=sistema,
                                     messages=[{"role": "user", "content": mensaje}], timeout=float(tiempo_max_s),
@@ -266,6 +270,7 @@ def montar(app, nucleo):
     @app.get("/api/coordinador/ejecuciones/{eid}")
     def coordinador_ejecucion(eid: int, request: Request):
         u = nucleo.usuario_actual(request)
+        eid = nucleo.id_o_404(eid, "Ejecución inválida", "Ejecución no encontrada")     # BD-18: fuera de rango → 404
         with closing(nucleo.db()) as con:
             e = coordinador.obtener_ejecucion(con, u["email"], eid)
         if not e:

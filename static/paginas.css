@@ -1,0 +1,24 @@
+/* Páginas sueltas de PULLEX IA (política de datos, sin conexión). Solo tokens de static/tema.css: claro y oscuro
+   salen de data-esquema en <html> (static/apariencia.js). Sin estilos en línea (CSP). */
+body{min-height:100vh;min-height:100dvh;padding:max(24px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right))
+  max(32px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+.pg-cab{max-width:68ch;margin:0 auto 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pg-marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.pg-volver{font-size:.9rem;min-height:44px;display:inline-flex;align-items:center}
+.pg-lectura{max-width:68ch;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:clamp(22px,4vw,44px)}
+.pg-lectura .eyebrow{margin:0 0 8px;color:var(--accent-text);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:650}
+.pg-lectura h1{font-family:var(--font-display);font-weight:var(--display-peso);letter-spacing:var(--display-tracking);
+  font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;margin:0 0 16px}
+.pg-lectura h2{font-family:var(--font-display);font-weight:var(--display-peso);font-size:1.25rem;line-height:1.25;margin:32px 0 10px}
+.pg-lectura h3{font-size:1.02rem;margin:24px 0 8px}
+.pg-lectura p,.pg-lectura li{font-family:var(--font-body);font-size:1.0625rem;line-height:1.7;color:var(--text)}
+.pg-lectura p{margin:0 0 14px}
+.pg-lectura ul,.pg-lectura ol{padding-left:1.3em;margin:0 0 14px}
+.pg-lectura .pg-nota{font-size:.9rem;color:var(--text-2);border-left:3px solid var(--accent);padding:8px 14px;background:var(--surface-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.pg-pie{max-width:68ch;margin:20px auto 0;font-size:.84rem;color:var(--text-2);text-align:center}
+.pg-centro{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.pg-centro .pg-lectura{max-width:440px}
+.pg-centro .btn{margin-top:18px;min-height:44px;padding:12px 22px;text-decoration:none}
+@media print{body{padding:0}.pg-cab,.pg-pie{display:none}.pg-lectura{border:0;padding:0}}

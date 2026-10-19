@@ -198,7 +198,7 @@ async function docGenerar(form,boton){
   DOC.ocupado=true;const t0=boton.textContent;boton.disabled=true;boton.textContent='Redactando borrador…';
   const w=document.getElementById('doc-trabajo');const espera=dE('div',{class:'doc-espera',role:'status'},
     dE('div',{class:'skel'}),dE('div',{class:'skel'}),dE('p',{text:'PULLEX está redactando el borrador. Puede tardar hasta un minuto.'}));
-  w.appendChild(espera);espera.scrollIntoView({behavior:'smooth',block:'nearest'});
+  w.appendChild(espera);desplazar(espera,{block:'nearest'});
   try{const d=await docApi('/api/documentos/generar',{body:{tipo:DOC.tipo.id,campos:form.leer()}});
     espera.remove();docMostrarResultado(w,d,{nuevo:true})}
   catch(e){espera.remove();if(e.errores)form.marcar(e.errores);toast(e.message)}
@@ -234,7 +234,7 @@ function docMostrarResultado(cont,doc,opc){
   if(doc.fuentes&&doc.fuentes.length&&typeof pintarFuentes==='function'){const w=dE('div',null,dE('div',{class:'bd'}));pintarFuentes(w,doc.fuentes);res.appendChild(w)}
   cont.appendChild(res);
   if(opc&&opc.nuevo)toast('Borrador listo y guardado en Mis documentos');
-  res.scrollIntoView({behavior:'smooth',block:'start'});titulo.focus({preventScroll:true});
+  desplazar(res,{block:'start'});titulo.focus({preventScroll:true});
 }
 function docRegenerar(doc){
   if(doc.origen==='documento'&&doc.tipo){docAbrirTipo(doc.tipo,doc.campos||{});return}
@@ -293,7 +293,7 @@ async function docCorrerPasos(cont,url,body,titulos){
     dE('span',{class:'doc-paso-est',text:'Pendiente'}),dE('span',{text:t}));items[n]=li;lista.appendChild(li)})};
   const marcar=(n,cls,txt)=>{const li=items[n];if(!li)return;li.className='doc-paso '+cls;li.querySelector('.doc-paso-est').textContent=txt};
   const render=()=>{Object.entries(bufs).forEach(([n,b])=>{if(textos[n])textos[n].innerHTML=md(b)});raf=null};
-  pintarLista(titulos||[]);box.scrollIntoView({behavior:'smooth',block:'start'});
+  pintarLista(titulos||[]);desplazar(box,{block:'start'});
   let fin=null;
   await docSSE(url,body,ev=>{
     if(ev.tipo==='inicio'){if(ev.pasos)pintarLista(ev.pasos);estado.textContent='Trabajando: '+ev.total+' pasos.'}

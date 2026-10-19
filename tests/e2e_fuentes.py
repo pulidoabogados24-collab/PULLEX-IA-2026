@@ -50,7 +50,7 @@ with sync_playwright() as p:
         pg.goto(BASE + "/")
         pg.click("#t-reg"); pg.fill("#r-nombre", "Valentina Ríos")
         pg.fill("#a-email", f"f{nombre}{int(time.time()*1000)}@demo.local"); pg.fill("#a-clave", "clave-demo-123")
-        pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
+        pg.check("#r-acepto"); pg.click("#a-btn"); pg.wait_for_function("() => PERFIL !== null")
         if "on" not in (pg.get_attribute("#chip-web", "class") or ""):
             pg.click("#chip-web")
         preguntar(pg, "¿Cuándo procede la acción de tutela? Explícame la subsidiariedad y la inmediatez.")
